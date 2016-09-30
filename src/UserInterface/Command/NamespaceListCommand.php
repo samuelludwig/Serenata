@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
+
 use PhpIntegrator\Indexing\IndexDatabase;
 
 /**
