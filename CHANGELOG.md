@@ -4,6 +4,7 @@
   * Indexing should be slightly faster.
   * Everything should feel a bit more responsive.
   * Semantic linting should be significantly faster, especially for large files.
+* A new command, `--namespace-list`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
 
 ### Bugs fixed
 * Documentation for built-in functions was escaping underscores with a slash.
