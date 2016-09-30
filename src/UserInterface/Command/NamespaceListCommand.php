@@ -24,13 +24,7 @@ class NamespaceListCommand extends AbstractCommand
     }
 
     /**
-     * Executes the actual command and processes the specified arguments.
-     *
-     * Operates as a template method.
-     *
-     * @param ArrayAccess $arguments
-     *
-     * @return string Output to pass back.
+     * @inheritDoc
      */
     protected function process(ArrayAccess $arguments)
     {
