@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
+use GetOptionKit\OptionCollection;
+
 use PhpIntegrator\Indexing\IndexDatabase;
 
 /**
@@ -27,16 +29,34 @@ class NamespaceListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
+    public function attachOptions(OptionCollection $optionCollection)
     {
-        return $this->outputJson(true, $this->getNamespaceList());
+        $optionCollection->add('file?', 'The file to filter the results by.')->isa('string');
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function process(ArrayAccess $arguments)
+    {
+        $file = isset($arguments['file']) ? $arguments['file']->value : null;
+
+        $list = $this->getNamespaceList($file);
+
+        return $this->outputJson(true, $list);
+    }
+
+    /**
+     * @param string|null $file
+     *
      * @return array
      */
-    public function getNamespaceList()
+    public function getNamespaceList($file = null)
     {
-        return $this->indexDatabase->getNamespaces();
+        if ($file !== null) {
+            return $this->indexDatabase->getNamespacesForFile($file);
+        }
+
+        return $this->indexDatabase->getNamespaces($file);
     }
 }

@@ -27,5 +27,23 @@ class NamespaceListCommandTest extends IndexedTest
         $this->assertSame('NamespaceA', $output[0]['namespace']);
         $this->assertArrayHasKey('namespace', $output[1]);
         $this->assertSame('NamespaceB', $output[1]['namespace']);
+
+        $output = $command->getNamespaceList($path . 'NamespaceA.php.test');
+
+        $this->assertCount(2, $output);
+
+        $this->assertEquals([
+            [
+                'name'      => null,
+                'startLine' => 0,
+                'endLine'   => 2
+            ],
+
+            [
+                'name'      => 'NamespaceA',
+                'startLine' => 3,
+                'endLine'   => null
+            ]
+        ], $output);
     }
 }
