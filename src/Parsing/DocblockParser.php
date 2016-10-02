@@ -297,9 +297,9 @@ class DocblockParser
             $type = null;
             $description = null;
 
-            // According to http://www.phpdoc.org/docs/latest/guides/docblocks.html, a method that does have a docblock,
-            // but no explicit return type returns void. Constructors, however, must return self. If there is no
-            // docblock at all, we can't assume either of these types.
+            // According to https://www.phpdoc.org/docs/latest/references/phpdoc/tags/return.html, a method that does
+            // have a docblock, but no explicit return type returns void. Constructors, however, must return self. If
+            // there is no docblock at all, we can't assume either of these types.
             if ($docblock !== null) {
                 $type = ($itemName === '__construct') ? 'self' : 'void';
             }
