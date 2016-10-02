@@ -476,6 +476,7 @@ class Application
     {
         $cachePath = sys_get_temp_dir() .
             '/php-integrator-base/' .
+            get_current_user() . '/' .
             $this->projectName . '/' .
             self::DATABASE_VERSION .
             '/';
