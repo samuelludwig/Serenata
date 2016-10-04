@@ -73,14 +73,14 @@ class InterfaceImplementationResolver extends AbstractResolver
 
             if ($parentMethodData['declaringStructure']['type'] === 'interface') {
                 $implementationData = [
-                    'declaringClass'     => $childMethod['declaringClass'],
+                    'declaringClass'     => $parentMethodData['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
                     'endLine'            => $parentMethodData['endLine']
                 ];
             } else {
                 $overrideData = [
-                    'declaringClass'     => $childMethod['declaringClass'],
+                    'declaringClass'     => $parentMethodData['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
                     'endLine'            => $parentMethodData['endLine'],

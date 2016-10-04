@@ -1044,11 +1044,11 @@ class ClassInfoCommandTest extends IndexedTest
             'endLine'   => 7,
 
             'declaringClass' => [
-                'name'      => '\A\ChildClass',
+                'name'      => '\A\TestInterface',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 10,
-                'endLine'   => 16,
-                'type'      => 'class'
+                'startLine' => 5,
+                'endLine'   => 8,
+                'type'      => 'interface'
             ],
 
             'declaringStructure' => [
