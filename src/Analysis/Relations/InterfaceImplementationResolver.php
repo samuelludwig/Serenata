@@ -61,21 +61,21 @@ class InterfaceImplementationResolver extends AbstractResolver
     {
         $inheritedData = [];
         $childMethod = null;
-        $overriddenMethodData = null;
-        $implementedMethodData = null;
+        $overrideData = null;
+        $implementationData = null;
 
         if (isset($class['methods'][$parentMethodData['name']])) {
             $childMethod = $class['methods'][$parentMethodData['name']];
 
             if ($parentMethodData['declaringStructure']['type'] === 'interface') {
-                $implementedMethodData = [
+                $implementationData = [
                     'declaringClass'     => $childMethod['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
                     'endLine'            => $parentMethodData['endLine']
                 ];
             } else {
-                $overriddenMethodData = [
+                $overrideData = [
                     'declaringClass'     => $childMethod['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
@@ -107,8 +107,8 @@ class InterfaceImplementationResolver extends AbstractResolver
         }
 
         $class['methods'][$parentMethodData['name']] = array_merge($parentMethodData, $childMethod, $inheritedData, [
-            'override'       => $overriddenMethodData,
-            'implementation' => $implementedMethodData,
+            'override'       => $overrideData,
+            'implementation' => $implementationData,
 
             'declaringClass' => [
                 'name'            => $class['name'],

@@ -79,12 +79,12 @@ class InheritanceResolver extends AbstractResolver
     {
         $inheritedData = [];
         $childProperty = null;
-        $overriddenPropertyData = null;
+        $overrideData = null;
 
         if (isset($class['properties'][$parentPropertyData['name']])) {
             $childProperty = $class['properties'][$parentPropertyData['name']];
 
-            $overriddenPropertyData = [
+            $overrideData = [
                 'declaringClass'     => $parentPropertyData['declaringClass'],
                 'declaringStructure' => $parentPropertyData['declaringStructure'],
                 'startLine'          => $parentPropertyData['startLine'],
@@ -122,7 +122,7 @@ class InheritanceResolver extends AbstractResolver
         }
 
         $class['properties'][$parentPropertyData['name']] = array_merge($parentPropertyData, $childProperty, $inheritedData, [
-            'override' => $overriddenPropertyData
+            'override' => $overrideData
         ]);
     }
 
@@ -134,21 +134,21 @@ class InheritanceResolver extends AbstractResolver
     {
         $inheritedData = [];
         $childMethod = null;
-        $overriddenMethodData = null;
-        $implementedMethodData = null;
+        $overrideData = null;
+        $implementationData = null;
 
         if (isset($class['methods'][$parentMethodData['name']])) {
             $childMethod = $class['methods'][$parentMethodData['name']];
 
             if ($parentMethodData['declaringStructure']['type'] === 'interface') {
-                $implementedMethodData = [
+                $implementationData = [
                     'declaringClass'     => $parentMethodData['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
                     'endLine'            => $parentMethodData['endLine']
                 ];
             } else {
-                $overriddenMethodData = [
+                $overrideData = [
                     'declaringClass'     => $parentMethodData['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
@@ -188,8 +188,8 @@ class InheritanceResolver extends AbstractResolver
         }
 
         $class['methods'][$parentMethodData['name']] = array_merge($parentMethodData, $childMethod, $inheritedData, [
-            'override'       => $overriddenMethodData,
-            'implementation' => $implementedMethodData
+            'override'       => $overrideData,
+            'implementation' => $implementationData
         ]);
     }
 }
