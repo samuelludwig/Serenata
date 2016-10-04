@@ -834,9 +834,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals($output['methods']['abstractMethod']['override']['wasAbstract'], true);
     }
 
-    public function testMethodOverridingOfImplementationIsAnalyzedCorrectly()
+    public function testMethodOverridingOfParentImplementationIsAnalyzedCorrectly()
     {
-        $fileName = 'MethodOverrideOfImplementation.php.test';
+        $fileName = 'MethodOverrideOfParentImplementation.php.test';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
