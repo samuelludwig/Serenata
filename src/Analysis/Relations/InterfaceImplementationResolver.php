@@ -6,6 +6,10 @@ use ArrayObject;
 
 /**
  * Deals with resolving implementation of interfaces for classlikes.
+ *
+ * "Implementation" in this context means nothing more than "is using an interface after the implements keyword". In
+ * other words, it doesn't matter if the class is actually implementing the methods from the interface, as long as it's
+ * (directly) referencing it, this class handles it.
  */
 class InterfaceImplementationResolver extends AbstractResolver
 {
@@ -93,14 +97,22 @@ class InterfaceImplementationResolver extends AbstractResolver
                 );
             }
 
+            $childMethod['declaringClass'] = [
+                'name'            => $class['name'],
+                'filename'        => $class['filename'],
+                'startLine'       => $class['startLine'],
+                'endLine'         => $class['endLine'],
+                'type'            => $class['type']
+            ];
+
             $childMethod['declaringStructure'] = [
-                'name'            => $parentMethodData['declaringStructure']['name'],
-                'filename'        => $parentMethodData['declaringStructure']['filename'],
-                'startLine'       => $parentMethodData['declaringStructure']['startLine'],
-                'endLine'         => $parentMethodData['declaringStructure']['endLine'],
-                'type'            => $parentMethodData['declaringStructure']['type'],
-                'startLineMember' => $parentMethodData['startLine'],
-                'endLineMember'   => $parentMethodData['endLine']
+                'name'            => $class['name'],
+                'filename'        => $class['filename'],
+                'startLine'       => $class['startLine'],
+                'endLine'         => $class['endLine'],
+                'type'            => $class['type'],
+                'startLineMember' => $childMethod['startLine'],
+                'endLineMember'   => $childMethod['endLine']
             ];
         } else {
             $childMethod = [];

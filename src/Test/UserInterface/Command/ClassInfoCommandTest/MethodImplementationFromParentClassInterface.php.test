@@ -12,19 +12,9 @@ abstract class ParentClass implements ParentInterface
 
 }
 
-interface TestInterface
-{
-    public function interfaceMethod();
-}
-
-class ChildClass extends ParentClass implements TestInterface
+class ChildClass extends ParentClass
 {
     public function parentInterfaceMethod(Foo $foo = null)
-    {
-
-    }
-
-    public function interfaceMethod(Foo $foo = null)
     {
 
     }

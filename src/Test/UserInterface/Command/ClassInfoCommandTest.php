@@ -834,6 +834,42 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals($output['methods']['abstractMethod']['override']['wasAbstract'], true);
     }
 
+    public function testMethodOverridingOfImplementationIsAnalyzedCorrectly()
+    {
+        $fileName = 'MethodOverrideOfImplementation.php.test';
+
+        $output = $this->getClassInfo($fileName, 'A\ChildClass');
+
+        $this->assertEquals([
+            'startLine'   => 12,
+            'endLine'     => 15,
+            'wasAbstract' => false,
+
+            'declaringClass' => [
+                'name'      => '\A\ParentClass',
+                'filename'  =>  $this->getPathFor($fileName),
+                'startLine' => 10,
+                'endLine'   => 16,
+                'type'      => 'class'
+            ],
+
+            'declaringStructure' => [
+                'name'            => '\A\ParentClass',
+                'filename'        => $this->getPathFor($fileName),
+                'startLine'       => 10,
+                'endLine'         => 16,
+                'type'            => 'class',
+                'startLineMember' => 12,
+                'endLineMember'   => 15
+            ]
+        ], $output['methods']['interfaceMethod']['override']);
+
+        $this->assertNull($output['methods']['interfaceMethod']['implementation']);
+
+        $this->assertEquals(20, $output['methods']['interfaceMethod']['startLine']);
+        $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
+    }
+
     public function testPropertyOverridingIsAnalyzedCorrectly()
     {
         $fileName = 'PropertyOverride.php.test';
@@ -910,9 +946,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['properties']['ancestorProperty']['override']);
     }
 
-    public function testMethodImplementationIsAnalyzedCorrectly()
+    public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceReferencedByParentClass()
     {
-        $fileName = 'MethodImplementation.php.test';
+        $fileName = 'MethodImplementationFromParentClassInterface.php.test';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -966,6 +1002,16 @@ class ClassInfoCommandTest extends IndexedTest
             ]
         ], $output['methods']['parentInterfaceMethod']['implementation']);
 
+        $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['name']);
+    }
+
+    public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceDirectlyReferenced()
+    {
+        $fileName = 'MethodImplementationFromDirectInterface.php.test';
+
+        $output = $this->getClassInfo($fileName, 'A\ChildClass');
+
         $this->assertEquals([
             [
                 'name'         => 'foo',
@@ -994,27 +1040,30 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['methods']['interfaceMethod']['parameters']);
 
         $this->assertEquals([
-            'startLine' => 17,
-            'endLine'   => 17,
+            'startLine' => 7,
+            'endLine'   => 7,
 
             'declaringClass' => [
                 'name'      => '\A\ChildClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 20,
-                'endLine'   => 31,
+                'startLine' => 10,
+                'endLine'   => 16,
                 'type'      => 'class'
             ],
 
             'declaringStructure' => [
                 'name'            => '\A\TestInterface',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 15,
-                'endLine'         => 18,
+                'startLine'       => 5,
+                'endLine'         => 8,
                 'type'            => 'interface',
-                'startLineMember' => 17,
-                'endLineMember'   => 17
+                'startLineMember' => 7,
+                'endLineMember'   => 7
             ]
         ], $output['methods']['interfaceMethod']['implementation']);
+
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['name']);
     }
 
     public function testMethodParameterTypesFallBackToDocblock()
