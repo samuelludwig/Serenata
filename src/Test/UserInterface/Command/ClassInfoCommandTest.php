@@ -1394,6 +1394,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['name']);
         $this->assertEquals('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['name']);
 
+        $this->assertEquals('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['name']);
+        $this->assertEquals('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['name']);
+
         $this->assertEquals('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['name']);
         $this->assertEquals('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['name']);
 
