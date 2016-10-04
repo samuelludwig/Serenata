@@ -1378,7 +1378,6 @@ class ClassInfoCommandTest extends IndexedTest
         $fileName = 'TraitUsage.php.test';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
-        $baseClassOutput = $this->getClassInfo($fileName, 'A\BaseClass');
 
         $this->assertEquals(['\A\FirstTrait', '\A\SecondTrait', '\A\BaseTrait'], $output['traits']);
         $this->assertEquals(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
@@ -1393,18 +1392,31 @@ class ClassInfoCommandTest extends IndexedTest
 
         // Do a couple of sanity checks.
         $this->assertEquals('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['name']);
-
         $this->assertEquals('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['name']);
         $this->assertEquals('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\TestClass', $output['methods']['test1']['declaringClass']['name']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['name']);
 
         // Test the 'as' keyword for renaming trait method.
         $this->assertThat($output['methods'], $this->arrayHasKey('test1'));
         $this->assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
 
         $this->assertTrue($output['methods']['test1']['isPrivate']);
-        $this->assertEquals($output['methods']['testAmbiguous']['declaringStructure']['name'], '\A\SecondTrait');
-        $this->assertEquals($output['methods']['testAmbiguousAsWell']['declaringStructure']['name'], '\A\FirstTrait');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['name']);
+        $this->assertEquals('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['name']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['name']);
     }
 
     public function testSpecialTypesAreCorrectlyResolved()

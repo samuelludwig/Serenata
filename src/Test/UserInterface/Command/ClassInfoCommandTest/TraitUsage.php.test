@@ -20,6 +20,11 @@ trait FirstTrait
     {
 
     }
+
+    protected function overriddenInChild()
+    {
+
+    }
 }
 
 trait SecondTrait
@@ -45,11 +50,21 @@ trait BaseTrait
     {
 
     }
+
+    protected function overriddenInBaseAndChild()
+    {
+
+    }
 }
 
 class BaseClass
 {
     use BaseTrait;
+
+    protected function overriddenInBaseAndChild()
+    {
+
+    }
 }
 
 class TestClass extends BaseClass
@@ -58,5 +73,15 @@ class TestClass extends BaseClass
         test as private test1;
         SecondTrait::testAmbiguous insteadof testAmbiguous;
         FirstTrait::testAmbiguousAsWell insteadof testAmbiguousAsWell;
+    }
+
+    protected function overriddenInBaseAndChild()
+    {
+
+    }
+
+    protected function overriddenInChild()
+    {
+
     }
 }

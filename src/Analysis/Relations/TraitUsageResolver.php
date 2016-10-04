@@ -36,17 +36,11 @@ class TraitUsageResolver extends AbstractResolver
                 }
             }
 
-            if (isset($class['methods'][$method['name']])) {
-                $existingMethod = $class['methods'][$method['name']];
-
-                if ($existingMethod['declaringStructure']['type'] === 'trait') {
-                    if (isset($traitPrecedences[$method['name']])) {
-                        if ($traitPrecedences[$method['name']]['trait_fqcn'] !== $trait['name']) {
-                            // The method is present in multiple used traits and precedences indicate that the one
-                            // from this trait should not be imported.
-                            continue;
-                        }
-                    }
+            if (isset($traitPrecedences[$method['name']])) {
+                if ($traitPrecedences[$method['name']]['trait_fqcn'] !== $trait['name']) {
+                    // The method is present in multiple used traits and precedences indicate that the one
+                    // from this trait should not be imported.
+                    continue;
                 }
             }
 
@@ -150,13 +144,13 @@ class TraitUsageResolver extends AbstractResolver
             }
 
             $childMethod['declaringStructure'] = [
-                'name'            => $parentMethodData['declaringStructure']['name'],
-                'filename'        => $parentMethodData['declaringStructure']['filename'],
-                'startLine'       => $parentMethodData['declaringStructure']['startLine'],
-                'endLine'         => $parentMethodData['declaringStructure']['endLine'],
-                'type'            => $parentMethodData['declaringStructure']['type'],
-                'startLineMember' => $parentMethodData['startLine'],
-                'endLineMember'   => $parentMethodData['endLine']
+                'name'            => $class['name'],
+                'filename'        => $class['filename'],
+                'startLine'       => $class['startLine'],
+                'endLine'         => $class['endLine'],
+                'type'            => $class['type'],
+                'startLineMember' => $childMethod['startLine'],
+                'endLineMember'   => $childMethod['endLine']
             ];
         } else {
             $childMethod = [];
