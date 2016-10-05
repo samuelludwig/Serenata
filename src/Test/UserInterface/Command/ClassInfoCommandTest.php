@@ -1909,6 +1909,36 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
+     *
+     */
+    public function testBuiltinClassesDoNotAutomaticallyOverrideMethodsFromTheirParents()
+    {
+        $output = $this->getBuiltinClassInfo('\SeekableIterator');
+
+        $this->assertEquals('\Iterator', $output['methods']['next']['declaringClass']['name']);
+    }
+
+    /**
+     *
+     */
+    public function testBuiltinClassesDoNotAutomaticallyOverridePropertiesFromTheirParents()
+    {
+        $output = $this->getBuiltinClassInfo('\DomainException');
+
+        $this->assertEquals('\Exception', $output['properties']['message']['declaringClass']['name']);
+    }
+
+    /**
+     *
+     */
+    public function testBuiltinClassesDoNotAutomaticallyOverrideConstantsFromTheirParents()
+    {
+        $output = $this->getBuiltinClassInfo('\SplTempFileObject');
+
+        $this->assertEquals('\SplFileObject', $output['constants']['DROP_NEW_LINE']['declaringClass']['name']);
+    }
+
+    /**
      * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
      */
     public function testThrowsExceptionOnCircularDependencyWithClassExtendingItself()

@@ -579,11 +579,15 @@ class BuiltinIndexer
         }
 
         foreach ($element->getMethods() as $method) {
-            $this->indexMethod($method, $structureId);
+            if ($method->getDeclaringClass()->getName() === $element->getName()) {
+                $this->indexMethod($method, $structureId);
+            }
         }
 
         foreach ($element->getProperties() as $property) {
-            $this->indexProperty($property, $structureId);
+            if ($property->getDeclaringClass()->getName() === $element->getName()) {
+                $this->indexProperty($property, $structureId);
+            }
         }
 
         foreach ($element->getConstants() as $constantName => $constantValue) {
