@@ -1883,7 +1883,7 @@ class ClassInfoCommandTest extends IndexedTest
             'isProtected'        => false,
             'isPrivate'          => false,
             'isStatic'           => false,
-            'isAbstract'         => true,
+            'isAbstract'         => false,
             'isFinal'            => false,
             'override'           => null,
             'implementation'     => null,
@@ -1906,6 +1906,16 @@ class ClassInfoCommandTest extends IndexedTest
                 'endLineMember'   => 0
             ]
         ], $output['methods']['getIterator']);
+    }
+
+    /**
+     *
+     */
+    public function testBuiltinInterfaceMethodsAreNotMarkedAsAbstract()
+    {
+        $output = $this->getBuiltinClassInfo('\SeekableIterator');
+
+        $this->assertFalse($output['methods']['seek']['isAbstract']);
     }
 
     /**

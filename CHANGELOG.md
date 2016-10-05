@@ -9,6 +9,7 @@
 
 ### Bugs fixed
 * Documentation for built-in functions was escaping underscores with a slash.
+* Built-in interface methods had `isAbstract` set to `true` instead of `false`.
 * Semantic linting was incorrectly processing unqualified global function names.
 * Semantic linting was incorrectly processing unqualified global constant names.
 * The status bar was not showing progress when a project index happened through a repository status change.

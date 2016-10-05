@@ -632,7 +632,7 @@ class BuiltinIndexer
             'access_modifier_id' => $accessModifierMap[$accessModifierName],
             'is_magic'           => 0,
             'is_static'          => $method->isStatic(),
-            'is_abstract'        => $method->isAbstract() ? 1 : 0,
+            'is_abstract'        => $method->isAbstract() && !$method->getDeclaringClass()->isInterface() ? 1 : 0,
             'is_final'           => $method->isFinal() ? 1 : 0
         ]);
     }
