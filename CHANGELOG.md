@@ -15,6 +15,7 @@
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
 * Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
 * Caching will now add an additional folder with the name of the active user in it. This solves a problem where instances from multiple users on the same system would try to use the same cache entries.
+* When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.
 * Built-in interfaces no longer have `isAbstract` set to true. They _are_ abstract in a certain sense, but this property is meant to indicate if a classlike has been defined using the abstract keyword. It was also not consistent with the behavior for non-built-in interfaces.
 
 ## 1.2.0

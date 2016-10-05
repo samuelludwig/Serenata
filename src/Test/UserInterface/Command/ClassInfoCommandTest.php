@@ -870,6 +870,63 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
     }
 
+    public function testMethodOverridingAndImplementationSimultaneouslyIsAnalyzedCorrectly()
+    {
+        $fileName = 'MethodOverrideAndImplementation.php.test';
+
+        $output = $this->getClassInfo($fileName, 'A\ChildClass');
+
+        $this->assertEquals([
+            'startLine'   => 7,
+            'endLine'     => 7,
+
+            'declaringClass' => [
+                'name'      => '\A\TestInterface',
+                'filename'  =>  $this->getPathFor($fileName),
+                'startLine' => 5,
+                'endLine'   => 8,
+                'type'      => 'interface'
+            ],
+
+            'declaringStructure' => [
+                'name'            => '\A\TestInterface',
+                'filename'        => $this->getPathFor($fileName),
+                'startLine'       => 5,
+                'endLine'         => 8,
+                'type'            => 'interface',
+                'startLineMember' => 7,
+                'endLineMember'   => 7
+            ]
+        ], $output['methods']['interfaceMethod']['implementation']);
+
+        $this->assertEquals([
+            'startLine'   => 12,
+            'endLine'     => 15,
+            'wasAbstract' => false,
+
+            'declaringClass' => [
+                'name'      => '\A\ParentClass',
+                'filename'  =>  $this->getPathFor($fileName),
+                'startLine' => 10,
+                'endLine'   => 16,
+                'type'      => 'class'
+            ],
+
+            'declaringStructure' => [
+                'name'            => '\A\ParentClass',
+                'filename'        => $this->getPathFor($fileName),
+                'startLine'       => 10,
+                'endLine'         => 16,
+                'type'            => 'class',
+                'startLineMember' => 12,
+                'endLineMember'   => 15
+            ]
+        ], $output['methods']['interfaceMethod']['override']);
+
+        $this->assertEquals(20, $output['methods']['interfaceMethod']['startLine']);
+        $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
+    }
+
     public function testPropertyOverridingIsAnalyzedCorrectly()
     {
         $fileName = 'PropertyOverride.php.test';

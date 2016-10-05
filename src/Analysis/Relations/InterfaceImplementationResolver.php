@@ -58,52 +58,32 @@ class InterfaceImplementationResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentMethodData
+     * @param array       $interfaceMethodData
      * @param ArrayObject $class
      */
-    protected function resolveImplementationOfMethod(array $parentMethodData, ArrayObject $class)
+    protected function resolveImplementationOfMethod(array $interfaceMethodData, ArrayObject $class)
     {
+        $childMethod = [];
         $inheritedData = [];
-        $childMethod = null;
-        $overrideData = null;
-        $implementationData = null;
 
-        if (isset($class['methods'][$parentMethodData['name']])) {
-            $childMethod = $class['methods'][$parentMethodData['name']];
+        if (isset($class['methods'][$interfaceMethodData['name']])) {
+            $childMethod = $class['methods'][$interfaceMethodData['name']];
 
-            if ($parentMethodData['declaringStructure']['type'] === 'interface') {
-                $implementationData = [
-                    'declaringClass'     => $parentMethodData['declaringClass'],
-                    'declaringStructure' => $parentMethodData['declaringStructure'],
-                    'startLine'          => $parentMethodData['startLine'],
-                    'endLine'            => $parentMethodData['endLine']
-                ];
-            } else {
-                $overrideData = [
-                    'declaringClass'     => $parentMethodData['declaringClass'],
-                    'declaringStructure' => $parentMethodData['declaringStructure'],
-                    'startLine'          => $parentMethodData['startLine'],
-                    'endLine'            => $parentMethodData['endLine'],
-                    'wasAbstract'        => $parentMethodData['isAbstract']
-                ];
-            }
+            $childMethod['implementation'] = [
+                'declaringClass'     => $interfaceMethodData['declaringClass'],
+                'declaringStructure' => $interfaceMethodData['declaringStructure'],
+                'startLine'          => $interfaceMethodData['startLine'],
+                'endLine'            => $interfaceMethodData['endLine']
+            ];
 
-            if ($parentMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
-                $inheritedData = $this->extractInheritedMethodInfo($parentMethodData, $childMethod);
+            if ($interfaceMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
+                $inheritedData = $this->extractInheritedMethodInfo($interfaceMethodData, $childMethod);
             } else {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childMethod['longDescription'],
-                    $parentMethodData['longDescription']
+                    $interfaceMethodData['longDescription']
                 );
             }
-
-            $childMethod['declaringClass'] = [
-                'name'            => $class['name'],
-                'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
-                'type'            => $class['type']
-            ];
 
             $childMethod['declaringStructure'] = [
                 'name'            => $class['name'],
@@ -114,20 +94,15 @@ class InterfaceImplementationResolver extends AbstractResolver
                 'startLineMember' => $childMethod['startLine'],
                 'endLineMember'   => $childMethod['endLine']
             ];
-        } else {
-            $childMethod = [];
         }
 
-        $class['methods'][$parentMethodData['name']] = array_merge($parentMethodData, $childMethod, $inheritedData, [
-            'override'       => $overrideData,
-            'implementation' => $implementationData,
-
+        $class['methods'][$interfaceMethodData['name']] = array_merge($interfaceMethodData, $childMethod, $inheritedData, [
             'declaringClass' => [
-                'name'            => $class['name'],
-                'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
-                'type'            => $class['type']
+                'name'     => $class['name'],
+                'filename' => $class['filename'],
+                'startLine'=> $class['startLine'],
+                'endLine'  => $class['endLine'],
+                'type'     => $class['type']
             ]
         ]);
     }
