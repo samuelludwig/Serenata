@@ -1152,33 +1152,6 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
         $this->assertEquals([
-            [
-                'name'         => 'foo',
-                'typeHint'     => 'Foo',
-                'description'  => null,
-                'defaultValue' => 'null',
-                'isNullable'   => true,
-                'isReference'  => false,
-                'isVariadic'   => false,
-                'isOptional'   => true,
-
-                'types' => [
-                    [
-                        'type'         => 'Foo',
-                        'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
-                    ],
-
-                    [
-                        'type'         => 'null',
-                        'fqcn'         => 'null',
-                        'resolvedType' => 'null'
-                    ]
-                ]
-            ]
-        ], $output['methods']['interfaceMethod']['parameters']);
-
-        $this->assertEquals([
             'startLine' => 7,
             'endLine'   => 7,
 
