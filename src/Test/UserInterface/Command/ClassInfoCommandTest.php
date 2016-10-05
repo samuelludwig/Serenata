@@ -1145,6 +1145,44 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      *
      */
+    public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceParent()
+    {
+        $fileName = 'MethodImplementationFromInterfaceParent.php.test';
+
+        $output = $this->getClassInfo($fileName, 'A\ChildClass');
+
+        $this->assertEquals([
+            'startLine' => 7,
+            'endLine'   => 7,
+
+            'declaringClass' => [
+                'name'      => '\A\ParentInterface',
+                'filename'  => $this->getPathFor($fileName),
+                'startLine' => 5,
+                'endLine'   => 8,
+                'type'      => 'interface'
+            ],
+
+            'declaringStructure' => [
+                'name'            => '\A\ParentInterface',
+                'filename'        => $this->getPathFor($fileName),
+                'startLine'       => 5,
+                'endLine'         => 8,
+                'type'            => 'interface',
+                'startLineMember' => 7,
+                'endLineMember'   => 7
+            ]
+        ], $output['methods']['interfaceParentMethod']['implementation']);
+
+        $this->assertNull($output['methods']['interfaceParentMethod']['override']);
+
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['name']);
+    }
+
+    /**
+     *
+     */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceDirectlyReferenced()
     {
         $fileName = 'MethodImplementationFromDirectInterface.php.test';
