@@ -8,6 +8,12 @@ use PhpIntegrator\Test\IndexedTest;
 
 class ClassInfoCommandTest extends IndexedTest
 {
+    /**
+     * @param string $file
+     * @param string $fqcn
+     *
+     * @return array
+     */
     protected function getClassInfo($file, $fqcn)
     {
         $path = $this->getPathFor($file);
@@ -24,6 +30,11 @@ class ClassInfoCommandTest extends IndexedTest
         return $command->getClassInfo($fqcn);
     }
 
+    /**
+     * @param string $fqcn
+     *
+     * @return array
+     */
     protected function getBuiltinClassInfo($fqcn)
     {
         $container = $this->createTestContainerForBuiltinStructuralElements();
@@ -36,6 +47,11 @@ class ClassInfoCommandTest extends IndexedTest
         return $command->getClassInfo($fqcn);
     }
 
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
     protected function getPathFor($file)
     {
         return __DIR__ . '/ClassInfoCommandTest/' . $file;
@@ -49,6 +65,9 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo('SimpleClass.php.test', 'DoesNotExist');
     }
 
+    /**
+     *
+     */
     public function testLeadingSlashIsResolvedCorrectly()
     {
         $fileName = 'SimpleClass.php.test';
@@ -59,6 +78,9 @@ class ClassInfoCommandTest extends IndexedTest
         );
     }
 
+    /**
+     *
+     */
     public function testDataIsCorrectForASimpleClass()
     {
         $fileName = 'SimpleClass.php.test';
@@ -96,6 +118,9 @@ class ClassInfoCommandTest extends IndexedTest
         ]);
     }
 
+    /**
+     *
+     */
     public function testAnnotationClassIsCorrectlyPickedUp()
     {
         $fileName = 'AnnotationClass.php.test';
@@ -105,6 +130,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertTrue($output['isAnnotation']);
     }
 
+    /**
+     *
+     */
     public function testFinalClassIsCorrectlyPickedUp()
     {
         $fileName = 'FinalClass.php.test';
@@ -114,6 +142,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertTrue($output['isFinal']);
     }
 
+    /**
+     *
+     */
     public function testDataIsCorrectForClassProperties()
     {
         $fileName = 'ClassProperty.php.test';
@@ -173,6 +204,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['properties']['testProperty']);
     }
 
+    /**
+     *
+     */
     public function testPropertyDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary()
     {
         $fileName = 'ClassPropertyDescriptionPrecedence.php.test';
@@ -183,6 +217,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('This is a long description.', $output['properties']['testProperty']['longDescription']);
     }
 
+    /**
+     *
+     */
     public function testCompoundClassPropertyStatementsHaveTheirDocblocksAnalyzedCorrectly()
     {
         $fileName = 'CompoundClassPropertyStatement.php.test';
@@ -212,6 +249,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['properties']['testProperty2']['types']);
     }
 
+    /**
+     *
+     */
     public function testPropertyTypeDeductionFallsBackToUsingItsDefaultValue()
     {
         $fileName = 'ClassPropertyDefaultValue.php.test';
@@ -235,6 +275,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['properties']['testPropertyWithNull']['types']);
     }
 
+    /**
+     *
+     */
     public function testConstantTypeDeductionFallsBackToUsingItsDefaultValue()
     {
         $fileName = 'ClassConstantDefaultValue.php.test';
@@ -250,6 +293,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['constants']['TEST_CONSTANT']['types']);
     }
 
+    /**
+     *
+     */
     public function testDataIsCorrectForClassMethods()
     {
         $fileName = 'ClassMethod.php.test';
@@ -373,6 +419,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['methods']['testMethod']);
     }
 
+    /**
+     *
+     */
     public function testFinalMethodIsCorrectlyPickedUp()
     {
         $fileName = 'FinalClassMethod.php.test';
@@ -382,6 +431,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertTrue($output['methods']['finalMethod']['isFinal']);
     }
 
+    /**
+     *
+     */
     public function testDataIsCorrectForClassConstants()
     {
         $fileName = 'ClassConstant.php.test';
@@ -442,6 +494,9 @@ class ClassInfoCommandTest extends IndexedTest
         ]);
     }
 
+    /**
+     *
+     */
     public function testConstantDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary()
     {
         $fileName = 'ClassConstantDescriptionPrecedence.php.test';
@@ -452,6 +507,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('This is a long description.', $output['constants']['TEST_CONSTANT']['longDescription']);
     }
 
+    /**
+     *
+     */
     public function testDocblockInheritanceWorksProperlyForClasses()
     {
         $fileName = 'ClassDocblockInheritance.php.test';
@@ -469,6 +527,9 @@ class ClassInfoCommandTest extends IndexedTest
         );
     }
 
+    /**
+     *
+     */
     public function testDocblockInheritanceWorksProperlyForMethods()
     {
         $fileName = 'MethodDocblockInheritance.php.test';
@@ -521,6 +582,9 @@ class ClassInfoCommandTest extends IndexedTest
         );
     }
 
+    /**
+     *
+     */
     public function testDocblockInheritanceWorksProperlyForProperties()
     {
         $fileName = 'PropertyDocblockInheritance.php.test';
@@ -561,6 +625,9 @@ class ClassInfoCommandTest extends IndexedTest
         );
     }
 
+    /**
+     *
+     */
     public function testMethodOverridingIsAnalyzedCorrectly()
     {
         $fileName = 'MethodOverride.php.test';
@@ -834,6 +901,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals($output['methods']['abstractMethod']['override']['wasAbstract'], true);
     }
 
+    /**
+     *
+     */
     public function testMethodOverridingOfParentImplementationIsAnalyzedCorrectly()
     {
         $fileName = 'MethodOverrideOfParentImplementation.php.test';
@@ -870,6 +940,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
     }
 
+    /**
+     *
+     */
     public function testMethodOverridingAndImplementationSimultaneouslyIsAnalyzedCorrectly()
     {
         $fileName = 'MethodOverrideAndImplementation.php.test';
@@ -927,6 +1000,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
     }
 
+    /**
+     *
+     */
     public function testPropertyOverridingIsAnalyzedCorrectly()
     {
         $fileName = 'PropertyOverride.php.test';
@@ -1003,6 +1079,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['properties']['ancestorProperty']['override']);
     }
 
+    /**
+     *
+     */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceReferencedByParentClass()
     {
         $fileName = 'MethodImplementationFromParentClassInterface.php.test';
@@ -1063,6 +1142,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['name']);
     }
 
+    /**
+     *
+     */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceDirectlyReferenced()
     {
         $fileName = 'MethodImplementationFromDirectInterface.php.test';
@@ -1123,6 +1205,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['name']);
     }
 
+    /**
+     *
+     */
     public function testMethodParameterTypesFallBackToDocblock()
     {
         $fileName = 'MethodParameterDocblockFallBack.php.test';
@@ -1136,6 +1221,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals($parameters[3]['types'][0]['type'], '\Traversable[]');
     }
 
+    /**
+     *
+     */
     public function testMagicClassPropertiesArePickedUpCorrectly()
     {
         $fileName = 'MagicClassProperties.php.test';
@@ -1228,6 +1316,9 @@ class ClassInfoCommandTest extends IndexedTest
         ]);
     }
 
+    /**
+     *
+     */
     public function testMagicClassMethodsArePickedUpCorrectly()
     {
         $fileName = 'MagicClassMethods.php.test';
@@ -1370,6 +1461,9 @@ class ClassInfoCommandTest extends IndexedTest
         ]);
     }
 
+    /**
+     *
+     */
     public function testDataIsCorrectForClassInheritance()
     {
         $fileName = 'ClassInheritance.php.test';
@@ -1403,6 +1497,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals($output['parents'], ['\A\AncestorClass']);
     }
 
+    /**
+     *
+     */
     public function testInterfaceImplementationIsCorrectlyProcessed()
     {
         $fileName = 'InterfaceImplementation.php.test';
@@ -1430,6 +1527,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['name']);
     }
 
+    /**
+     *
+     */
     public function testTraitUsageIsCorrectlyProcessed()
     {
         $fileName = 'TraitUsage.php.test';
@@ -1479,6 +1579,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['name']);
     }
 
+    /**
+     *
+     */
     public function testSpecialTypesAreCorrectlyResolved()
     {
         $fileName = 'ResolveSpecialTypes.php.test';
@@ -1664,6 +1767,9 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['methods']['baseMethodThis']['returnTypes']);
     }
 
+    /**
+     *
+     */
     public function testMethodDocblockParameterTypesGetPrecedenceOverTypeHints()
     {
         $fileName = 'ClassMethodPrecedence.php.test';
@@ -1676,6 +1782,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('string', $output['methods']['testMethod']['parameters'][1]['types'][0]['fqcn']);
     }
 
+    /**
+     *
+     */
     public function testItemsWithoutDocblockAndDefaultValueHaveNoTypes()
     {
         $fileName = 'ClassMethodNoDocblock.php.test';
@@ -1687,6 +1796,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEmpty($output['properties']['testProperty']['types']);
     }
 
+    /**
+     *
+     */
     public function testCorrectlyFindsClassesInNamelessNamespace()
     {
         $fileName = 'ClassNamelessNamespace.php.test';
@@ -1696,6 +1808,9 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\TestClass', $output['name']);
     }
 
+    /**
+     *
+     */
     public function testCorrectlyAnalyzesBuiltinItems()
     {
         $output = $this->getBuiltinClassInfo('\IteratorAggregate');
