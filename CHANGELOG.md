@@ -15,6 +15,7 @@
 * Semantic linting was incorrectly processing unqualified global constant names.
 * The status bar was not showing progress when a project index happened through a repository status change.
 * Editing a file that did not meet the allowed extensions specified in the project settings still caused it to be added to the index.
+* Assigning a global constant to something caused the type of that something to become the name of the constant as class name instead.
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
 * Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
 * Caching will now add an additional folder with the name of the active user in it. This solves a problem where instances from multiple users on the same system would try to use the same cache entries.

@@ -7,6 +7,7 @@ use UnexpectedValueException;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
+use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\TypeResolver;
@@ -92,6 +93,11 @@ class TypeDeducer
     protected $functionConverter;
 
     /**
+     * @var ConstantConverter
+     */
+    protected $constantConverter;
+
+    /**
      * Serves as cache to avoid refetching class lists for the same file multiple times.
      *
      * @var array
@@ -116,6 +122,7 @@ class TypeDeducer
      * @param IndexDatabase           $indexDatabase
      * @param ClasslikeInfoBuilder    $classlikeInfoBuilder
      * @param FunctionConverter       $functionConverter
+     * @param ConstantConverter       $constantConverter
      */
     public function __construct(
         Parser $parser,
@@ -127,7 +134,8 @@ class TypeDeducer
         FileTypeResolverFactory $fileTypeResolverFactory,
         IndexDatabase $indexDatabase,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
-        FunctionConverter $functionConverter
+        FunctionConverter $functionConverter,
+        ConstantConverter $constantConverter
     ) {
         $this->parser = $parser;
         $this->classListCommand = $classListCommand;
@@ -139,6 +147,7 @@ class TypeDeducer
         $this->indexDatabase = $indexDatabase;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->functionConverter = $functionConverter;
+        $this->constantConverter = $constantConverter;
     }
 
     /**
@@ -238,12 +247,21 @@ class TypeDeducer
                 $types = $this->fetchResolvedTypesFromTypeArrays($convertedGlobalFunction['returnTypes']);
             }
         } elseif (preg_match("/(({$classRegexPart}))/", $firstElement, $matches) === 1) {
-            // Static class name.
-            $propertyAccessNeedsDollarSign = true;
+            // Global constant or static class name.
+            $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($matches[1]);
 
-            $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+            if ($globalConstant) {
+                $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
 
-            $types = [$this->getTypeResolverForFile($file)->resolve($matches[1], $line)];
+                $types = $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
+            } else {
+                // Static class name.
+                $propertyAccessNeedsDollarSign = true;
+
+                $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+                $types = [$this->getTypeResolverForFile($file)->resolve($matches[1], $line)];
+            }
         }
 
         // We now know what types we need to start from, now it's just a matter of fetching the return types of members

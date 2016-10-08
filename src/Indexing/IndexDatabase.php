@@ -524,6 +524,24 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     }
 
     /**
+     * @param string $fqcn
+     *
+     * @return array|null
+     */
+    public function getGlobalConstantByFqcn($fqcn)
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('c.*', 'fi.path')
+            ->from(IndexStorageItemEnum::CONSTANTS, 'c')
+            ->leftJoin('c', IndexStorageItemEnum::FILES, 'fi', 'fi.id = c.file_id')
+            ->where('structure_id IS NULL')
+            ->andWhere('fqcn = ?')
+            ->setParameter(0, $fqcn)
+            ->execute()
+            ->fetch();
+    }
+
+    /**
      * Fetches a list of global functions.
      *
      * @return \Traversable

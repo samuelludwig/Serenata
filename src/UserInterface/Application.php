@@ -338,7 +338,8 @@ class Application
                 new Reference('fileTypeResolverFactory'),
                 new Reference('indexDatabase'),
                 new Reference('classlikeInfoBuilder'),
-                new Reference('functionConverter')
+                new Reference('functionConverter'),
+                new Reference('constantConverter')
             ]);
 
         $container
