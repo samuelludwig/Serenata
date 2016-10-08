@@ -247,10 +247,14 @@ class TypeDeducer
                 $types = $this->fetchResolvedTypesFromTypeArrays($convertedGlobalFunction['returnTypes']);
             }
         } elseif (preg_match("/({$classRegexPart})/", $firstElement, $matches) === 1) {
-            // Global constant or static class name.
-            $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($matches[0]);
+            $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+            $fqcn = $this->getTypeResolverForFile($file)->resolve($matches[0], $line);
+
+            $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
 
             if ($globalConstant) {
+                // Global constant.
                 $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
 
                 $types = $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
@@ -258,9 +262,7 @@ class TypeDeducer
                 // Static class name.
                 $propertyAccessNeedsDollarSign = true;
 
-                $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
-                $types = [$this->getTypeResolverForFile($file)->resolve($matches[0], $line)];
+                $types = [$fqcn];
             }
         }
 

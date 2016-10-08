@@ -441,6 +441,16 @@ class DeduceTypesCommandTest extends IndexedTest
         $this->assertEquals(['string'], $result);
     }
 
+    public function testCorrectlyAnalyzesGlobalConstantsAssignedToOtherGlobalConstants()
+    {
+        $result = $this->deduceTypes(
+            'GlobalConstant.php.test',
+            ['\ANOTHER_GLOBAL_CONSTANT']
+        );
+
+        $this->assertEquals(['string'], $result);
+    }
+
     public function testCorrectlyAnalyzesClosures()
     {
         $result = $this->deduceTypes(
