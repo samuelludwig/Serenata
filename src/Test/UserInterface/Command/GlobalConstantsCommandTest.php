@@ -75,7 +75,11 @@ class GlobalConstantsCommandTest extends IndexedTest
         ], $output['\PHP_EOL']);
 
         $this->assertEquals([
-
+            [
+                'type'         => 'string',
+                'fqcn'         => 'string',
+                'resolvedType' => 'string'
+            ]
         ], $output['\PHP_EOL']['types']);
     }
 }

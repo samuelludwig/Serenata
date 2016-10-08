@@ -345,7 +345,8 @@ class Application
             ->register('builtinIndexer', BuiltinIndexer::class)
             ->setArguments([
                 new Reference('indexDatabase'),
-                new Reference('typeAnalyzer')
+                new Reference('typeAnalyzer'),
+                new Reference('typeDeducer')
             ]);
 
         $container

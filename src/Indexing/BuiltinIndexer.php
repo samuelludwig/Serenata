@@ -8,8 +8,10 @@ use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionProperty;
 use ReflectionParameter;
+use UnexpectedValueException;
 use ReflectionFunctionAbstract;
 
+use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 /**
@@ -28,6 +30,11 @@ class BuiltinIndexer
      * @var TypeAnalyzer
      */
     protected $typeAnalyzer;
+
+    /**
+     * @var DeduceTypesCommand
+     */
+    protected $typeDeducer;
 
     /**
      * @var array
@@ -53,10 +60,11 @@ class BuiltinIndexer
      * @param StorageInterface $storage
      * @param TypeAnalyzer     $typeAnalyzer
      */
-    public function __construct(StorageInterface $storage, TypeAnalyzer $typeAnalyzer)
+    public function __construct(StorageInterface $storage, TypeAnalyzer $typeAnalyzer, TypeDeducer $typeDeducer)
     {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->typeDeducer = $typeDeducer;
     }
 
     /**
@@ -150,20 +158,35 @@ class BuiltinIndexer
             $encodingOptions |= JSON_PRESERVE_ZERO_FRACTION;
         }
 
+        $defaultValue = json_encode($value, $encodingOptions);
+
+        try {
+            $typeList = $this->typeDeducer->deduceTypes(
+                'test',
+                $defaultValue,
+                [$defaultValue],
+                0
+            );
+
+            $types = $this->getTypeDataForTypeList($typeList);
+        } catch (UnexpectedValueException $e) {
+            $types = [];
+        }
+
         return $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
             'name'               => $name,
             'fqcn'               => $this->typeAnalyzer->getNormalizedFqcn($name),
             'file_id'            => null,
             'start_line'         => null,
             'end_line'           => null,
-            'default_value'      => json_encode($value, $encodingOptions),
+            'default_value'      => $defaultValue,
             'is_builtin'         => 1,
             'is_deprecated'      => 0,
             'has_docblock'       => 0,
             'short_description'  => null,
             'long_description'   => null,
             'type_description'   => null,
-            'types_serialized'   => serialize([])
+            'types_serialized'   => serialize($types)
         ]);
     }
 
@@ -696,6 +719,31 @@ class BuiltinIndexer
         $this->storage->update(IndexStorageItemEnum::CONSTANTS, $constantId, [
             'structure_id' => $structureId
         ]);
+    }
+
+    /**
+     * @param string[] $typeList
+     *
+     * @return array[]
+     */
+    protected function getTypeDataForTypeList(array $typeList)
+    {
+        $types = [];
+
+        foreach ($typeList as $type) {
+            $fqcn = $type;
+
+            if ($this->typeAnalyzer->isClassType($type)) {
+                $fqcn = $this->typeAnalyzer->getNormalizedFqcn($ytpe);
+            }
+
+            $types[] = [
+                'type' => $type,
+                'fqcn' => $fqcn
+            ];
+        }
+
+        return $types;
     }
 
     /**
