@@ -258,7 +258,6 @@ class TypeDeducer
                 // Static class name.
                 $propertyAccessNeedsDollarSign = true;
 
-
                 $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
                 $types = [$this->getTypeResolverForFile($file)->resolve($matches[0], $line)];
