@@ -347,6 +347,20 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    public function testReportsUnusedUseStatementsForConstants()
+    {
+        $output = $this->lintFile('UnusedUseStatementsConstant.php.test');
+
+        $this->assertEquals([
+            [
+                'name'  => 'Some\CONSTANT_UNUSED',
+                'alias' => 'CONSTANT_UNUSED',
+                'start' => 56,
+                'end'   => 76
+            ]
+        ], $output['warnings']['unusedUseStatements']);
+    }
+
     public function testSeesUseStatementsAsUsedIfTheyAppearInComments()
     {
         $output = $this->lintFile('UnusedUseStatementsDocblock.php.test');

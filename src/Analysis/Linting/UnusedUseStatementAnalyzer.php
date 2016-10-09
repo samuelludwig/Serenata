@@ -27,6 +27,11 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     protected $useStatementFetchingVisitor;
 
     /**
+     * @var GlobalConstantUsageFetchingVisitor
+     */
+    protected $globalConstantUsageFetchingVisitor;
+
+    /**
      * @var DocblockClassUsageFetchingVisitor
      */
     protected $docblockClassUsageFetchingVisitor;
@@ -40,8 +45,8 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
     {
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
-        $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
         $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
+        $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
         $this->docblockClassUsageFetchingVisitor = new DocblockClassUsageFetchingVisitor($typeAnalyzer, $docblockParser);
     }
 
@@ -64,7 +69,8 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     public function getOutput()
     {
         $unusedUseStatements = array_merge(
-            $this->getOutputForClasses()
+            $this->getOutputForClasses(),
+            $this->getOutputForConstants()
         );
 
         return $unusedUseStatements;
@@ -104,6 +110,48 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                 if (
                     (!array_key_exists('used', $data) || !$data['used']) &&
                     $data['type'] === UseStatementFetchingVisitor::TYPE_CLASSLIKE
+                ) {
+                    unset($data['line'], $data['type']);
+
+                    $unusedUseStatements[] = $data;
+                }
+            }
+        }
+
+        return $unusedUseStatements;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOutputForConstants()
+    {
+        $unknownClasses = [];
+        $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
+
+        $constantUsages = $this->globalConstantUsageFetchingVisitor->getGlobalConstantList();
+
+        foreach ($constantUsages as $constantUsage) {
+            $relevantAlias = $constantUsage['localNameFirstPart'];
+
+            if (!$constantUsage['isFullyQualified'] &&
+                isset($namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]) &&
+                $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['type'] === UseStatementFetchingVisitor::TYPE_CONSTANT
+            ) {
+                // Mark the accompanying used statement, if any, as used.
+                $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
+            }
+        }
+
+        $unusedUseStatements = [];
+
+        foreach ($namespaces as $namespace => $namespaceData) {
+            $useStatementMap = $namespaceData['useStatements'];
+
+            foreach ($useStatementMap as $alias => $data) {
+                if (
+                    (!array_key_exists('used', $data) || !$data['used']) &&
+                    $data['type'] === UseStatementFetchingVisitor::TYPE_CONSTANT
                 ) {
                     unset($data['line'], $data['type']);
 

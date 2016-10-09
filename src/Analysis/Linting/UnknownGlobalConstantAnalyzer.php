@@ -70,7 +70,13 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
                 }
             }
 
-            unset($globalConstant['namespace'], $globalConstant['isUnqualified']);
+            unset(
+                $globalConstant['namespace'],
+                $globalConstant['isUnqualified'],
+                $globalConstant['isFullyQualified'],
+                $globalConstant['localName'],
+                $globalConstant['localNameFirstPart']
+            );
 
             $unknownGlobalConstants[] = $globalConstant;
         }
