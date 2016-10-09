@@ -28,4 +28,16 @@ abstract class AbstractNameResolvingVisitor extends NameResolver
 
         return $name;
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function resolveOtherName(Name $name, $type)
+    {
+        $resolvedName = parent::resolveOtherName($name, $type);
+
+        $name->setAttribute('resolvedName', $resolvedName);
+
+        return $name;
+    }
 }
