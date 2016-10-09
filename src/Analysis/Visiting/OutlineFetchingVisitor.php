@@ -9,13 +9,11 @@ use PhpIntegrator\Utility\NodeHelpers;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 
-use PhpParser\NodeVisitor\NameResolver;
-
 /**
  * Node visitor that fetches the outline of a file, creating a list of structural elements (classes, interfaces, ...)
  * with their direct methods, properties, constants, and so on.
  */
-class OutlineFetchingVisitor extends NameResolver
+class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 {
     /**
      * @var array
@@ -114,7 +112,7 @@ class OutlineFetchingVisitor extends NameResolver
         $interfaces = [];
 
         foreach ($node->implements as $implementedName) {
-            $interfaces[] = NodeHelpers::fetchClassName($implementedName);
+            $interfaces[] = NodeHelpers::fetchClassName($implementedName->getAttribute('resolvedName'));
         }
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
@@ -130,7 +128,7 @@ class OutlineFetchingVisitor extends NameResolver
             'isAbstract'     => $node->isAbstract(),
             'isFinal'        => $node->isFinal(),
             'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
-            'parents'        => $node->extends ? [NodeHelpers::fetchClassName($node->extends)] : [],
+            'parents'        => $node->extends ? [NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'))] : [],
             'interfaces'     => $interfaces,
             'traits'         => [],
             'methods'        => [],
@@ -155,7 +153,7 @@ class OutlineFetchingVisitor extends NameResolver
         $extendedInterfaces = [];
 
         foreach ($node->extends as $extends) {
-            $extendedInterfaces[] = NodeHelpers::fetchClassName($extends);
+            $extendedInterfaces[] = NodeHelpers::fetchClassName($extends->getAttribute('resolvedName'));
         }
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
@@ -218,7 +216,7 @@ class OutlineFetchingVisitor extends NameResolver
 
         foreach ($node->traits as $traitName) {
             $this->structures[$fqcn]['traits'][] =
-                NodeHelpers::fetchClassName($traitName);
+                NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
         }
 
         foreach ($node->adaptations as $adaptation) {
@@ -226,7 +224,7 @@ class OutlineFetchingVisitor extends NameResolver
                 $this->structures[$fqcn]['traitAliases'][] = [
                     'name'                       => $adaptation->method,
                     'alias'                      => $adaptation->newName,
-                    'trait'                      => $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait) : null,
+                    'trait'                      => $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null,
                     'isPublic'                   => ($adaptation->newModifier === 1),
                     'isPrivate'                  => ($adaptation->newModifier === 4),
                     'isProtected'                => ($adaptation->newModifier === 2),
@@ -235,7 +233,7 @@ class OutlineFetchingVisitor extends NameResolver
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 $this->structures[$fqcn]['traitPrecedences'][] = [
                     'name'  => $adaptation->method,
-                    'trait' => NodeHelpers::fetchClassName($adaptation->trait)
+                    'trait' => NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'))
                 ];
             }
         }
@@ -360,7 +358,7 @@ class OutlineFetchingVisitor extends NameResolver
             $resolvedType = null;
 
             if ($param->type instanceof Node\Name) {
-                $resolvedType = NodeHelpers::fetchClassName($param->type);
+                $resolvedType = NodeHelpers::fetchClassName($param->type->getAttribute('resolvedName'));
             } elseif ($param->type) {
                 $resolvedType = (string) $param->type;
             }
