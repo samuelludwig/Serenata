@@ -28,11 +28,14 @@ class GlobalFunctionUsageFetchingVisitor extends AbstractNameResolvingVisitor
         }
 
         $this->globalFunctionCallList[] = [
-            'name'          => NodeHelpers::fetchClassName($node->name),
-            'namespace'     => $this->namespace ? NodeHelpers::fetchClassName($this->namespace) : null,
-            'isUnqualified' => $node->name->isUnqualified(),
-            'start'         => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-            'end'           => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+            'name'               => NodeHelpers::fetchClassName($node->name->getAttribute('resolvedName')),
+            'localName'          => NodeHelpers::fetchClassName($node->name),
+            'localNameFirstPart' => $node->name->getFirst(),
+            'isFullyQualified'   => $node->name->isFullyQualified(),
+            'namespace'          => $this->namespace ? NodeHelpers::fetchClassName($this->namespace) : null,
+            'isUnqualified'      => $node->name->isUnqualified(),
+            'start'              => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+            'end'                => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
         ];
     }
 

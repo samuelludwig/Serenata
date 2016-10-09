@@ -70,7 +70,13 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
                 }
             }
 
-            unset($globalFunction['namespace'], $globalFunction['isUnqualified']);
+            unset(
+                $globalFunction['namespace'],
+                $globalFunction['isUnqualified'],
+                $globalFunction['isFullyQualified'],
+                $globalFunction['localName'],
+                $globalFunction['localNameFirstPart']
+            );
 
             $unknownGlobalFunctions[] = $globalFunction;
         }

@@ -5,6 +5,7 @@ namespace PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
+use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
@@ -32,6 +33,11 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     protected $globalConstantUsageFetchingVisitor;
 
     /**
+     * @var GlobalFunctionUsageFetchingVisitor
+     */
+    protected $globalFunctionUsageFetchingVisitor;
+
+    /**
      * @var DocblockClassUsageFetchingVisitor
      */
     protected $docblockClassUsageFetchingVisitor;
@@ -47,6 +53,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
         $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
+        $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
         $this->docblockClassUsageFetchingVisitor = new DocblockClassUsageFetchingVisitor($typeAnalyzer, $docblockParser);
     }
 
@@ -59,7 +66,8 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
             $this->classUsageFetchingVisitor,
             $this->useStatementFetchingVisitor,
             $this->docblockClassUsageFetchingVisitor,
-            $this->globalConstantUsageFetchingVisitor
+            $this->globalConstantUsageFetchingVisitor,
+            $this->globalFunctionUsageFetchingVisitor
         ];
     }
 
@@ -70,7 +78,8 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     {
         $unusedUseStatements = array_merge(
             $this->getOutputForClasses(),
-            $this->getOutputForConstants()
+            $this->getOutputForConstants(),
+            $this->getOutputForFunctions()
         );
 
         return $unusedUseStatements;
@@ -152,6 +161,48 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                 if (
                     (!array_key_exists('used', $data) || !$data['used']) &&
                     $data['type'] === UseStatementFetchingVisitor::TYPE_CONSTANT
+                ) {
+                    unset($data['line'], $data['type']);
+
+                    $unusedUseStatements[] = $data;
+                }
+            }
+        }
+
+        return $unusedUseStatements;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOutputForFunctions()
+    {
+        $unknownClasses = [];
+        $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
+
+        $functionUsages = $this->globalFunctionUsageFetchingVisitor->getGlobalFunctionCallList();
+
+        foreach ($functionUsages as $functionUsage) {
+            $relevantAlias = $functionUsage['localNameFirstPart'];
+
+            if (!$functionUsage['isFullyQualified'] &&
+                isset($namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]) &&
+                $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['type'] === UseStatementFetchingVisitor::TYPE_FUNCTION
+            ) {
+                // Mark the accompanying used statement, if any, as used.
+                $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
+            }
+        }
+
+        $unusedUseStatements = [];
+
+        foreach ($namespaces as $namespace => $namespaceData) {
+            $useStatementMap = $namespaceData['useStatements'];
+
+            foreach ($useStatementMap as $alias => $data) {
+                if (
+                    (!array_key_exists('used', $data) || !$data['used']) &&
+                    $data['type'] === UseStatementFetchingVisitor::TYPE_FUNCTION
                 ) {
                     unset($data['line'], $data['type']);
 
