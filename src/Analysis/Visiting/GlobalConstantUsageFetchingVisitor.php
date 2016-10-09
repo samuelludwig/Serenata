@@ -6,12 +6,10 @@ use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
 
-use PhpParser\NodeVisitor\NameResolver;
-
 /**
  * Node visitor that fetches usages of (global) constants.
  */
-class GlobalConstantUsageFetchingVisitor extends NameResolver
+class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
 {
     /**
      * @var array
