@@ -2,10 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand;
-
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
