@@ -79,12 +79,12 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
 
-        $classUsage = array_merge(
+        $classUsages = array_merge(
             $this->classUsageFetchingVisitor->getClassUsageList(),
             $this->docblockClassUsageFetchingVisitor->getClassUsageList()
         );
 
-        foreach ($classUsage as $classUsage) {
+        foreach ($classUsages as $classUsage) {
             $relevantAlias = $classUsage['firstPart'];
 
             if (!$classUsage['isFullyQualified'] &&
