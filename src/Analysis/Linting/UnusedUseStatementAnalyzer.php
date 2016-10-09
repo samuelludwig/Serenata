@@ -101,7 +101,10 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
             $useStatementMap = $namespaceData['useStatements'];
 
             foreach ($useStatementMap as $alias => $data) {
-                if (!array_key_exists('used', $data) || !$data['used']) {
+                if (
+                    (!array_key_exists('used', $data) || !$data['used']) &&
+                    $data['type'] === UseStatementFetchingVisitor::TYPE_CLASSLIKE
+                ) {
                     unset($data['line'], $data['type']);
 
                     $unusedUseStatements[] = $data;
