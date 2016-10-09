@@ -87,7 +87,7 @@ class ClassInfoCommandTest extends IndexedTest
 
         $output = $this->getClassInfo($fileName, 'A\SimpleClass');
 
-        $this->assertEquals($output, [
+        $this->assertEquals([
             'name'               => '\A\SimpleClass',
             'startLine'          => 10,
             'endLine'            => 13,
@@ -115,7 +115,7 @@ class ClassInfoCommandTest extends IndexedTest
             'constants'          => [],
             'properties'         => [],
             'methods'            => []
-        ]);
+        ], $output);
     }
 
     /**
