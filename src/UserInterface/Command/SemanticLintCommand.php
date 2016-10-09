@@ -267,14 +267,9 @@ class SemanticLintCommand extends AbstractCommand
                 }
             }
 
-            $traverser->traverse($nodes);
-
             $docblockCorrectnessAnalyzer = null;
 
             if ($analyzeDocblockCorrectness) {
-                // These analyzers needs to traverse the nodes separately as it modifies them.
-                $traverser = new NodeTraverser(false);
-
                 $docblockCorrectnessAnalyzer = new Linting\DocblockCorrectnessAnalyzer(
                     $code,
                     $this->classlikeInfoBuilder,
@@ -286,56 +281,33 @@ class SemanticLintCommand extends AbstractCommand
                 foreach ($docblockCorrectnessAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
                 }
-
-                try {
-                    $traverser->traverse($nodes);
-                } catch (Error $e) {
-                    // The NameResolver can throw exceptions on things such as duplicate use statements. Seeing as that is
-                    // a PHP error, just fetch any output at all.
-                    $docblockCorrectnessAnalyzer = null;
-                }
-
-                // The NameResolver modifies nodes as it goes along. We can't use NodeTraverser's clone functionality
-                // as that only (shallowly) clones the nodes themselves, but not their names.
-                $nodes = $parser->parse($code);
             }
 
             $unknownGlobalConstantAnalyzer = null;
-            $unknownGlobalFunctionAnalyzer = null;
 
-            if ($unknownGlobalConstantAnalyzer || $retrieveUnknownGlobalFunctions) {
-                // These analyzers needs to traverse the nodes separately as it modifies them.
-                $traverser = new NodeTraverser(false);
+            if ($retrieveUnknownGlobalFunctions) {
+                $unknownGlobalConstantAnalyzer = new Linting\UnknownGlobalConstantAnalyzer(
+                    $this->globalConstantExistanceChecker
+                );
 
-                if ($retrieveUnknownGlobalFunctions) {
-                    $unknownGlobalConstantAnalyzer = new Linting\UnknownGlobalConstantAnalyzer(
-                        $this->globalConstantExistanceChecker
-                    );
-
-                    foreach ($unknownGlobalConstantAnalyzer->getVisitors() as $visitor) {
-                        $traverser->addVisitor($visitor);
-                    }
-                }
-
-                if ($retrieveUnknownGlobalFunctions) {
-                    $unknownGlobalFunctionAnalyzer = new Linting\UnknownGlobalFunctionAnalyzer(
-                        $this->globalFunctionExistanceChecker
-                    );
-
-                    foreach ($unknownGlobalFunctionAnalyzer->getVisitors() as $visitor) {
-                        $traverser->addVisitor($visitor);
-                    }
-                }
-
-                try {
-                    $traverser->traverse($nodes);
-                } catch (Error $e) {
-                    // The NameResolver can throw exceptions on things such as duplicate use statements. Seeing as that is
-                    // a PHP error, just fetch any output at all.
-                    $unknownGlobalConstantAnalyzer = null;
-                    $unknownGlobalFunctionAnalyzer = null;
+                foreach ($unknownGlobalConstantAnalyzer->getVisitors() as $visitor) {
+                    $traverser->addVisitor($visitor);
                 }
             }
+
+            $unknownGlobalFunctionAnalyzer = null;
+
+            if ($retrieveUnknownGlobalFunctions) {
+                $unknownGlobalFunctionAnalyzer = new Linting\UnknownGlobalFunctionAnalyzer(
+                    $this->globalFunctionExistanceChecker
+                );
+
+                foreach ($unknownGlobalFunctionAnalyzer->getVisitors() as $visitor) {
+                    $traverser->addVisitor($visitor);
+                }
+            }
+
+            $traverser->traverse($nodes);
 
             if ($unknownClassAnalyzer) {
                 $output['errors']['unknownClasses'] = $unknownClassAnalyzer->getOutput();
