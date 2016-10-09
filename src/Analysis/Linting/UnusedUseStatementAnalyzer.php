@@ -76,7 +76,6 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     protected function getOutputForClasses()
     {
         // Cross-reference the found class names against the class map.
-        $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
 
         $classUsages = array_merge(
