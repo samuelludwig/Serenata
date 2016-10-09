@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
+use DomainException;
+
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
@@ -10,6 +12,21 @@ use PhpParser\NodeVisitorAbstract;
  */
 class UseStatementFetchingVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var string
+     */
+    const TYPE_CLASSLIKE = 'classlike';
+
+    /**
+     * @var string
+     */
+    const TYPE_FUNCTION = 'function';
+
+    /**
+     * @var string
+     */
+    const TYPE_CONSTANT = 'constant';
+
     /**
      * @var array
      */
@@ -62,10 +79,23 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             };
 
             foreach ($node->uses as $use) {
+                $type = $node->type === Node\Stmt\Use_::TYPE_UNKNOWN ? $use->type : $node->type;
+
+                if ($type === Node\Stmt\Use_::TYPE_UNKNOWN) {
+                    throw new DomainException('Unknown use statement type encountered!');
+                }
+
+                $typeMap = [
+                    Node\Stmt\Use_::TYPE_NORMAL   => self::TYPE_CLASSLIKE,
+                    Node\Stmt\Use_::TYPE_FUNCTION => self::TYPE_FUNCTION,
+                    Node\Stmt\Use_::TYPE_CONSTANT => self::TYPE_CONSTANT
+                ];
+
                 // NOTE: The namespace may be null here (intended behavior).
                 $this->namespaces[$this->lastNamespace]['useStatements'][(string) $use->alias] = [
                     'name'  => $prefix . ((string) $use->name),
                     'alias' => $use->alias,
+                    'type'  => $typeMap[$type],
                     'line'  => $node->getLine(),
                     'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,
                     'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null
