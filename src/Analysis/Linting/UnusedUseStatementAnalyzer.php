@@ -72,7 +72,10 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         foreach ($classUsage as $classUsage) {
             $relevantAlias = $classUsage['firstPart'];
 
-            if (!$classUsage['isFullyQualified'] && isset($namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias])) {
+            if (!$classUsage['isFullyQualified'] &&
+                isset($namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]) &&
+                $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['type'] === UseStatementFetchingVisitor::TYPE_CLASSLIKE
+            ) {
                 // Mark the accompanying used statement, if any, as used.
                 $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
             }
