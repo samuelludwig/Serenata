@@ -5,6 +5,7 @@ namespace PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
+use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -39,6 +40,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
     {
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
+        $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
         $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
         $this->docblockClassUsageFetchingVisitor = new DocblockClassUsageFetchingVisitor($typeAnalyzer, $docblockParser);
     }
@@ -51,7 +53,8 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         return [
             $this->classUsageFetchingVisitor,
             $this->useStatementFetchingVisitor,
-            $this->docblockClassUsageFetchingVisitor
+            $this->docblockClassUsageFetchingVisitor,
+            $this->globalConstantUsageFetchingVisitor
         ];
     }
 
@@ -59,6 +62,18 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
      * @inheritDoc
      */
     public function getOutput()
+    {
+        $unusedUseStatements = array_merge(
+            $this->getOutputForClasses()
+        );
+
+        return $unusedUseStatements;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOutputForClasses()
     {
         // Cross-reference the found class names against the class map.
         $unknownClasses = [];
