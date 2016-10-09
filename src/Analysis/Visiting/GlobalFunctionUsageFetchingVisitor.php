@@ -6,12 +6,10 @@ use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
 
-use PhpParser\NodeVisitor\NameResolver;
-
 /**
  * Node visitor that fetches usages of (global) functions.
  */
-class GlobalFunctionUsageFetchingVisitor extends NameResolver
+class GlobalFunctionUsageFetchingVisitor extends AbstractNameResolvingVisitor
 {
     /**
      * @var array
