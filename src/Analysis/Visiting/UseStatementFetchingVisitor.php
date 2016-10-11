@@ -13,21 +13,6 @@ use PhpParser\NodeVisitorAbstract;
 class UseStatementFetchingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var string
-     */
-    const TYPE_CLASSLIKE = 'classlike';
-
-    /**
-     * @var string
-     */
-    const TYPE_FUNCTION = 'function';
-
-    /**
-     * @var string
-     */
-    const TYPE_CONSTANT = 'constant';
-
-    /**
      * @var array
      */
     protected $namespaces = [];
@@ -86,9 +71,9 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 }
 
                 $typeMap = [
-                    Node\Stmt\Use_::TYPE_NORMAL   => self::TYPE_CLASSLIKE,
-                    Node\Stmt\Use_::TYPE_FUNCTION => self::TYPE_FUNCTION,
-                    Node\Stmt\Use_::TYPE_CONSTANT => self::TYPE_CONSTANT
+                    Node\Stmt\Use_::TYPE_NORMAL   => UseStatementKind::TYPE_CLASSLIKE,
+                    Node\Stmt\Use_::TYPE_FUNCTION => UseStatementKind::TYPE_FUNCTION,
+                    Node\Stmt\Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT
                 ];
 
                 // NOTE: The namespace may be null here (intended behavior).
