@@ -75,7 +75,7 @@ class ResolveTypeCommand extends AbstractCommand
     /**
      * Resolves the type.
      *
-     * @param string $type
+     * @param string $name
      * @param string $file
      * @param int    $line
      * @param string $kind A constant from {@see UseStatementKind}.
@@ -84,7 +84,7 @@ class ResolveTypeCommand extends AbstractCommand
      *
      * @return string|null
      */
-    public function resolveType($type, $file, $line, $kind)
+    public function resolveType($name, $file, $line, $kind)
     {
         $recognizedKinds = [
             UseStatementKind::TYPE_CLASSLIKE,
@@ -102,6 +102,6 @@ class ResolveTypeCommand extends AbstractCommand
             throw new UnexpectedValueException('The specified file is not present in the index!');
         }
 
-        return $this->fileTypeResolverFactory->create($file)->resolve($type, $line, $kind);
+        return $this->fileTypeResolverFactory->create($file)->resolve($name, $line, $kind);
     }
 }

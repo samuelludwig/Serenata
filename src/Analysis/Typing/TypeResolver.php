@@ -38,24 +38,24 @@ class TypeResolver
      *
      * @return string|null
      */
-    public function resolve($type, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
+    public function resolve($name, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
-        if (empty($type)) {
+        if (empty($name)) {
             return null;
-        } elseif ($type[0] === '\\') {
-            return $type;
+        } elseif ($name[0] === '\\') {
+            return $name;
         }
 
         $fullName = null;
-        $typeParts = explode('\\', $type);
+        $nameParts = explode('\\', $name);
 
         foreach ($imports as $import) {
-            if ($import['alias'] === $typeParts[0] && $import['kind'] === $kind) {
-                array_shift($typeParts);
+            if ($import['alias'] === $nameParts[0] && $import['kind'] === $kind) {
+                array_shift($nameParts);
 
                 $fullName = $import['name'];
 
-                if (!empty($typeParts)) {
+                if (!empty($nameParts)) {
                     /*
                      * This block is only executed when relative names are used with more than one part, i.e.:
                      *   use A\B\C;
@@ -65,7 +65,7 @@ class TypeResolver
                      * 'C' will be dropped from 'C\D', and the remaining 'D' will be appended to 'A\B\C',
                      * becoming 'A\B\C\D'.
                      */
-                    $fullName .= '\\' . implode('\\', $typeParts);
+                    $fullName .= '\\' . implode('\\', $nameParts);
                 }
 
                 break;
@@ -75,7 +75,7 @@ class TypeResolver
         if (!$fullName) {
             // Still here? There must be no explicit use statement, default to the current namespace.
             $fullName = $namespaceName ? ($namespaceName . '\\') : '';
-            $fullName .= $type;
+            $fullName .= $name;
         }
 
         return $this->typeAnalyzer->getNormalizedFqcn($fullName);

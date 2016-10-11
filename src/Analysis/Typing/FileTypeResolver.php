@@ -52,13 +52,13 @@ class FileTypeResolver
     /**
      * Resolves and determines the FQCN of the specified type.
      *
-     * @param string $type
+     * @param string $name
      * @param int    $line
      * @param string $kind
      *
      * @return string|null
      */
-    public function resolve($type, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
+    public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
         $namespaceFqcn = null;
         $relevantImports = [];
@@ -77,7 +77,7 @@ class FileTypeResolver
             }
         }
 
-        return $this->typeResolver->resolve($type, $namespaceFqcn, $relevantImports, $kind);
+        return $this->typeResolver->resolve($name, $namespaceFqcn, $relevantImports, $kind);
     }
 
     /**
