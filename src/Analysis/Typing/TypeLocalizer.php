@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
+use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+
 /**
  * Resolves FQCN's back to local types based on use statements and the namespace.
  */
@@ -31,13 +33,14 @@ class TypeLocalizer
      * @param array {
      *     @var string|null $fqcn
      *     @var string      $alias
+     *     @var string      $kind
      * } $imports
      *
      * @example With use statement "use A\B as AliasB", unresolving "A\B\C\D" will yield "AliasB\C\D".
      *
      * @return string|null
      */
-    public function localize($name, $namespaceFqcn, array $imports)
+    public function localize($name, $namespaceFqcn, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
         $bestLocalizedType = null;
 
@@ -62,7 +65,8 @@ class TypeLocalizer
                 // statement "use A;").
                 $imports[] = [
                     'name'  => $namespaceFqcn . '\\' . $nameWithoutNamespacePrefixParts[0],
-                    'alias' => $nameWithoutNamespacePrefixParts[0]
+                    'alias' => $nameWithoutNamespacePrefixParts[0],
+                    'kind'  => null
                 ];
             }
         }
@@ -70,7 +74,7 @@ class TypeLocalizer
         foreach ($imports as $import) {
             $importFqcn = $this->typeAnalyzer->getNormalizedFqcn($import['name']);
 
-            if (mb_strpos($nameFqcn, $importFqcn) === 0) {
+            if (mb_strpos($nameFqcn, $importFqcn) === 0 && ($import['kind'] === $kind || $import['kind'] === null)) {
                 $localizedType = $import['alias'] . mb_substr($nameFqcn, mb_strlen($importFqcn));
 
                 // It is possible that there are multiple use statements the FQCN could be made relative to (e.g.

@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
+use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+
 /**
  * Resolves FQCN's back to local types based on use statements and the namespace.
  *
@@ -36,6 +38,7 @@ class FileTypeLocalizer
      * @param array {
      *     @var string $fqcn
      *     @var string $alias
+     *     @var string $kind
      *     @var int    $line
      * } $imports
      */
@@ -51,10 +54,11 @@ class FileTypeLocalizer
      *
      * @param string $name
      * @param int    $line
+     * @param string $kind
      *
      * @return string|null
      */
-    public function resolve($name, $line)
+    public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
         $namespaceFqcn = null;
         $relevantImports = [];
@@ -73,7 +77,7 @@ class FileTypeLocalizer
             }
         }
 
-        return $this->typeLocalizer->localize($name, $namespaceFqcn, $relevantImports);
+        return $this->typeLocalizer->localize($name, $namespaceFqcn, $relevantImports, $kind);
     }
 
     /**
