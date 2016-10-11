@@ -8,6 +8,9 @@ use PhpIntegrator\Test\IndexedTest;
 
 class ResolveTypeCommandTest extends IndexedTest
 {
+    /**
+     *
+     */
     public function testCorrectlyResolvesVariousTypes()
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.php.test';
