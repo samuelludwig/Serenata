@@ -6,8 +6,6 @@ use PhpIntegrator\UserInterface\Command\ResolveTypeCommand;
 
 use PhpIntegrator\Test\IndexedTest;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-
 class ResolveTypeCommandTest extends IndexedTest
 {
     public function testCorrectlyResolvesVariousTypes()
