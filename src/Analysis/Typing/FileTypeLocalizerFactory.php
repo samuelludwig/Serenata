@@ -36,7 +36,7 @@ class FileTypeLocalizerFactory
      *
      * @throws LogicException if no namespaces exist for a file.
      *
-     * @return TypeLocalizer
+     * @return FileTypeLocalizer
      */
     public function create($filePath)
     {
