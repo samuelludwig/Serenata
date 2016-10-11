@@ -49,12 +49,12 @@ class FileTypeLocalizer
     /**
      * Resolves and determines the FQCN of the specified type.
      *
-     * @param string $type
+     * @param string $name
      * @param int    $line
      *
      * @return string|null
      */
-    public function resolve($type, $line)
+    public function resolve($name, $line)
     {
         $namespaceFqcn = null;
         $relevantImports = [];
@@ -73,7 +73,7 @@ class FileTypeLocalizer
             }
         }
 
-        return $this->typeLocalizer->localize($type, $namespaceFqcn, $relevantImports);
+        return $this->typeLocalizer->localize($name, $namespaceFqcn, $relevantImports);
     }
 
     /**

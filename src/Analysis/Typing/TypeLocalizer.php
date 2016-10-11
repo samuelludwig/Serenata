@@ -26,7 +26,7 @@ class TypeLocalizer
      * "Unresolves" a FQCN, turning it back into a name relative to local use statements. If no local type could be
      * determined, the FQCN is returned (as that is the only way the type can be referenced locally).
      *
-     * @param string      $type
+     * @param string      $name
      * @param string|null $namespaceFqcn
      * @param array {
      *     @var string|null $fqcn
@@ -37,32 +37,32 @@ class TypeLocalizer
      *
      * @return string|null
      */
-    public function localize($type, $namespaceFqcn, array $imports)
+    public function localize($name, $namespaceFqcn, array $imports)
     {
         $bestLocalizedType = null;
 
-        if (!$type) {
+        if (!$name) {
             return null;
         }
 
-        $typeFqcn = $this->typeAnalyzer->getNormalizedFqcn($type);
+        $nameFqcn = $this->typeAnalyzer->getNormalizedFqcn($name);
 
         if ($namespaceFqcn) {
             $namespaceFqcn = $this->typeAnalyzer->getNormalizedFqcn($namespaceFqcn);
 
             $namespaceParts = explode('\\', $namespaceFqcn);
 
-            if (mb_strpos($typeFqcn, $namespaceFqcn) === 0) {
-                $typeWithoutNamespacePrefix = mb_substr($typeFqcn, mb_strlen($namespaceFqcn) + 1);
+            if (mb_strpos($nameFqcn, $namespaceFqcn) === 0) {
+                $nameWithoutNamespacePrefix = mb_substr($nameFqcn, mb_strlen($namespaceFqcn) + 1);
 
-                $typeWithoutNamespacePrefixParts = explode('\\', $typeWithoutNamespacePrefix);
+                $nameWithoutNamespacePrefixParts = explode('\\', $nameWithoutNamespacePrefix);
 
                 // The namespace also acts as a use statement, but the rules are slightly different: in namespace A,
                 // the class \A\B becomes B rather than A\B (the latter which would happen if there were a use
                 // statement "use A;").
                 $imports[] = [
-                    'name'  => $namespaceFqcn . '\\' . $typeWithoutNamespacePrefixParts[0],
-                    'alias' => $typeWithoutNamespacePrefixParts[0]
+                    'name'  => $namespaceFqcn . '\\' . $nameWithoutNamespacePrefixParts[0],
+                    'alias' => $nameWithoutNamespacePrefixParts[0]
                 ];
             }
         }
@@ -70,8 +70,8 @@ class TypeLocalizer
         foreach ($imports as $import) {
             $importFqcn = $this->typeAnalyzer->getNormalizedFqcn($import['name']);
 
-            if (mb_strpos($typeFqcn, $importFqcn) === 0) {
-                $localizedType = $import['alias'] . mb_substr($typeFqcn, mb_strlen($importFqcn));
+            if (mb_strpos($nameFqcn, $importFqcn) === 0) {
+                $localizedType = $import['alias'] . mb_substr($nameFqcn, mb_strlen($importFqcn));
 
                 // It is possible that there are multiple use statements the FQCN could be made relative to (e.g.
                 // if a namespace as well as one of its classes is imported), select the closest one in that case.
@@ -81,6 +81,6 @@ class TypeLocalizer
             }
         }
 
-        return $bestLocalizedType ?: $this->typeAnalyzer->getNormalizedFqcn($type);
+        return $bestLocalizedType ?: $this->typeAnalyzer->getNormalizedFqcn($name);
     }
 }
