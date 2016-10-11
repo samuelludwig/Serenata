@@ -36,7 +36,7 @@ class FileTypeResolverFactory
      *
      * @throws UnexpectedValueException if no namespaces exist for a file.
      *
-     * @return TypeResolver
+     * @return FileTypeResolver
      */
     public function create($filePath)
     {
