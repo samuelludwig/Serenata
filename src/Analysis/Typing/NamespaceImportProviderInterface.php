@@ -24,6 +24,7 @@ interface NamespaceImportProviderInterface
      * @return array {
      *     @var string $fqcn
      *     @var string $alias
+     *     @var string $kind
      *     @var int    $line
      * }
      */

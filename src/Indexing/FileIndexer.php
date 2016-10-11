@@ -177,6 +177,7 @@ class FileIndexer
                     'line'               => $useStatement['line'],
                     'alias'              => $useStatement['alias'] ?: null,
                     'name'               => $useStatement['name'],
+                    'kind'               => $useStatement['kind'],
                     'files_namespace_id' => $namespaceId
                 ]);
             }

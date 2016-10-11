@@ -70,7 +70,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
                     throw new DomainException('Unknown use statement type encountered!');
                 }
 
-                $typeMap = [
+                $kindMap = [
                     Node\Stmt\Use_::TYPE_NORMAL   => UseStatementKind::TYPE_CLASSLIKE,
                     Node\Stmt\Use_::TYPE_FUNCTION => UseStatementKind::TYPE_FUNCTION,
                     Node\Stmt\Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT
@@ -80,7 +80,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 $this->namespaces[$this->lastNamespace]['useStatements'][(string) $use->alias] = [
                     'name'  => $prefix . ((string) $use->name),
                     'alias' => $use->alias,
-                    'type'  => $typeMap[$type],
+                    'kind'  => $kindMap[$type],
                     'line'  => $node->getLine(),
                     'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,
                     'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null

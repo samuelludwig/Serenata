@@ -5,6 +5,8 @@ namespace PhpIntegrator\Test\Analysis\Typing;
 use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+
 class TypeResolverTest extends \PHPUnit_Framework_TestCase
 {
     protected function getTypeAnalyzer()
@@ -43,12 +45,14 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
         $imports = [
             [
                 'name'  => 'B\C',
-                'alias' => 'Alias'
+                'alias' => 'Alias',
+                'kind'  => UseStatementKind::TYPE_CLASSLIKE
             ],
 
             [
                 'name'  => 'B\C\D',
-                'alias' => 'D'
+                'alias' => 'D',
+                'kind'  => UseStatementKind::TYPE_CLASSLIKE
             ]
         ];
 

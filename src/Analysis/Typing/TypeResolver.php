@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
+use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+
 /**
  * Resolves local types to their FQCN.
  */
@@ -30,11 +32,13 @@ class TypeResolver
      * @param array {
      *     @var string|null $name
      *     @var string      $alias
+     *     @var string      $kind
      * } $imports
+     * @param string      $kind
      *
      * @return string|null
      */
-    public function resolve($type, $namespaceName, array $imports)
+    public function resolve($type, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
         if (empty($type)) {
             return null;
@@ -46,7 +50,7 @@ class TypeResolver
         $typeParts = explode('\\', $type);
 
         foreach ($imports as $import) {
-            if ($import['alias'] === $typeParts[0]) {
+            if ($import['alias'] === $typeParts[0] && $import['kind'] === $kind) {
                 array_shift($typeParts);
 
                 $fullName = $import['name'];

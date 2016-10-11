@@ -104,7 +104,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
             if (!$classUsage['isFullyQualified'] &&
                 isset($namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]) &&
-                $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['type'] === UseStatementKind::TYPE_CLASSLIKE
+                $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CLASSLIKE
             ) {
                 // Mark the accompanying used statement, if any, as used.
                 $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
@@ -119,9 +119,9 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
             foreach ($useStatementMap as $alias => $data) {
                 if (
                     (!array_key_exists('used', $data) || !$data['used']) &&
-                    $data['type'] === UseStatementKind::TYPE_CLASSLIKE
+                    $data['kind'] === UseStatementKind::TYPE_CLASSLIKE
                 ) {
-                    unset($data['line'], $data['type']);
+                    unset($data['line'], $data['kind']);
 
                     $unusedUseStatements[] = $data;
                 }
@@ -146,7 +146,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
             if (!$constantUsage['isFullyQualified'] &&
                 isset($namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]) &&
-                $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['type'] === UseStatementKind::TYPE_CONSTANT
+                $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CONSTANT
             ) {
                 // Mark the accompanying used statement, if any, as used.
                 $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
@@ -161,9 +161,9 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
             foreach ($useStatementMap as $alias => $data) {
                 if (
                     (!array_key_exists('used', $data) || !$data['used']) &&
-                    $data['type'] === UseStatementKind::TYPE_CONSTANT
+                    $data['kind'] === UseStatementKind::TYPE_CONSTANT
                 ) {
-                    unset($data['line'], $data['type']);
+                    unset($data['line'], $data['kind']);
 
                     $unusedUseStatements[] = $data;
                 }
@@ -188,7 +188,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
             if (!$functionUsage['isFullyQualified'] &&
                 isset($namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]) &&
-                $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['type'] === UseStatementKind::TYPE_FUNCTION
+                $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_FUNCTION
             ) {
                 // Mark the accompanying used statement, if any, as used.
                 $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
@@ -203,9 +203,9 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
             foreach ($useStatementMap as $alias => $data) {
                 if (
                     (!array_key_exists('used', $data) || !$data['used']) &&
-                    $data['type'] === UseStatementKind::TYPE_FUNCTION
+                    $data['kind'] === UseStatementKind::TYPE_FUNCTION
                 ) {
-                    unset($data['line'], $data['type']);
+                    unset($data['line'], $data['kind']);
 
                     $unusedUseStatements[] = $data;
                 }

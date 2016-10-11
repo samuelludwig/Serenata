@@ -595,7 +595,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     public function getUseStatementsForFile($filePath)
     {
         return $this->getConnection()->createQueryBuilder()
-            ->select('fni.name', 'fni.alias', 'fni.line')
+            ->select('fni.name', 'fni.alias', 'fni.kind', 'fni.line')
             ->from(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, 'fni')
             ->join('fni', IndexStorageItemEnum::FILES_NAMESPACES, 'fn', 'fn.id = fni.files_namespace_id')
             ->join('fn', IndexStorageItemEnum::FILES, 'fi', 'fi.id = fn.file_id')

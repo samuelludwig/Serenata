@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
+use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+
 /**
  * Resolves local types to their FQCN for a file.
  *
@@ -36,6 +38,7 @@ class FileTypeResolver
      * @param array {
      *     @var string $name
      *     @var string $alias
+     *     @var string $kind
      *     @var int    $line
      * } $imports
      */
@@ -51,10 +54,11 @@ class FileTypeResolver
      *
      * @param string $type
      * @param int    $line
+     * @param string $kind
      *
      * @return string|null
      */
-    public function resolve($type, $line)
+    public function resolve($type, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
         $namespaceFqcn = null;
         $relevantImports = [];
@@ -73,7 +77,7 @@ class FileTypeResolver
             }
         }
 
-        return $this->typeResolver->resolve($type, $namespaceFqcn, $relevantImports);
+        return $this->typeResolver->resolve($type, $namespaceFqcn, $relevantImports, $kind);
     }
 
     /**
