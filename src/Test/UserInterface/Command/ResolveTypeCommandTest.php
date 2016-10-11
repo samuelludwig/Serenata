@@ -37,6 +37,25 @@ class ResolveTypeCommandTest extends IndexedTest
         $this->assertEquals('\DateTime', $command->resolveType('DateTime', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CONSTANT));
         $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_FUNCTION));
+    }
+
+    /**
+     *
+     */
+    public function testCorrectlyIgnoresMismatchedKinds()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.php.test';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('fileTypeResolverFactory')
+        );
+
+        $this->assertEquals('\B\D\Test', $command->resolveType('D\Test', $path, 13, UseStatementKind::TYPE_CONSTANT));
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
     }
