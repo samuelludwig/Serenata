@@ -307,7 +307,19 @@ class SemanticLintCommand extends AbstractCommand
                 }
             }
 
-            $traverser->traverse($nodes);
+            try {
+                $traverser->traverse($nodes);
+            } catch (Error $e) {
+                $output['errors']['syntaxErrors'][] = [
+                    'startLine'   => 0,
+                    'endLine'     => 0,
+                    'startColumn' => 0,
+                    'endColumn'   => 0,
+                    'message'     => "Something is semantically wrong. Is there perhaps a duplicate use statement?"
+                ];
+
+                return $output;
+            }
 
             if ($unknownClassAnalyzer) {
                 $output['errors']['unknownClasses'] = $unknownClassAnalyzer->getOutput();
