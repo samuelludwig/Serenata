@@ -62,7 +62,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testFailsOnUnknownClass()
     {
-        $output = $this->getClassInfo('SimpleClass.php.test', 'DoesNotExist');
+        $output = $this->getClassInfo('SimpleClass.phpt', 'DoesNotExist');
     }
 
     /**
@@ -70,7 +70,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testLeadingSlashIsResolvedCorrectly()
     {
-        $fileName = 'SimpleClass.php.test';
+        $fileName = 'SimpleClass.phpt';
 
         $this->assertEquals(
             $this->getClassInfo($fileName, 'A\SimpleClass'),
@@ -83,7 +83,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDataIsCorrectForASimpleClass()
     {
-        $fileName = 'SimpleClass.php.test';
+        $fileName = 'SimpleClass.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\SimpleClass');
 
@@ -123,7 +123,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testAnnotationClassIsCorrectlyPickedUp()
     {
-        $fileName = 'AnnotationClass.php.test';
+        $fileName = 'AnnotationClass.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\AnnotationClass');
 
@@ -135,7 +135,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testFinalClassIsCorrectlyPickedUp()
     {
-        $fileName = 'FinalClass.php.test';
+        $fileName = 'FinalClass.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\FinalClass');
 
@@ -147,7 +147,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDataIsCorrectForClassProperties()
     {
-        $fileName = 'ClassProperty.php.test';
+        $fileName = 'ClassProperty.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -209,7 +209,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testPropertyDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary()
     {
-        $fileName = 'ClassPropertyDescriptionPrecedence.php.test';
+        $fileName = 'ClassPropertyDescriptionPrecedence.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -222,7 +222,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testCompoundClassPropertyStatementsHaveTheirDocblocksAnalyzedCorrectly()
     {
-        $fileName = 'CompoundClassPropertyStatement.php.test';
+        $fileName = 'CompoundClassPropertyStatement.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -254,7 +254,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testPropertyTypeDeductionFallsBackToUsingItsDefaultValue()
     {
-        $fileName = 'ClassPropertyDefaultValue.php.test';
+        $fileName = 'ClassPropertyDefaultValue.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -280,7 +280,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testConstantTypeDeductionFallsBackToUsingItsDefaultValue()
     {
-        $fileName = 'ClassConstantDefaultValue.php.test';
+        $fileName = 'ClassConstantDefaultValue.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -298,7 +298,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDataIsCorrectForClassMethods()
     {
-        $fileName = 'ClassMethod.php.test';
+        $fileName = 'ClassMethod.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -424,7 +424,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testFinalMethodIsCorrectlyPickedUp()
     {
-        $fileName = 'FinalClassMethod.php.test';
+        $fileName = 'FinalClassMethod.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -436,7 +436,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDataIsCorrectForClassConstants()
     {
-        $fileName = 'ClassConstant.php.test';
+        $fileName = 'ClassConstant.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -499,7 +499,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testConstantDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary()
     {
-        $fileName = 'ClassConstantDescriptionPrecedence.php.test';
+        $fileName = 'ClassConstantDescriptionPrecedence.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -512,7 +512,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDocblockInheritanceWorksProperlyForClasses()
     {
-        $fileName = 'ClassDocblockInheritance.php.test';
+        $fileName = 'ClassDocblockInheritance.phpt';
 
         $childClassOutput = $this->getClassInfo($fileName, 'A\ChildClass');
         $parentClassOutput = $this->getClassInfo($fileName, 'A\ParentClass');
@@ -532,7 +532,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDocblockInheritanceWorksProperlyForMethods()
     {
-        $fileName = 'MethodDocblockInheritance.php.test';
+        $fileName = 'MethodDocblockInheritance.phpt';
 
         $traitOutput       = $this->getClassInfo($fileName, 'A\TestTrait');
         $interfaceOutput   = $this->getClassInfo($fileName, 'A\TestInterface');
@@ -587,7 +587,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDocblockInheritanceWorksProperlyForProperties()
     {
-        $fileName = 'PropertyDocblockInheritance.php.test';
+        $fileName = 'PropertyDocblockInheritance.phpt';
 
         $traitOutput       = $this->getClassInfo($fileName, 'A\TestTrait');
         $childClassOutput  = $this->getClassInfo($fileName, 'A\ChildClass');
@@ -630,7 +630,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodOverridingIsAnalyzedCorrectly()
     {
-        $fileName = 'MethodOverride.php.test';
+        $fileName = 'MethodOverride.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -906,7 +906,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodOverridingOfParentImplementationIsAnalyzedCorrectly()
     {
-        $fileName = 'MethodOverrideOfParentImplementation.php.test';
+        $fileName = 'MethodOverrideOfParentImplementation.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -945,7 +945,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodOverridingAndImplementationSimultaneouslyIsAnalyzedCorrectly()
     {
-        $fileName = 'MethodOverrideAndImplementation.php.test';
+        $fileName = 'MethodOverrideAndImplementation.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -1005,7 +1005,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testPropertyOverridingIsAnalyzedCorrectly()
     {
-        $fileName = 'PropertyOverride.php.test';
+        $fileName = 'PropertyOverride.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -1084,7 +1084,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceReferencedByParentClass()
     {
-        $fileName = 'MethodImplementationFromParentClassInterface.php.test';
+        $fileName = 'MethodImplementationFromParentClassInterface.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -1147,7 +1147,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceParent()
     {
-        $fileName = 'MethodImplementationFromInterfaceParent.php.test';
+        $fileName = 'MethodImplementationFromInterfaceParent.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -1185,7 +1185,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceDirectlyReferenced()
     {
-        $fileName = 'MethodImplementationFromDirectInterface.php.test';
+        $fileName = 'MethodImplementationFromDirectInterface.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -1221,7 +1221,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodParameterTypesFallBackToDocblock()
     {
-        $fileName = 'MethodParameterDocblockFallBack.php.test';
+        $fileName = 'MethodParameterDocblockFallBack.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
         $parameters = $output['methods']['testMethod']['parameters'];
@@ -1237,7 +1237,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMagicClassPropertiesArePickedUpCorrectly()
     {
-        $fileName = 'MagicClassProperties.php.test';
+        $fileName = 'MagicClassProperties.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1332,7 +1332,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMagicClassMethodsArePickedUpCorrectly()
     {
-        $fileName = 'MagicClassMethods.php.test';
+        $fileName = 'MagicClassMethods.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1477,7 +1477,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testDataIsCorrectForClassInheritance()
     {
-        $fileName = 'ClassInheritance.php.test';
+        $fileName = 'ClassInheritance.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
@@ -1513,7 +1513,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testInterfaceImplementationIsCorrectlyProcessed()
     {
-        $fileName = 'InterfaceImplementation.php.test';
+        $fileName = 'InterfaceImplementation.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1543,7 +1543,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testTraitUsageIsCorrectlyProcessed()
     {
-        $fileName = 'TraitUsage.php.test';
+        $fileName = 'TraitUsage.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1595,7 +1595,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testSpecialTypesAreCorrectlyResolved()
     {
-        $fileName = 'ResolveSpecialTypes.php.test';
+        $fileName = 'ResolveSpecialTypes.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\childClass');
 
@@ -1783,7 +1783,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testMethodDocblockParameterTypesGetPrecedenceOverTypeHints()
     {
-        $fileName = 'ClassMethodPrecedence.php.test';
+        $fileName = 'ClassMethodPrecedence.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1798,7 +1798,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testItemsWithoutDocblockAndDefaultValueHaveNoTypes()
     {
-        $fileName = 'ClassMethodNoDocblock.php.test';
+        $fileName = 'ClassMethodNoDocblock.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1812,7 +1812,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testCorrectlyFindsClassesInNamelessNamespace()
     {
-        $fileName = 'ClassNamelessNamespace.php.test';
+        $fileName = 'ClassNamelessNamespace.phpt';
 
         $output = $this->getClassInfo($fileName, 'TestClass');
 
@@ -1953,7 +1953,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testThrowsExceptionOnCircularDependencyWithClassExtendingItself()
     {
-        $fileName = 'CircularDependencyExtends.php.test';
+        $fileName = 'CircularDependencyExtends.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\C');
     }
@@ -1963,7 +1963,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testThrowsExceptionOnCircularDependencyWithClassImplementingItself()
     {
-        $fileName = 'CircularDependencyImplements.php.test';
+        $fileName = 'CircularDependencyImplements.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\C');
     }
@@ -1973,7 +1973,7 @@ class ClassInfoCommandTest extends IndexedTest
      */
     public function testThrowsExceptionOnCircularDependencyWithClassUsingItselfAsTrait()
     {
-        $fileName = 'CircularDependencyUses.php.test';
+        $fileName = 'CircularDependencyUses.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\C');
     }

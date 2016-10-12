@@ -35,14 +35,14 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesSyntaxErrors()
     {
-        $output = $this->lintFile('SyntaxError.php.test', true);
+        $output = $this->lintFile('SyntaxError.phpt', true);
 
         $this->assertEquals(2, count($output['errors']['syntaxErrors']));
     }
 
     public function testReportsUnknownClassesWithNoNamespace()
     {
-        $output = $this->lintFile('UnknownClassesNoNamespace.php.test');
+        $output = $this->lintFile('UnknownClassesNoNamespace.phpt');
 
         $this->assertEquals([
             [
@@ -56,7 +56,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnknownClassesWithSingleNamespace()
     {
-        $output = $this->lintFile('UnknownClassesSingleNamespace.php.test');
+        $output = $this->lintFile('UnknownClassesSingleNamespace.phpt');
 
         $this->assertEquals([
             [
@@ -76,7 +76,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnknownClassesWithMultipleNamespaces()
     {
-        $output = $this->lintFile('UnknownClassesMultipleNamespaces.php.test');
+        $output = $this->lintFile('UnknownClassesMultipleNamespaces.phpt');
 
         $this->assertEquals([
             [
@@ -97,7 +97,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnknownClassesInDocBlocks()
     {
-        $output = $this->lintFile('UnknownClassesDocblock.php.test');
+        $output = $this->lintFile('UnknownClassesDocblock.phpt');
 
         $this->assertEquals([
             [
@@ -139,14 +139,14 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testDoesNotComplainAboutUnknownClassesInGroupedUseStatements()
     {
-        $output = $this->lintFile('GroupedUseStatements.php.test');
+        $output = $this->lintFile('GroupedUseStatements.phpt');
 
         $this->assertEquals([], $output['errors']['unknownClasses']);
     }
 
     public function testReportsInvalidMemberCallsOnAnExpressionWithoutAType()
     {
-        $output = $this->lintFile('UnknownMemberExpressionWithNoType.php.test');
+        $output = $this->lintFile('UnknownMemberExpressionWithNoType.phpt');
 
         $this->assertEquals([
             [
@@ -159,7 +159,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsInvalidMemberCallsOnAnExpressionThatDoesNotReturnAClasslike()
     {
-        $output = $this->lintFile('UnknownMemberExpressionWithNoClasslike.php.test');
+        $output = $this->lintFile('UnknownMemberExpressionWithNoClasslike.phpt');
 
         $this->assertEquals([
             [
@@ -180,7 +180,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsInvalidMemberCallsOnAnExpressionThatReturnsAClasslikeWithNoSuchMember()
     {
-        $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.php.test');
+        $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.phpt');
 
         $this->assertEquals([
             [
@@ -208,7 +208,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsInvalidMemberCallsOnAnExpressionThatReturnsAClasslikeWithNoSuchMemberCausingANewMemberToBeCreated()
     {
-        $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.php.test');
+        $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.phpt');
 
         $this->assertEquals([
             [
@@ -236,7 +236,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnknownGlobalFunctions()
     {
-        $output = $this->lintFile('UnknownGlobalFunctions.php.test');
+        $output = $this->lintFile('UnknownGlobalFunctions.phpt');
 
         $this->assertEquals([
             [
@@ -261,7 +261,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnknownGlobalConstants()
     {
-        $output = $this->lintFile('UnknownGlobalConstants.php.test');
+        $output = $this->lintFile('UnknownGlobalConstants.phpt');
 
         $this->assertEquals([
             [
@@ -286,7 +286,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnusedUseStatementsWithSingleNamespace()
     {
-        $output = $this->lintFile('UnusedUseStatementsSingleNamespace.php.test');
+        $output = $this->lintFile('UnusedUseStatementsSingleNamespace.phpt');
 
         $this->assertEquals([
             [
@@ -300,7 +300,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnusedUseStatementsWithMultipleNamespaces()
     {
-        $output = $this->lintFile('UnusedUseStatementsMultipleNamespaces.php.test');
+        $output = $this->lintFile('UnusedUseStatementsMultipleNamespaces.phpt');
 
         $this->assertEquals([
             [
@@ -321,7 +321,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnusedUseStatementsWithGroupedUseStatements()
     {
-        $output = $this->lintFile('GroupedUseStatements.php.test');
+        $output = $this->lintFile('GroupedUseStatements.phpt');
 
         $this->assertEquals([
             [
@@ -349,7 +349,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnusedUseStatementsForConstants()
     {
-        $output = $this->lintFile('UnusedUseStatementsConstant.php.test');
+        $output = $this->lintFile('UnusedUseStatementsConstant.phpt');
 
         $this->assertEquals([
             [
@@ -363,7 +363,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testReportsUnusedUseStatementsForFunctions()
     {
-        $output = $this->lintFile('UnusedUseStatementsFunction.php.test');
+        $output = $this->lintFile('UnusedUseStatementsFunction.phpt');
 
         $this->assertEquals([
             [
@@ -377,7 +377,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testSeesUseStatementsAsUsedIfTheyAppearInComments()
     {
-        $output = $this->lintFile('UnusedUseStatementsDocblock.php.test');
+        $output = $this->lintFile('UnusedUseStatementsDocblock.phpt');
 
         $this->assertEquals([
             [
@@ -398,7 +398,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesMissingDocumentation()
     {
-        $output = $this->lintFile('DocblockCorrectnessMissingDocumentation.php.test');
+        $output = $this->lintFile('DocblockCorrectnessMissingDocumentation.phpt');
 
         $this->assertEquals([
             [
@@ -440,7 +440,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDocblockMissingParameter()
     {
-        $output = $this->lintFile('DocblockCorrectnessMissingParameter.php.test');
+        $output = $this->lintFile('DocblockCorrectnessMissingParameter.phpt');
 
         $this->assertEquals([
             [
@@ -455,7 +455,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testDoesNotComplainAboutMissingParameterWhenItIsAReference()
     {
-        $output = $this->lintFile('DocblockCorrectnessParamWithReference.php.test');
+        $output = $this->lintFile('DocblockCorrectnessParamWithReference.phpt');
 
         $this->assertEquals([
 
@@ -464,7 +464,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testDoesNotComplainAboutMissingParameterWhenItIsVariadic()
     {
-        $output = $this->lintFile('DocblockCorrectnessVariadicParam.php.test');
+        $output = $this->lintFile('DocblockCorrectnessVariadicParam.phpt');
 
         $this->assertEquals([
 
@@ -473,7 +473,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testDoesNotComplainAboutDocblocksHavingFullInheritance()
     {
-        $output = $this->lintFile('DocblockCorrectnessFullInheritance.php.test');
+        $output = $this->lintFile('DocblockCorrectnessFullInheritance.phpt');
 
         $this->assertEquals([
 
@@ -482,7 +482,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDocblockParameterTypeMismatch()
     {
-        $output = $this->lintFile('DocblockCorrectnessParameterTypeMismatch.php.test');
+        $output = $this->lintFile('DocblockCorrectnessParameterTypeMismatch.phpt');
 
         $this->assertEquals([
             [
@@ -497,7 +497,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDocblockSuperfluousParameters()
     {
-        $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.php.test');
+        $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');
 
         $this->assertEquals([
             [
@@ -512,7 +512,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDocblockMissingVarTag()
     {
-        $output = $this->lintFile('DocblockCorrectnessMissingVarTag.php.test');
+        $output = $this->lintFile('DocblockCorrectnessMissingVarTag.phpt');
 
         $this->assertEquals([
             [
@@ -533,7 +533,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDeprecatedCategoryTag()
     {
-        $output = $this->lintFile('DocblockCorrectnessDeprecatedCategoryTag.php.test');
+        $output = $this->lintFile('DocblockCorrectnessDeprecatedCategoryTag.phpt');
 
         $this->assertEquals([
             [
@@ -547,7 +547,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDeprecatedSubpackageTag()
     {
-        $output = $this->lintFile('DocblockCorrectnessDeprecatedSubpackageTag.php.test');
+        $output = $this->lintFile('DocblockCorrectnessDeprecatedSubpackageTag.phpt');
 
         $this->assertEquals([
             [
@@ -561,7 +561,7 @@ class SemanticLintCommandTest extends IndexedTest
 
     public function testCorrectlyIdentifiesDeprecatedLinkTag()
     {
-        $output = $this->lintFile('DocblockCorrectnessDeprecatedLinkTag.php.test');
+        $output = $this->lintFile('DocblockCorrectnessDeprecatedLinkTag.phpt');
 
         $this->assertEquals([
             [

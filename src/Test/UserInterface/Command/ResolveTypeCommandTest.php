@@ -15,7 +15,7 @@ class ResolveTypeCommandTest extends IndexedTest
      */
     public function testCorrectlyResolvesVariousTypes()
     {
-        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.php.test';
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
 
         $container = $this->createTestContainer();
 
@@ -44,7 +44,7 @@ class ResolveTypeCommandTest extends IndexedTest
      */
     public function testCorrectlyIgnoresMismatchedKinds()
     {
-        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.php.test';
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
 
         $container = $this->createTestContainer();
 

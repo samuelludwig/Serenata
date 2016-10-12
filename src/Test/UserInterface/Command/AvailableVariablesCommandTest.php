@@ -52,7 +52,7 @@ class AvailableVariablesCommandTest extends IndexedTest
 
     public function testReturnsOnlyVariablesRelevantToTheGlobalScope()
     {
-        $output = $this->getAvailableVariables('GlobalScope.php.test');
+        $output = $this->getAvailableVariables('GlobalScope.phpt');
 
         $this->assertEquals([
             '$var3' => ['name' => '$var3', 'type' => null],
@@ -63,7 +63,7 @@ class AvailableVariablesCommandTest extends IndexedTest
 
     public function testReturnsOnlyVariablesRelevantToTheCurrentFunction()
     {
-        $output = $this->getAvailableVariables('FunctionScope.php.test');
+        $output = $this->getAvailableVariables('FunctionScope.phpt');
 
         $this->assertEquals([
             '$closure' => ['name' => '$closure', 'type' => null],
@@ -74,7 +74,7 @@ class AvailableVariablesCommandTest extends IndexedTest
 
     public function testReturnsOnlyVariablesRelevantToTheCurrentMethod()
     {
-        $output = $this->getAvailableVariables('ClassMethodScope.php.test');
+        $output = $this->getAvailableVariables('ClassMethodScope.phpt');
 
         $this->assertEquals([
             '$this'    => ['name' => '$this',    'type' => null],
@@ -86,7 +86,7 @@ class AvailableVariablesCommandTest extends IndexedTest
 
     public function testReturnsOnlyVariablesRelevantToTheCurrentClosure()
     {
-        $output = $this->getAvailableVariables('ClosureScope.php.test');
+        $output = $this->getAvailableVariables('ClosureScope.phpt');
 
         $this->assertEquals([
             '$this'         => ['name' => '$this',         'type' => null],
@@ -98,7 +98,7 @@ class AvailableVariablesCommandTest extends IndexedTest
 
     public function testCorrectlyIgnoresVariousStatements()
     {
-        $file = 'VariousStatements.php.test';
+        $file = 'VariousStatements.phpt';
         $fullPath = $this->getTestFilePath($file);
 
         $command = $this->getCommand($file);

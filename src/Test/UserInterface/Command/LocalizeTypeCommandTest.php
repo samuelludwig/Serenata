@@ -12,7 +12,7 @@ class LocalizeTypeCommandTest extends IndexedTest
 {
     public function testCorrectlyLocalizesVariousTypes()
     {
-        $path = __DIR__ . '/LocalizeTypeCommandTest/' . 'LocalizeType.php.test';
+        $path = __DIR__ . '/LocalizeTypeCommandTest/' . 'LocalizeType.phpt';
 
         $container = $this->createTestContainer();
 
@@ -43,7 +43,7 @@ class LocalizeTypeCommandTest extends IndexedTest
      */
     public function testCorrectlyIgnoresMismatchedKinds()
     {
-        $path = __DIR__ . '/LocalizeTypeCommandTest/' . 'LocalizeType.php.test';
+        $path = __DIR__ . '/LocalizeTypeCommandTest/' . 'LocalizeType.phpt';
 
         $container = $this->createTestContainer();
 

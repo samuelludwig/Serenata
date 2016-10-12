@@ -10,7 +10,7 @@ class ClassListCommandTest extends IndexedTest
 {
     public function testClassList()
     {
-        $path = __DIR__ . '/ClassListCommandTest/' . 'ClassList.php.test';
+        $path = __DIR__ . '/ClassListCommandTest/' . 'ClassList.phpt';
 
         $container = $this->createTestContainer();
 
