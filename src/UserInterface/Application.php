@@ -67,7 +67,7 @@ class Application
      *
      * @var int
      */
-    const DATABASE_VERSION = 27;
+    const DATABASE_VERSION = 28;
 
     /**
      * @var string
