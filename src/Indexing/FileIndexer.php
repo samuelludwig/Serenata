@@ -75,6 +75,7 @@ class FileIndexer
     /**
      * @param StorageInterface $storage
      * @param TypeAnalyzer     $typeAnalyzer
+     * @param TypeResolver     $typeResolver
      * @param DocblockParser   $docblockParser
      * @param TypeDeducer      $typeDeducer
      * @param Parser           $parser
@@ -82,12 +83,14 @@ class FileIndexer
     public function __construct(
         StorageInterface $storage,
         TypeAnalyzer $typeAnalyzer,
+        TypeResolver $typeResolver,
         DocblockParser $docblockParser,
         TypeDeducer $typeDeducer,
         Parser $parser
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
         $this->typeDeducer = $typeDeducer;
         $this->parser = $parser;
@@ -183,8 +186,7 @@ class FileIndexer
             }
         }
 
-        $typeResolver = new TypeResolver($this->typeAnalyzer);
-        $fileTypeResolver = new FileTypeResolver($typeResolver, $namespaces, $imports);
+        $fileTypeResolver = new FileTypeResolver($this->typeResolver, $namespaces, $imports);
 
         foreach ($outlineIndexingVisitor->getStructures() as $fqcn => $structure) {
              $this->indexStructure(

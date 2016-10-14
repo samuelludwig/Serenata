@@ -372,6 +372,7 @@ class Application
             ->setArguments([
                 new Reference('storageForIndexers'),
                 new Reference('typeAnalyzer'),
+                new Reference('typeResolver'),
                 new Reference('docblockParser'),
                 new Reference('typeDeducer'),
                 new Reference('parser')
