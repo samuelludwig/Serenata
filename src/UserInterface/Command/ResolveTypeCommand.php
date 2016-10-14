@@ -7,7 +7,7 @@ use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
+use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
@@ -24,18 +24,20 @@ class ResolveTypeCommand extends AbstractCommand
     protected $indexDatabase;
 
     /**
-     * @var FileTypeResolverFactory
+     * @var ProjectTypeResolverFactoryFacade
      */
-    protected $fileTypeResolverFactory;
+    protected $projectTypeResolverFactoryFacade;
 
     /**
-     * @param IndexDatabase           $indexDatabase
-     * @param FileTypeResolverFactory $fileTypeResolverFactory
+     * @param IndexDatabase                    $indexDatabase
+     * @param ProjectTypeResolverFactoryFacade $projectTypeResolverFactoryFacade
      */
-    public function __construct(IndexDatabase $indexDatabase, FileTypeResolverFactory $fileTypeResolverFactory)
-    {
+    public function __construct(
+        IndexDatabase $indexDatabase,
+        ProjectTypeResolverFactoryFacade $projectTypeResolverFactoryFacade
+    ) {
         $this->indexDatabase = $indexDatabase;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->projectTypeResolverFactoryFacade = $projectTypeResolverFactoryFacade;
     }
 
     /**
@@ -102,6 +104,6 @@ class ResolveTypeCommand extends AbstractCommand
             throw new UnexpectedValueException('The specified file is not present in the index!');
         }
 
-        return $this->fileTypeResolverFactory->create($file)->resolve($name, $line, $kind);
+        return $this->projectTypeResolverFactoryFacade->create($file)->resolve($name, $line, $kind);
     }
 }

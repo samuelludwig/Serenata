@@ -34,6 +34,8 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\TypeLocalizer;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
+use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
+use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
 
 use PhpIntegrator\Indexing\FileIndexer;
 use PhpIntegrator\Indexing\IndexDatabase;
@@ -262,6 +264,21 @@ class Application
             ->setArguments([new Reference('typeResolver'), new Reference('indexDatabase')]);
 
         $container
+            ->register('projectTypeResolverFactory', ProjectTypeResolverFactory::class)
+            ->setArguments([
+                new Reference('globalConstantExistanceChecker'),
+                new Reference('globalFunctionExistanceChecker'),
+                new Reference('indexDatabase')
+            ]);
+
+        $container
+            ->register('projectTypeResolverFactoryFacade', ProjectTypeResolverFactoryFacade::class)
+            ->setArguments([
+                new Reference('projectTypeResolverFactory'),
+                new Reference('fileTypeResolverFactory')
+            ]);
+
+        $container
             ->register('fileTypeLocalizerFactory', FileTypeLocalizerFactory::class)
             ->setArguments([new Reference('typeLocalizer'), new Reference('indexDatabase')]);
 
@@ -422,7 +439,7 @@ class Application
 
         $container
             ->register('resolveTypeCommand', Command\ResolveTypeCommand::class)
-            ->setArguments([new Reference('indexDatabase'), new Reference('fileTypeResolverFactory')]);
+            ->setArguments([new Reference('indexDatabase'), new Reference('ProjectTypeResolverFactoryFacade')]);
 
         $container
             ->register('localizeTypeCommand', Command\LocalizeTypeCommand::class)

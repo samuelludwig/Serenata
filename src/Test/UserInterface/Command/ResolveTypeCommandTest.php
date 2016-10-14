@@ -23,7 +23,7 @@ class ResolveTypeCommandTest extends IndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('fileTypeResolverFactory')
+            $container->get('ProjectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\C', $command->resolveType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
@@ -42,6 +42,120 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
+    public function testCorrectlyResolvesUnqualifiedConstantsWhenNotInNamespace()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('ProjectTypeResolverFactoryFacade')
+        );
+
+        $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 2, UseStatementKind::TYPE_CONSTANT));
+    }
+
+    /**
+     *
+     */
+    public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndNoConstantRelativeToTheNamespaceExists()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('ProjectTypeResolverFactoryFacade')
+        );
+
+        $this->assertEquals('\SOME_ROOT_CONSTANT', $command->resolveType('SOME_ROOT_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
+    }
+
+    /**
+     *
+     */
+    public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndConstantRelativeToTheNamespaceExists()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('ProjectTypeResolverFactoryFacade')
+        );
+
+        $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
+    }
+
+    /**
+     *
+     */
+    public function testCorrectlyResolvesUnqualifiedFunctionsWhenNotInNamespace()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('ProjectTypeResolverFactoryFacade')
+        );
+
+        $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 2, UseStatementKind::TYPE_FUNCTION));
+    }
+
+    /**
+     *
+     */
+    public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndNoFunctionRelativeToTheNamespaceExists()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('ProjectTypeResolverFactoryFacade')
+        );
+
+        $this->assertEquals('\some_root_function', $command->resolveType('some_root_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
+    }
+
+    /**
+     *
+     */
+    public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndFunctionRelativeToTheNamespaceExists()
+    {
+        $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new ResolveTypeCommand(
+            $container->get('indexDatabase'),
+            $container->get('ProjectTypeResolverFactoryFacade')
+        );
+
+        $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
+    }
+
+    /**
+     *
+     */
     public function testCorrectlyIgnoresMismatchedKinds()
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
@@ -52,7 +166,7 @@ class ResolveTypeCommandTest extends IndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('fileTypeResolverFactory')
+            $container->get('ProjectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
@@ -68,7 +182,7 @@ class ResolveTypeCommandTest extends IndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('fileTypeResolverFactory')
+            $container->get('ProjectTypeResolverFactoryFacade')
         );
 
         $command->resolveType('\C', 'MissingFile.php', 1, UseStatementKind::TYPE_CLASSLIKE);
