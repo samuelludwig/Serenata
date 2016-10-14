@@ -63,4 +63,44 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\B\C\D', $object->resolve('D', $namespace, $imports));
         $this->assertEquals('\B\C\D\E', $object->resolve('D\E', $namespace, $imports));
     }
+
+    /**
+     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     */
+    public function testUnqualifiedConstantsGenerateException()
+    {
+        $object = new TypeResolver($this->getTypeAnalyzer());
+
+        $object->resolve('SOME_CONSTANT', null, [], UseStatementKind::TYPE_CONSTANT);
+    }
+
+    /**
+     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     */
+    public function testUnqualifiedConstantsWithNamespacePrefixGenerateException()
+    {
+        $object = new TypeResolver($this->getTypeAnalyzer());
+
+        $object->resolve('A\SOME_CONSTANT', null, [], UseStatementKind::TYPE_CONSTANT);
+    }
+
+    /**
+     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     */
+    public function testUnqualifiedFunctionsGenerateException()
+    {
+        $object = new TypeResolver($this->getTypeAnalyzer());
+
+        $object->resolve('some_function', null, [], UseStatementKind::TYPE_FUNCTION);
+    }
+
+    /**
+     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     */
+    public function testUnqualifiedFunctionsWithNamespacePrefixGenerateException()
+    {
+        $object = new TypeResolver($this->getTypeAnalyzer());
+
+        $object->resolve('A\some_function', null, [], UseStatementKind::TYPE_FUNCTION);
+    }
 }

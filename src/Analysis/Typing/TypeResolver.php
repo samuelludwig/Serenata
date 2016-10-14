@@ -36,6 +36,8 @@ class TypeResolver
      * } $imports
      * @param string      $kind
      *
+     * @throws TypeResolutionImpossibleException when unqualified constants or functions are encountered.
+     *
      * @return string|null
      */
     public function resolve($name, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
@@ -73,6 +75,15 @@ class TypeResolver
         }
 
         if (!$fullName) {
+            if ($kind !== UseStatementKind::TYPE_CLASSLIKE) {
+                // Unqualified constant or functions names could be relative to the current namespace OR be part of the
+                // root namespace. Which one of the two is used by PHP depends on which one exists, which is not known
+                // to us.
+                throw new TypeResolutionImpossibleException(
+                    'An unqualified can\'t be resolved without further information!'
+                );
+            }
+
             // Still here? There must be no explicit use statement, default to the current namespace.
             $fullName = $namespaceName ? ($namespaceName . '\\') : '';
             $fullName .= $name;
