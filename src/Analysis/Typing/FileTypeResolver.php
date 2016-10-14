@@ -50,13 +50,7 @@ class FileTypeResolver implements FileTypeResolverInterface
     }
 
     /**
-     * Resolves and determines the FQCN of the specified type.
-     *
-     * @param string $name
-     * @param int    $line
-     * @param string $kind
-     *
-     * @return string|null
+     * @inheritDoc
      */
     public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
