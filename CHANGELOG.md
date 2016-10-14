@@ -11,6 +11,8 @@
   * This is necessary to distinguish between classlike, constant and function name resolving based on use statements. (Yes, duplicate use statements may exist in PHP, as long as their `kind` is different).
 
 ### Bugs fixed
+* Unqualified global constants will now correctly be resolved.
+* Unqualified global functions will now correctly be resolved.
 * Documentation for built-in functions was escaping underscores with a slash.
 * Built-in interface methods had `isAbstract` set to `true` instead of `false`.
 * Semantic linting was incorrectly processing unqualified global function names.
