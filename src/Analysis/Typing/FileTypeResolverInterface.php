@@ -16,6 +16,8 @@ interface FileTypeResolverInterface
      * @param int    $line
      * @param string $kind
      *
+     * @throws TypeResolutionImpossibleException when unqualified constants or functions are encountered.
+     *
      * @return string|null
      */
     public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE);
