@@ -57,21 +57,35 @@ class FileTypeResolver implements FileTypeResolverInterface
         $namespaceFqcn = null;
         $relevantImports = [];
 
-        foreach ($this->namespaces as $namespace) {
-            if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
-                $namespaceFqcn = $namespace['name'];
+        $namespace = $this->getRelevantNamespaceForLine($line);
 
-                foreach ($this->imports as $import) {
-                    if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
-                        $relevantImports[] = $import;
-                    }
+        if ($namespace !== null) {
+            $namespaceFqcn = $namespace['name'];
+
+            foreach ($this->imports as $import) {
+                if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
+                    $relevantImports[] = $import;
                 }
-
-                break;
             }
         }
 
         return $this->typeResolver->resolve($name, $namespaceFqcn, $relevantImports, $kind);
+    }
+
+    /**
+     * @param int $line
+     *
+     * @return array|null
+     */
+    protected function getRelevantNamespaceForLine($line)
+    {
+        foreach ($this->namespaces as $namespace) {
+            if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
+                return $namespace;
+            }
+        }
+
+        return null;
     }
 
     /**
