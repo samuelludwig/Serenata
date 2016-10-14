@@ -48,7 +48,7 @@ class ResolveTypeCommand extends AbstractCommand
         $optionCollection->add('kind?', 'What you want to resolve. Either "classlike" (the default), "function" or "constant".')->isa('string');
         $optionCollection->add('line:', 'The line on which the type can be found, line 1 being the first line.')->isa('number');
         $optionCollection->add('type:', 'The name of the type to resolve.')->isa('string');
-        $optionCollection->add('file:', 'The file in which the type needs to be resolved..')->isa('string');
+        $optionCollection->add('file:', 'The file in which the type needs to be resolved.')->isa('string');
     }
 
     /**
