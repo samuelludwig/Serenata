@@ -11,7 +11,7 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
  * statements) for a file and automatically selects the data relevant at the requested line from the list to feed to
  * the underlying resolver.
  */
-class FileTypeResolver
+class FileTypeResolver implements FileTypeResolverInterface
 {
     /**
      * @var array
