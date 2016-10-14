@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\ClasslikeExistanceCheckerInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolver;
+use PhpIntegrator\Analysis\Typing\FileTypeResolverInterface;
 
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
@@ -38,7 +38,7 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     protected $typeAnalyzer;
 
     /**
-     * @var FileTypeResolver
+     * @var FileTypeResolverInterface
      */
     protected $fileTypeResolver;
 
@@ -46,13 +46,13 @@ class UnknownClassAnalyzer implements AnalyzerInterface
      * Constructor.
      *
      * @param ClasslikeExistanceCheckerInterface $classlikeExistanceChecker
-     * @param FileTypeResolver $fileTypeResolver
-     * @param TypeAnalyzer     $typeAnalyzer
-     * @param DocblockParser   $docblockParser
+     * @param FileTypeResolverInterface          $fileTypeResolver
+     * @param TypeAnalyzer                       $typeAnalyzer
+     * @param DocblockParser                     $docblockParser
      */
     public function __construct(
         ClasslikeExistanceCheckerInterface $classlikeExistanceChecker,
-        FileTypeResolver $fileTypeResolver,
+        FileTypeResolverInterface $fileTypeResolver,
         TypeAnalyzer $typeAnalyzer,
         DocblockParser $docblockParser
     ) {
