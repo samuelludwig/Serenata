@@ -1226,10 +1226,10 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo($fileName, 'A\TestClass');
         $parameters = $output['methods']['testMethod']['parameters'];
 
-        $this->assertEquals($parameters[0]['types'][0]['type'], '\DateTime');
-        $this->assertEquals($parameters[1]['types'][0]['type'], 'boolean');
-        $this->assertEquals($parameters[2]['types'][0]['type'], 'mixed');
-        $this->assertEquals($parameters[3]['types'][0]['type'], '\Traversable[]');
+        $this->assertEquals('\DateTime', $parameters[0]['types'][0]['type']);
+        $this->assertEquals('boolean', $parameters[1]['types'][0]['type']);
+        $this->assertEquals('mixed', $parameters[2]['types'][0]['type']);
+        $this->assertEquals('\Traversable[]', $parameters[3]['types'][0]['type']);
     }
 
     /**
