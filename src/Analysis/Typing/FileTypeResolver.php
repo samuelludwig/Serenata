@@ -61,13 +61,9 @@ class FileTypeResolver implements FileTypeResolverInterface
 
         if ($namespace !== null) {
             $namespaceFqcn = $namespace['name'];
-
-            foreach ($this->imports as $import) {
-                if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
-                    $relevantImports[] = $import;
-                }
-            }
         }
+
+        $relevantImports = $this->getRelevantUseStatementsForLine($line);
 
         return $this->typeResolver->resolve($name, $namespaceFqcn, $relevantImports, $kind);
     }
@@ -86,6 +82,30 @@ class FileTypeResolver implements FileTypeResolverInterface
         }
 
         return null;
+    }
+
+    /**
+     * @param int $line
+     *
+     * @return array
+     */
+    protected function getRelevantUseStatementsForLine($line)
+    {
+        $namespace = $this->getRelevantNamespaceForLine($line);
+
+        $relevantImports = [];
+
+        if ($namespace !== null) {
+            $namespaceFqcn = $namespace['name'];
+
+            foreach ($this->imports as $import) {
+                if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
+                    $relevantImports[] = $import;
+                }
+            }
+        }
+
+        return $relevantImports;
     }
 
     /**
