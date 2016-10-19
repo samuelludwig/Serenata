@@ -1227,7 +1227,7 @@ class ClassInfoCommandTest extends IndexedTest
         $parameters = $output['methods']['testMethod']['parameters'];
 
         $this->assertEquals('\DateTime', $parameters[0]['types'][0]['type']);
-        $this->assertEquals('boolean', $parameters[1]['types'][0]['type']);
+        $this->assertEquals('bool', $parameters[1]['types'][0]['type']);
         $this->assertEquals('mixed', $parameters[2]['types'][0]['type']);
         $this->assertEquals('\Traversable[]', $parameters[3]['types'][0]['type']);
     }

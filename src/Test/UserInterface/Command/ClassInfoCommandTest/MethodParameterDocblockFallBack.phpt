@@ -6,7 +6,7 @@ class TestClass
 {
     /**
      * @param \DateTime      $a
-     * @param boolean        $b
+     * @param bool           $b
      * @param mixed          $c
      * @param \Traversable[] $d
      */
