@@ -20,6 +20,7 @@
 * The status bar was not showing progress when a project index happened through a repository status change.
 * Use statements for constants (i.e. `use const`) will now be properly analyzed when checking for unused use statements.
 * Use statements for functions (i.e. `use function`) will now be properly analyzed when checking for unused use statements.
+* Class annotations were sometimes being picked up as being part of the description of other tags (such as `@var`, `@param`, ...).
 * Editing a file that did not meet the allowed extensions specified in the project settings still caused it to be added to the index.
 * Assigning a global constant to something caused the type of that something to become the name of the constant as class name instead.
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.

@@ -60,4 +60,23 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
             ]
         ], $result['params']);
     }
+
+    public function testVarTagDescriptionStopsAtNextTag()
+    {
+        $parser = new DocblockParser();
+        $result = $parser->parse('
+            /**
+             * @var int
+             *
+             * @ORM\Column(type="integer")
+             */
+        ', [DocblockParser::VAR_TYPE], 'someProperty');
+
+        $this->assertEquals([
+            '$someProperty' => [
+                'type'        => 'int',
+                'description' => ''
+            ]
+        ], $result['var']);
+    }
 }
