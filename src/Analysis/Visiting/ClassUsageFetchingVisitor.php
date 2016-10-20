@@ -57,27 +57,35 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Node\Name) {
-            if (!$this->lastNode instanceof Node\Expr\FuncCall &&
-                !$this->lastNode instanceof Node\Expr\ConstFetch &&
-                !$this->lastNode instanceof Node\Stmt\Namespace_
-            ) {
-                $name = (string) $node;
-
-                if ($this->isValidType($name)) {
-                    $this->classUsageList[] = [
-                        'name'             => $name,
-                        'firstPart'        => $node->getFirst(),
-                        'isFullyQualified' => $node->isFullyQualified(),
-                        'namespace'        => $this->lastNamespace,
-                        'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
-                        'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                        'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-                    ];
-                }
-            }
+            $this->processName($node);
         }
 
         $this->lastNode = $node;
+    }
+
+    /**
+     * @param Node\Name $node
+     */
+    protected function processName(Node\Name $node)
+    {
+        if (!$this->lastNode instanceof Node\Expr\FuncCall &&
+            !$this->lastNode instanceof Node\Expr\ConstFetch &&
+            !$this->lastNode instanceof Node\Stmt\Namespace_
+        ) {
+            $name = (string) $node;
+
+            if ($this->isValidType($name)) {
+                $this->classUsageList[] = [
+                    'name'             => $name,
+                    'firstPart'        => $node->getFirst(),
+                    'isFullyQualified' => $node->isFullyQualified(),
+                    'namespace'        => $this->lastNamespace,
+                    'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
+                    'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                    'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                ];
+            }
+        }
     }
 
     /**
