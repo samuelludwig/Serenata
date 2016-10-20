@@ -34,7 +34,7 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
     protected $lastNamespace = null;
 
     /**
-     * Constructor.
+     * @param TypeAnalyzer $typeAnalyzer
      */
     public function __construct(TypeAnalyzer $typeAnalyzer)
     {
