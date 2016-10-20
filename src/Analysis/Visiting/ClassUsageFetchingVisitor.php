@@ -58,6 +58,16 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\Name) {
             $this->processName($node);
+        } elseif ($node instanceof Node\Stmt\Class_ && $node->name === null) {
+            // NOTE: Extends and implements for classlikes are automatically traversed, but this does not happen for
+            // anonymous classes, which is handled separately here.
+            if ($node->extends instanceof Node\Name) {
+                $this->processName($node->extends);
+            }
+
+            foreach ($node->implements as $implements) {
+                $this->processName($implements);
+            }
         }
 
         $this->lastNode = $node;

@@ -396,6 +396,13 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    public function testSeesUseStatementsAsUsedIfTheyAppearInAnonymousClasses()
+    {
+        $output = $this->lintFile('UnusedUseStatementsAnonymousClass.phpt');
+
+        $this->assertEquals([], $output['warnings']['unusedUseStatements']);
+    }
+
     public function testCorrectlyIdentifiesMissingDocumentation()
     {
         $output = $this->lintFile('DocblockCorrectnessMissingDocumentation.phpt');
