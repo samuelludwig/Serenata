@@ -502,6 +502,15 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
     }
 
+    public function testCorrectlyInterpretsVariadicParametersWhenCheckingForParameterTypeMismatches()
+    {
+        $output = $this->lintFile('DocblockCorrectnessVariadicParam.phpt');
+
+        $this->assertEquals([
+
+        ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
+    }
+
     public function testCorrectlyIdentifiesDocblockSuperfluousParameters()
     {
         $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');

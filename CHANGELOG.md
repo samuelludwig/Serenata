@@ -26,6 +26,7 @@
 * Editing a file that did not meet the allowed extensions specified in the project settings still caused it to be added to the index.
 * Assigning a global constant to something caused the type of that something to become the name of the constant as class name instead.
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
+* Variadic parameters with type hints were incorrectly matched with their docblock types and, by consequence, incorrectly reported as having a mismatching type.
 * Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
 * Caching will now add an additional folder with the name of the active user in it. This solves a problem where instances from multiple users on the same system would try to use the same cache entries.
 * Parent members of built-in classlikes were being indexed twice: once for the parent and once for the child, which was resulting in incorrect inheritance resolution results, unnecessary data storage and a (minor) performance hit.
