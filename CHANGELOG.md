@@ -13,7 +13,7 @@
 ### Bugs fixed
 * Unqualified global constants will now correctly be resolved.
 * Unqualified global functions will now correctly be resolved.
-* The indexer was not correctly picking up the type of variadic parameters.
+* The indexer was assigning an incorrect type to variadic parameters.
 * Documentation for built-in functions was escaping underscores with a slash.
 * Built-in interface methods had `isAbstract` set to `true` instead of `false`.
 * Semantic linting was incorrectly processing unqualified global function names.
