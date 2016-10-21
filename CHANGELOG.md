@@ -13,7 +13,6 @@
 ### Bugs fixed
 * Unqualified global constants will now correctly be resolved.
 * Unqualified global functions will now correctly be resolved.
-* The indexer was assigning an incorrect type to variadic parameters.
 * Documentation for built-in functions was escaping underscores with a slash.
 * Built-in interface methods had `isAbstract` set to `true` instead of `false`.
 * Semantic linting was incorrectly processing unqualified global function names.
@@ -32,6 +31,16 @@
 * Caching will now add an additional folder with the name of the active user in it. This solves a problem where instances from multiple users on the same system would try to use the same cache entries.
 * Parent members of built-in classlikes were being indexed twice: once for the parent and once for the child, which was resulting in incorrect inheritance resolution results, unnecessary data storage and a (minor) performance hit.
 * Built-in interfaces no longer have `isAbstract` set to true. They _are_ abstract in a certain sense, but this property is meant to indicate if a classlike has been defined using the abstract keyword. It was also not consistent with the behavior for non-built-in interfaces.
+* The indexer was assigning an incorrect type to variadic parameters. You can now use elements of type hinted variadic parameters as expected in a foreach:
+
+```php
+protected function foo(Bar ...$bars)
+{
+    foreach ($bars as $bar) {
+        // $bar is now an instance of Bar.
+    }
+}
+```
 
 ## 1.2.0
 * Initial split from the [php-integrator/atom-base](https://github.com/php-integrator/atom-base) repository. See [its changelog](https://github.com/php-integrator/atom-base/blob/master/CHANGELOG.md) for what changed in older versions.
