@@ -15,22 +15,70 @@ class DocblockParser
      * @var string
      */
     const VAR_TYPE        = '@var';
+
+    /**
+     * @var string
+     */
     const PARAM_TYPE      = '@param';
+
+    /**
+     * @var string
+     */
     const THROWS          = '@throws';
+
+    /**
+     * @var string
+     */
     const RETURN_VALUE    = '@return';
+
+    /**
+     * @var string
+     */
     const DEPRECATED      = '@deprecated';
 
+    /**
+     * @var string
+     */
     const METHOD          = "@method";
 
+    /**
+     * @var string
+     */
     const PROPERTY        = '@property';
+
+    /**
+     * @var string
+     */
     const PROPERTY_READ   = '@property-read';
+
+    /**
+     * @var string
+     */
     const PROPERTY_WRITE  = '@property-write';
 
+    /**
+     * @var string
+     */
     const CATEGORY        = '@category';
+
+    /**
+     * @var string
+     */
     const SUBPACKAGE      = '@subpackage';
+
+    /**
+     * @var string
+     */
     const LINK            = '@link';
 
+    /**
+     * @var string
+     */
     const DESCRIPTION     = 'description';
+
+    /**
+     * @var string
+     */
     const INHERITDOC      = '{@inheritDoc}';
 
     /**
@@ -40,7 +88,14 @@ class DocblockParser
      */
     const ANNOTATION      = '@Annotation';
 
+    /**
+     * @var string
+     */
     const TYPE_SPLITTER   = '|';
+
+    /**
+     * @var string
+     */
     const TAG_START_REGEX = '/^\s*(?:\/\*)?\*\s+(\@.+)(?:\*\/)?$/';
 
     /**
