@@ -79,4 +79,19 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
             ]
         ], $result['var']);
     }
+
+    public function testVarTagInSingleLineCommentIsCorrectlyIdentified()
+    {
+        $parser = new DocblockParser();
+        $result = $parser->parse('
+            /** @var int Some description */
+        ', [DocblockParser::VAR_TYPE], 'someProperty');
+
+        $this->assertEquals([
+            '$someProperty' => [
+                'type'        => 'int',
+                'description' => 'Some description'
+            ]
+        ], $result['var']);
+    }
 }

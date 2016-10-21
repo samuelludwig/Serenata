@@ -126,6 +126,11 @@ class DocblockParser
         $docblock = is_string($docblock) ? $docblock : null;
 
         if ($docblock) {
+            // Strip off the start and en of the docblock.
+            $docblock = trim($docblock);
+            $docblock = mb_substr($docblock, 2);
+            $docblock = mb_substr($docblock, 0, -2);
+
             preg_match_all('/\*\s+(@[a-zA-Z0-9-\\\\]+(?:\(.*\))?)(?:\s+([.\n]*))/', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
             $segments = [];
@@ -170,7 +175,7 @@ class DocblockParser
                 $tagValue = $this->normalizeNewlines($tagValue);
 
                 // Remove the delimiters of the docblock itself at the start of each line, if any.
-                $tagValue = preg_replace('/\n\s+\*\/?\s*/', ' ', $tagValue);
+                $tagValue = preg_replace('/\n\s+\*\s*/', ' ', $tagValue);
 
                 // Collapse multiple spaces, just like HTML does.
                 $tagValue = preg_replace('/\s\s+/', ' ', $tagValue);

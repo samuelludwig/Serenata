@@ -18,6 +18,7 @@
 * Semantic linting was incorrectly processing unqualified global function names.
 * Semantic linting was incorrectly processing unqualified global constant names.
 * The status bar was not showing progress when a project index happened through a repository status change.
+* In single line docblocks, the terminator `*/` was not being ignored (and taken up in the last tag's data).
 * Use statements for constants (i.e. `use const`) will now be properly analyzed when checking for unused use statements.
 * Use statements for functions (i.e. `use function`) will now be properly analyzed when checking for unused use statements.
 * Class annotations were sometimes being picked up as being part of the description of other tags (such as `@var`, `@param`, ...).
