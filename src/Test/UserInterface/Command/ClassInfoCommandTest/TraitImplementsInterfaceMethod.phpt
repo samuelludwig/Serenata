@@ -4,7 +4,7 @@ namespace A;
 
 trait TestTrait
 {
-    protected function someMethod()
+    public function someMethod()
     {
 
     }
