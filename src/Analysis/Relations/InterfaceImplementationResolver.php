@@ -69,12 +69,14 @@ class InterfaceImplementationResolver extends AbstractResolver
         if (isset($class['methods'][$interfaceMethodData['name']])) {
             $childMethod = $class['methods'][$interfaceMethodData['name']];
 
-            $childMethod['implementation'][] = [
-                'declaringClass'     => $interfaceMethodData['declaringClass'],
-                'declaringStructure' => $interfaceMethodData['declaringStructure'],
-                'startLine'          => $interfaceMethodData['startLine'],
-                'endLine'            => $interfaceMethodData['endLine']
-            ];
+            if ($childMethod['declaringStructure']['type'] !== 'interface') {
+                $childMethod['implementation'][] = [
+                    'declaringClass'     => $interfaceMethodData['declaringClass'],
+                    'declaringStructure' => $interfaceMethodData['declaringStructure'],
+                    'startLine'          => $interfaceMethodData['startLine'],
+                    'endLine'            => $interfaceMethodData['endLine']
+                ];
+            }
 
             if ($interfaceMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
                 $inheritedData = $this->extractInheritedMethodInfo($interfaceMethodData, $childMethod);

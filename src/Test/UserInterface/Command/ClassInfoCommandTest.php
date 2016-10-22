@@ -1668,6 +1668,23 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      *
      */
+    public function testMethodImplementationDataIsCorrectWhenClassReceivesSameInterfaceMethodFromTwoInterfacesAndDoesNotImplementMethod()
+    {
+        $fileName = 'ClassWithTwoInterfacesWithSameMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEmpty($output['methods']['someMethod']['implementation']);
+
+        $this->assertNull($output['methods']['someMethod']['override']);
+    }
+
+    /**
+     *
+     */
     public function testMethodImplementationDataIsCorrectWhenClassMethodImplementsMultipleInterfaceMethodsSimultaneously()
     {
         $fileName = 'ClassMethodImplementsMultipleInterfaceMethods.phpt';
