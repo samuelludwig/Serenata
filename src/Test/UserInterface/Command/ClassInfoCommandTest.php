@@ -397,7 +397,7 @@ class ClassInfoCommandTest extends IndexedTest
             'isAbstract'         => false,
             'isFinal'            => false,
             'override'           => null,
-            'implementation'     => null,
+            'implementation'     => [],
 
             'declaringClass'     => [
                 'name'      => '\A\TestClass',
@@ -934,7 +934,7 @@ class ClassInfoCommandTest extends IndexedTest
             ]
         ], $output['methods']['interfaceMethod']['override']);
 
-        $this->assertNull($output['methods']['interfaceMethod']['implementation']);
+        $this->assertEmpty($output['methods']['interfaceMethod']['implementation']);
 
         $this->assertEquals(20, $output['methods']['interfaceMethod']['startLine']);
         $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
@@ -950,25 +950,27 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
         $this->assertEquals([
-            'startLine'   => 7,
-            'endLine'     => 7,
+            [
+                'startLine'   => 7,
+                'endLine'     => 7,
 
-            'declaringClass' => [
-                'name'      => '\A\TestInterface',
-                'filename'  =>  $this->getPathFor($fileName),
-                'startLine' => 5,
-                'endLine'   => 8,
-                'type'      => 'interface'
-            ],
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface',
+                    'filename'  =>  $this->getPathFor($fileName),
+                    'startLine' => 5,
+                    'endLine'   => 8,
+                    'type'      => 'interface'
+                ],
 
-            'declaringStructure' => [
-                'name'            => '\A\TestInterface',
-                'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 8,
-                'type'            => 'interface',
-                'startLineMember' => 7,
-                'endLineMember'   => 7
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ]
             ]
         ], $output['methods']['interfaceMethod']['implementation']);
 
@@ -1116,25 +1118,27 @@ class ClassInfoCommandTest extends IndexedTest
         ], $output['methods']['parentInterfaceMethod']['parameters']);
 
         $this->assertEquals([
-            'startLine' => 7,
-            'endLine'   => 7,
+            [
+                'startLine' => 7,
+                'endLine'   => 7,
 
-            'declaringClass' => [
-                'name'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
-                'startLine' => 10,
-                'endLine'   => 13,
-                'type'      => 'class'
-            ],
+                'declaringClass' => [
+                    'name'      => '\A\ParentClass',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 10,
+                    'endLine'   => 13,
+                    'type'      => 'class'
+                ],
 
-            'declaringStructure' => [
-                'name'            => '\A\ParentInterface',
-                'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 8,
-                'type'            => 'interface',
-                'startLineMember' => 7,
-                'endLineMember'   => 7
+                'declaringStructure' => [
+                    'name'            => '\A\ParentInterface',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ]
             ]
         ], $output['methods']['parentInterfaceMethod']['implementation']);
 
@@ -1152,25 +1156,27 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
         $this->assertEquals([
-            'startLine' => 7,
-            'endLine'   => 7,
+            [
+                'startLine' => 7,
+                'endLine'   => 7,
 
-            'declaringClass' => [
-                'name'      => '\A\ParentInterface',
-                'filename'  => $this->getPathFor($fileName),
-                'startLine' => 5,
-                'endLine'   => 8,
-                'type'      => 'interface'
-            ],
+                'declaringClass' => [
+                    'name'      => '\A\ParentInterface',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 5,
+                    'endLine'   => 8,
+                    'type'      => 'interface'
+                ],
 
-            'declaringStructure' => [
-                'name'            => '\A\ParentInterface',
-                'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 8,
-                'type'            => 'interface',
-                'startLineMember' => 7,
-                'endLineMember'   => 7
+                'declaringStructure' => [
+                    'name'            => '\A\ParentInterface',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ]
             ]
         ], $output['methods']['interfaceParentMethod']['implementation']);
 
@@ -1190,25 +1196,27 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
         $this->assertEquals([
-            'startLine' => 7,
-            'endLine'   => 7,
+            [
+                'startLine' => 7,
+                'endLine'   => 7,
 
-            'declaringClass' => [
-                'name'      => '\A\TestInterface',
-                'filename'  => $this->getPathFor($fileName),
-                'startLine' => 5,
-                'endLine'   => 8,
-                'type'      => 'interface'
-            ],
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 5,
+                    'endLine'   => 8,
+                    'type'      => 'interface'
+                ],
 
-            'declaringStructure' => [
-                'name'            => '\A\TestInterface',
-                'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 8,
-                'type'            => 'interface',
-                'startLineMember' => 7,
-                'endLineMember'   => 7
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ]
             ]
         ], $output['methods']['interfaceMethod']['implementation']);
 
@@ -1618,7 +1626,7 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['name']);
         $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['name']);
 
-        $this->assertNull($output['methods']['someMethod']['implementation']);
+        $this->assertEmpty($output['methods']['someMethod']['implementation']);
     }
 
     /**
@@ -1636,7 +1644,7 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['name']);
         $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['name']);
 
-        $this->assertNull($output['methods']['someMethod']['implementation']);
+        $this->assertEmpty($output['methods']['someMethod']['implementation']);
     }
 
     /**
@@ -1651,8 +1659,197 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
         $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
 
-        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation']['declaringClass']['name']);
-        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation'][0]['declaringClass']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation'][0]['declaringStructure']['name']);
+
+        $this->assertNull($output['methods']['someMethod']['override']);
+    }
+
+    /**
+     *
+     */
+    public function testMethodImplementationDataIsCorrectWhenClassMethodImplementsMultipleInterfaceMethodsSimultaneously()
+    {
+        $fileName = 'ClassMethodImplementsMultipleInterfaceMethods.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEquals([
+            [
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface1',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 5,
+                    'endLine'   => 8,
+                    'type'      => 'interface'
+                ],
+
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface1',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ],
+
+                'startLine' => 7,
+                'endLine'   => 7
+            ],
+
+            [
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface2',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 10,
+                    'endLine'   => 13,
+                    'type'      => 'interface',
+                ],
+
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface2',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 10,
+                    'endLine'         => 13,
+                    'type'            => 'interface',
+                    'startLineMember' => 12,
+                    'endLineMember'   => 12
+                ],
+
+                'startLine' => 12,
+                'endLine'   => 12
+            ]
+        ], $output['methods']['someMethod']['implementation']);
+
+        $this->assertNull($output['methods']['someMethod']['override']);
+    }
+
+    /**
+     *
+     */
+    public function testMethodImplementationDataIsCorrectWhenClassTraitMethodImplementsMultipleInterfaceMethodsSimultaneously()
+    {
+        $fileName = 'ClassTraitMethodImplementsMultipleInterfaceMethods.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEquals([
+            [
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface1',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 5,
+                    'endLine'   => 8,
+                    'type'      => 'interface'
+                ],
+
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface1',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ],
+
+                'startLine' => 7,
+                'endLine'   => 7
+            ],
+
+            [
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface2',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 10,
+                    'endLine'   => 13,
+                    'type'      => 'interface',
+                ],
+
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface2',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 10,
+                    'endLine'         => 13,
+                    'type'            => 'interface',
+                    'startLineMember' => 12,
+                    'endLineMember'   => 12
+                ],
+
+                'startLine' => 12,
+                'endLine'   => 12
+            ]
+        ], $output['methods']['someMethod']['implementation']);
+
+        $this->assertNull($output['methods']['someMethod']['override']);
+    }
+
+    /**
+     *
+     */
+    public function testMethodImplementationDataIsCorrectWhenClassMethodImplementsMultipleDirectAndIndirectInterfaceMethodsSimultaneously()
+    {
+        $fileName = 'ClassMethodImplementsMultipleDirectAndIndirectInterfaceMethods.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEquals([
+            [
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface1',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 5,
+                    'endLine'   => 8,
+                    'type'      => 'interface'
+                ],
+
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface1',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 5,
+                    'endLine'         => 8,
+                    'type'            => 'interface',
+                    'startLineMember' => 7,
+                    'endLineMember'   => 7
+                ],
+
+                'startLine' => 7,
+                'endLine'   => 7
+            ],
+
+            [
+                'declaringClass' => [
+                    'name'      => '\A\TestInterface2',
+                    'filename'  => $this->getPathFor($fileName),
+                    'startLine' => 10,
+                    'endLine'   => 13,
+                    'type'      => 'interface',
+                ],
+
+                'declaringStructure' => [
+                    'name'            => '\A\TestInterface2',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 10,
+                    'endLine'         => 13,
+                    'type'            => 'interface',
+                    'startLineMember' => 12,
+                    'endLineMember'   => 12
+                ],
+
+                'startLine' => 12,
+                'endLine'   => 12
+            ]
+        ], $output['methods']['someMethod']['implementation']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }

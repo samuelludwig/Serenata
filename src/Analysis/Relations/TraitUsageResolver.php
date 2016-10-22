@@ -112,18 +112,20 @@ class TraitUsageResolver extends AbstractResolver
         $inheritedData = [];
         $childMethod = null;
         $overrideData = null;
-        $implementationData = null;
+        $implementationData = [];
 
         if (isset($class['methods'][$traitMethodData['name']])) {
             $childMethod = $class['methods'][$traitMethodData['name']];
 
             if ($traitMethodData['declaringStructure']['type'] === 'interface') {
-                $implementationData = [
-                    'declaringClass'     => $childMethod['declaringClass'],
-                    'declaringStructure' => $traitMethodData['declaringStructure'],
-                    'startLine'          => $traitMethodData['startLine'],
-                    'endLine'            => $traitMethodData['endLine']
-                ];
+                $implementationData = array_merge($childMethod['implementation'], [
+                    [
+                        'declaringClass'     => $childMethod['declaringClass'],
+                        'declaringStructure' => $traitMethodData['declaringStructure'],
+                        'startLine'          => $traitMethodData['startLine'],
+                        'endLine'            => $traitMethodData['endLine']
+                    ]
+                ]);
             } else {
                 if ($childMethod['declaringStructure']['name'] === $class['name']) {
                     // We are in the special case where the class is defining a method with the same name as a method

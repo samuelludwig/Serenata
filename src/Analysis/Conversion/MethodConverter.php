@@ -29,7 +29,7 @@ class MethodConverter extends FunctionConverter
             'isFinal'         => !!$rawInfo['is_final'],
 
             'override'       => null,
-            'implementation' => null,
+            'implementation' => [],
 
             'declaringClass' => [
                 'name'            => $class['name'],
