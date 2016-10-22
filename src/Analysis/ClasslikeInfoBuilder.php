@@ -203,6 +203,12 @@ class ClasslikeInfoBuilder
      */
     protected function resolveClasslikeRelations(ArrayObject $classlike, array $traitAliases, array $traitPrecedences)
     {
+        foreach ($classlike['directTraits'] as $trait) {
+            $traitInfo = $this->getCheckedClasslikeInfo($trait, $classlike['name']);
+
+            $this->traitUsageResolver->resolveUseOf($traitInfo, $classlike, $traitAliases, $traitPrecedences);
+        }
+
         foreach ($classlike['directParents'] as $parent) {
             $parentInfo = $this->getCheckedClasslikeInfo($parent, $classlike['name']);
 
@@ -213,12 +219,6 @@ class ClasslikeInfoBuilder
             $interfaceInfo = $this->getCheckedClasslikeInfo($interface, $classlike['name']);
 
             $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
-        }
-
-        foreach ($classlike['directTraits'] as $trait) {
-            $traitInfo = $this->getCheckedClasslikeInfo($trait, $classlike['name']);
-
-            $this->traitUsageResolver->resolveUseOf($traitInfo, $classlike, $traitAliases, $traitPrecedences);
         }
     }
 
