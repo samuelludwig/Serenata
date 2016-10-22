@@ -31,12 +31,12 @@ class InterfaceImplementationResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentConstantData
+     * @param array       $interfaceConstantData
      * @param ArrayObject $class
      */
-    protected function resolveInheritanceOfConstant(array $parentConstantData, ArrayObject $class)
+    protected function resolveInheritanceOfConstant(array $interfaceConstantData, ArrayObject $class)
     {
-        $class['constants'][$parentConstantData['name']] = $parentConstantData + [
+        $class['constants'][$interfaceConstantData['name']] = $interfaceConstantData + [
             'declaringClass' => [
                 'name'      => $class['name'],
                 'filename'  => $class['filename'],
@@ -51,8 +51,8 @@ class InterfaceImplementationResolver extends AbstractResolver
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
-                'startLineMember' => $parentConstantData['startLine'],
-                'endLineMember'   => $parentConstantData['endLine']
+                'startLineMember' => $interfaceConstantData['startLine'],
+                'endLineMember'   => $interfaceConstantData['endLine']
             ]
         ];
     }
