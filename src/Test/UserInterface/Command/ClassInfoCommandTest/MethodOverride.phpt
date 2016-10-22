@@ -40,12 +40,12 @@ class ParentClass extends AncestorClass
 
 trait TestTrait
 {
-    public function traitMethod()
+    protected function traitMethod()
     {
 
     }
 
-    abstract public function abstractMethod();
+    abstract protected function abstractMethod();
 }
 
 class ChildClass extends ParentClass
@@ -67,7 +67,7 @@ class ChildClass extends ParentClass
 
     }
 
-    public function parentMethod(Foo $foo = null)
+    protected function parentMethod(Foo $foo = null)
     {
 
     }
@@ -77,7 +77,7 @@ class ChildClass extends ParentClass
 
     }
 
-    public function abstractMethod(Foo $foo = null)
+    protected function abstractMethod(Foo $foo = null)
     {
 
     }
