@@ -84,16 +84,6 @@ class InterfaceImplementationResolver extends AbstractResolver
                     $interfaceMethodData['longDescription']
                 );
             }
-
-            $childMethod['declaringStructure'] = [
-                'name'            => $class['name'],
-                'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
-                'type'            => $class['type'],
-                'startLineMember' => $childMethod['startLine'],
-                'endLineMember'   => $childMethod['endLine']
-            ];
         }
 
         $class['methods'][$interfaceMethodData['name']] = array_merge($interfaceMethodData, $childMethod, $inheritedData, [

@@ -1606,6 +1606,24 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      *
      */
+    public function testMethodImplementationDataIsCorrectWhenTraitMethodIndirectlyImplementsInterfaceMethod()
+    {
+        $fileName = 'TraitImplementsInterfaceMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation']['declaringClass']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation']['declaringStructure']['name']);
+
+        $this->assertNull($output['methods']['someMethod']['override']);
+    }
+
+    /**
+     *
+     */
     public function testSpecialTypesAreCorrectlyResolved()
     {
         $fileName = 'ResolveSpecialTypes.phpt';
