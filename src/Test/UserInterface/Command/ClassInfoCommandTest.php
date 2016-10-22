@@ -1624,6 +1624,24 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      *
      */
+    public function testMethodOverrideDataIsCorrectWhenClassHasMethodThatIsAlsoDefinedByOneOfItsOwnTraitsAndByTheParent()
+    {
+        $fileName = 'ClassOverridesTraitAndParentMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['name']);
+        $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['name']);
+
+        $this->assertNull($output['methods']['someMethod']['implementation']);
+    }
+
+    /**
+     *
+     */
     public function testMethodImplementationDataIsCorrectWhenTraitMethodIndirectlyImplementsInterfaceMethod()
     {
         $fileName = 'TraitImplementsInterfaceMethod.phpt';
