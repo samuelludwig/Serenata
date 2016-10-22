@@ -850,11 +850,11 @@ class ClassInfoCommandTest extends IndexedTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ChildClass',
+                'name'      => '\A\TestTrait',
                 'filename'  =>  $this->getPathFor($fileName),
-                'startLine' => 51,
-                'endLine'   => 84,
-                'type'      => 'class'
+                'startLine' => 41,
+                'endLine'   => 49,
+                'type'      => 'trait'
             ],
 
             'declaringStructure' => [
@@ -1601,6 +1601,24 @@ class ClassInfoCommandTest extends IndexedTest
 
         $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['name']);
         $this->assertEquals('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['name']);
+    }
+
+    /**
+     *
+     */
+    public function testMethodOverrideDataIsCorrectWhenClassHasMethodThatIsAlsoDefinedByOneOfItsOwnTraits()
+    {
+        $fileName = 'ClassOverridesOwnTraitMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['name']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['name']);
+
+        $this->assertNull($output['methods']['someMethod']['implementation']);
     }
 
     /**

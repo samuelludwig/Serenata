@@ -125,13 +125,41 @@ class TraitUsageResolver extends AbstractResolver
                     'endLine'            => $traitMethodData['endLine']
                 ];
             } else {
-                $overrideData = [
-                    'declaringClass'     => $childMethod['declaringClass'],
-                    'declaringStructure' => $traitMethodData['declaringStructure'],
-                    'startLine'          => $traitMethodData['startLine'],
-                    'endLine'            => $traitMethodData['endLine'],
-                    'wasAbstract'        => $traitMethodData['isAbstract']
-                ];
+                if ($childMethod['declaringStructure']['name'] === $class['name']) {
+                    // We are in the special case where the class is defining a method with the same name as a method
+                    // we're trying to import from a trait. In that case the class' method takes precedence.
+                    if (!$childMethod['override']) {
+                        /*
+                         * This requires a little explanation: strictly spoken, a trait method overrides a method
+                         * defined in the parent class of the class using it. If the class itself defines the method
+                         * as well, the class is "overriding" a method from its own trait, and the trait method is
+                         * "overriding" the parent method. However, if we strictly follow this, the class method's
+                         * override data would point to the trait method and the trait method's override data would
+                         * point nowhere as a trait in itself can't be overriding anything. Because of this, we opt to
+                         * point the class method's override data to the parent method instead of to the trait method,
+                         * which is much more useful. If there is no parent method and the class method is just
+                         * overwriting the trait method, we *do* point the override data to the trait, as there is no
+                         * useful information getting lost.
+                         *
+                         * *Phew*
+                         */
+                        $overrideData = [
+                            'declaringClass'     => $traitMethodData['declaringClass'],
+                            'declaringStructure' => $traitMethodData['declaringStructure'],
+                            'startLine'          => $traitMethodData['startLine'],
+                            'endLine'            => $traitMethodData['endLine'],
+                            'wasAbstract'        => $traitMethodData['isAbstract']
+                        ];
+                    }
+                } else {
+                    $overrideData = [
+                        'declaringClass'     => $childMethod['declaringClass'],
+                        'declaringStructure' => $traitMethodData['declaringStructure'],
+                        'startLine'          => $traitMethodData['startLine'],
+                        'endLine'            => $traitMethodData['endLine'],
+                        'wasAbstract'        => $traitMethodData['isAbstract']
+                    ];
+                }
             }
 
             if ($traitMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
