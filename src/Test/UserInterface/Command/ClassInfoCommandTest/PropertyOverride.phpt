@@ -4,8 +4,6 @@ namespace A;
 
 class AncestorClass
 {
-    use ParentTrait;
-
     protected $ancestorProperty;
 }
 

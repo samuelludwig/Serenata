@@ -1010,71 +1010,71 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
         $this->assertEquals([
-            'startLine' => 14,
-            'endLine'   => 14,
+            'startLine' => 12,
+            'endLine'   => 12,
 
             'declaringClass' => [
                 'name'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 17,
-                'endLine'   => 23,
+                'startLine' => 15,
+                'endLine'   => 21,
                 'type'      => 'class'
             ],
 
             'declaringStructure' => [
                 'name'            => '\A\ParentTrait',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 12,
-                'endLine'         => 15,
+                'startLine'       => 10,
+                'endLine'         => 13,
                 'type'            => 'trait',
-                'startLineMember' => 14,
-                'endLineMember'   => 14
+                'startLineMember' => 12,
+                'endLineMember'   => 12
             ]
         ], $output['properties']['parentTraitProperty']['override']);
 
         $this->assertEquals([
-            'startLine' => 21,
-            'endLine'   => 21,
+            'startLine' => 19,
+            'endLine'   => 19,
 
             'declaringClass' => [
                 'name'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 17,
-                'endLine'   => 23,
+                'startLine' => 15,
+                'endLine'   => 21,
                 'type'      => 'class'
             ],
 
             'declaringStructure' => [
                 'name'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 17,
-                'endLine'         => 23,
+                'startLine'       => 15,
+                'endLine'         => 21,
                 'type'            => 'class',
-                'startLineMember' => 21,
-                'endLineMember'   => 21
+                'startLineMember' => 19,
+                'endLineMember'   => 19
             ]
         ], $output['properties']['parentProperty']['override']);
 
         $this->assertEquals([
-            'startLine' => 22,
-            'endLine'   => 22,
+            'startLine' => 20,
+            'endLine'   => 20,
 
             'declaringClass' => [
                 'name'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 17,
-                'endLine'   => 23,
+                'startLine' => 15,
+                'endLine'   => 21,
                 'type'      => 'class'
             ],
 
             'declaringStructure' => [
                 'name'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 17,
-                'endLine'         => 23,
+                'startLine'       => 15,
+                'endLine'         => 21,
                 'type'            => 'class',
-                'startLineMember' => 22,
-                'endLineMember'   => 22
+                'startLineMember' => 20,
+                'endLineMember'   => 20
             ]
         ], $output['properties']['ancestorProperty']['override']);
     }
