@@ -49,48 +49,48 @@ class TraitUsageResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentPropertyData
+     * @param array       $traitPropertyData
      * @param ArrayObject $class
      */
-    protected function resolveTraitUseOfProperty(array $parentPropertyData, ArrayObject $class)
+    protected function resolveTraitUseOfProperty(array $traitPropertyData, ArrayObject $class)
     {
         $inheritedData = [];
         $childProperty = null;
         $overriddenPropertyData = null;
 
-        if (isset($class['properties'][$parentPropertyData['name']])) {
-            $childProperty = $class['properties'][$parentPropertyData['name']];
+        if (isset($class['properties'][$traitPropertyData['name']])) {
+            $childProperty = $class['properties'][$traitPropertyData['name']];
 
             $overriddenPropertyData = [
                 'declaringClass'     => $childProperty['declaringClass'],
-                'declaringStructure' => $parentPropertyData['declaringStructure'],
-                'startLine'          => $parentPropertyData['startLine'],
-                'endLine'            => $parentPropertyData['endLine']
+                'declaringStructure' => $traitPropertyData['declaringStructure'],
+                'startLine'          => $traitPropertyData['startLine'],
+                'endLine'            => $traitPropertyData['endLine']
             ];
 
-            if ($parentPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
-                $inheritedData = $this->extractInheritedPropertyInfo($parentPropertyData);
+            if ($traitPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
+                $inheritedData = $this->extractInheritedPropertyInfo($traitPropertyData);
             } else {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childProperty['longDescription'],
-                    $parentPropertyData['longDescription']
+                    $traitPropertyData['longDescription']
                 );
             }
 
             $childProperty['declaringStructure'] = [
-                'name'            => $parentPropertyData['declaringStructure']['name'],
-                'filename'        => $parentPropertyData['declaringStructure']['filename'],
-                'startLine'       => $parentPropertyData['declaringStructure']['startLine'],
-                'endLine'         => $parentPropertyData['declaringStructure']['endLine'],
-                'type'            => $parentPropertyData['declaringStructure']['type'],
-                'startLineMember' => $parentPropertyData['startLine'],
-                'endLineMember'   => $parentPropertyData['endLine']
+                'name'            => $traitPropertyData['declaringStructure']['name'],
+                'filename'        => $traitPropertyData['declaringStructure']['filename'],
+                'startLine'       => $traitPropertyData['declaringStructure']['startLine'],
+                'endLine'         => $traitPropertyData['declaringStructure']['endLine'],
+                'type'            => $traitPropertyData['declaringStructure']['type'],
+                'startLineMember' => $traitPropertyData['startLine'],
+                'endLineMember'   => $traitPropertyData['endLine']
             ];
         } else {
             $childProperty = [];
         }
 
-        $class['properties'][$parentPropertyData['name']] = array_merge($parentPropertyData, $childProperty, $inheritedData, [
+        $class['properties'][$traitPropertyData['name']] = array_merge($traitPropertyData, $childProperty, $inheritedData, [
             'override' => $overriddenPropertyData,
 
             'declaringClass' => [
@@ -104,42 +104,42 @@ class TraitUsageResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentMethodData
+     * @param array       $traitMethodData
      * @param ArrayObject $class
      */
-    protected function resolveTraitUseOfMethod(array $parentMethodData, ArrayObject $class)
+    protected function resolveTraitUseOfMethod(array $traitMethodData, ArrayObject $class)
     {
         $inheritedData = [];
         $childMethod = null;
         $overrideData = null;
         $implementationData = null;
 
-        if (isset($class['methods'][$parentMethodData['name']])) {
-            $childMethod = $class['methods'][$parentMethodData['name']];
+        if (isset($class['methods'][$traitMethodData['name']])) {
+            $childMethod = $class['methods'][$traitMethodData['name']];
 
-            if ($parentMethodData['declaringStructure']['type'] === 'interface') {
+            if ($traitMethodData['declaringStructure']['type'] === 'interface') {
                 $implementationData = [
                     'declaringClass'     => $childMethod['declaringClass'],
-                    'declaringStructure' => $parentMethodData['declaringStructure'],
-                    'startLine'          => $parentMethodData['startLine'],
-                    'endLine'            => $parentMethodData['endLine']
+                    'declaringStructure' => $traitMethodData['declaringStructure'],
+                    'startLine'          => $traitMethodData['startLine'],
+                    'endLine'            => $traitMethodData['endLine']
                 ];
             } else {
                 $overrideData = [
                     'declaringClass'     => $childMethod['declaringClass'],
-                    'declaringStructure' => $parentMethodData['declaringStructure'],
-                    'startLine'          => $parentMethodData['startLine'],
-                    'endLine'            => $parentMethodData['endLine'],
-                    'wasAbstract'        => $parentMethodData['isAbstract']
+                    'declaringStructure' => $traitMethodData['declaringStructure'],
+                    'startLine'          => $traitMethodData['startLine'],
+                    'endLine'            => $traitMethodData['endLine'],
+                    'wasAbstract'        => $traitMethodData['isAbstract']
                 ];
             }
 
-            if ($parentMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
-                $inheritedData = $this->extractInheritedMethodInfo($parentMethodData, $childMethod);
+            if ($traitMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
+                $inheritedData = $this->extractInheritedMethodInfo($traitMethodData, $childMethod);
             } else {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childMethod['longDescription'],
-                    $parentMethodData['longDescription']
+                    $traitMethodData['longDescription']
                 );
             }
 
@@ -156,7 +156,7 @@ class TraitUsageResolver extends AbstractResolver
             $childMethod = [];
         }
 
-        $class['methods'][$parentMethodData['name']] = array_merge($parentMethodData, $childMethod, $inheritedData, [
+        $class['methods'][$traitMethodData['name']] = array_merge($traitMethodData, $childMethod, $inheritedData, [
             'override'       => $overrideData,
             'implementation' => $implementationData,
 
