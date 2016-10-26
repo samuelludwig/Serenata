@@ -140,7 +140,7 @@ class InheritanceResolver extends AbstractResolver
         if (isset($class['methods'][$parentMethodData['name']])) {
             $childMethod = $class['methods'][$parentMethodData['name']];
 
-            if ($parentMethodData['declaringStructure']['type'] === 'interface') {
+            if ($class['type'] !== 'interface' && $parentMethodData['declaringStructure']['type'] === 'interface') {
                 $implementationData = array_merge($childMethod['implementation'], [
                     [
                         'declaringClass'     => $parentMethodData['declaringClass'],

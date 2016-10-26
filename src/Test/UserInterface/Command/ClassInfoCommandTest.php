@@ -1650,6 +1650,24 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      *
      */
+    public function testMethodOverrideDataIsCorrectWhenInterfaceOverridesParentInterfaceMethod()
+    {
+        $fileName = 'InterfaceOverridesParentInterfaceMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestInterface');
+
+        $this->assertEquals('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['name']);
+
+        $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['name']);
+        $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['name']);
+        
+        $this->assertEmpty($output['methods']['interfaceMethod']['implementation']);
+    }
+
+    /**
+     *
+     */
     public function testMethodImplementationDataIsCorrectWhenTraitMethodIndirectlyImplementsInterfaceMethod()
     {
         $fileName = 'TraitImplementsInterfaceMethod.phpt';
