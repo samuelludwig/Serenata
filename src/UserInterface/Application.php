@@ -82,14 +82,22 @@ class Application
     protected $databaseFile;
 
     /**
+     * @var resource|null
+     */
+    protected $stdinStream;
+
+    /**
      * Handles the application process.
      *
-     * @param array $arguments The arguments to pass.
+     * @param array         $arguments   The arguments to pass.
+     * @param resource|null $stdinStream The stream t use to read STDIN data from when requested for commands.
      *
      * @return mixed
      */
-    public function handle(array $arguments)
+    public function handle(array $arguments, $stdinStream = null)
     {
+        $this->stdinStream = $stdinStream;
+
         if (count($arguments) < 3) {
             throw new UnexpectedValueException(
                 'Not enough argument supplied. Usage: . <project> <command> [<addtional parameters>]'
@@ -233,7 +241,8 @@ class Application
             ->register('partialParser', PartialParser::class);
 
         $container
-            ->register('sourceCodeStreamReader', SourceCodeStreamReader::class);
+            ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)
+            ->setArguments([$this->stdinStream]);
 
         $container
             ->register('docblockParser', DocblockParser::class);
