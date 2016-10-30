@@ -21,6 +21,12 @@ class ComposerStaticInit6d911d2c0317086b52990384597ba6c1
             'Symfony\\Component\\ExpressionLanguage\\' => 37,
             'Symfony\\Component\\DependencyInjection\\' => 38,
         ),
+        'R' => 
+        array (
+            'React\\Stream\\' => 13,
+            'React\\Socket\\' => 13,
+            'React\\EventLoop\\' => 16,
+        ),
         'P' => 
         array (
             'PhpParser\\' => 10,
@@ -61,6 +67,18 @@ class ComposerStaticInit6d911d2c0317086b52990384597ba6c1
         array (
             0 => __DIR__ . '/..' . '/symfony/dependency-injection',
         ),
+        'React\\Stream\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/stream/src',
+        ),
+        'React\\Socket\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/socket/src',
+        ),
+        'React\\EventLoop\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/react/event-loop/src',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -93,6 +111,13 @@ class ComposerStaticInit6d911d2c0317086b52990384597ba6c1
             'Prophecy\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
+            ),
+        ),
+        'E' => 
+        array (
+            'Evenement' => 
+            array (
+                0 => __DIR__ . '/..' . '/evenement/evenement/src',
             ),
         ),
         'D' => 
