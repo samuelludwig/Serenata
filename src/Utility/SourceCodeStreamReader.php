@@ -10,15 +10,22 @@ use UnexpectedValueException;
 class SourceCodeStreamReader
 {
     /**
+     * @var resource|null
+     */
+    protected $stdinStream;
+
+    /**
      * @var bool
      */
     protected $autoConvertToUtf8;
 
     /**
-     * @param bool $autoConvertToUtf8
+     * @param resource|null $stdinStream
+     * @param bool          $autoConvertToUtf8
      */
-    public function __construct($autoConvertToUtf8 = true)
+    public function __construct($stdinStream = null, $autoConvertToUtf8 = true)
     {
+        $this->stdinStream = $stdinStream;
         $this->autoConvertToUtf8 = $autoConvertToUtf8;
     }
 
@@ -29,7 +36,10 @@ class SourceCodeStreamReader
      */
     public function getSourceCodeFromStdin()
     {
-        $code = file_get_contents('php://stdin');
+        $stream = $this->stdinStream;
+        $stream = $stream ?: STDIN;
+
+        $code = stream_get_contents($stream);
 
         $code = $this->convertEncodingIfNecessary($code);
 
