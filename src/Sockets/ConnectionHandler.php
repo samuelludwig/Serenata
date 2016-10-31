@@ -106,7 +106,6 @@ class ConnectionHandler
     protected function processData($data)
     {
         // TODO: Extract a RequestHandler class.
-        // TODO: There could be multiple simultaneous connections sending different requests.
 
         $bytesRead = 0;
 
