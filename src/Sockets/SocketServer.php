@@ -150,12 +150,10 @@ class SocketServer extends Server
 
             $bytesRead = strlen($header) + strlen(self::HEADER_DELIMITER);
         } else {
-            $bytesToRead = min(strlen($data), $this->request['length'] - $this->request['bytesRead']);
+            $bytesRead = min(strlen($data), $this->request['length'] - $this->request['bytesRead']);
 
-            $this->request['content'] .= substr($data, 0, $bytesToRead);
-            $this->request['bytesRead'] += $bytesToRead;
-
-            $bytesRead = $bytesToRead;
+            $this->request['content'] .= substr($data, 0, $bytesRead);
+            $this->request['bytesRead'] += $bytesRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
                 $requestContent = json_decode($this->request['content'], true);
