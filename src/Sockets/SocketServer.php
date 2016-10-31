@@ -97,9 +97,17 @@ class SocketServer extends Server
         try {
             $this->processConnectionData($connection, $data);
         } catch (RequestParsingException $e) {
-            echo "Something went wrong, starting over\n";
-            $this->resetRequestState();
+            $this->handleRequestParsingException($e);
         }
+    }
+
+    /**
+     * @param RequestParsingException $e
+     */
+    protected function handleRequestParsingException(RequestParsingException $e)
+    {
+        echo "Something went wrong, starting over\n";
+        $this->resetRequestState();
     }
 
     /**
