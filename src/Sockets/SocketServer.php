@@ -132,6 +132,7 @@ class SocketServer extends Server
     protected function processConnectionData(Connection $connection, $data)
     {
         // TODO: Extract a RequestHandler class.
+        // TODO: There could be multiple simultaneous connections sending different requests.
 
         echo "Data received\n";
 
