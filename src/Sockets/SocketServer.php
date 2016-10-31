@@ -134,7 +134,7 @@ class SocketServer extends Server
         // TODO: Extract a RequestHandler class.
         // TODO: There could be multiple simultaneous connections sending different requests.
 
-        echo "Data received\n";
+        $bytesRead = 0;
 
         if ($this->request['length'] === null) {
             $contentLengthHeader = $this->readRawHeader($data);
@@ -142,7 +142,7 @@ class SocketServer extends Server
 
             $this->request['length'] = $contentLength;
 
-            $data = substr($data, strlen($contentLengthHeader) + strlen(self::HEADER_DELIMITER));
+            $bytesRead = strlen($contentLengthHeader) + strlen(self::HEADER_DELIMITER);
         } elseif (!$this->request['wasBoundaryFound']) {
             $header = $this->readRawHeader($data);
 
@@ -150,7 +150,7 @@ class SocketServer extends Server
                 $this->request['wasBoundaryFound'] = true;
             }
 
-            $data = substr($data, strlen($header) + strlen(self::HEADER_DELIMITER));
+            $bytesRead = strlen($header) + strlen(self::HEADER_DELIMITER);
         } else {
             echo "Reading data\n";
 
@@ -161,7 +161,7 @@ class SocketServer extends Server
             $this->request['content'] .= substr($data, 0, $bytesToRead);
             $this->request['bytesRead'] += $bytesToRead;
 
-            $data = substr($data, $bytesToRead);
+            $bytesRead = $bytesToRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
                 echo "End of request reached, formulating response\n";
@@ -220,6 +220,8 @@ class SocketServer extends Server
                 echo "Still need " . ($this->request['length'] - $this->request['bytesRead']) . " more bytes!\n";
             }
         }
+
+        $data = substr($data, $bytesRead);
 
         if (strlen($data) > 0) {
             echo "Processing remainder of data...\n";
