@@ -137,14 +137,10 @@ class SocketServer extends Server
         echo "Data received\n";
 
         if ($this->request['length'] === null) {
-            echo "Looking for length\n";
-
             $contentLengthHeader = $this->readRawHeader($data);
             $contentLength = $this->getLengthFromContentLengthHeader($contentLengthHeader);
 
             $this->request['length'] = $contentLength;
-
-            echo "Length received: " . $contentLength . "\n";
 
             $data = substr($data, strlen($contentLengthHeader) + strlen(self::HEADER_DELIMITER));
         } elseif (!$this->request['wasBoundaryFound']) {
@@ -152,7 +148,6 @@ class SocketServer extends Server
 
             if (empty($header)) {
                 $this->request['wasBoundaryFound'] = true;
-                echo "Boundary found\n";
             }
 
             $data = substr($data, strlen($header) + strlen(self::HEADER_DELIMITER));
