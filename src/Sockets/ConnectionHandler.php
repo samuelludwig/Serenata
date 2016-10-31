@@ -132,7 +132,6 @@ class ConnectionHandler
 
             if ($this->request['bytesRead'] == $this->request['length']) {
                 $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
-
                 $responseContent = $this->getResponseForJsonRpcRequest($jsonRpcRequest);
 
                 $this->writeRawResponse($responseContent);
@@ -149,13 +148,15 @@ class ConnectionHandler
     }
 
     /**
-     * @param array $request
+     * @param JsonRpcRequest $request
      *
      * @return mixed
      */
-    protected function getOutputForJsonRpcRequest(array $request)
+    protected function getOutputForJsonRpcRequest(JsonRpcRequest $request)
     {
-        $arguments = $request['params']['parameters'];
+        $params = $request->getParams();
+
+        $arguments = $params['parameters'];
 
         if (!is_array($arguments)) {
             throw new RequestParsingException('Malformed request content received (expected an \'arguments\' array)');
@@ -165,10 +166,10 @@ class ConnectionHandler
 
         $stdinStream = null;
 
-        if ($request['params']['stdinData']) {
+        if ($params['stdinData']) {
             $stdinStream = fopen('php://memory', 'w+');
 
-            fwrite($stdinStream, $request['params']['stdinData']);
+            fwrite($stdinStream, $params['stdinData']);
             rewind($stdinStream);
         }
 
@@ -184,27 +185,26 @@ class ConnectionHandler
     }
 
     /**
-     * @param array $request
+     * @param JsonRpcRequest $request
      *
-     * @return array
+     * @return JsonRpcResponse
      */
-    protected function getJsonRpcResponseForJsonRpcRequest(array $request)
+    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request)
     {
         $responseData = $this->getOutputForJsonRpcRequest($request);
 
-        return [
-            'id'     => $request['id'],
-            'result' => json_decode($responseData, true), // TODO: Commands should not encode, should be handled by outer layer.
-            'error'  => null
-        ];
+        return new JsonRpcResponse(
+            $request->getId(),
+            json_decode($responseData, true) // TODO: Commands should not encode, should be handled by outer layer.
+        );
     }
 
     /**
-     * @param array $request
+     * @param JsonRpcRequest $request
      *
      * @return string
      */
-    protected function getResponseForJsonRpcRequest(array $request)
+    protected function getResponseForJsonRpcRequest(JsonRpcRequest $request)
     {
         $response = $this->getJsonRpcResponseForJsonRpcRequest($request);
 
@@ -214,11 +214,11 @@ class ConnectionHandler
     /**
      * @param string $content
      *
-     * @return array
+     * @return JsonRpcRequest
      */
     protected function getJsonRpcRequestFromRequestContent($content)
     {
-        return json_decode($this->request['content'], true);;
+        return JsonRpcRequest::createFromJson($this->request['content']);
     }
 
     /**
