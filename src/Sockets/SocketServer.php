@@ -71,8 +71,6 @@ class SocketServer extends Server
      */
     protected function onConnectionEstablished(Connection $connection)
     {
-        echo "Connection established\n";
-
         $this->resetRequestState();
 
         $connection->on('data', function ($data) use ($connection) {
@@ -152,11 +150,7 @@ class SocketServer extends Server
 
             $bytesRead = strlen($header) + strlen(self::HEADER_DELIMITER);
         } else {
-            echo "Reading data\n";
-
             $bytesToRead = min(strlen($data), $this->request['length'] - $this->request['bytesRead']);
-
-            echo "Reading $bytesToRead bytes of data packet of " . strlen($data) . " bytes\n";
 
             $this->request['content'] .= substr($data, 0, $bytesToRead);
             $this->request['bytesRead'] += $bytesToRead;
@@ -164,24 +158,15 @@ class SocketServer extends Server
             $bytesRead = $bytesToRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
-                echo "End of request reached, formulating response\n";
-
                 $requestContent = json_decode($this->request['content'], true);
-
-                echo "Done decoding\n";
-
 
                 $arguments = $requestContent['params']['parameters'];
 
                 if (!is_array($arguments)) {
-                    echo "Unexpected data format received! " . print_r($arguments) . "\n";
-                    $connection->write('Unexpected data format received!');
-                    return;
+                    throw new RequestParsingException('Malformed request content received');
                 }
 
                 array_unshift($arguments, __FILE__);
-
-                echo "Done unshifting\n";
 
                 $stdinStream = null;
 
@@ -201,8 +186,6 @@ class SocketServer extends Server
                     fclose($stdinStream);
                 }
 
-                echo "Sending back response\n";
-
                 $responseContent = [
                     'id'     => $requestContent['id'],
                     'result' => json_decode($responseData, true), // TODO: Commands should not encode, should be handled by outer layer.
@@ -216,15 +199,12 @@ class SocketServer extends Server
                 $connection->write($responseContent);
 
                 $this->resetRequestState();
-            } else {
-                echo "Still need " . ($this->request['length'] - $this->request['bytesRead']) . " more bytes!\n";
             }
         }
 
         $data = substr($data, $bytesRead);
 
         if (strlen($data) > 0) {
-            echo "Processing remainder of data...\n";
             $this->processConnectionData($connection, $data);
         }
     }
