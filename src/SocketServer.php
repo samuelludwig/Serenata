@@ -1,25 +1,122 @@
 <?php
 
-require 'Bootstrap.php';
+namespace PhpIntegrator;
 
-$loop = React\EventLoop\Factory::create();
-$socket = new React\Socket\Server($loop);
+use React\EventLoop\LoopInterface;
 
-$socket->on('connection', function (React\Socket\Connection $connection) {
-    echo "Connection established\n";
+use React\Socket\Server;
+use React\Socket\Connection;
 
-    $request = [
-        'length'           => null,
-        'mimeType'         => null,
-        'wasBoundaryFound' => false,
-        'bytesRead'        => 0,
-        'content'          => ''
-    ];
+/**
+ * Represents a socket server that handles communication with the core.
+ */
+class SocketServer extends Server
+{
+    /**
+     * @var array
+     */
+    protected $request;
 
-    $processData = function ($data) use ($connection, &$request, &$processData) {
+    /**
+     * @var int
+     */
+    protected $port;
+
+    /**
+     * @param LoopInterface $loop
+     * @param int           $port
+     */
+    public function __construct(LoopInterface $loop, $port)
+    {
+        parent::__construct($loop);
+
+        $this->port = $port;
+
+        $this->setup();
+    }
+
+    /**
+     * @return void
+     */
+    protected function setup()
+    {
+        $this->on('connection', [$this, 'onConnectionEstablished']);
+
+        $this->listen($this->port);
+    }
+
+    /**
+     * @return void
+     */
+    protected function resetRequestState()
+    {
+        $this->request = [
+            'length'           => null,
+            'mimeType'         => null,
+            'wasBoundaryFound' => false,
+            'bytesRead'        => 0,
+            'content'          => ''
+        ];
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    protected function onConnectionEstablished(Connection $connection)
+    {
+        echo "Connection established\n";
+
+        $this->resetRequestState();
+
+        $connection->on('data', function ($data) use ($connection) {
+            $this->onDataReceived($connection, $data);
+        });
+
+        $connection->on('end', function () use ($connection) {
+            $this->onConnectionEnded($connection);
+        });
+
+        $connection->on('close', function () use ($connection) {
+            $this->onConnectionClosed($connection);
+        });
+    }
+
+    /**
+     * @param Connection $connection
+     * @param string     $data
+     */
+    protected function onDataReceived(Connection $connection, $data)
+    {
+        $this->processConnectionData($connection, $data);
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    protected function onConnectionEnded(Connection $connection)
+    {
+
+    }
+
+    /**
+     * @param Connection $connection
+     */
+    protected function onConnectionClosed(Connection $connection)
+    {
+
+    }
+
+    /**
+     * @param Connection $connection
+     * @param string     $data
+     */
+    protected function processConnectionData(Connection $connection, $data)
+    {
+        // TODO: Extract a RequestHandler class.
+
         echo "Data received\n";
 
-        if ($request['length'] === null) {
+        if ($this->request['length'] === null) {
             echo "Looking for length\n";
             $end = strpos($data, "\r\n");
 
@@ -47,16 +144,16 @@ $socket->on('connection', function (React\Socket\Connection $connection) {
                 return;
             }
 
-            $request['length'] = $contentLength;
+            $this->request['length'] = $contentLength;
 
             echo "Length received: " . $contentLength . "\n";
 
             $data = substr($data, $end + strlen("\r\n"));
-        } elseif (!$request['wasBoundaryFound']) {
+        } elseif (!$this->request['wasBoundaryFound']) {
             $end = strpos($data, "\r\n");
 
             if ($end === 0) {
-                $request['wasBoundaryFound'] = true;
+                $this->request['wasBoundaryFound'] = true;
                 echo "Boundary found\n";
             }
 
@@ -64,19 +161,19 @@ $socket->on('connection', function (React\Socket\Connection $connection) {
         } else {
             echo "Reading data\n";
 
-            $bytesToRead = min(strlen($data), $request['length'] - $request['bytesRead']);
+            $bytesToRead = min(strlen($data), $this->request['length'] - $this->request['bytesRead']);
 
             echo "Reading $bytesToRead bytes of data packet of " . strlen($data) . " bytes\n";
 
-            $request['content'] .= substr($data, 0, $bytesToRead);
-            $request['bytesRead'] += $bytesToRead;
+            $this->request['content'] .= substr($data, 0, $bytesToRead);
+            $this->request['bytesRead'] += $bytesToRead;
 
             $data = substr($data, $bytesToRead);
 
-            if ($request['bytesRead'] == $request['length']) {
+            if ($this->request['bytesRead'] == $this->request['length']) {
                 echo "End of request reached, formulating response\n";
 
-                $requestContent = json_decode($request['content'], true);
+                $requestContent = json_decode($this->request['content'], true);
 
                 echo "Done decoding\n";
 
@@ -125,40 +222,15 @@ $socket->on('connection', function (React\Socket\Connection $connection) {
                 $connection->write("\r\n");
                 $connection->write($responseContent);
 
-                $request['length'] = null;
-                $request['mimeType'] = null;
-                $request['wasBoundaryFound'] = null;
-                $request['bytesRead'] = 0;
-                $request['content'] = '';
+                $this->resetRequestState();
             } else {
-                echo "Still need " . ($request['length'] - $request['bytesRead']) . " more bytes!\n";
+                echo "Still need " . ($this->request['length'] - $this->request['bytesRead']) . " more bytes!\n";
             }
         }
 
         if (strlen($data) > 0) {
             echo "Processing remainder of data...\n";
-            $processData($data);
+            $this->processConnectionData($connection, $data);
         }
-    };
-
-    $onDataReceived = function ($data) use (&$request, $processData) {
-        $processData($data);
-    };
-
-    $connection->on('data', $onDataReceived);
-
-
-    $connection->on('end', function () {
-        echo "Connection ended\n";
-    });
-
-    $connection->on('close', function () {
-        echo "Connection ended\n";
-    });
-});
-
-$socket->listen(9999);
-
-echo "Starting server...\n";
-
-$loop->run();
+    }
+}
