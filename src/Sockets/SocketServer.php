@@ -25,14 +25,20 @@ class SocketServer extends Server
     protected $port;
 
     /**
+     * @var ConnectionHandlerFactory
+     */
+    protected $connectionHandlerFactory;
+
+    /**
      * @param LoopInterface $loop
      * @param int           $port
      */
-    public function __construct(LoopInterface $loop, $port)
+    public function __construct(LoopInterface $loop, $port, ConnectionHandlerFactory $connectionHandlerFactory)
     {
         parent::__construct($loop);
 
         $this->port = $port;
+        $this->connectionHandlerFactory = $connectionHandlerFactory;
 
         $this->setup();
     }
@@ -54,7 +60,7 @@ class SocketServer extends Server
     {
         $key = $this->getKeyForConnection($connection);
 
-        $this->connectionMap[$key] = new ConnectionHandler($connection);
+        $this->connectionMap[$key] = $this->connectionHandlerFactory->create($connection);
 
         $connection->on('close', [$this, 'onConnectionClosed']);
     }

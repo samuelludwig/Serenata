@@ -2,10 +2,6 @@
 
 namespace PhpIntegrator\Sockets;
 
-use UnexpectedValueException;
-
-use React\EventLoop\LoopInterface;
-
 use React\Socket\Connection;
 
 /**
@@ -29,11 +25,18 @@ class ConnectionHandler
     protected $connection;
 
     /**
-     * @param Connection $connection
+     * @var JsonRpcRequestHandlerInterface
      */
-    public function __construct(Connection $connection)
+    protected $jsonRpcRequestHandler;
+
+    /**
+     * @param Connection                     $connection
+     * @param JsonRpcRequestHandlerInterface $jsonRpcRequestHandler
+     */
+    public function __construct(Connection $connection, JsonRpcRequestHandlerInterface $jsonRpcRequestHandler)
     {
         $this->connection = $connection;
+        $this->jsonRpcRequestHandler = $jsonRpcRequestHandler;
 
         $this->setup();
     }
@@ -105,8 +108,6 @@ class ConnectionHandler
      */
     protected function processData($data)
     {
-        // TODO: Extract a RequestHandler class.
-
         $bytesRead = 0;
 
         if ($this->request['length'] === null) {
@@ -150,63 +151,11 @@ class ConnectionHandler
     /**
      * @param JsonRpcRequest $request
      *
-     * @return mixed
-     */
-    protected function getOutputForJsonRpcRequest(JsonRpcRequest $request)
-    {
-        $params = $request->getParams();
-
-        $arguments = $params['parameters'];
-
-        if (!is_array($arguments)) {
-            throw new RequestParsingException('Malformed request content received (expected an \'arguments\' array)');
-        }
-
-        array_unshift($arguments, __FILE__);
-
-        $stdinStream = null;
-
-        if ($params['stdinData']) {
-            $stdinStream = fopen('php://memory', 'w+');
-
-            fwrite($stdinStream, $params['stdinData']);
-            rewind($stdinStream);
-        }
-
-        // TODO: Don't create application and container over and over. This might pose a problem as currently
-        // classes don't count on state being maintained.
-        $output = (new \PhpIntegrator\UserInterface\Application())->handle($arguments, $stdinStream);
-
-        if ($stdinStream) {
-            fclose($stdinStream);
-        }
-
-        return $output;
-    }
-
-    /**
-     * @param JsonRpcRequest $request
-     *
-     * @return JsonRpcResponse
-     */
-    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request)
-    {
-        $responseData = $this->getOutputForJsonRpcRequest($request);
-
-        return new JsonRpcResponse(
-            $request->getId(),
-            json_decode($responseData, true) // TODO: Commands should not encode, should be handled by outer layer.
-        );
-    }
-
-    /**
-     * @param JsonRpcRequest $request
-     *
      * @return string
      */
     protected function getResponseForJsonRpcRequest(JsonRpcRequest $request)
     {
-        $response = $this->getJsonRpcResponseForJsonRpcRequest($request);
+        $response = $this->jsonRpcRequestHandler->handle($request);
 
         return json_encode($response);
     }
