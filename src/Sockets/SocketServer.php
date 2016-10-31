@@ -106,7 +106,6 @@ class SocketServer extends Server
      */
     protected function handleRequestParsingException(RequestParsingException $e)
     {
-        echo "Something went wrong, starting over\n";
         $this->resetRequestState();
     }
 
