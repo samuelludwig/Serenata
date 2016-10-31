@@ -94,7 +94,12 @@ class SocketServer extends Server
      */
     protected function onDataReceived(Connection $connection, $data)
     {
-        $this->processConnectionData($connection, $data);
+        try {
+            $this->processConnectionData($connection, $data);
+        } catch (RequestParsingException $e) {
+            echo "Something went wrong, starting over\n";
+            $this->resetRequestState();
+        }
     }
 
     /**
@@ -247,7 +252,7 @@ class SocketServer extends Server
         $end = strpos($data, self::HEADER_DELIMITER);
 
         if ($end === -1) {
-            return;
+            throw new RequestParsingException('Header delimiter not found');
         }
 
         return substr($data, 0, $end);
