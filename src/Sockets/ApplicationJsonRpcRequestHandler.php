@@ -14,7 +14,7 @@ class ApplicationJsonRpcRequestHandler implements JsonRpcRequestHandlerInterface
 
         return new JsonRpcResponse(
             $request->getId(),
-            json_decode($responseData, true) // TODO: Commands should not encode, should be handled by outer layer.
+            json_decode($responseData, true) // TODO: Commands should not encode, should be handled by outer layer (CLI).
         );
     }
 
