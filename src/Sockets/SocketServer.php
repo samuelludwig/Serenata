@@ -156,45 +156,11 @@ class SocketServer extends Server
             $this->request['bytesRead'] += $bytesRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
-                $requestContent = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
+                $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
 
-                $arguments = $requestContent['params']['parameters'];
+                $responseContent = $this->getResponseForJsonRpcRequest($jsonRpcRequest);
 
-                if (!is_array($arguments)) {
-                    throw new RequestParsingException('Malformed request content received');
-                }
-
-                array_unshift($arguments, __FILE__);
-
-                $stdinStream = null;
-
-                if ($requestContent['params']['stdinData']) {
-                    $stdinStream = fopen('php://memory', 'w+');
-
-                    fwrite($stdinStream, $requestContent['params']['stdinData']);
-                    rewind($stdinStream);
-                }
-
-                // TODO: Refactor.
-                // TODO: Don't create application and container over and over. This might pose a problem as currently
-                // classes don't count on state being maintained.
-                $responseData = (new \PhpIntegrator\UserInterface\Application())->handle($arguments, $stdinStream);
-
-                if ($stdinStream) {
-                    fclose($stdinStream);
-                }
-
-                $responseContent = [
-                    'id'     => $requestContent['id'],
-                    'result' => json_decode($responseData, true), // TODO: Commands should not encode, should be handled by outer layer.
-                    'error'  => null
-                ];
-
-                $responseContent = json_encode($responseContent);
-
-                $connection->write('Content-Length: ' . strlen($responseContent) . self::HEADER_DELIMITER);
-                $connection->write(self::HEADER_DELIMITER);
-                $connection->write($responseContent);
+                $this->writeRawResponse($connection, $responseContent);
 
                 $this->resetRequestState();
             }
@@ -205,6 +171,69 @@ class SocketServer extends Server
         if (strlen($data) > 0) {
             $this->processConnectionData($connection, $data);
         }
+    }
+
+    /**
+     * @param array $request
+     *
+     * @return mixed
+     */
+    protected function getOutputForJsonRpcRequest(array $request)
+    {
+        $arguments = $request['params']['parameters'];
+
+        if (!is_array($arguments)) {
+            throw new RequestParsingException('Malformed request content received (expected an \'arguments\' array)');
+        }
+
+        array_unshift($arguments, __FILE__);
+
+        $stdinStream = null;
+
+        if ($request['params']['stdinData']) {
+            $stdinStream = fopen('php://memory', 'w+');
+
+            fwrite($stdinStream, $request['params']['stdinData']);
+            rewind($stdinStream);
+        }
+
+        // TODO: Don't create application and container over and over. This might pose a problem as currently
+        // classes don't count on state being maintained.
+        $output = (new \PhpIntegrator\UserInterface\Application())->handle($arguments, $stdinStream);
+
+        if ($stdinStream) {
+            fclose($stdinStream);
+        }
+
+        return $output;
+    }
+
+    /**
+     * @param array $request
+     *
+     * @return array
+     */
+    protected function getJsonRpcResponseForJsonRpcRequest(array $request)
+    {
+        $responseData = $this->getOutputForJsonRpcRequest($request);
+
+        return [
+            'id'     => $request['id'],
+            'result' => json_decode($responseData, true), // TODO: Commands should not encode, should be handled by outer layer.
+            'error'  => null
+        ];
+    }
+
+    /**
+     * @param array $request
+     *
+     * @return string
+     */
+    protected function getResponseForJsonRpcRequest(array $request)
+    {
+        $response = $this->getJsonRpcResponseForJsonRpcRequest($request);
+
+        return json_encode($response);
     }
 
     /**
@@ -233,6 +262,17 @@ class SocketServer extends Server
         }
 
         return substr($data, 0, $end);
+    }
+
+    /**
+     * @param Connection $connection
+     * @param string     $content
+     */
+    protected function writeRawResponse(Connection $connection, $content)
+    {
+        $connection->write('Content-Length: ' . strlen($content) . self::HEADER_DELIMITER);
+        $connection->write(self::HEADER_DELIMITER);
+        $connection->write($content);
     }
 
     /**
