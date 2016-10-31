@@ -132,23 +132,7 @@ class SocketServer extends Server
             echo "Looking for length\n";
 
             $contentLengthHeader = $this->readRawHeader($data);
-
-            $parts = explode(':', $contentLengthHeader);
-
-            if (count($parts) !== 2) {
-                echo "Nope.";
-                return;
-            }
-
-            list($headerName, $contentLength) = $parts;
-
-            $contentLength = trim($contentLength);
-
-            echo "Length is {$contentLength}\n";
-
-            if (!$contentLength || !is_numeric($contentLength)) {
-                return;
-            }
+            $contentLength = $this->getLengthFromContentLengthHeader($contentLengthHeader);
 
             $this->request['length'] = $contentLength;
 
@@ -256,5 +240,27 @@ class SocketServer extends Server
         }
 
         return substr($data, 0, $end);
+    }
+
+    /**
+     * @param string $rawHeader
+     *
+     * @throws RequestParsingException
+     *
+     * @return int
+     */
+    protected function getLengthFromContentLengthHeader($rawHeader)
+    {
+        $parts = explode(':', $rawHeader, 2);
+
+        list($headerName, $contentLength) = $parts;
+
+        $contentLength = trim($contentLength);
+
+        if (!$contentLength || !is_numeric($contentLength)) {
+            throw new RequestParsingException('Content of the Content-Length header is not a valid number');
+        }
+
+        return $contentLength;
     }
 }
