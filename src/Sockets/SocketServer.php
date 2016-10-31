@@ -156,7 +156,7 @@ class SocketServer extends Server
             $this->request['bytesRead'] += $bytesRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
-                $requestContent = json_decode($this->request['content'], true);
+                $requestContent = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
 
                 $arguments = $requestContent['params']['parameters'];
 
@@ -205,6 +205,16 @@ class SocketServer extends Server
         if (strlen($data) > 0) {
             $this->processConnectionData($connection, $data);
         }
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return array
+     */
+    protected function getJsonRpcRequestFromRequestContent($content)
+    {
+        return json_decode($this->request['content'], true);;
     }
 
     /**
