@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Sockets;
 
+use UnexpectedValueException;
+
 use React\EventLoop\LoopInterface;
 
 use React\Socket\Server;
@@ -123,14 +125,8 @@ class SocketServer extends Server
 
         if ($this->request['length'] === null) {
             echo "Looking for length\n";
-            $end = strpos($data, self::HEADER_DELIMITER);
 
-            if ($end === -1) {
-                echo "Expected length header, not found.\n";
-                return;
-            }
-
-            $contentLengthHeader = substr($data, 0, $end);
+            $contentLengthHeader = $this->readRawHeader($data);
 
             $parts = explode(':', $contentLengthHeader);
 
@@ -153,16 +149,16 @@ class SocketServer extends Server
 
             echo "Length received: " . $contentLength . "\n";
 
-            $data = substr($data, $end + strlen(self::HEADER_DELIMITER));
+            $data = substr($data, strlen($contentLengthHeader) + strlen(self::HEADER_DELIMITER));
         } elseif (!$this->request['wasBoundaryFound']) {
-            $end = strpos($data, self::HEADER_DELIMITER);
+            $header = $this->readRawHeader($data);
 
-            if ($end === 0) {
+            if (empty($header)) {
                 $this->request['wasBoundaryFound'] = true;
                 echo "Boundary found\n";
             }
 
-            $data = substr($data, $end + strlen(self::HEADER_DELIMITER));
+            $data = substr($data, strlen($header) + strlen(self::HEADER_DELIMITER));
         } else {
             echo "Reading data\n";
 
@@ -237,5 +233,23 @@ class SocketServer extends Server
             echo "Processing remainder of data...\n";
             $this->processConnectionData($connection, $data);
         }
+    }
+
+    /**
+     * @param string $data
+     *
+     * @throws RequestParsingException
+     *
+     * @return string
+     */
+    protected function readRawHeader($data)
+    {
+        $end = strpos($data, self::HEADER_DELIMITER);
+
+        if ($end === -1) {
+            return;
+        }
+
+        return substr($data, 0, $end);
     }
 }
