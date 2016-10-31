@@ -13,6 +13,11 @@ use React\Socket\Connection;
 class SocketServer extends Server
 {
     /**
+     * @var string
+     */
+    const HEADER_DELIMITER = "\r\n";
+
+    /**
      * @var array
      */
     protected $request;
@@ -118,7 +123,7 @@ class SocketServer extends Server
 
         if ($this->request['length'] === null) {
             echo "Looking for length\n";
-            $end = strpos($data, "\r\n");
+            $end = strpos($data, self::HEADER_DELIMITER);
 
             if ($end === -1) {
                 echo "Expected length header, not found.\n";
@@ -148,16 +153,16 @@ class SocketServer extends Server
 
             echo "Length received: " . $contentLength . "\n";
 
-            $data = substr($data, $end + strlen("\r\n"));
+            $data = substr($data, $end + strlen(self::HEADER_DELIMITER));
         } elseif (!$this->request['wasBoundaryFound']) {
-            $end = strpos($data, "\r\n");
+            $end = strpos($data, self::HEADER_DELIMITER);
 
             if ($end === 0) {
                 $this->request['wasBoundaryFound'] = true;
                 echo "Boundary found\n";
             }
 
-            $data = substr($data, $end + strlen("\r\n"));
+            $data = substr($data, $end + strlen(self::HEADER_DELIMITER));
         } else {
             echo "Reading data\n";
 
@@ -218,8 +223,8 @@ class SocketServer extends Server
 
                 $responseContent = json_encode($responseContent);
 
-                $connection->write('Content-Length: ' . strlen($responseContent) . "\r\n");
-                $connection->write("\r\n");
+                $connection->write('Content-Length: ' . strlen($responseContent) . self::HEADER_DELIMITER);
+                $connection->write(self::HEADER_DELIMITER);
                 $connection->write($responseContent);
 
                 $this->resetRequestState();
