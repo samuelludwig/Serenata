@@ -85,12 +85,12 @@ class Application
     protected $stdinStream;
 
     /**
-     * @param Command\AbstractCommand $command
-     * @param ArrayAccess             $arguments
+     * @param Command\CommandInterface $command
+     * @param ArrayAccess              $arguments
      *
      * @return mixed
      */
-    public function handle(Command\AbstractCommand $command, ArrayAccess $arguments)
+    public function handle(Command\CommandInterface $command, ArrayAccess $arguments)
     {
         $result = null;
         $success = false;
