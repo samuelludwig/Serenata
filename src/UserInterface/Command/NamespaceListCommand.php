@@ -43,7 +43,7 @@ class NamespaceListCommand extends AbstractCommand
 
         $list = $this->getNamespaceList($file);
 
-        return $this->outputJson(true, $list);
+        return $list;
     }
 
     /**

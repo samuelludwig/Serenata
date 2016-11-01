@@ -70,7 +70,7 @@ class ResolveTypeCommand extends AbstractCommand
             isset($arguments['kind']->value) ? $arguments['kind']->value : UseStatementKind::TYPE_CLASSLIKE
         );
 
-        return $this->outputJson(true, $type);
+        return $type;
     }
 
     /**

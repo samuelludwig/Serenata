@@ -74,7 +74,7 @@ class InvocationInfoCommand extends AbstractCommand
 
         $result = $this->getInvocationInfoAt($code, $offset);
 
-        return $this->outputJson(true, $result);
+        return $result;
     }
 
     /**

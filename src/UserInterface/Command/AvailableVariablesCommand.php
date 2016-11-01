@@ -83,7 +83,7 @@ class AvailableVariablesCommand extends AbstractCommand
 
         $result = $this->getAvailableVariables($code, $offset);
 
-        return $this->outputJson(true, $result);
+        return $result;
      }
 
     /**

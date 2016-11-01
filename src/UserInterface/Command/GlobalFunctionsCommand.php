@@ -40,7 +40,7 @@ class GlobalFunctionsCommand extends AbstractCommand
      {
          $result = $this->getGlobalFunctions();
 
-         return $this->outputJson(true, $result);
+         return $result;
      }
 
      /**

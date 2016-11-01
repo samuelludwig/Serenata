@@ -46,7 +46,7 @@ class ClassInfoCommand extends AbstractCommand
 
         $result = $this->getClassInfo($arguments['name']->value);
 
-        return $this->outputJson(true, $result);
+        return $result;
     }
 
     /**

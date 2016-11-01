@@ -103,7 +103,7 @@ class DeduceTypesCommand extends AbstractCommand
            $offset
         );
 
-        return $this->outputJson(true, $result);
+        return $result;
     }
 
     /**

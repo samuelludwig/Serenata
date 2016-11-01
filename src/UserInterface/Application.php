@@ -92,16 +92,22 @@ class Application
      */
     public function handle(Command\AbstractCommand $command, ArrayAccess $arguments)
     {
+        $result = null;
+        $success = false;
+
         try {
-            return $command->execute($arguments);
+            $result = $command->execute($arguments);
+            $success = true;
         } catch (Command\InvalidArgumentsException $e) {
-            return $this->outputJson(false, $e->getMessage());
+            $result = $e->getMessage();
         } catch (Exception $e) {
-            return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+            $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
         } catch (\Throwable $e) {
             // On PHP < 7, throwable simply won't exist and this clause is never triggered.
-            return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+            $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
         }
+
+        return $this->outputJson($success, $result);
     }
 
     /**

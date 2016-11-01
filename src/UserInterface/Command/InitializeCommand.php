@@ -31,7 +31,7 @@ class InitializeCommand extends AbstractCommand
     {
         $success = $this->initialize();
 
-        return $this->outputJson($success, []);
+        return $success;
     }
 
     /**

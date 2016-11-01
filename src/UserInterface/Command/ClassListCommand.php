@@ -150,7 +150,7 @@ class ClassListCommand extends AbstractCommand
 
         $classList = $this->getClassList($file);
 
-        return $this->outputJson(true, $classList);
+        return $classList;
     }
 
     /**

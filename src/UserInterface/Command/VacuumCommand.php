@@ -33,7 +33,7 @@ class VacuumCommand extends AbstractCommand
     {
         $success = $this->initialize();
 
-        return $this->outputJson($success, []);
+        return $success;
     }
 
     /**

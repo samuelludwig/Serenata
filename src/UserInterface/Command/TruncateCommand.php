@@ -49,7 +49,7 @@ class TruncateCommand extends AbstractCommand
     {
         $success = $this->truncate();
 
-        return $this->outputJson($success, []);
+        return null;
     }
 
     /**

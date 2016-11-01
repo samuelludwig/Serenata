@@ -168,7 +168,7 @@ class SemanticLintCommand extends AbstractCommand
             !(isset($arguments['no-unused-use-statements']) && $arguments['no-unused-use-statements']->value)
         );
 
-        return $this->outputJson(true, $output);
+        return $output;
     }
 
     /**

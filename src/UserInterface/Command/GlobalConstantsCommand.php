@@ -40,7 +40,7 @@ class GlobalConstantsCommand extends AbstractCommand
     {
         $constants = $this->getGlobalConstants();
 
-        return $this->outputJson(true, $constants);
+        return $constants;
     }
 
     /**

@@ -79,7 +79,7 @@ class ReindexCommand extends AbstractCommand
             isset($arguments['extension'], $arguments['extension']->value) ? $arguments['extension']->value : []
         );
 
-        return $this->outputJson($success, []);
+        return $success;
     }
 
     /**
