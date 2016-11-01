@@ -172,14 +172,14 @@ class Application
 
     /**
      * @param Command\AbstractCommand $command
-     * @param ArrayAccess             $processedArguments
+     * @param ArrayAccess             $arguments
      *
      * @return mixed
      */
-    protected function process(Command\AbstractCommand $command, ArrayAccess $processedArguments)
+    protected function process(Command\AbstractCommand $command, ArrayAccess $arguments)
     {
         try {
-            return $command->execute($processedArguments);
+            return $command->execute($arguments);
         } catch (UnexpectedValueException $e) {
             return $this->outputJson(false, $e->getMessage());
         } catch (Exception $e) {
