@@ -412,7 +412,7 @@ abstract class AbstractApplication
      *
      * @return mixed
      */
-    abstract public function handle(Command\CommandInterface $command, ArrayAccess $arguments);
+    abstract public function handleCommand(Command\CommandInterface $command, ArrayAccess $arguments);
 
     /**
      * @return resource|null
