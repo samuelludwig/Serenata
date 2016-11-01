@@ -1,13 +1,26 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace PhpIntegrator\UserInterface;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\RequestParsingException;
+use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 
 /**
- * Handles {@see JsonRpcRequestHandler}s.
+ * Application extension that can handle JSON-RPC requests.
+ *
+ * TODO: Should not extend CliApplication.
  */
-class ApplicationJsonRpcRequestHandler implements JsonRpcRequestHandlerInterface
+class JsonRpcApplication extends CliApplication implements JsonRpcRequestHandlerInterface
 {
-    /// @inherited
+    /**
+     * Handles a JSON-PRC request.
+     *
+     * @param JsonRpcRequest $request
+     *
+     * @return JsonRpcResponse
+     */
     public function handle(JsonRpcRequest $request)
     {
         $responseData = $this->getResultFor($request);
@@ -47,7 +60,7 @@ class ApplicationJsonRpcRequestHandler implements JsonRpcRequestHandlerInterface
         // TODO: Don't create application and container over and over. This might pose a problem as currently
         // classes don't count on state being maintained.
         // TODO: This should not be a CLI application.
-        $output = (new \PhpIntegrator\UserInterface\CliApplication())->handleCommandLineArguments(
+        $output = $this->handleCommandLineArguments(
             $arguments,
             $stdinStream
         );

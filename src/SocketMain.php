@@ -1,13 +1,14 @@
 <?php
 
 use PhpIntegrator\Sockets\ConnectionHandlerFactory;
-use PhpIntegrator\Sockets\ApplicationJsonRpcRequestHandler;
+
+use PhpIntegrator\UserInterface\JsonRpcApplication;
 
 require 'Bootstrap.php';
 
 echo "Starting socket server...\n";
 
-$applicationJsonRpcRequestHandler = new ApplicationJsonRpcRequestHandler();
+$applicationJsonRpcRequestHandler = new JsonRpcApplication();
 
 $connectionHandlerFactory = new ConnectionHandlerFactory($applicationJsonRpcRequestHandler);
 
