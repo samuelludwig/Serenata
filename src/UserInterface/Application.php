@@ -162,7 +162,7 @@ class Application
                 return 'No database path passed!';
             }
 
-            return $this->process($command, $processedArguments);
+            return $this->handleCommand($command, $processedArguments);
         }
 
         $supportedCommands = implode(', ', array_keys($commandServiceMap));
@@ -176,7 +176,7 @@ class Application
      *
      * @return mixed
      */
-    protected function process(Command\AbstractCommand $command, ArrayAccess $arguments)
+    protected function handleCommand(Command\AbstractCommand $command, ArrayAccess $arguments)
     {
         try {
             return $command->execute($arguments);
