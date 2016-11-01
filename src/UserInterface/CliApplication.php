@@ -103,8 +103,6 @@ class CliApplication extends AbstractApplication
                 return 'No database path passed!';
             }
 
-            $output = $this->handleCommand($command, $processedArguments);
-
             return $this->handleCommand($command, $processedArguments);
         }
 
