@@ -14,14 +14,6 @@ use GetOptionKit\OptionCollection;
 abstract class AbstractCommand implements CommandInterface
 {
     /**
-     * @inheritDoc
-     */
-    public function execute(ArrayAccess $processedArguments)
-    {
-        return $this->process($processedArguments);
-    }
-
-    /**
      * Sets up command line arguments expected by the command.
      *
      * Operates as a(n optional) template method.
@@ -42,7 +34,7 @@ abstract class AbstractCommand implements CommandInterface
      *
      * @return string Output to pass back.
      */
-    abstract protected function process(ArrayAccess $arguments);
+    abstract public function execute(ArrayAccess $arguments);
 
     /**
      * Outputs JSON.

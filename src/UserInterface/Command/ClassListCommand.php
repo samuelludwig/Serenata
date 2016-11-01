@@ -144,7 +144,7 @@ class ClassListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments)
     {
         $file = isset($arguments['file']) ? $arguments['file']->value : null;
 

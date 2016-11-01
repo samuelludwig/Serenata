@@ -65,7 +65,7 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['file'])) {
             throw new UnexpectedValueException('A --file must be supplied!');

@@ -144,7 +144,7 @@ class SemanticLintCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['file'])) {
             throw new UnexpectedValueException('A file name is required for this command.');

@@ -60,7 +60,7 @@ class AvailableVariablesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['offset'])) {
             throw new UnexpectedValueException('An --offset must be supplied into the source code!');

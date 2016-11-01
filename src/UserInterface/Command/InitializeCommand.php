@@ -27,7 +27,7 @@ class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    protected function process(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments)
     {
         $success = $this->initialize();
 
