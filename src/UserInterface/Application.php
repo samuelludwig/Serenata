@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface;
 
 use Exception;
+use ArrayAccess;
 use RuntimeException;
 use UnexpectedValueException;
 
@@ -161,30 +162,32 @@ class Application
                 return 'No database path passed!';
             }
 
-            if (interface_exists('Throwable')) {
-                // PHP >= 7.
-                try {
-                    return $command->execute($processedArguments);
-                } catch (UnexpectedValueException $e) {
-                    return $this->outputJson(false, $e->getMessage());
-                } catch (\Throwable $e) {
-                    return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
-                }
-            } else {
-                // PHP < 7
-                try {
-                    return $command->execute($processedArguments);
-                } catch (UnexpectedValueException $e) {
-                    return $this->outputJson(false, $e->getMessage());
-                } catch (Exception $e) {
-                    return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
-                }
-            }
+            return $this->process($command, $processedArguments);
         }
 
         $supportedCommands = implode(', ', array_keys($commandServiceMap));
 
         echo "Unknown command {$command}, supported commands: {$supportedCommands}";
+    }
+
+    /**
+     * @param Command\AbstractCommand $command
+     * @param ArrayAccess             $processedArguments
+     *
+     * @return mixed
+     */
+    protected function process(Command\AbstractCommand $command, ArrayAccess $processedArguments)
+    {
+        try {
+            return $command->execute($processedArguments);
+        } catch (UnexpectedValueException $e) {
+            return $this->outputJson(false, $e->getMessage());
+        } catch (Exception $e) {
+            return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+        } catch (\Throwable $e) {
+            // On PHP < 7, throwable simply won't exist and this clause is never triggered.
+            return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+        }
     }
 
     /**
