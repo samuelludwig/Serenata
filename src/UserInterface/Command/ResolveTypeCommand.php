@@ -100,7 +100,7 @@ class ResolveTypeCommand extends AbstractCommand
         $fileId = $this->indexDatabase->getFileId($file);
 
         if (!$fileId) {
-            throw new InvalidArgumentsException('The specified file is not present in the index!');
+            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
         }
 
         return $this->projectTypeResolverFactoryFacade->create($file)->resolve($name, $line, $kind);

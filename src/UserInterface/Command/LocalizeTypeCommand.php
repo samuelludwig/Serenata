@@ -86,7 +86,7 @@ class LocalizeTypeCommand extends AbstractCommand
         $fileId = $this->indexDatabase->getFileId($file);
 
         if (!$fileId) {
-            throw new InvalidArgumentsException('The specified file is not present in the index!');
+            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
         }
 
         return $this->fileTypeLocalizerFactory->create($file)->resolve($type, $line, $kind);
