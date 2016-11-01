@@ -4,7 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 use RuntimeException;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
