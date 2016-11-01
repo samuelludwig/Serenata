@@ -72,22 +72,22 @@ class DeduceTypesCommand extends AbstractCommand
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }
 
-        if (isset($arguments['stdin']) && $arguments['stdin']->value) {
+        if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']->value);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         }
 
-        $offset = $arguments['offset']->value;
+        $offset = $arguments['offset'];
 
-        if (isset($arguments['charoffset']) && $arguments['charoffset']->value == true) {
+        if (isset($arguments['charoffset']) && $arguments['charoffset'] == true) {
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
         $parts = [];
 
         if (isset($arguments['part'])) {
-            $parts = $arguments['part']->value;
+            $parts = $arguments['part'];
         } else {
             $parts = $this->partialParser->retrieveSanitizedCallStackAt(substr($code, 0, $offset));
 
@@ -97,7 +97,7 @@ class DeduceTypesCommand extends AbstractCommand
         }
 
         $result = $this->deduceTypes(
-           isset($arguments['file']) ? $arguments['file']->value : null,
+           isset($arguments['file']) ? $arguments['file'] : null,
            $code,
            $parts,
            $offset

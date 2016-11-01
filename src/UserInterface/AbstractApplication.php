@@ -405,16 +405,6 @@ abstract class AbstractApplication
     }
 
     /**
-     * Handles the specified command by dispatching it to the application.
-     *
-     * @param Command\CommandInterface $command
-     * @param ArrayAccess              $arguments
-     *
-     * @return mixed
-     */
-    abstract public function handleCommand(Command\CommandInterface $command, ArrayAccess $arguments);
-
-    /**
      * @return resource|null
      */
     abstract public function getStdinStream();

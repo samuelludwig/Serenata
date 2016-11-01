@@ -8,7 +8,9 @@ require 'Bootstrap.php';
 
 echo "Starting socket server...\n";
 
-$applicationJsonRpcRequestHandler = new JsonRpcApplication();
+$stdinStream = fopen('php://memory', 'w+');
+
+$applicationJsonRpcRequestHandler = new JsonRpcApplication($stdinStream);
 
 $connectionHandlerFactory = new ConnectionHandlerFactory($applicationJsonRpcRequestHandler);
 
@@ -16,3 +18,5 @@ $loop = React\EventLoop\Factory::create();
 $socket = new PhpIntegrator\Sockets\SocketServer($loop, 9999, $connectionHandlerFactory);
 
 $loop->run();
+
+fclose($stdinStream);

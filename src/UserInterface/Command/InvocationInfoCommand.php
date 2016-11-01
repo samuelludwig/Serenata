@@ -58,17 +58,17 @@ class InvocationInfoCommand extends AbstractCommand
 
         $code = null;
 
-        if (isset($arguments['stdin']) && $arguments['stdin']->value) {
+        if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-        } elseif (isset($arguments['file']) && $arguments['file']->value) {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']->value);
+        } elseif (isset($arguments['file']) && $arguments['file']) {
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         } else {
             throw new InvalidArgumentsException('Either a --file file must be supplied or --stdin must be passed!');
         }
 
-        $offset = $arguments['offset']->value;
+        $offset = $arguments['offset'];
 
-        if (isset($arguments['charoffset']) && $arguments['charoffset']->value == true) {
+        if (isset($arguments['charoffset']) && $arguments['charoffset'] == true) {
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 

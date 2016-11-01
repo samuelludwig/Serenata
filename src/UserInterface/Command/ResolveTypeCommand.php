@@ -64,10 +64,10 @@ class ResolveTypeCommand extends AbstractCommand
         }
 
         $type = $this->resolveType(
-            $arguments['type']->value,
-            $arguments['file']->value,
-            $arguments['line']->value,
-            isset($arguments['kind']->value) ? $arguments['kind']->value : UseStatementKind::TYPE_CLASSLIKE
+            $arguments['type'],
+            $arguments['file'],
+            $arguments['line'],
+            isset($arguments['kind']) ? $arguments['kind'] : UseStatementKind::TYPE_CLASSLIKE
         );
 
         return $type;

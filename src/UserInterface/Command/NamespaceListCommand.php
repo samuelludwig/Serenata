@@ -39,7 +39,7 @@ class NamespaceListCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        $file = isset($arguments['file']) ? $arguments['file']->value : null;
+        $file = isset($arguments['file']) ? $arguments['file'] : null;
 
         $list = $this->getNamespaceList($file);
 

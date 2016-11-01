@@ -71,12 +71,12 @@ class ReindexCommand extends AbstractCommand
         }
 
         $success = $this->reindex(
-            $arguments['source']->value,
+            $arguments['source'],
             isset($arguments['stdin']),
             isset($arguments['verbose']),
             isset($arguments['stream-progress']),
-            isset($arguments['exclude'], $arguments['exclude']->value) ? $arguments['exclude']->value : [],
-            isset($arguments['extension'], $arguments['extension']->value) ? $arguments['extension']->value : []
+            isset($arguments['exclude']) ? $arguments['exclude'] : [],
+            isset($arguments['extension']) ? $arguments['extension'] : []
         );
 
         return $success;

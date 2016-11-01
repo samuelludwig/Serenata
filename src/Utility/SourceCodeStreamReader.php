@@ -30,6 +30,44 @@ class SourceCodeStreamReader
     }
 
     /**
+     * @return resource|null
+     */
+    public function getStdinStream()
+    {
+        return $this->stdinStream;
+    }
+
+    /**
+     * @param resource|null $stdinStream
+     *
+     * @return static
+     */
+    public function setStdinStream($stdinStream)
+    {
+        $this->stdinStream = $stdinStream;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getAutoConvertToUtf8()
+    {
+        return $this->autoConvertToUtf8;
+    }
+
+    /**
+     * @param bool $autoConvertToUtf8
+     *
+     * @return static
+     */
+    public function setAutoConvertToUtf8($autoConvertToUtf8)
+    {
+        $this->autoConvertToUtf8 = $autoConvertToUtf8;
+        return $this;
+    }
+
+    /**
      * Reads source code from STDIN. Note that this call is blocking as long as there is no input!
      *
      * @return string

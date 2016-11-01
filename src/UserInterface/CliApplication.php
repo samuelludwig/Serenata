@@ -3,9 +3,11 @@
 namespace PhpIntegrator\UserInterface;
 
 use ArrayAccess;
+use ArrayObject;
 use RuntimeException;
 use UnexpectedValueException;
 
+use GetOptionKit\Option;
 use GetOptionKit\OptionParser;
 use GetOptionKit\OptionCollection;
 
@@ -99,7 +101,9 @@ class CliApplication extends AbstractApplication
                 return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
             }
 
-            return $this->handleCommand($command, $processedArguments);
+            $simplifiedOptions = $this->getSimplifiedOptions($processedArguments);
+
+            return $this->handleCommand($command, $simplifiedOptions);
         }
 
         $supportedCommands = implode(', ', array_keys($commandServiceMap));
@@ -128,6 +132,26 @@ class CliApplication extends AbstractApplication
         }
 
         return $this->outputJson($success, $result);
+    }
+
+    /**
+     * @param ArrayAccess $processedOptions
+     *
+     * @return ArrayObject
+     */
+    protected function getSimplifiedOptions(ArrayAccess $processedOptions)
+    {
+        $options = [];
+
+        foreach ($processedOptions as $key => $option) {
+            if ($option instanceof Option) {
+                $options[$key] = $option->value;
+            } else {
+                $options[$key] = $option;
+            }
+        }
+
+        return new ArrayObject($options);
     }
 
     /**

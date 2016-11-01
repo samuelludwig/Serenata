@@ -151,21 +151,21 @@ class SemanticLintCommand extends AbstractCommand
 
         $code = null;
 
-        if (isset($arguments['stdin']) && $arguments['stdin']->value) {
+        if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']->value);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         }
 
         $output = $this->semanticLint(
-            $arguments['file']->value,
+            $arguments['file'],
             $code,
-            !(isset($arguments['no-unknown-classes']) && $arguments['no-unknown-classes']->value),
-            !(isset($arguments['no-unknown-members']) && $arguments['no-unknown-members']->value),
-            !(isset($arguments['no-unknown-global-functions']) && $arguments['no-unknown-global-functions']->value),
-            !(isset($arguments['no-unknown-global-constants']) && $arguments['no-unknown-global-constants']->value),
-            !(isset($arguments['no-docblock-correctness']) && $arguments['no-docblock-correctness']->value),
-            !(isset($arguments['no-unused-use-statements']) && $arguments['no-unused-use-statements']->value)
+            !(isset($arguments['no-unknown-classes']) && $arguments['no-unknown-classes']),
+            !(isset($arguments['no-unknown-members']) && $arguments['no-unknown-members']),
+            !(isset($arguments['no-unknown-global-functions']) && $arguments['no-unknown-global-functions']),
+            !(isset($arguments['no-unknown-global-constants']) && $arguments['no-unknown-global-constants']),
+            !(isset($arguments['no-docblock-correctness']) && $arguments['no-docblock-correctness']),
+            !(isset($arguments['no-unused-use-statements']) && $arguments['no-unused-use-statements'])
         );
 
         return $output;
