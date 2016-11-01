@@ -30,7 +30,7 @@ class CliApplication extends AbstractApplication
     protected $stdinStream;
 
     /**
-     * Handles the application process.
+     * Handles a command based on command line parameters.
      *
      * @param array         $arguments   The arguments to pass.
      * @param resource|null $stdinStream The stream t use to read STDIN data from when requested for commands.
