@@ -46,7 +46,8 @@ class ApplicationJsonRpcRequestHandler implements JsonRpcRequestHandlerInterface
 
         // TODO: Don't create application and container over and over. This might pose a problem as currently
         // classes don't count on state being maintained.
-        $output = (new \PhpIntegrator\UserInterface\Application())->handle($arguments, $stdinStream);
+        // TODO: This should not be a CLI application.
+        $output = (new \PhpIntegrator\UserInterface\CliApplication())->handle($arguments, $stdinStream);
 
         if ($stdinStream) {
             fclose($stdinStream);

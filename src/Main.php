@@ -2,8 +2,4 @@
 
 require 'Bootstrap.php';
 
-$arguments = $argv;
-
-$response = (new \PhpIntegrator\UserInterface\Application())->handle($arguments);
-
-echo $response;
+echo (new \PhpIntegrator\UserInterface\CliApplication())->handleCommandLineArguments($argv);

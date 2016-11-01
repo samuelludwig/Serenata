@@ -89,94 +89,12 @@ class Application
     protected $stdinStream;
 
     /**
-     * Handles the application process.
-     *
-     * @param array         $arguments   The arguments to pass.
-     * @param resource|null $stdinStream The stream t use to read STDIN data from when requested for commands.
-     *
-     * @return mixed
-     */
-    public function handle(array $arguments, $stdinStream = null)
-    {
-        $this->stdinStream = $stdinStream;
-
-        if (count($arguments) < 3) {
-            throw new UnexpectedValueException(
-                'Not enough argument supplied. Usage: . <project> <command> [<addtional parameters>]'
-            );
-        }
-
-        $programName = array_shift($arguments);
-        $this->projectName = array_shift($arguments);
-        $command = array_shift($arguments);
-
-        // This seems to be needed for GetOptionKit.
-        array_unshift($arguments, $programName);
-
-        $commandServiceMap = [
-            '--initialize'          => 'initializeCommand',
-            '--reindex'             => 'reindexCommand',
-            '--vacuum'              => 'vacuumCommand',
-            '--truncate'            => 'truncateCommand',
-
-            '--class-list'          => 'classListCommand',
-            '--class-info'          => 'classInfoCommand',
-            '--functions'           => 'globalFunctionsCommand',
-            '--constants'           => 'globalConstantsCommand',
-            '--resolve-type'        => 'resolveTypeCommand',
-            '--localize-type'       => 'localizeTypeCommand',
-            '--semantic-lint'       => 'semanticLintCommand',
-            '--available-variables' => 'availableVariablesCommand',
-            '--deduce-types'        => 'deduceTypesCommand',
-            '--invocation-info'     => 'invocationInfoCommand',
-            '--namespace-list'      => 'namespaceListCommand'
-        ];
-
-        $optionCollection = new OptionCollection();
-        $optionCollection->add('database:', 'The index database to use.' )->isa('string');
-
-        foreach ($arguments as $argument) {
-            if (mb_strpos($argument, '--database=') === 0) {
-                $this->databaseFile = mb_substr($argument, mb_strlen('--database='));
-            }
-        }
-
-        $container = $this->getContainer();
-
-        if (isset($commandServiceMap[$command])) {
-            /** @var \PhpIntegrator\UserInterface\Command\CommandInterface $command */
-            $command = $container->get($commandServiceMap[$command]);
-            $command->attachOptions($optionCollection);
-
-            $parser = new OptionParser($optionCollection);
-
-            $processedArguments = null;
-
-            try {
-                $processedArguments = $parser->parse($arguments);
-            } catch(\Exception $e) {
-                return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
-            }
-
-            if (!isset($processedArguments['database'])) {
-                return 'No database path passed!';
-            }
-
-            return $this->handleCommand($command, $processedArguments);
-        }
-
-        $supportedCommands = implode(', ', array_keys($commandServiceMap));
-
-        echo "Unknown command {$command}, supported commands: {$supportedCommands}";
-    }
-
-    /**
      * @param Command\AbstractCommand $command
      * @param ArrayAccess             $arguments
      *
      * @return mixed
      */
-    protected function handleCommand(Command\AbstractCommand $command, ArrayAccess $arguments)
+    public function handle(Command\AbstractCommand $command, ArrayAccess $arguments)
     {
         try {
             return $command->execute($arguments);
