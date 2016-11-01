@@ -12,9 +12,9 @@ interface CommandInterface
     /**
      * Executes the command.
      *
-     * @param ArrayAccess $processedArguments
+     * @param ArrayAccess $arguments
      *
      * @return string Output to return to the user.
      */
-    public function execute(ArrayAccess $processedArguments);
+    public function execute(ArrayAccess $arguments);
 }
