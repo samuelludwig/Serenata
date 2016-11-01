@@ -5,12 +5,8 @@ namespace PhpIntegrator\UserInterface;
 use Exception;
 use ArrayAccess;
 use RuntimeException;
-use UnexpectedValueException;
 
 use Doctrine\Common\Cache\FilesystemCache;
-
-use GetOptionKit\OptionParser;
-use GetOptionKit\OptionCollection;
 
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
