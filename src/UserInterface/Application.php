@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface;
 
 use Exception;
+use RuntimeException;
 use UnexpectedValueException;
 
 use Doctrine\Common\Cache\FilesystemCache;
