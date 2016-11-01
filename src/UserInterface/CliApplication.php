@@ -165,10 +165,7 @@ class CliApplication extends Application
     }
 
     /**
-     * @param Command\CommandInterface $command
-     * @param ArrayAccess              $arguments
-     *
-     * @return mixed
+     * @inheritDoc
      */
     public function handle(Command\CommandInterface $command, ArrayAccess $arguments)
     {
