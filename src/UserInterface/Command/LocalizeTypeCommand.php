@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -55,11 +54,11 @@ class LocalizeTypeCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['type'])) {
-            throw new UnexpectedValueException('The type is required for this command.');
+            throw new InvalidArgumentsException('The type is required for this command.');
         } elseif (!isset($arguments['file'])) {
-            throw new UnexpectedValueException('A file name is required for this command.');
+            throw new InvalidArgumentsException('A file name is required for this command.');
         } elseif (!isset($arguments['line'])) {
-            throw new UnexpectedValueException('A line number is required for this command.');
+            throw new InvalidArgumentsException('A line number is required for this command.');
         }
 
         $type = $this->localizeType(
@@ -87,7 +86,7 @@ class LocalizeTypeCommand extends AbstractCommand
         $fileId = $this->indexDatabase->getFileId($file);
 
         if (!$fileId) {
-            throw new UnexpectedValueException('The specified file is not present in the index!');
+            throw new InvalidArgumentsException('The specified file is not present in the index!');
         }
 
         return $this->fileTypeLocalizerFactory->create($file)->resolve($type, $line, $kind);

@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -57,11 +56,11 @@ class ResolveTypeCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['type'])) {
-            throw new UnexpectedValueException('The type is required for this command.');
+            throw new InvalidArgumentsException('The type is required for this command.');
         } elseif (!isset($arguments['file'])) {
-            throw new UnexpectedValueException('A file name is required for this command.');
+            throw new InvalidArgumentsException('A file name is required for this command.');
         } elseif (!isset($arguments['line'])) {
-            throw new UnexpectedValueException('A line number is required for this command.');
+            throw new InvalidArgumentsException('A line number is required for this command.');
         }
 
         $type = $this->resolveType(
@@ -82,7 +81,7 @@ class ResolveTypeCommand extends AbstractCommand
      * @param int    $line
      * @param string $kind A constant from {@see UseStatementKind}.
      *
-     * @throws UnexpectedValueException
+     * @throws InvalidArgumentsException
      *
      * @return string|null
      */
@@ -95,13 +94,13 @@ class ResolveTypeCommand extends AbstractCommand
         ];
 
         if (!in_array($kind, $recognizedKinds)) {
-            throw new UnexpectedValueException('Unknown kind specified!');
+            throw new InvalidArgumentsException('Unknown kind specified!');
         }
 
         $fileId = $this->indexDatabase->getFileId($file);
 
         if (!$fileId) {
-            throw new UnexpectedValueException('The specified file is not present in the index!');
+            throw new InvalidArgumentsException('The specified file is not present in the index!');
         }
 
         return $this->projectTypeResolverFactoryFacade->create($file)->resolve($name, $line, $kind);

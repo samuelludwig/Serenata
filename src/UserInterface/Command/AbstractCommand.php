@@ -31,6 +31,8 @@ abstract class AbstractCommand implements CommandInterface
      *
      * @param ArrayAccess $arguments
      *
+     * @throws InvalidArgumentsException
+     *
      * @return string Output to pass back.
      */
     abstract public function execute(ArrayAccess $arguments);

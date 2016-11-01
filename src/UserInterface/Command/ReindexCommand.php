@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -68,7 +67,7 @@ class ReindexCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['source']) || empty($arguments['source'])) {
-            throw new UnexpectedValueException('At least one file or directory to index is required for this command.');
+            throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');
         }
 
         $success = $this->reindex(
@@ -103,9 +102,9 @@ class ReindexCommand extends AbstractCommand
     ) {
         if ($useStdin) {
             if (count($paths) > 1) {
-                throw new UnexpectedValueException('Reading from STDIN is only possible when a single path is specified!');
+                throw new InvalidArgumentsException('Reading from STDIN is only possible when a single path is specified!');
             } elseif (!is_file($paths[0])) {
-                throw new UnexpectedValueException('Reading from STDIN is only possible for a single file!');
+                throw new InvalidArgumentsException('Reading from STDIN is only possible for a single file!');
             }
         }
 

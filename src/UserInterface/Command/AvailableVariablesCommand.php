@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -63,7 +62,7 @@ class AvailableVariablesCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['offset'])) {
-            throw new UnexpectedValueException('An --offset must be supplied into the source code!');
+            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }
 
         $code = null;
@@ -73,7 +72,7 @@ class AvailableVariablesCommand extends AbstractCommand
         } elseif (isset($arguments['file']) && $arguments['file']->value) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']->value);
         } else {
-            throw new UnexpectedValueException('Either a --file file must be supplied or --stdin must be passed!');
+            throw new InvalidArgumentsException('Either a --file file must be supplied or --stdin must be passed!');
         }
 
         $offset = $arguments['offset']->value;

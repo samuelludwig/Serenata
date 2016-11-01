@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -68,9 +67,9 @@ class DeduceTypesCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['file'])) {
-            throw new UnexpectedValueException('A --file must be supplied!');
+            throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {
-            throw new UnexpectedValueException('An --offset must be supplied into the source code!');
+            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }
 
         if (isset($arguments['stdin']) && $arguments['stdin']->value) {

@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -147,7 +146,7 @@ class SemanticLintCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['file'])) {
-            throw new UnexpectedValueException('A file name is required for this command.');
+            throw new InvalidArgumentsException('A file name is required for this command.');
         }
 
         $code = null;

@@ -3,7 +3,6 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use UnexpectedValueException;
 
 use GetOptionKit\OptionCollection;
 
@@ -40,7 +39,7 @@ class ClassInfoCommand extends AbstractCommand
     public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['name'])) {
-            throw new UnexpectedValueException(
+            throw new InvalidArgumentsException(
                 'The fully qualified name of the structural element is required for this command.'
             );
         }

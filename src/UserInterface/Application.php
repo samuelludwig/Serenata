@@ -98,7 +98,7 @@ class Application
     {
         try {
             return $command->execute($arguments);
-        } catch (UnexpectedValueException $e) {
+        } catch (Command\InvalidArgumentsException $e) {
             return $this->outputJson(false, $e->getMessage());
         } catch (Exception $e) {
             return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
