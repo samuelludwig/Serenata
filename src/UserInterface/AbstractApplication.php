@@ -59,7 +59,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 /**
  * Main application class.
  */
-abstract class Application
+abstract class AbstractApplication
 {
     /**
      * The version of the database we're currently at. When there are large changes to the layout of the database, this

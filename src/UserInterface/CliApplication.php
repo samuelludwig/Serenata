@@ -63,7 +63,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 /**
  * Command line extension of the application class.
  */
-class CliApplication extends Application
+class CliApplication extends AbstractApplication
 {
     /**
      * @var string
