@@ -164,6 +164,8 @@ class Application
                 // PHP >= 7.
                 try {
                     return $command->execute($processedArguments);
+                } catch (UnexpectedValueException $e) {
+                    return $this->outputJson(false, $e->getMessage());
                 } catch (\Throwable $e) {
                     return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
                 }
@@ -171,6 +173,8 @@ class Application
                 // PHP < 7
                 try {
                     return $command->execute($processedArguments);
+                } catch (UnexpectedValueException $e) {
+                    return $this->outputJson(false, $e->getMessage());
                 } catch (Exception $e) {
                     return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
                 }
@@ -523,5 +527,36 @@ class Application
     public function getDatabaseFile()
     {
         return $this->databaseFile;
+    }
+
+    /**
+     * Outputs JSON.
+     *
+     * @param bool  $success
+     * @param mixed $data
+     *
+     * @throws RuntimeException When the encoding fails, which should never happen.
+     *
+     * @return string
+     */
+    protected function outputJson($success, $data)
+    {
+        $output = json_encode([
+            'success' => $success,
+            'result'  => $data
+        ]);
+
+        if (!$output) {
+            $errorMessage = json_last_error_msg() ?: 'Unknown';
+
+            throw new RuntimeException(
+                'The encoded JSON output was empty, something must have gone wrong! The error message was: ' .
+                '"' .
+                $errorMessage .
+                '"'
+            );
+        }
+
+        return $output;
     }
 }

@@ -18,11 +18,7 @@ abstract class AbstractCommand implements CommandInterface
      */
     public function execute(ArrayAccess $processedArguments)
     {
-        try {
-            return $this->process($processedArguments);
-        } catch (UnexpectedValueException $e) {
-            return $this->outputJson(false, $e->getMessage());
-        }
+        return $this->process($processedArguments);
     }
 
     /**
