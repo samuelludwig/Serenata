@@ -2,63 +2,12 @@
 
 namespace PhpIntegrator\UserInterface;
 
-use Exception;
 use ArrayAccess;
 use RuntimeException;
 use UnexpectedValueException;
 
-use Doctrine\Common\Cache\FilesystemCache;
-
 use GetOptionKit\OptionParser;
 use GetOptionKit\OptionCollection;
-
-use PhpIntegrator\Analysis\VariableScanner;
-use PhpIntegrator\Analysis\DocblockAnalyzer;
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\ClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\GlobalConstantExistanceChecker;
-use PhpIntegrator\Analysis\GlobalFunctionExistanceChecker;
-
-use PhpIntegrator\Analysis\Conversion\MethodConverter;
-use PhpIntegrator\Analysis\Conversion\ConstantConverter;
-use PhpIntegrator\Analysis\Conversion\PropertyConverter;
-use PhpIntegrator\Analysis\Conversion\FunctionConverter;
-use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
-use PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter;
-
-use PhpIntegrator\Analysis\Relations\TraitUsageResolver;
-use PhpIntegrator\Analysis\Relations\InheritanceResolver;
-use PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver;
-
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
-use PhpIntegrator\Analysis\Typing\TypeResolver;
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeLocalizer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
-use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
-use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
-use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
-
-use PhpIntegrator\Indexing\FileIndexer;
-use PhpIntegrator\Indexing\IndexDatabase;
-use PhpIntegrator\Indexing\ProjectIndexer;
-use PhpIntegrator\Indexing\BuiltinIndexer;
-use PhpIntegrator\Indexing\CallbackStorageProxy;
-
-use PhpIntegrator\Parsing\PartialParser;
-use PhpIntegrator\Parsing\DocblockParser;
-use PhpIntegrator\Parsing\CachingParserProxy;
-
-use PhpIntegrator\Utility\SourceCodeStreamReader;
-
-use PhpParser\Lexer;
-use PhpParser\Parser;
-use PhpParser\ParserFactory;
-
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Command line extension of the application class.
@@ -177,7 +126,7 @@ class CliApplication extends AbstractApplication
             $success = true;
         } catch (Command\InvalidArgumentsException $e) {
             $result = $e->getMessage();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
         } catch (\Throwable $e) {
             // On PHP < 7, throwable simply won't exist and this clause is never triggered.
