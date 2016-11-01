@@ -154,12 +154,40 @@ class CliApplication extends Application
                 return 'No database path passed!';
             }
 
+            $output = $this->handle($command, $processedArguments);
+
             return $this->handle($command, $processedArguments);
         }
 
         $supportedCommands = implode(', ', array_keys($commandServiceMap));
 
         echo "Unknown command {$command}, supported commands: {$supportedCommands}";
+    }
+
+    /**
+     * @param Command\CommandInterface $command
+     * @param ArrayAccess              $arguments
+     *
+     * @return mixed
+     */
+    public function handle(Command\CommandInterface $command, ArrayAccess $arguments)
+    {
+        $result = null;
+        $success = false;
+
+        try {
+            $result = $command->execute($arguments);
+            $success = true;
+        } catch (Command\InvalidArgumentsException $e) {
+            $result = $e->getMessage();
+        } catch (Exception $e) {
+            $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+        } catch (\Throwable $e) {
+            // On PHP < 7, throwable simply won't exist and this clause is never triggered.
+            $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
+        }
+
+        return $this->outputJson($success, $result);
     }
 
     /**
@@ -191,5 +219,29 @@ class CliApplication extends Application
         }
 
         return $output;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStdinStream()
+    {
+        return $this->stdinStream;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDatabaseFile()
+    {
+        return $this->databaseFile;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProjectName()
+    {
+        return $this->projectName;
     }
 }

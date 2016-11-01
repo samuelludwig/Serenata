@@ -59,7 +59,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
 /**
  * Main application class.
  */
-class Application
+abstract class Application
 {
     /**
      * The version of the database we're currently at. When there are large changes to the layout of the database, this
@@ -68,47 +68,6 @@ class Application
      * @var int
      */
     const DATABASE_VERSION = 28;
-
-    /**
-     * @var string
-     */
-    protected $projectName;
-
-    /**
-     * @var string
-     */
-    protected $databaseFile;
-
-    /**
-     * @var resource|null
-     */
-    protected $stdinStream;
-
-    /**
-     * @param Command\CommandInterface $command
-     * @param ArrayAccess              $arguments
-     *
-     * @return mixed
-     */
-    public function handle(Command\CommandInterface $command, ArrayAccess $arguments)
-    {
-        $result = null;
-        $success = false;
-
-        try {
-            $result = $command->execute($arguments);
-            $success = true;
-        } catch (Command\InvalidArgumentsException $e) {
-            $result = $e->getMessage();
-        } catch (Exception $e) {
-            $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
-        } catch (\Throwable $e) {
-            // On PHP < 7, throwable simply won't exist and this clause is never triggered.
-            $result = $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
-        }
-
-        return $this->outputJson($success, $result);
-    }
 
     /**
      * @return ContainerBuilder
@@ -434,7 +393,7 @@ class Application
         $cachePath = sys_get_temp_dir() .
             '/php-integrator-base/' .
             get_current_user() . '/' .
-            $this->projectName . '/' .
+            $this->getProjectName() . '/' .
             self::DATABASE_VERSION .
             '/';
 
@@ -446,41 +405,17 @@ class Application
     }
 
     /**
-     * @return string
+     * @return resource|null
      */
-    public function getDatabaseFile()
-    {
-        return $this->databaseFile;
-    }
+    abstract public function getStdinStream();
 
     /**
-     * Outputs JSON.
-     *
-     * @param bool  $success
-     * @param mixed $data
-     *
-     * @throws RuntimeException When the encoding fails, which should never happen.
-     *
      * @return string
      */
-    protected function outputJson($success, $data)
-    {
-        $output = json_encode([
-            'success' => $success,
-            'result'  => $data
-        ]);
+    abstract public function getDatabaseFile();
 
-        if (!$output) {
-            $errorMessage = json_last_error_msg() ?: 'Unknown';
-
-            throw new RuntimeException(
-                'The encoded JSON output was empty, something must have gone wrong! The error message was: ' .
-                '"' .
-                $errorMessage .
-                '"'
-            );
-        }
-
-        return $output;
-    }
+    /**
+     * @return string
+     */
+    abstract public function getProjectName();
 }
