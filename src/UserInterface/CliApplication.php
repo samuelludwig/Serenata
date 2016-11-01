@@ -99,10 +99,6 @@ class CliApplication extends AbstractApplication
                 return $e->getFile() . ':' . $e->getLine() . ' - ' . $e->getMessage();
             }
 
-            if (!isset($processedArguments['database'])) {
-                return 'No database path passed!';
-            }
-
             return $this->handleCommand($command, $processedArguments);
         }
 
