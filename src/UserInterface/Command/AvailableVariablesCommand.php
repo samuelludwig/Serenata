@@ -60,21 +60,21 @@ class AvailableVariablesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-     protected function process(ArrayAccess $arguments)
-     {
-         if (!isset($arguments['offset'])) {
-             throw new UnexpectedValueException('An --offset must be supplied into the source code!');
-         }
+    protected function process(ArrayAccess $arguments)
+    {
+        if (!isset($arguments['offset'])) {
+            throw new UnexpectedValueException('An --offset must be supplied into the source code!');
+        }
 
-         $code = null;
+        $code = null;
 
-         if (isset($arguments['stdin']) && $arguments['stdin']->value) {
-             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-         } elseif (isset($arguments['file']) && $arguments['file']->value) {
-             $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']->value);
-         } else {
-             throw new UnexpectedValueException('Either a --file file must be supplied or --stdin must be passed!');
-         }
+        if (isset($arguments['stdin']) && $arguments['stdin']->value) {
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
+        } elseif (isset($arguments['file']) && $arguments['file']->value) {
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']->value);
+        } else {
+            throw new UnexpectedValueException('Either a --file file must be supplied or --stdin must be passed!');
+        }
 
         $offset = $arguments['offset']->value;
 
