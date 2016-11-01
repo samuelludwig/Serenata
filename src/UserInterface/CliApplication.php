@@ -103,9 +103,9 @@ class CliApplication extends AbstractApplication
                 return 'No database path passed!';
             }
 
-            $output = $this->handle($command, $processedArguments);
+            $output = $this->handleCommand($command, $processedArguments);
 
-            return $this->handle($command, $processedArguments);
+            return $this->handleCommand($command, $processedArguments);
         }
 
         $supportedCommands = implode(', ', array_keys($commandServiceMap));
@@ -116,7 +116,7 @@ class CliApplication extends AbstractApplication
     /**
      * @inheritDoc
      */
-    public function handle(Command\CommandInterface $command, ArrayAccess $arguments)
+    public function handleCommand(Command\CommandInterface $command, ArrayAccess $arguments)
     {
         $result = null;
         $success = false;
