@@ -101,14 +101,14 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $this->projectName = $params['projectName'];
 
-        if (isset($params['databaseFile'])) {
+        if (isset($params['database'])) {
             $this->databaseFile = $params['database'];
         }
 
         unset(
             $params['stdinData'],
             $params['projectName'],
-            $params['databaseFile']
+            $params['database']
         );
 
         // echo json_encode()
