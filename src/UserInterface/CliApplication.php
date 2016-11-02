@@ -45,7 +45,7 @@ class CliApplication extends AbstractApplication
 
         if (count($arguments) < 3) {
             throw new UnexpectedValueException(
-                'Not enough argument supplied. Usage: . <project> <command> [<addtional parameters>]'
+                'Not enough argument supplied. Usage: . <project> <command> [<additional parameters>]'
             );
         }
 
