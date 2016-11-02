@@ -44,9 +44,7 @@ class CliApplication extends AbstractApplication
         $this->stdinStream = $stdinStream;
 
         if (count($arguments) < 3) {
-            throw new UnexpectedValueException(
-                'Not enough argument supplied. Usage: . <project> <command> [<additional parameters>]'
-            );
+            echo 'Not enough argument supplied. Usage: . <project> <command> [<additional parameters>]';
         }
 
         $programName = array_shift($arguments);
