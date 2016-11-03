@@ -1,5 +1,7 @@
 <?php
 
+use React\Socket\ConnectionException;
+
 use PhpIntegrator\Sockets\ConnectionHandlerFactory;
 
 use PhpIntegrator\UserInterface\JsonRpcApplication;
@@ -30,7 +32,14 @@ $connectionHandlerFactory = new ConnectionHandlerFactory($applicationJsonRpcRequ
 $loop = React\EventLoop\Factory::create();
 $socket = new PhpIntegrator\Sockets\SocketServer($loop, $connectionHandlerFactory);
 
-$socket->listen($options['p']);
+try {
+    $socket->listen($options['p']);
+} catch (ConnectionException $e) {
+    fwrite(STDERR, 'Socket already in use!');
+    fclose($stdinStream);
+    return 2;
+}
+
 $loop->run();
 
 fclose($stdinStream);
