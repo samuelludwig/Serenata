@@ -64,14 +64,16 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (Command\InvalidArgumentsException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
+        } catch (\RuntimeException $e) {
+            $error = new JsonRpcError(JsonRpcErrorCode::RUNTIME_ERROR, $e->getMessage());
         } catch (\Exception $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::UNKNOWN_ERROR, $e->getMessage(), [
+            $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
                 'line' => $e->getLine(),
                 'file' => $e->getFile()
             ]);
         } catch (\Throwable $e) {
             // On PHP < 7, throwable simply won't exist and this clause is never triggered.
-            $error = new JsonRpcError(JsonRpcErrorCode::UNKNOWN_ERROR, $e->getMessage(), [
+            $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
                 'line' => $e->getLine(),
                 'file' => $e->getFile()
             ]);
