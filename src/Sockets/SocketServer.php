@@ -20,37 +20,20 @@ class SocketServer extends Server
     protected $connectionMap;
 
     /**
-     * @var int
-     */
-    protected $port;
-
-    /**
      * @var ConnectionHandlerFactory
      */
     protected $connectionHandlerFactory;
 
     /**
      * @param LoopInterface $loop
-     * @param int           $port
      */
-    public function __construct(LoopInterface $loop, $port, ConnectionHandlerFactory $connectionHandlerFactory)
+    public function __construct(LoopInterface $loop, ConnectionHandlerFactory $connectionHandlerFactory)
     {
         parent::__construct($loop);
 
-        $this->port = $port;
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 
-        $this->setup();
-    }
-
-    /**
-     * @return void
-     */
-    protected function setup()
-    {
         $this->on('connection', [$this, 'onConnectionEstablished']);
-
-        $this->listen($this->port);
     }
 
     /**

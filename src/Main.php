@@ -28,8 +28,9 @@ $applicationJsonRpcRequestHandler = new JsonRpcApplication($stdinStream);
 $connectionHandlerFactory = new ConnectionHandlerFactory($applicationJsonRpcRequestHandler);
 
 $loop = React\EventLoop\Factory::create();
-$socket = new PhpIntegrator\Sockets\SocketServer($loop, $options['p'], $connectionHandlerFactory);
+$socket = new PhpIntegrator\Sockets\SocketServer($loop, $connectionHandlerFactory);
 
+$socket->listen($options['p']);
 $loop->run();
 
 fclose($stdinStream);
