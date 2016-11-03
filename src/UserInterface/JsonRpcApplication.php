@@ -113,8 +113,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $params['database']
         );
 
-        // echo json_encode()
-
         $command = $this->getCommandByMethod($request->getMethod());
 
         $result = $command->execute(new ArrayObject($params));
