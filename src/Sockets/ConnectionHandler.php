@@ -210,6 +210,10 @@ class ConnectionHandler
     {
         $parts = explode(':', $rawHeader, 2);
 
+        if (count($parts) !== 2) {
+            throw new RequestParsingException('Invalid header format encountered');
+        }
+
         list($headerName, $contentLength) = $parts;
 
         $contentLength = trim($contentLength);
