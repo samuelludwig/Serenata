@@ -6,7 +6,7 @@ use ReflectionClass;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 
-use PhpIntegrator\UserInterface\Application;
+use PhpIntegrator\UserInterface\CliApplication;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -34,9 +34,9 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTestContainer()
     {
-        $app = new Application();
+        $app = new CliApplication();
 
-        $refClass = new ReflectionClass(Application::class);
+        $refClass = new ReflectionClass(CliApplication::class);
         $refMethod = $refClass->getMethod('getContainer');
 
         $refMethod->setAccessible(true);
