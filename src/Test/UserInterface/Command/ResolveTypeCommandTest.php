@@ -174,7 +174,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \PhpIntegrator\UserInterface\Command\InvalidArgumentsException
      */
     public function testThrowsExceptionOnUnknownFile()
     {

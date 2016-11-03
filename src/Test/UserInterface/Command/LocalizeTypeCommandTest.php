@@ -60,7 +60,7 @@ class LocalizeTypeCommandTest extends IndexedTest
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \PhpIntegrator\UserInterface\Command\InvalidArgumentsException
      */
     public function testThrowsExceptionOnUnknownFile()
     {
