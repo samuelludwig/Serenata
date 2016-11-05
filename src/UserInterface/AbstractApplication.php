@@ -2,10 +2,6 @@
 
 namespace PhpIntegrator\UserInterface;
 
-use Exception;
-use ArrayAccess;
-use RuntimeException;
-
 use Doctrine\Common\Cache\FilesystemCache;
 
 use PhpIntegrator\Analysis\VariableScanner;
