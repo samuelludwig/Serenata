@@ -65,7 +65,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         } catch (Command\InvalidArgumentsException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (\RuntimeException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::RUNTIME_ERROR, $e->getMessage());
+            $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
         } catch (\Exception $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
                 'line' => $e->getLine(),
