@@ -83,7 +83,7 @@ abstract class AbstractApplication
             $this->container = new ContainerBuilder();
 
             $this->container
-                ->register('application', Application::class)
+                ->register('application', AbstractApplication::class)
                 ->setSynthetic(true);
 
             $this->container->set('application', $this);
