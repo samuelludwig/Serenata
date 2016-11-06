@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface;
 
 use ArrayObject;
 
+use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
+
 use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
@@ -64,6 +66,8 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (Command\InvalidArgumentsException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
+        } catch (IncorrectDatabaseVersionException $e) {
+            $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
         } catch (\RuntimeException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
         } catch (\Exception $e) {

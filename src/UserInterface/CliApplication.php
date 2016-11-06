@@ -59,6 +59,7 @@ class CliApplication extends AbstractApplication
             '--reindex'             => 'reindexCommand',
             '--vacuum'              => 'vacuumCommand',
             '--truncate'            => 'truncateCommand',
+            '--test'                => 'testCommand',
 
             '--class-list'          => 'classListCommand',
             '--class-info'          => 'classInfoCommand',

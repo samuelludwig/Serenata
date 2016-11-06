@@ -32,11 +32,6 @@ class ProjectIndexer
     protected $sourceCodeStreamReader;
 
     /**
-     * @var array
-     */
-    protected $fileModifiedMap;
-
-    /**
      * @var resource|null
      */
     protected $loggingStream;
@@ -51,20 +46,17 @@ class ProjectIndexer
      * @param BuiltinIndexer         $builtinIndexer
      * @param FileIndexer            $fileIndexer
      * @param SourceCodeStreamReader $sourceCodeStreamReader
-     * @param array                  $fileModifiedMap
      */
     public function __construct(
         StorageInterface $storage,
         BuiltinIndexer $builtinIndexer,
         FileIndexer $fileIndexer,
-        SourceCodeStreamReader $sourceCodeStreamReader,
-        array $fileModifiedMap
+        SourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->storage = $storage;
         $this->builtinIndexer = $builtinIndexer;
         $this->fileIndexer = $fileIndexer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->fileModifiedMap = $fileModifiedMap;
     }
 
     /**
@@ -152,7 +144,7 @@ class ProjectIndexer
      */
     public function index(array $items, array $extensionsToIndex, array $excludedPaths = [], $sourceOverrideMap = [])
     {
-        $fileModifiedMap = $this->fileModifiedMap;
+        $fileModifiedMap = $this->storage->getFileModifiedMap();
 
         // The modification time doesn't matter for files we have direct source code for, as this source code always
         // needs to be indexed (e.g it may simply not have been saved to disk yet).
@@ -235,7 +227,7 @@ class ProjectIndexer
      */
     public function pruneRemovedFiles()
     {
-        foreach ($this->fileModifiedMap as $fileName => $indexedTime) {
+        foreach ($this->storage->getFileModifiedMap() as $fileName => $indexedTime) {
             if (!file_exists($fileName)) {
                 $this->logMessage('  - ' . $fileName);
 

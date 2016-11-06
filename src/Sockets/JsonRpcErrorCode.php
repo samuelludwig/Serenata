@@ -10,27 +10,27 @@ class JsonRpcErrorCode
     /**
      * @var int
      */
-    const PARSE_ERROR           = -32700;
+    const PARSE_ERROR                = -32700;
 
     /**
      * @var int
      */
-    const INVALID_REQUEST       = -32600;
+    const INVALID_REQUEST            = -32600;
 
     /**
      * @var int
      */
-    const METHOD_NOT_FOUND      = -32601;
+    const METHOD_NOT_FOUND           = -32601;
 
     /**
      * @var int
      */
-    const INVALID_PARAMS        = -32602;
+    const INVALID_PARAMS             = -32602;
 
     /**
      * @var int
      */
-    const INTERNAL_ERROR        = -32603;
+    const INTERNAL_ERROR             = -32603;
 
     /**
      * Indicates that a fatal error occurred in the srever.
@@ -40,7 +40,7 @@ class JsonRpcErrorCode
      *
      * @var int
      */
-    const FATAL_SERVER_ERROR    = -32000;
+    const FATAL_SERVER_ERROR         = -32000;
 
     /**
      * Indicates that a generic runtime error occurred in the server.
@@ -50,5 +50,16 @@ class JsonRpcErrorCode
      *
      * @var int
      */
-    const GENERIC_RUNTIME_ERROR = -32001;
+    const GENERIC_RUNTIME_ERROR      = -32001;
+
+    /**
+     * Indicates that the database version is of an incorrect (i.e. too old or too new) version and can't be used by
+     * this version.
+     *
+     * The client should initiate a request to reinitialize the project in order to recreate the index database. This
+     * could happen via the "initialize" command.
+     *
+     * @var int
+     */
+    const DATABASE_VERSION_MISMATCH  = -32002;
 }

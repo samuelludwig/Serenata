@@ -58,14 +58,6 @@ use Symfony\Component\ExpressionLanguage\Expression;
 abstract class AbstractApplication
 {
     /**
-     * The version of the database we're currently at. When there are large changes to the layout of the database, this
-     * number is bumped and all databases with older versions will be dumped and replaced with a new index database.
-     *
-     * @var int
-     */
-    const DATABASE_VERSION = 28;
-
-    /**
      * @var ContainerBuilder
      */
     protected $container;
@@ -194,7 +186,7 @@ abstract class AbstractApplication
 
             $this->container
                 ->register('indexDatabase', IndexDatabase::class)
-                ->setArguments([new Expression("service('application').getDatabaseFile()"), self::DATABASE_VERSION]);
+                ->setArguments([new Expression("service('application').getDatabaseFile()")]);
 
             $this->container
                 ->register('classlikeInfoBuilderProviderCachingProxy', ClasslikeInfoBuilderProviderCachingProxy::class)
@@ -282,14 +274,13 @@ abstract class AbstractApplication
                     new Reference('storageForIndexers'),
                     new Reference('builtinIndexer'),
                     new Reference('fileIndexer'),
-                    new Reference('sourceCodeStreamReader'),
-                    new Expression("service('indexDatabase').getFileModifiedMap()")
+                    new Reference('sourceCodeStreamReader')
                 ]);
 
             // Commands.
             $this->container
                 ->register('initializeCommand', Command\InitializeCommand::class)
-                ->setArguments([new Reference('projectIndexer')]);
+                ->setArguments([new Reference('indexDatabase'), new Reference('projectIndexer')]);
 
             $this->container
                 ->register('reindexCommand', Command\ReindexCommand::class)
@@ -306,6 +297,10 @@ abstract class AbstractApplication
             $this->container
                 ->register('truncateCommand', Command\TruncateCommand::class)
                 ->setArguments([new Expression("service('application').getDatabaseFile()"), new Reference('cache')]);
+
+            $this->container
+                ->register('testCommand', Command\TestCommand::class)
+                ->setArguments([new Reference('indexDatabase')]);
 
             $this->container
                 ->register('classListCommand', Command\ClassListCommand::class)
@@ -397,7 +392,7 @@ abstract class AbstractApplication
             '/php-integrator-base/' .
             get_current_user() . '/' .
             $this->getProjectName() . '/' .
-            self::DATABASE_VERSION .
+            IndexDatabase::SCHEMA_VERSION .
             '/';
 
         if (!file_exists($cachePath)) {

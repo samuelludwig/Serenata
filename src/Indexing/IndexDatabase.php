@@ -16,6 +16,14 @@ use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
 class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInterface, NamespaceImportProviderInterface
 {
     /**
+     * The version of the schema we're currently at. When there are large changes to the layout of the database, this
+     * number is bumped and all databases with older versions will be dumped and replaced with a new index database.
+     *
+     * @var int
+     */
+    const SCHEMA_VERSION = 28;
+
+    /**
      * @var Connection
      */
     protected $connection;
@@ -28,61 +36,30 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     protected $databasePath;
 
     /**
-     * The version of the database index.
-     *
-     * @var string
-     */
-    protected $databaseVersion;
-
-    /**
-     * Constructor.
-     *
      * @param string $databasePath
-     * @param int    $databaseVersion
      */
-    public function __construct($databasePath, $databaseVersion)
+    public function __construct($databasePath)
     {
         $this->databasePath = $databasePath;
-        $this->databaseVersion = $databaseVersion;
     }
 
     /**
      * Retrieves hte index database.
      *
+     * @param bool $checkVersion
+     *
      * @return Connection
      */
-    protected function getConnection()
+    protected function getConnection($checkVersion = true)
     {
         if (!$this->connection) {
-            $isNewDatabase = !file_exists($this->databasePath);
+            $connection = $this->createConnection();
 
-            $configuration = new Configuration();
-
-            $this->connection = DriverManager::getConnection([
-                'driver' => 'pdo_sqlite',
-                'path'   => $this->databasePath
-            ], $configuration);
-
-            $outOfDate = null;
-
-            if ($isNewDatabase) {
-                $this->createDatabaseTables($this->connection);
-
-                // NOTE: This causes a database write and will cause locking problems if multiple PHP processes are
-                // spawned and another one is also writing (e.g. indexing).
-                $this->connection->executeQuery('PRAGMA user_version=' . $this->databaseVersion);
-            } else {
-                $version = $this->connection->executeQuery('PRAGMA user_version')->fetchColumn();
-
-                if ($version < $this->databaseVersion) {
-                    $this->connection->close();
-                    $this->connection = null;
-
-                    @unlink($this->databasePath);
-
-                    return $this->getConnection(); // Do it again.
-                }
+            if ($checkVersion) {
+                $this->checkDatabaseVersionFor($connection);
             }
+
+            $this->connection = $connection;
 
             // Data could become corrupted if the operating system were to crash during synchronization, but this
             // matters very little as we will just reindex the project next time. In the meantime, this majorly reduces
@@ -94,6 +71,8 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
             // time it took to build information about a structure (from 250 ms to 125 ms). On systems that do not
             // support it, this pragma just does nothing.
             $this->connection->executeQuery('PRAGMA mmap_size=100000000'); // About 100 MB.
+        } elseif ($checkVersion) {
+            $this->checkDatabaseVersionFor($this->connection);
         }
 
         // Have to be a douche about this as these PRAGMA's seem to reset, even though the connection is not closed.
@@ -107,6 +86,25 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     }
 
     /**
+     * @return Connection
+     */
+    protected function createConnection()
+    {
+        return DriverManager::getConnection([
+            'driver' => 'pdo_sqlite',
+            'path'   => $this->databasePath
+        ], $this->getConfiguration());
+    }
+
+    /**
+     * @return Configuration
+     */
+    protected function getConfiguration()
+    {
+        return new Configuration();
+    }
+
+    /**
      * Retrieves the currently set databasePath.
      *
      * @return string
@@ -117,12 +115,47 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     }
 
     /**
-     * (Re)creates the database tables in the database using the specified connection.
-     *
-     * @param Connection $connection
+     * @throws IncorrectDatabaseVersionException
      */
-    protected function createDatabaseTables(Connection $connection)
+    public function checkDatabaseVersion()
     {
+        return $this->checkDatabaseVersionFor($this->getConnection(false));
+    }
+
+    /**
+     * @param Connection $connection
+     *
+     * @throws IncorrectDatabaseVersionException
+     */
+    public function checkDatabaseVersionFor(Connection $connection)
+    {
+        $version = $connection->executeQuery('PRAGMA user_version')->fetchColumn();
+
+        if ($version < self::SCHEMA_VERSION) {
+            $connection->close();
+
+            throw new IncorrectDatabaseVersionException('The database is of an incorrect version!');
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function ensureConnectionClosed()
+    {
+        if ($this->connection) {
+            $this->connection->close();
+            $this->connection = null;
+        }
+    }
+
+    /**
+     * (Re)creates the database tables in the database using the specified connection.
+     */
+    public function initialize()
+    {
+        $connection = $this->getConnection(false);
+
         $files = glob(__DIR__ . '/Sql/*.sql');
 
         foreach ($files as $file) {
@@ -134,10 +167,9 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
             }
         }
 
-        $connection->insert(IndexStorageItemEnum::SETTINGS, [
-            'name'  => 'version',
-            'value' => $this->databaseVersion
-        ]);
+        // NOTE: This causes a database write and will cause locking problems if multiple PHP processes are
+        // spawned and another one is also writing (e.g. indexing).
+        $connection->executeQuery('PRAGMA user_version=' . self::SCHEMA_VERSION);
     }
 
     /**
