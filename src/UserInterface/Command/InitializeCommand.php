@@ -54,15 +54,19 @@ class InitializeCommand extends AbstractCommand
     }
 
     /**
+     * @param bool $includeBuiltinItems
+     *
      * @return bool
      */
-    public function initialize()
+    public function initialize($includeBuiltinItems = true)
     {
         $this->ensureIndexDatabaseDoesNotExist();
 
         $this->indexDatabase->initialize();
 
-        $this->builtinIndexer->index();
+        if ($includeBuiltinItems) {
+            $this->builtinIndexer->index();
+        }
 
         return true;
     }

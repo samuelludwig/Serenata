@@ -50,6 +50,10 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
         $container
             ->set('cache', new \Doctrine\Common\Cache\VoidCache());
 
+        $success = $container->get('initializeCommand')->initialize(false);
+
+        $this->assertTrue($success);
+
         return $container;
     }
 
