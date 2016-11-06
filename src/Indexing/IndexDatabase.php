@@ -21,7 +21,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @var int
      */
-    const SCHEMA_VERSION = 28;
+    const SCHEMA_VERSION = 29;
 
     /**
      * @var Connection
@@ -255,20 +255,6 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
             ->where('path = ?')
             ->setParameter(0, $path)
             ->execute();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSetting($name)
-    {
-        return $this->getConnection()->createQueryBuilder()
-            ->select('id', 'value')
-            ->from(IndexStorageItemEnum::SETTINGS)
-            ->where('name = ?')
-            ->setParameter(0, $name)
-            ->execute()
-            ->fetch();
     }
 
     /**

@@ -44,15 +44,6 @@ interface StorageInterface
     public function deleteFile($path);
 
     /**
-     * Retrieves the value of the setting with the specified name.
-     *
-     * @param string $name
-     *
-     * @return mixed
-     */
-    public function getSetting($name);
-
-    /**
      * @param array  $data
      *
      * @return int The unique identifier assigned to the inserted data.

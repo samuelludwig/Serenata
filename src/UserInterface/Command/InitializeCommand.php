@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use ArrayAccess;
 
 use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\BuiltinIndexer;
 use PhpIntegrator\Indexing\ProjectIndexer;
 
 /**
@@ -18,17 +19,27 @@ class InitializeCommand extends AbstractCommand
     protected $indexDatabase;
 
     /**
+     * @var BuiltinIndexer
+     */
+    protected $builtinIndexer;
+
+    /**
      * @var ProjectIndexer
      */
     protected $projectIndexer;
 
     /**
      * @param IndexDatabase  $indexDatabase
+     * @param BuiltinIndexer $builtinIndexer
      * @param ProjectIndexer $projectIndexer
      */
-    public function __construct(IndexDatabase $indexDatabase, ProjectIndexer $projectIndexer)
-    {
+    public function __construct(
+        IndexDatabase $indexDatabase,
+        BuiltinIndexer $builtinIndexer,
+        ProjectIndexer $projectIndexer
+    ) {
         $this->indexDatabase = $indexDatabase;
+        $this->builtinIndexer = $builtinIndexer;
         $this->projectIndexer = $projectIndexer;
     }
 
@@ -51,7 +62,7 @@ class InitializeCommand extends AbstractCommand
 
         $this->indexDatabase->initialize();
 
-        $this->projectIndexer->indexBuiltinItemsIfNecessary();
+        $this->builtinIndexer->index();
 
         return true;
     }

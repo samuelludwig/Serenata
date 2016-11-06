@@ -272,7 +272,6 @@ abstract class AbstractApplication
                 ->register('projectIndexer', ProjectIndexer::class)
                 ->setArguments([
                     new Reference('storageForIndexers'),
-                    new Reference('builtinIndexer'),
                     new Reference('fileIndexer'),
                     new Reference('sourceCodeStreamReader')
                 ]);
@@ -280,7 +279,11 @@ abstract class AbstractApplication
             // Commands.
             $this->container
                 ->register('initializeCommand', Command\InitializeCommand::class)
-                ->setArguments([new Reference('indexDatabase'), new Reference('projectIndexer')]);
+                ->setArguments([
+                    new Reference('indexDatabase'),
+                    new Reference('builtinIndexer'),
+                    new Reference('projectIndexer')
+                ]);
 
             $this->container
                 ->register('reindexCommand', Command\ReindexCommand::class)

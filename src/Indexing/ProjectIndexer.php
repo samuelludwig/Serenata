@@ -17,11 +17,6 @@ class ProjectIndexer
     protected $storage;
 
     /**
-     * @var BuiltinIndexer
-     */
-    protected $builtinIndexer;
-
-    /**
      * @var FileIndexer
      */
     protected $fileIndexer;
@@ -43,18 +38,15 @@ class ProjectIndexer
 
     /**
      * @param StorageInterface       $storage
-     * @param BuiltinIndexer         $builtinIndexer
      * @param FileIndexer            $fileIndexer
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
     public function __construct(
         StorageInterface $storage,
-        BuiltinIndexer $builtinIndexer,
         FileIndexer $fileIndexer,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->storage = $storage;
-        $this->builtinIndexer = $builtinIndexer;
         $this->fileIndexer = $fileIndexer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
@@ -74,8 +66,6 @@ class ProjectIndexer
      */
     public function setLoggingStream($loggingStream)
     {
-        $this->builtinIndexer->setLoggingStream($loggingStream);
-
         $this->loggingStream = $loggingStream;
         return $this;
     }
@@ -197,29 +187,6 @@ class ProjectIndexer
         }
 
         $this->storage->commitTransaction();
-    }
-
-    /**
-     * Indexes builtin PHP structural elemens when necessary.
-     */
-    public function indexBuiltinItemsIfNecessary()
-    {
-        $hasIndexedBuiltin = $this->storage->getSetting('has_indexed_builtin');
-
-        if (!$hasIndexedBuiltin || !$hasIndexedBuiltin['value']) {
-            $this->builtinIndexer->index();
-
-            if ($hasIndexedBuiltin) {
-                $this->storage->update(IndexStorageItemEnum::SETTINGS, $hasIndexedBuiltin['id'], [
-                    'value' => 1
-                ]);
-            } else {
-                $this->storage->insert(IndexStorageItemEnum::SETTINGS, [
-                    'name'  => 'has_indexed_builtin',
-                    'value' => 1
-                ]);
-            }
-        }
     }
 
     /**

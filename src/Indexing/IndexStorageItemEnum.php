@@ -7,7 +7,6 @@ namespace PhpIntegrator\Indexing;
  */
 class IndexStorageItemEnum
 {
-    const SETTINGS                      = 'settings';
     const FILES                         = 'files';
     const STRUCTURE_TYPES               = 'structure_types';
     const ACCESS_MODIFIERS              = 'access_modifiers';
