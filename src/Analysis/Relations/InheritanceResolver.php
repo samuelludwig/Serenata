@@ -167,24 +167,6 @@ class InheritanceResolver extends AbstractResolver
                     $parentMethodData['longDescription']
                 );
             }
-
-            $childMethod['declaringClass'] = [
-                'name'            => $class['name'],
-                'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
-                'type'            => $class['type']
-            ];
-
-            $childMethod['declaringStructure'] = [
-                'name'            => $class['name'],
-                'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
-                'type'            => $class['type'],
-                'startLineMember' => $childMethod['startLine'],
-                'endLineMember'   => $childMethod['endLine']
-            ];
         } else {
             $childMethod = [];
         }
