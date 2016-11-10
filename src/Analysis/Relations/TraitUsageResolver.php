@@ -173,17 +173,39 @@ class TraitUsageResolver extends AbstractResolver
                 );
             }
 
-            $childMethod['declaringStructure'] = [
-                'name'            => $class['name'],
-                'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
-                'type'            => $class['type'],
-                'startLineMember' => $childMethod['startLine'],
-                'endLineMember'   => $childMethod['endLine']
-            ];
+            if ($childMethod['declaringStructure']['name'] !== $class['name']) {
+                $childMethod['declaringStructure'] = [
+                    'name'            => $traitMethodData['declaringStructure']['name'],
+                    'filename'        => $traitMethodData['declaringStructure']['filename'],
+                    'startLine'       => $traitMethodData['declaringStructure']['startLine'],
+                    'endLine'         => $traitMethodData['declaringStructure']['endLine'],
+                    'type'            => $traitMethodData['declaringStructure']['type'],
+                    'startLineMember' => $traitMethodData['startLine'],
+                    'endLineMember'   => $traitMethodData['endLine']
+                ];
+            } else {
+                $childMethod['declaringStructure'] = [
+                    'name'            => $class['name'],
+                    'filename'        => $class['filename'],
+                    'startLine'       => $class['startLine'],
+                    'endLine'         => $class['endLine'],
+                    'type'            => $class['type'],
+                    'startLineMember' => $childMethod['startLine'],
+                    'endLineMember'   => $childMethod['endLine']
+                ];
+            }
         } else {
-            $childMethod = [];
+            $childMethod = [
+                'declaringStructure' => [
+                    'name'            => $traitMethodData['declaringStructure']['name'],
+                    'filename'        => $traitMethodData['declaringStructure']['filename'],
+                    'startLine'       => $traitMethodData['declaringStructure']['startLine'],
+                    'endLine'         => $traitMethodData['declaringStructure']['endLine'],
+                    'type'            => $traitMethodData['declaringStructure']['type'],
+                    'startLineMember' => $traitMethodData['startLine'],
+                    'endLineMember'   => $traitMethodData['endLine']
+                ]
+            ];
         }
 
         $class['methods'][$traitMethodData['name']] = array_merge($traitMethodData, $childMethod, $inheritedData, [

@@ -8,6 +8,11 @@ if (!function_exists('mb_substr')) {
     die('Multibyte String support in your PHP installation is required. See also https://secure.php.net/manual/en/book.mbstring.php');
 }
 
+// If cli.pager is set to less/more or the like, it causes the JSON response
+// to be duplicated when read by the coffeescript API.
+// This unsets the option, so that the JSON response is returned correctly.
+ini_set('cli.pager', null);
+
 // Show us pretty much everything so we can properly debug what is going wrong.
 error_reporting(E_ALL & ~E_DEPRECATED);
 

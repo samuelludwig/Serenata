@@ -1661,7 +1661,7 @@ class ClassInfoCommandTest extends IndexedTest
 
         $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['name']);
         $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['name']);
-        
+
         $this->assertEmpty($output['methods']['interfaceMethod']['implementation']);
     }
 
@@ -1698,6 +1698,19 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEmpty($output['methods']['someMethod']['implementation']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
+    }
+
+    /**
+     *
+     */
+    public function testMethodDeclaringStructureIsCorrectWhenMethodDirectlyOriginatesFromTrait()
+    {
+        $fileName = 'ClassUsingTraitMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
     }
 
     /**
