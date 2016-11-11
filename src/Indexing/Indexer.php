@@ -58,8 +58,6 @@ class Indexer
             throw new LogicException('No progress streaming callback configured whilst streaming was requestd!');
         }
 
-        $success = true;
-
         $this->projectIndexer
             ->setLoggingStream($showOutput ? STDOUT : null)
             ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
@@ -73,10 +71,10 @@ class Indexer
         try {
             $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
         } catch (IndexingFailedException $e) {
-            $success = false;
+            return false
         }
 
-        return $success;
+        return true;
     }
 
     /**
