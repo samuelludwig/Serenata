@@ -80,7 +80,7 @@ abstract class AbstractApplication
     /**
      * @param ContainerBuilder $container
      */
-    protected function registerCommands(ContainerBuilder $container)
+    protected function registerServices(ContainerBuilder $container)
     {
         $container
             ->register('application', AbstractApplication::class)
@@ -295,7 +295,14 @@ abstract class AbstractApplication
                 new Reference('sourceCodeStreamReader')
             ]);
 
-        // Commands.
+        $this->registerCommandServices($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    protected function registerCommandServices(ContainerBuilder $container)
+    {
         $container
             ->register('initializeCommand', Command\InitializeCommand::class)
             ->setArguments([
