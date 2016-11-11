@@ -15,11 +15,6 @@ class GlobalFunctionExistanceChecker implements GlobalFunctionExistanceCheckerIn
     protected $indexDatabase;
 
     /**
-     * @var array
-     */
-    protected $globalFunctionsFqcnMap;
-
-    /**
      * @param IndexDatabase $indexDatabase
      */
     public function __construct(IndexDatabase $indexDatabase)
@@ -42,14 +37,12 @@ class GlobalFunctionExistanceChecker implements GlobalFunctionExistanceCheckerIn
      */
     protected function getGlobalFunctionsFqcnMap()
     {
-        if ($this->globalFunctionsFqcnMap === null) {
-            $this->globalFunctionsFqcnMap = [];
+        $globalFunctionsFqcnMap = [];
 
-            foreach ($this->indexDatabase->getGlobalFunctions() as $element) {
-                $this->globalFunctionsFqcnMap[$element['fqcn']] = true;
-            }
+        foreach ($this->indexDatabase->getGlobalFunctions() as $element) {
+            $globalFunctionsFqcnMap[$element['fqcn']] = true;
         }
 
-        return $this->globalFunctionsFqcnMap;
+        return $globalFunctionsFqcnMap;
     }
 }

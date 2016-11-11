@@ -7,9 +7,9 @@ use Doctrine\Common\Cache\FilesystemCache;
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\ClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\GlobalConstantExistanceChecker;
-use PhpIntegrator\Analysis\GlobalFunctionExistanceChecker;
+use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
+use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
+use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
 
 use PhpIntegrator\Analysis\Conversion\MethodConverter;
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
@@ -196,15 +196,15 @@ abstract class AbstractApplication
                 ->setAlias('classlikeInfoBuilderProvider', 'classlikeInfoBuilderProviderCachingProxy');
 
             $this->container
-                ->register('classlikeExistanceChecker', ClasslikeExistanceChecker::class)
+                ->register('classlikeExistanceChecker', CachingClasslikeExistanceChecker::class)
                 ->setArguments([new Reference('indexDatabase')]);
 
             $this->container
-                ->register('globalFunctionExistanceChecker', GlobalFunctionExistanceChecker::class)
+                ->register('globalFunctionExistanceChecker', CachingGlobalFunctionExistanceChecker::class)
                 ->setArguments([new Reference('indexDatabase')]);
 
             $this->container
-                ->register('globalConstantExistanceChecker', GlobalConstantExistanceChecker::class)
+                ->register('globalConstantExistanceChecker', CachingGlobalConstantExistanceChecker::class)
                 ->setArguments([new Reference('indexDatabase')]);
 
             $this->container

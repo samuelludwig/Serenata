@@ -15,11 +15,6 @@ class ClasslikeExistanceChecker implements ClasslikeExistanceCheckerInterface
     protected $indexDatabase;
 
     /**
-     * @var array
-     */
-    protected $classlikeFqcnMap;
-
-    /**
      * @param IndexDatabase $indexDatabase
      */
     public function __construct(IndexDatabase $indexDatabase)
@@ -42,14 +37,12 @@ class ClasslikeExistanceChecker implements ClasslikeExistanceCheckerInterface
      */
     protected function getClasslikeFqcnMap()
     {
-        if ($this->classlikeFqcnMap === null) {
-            $this->classlikeFqcnMap = [];
+        $classlikeFqcnMap = [];
 
-            foreach ($this->indexDatabase->getAllStructuresRawInfo(null) as $element) {
-                $this->classlikeFqcnMap[$element['fqcn']] = true;
-            }
+        foreach ($this->indexDatabase->getAllStructuresRawInfo(null) as $element) {
+            $classlikeFqcnMap[$element['fqcn']] = true;
         }
 
-        return $this->classlikeFqcnMap;
+        return $classlikeFqcnMap;
     }
 }

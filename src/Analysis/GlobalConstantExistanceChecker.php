@@ -15,11 +15,6 @@ class GlobalConstantExistanceChecker implements GlobalConstantExistanceCheckerIn
     protected $indexDatabase;
 
     /**
-     * @var array
-     */
-    protected $globalConstantFqcnMap;
-
-    /**
      * @param IndexDatabase $indexDatabase
      */
     public function __construct(IndexDatabase $indexDatabase)
@@ -42,14 +37,12 @@ class GlobalConstantExistanceChecker implements GlobalConstantExistanceCheckerIn
      */
     protected function getGlobalConstantFqcnMap()
     {
-        if ($this->globalConstantFqcnMap === null) {
-            $this->globalConstantFqcnMap = [];
+        $globalConstantFqcnMap = [];
 
-            foreach ($this->indexDatabase->getGlobalConstants() as $element) {
-                $this->globalConstantFqcnMap[$element['fqcn']] = true;
-            }
+        foreach ($this->indexDatabase->getGlobalConstants() as $element) {
+            $globalConstantFqcnMap[$element['fqcn']] = true;
         }
 
-        return $this->globalConstantFqcnMap;
+        return $globalConstantFqcnMap;
     }
 }
