@@ -71,7 +71,7 @@ class Indexer
         try {
             $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
         } catch (IndexingFailedException $e) {
-            return false
+            return false;
         }
 
         return true;
