@@ -44,7 +44,7 @@ class Indexer
      * @param string[] $excludedPaths
      * @param string[] $extensionsToIndex
      *
-     * @return bool
+     * @return bool Whether indexing succeeded or not.
      */
     public function reindex(
         array $paths,
