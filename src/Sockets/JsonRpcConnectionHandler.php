@@ -8,7 +8,7 @@ use React\Socket\Connection;
  * Handles socket connections that send JSON-RPC requests via a simple HTTP-like protocol and dispatches the requests
  * to a handler.
  */
-class ConnectionHandler
+class JsonRpcConnectionHandler
 {
     /**
      * @var string

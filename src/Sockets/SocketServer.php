@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Sockets;
 
-use UnexpectedValueException;
-
 use React\EventLoop\LoopInterface;
 
 use React\Socket\Server;
@@ -25,9 +23,10 @@ class SocketServer extends Server
     protected $connectionHandlerFactory;
 
     /**
-     * @param LoopInterface $loop
+     * @param LoopInterface                   $loop
+     * @param JsonRpcConnectionHandlerFactory $connectionHandlerFactory
      */
-    public function __construct(LoopInterface $loop, ConnectionHandlerFactory $connectionHandlerFactory)
+    public function __construct(LoopInterface $loop, JsonRpcConnectionHandlerFactory $connectionHandlerFactory)
     {
         parent::__construct($loop);
 

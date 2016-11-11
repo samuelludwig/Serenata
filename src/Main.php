@@ -2,7 +2,7 @@
 
 use React\Socket\ConnectionException;
 
-use PhpIntegrator\Sockets\ConnectionHandlerFactory;
+use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use PhpIntegrator\UserInterface\JsonRpcApplication;
 
@@ -27,7 +27,7 @@ $stdinStream = fopen('php://memory', 'w+');
 
 $applicationJsonRpcRequestHandler = new JsonRpcApplication($stdinStream);
 
-$connectionHandlerFactory = new ConnectionHandlerFactory($applicationJsonRpcRequestHandler);
+$connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($applicationJsonRpcRequestHandler);
 
 $loop = React\EventLoop\Factory::create();
 $socket = new PhpIntegrator\Sockets\SocketServer($loop, $connectionHandlerFactory);

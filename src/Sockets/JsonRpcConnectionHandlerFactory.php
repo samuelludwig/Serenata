@@ -5,9 +5,9 @@ namespace PhpIntegrator\Sockets;
 use React\Socket\Connection;
 
 /**
- * Represents a socket server that handles communication with the core.
+ * Factory that creates instances of {@see JsonRpcConnectionHandler}.
  */
-class ConnectionHandlerFactory
+class JsonRpcConnectionHandlerFactory
 {
     /**
      * @var JsonRpcRequestHandlerInterface
@@ -27,6 +27,6 @@ class ConnectionHandlerFactory
      */
     public function create(Connection $connection)
     {
-        return new ConnectionHandler($connection, $this->jsonRpcRequestHandler);
+        return new JsonRpcConnectionHandler($connection, $this->jsonRpcRequestHandler);
     }
 }
