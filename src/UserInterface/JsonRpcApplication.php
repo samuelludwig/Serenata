@@ -11,6 +11,7 @@ use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\RequestParsingException;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -49,19 +50,15 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * Handles a JSON-PRC request.
-     *
-     * @param JsonRpcRequest $request
-     *
-     * @return JsonRpcResponse
+     * @inheritDoc
      */
-    public function handle(JsonRpcRequest $request)
+    public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender = null)
     {
         $error = null;
         $result = null;
 
         try {
-            $result = $this->handleRequest($request);
+            $result = $this->handleRequest($request, $jsonRpcResponseSender);
         } catch (RequestParsingException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (Command\InvalidArgumentsException $e) {
@@ -87,17 +84,18 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @param JsonRpcRequest $request
+     * @param JsonRpcRequest                      $request
+     * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
      *
      * @return string
      */
-    protected function handleRequest(JsonRpcRequest $request)
-    {
+    protected function handleRequest(
+        JsonRpcRequest $request,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+    ) {
         $params = $request->getParams();
 
-        $this->getContainer()->get('reindexCommand')->setProgressStreamingCallback(
-            $this->getProgressStreamingCallback()
-        );
+        $this->configureProgressStreamingCallback($request, $jsonRpcResponseSender);
 
         if (isset($params['stdinData'])) {
             ftruncate($this->stdinStream, 0);
@@ -145,6 +143,23 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
+     * @param JsonRpcRequest                      $request
+     * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
+     */
+    protected function configureProgressStreamingCallback(
+        JsonRpcRequest $request,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+    ) {
+        $progressStreamingCallback = null;
+
+        if ($jsonRpcResponseSender) {
+            $progressStreamingCallback = $this->createProgressStreamingCallback($request, $jsonRpcResponseSender);
+        }
+
+        $this->getContainer()->get('reindexCommand')->setProgressStreamingCallback($progressStreamingCallback);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getStdinStream()
@@ -153,12 +168,21 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @inheritDoc
+     * @param JsonRpcRequest                      $request
+     * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
      */
-    public function getProgressStreamingCallback()
-    {
-        return function ($progress) {
-            // TODO: Need some way to send responses over the socket.
+    public function createProgressStreamingCallback(
+        JsonRpcRequest $request,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+    ) {
+        return function ($progress) use ($request, $jsonRpcResponseSender) {
+            $jsonRpcResponse = new JsonRpcResponse(null, [
+                'type'      => 'reindexProgressInformation',
+                'requestId' => $request->getId(),
+                'progress'  => $progress
+            ]);
+
+            $jsonRpcResponseSender->send($jsonRpcResponse);
         };
     }
 

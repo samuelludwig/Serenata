@@ -156,7 +156,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      */
     protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request)
     {
-        return $this->jsonRpcRequestHandler->handle($request);
+        return $this->jsonRpcRequestHandler->handle($request, $this);
     }
 
     /**

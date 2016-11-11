@@ -122,27 +122,20 @@ class ReindexCommand extends AbstractCommand
         $exception = null;
 
         try {
-            $loggingStream = $showOutput ? fopen('php://stdout', 'w') : null;
-            $progressStreamingCallback = $doStreamProgress ? $this->getProgressStreamingCallback() : null;
+            $this->projectIndexer
+                ->setLoggingStream($showOutput ? STDOUT : null)
+                ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
+
+            $sourceOverrideMap = [];
+
+            if ($useStdin) {
+                $sourceOverrideMap[$paths[0]] = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
+            }
 
             try {
-                $this->projectIndexer
-                    ->setProgressStreamingCallback($progressStreamingCallback)
-                    ->setLoggingStream($loggingStream);
-
-                $sourceOverrideMap = [];
-
-                if ($useStdin) {
-                    $sourceOverrideMap[$paths[0]] = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-                }
-
                 $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
             } catch (Indexing\IndexingFailedException $e) {
                 $success = false;
-            }
-
-            if ($loggingStream) {
-                fclose($loggingStream);
             }
         } catch (\Exception $e) {
             $exception = $e;
