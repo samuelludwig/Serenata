@@ -59,30 +59,21 @@ class Indexer
         }
 
         $success = true;
-        $exception = null;
 
-        try {
-            $this->projectIndexer
-                ->setLoggingStream($showOutput ? STDOUT : null)
-                ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
+        $this->projectIndexer
+            ->setLoggingStream($showOutput ? STDOUT : null)
+            ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
 
-            $sourceOverrideMap = [];
+        $sourceOverrideMap = [];
 
-            if ($useStdin) {
-                $sourceOverrideMap[$paths[0]] = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-            }
-
-            try {
-                $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
-            } catch (IndexingFailedException $e) {
-                $success = false;
-            }
-        } catch (\Exception $e) {
-            $exception = $e;
+        if ($useStdin) {
+            $sourceOverrideMap[$paths[0]] = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         }
 
-        if ($exception) {
-            throw $exception;
+        try {
+            $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
+        } catch (IndexingFailedException $e) {
+            $success = false;
         }
 
         return $success;
