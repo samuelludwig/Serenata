@@ -3,7 +3,7 @@
 namespace PhpIntegrator\Sockets;
 
 /**
- * Interface for {@see JsonRpcRequestHandler} handlers.
+ * Interface for {@see JsonRpcRequest} handlers.
  */
 interface JsonRpcRequestHandlerInterface
 {
