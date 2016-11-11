@@ -280,7 +280,6 @@ abstract class AbstractApplication
             $this->container
                 ->register('indexer', Indexer::class)
                 ->setArguments([
-                    new Reference('indexDatabase'),
                     new Reference('projectIndexer'),
                     new Reference('sourceCodeStreamReader')
                 ]);

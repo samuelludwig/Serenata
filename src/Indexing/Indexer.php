@@ -30,11 +30,6 @@ use PhpParser\NodeTraverser;
 class Indexer
 {
     /**
-     * @var IndexDatabase
-     */
-    protected $indexDatabase;
-
-    /**
      * @var ProjectIndexer
      */
     protected $projectIndexer;
@@ -50,16 +45,11 @@ class Indexer
     protected $progressStreamingCallback;
 
     /**
-     * @param IndexDatabase          $indexDatabase
      * @param ProjectIndexer         $projectIndexer
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
-    public function __construct(
-        IndexDatabase $indexDatabase,
-        ProjectIndexer $projectIndexer,
-        SourceCodeStreamReader $sourceCodeStreamReader
-    ) {
-        $this->indexDatabase = $indexDatabase;
+    public function __construct(ProjectIndexer $projectIndexer, SourceCodeStreamReader $sourceCodeStreamReader)
+    {
         $this->projectIndexer = $projectIndexer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
