@@ -50,6 +50,10 @@ class CliApplication extends AbstractApplication
         $this->projectName = array_shift($arguments);
         $command = array_shift($arguments);
 
+        $this->getContainer()->get('reindexCommand')->setProgressStreamingCallback(
+            $this->getProgressStreamingCallback()
+        );
+
         // This seems to be needed for GetOptionKit.
         array_unshift($arguments, $programName);
 
@@ -189,6 +193,17 @@ class CliApplication extends AbstractApplication
     public function getStdinStream()
     {
         return $this->stdinStream;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProgressStreamingCallback()
+    {
+        return function ($progress) {
+            // Yes, we abuse the error channel for this.
+            fwrite(STDERR, $progress . PHP_EOL);
+        };
     }
 
     /**

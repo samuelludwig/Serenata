@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
+use LogicException;
 
 use GetOptionKit\OptionCollection;
 
@@ -32,6 +33,11 @@ class ReindexCommand extends AbstractCommand
      * @var SourceCodeStreamReader
      */
     protected $sourceCodeStreamReader;
+
+    /**
+     * @var callable|null
+     */
+    protected $progressStreamingCallback;
 
     /**
      * @param IndexDatabase          $indexDatabase
@@ -108,17 +114,20 @@ class ReindexCommand extends AbstractCommand
             }
         }
 
+        if ($doStreamProgress && !$this->getProgressStreamingCallback()) {
+            throw new LogicException('No progress streaming callback configured whilst streaming was requestd!');
+        }
+
         $success = true;
         $exception = null;
 
         try {
-            // Yes, we abuse the error channel...
             $loggingStream = $showOutput ? fopen('php://stdout', 'w') : null;
-            $progressStream = $doStreamProgress ? fopen('php://stderr', 'w') : null;
+            $progressStreamingCallback = $doStreamProgress ? $this->getProgressStreamingCallback() : null;
 
             try {
                 $this->projectIndexer
-                    ->setProgressStream($progressStream)
+                    ->setProgressStreamingCallback($progressStreamingCallback)
                     ->setLoggingStream($loggingStream);
 
                 $sourceOverrideMap = [];
@@ -135,10 +144,6 @@ class ReindexCommand extends AbstractCommand
             if ($loggingStream) {
                 fclose($loggingStream);
             }
-
-            if ($progressStream) {
-                fclose($progressStream);
-            }
         } catch (\Exception $e) {
             $exception = $e;
         }
@@ -148,5 +153,24 @@ class ReindexCommand extends AbstractCommand
         }
 
         return $success;
+    }
+
+    /**
+     * @return callable|null
+     */
+    public function getProgressStreamingCallback()
+    {
+        return $this->progressStreamingCallback;
+    }
+
+    /**
+     * @param callable|null $progressStreamingCallback
+     *
+     * @return static
+     */
+    public function setProgressStreamingCallback(callable $progressStreamingCallback = null)
+    {
+        $this->progressStreamingCallback = $progressStreamingCallback;
+        return $this;
     }
 }

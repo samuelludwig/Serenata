@@ -411,6 +411,11 @@ abstract class AbstractApplication
     abstract public function getStdinStream();
 
     /**
+     * @return callable|null
+     */
+    abstract public function getProgressStreamingCallback();
+
+    /**
      * @return string
      */
     abstract public function getDatabaseFile();

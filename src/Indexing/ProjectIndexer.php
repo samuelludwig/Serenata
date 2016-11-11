@@ -32,9 +32,9 @@ class ProjectIndexer
     protected $loggingStream;
 
     /**
-     * @var resource|null
+     * @var callable|null
      */
-    protected $progressStream;
+    protected $progressStreamingCallback;
 
     /**
      * @param StorageInterface       $storage
@@ -71,21 +71,21 @@ class ProjectIndexer
     }
 
     /**
-     * @return resource|null
+     * @return callable|null
      */
-    public function getProgressStream()
+    public function getProgressStreamingCallback()
     {
-        return $this->progressStream;
+        return $this->progressStreamingCallback;
     }
 
     /**
-     * @param resource|null $progressStream
+     * @param callable|null $progressStreamingCallback
      *
      * @return static
      */
-    public function setProgressStream($progressStream)
+    public function setProgressStreamingCallback($progressStreamingCallback)
     {
-        $this->progressStream = $progressStream;
+        $this->progressStreamingCallback = $progressStreamingCallback;
         return $this;
     }
 
@@ -111,7 +111,9 @@ class ProjectIndexer
      */
     protected function sendProgress($itemNumber, $totalItemCount)
     {
-        if (!$this->progressStream) {
+        $callback = $this->getProgressStreamingCallback();
+
+        if (!$callback) {
             return;
         }
 
@@ -121,7 +123,7 @@ class ProjectIndexer
             $progress = 100;
         }
 
-        fwrite($this->progressStream, $progress . PHP_EOL);
+        $callback($progress);
     }
 
     /**

@@ -95,6 +95,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     {
         $params = $request->getParams();
 
+        $this->getContainer()->get('reindexCommand')->setProgressStreamingCallback(
+            $this->getProgressStreamingCallback()
+        );
+
         if (isset($params['stdinData'])) {
             ftruncate($this->stdinStream, 0);
             fwrite($this->stdinStream, $params['stdinData']);
@@ -146,6 +150,16 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     public function getStdinStream()
     {
         return $this->stdinStream;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getProgressStreamingCallback()
+    {
+        return function ($progress) {
+            // TODO: Need some way to send responses over the socket.
+        };
     }
 
     /**
