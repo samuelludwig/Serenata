@@ -4,13 +4,28 @@ namespace PhpIntegrator\Indexing;
 
 use LogicException;
 
+use Evenement\EventEmitterTrait;
+use Evenement\EventEmitterInterface;
+
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 /**
  * Handles indexation of PHP code.
  */
-class Indexer
+class Indexer implements EventEmitterInterface
 {
+    use EventEmitterTrait;
+
+    /**
+     * @var string
+     */
+    const INDEXING_FAILED_EVENT = 'indexingFailed';
+
+    /**
+     * @var string
+     */
+    const INDEXING_SUCCEEDED_EVENT = 'indexingSucceeded';
+
     /**
      * @var ProjectIndexer
      */
@@ -71,8 +86,12 @@ class Indexer
         try {
             $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
         } catch (IndexingFailedException $e) {
+            $this->emit(self::INDEXING_FAILED_EVENT);
+
             return false;
         }
+
+        $this->emit(self::INDEXING_SUCCEEDED_EVENT);
 
         return true;
     }

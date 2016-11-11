@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * @inheritDoc
  */
-class CachingClasslikeExistanceChecker extends ClasslikeExistanceChecker
+class CachingClasslikeExistanceChecker extends ClasslikeExistanceChecker implements ClearableCacheInterface
 {
     /**
      * @var array
@@ -25,7 +25,7 @@ class CachingClasslikeExistanceChecker extends ClasslikeExistanceChecker
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     public function clearCache()
     {

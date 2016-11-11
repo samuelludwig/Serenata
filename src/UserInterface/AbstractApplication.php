@@ -7,6 +7,7 @@ use Doctrine\Common\Cache\FilesystemCache;
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
@@ -37,6 +38,8 @@ use PhpIntegrator\Indexing\IndexDatabase;
 use PhpIntegrator\Indexing\ProjectIndexer;
 use PhpIntegrator\Indexing\BuiltinIndexer;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
+
+use PhpIntegrator\Mediating\CacheClearingEventMediator;
 
 use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\DocblockParser;
@@ -220,8 +223,24 @@ abstract class AbstractApplication
             ->setArguments([new Reference('indexDatabase')]);
 
         $container
+            ->register('cacheClearingEventMediator.clearableCache', ClearableCacheCollection::class)
+            ->setArguments([[
+                new Reference('classlikeExistanceChecker'),
+                new Reference('globalFunctionExistanceChecker'),
+                new Reference('globalConstantExistanceChecker')
+            ]]);
+
+        $container
+            ->register('cacheClearingEventMediator', CacheClearingEventMediator::class)
+            ->setArguments([
+                new Reference('cacheClearingEventMediator.clearableCache'),
+                new Reference('indexer'),
+                Indexer::INDEXING_SUCCEEDED_EVENT
+            ]);
+
+        $container
             ->register('storageForIndexers', CallbackStorageProxy::class)
-            ->setArguments([new Reference('indexDatabase'), function ($fqcn) {
+            ->setArguments([new Reference('indexDatabase'), function ($fqcn) use ($container) {
                 $provider = $container->get('classlikeInfoBuilderProvider');
 
                 if ($provider instanceof ClasslikeInfoBuilderProviderCachingProxy) {
@@ -296,6 +315,8 @@ abstract class AbstractApplication
             ]);
 
         $this->registerCommandServices($container);
+
+        $this->instantiateRequiredServices($container);
     }
 
     /**
@@ -405,6 +426,19 @@ abstract class AbstractApplication
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)
             ->setArguments([new Reference('indexDatabase')]);
+    }
+
+    /**
+     * Instantiates services that are required for the application to function correctly.
+     *
+     * Usually we prefer to rely on lazy loading of services, but some services aren't explicitly required by any other
+     * service, but do provide necessary interaction (i.e. they are required by the application itself).
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function instantiateRequiredServices(ContainerBuilder $container)
+    {
+        $container->get('cacheClearingEventMediator');
     }
 
     /**
