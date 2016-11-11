@@ -8,7 +8,7 @@ use React\Socket\Connection;
  * Handles socket connections that send JSON-RPC requests via a simple HTTP-like protocol and dispatches the requests
  * to a handler.
  */
-class JsonRpcConnectionHandler
+class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 {
     /**
      * @var string
@@ -134,9 +134,9 @@ class JsonRpcConnectionHandler
 
             if ($this->request['bytesRead'] == $this->request['length']) {
                 $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
-                $responseContent = $this->getResponseForJsonRpcRequest($jsonRpcRequest);
+                $jsonRpcResponse = $this->getJsonRpcResponseForJsonRpcRequest($jsonRpcRequest);
 
-                $this->writeRawResponse($responseContent);
+                $this->send($jsonRpcResponse);
 
                 $this->resetRequestState();
             }
@@ -152,13 +152,21 @@ class JsonRpcConnectionHandler
     /**
      * @param JsonRpcRequest $request
      *
-     * @return string
+     * @return JsonRpcResponse
      */
-    protected function getResponseForJsonRpcRequest(JsonRpcRequest $request)
+    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request)
     {
-        $response = $this->jsonRpcRequestHandler->handle($request);
+        return $this->jsonRpcRequestHandler->handle($request);
+    }
 
-        return json_encode($response);
+    /**
+     * @inheritDoc
+     */
+    public function send(JsonRpcResponse $response)
+    {
+        $responseContent = json_encode($response);
+
+        $this->writeRawResponse($responseContent);
     }
 
     /**
