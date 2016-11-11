@@ -214,5 +214,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         }
 
         $this->databaseFile = $databaseFile;
+
+        return $this;
     }
 }
