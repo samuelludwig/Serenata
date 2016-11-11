@@ -21,11 +21,6 @@ class CliApplication extends AbstractApplication
     protected $projectName;
 
     /**
-     * @var string
-     */
-    protected $databaseFile;
-
-    /**
      * @var resource|null
      */
     protected $stdinStream;
@@ -82,7 +77,7 @@ class CliApplication extends AbstractApplication
 
         foreach ($arguments as $argument) {
             if (mb_strpos($argument, '--database=') === 0) {
-                $this->databaseFile = mb_substr($argument, mb_strlen('--database='));
+                $this->setDatabaseFile(mb_substr($argument, mb_strlen('--database=')));
             }
         }
 
@@ -204,14 +199,6 @@ class CliApplication extends AbstractApplication
             // Yes, we abuse the error channel for this.
             fwrite(STDERR, $progress . PHP_EOL);
         };
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDatabaseFile()
-    {
-        return $this->databaseFile;
     }
 
     /**

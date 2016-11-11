@@ -29,13 +29,6 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     protected $connection;
 
     /**
-     * The path to the database to use.
-     *
-     * @var string
-     */
-    protected $databasePath;
-
-    /**
      * @param string $databasePath
      */
     public function __construct($databasePath)
@@ -112,6 +105,17 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     public function getDatabasePath()
     {
         return $this->databasePath;
+    }
+
+    /**
+     * @param string $databasePath
+     *
+     * @return static
+     */
+    public function setDatabasePath($databasePath)
+    {
+        $this->databasePath = $databasePath;
+        return $this;
     }
 
     /**

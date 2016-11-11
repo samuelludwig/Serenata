@@ -189,32 +189,8 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @inheritDoc
      */
-    public function getDatabaseFile()
-    {
-        return $this->databaseFile;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getProjectName()
     {
         return $this->projectName;
-    }
-
-    /**
-     * @param string $database
-     *
-     * @return static
-     */
-    public function setDatabaseFile($databaseFile)
-    {
-        if ($this->databaseFile !== $databaseFile) {
-            $this->getContainer()->get('indexDatabase')->ensureConnectionClosed();
-        }
-
-        $this->databaseFile = $databaseFile;
-
-        return $this;
     }
 }

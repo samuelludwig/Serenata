@@ -9,15 +9,17 @@ use Doctrine\Common\Cache\ClearableCache;
 
 use GetOptionKit\OptionCollection;
 
+use PhpIntegrator\Indexing\IndexDatabase;
+
 /**
  * Command that truncates the database.
  */
 class TruncateCommand extends AbstractCommand
 {
     /**
-     * @var string
+     * @var IndexDatabase
      */
-    protected $databaseFile;
+    protected $indexDatabase;
 
     /**
      * @var Cache
@@ -25,12 +27,12 @@ class TruncateCommand extends AbstractCommand
     protected $cache;
 
     /**
-     * @param string $databaseFile
-     * @param Cache  $cache
+     * @param IndexDatabase $database
+     * @param Cache         $cache
      */
-    public function __construct($databaseFile, Cache $cache)
+    public function __construct(IndexDatabase $database, Cache $cache)
     {
-        $this->databaseFile = $databaseFile;
+        $this->indexDatabase = $indexDatabase;
         $this->cache = $cache;
     }
 
@@ -57,7 +59,7 @@ class TruncateCommand extends AbstractCommand
      */
     public function truncate()
     {
-        @unlink($this->databaseFile);
+        @unlink($this->indexDatabase->getDatabasePath());``
 
         if ($this->cache instanceof ClearableCache) {
             $this->cache->deleteAll();

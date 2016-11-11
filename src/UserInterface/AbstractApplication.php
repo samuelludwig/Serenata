@@ -67,6 +67,13 @@ abstract class AbstractApplication
     protected $container;
 
     /**
+     * The path to the database to use.
+     *
+     * @var string
+     */
+    protected $databasePath;
+
+    /**
      * @return ContainerBuilder
      */
     protected function getContainer()
@@ -344,7 +351,7 @@ abstract class AbstractApplication
 
         $container
             ->register('truncateCommand', Command\TruncateCommand::class)
-            ->setArguments([new Expression("service('application').getDatabaseFile()"), new Reference('cache')]);
+            ->setArguments([new Reference('indexDatabase'), new Reference('cache')]);
 
         $container
             ->register('testCommand', Command\TestCommand::class)
@@ -468,10 +475,32 @@ abstract class AbstractApplication
     /**
      * @return string
      */
-    abstract public function getDatabaseFile();
+    abstract public function getProjectName();
 
     /**
      * @return string
      */
-    abstract public function getProjectName();
+    public function getDatabaseFile()
+    {
+        return $this->databaseFile;
+    }
+
+    /**
+     * @param string $database
+     *
+     * @return static
+     */
+    public function setDatabaseFile($databaseFile)
+    {
+        if ($this->databaseFile !== $databaseFile) {
+            $indexDatabase = $this->getContainer()->get('indexDatabase');
+
+            $indexDatabase->ensureConnectionClosed();
+            $indexDatabase->setDatabasePath($databaseFile);
+        }
+
+        $this->databaseFile = $databaseFile;
+
+        return $this;
+    }
 }
