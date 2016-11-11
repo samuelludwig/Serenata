@@ -27,7 +27,7 @@ class CachingGlobalConstantExistanceChecker extends GlobalConstantExistanceCheck
     /**
      * @return void
      */
-    protected function clearCache()
+    public function clearCache()
     {
         $this->globalConstantFqcnMap = null;
     }

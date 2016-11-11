@@ -27,7 +27,7 @@ class CachingClasslikeExistanceChecker extends ClasslikeExistanceChecker
     /**
      * @return void
      */
-    protected function clearCache()
+    public function clearCache()
     {
         $this->classlikeFqcnMap = null;
     }

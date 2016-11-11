@@ -27,7 +27,7 @@ class CachingGlobalFunctionExistanceChecker extends GlobalFunctionExistanceCheck
     /**
      * @return void
      */
-    protected function clearCache()
+    public function clearCache()
     {
         $this->globalFunctionsFqcnMap = null;
     }
