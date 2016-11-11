@@ -196,7 +196,7 @@ class CliApplication extends AbstractApplication
     }
 
     /**
-     * @inheritDoc
+     * @return callable
      */
     public function getProgressStreamingCallback()
     {
