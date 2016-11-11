@@ -2,27 +2,11 @@
 
 namespace PhpIntegrator\Indexing;
 
-use DateTime;
-use Exception;
-use UnexpectedValueException;
+use LogicException;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeResolver;
-use PhpIntegrator\Analysis\Typing\FileTypeResolver;
-
-use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
-
-use PhpIntegrator\Parsing\DocblockParser;
-
-use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
+use PhpIntegrator\UserInterface\Command\InvalidArgumentsException;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
-
-use PhpParser\Error;
-use PhpParser\Parser;
-use PhpParser\NodeTraverser;
 
 /**
  * Handles indexation of PHP code.
@@ -100,7 +84,7 @@ class Indexer
 
             try {
                 $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
-            } catch (Indexing\IndexingFailedException $e) {
+            } catch (IndexingFailedException $e) {
                 $success = false;
             }
         } catch (\Exception $e) {
