@@ -48,9 +48,20 @@ class ReindexCommand extends AbstractCommand
             throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');
         }
 
+        $paths = $arguments['source'];
+        $useStdin = isset($arguments['stdin']);
+
+        if ($useStdin) {
+            if (count($paths) > 1) {
+                throw new InvalidArgumentsException('Reading from STDIN is only possible when a single path is specified!');
+            } elseif (!is_file($paths[0])) {
+                throw new InvalidArgumentsException('Reading from STDIN is only possible for a single file!');
+            }
+        }
+
         $success = $this->indexer->reindex(
-            $arguments['source'],
-            isset($arguments['stdin']),
+            $paths,
+            $useStdin,
             isset($arguments['verbose']),
             isset($arguments['stream-progress']),
             isset($arguments['exclude']) ? $arguments['exclude'] : [],

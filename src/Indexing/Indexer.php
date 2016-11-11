@@ -4,8 +4,6 @@ namespace PhpIntegrator\Indexing;
 
 use LogicException;
 
-use PhpIntegrator\UserInterface\Command\InvalidArgumentsException;
-
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 /**
@@ -56,14 +54,6 @@ class Indexer
         array $excludedPaths = [],
         array $extensionsToIndex = ['php']
     ) {
-        if ($useStdin) {
-            if (count($paths) > 1) {
-                throw new InvalidArgumentsException('Reading from STDIN is only possible when a single path is specified!');
-            } elseif (!is_file($paths[0])) {
-                throw new InvalidArgumentsException('Reading from STDIN is only possible for a single file!');
-            }
-        }
-
         if ($doStreamProgress && !$this->getProgressStreamingCallback()) {
             throw new LogicException('No progress streaming callback configured whilst streaming was requestd!');
         }
