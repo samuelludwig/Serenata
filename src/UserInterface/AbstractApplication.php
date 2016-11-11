@@ -31,6 +31,7 @@ use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
 
+use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;
 use PhpIntegrator\Indexing\IndexDatabase;
 use PhpIntegrator\Indexing\ProjectIndexer;
@@ -276,6 +277,14 @@ abstract class AbstractApplication
                     new Reference('sourceCodeStreamReader')
                 ]);
 
+            $this->container
+                ->register('indexer', Indexer::class)
+                ->setArguments([
+                    new Reference('indexDatabase'),
+                    new Reference('projectIndexer'),
+                    new Reference('sourceCodeStreamReader')
+                ]);
+
             // Commands.
             $this->container
                 ->register('initializeCommand', Command\InitializeCommand::class)
@@ -288,9 +297,7 @@ abstract class AbstractApplication
             $this->container
                 ->register('reindexCommand', Command\ReindexCommand::class)
                 ->setArguments([
-                    new Reference('indexDatabase'),
-                    new Reference('projectIndexer'),
-                    new Reference('sourceCodeStreamReader')
+                    new Reference('indexer')
                 ]);
 
             $this->container

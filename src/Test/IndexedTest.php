@@ -64,7 +64,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
      */
     protected function indexTestFile(ContainerBuilder $container, $testPath, $mayFail = false)
     {
-        $success = $container->get('reindexCommand')->reindex(
+        $success = $container->get('indexer')->reindex(
             [$testPath],
             false,
             false,

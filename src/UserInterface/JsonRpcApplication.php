@@ -156,7 +156,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $progressStreamingCallback = $this->createProgressStreamingCallback($request, $jsonRpcResponseSender);
         }
 
-        $this->getContainer()->get('reindexCommand')->setProgressStreamingCallback($progressStreamingCallback);
+        $this->getContainer()->get('indexer')->setProgressStreamingCallback($progressStreamingCallback);
     }
 
     /**

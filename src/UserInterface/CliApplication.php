@@ -50,7 +50,7 @@ class CliApplication extends AbstractApplication
         $this->projectName = array_shift($arguments);
         $command = array_shift($arguments);
 
-        $this->getContainer()->get('reindexCommand')->setProgressStreamingCallback(
+        $this->getContainer()->get('indexer')->setProgressStreamingCallback(
             $this->getProgressStreamingCallback()
         );
 

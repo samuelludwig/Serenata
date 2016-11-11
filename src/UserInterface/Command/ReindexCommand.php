@@ -3,16 +3,10 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
-use LogicException;
 
 use GetOptionKit\OptionCollection;
 
-use PhpIntegrator\Indexing;
-
-use PhpIntegrator\Indexing\IndexDatabase;
-use PhpIntegrator\Indexing\ProjectIndexer;
-
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use PhpIntegrator\Indexing\Indexer;
 
 /**
  * Command that reindexes a file or folder.
@@ -20,38 +14,16 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class ReindexCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
+     * @var Indexer
      */
-    protected $indexDatabase;
+    protected $indexer;
 
     /**
-     * @var ProjectIndexer
+     * @param Indexer $indexer
      */
-    protected $projectIndexer;
-
-    /**
-     * @var SourceCodeStreamReader
-     */
-    protected $sourceCodeStreamReader;
-
-    /**
-     * @var callable|null
-     */
-    protected $progressStreamingCallback;
-
-    /**
-     * @param IndexDatabase          $indexDatabase
-     * @param ProjectIndexer         $projectIndexer
-     * @param SourceCodeStreamReader $sourceCodeStreamReader
-     */
-    public function __construct(
-        IndexDatabase $indexDatabase,
-        ProjectIndexer $projectIndexer,
-        SourceCodeStreamReader $sourceCodeStreamReader
-    ) {
-        $this->indexDatabase = $indexDatabase;
-        $this->projectIndexer = $projectIndexer;
-        $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+    public function __construct(Indexer $indexer)
+    {
+        $this->indexer = $indexer;
     }
 
     /**
@@ -76,7 +48,7 @@ class ReindexCommand extends AbstractCommand
             throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');
         }
 
-        $success = $this->reindex(
+        $success = $this->indexer->reindex(
             $arguments['source'],
             isset($arguments['stdin']),
             isset($arguments['verbose']),
@@ -86,84 +58,5 @@ class ReindexCommand extends AbstractCommand
         );
 
         return $success;
-    }
-
-    /**
-     * @param string[] $paths
-     * @param bool     $useStdin
-     * @param bool     $showOutput
-     * @param bool     $doStreamProgress
-     * @param string[] $excludedPaths
-     * @param string[] $extensionsToIndex
-     *
-     * @return bool
-     */
-    public function reindex(
-        array $paths,
-        $useStdin,
-        $showOutput,
-        $doStreamProgress,
-        array $excludedPaths = [],
-        array $extensionsToIndex = ['php']
-    ) {
-        if ($useStdin) {
-            if (count($paths) > 1) {
-                throw new InvalidArgumentsException('Reading from STDIN is only possible when a single path is specified!');
-            } elseif (!is_file($paths[0])) {
-                throw new InvalidArgumentsException('Reading from STDIN is only possible for a single file!');
-            }
-        }
-
-        if ($doStreamProgress && !$this->getProgressStreamingCallback()) {
-            throw new LogicException('No progress streaming callback configured whilst streaming was requestd!');
-        }
-
-        $success = true;
-        $exception = null;
-
-        try {
-            $this->projectIndexer
-                ->setLoggingStream($showOutput ? STDOUT : null)
-                ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
-
-            $sourceOverrideMap = [];
-
-            if ($useStdin) {
-                $sourceOverrideMap[$paths[0]] = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-            }
-
-            try {
-                $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
-            } catch (Indexing\IndexingFailedException $e) {
-                $success = false;
-            }
-        } catch (\Exception $e) {
-            $exception = $e;
-        }
-
-        if ($exception) {
-            throw $exception;
-        }
-
-        return $success;
-    }
-
-    /**
-     * @return callable|null
-     */
-    public function getProgressStreamingCallback()
-    {
-        return $this->progressStreamingCallback;
-    }
-
-    /**
-     * @param callable|null $progressStreamingCallback
-     *
-     * @return static
-     */
-    public function setProgressStreamingCallback(callable $progressStreamingCallback = null)
-    {
-        $this->progressStreamingCallback = $progressStreamingCallback;
-        return $this;
     }
 }
