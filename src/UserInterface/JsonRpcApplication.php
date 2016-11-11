@@ -89,7 +89,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @param JsonRpcRequest $request
      *
-     * @return JsonRpcResponse
+     * @return string
      */
     protected function handleRequest(JsonRpcRequest $request)
     {
