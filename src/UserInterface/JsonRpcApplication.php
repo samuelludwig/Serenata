@@ -1,4 +1,4 @@
-<?php
+k<?php
 
 namespace PhpIntegrator\UserInterface;
 
@@ -110,7 +110,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $this->projectName = $params['projectName'];
 
         if (isset($params['database'])) {
-            $this->databaseFile = $params['database'];
+            $this->setDatabaseFile($params['database']);
         }
 
         unset(
@@ -200,5 +200,19 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     public function getProjectName()
     {
         return $this->projectName;
+    }
+
+    /**
+     * @param string $database
+     *
+     * @return static
+     */
+    public function setDatabaseFile($databaseFile)
+    {
+        if ($this->databaseFile !== $databaseFile) {
+            $this->getContainer()->get('indexDatabase')->ensureConnectionClosed();
+        }
+
+        $this->databaseFile = $databaseFile;
     }
 }
