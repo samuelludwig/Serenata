@@ -71,7 +71,7 @@ abstract class AbstractApplication
      *
      * @var string
      */
-    protected $databasePath;
+    protected $databaseFile;
 
     /**
      * @return ContainerBuilder
