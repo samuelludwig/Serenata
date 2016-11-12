@@ -336,7 +336,8 @@ abstract class AbstractApplication
             ->setArguments([
                 new Reference('indexDatabase'),
                 new Reference('builtinIndexer'),
-                new Reference('projectIndexer')
+                new Reference('projectIndexer'),
+                new Reference('cache')
             ]);
 
         $container
@@ -348,10 +349,6 @@ abstract class AbstractApplication
         $container
             ->register('vacuumCommand', Command\VacuumCommand::class)
             ->setArguments([new Reference('projectIndexer')]);
-
-        $container
-            ->register('truncateCommand', Command\TruncateCommand::class)
-            ->setArguments([new Reference('indexDatabase'), new Reference('cache')]);
 
         $container
             ->register('testCommand', Command\TestCommand::class)
