@@ -10,6 +10,7 @@
 * `ResolveType` and `LocalizeType` now support a `kind` parameter to determine the kind of the type (or rather: name) that needs to be resolved.
   * This is necessary to distinguish between classlike, constant and function name resolving based on use statements. (Yes, duplicate use statements may exist in PHP, as long as their `kind` is different).
 * `implementation` has had a necessary backwards compatibility break because the data returned must be an array instead of a single value. The reasoning behind this is that a method can in fact implement multiple interface methods simultaneously and not just one.
+* The truncate command was merged into the initialize command.
 
 ### Bugs fixed
 * Unqualified global constants will now correctly be resolved.
