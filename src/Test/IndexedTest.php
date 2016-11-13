@@ -20,11 +20,11 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
     static $testContainerBuiltinStructuralElements;
 
     /**
-     * @param bool $includeBuiltinItems
+     * @param bool $indexBuiltinItems
      *
      * @return ContainerBuilder
      */
-    protected function createTestContainer($includeBuiltinItems = false)
+    protected function createTestContainer($indexBuiltinItems = false)
     {
         $app = new CliApplication();
 
@@ -40,7 +40,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
         $container->get('indexDatabase')->setDatabasePath(':memory:');
 
-        $success = $container->get('initializeCommand')->initialize($includeBuiltinItems);
+        $success = $container->get('initializeCommand')->initialize($indexBuiltinItems);
 
         $this->assertTrue($success);
 
