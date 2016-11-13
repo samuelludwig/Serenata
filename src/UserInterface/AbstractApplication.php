@@ -492,7 +492,6 @@ abstract class AbstractApplication
         if ($this->databaseFile !== $databaseFile) {
             $indexDatabase = $this->getContainer()->get('indexDatabase');
 
-            $indexDatabase->ensureConnectionClosed();
             $indexDatabase->setDatabasePath($databaseFile);
         }
 

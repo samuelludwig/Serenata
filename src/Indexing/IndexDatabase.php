@@ -119,6 +119,8 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      */
     public function setDatabasePath($databasePath)
     {
+        $this->ensureConnectionClosed();
+
         $this->databasePath = $databasePath;
         return $this;
     }
