@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProviderInterface;
 
@@ -131,14 +129,6 @@ class ClassListCommand extends AbstractCommand
         $this->classlikeInfoBuilderProvider = $classlikeInfoBuilderProvider;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->indexDatabase = $indexDatabase;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('file?', 'The file to filter the results by.')->isa('string');
     }
 
     /**

@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
@@ -123,21 +121,6 @@ class SemanticLintCommand extends AbstractCommand
         $this->classlikeExistanceChecker = $classlikeExistanceChecker;
         $this->globalConstantExistanceChecker = $globalConstantExistanceChecker;
         $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('file?', 'The file to lint.')->isa('string');
-        $optionCollection->add('stdin?', 'If set, file contents will not be read from disk but the contents from STDIN will be used instead.');
-        $optionCollection->add('no-unknown-classes?', 'If set, unknown class names will not be returned.');
-        $optionCollection->add('no-unknown-members?', 'If set, unknown class member linting will not be performed.');
-        $optionCollection->add('no-unknown-global-functions?', 'If set, unknown global function linting will not be performed.');
-        $optionCollection->add('no-unknown-global-constants?', 'If set, unknown global constant linting will not be performed.');
-        $optionCollection->add('no-docblock-correctness?', 'If set, docblock correctness will not be analyzed.');
-        $optionCollection->add('no-unused-use-statements?', 'If set, unused use statements will not be returned.');
     }
 
     /**

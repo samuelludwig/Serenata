@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Indexing\Indexer;
 
 /**
@@ -24,19 +22,6 @@ class ReindexCommand extends AbstractCommand
     public function __construct(Indexer $indexer)
     {
         $this->indexer = $indexer;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('source+', 'The file or directory to index. Can be passed multiple times to process multiple items at once.')->isa('string');
-        $optionCollection->add('exclude+', 'An absolute path to exclude. Can be passed multiple times.')->isa('string');
-        $optionCollection->add('extension+', 'An extension (without leading dot) to index. Can be passed multiple times.')->isa('string');
-        $optionCollection->add('stdin?', 'If set, file contents will not be read from disk but the contents from STDIN will be used instead.');
-        $optionCollection->add('v|verbose?', 'If set, verbose output will be displayed.');
-        $optionCollection->add('s|stream-progress?', 'If set, progress will be streamed. Incompatible with verbose mode.');
     }
 
     /**

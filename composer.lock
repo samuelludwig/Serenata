@@ -4,55 +4,9 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3b35281b2b44d5752f237d17765dc6b7",
-    "content-hash": "190c36909c958ec9d744e04a009b7a30",
+    "hash": "29cc224c2afee8b174a050d7aa159a32",
+    "content-hash": "dcc179822ddfb548baa88986b6d17294",
     "packages": [
-        {
-            "name": "corneltek/getoptionkit",
-            "version": "2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/c9s/GetOptionKit.git",
-                "reference": "4534eeef636ec20efb2908a215ad8481eaba7370"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/c9s/GetOptionKit/zipball/4534eeef636ec20efb2908a215ad8481eaba7370",
-                "reference": "4534eeef636ec20efb2908a215ad8481eaba7370",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "corneltek/phpunit-testmore": "dev-master",
-                "satooshi/php-coveralls": "dev-master"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GetOptionKit\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Yo-An Lin",
-                    "email": "cornelius.howl@gmail.com"
-                }
-            ],
-            "description": "Powerful command-line option toolkit",
-            "homepage": "http://github.com/c9s/GetOptionKit",
-            "time": "2016-05-12 02:37:54"
-        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.7",
@@ -813,7 +767,7 @@
         },
         {
             "name": "symfony/expression-language",
-            "version": "v2.8.12",
+            "version": "v2.8.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/expression-language.git",

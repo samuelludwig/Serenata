@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
@@ -23,14 +21,6 @@ class ClassInfoCommand extends AbstractCommand
     {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('name:', 'The name of the class, trait or interface to fetch information about.')->isa('string');
     }
 
     /**

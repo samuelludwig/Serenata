@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Indexing\IndexDatabase;
 
 /**
@@ -24,14 +22,6 @@ class NamespaceListCommand extends AbstractCommand
     public function __construct(IndexDatabase $indexDatabase)
     {
         $this->indexDatabase = $indexDatabase;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('file?', 'The file to filter the results by.')->isa('string');
     }
 
     /**

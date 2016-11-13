@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
 
 use PhpIntegrator\Parsing\PartialParser;
@@ -46,19 +44,6 @@ class DeduceTypesCommand extends AbstractCommand
         $this->typeDeducer = $typeDeducer;
         $this->partialParser = $partialParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('file:', 'The file to examine.')->isa('string');
-        $optionCollection->add('stdin?', 'If set, file contents will not be read from disk but the contents from STDIN will be used instead.');
-        $optionCollection->add('charoffset?', 'If set, the input offset will be treated as a character offset instead of a byte offset.');
-        $optionCollection->add('part+', 'A part of the expression as string. Specify this as many times as you have parts.')->isa('string');
-        $optionCollection->add('offset:', 'The character byte offset into the code to use for the determination.')->isa('number');
-        $optionCollection->add('ignore-last-element?', 'If set, when determining the parts automatically, the last part of the expression will be ignored (i.e. because it may not be complete).');
     }
 
     /**

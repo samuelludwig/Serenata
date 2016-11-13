@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
@@ -35,17 +33,6 @@ class LocalizeTypeCommand extends AbstractCommand
     {
         $this->indexDatabase = $indexDatabase;
         $this->fileTypeLocalizerFactory = $fileTypeLocalizerFactory;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('kind?', 'What you want to resolve. Either "classlike" (the default), "function" or "constant".')->isa('string');
-        $optionCollection->add('line:', 'The line on which the type can be found, line 1 being the first line.')->isa('number');
-        $optionCollection->add('type:', 'The name of the type to resolve.')->isa('string');
-        $optionCollection->add('file:', 'The file in which the type needs to be resolved..')->isa('string');
     }
 
     /**

@@ -4,8 +4,6 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use GetOptionKit\OptionCollection;
-
 use PhpIntegrator\Analysis\VariableScanner;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -43,17 +41,6 @@ class AvailableVariablesCommand extends AbstractCommand
         $this->variableScanner = $variableScanner;
         $this->parser = $parser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function attachOptions(OptionCollection $optionCollection)
-    {
-        $optionCollection->add('file?', 'The file to examine.')->isa('string');
-        $optionCollection->add('stdin?', 'If set, file contents will not be read from disk but the contents from STDIN will be used instead.');
-        $optionCollection->add('charoffset?', 'If set, the input offset will be treated as a character offset instead of a byte offset.');
-        $optionCollection->add('offset:', 'The character byte offset into the code to use for the determination.')->isa('number');
     }
 
     /**
