@@ -4,8 +4,6 @@ namespace PhpIntegrator\Test;
 
 use ReflectionClass;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-
 use PhpIntegrator\UserInterface\CliApplication;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,14 +20,6 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
     static $testContainerBuiltinStructuralElements;
 
     /**
-     * @return IndexDatabase
-     */
-    protected function getDatabase()
-    {
-        return new IndexDatabase(':memory:');
-    }
-
-    /**
      * @return ContainerBuilder
      */
     protected function createTestContainer()
@@ -37,18 +27,16 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
         $app = new CliApplication();
 
         $refClass = new ReflectionClass(CliApplication::class);
-        $refMethod = $refClass->getMethod('getContainer');
 
+        $refMethod = $refClass->getMethod('createContainer');
         $refMethod->setAccessible(true);
 
         $container = $refMethod->invoke($app);
 
         // Replace some container items for testing purposes.
-        $container->set('indexDatabase', $this->getDatabase());
         $container->setAlias('parser', 'parser.phpParser');
-
-        $container
-            ->set('cache', new \Doctrine\Common\Cache\VoidCache());
+        $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
+        $container->get('indexDatabase')->setDatabasePath(':memory:');
 
         $success = $container->get('initializeCommand')->initialize(false);
 

@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Indexing;
 
+use UnexpectedValueException;
+
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
@@ -32,14 +34,6 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      * @var string
      */
     protected $databasePath;
-
-    /**
-     * @param string $databasePath
-     */
-    public function __construct($databasePath)
-    {
-        $this->databasePath = $databasePath;
-    }
 
     /**
      * Retrieves hte index database.
@@ -88,6 +82,10 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      */
     protected function createConnection()
     {
+        if (!$this->databasePath) {
+            throw new UnexpectedValueException('No database path configured!');
+        }
+
         return DriverManager::getConnection([
             'driver' => 'pdo_sqlite',
             'path'   => $this->databasePath

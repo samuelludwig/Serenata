@@ -217,8 +217,7 @@ abstract class AbstractApplication
             ->setArguments([new Reference('docblockAnalyzer'), new Reference('typeAnalyzer')]);
 
         $container
-            ->register('indexDatabase', IndexDatabase::class)
-            ->setArguments([new Expression("service('application').getDatabaseFile()")]);
+            ->register('indexDatabase', IndexDatabase::class);
 
         $container
             ->register('classlikeInfoBuilderProviderCachingProxy', ClasslikeInfoBuilderProviderCachingProxy::class)
@@ -485,25 +484,17 @@ abstract class AbstractApplication
     abstract public function getProjectName();
 
     /**
-     * @return string
-     */
-    public function getDatabaseFile()
-    {
-        return $this->databaseFile;
-    }
-
-    /**
      * @param string $databaseFile
      *
      * @return static
      */
     public function setDatabaseFile($databaseFile)
     {
-        if ($this->databaseFile !== $databaseFile) {
-            $this->getContainer()->get('indexDatabase')->setDatabasePath($databaseFile);
-        }
+        $indexDatabase = $this->getContainer()->get('indexDatabase');
 
-        $this->databaseFile = $databaseFile;
+        if ($indexDatabase->getDatabasePath() !== $databaseFile) {
+            $indexDatabase->setDatabasePath($databaseFile);
+        }
 
         return $this;
     }

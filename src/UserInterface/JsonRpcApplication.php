@@ -27,11 +27,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     protected $projectName;
 
     /**
-     * @var string
-     */
-    protected $databaseFile;
-
-    /**
      * A stream that is used to read and write STDIN data from.
      *
      * As there is no actual STDIN when working with sockets, this temporary stream is used to transparently replace
