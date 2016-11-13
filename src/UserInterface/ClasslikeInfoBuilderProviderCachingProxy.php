@@ -141,19 +141,17 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
      */
     protected function proxyCall($method, array $arguments)
     {
-        return $this->synchronized(function () use ($method, $arguments) {
-            $cacheId = $this->getCacheId($method, $arguments);
+        $cacheId = $this->getCacheId($method, $arguments);
 
-            if ($this->cache->contains($cacheId)) {
-                return $this->cache->fetch($cacheId);
-            }
+        if ($this->cache->contains($cacheId)) {
+            return $this->cache->fetch($cacheId);
+        }
 
-            $data = call_user_func_array([$this->provider, $method], $arguments);
+        $data = call_user_func_array([$this->provider, $method], $arguments);
 
-            $this->cache->save($cacheId, $data);
+        $this->cache->save($cacheId, $data);
 
-            return $data;
-        });
+        return $data;
     }
 
     /**
@@ -171,12 +169,10 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
      */
     protected function rememberCacheIdForFqcn($fqcn, $cacheId)
     {
-        $this->synchronized(function () use ($fqcn, $cacheId) {
-            $cacheMap = $this->getCacheMap();
-            $cacheMap[$fqcn][$cacheId] = true;
+        $cacheMap = $this->getCacheMap();
+        $cacheMap[$fqcn][$cacheId] = true;
 
-            $this->saveCacheMap($cacheMap);
-        });
+        $this->saveCacheMap($cacheMap);
     }
 
     /**
@@ -184,19 +180,17 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
      */
     public function clearCacheFor($fqcn)
     {
-        $this->synchronized(function () use ($fqcn) {
-            $cacheMap = $this->getCacheMap();
+        $cacheMap = $this->getCacheMap();
 
-            if (isset($cacheMap[$fqcn])) {
-                foreach ($cacheMap[$fqcn] as $cacheId => $ignoredValue) {
-                    $this->cache->delete($cacheId);
-                }
-
-                unset($cacheMap[$fqcn]);
-
-                $this->saveCacheMap($cacheMap);
+        if (isset($cacheMap[$fqcn])) {
+            foreach ($cacheMap[$fqcn] as $cacheId => $ignoredValue) {
+                $this->cache->delete($cacheId);
             }
-        });
+
+            unset($cacheMap[$fqcn]);
+
+            $this->saveCacheMap($cacheMap);
+        }
     }
 
     /**
@@ -224,61 +218,6 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
 
         // Silenced for the same reason as above.
         @$this->cache->save($cacheIdsCacheId, $cacheMap);
-    }
-
-    /**
-     * Executes the specified callback in a "synchronized" way. A shared lock file is created to ensure that all
-     * processes executing the code must first wait for the (exclusive) lock.
-     *
-     * The cache map used in this class is used to maintain a list of which FQCN's relate to which cache ID's. This is
-     * necessary because the Doctrine cache has no notion of cache tags or tagging, so there is no way to delete all
-     * cache files associated with a certain FQCN. To solve this problem, a shared cache map is maintained (which is
-     * also stored in the cache) that keeps track of this list and replaces this missing tagging functionality.
-     *
-     * If multiple processes are active, they are all accessing the same shared cache map (some may be trying to read
-     * it, others may be trying to update it). For this reason, locking is used to ensure each process patiently awaits
-     * their turn.
-     *
-     * Windows seems to have an additional amount of trouble with this, see also
-     * https://github.com/Gert-dev/php-integrator-base/issues/185
-     *
-     * @param callable $callback
-     *
-     * @return mixed Whatever the callback returns.
-     */
-    protected function synchronized($callback)
-    {
-        $lockFileName = $this->getLockFileName();
-
-        $this->ensurePathExists(dirname($lockFileName));
-
-        $handle = fopen($lockFileName, "w");
-        flock($handle, LOCK_EX);
-
-        $result = $callback();
-
-        flock($handle, LOCK_UN);
-        fclose($handle);
-
-        return $result;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getLockFileName()
-    {
-        return sys_get_temp_dir() . '/php-integrator-base/accessing_shared_cache.lock';
-    }
-
-    /**
-     * @param string $path
-     */
-    protected function ensurePathExists($path)
-    {
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
     }
 
     /**
