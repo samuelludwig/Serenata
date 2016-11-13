@@ -483,7 +483,7 @@ abstract class AbstractApplication
     }
 
     /**
-     * @param string $database
+     * @param string $databaseFile
      *
      * @return static
      */
