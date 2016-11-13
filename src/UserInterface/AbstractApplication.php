@@ -331,8 +331,6 @@ abstract class AbstractApplication
             ]);
 
         $this->registerCommandServices($container);
-
-        $this->instantiateRequiredServices($container);
     }
 
     /**
@@ -439,19 +437,6 @@ abstract class AbstractApplication
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)
             ->setArguments([new Reference('indexDatabase')]);
-    }
-
-    /**
-     * Instantiates services that are required for the application to function correctly.
-     *
-     * Usually we prefer to rely on lazy loading of services, but some services aren't explicitly required by any other
-     * service, but do provide necessary interaction (i.e. they are required by the application itself).
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function instantiateRequiredServices(ContainerBuilder $container)
-    {
-        $container->get('cacheClearingEventMediator');
     }
 
     /**

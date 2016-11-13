@@ -14,6 +14,8 @@ use PhpIntegrator\Sockets\RequestParsingException;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
@@ -152,6 +154,31 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         }
 
         $this->getContainer()->get('indexer')->setProgressStreamingCallback($progressStreamingCallback);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function createContainer()
+    {
+        $value = parent::createContainer();
+
+        $this->instantiateRequiredServices($value);
+
+        return $value;
+    }
+
+    /**
+     * Instantiates services that are required for the application to function correctly.
+     *
+     * Usually we prefer to rely on lazy loading of services, but some services aren't explicitly required by any other
+     * service, but do provide necessary interaction (i.e. they are required by the application itself).
+     *
+     * @param ContainerBuilder $container
+     */
+    protected function instantiateRequiredServices(ContainerBuilder $container)
+    {
+        $container->get('cacheClearingEventMediator');
     }
 
     /**
