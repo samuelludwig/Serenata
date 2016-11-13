@@ -4,6 +4,8 @@
   * Indexing should be slightly faster.
   * Everything should feel a bit more responsive.
   * Semantic linting should be significantly faster, especially for large files.
+* A socket server implementation is now available that will allow communication
+
 * The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them..
 * A new command, `NamespaceList`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
 * When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.

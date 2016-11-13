@@ -4,7 +4,7 @@ namespace PhpIntegrator\Test;
 
 use ReflectionClass;
 
-use PhpIntegrator\UserInterface\CliApplication;
+use PhpIntegrator\UserInterface\JsonRpcApplication;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -26,9 +26,9 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
      */
     protected function createTestContainer($indexBuiltinItems = false)
     {
-        $app = new CliApplication();
+        $app = new JsonRpcApplication();
 
-        $refClass = new ReflectionClass(CliApplication::class);
+        $refClass = new ReflectionClass(JsonRpcApplication::class);
 
         $refMethod = $refClass->getMethod('createContainer');
         $refMethod->setAccessible(true);
