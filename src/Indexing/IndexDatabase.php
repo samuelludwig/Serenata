@@ -138,7 +138,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
         if ($version < self::SCHEMA_VERSION) {
             $connection->close();
 
-            throw new IncorrectDatabaseVersionException('The database is of an incorrect version!');
+            throw new IncorrectDatabaseVersionException('The database is of an incorrect version (' . $version . ')!');
         }
     }
 
