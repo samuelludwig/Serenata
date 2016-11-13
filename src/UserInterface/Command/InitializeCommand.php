@@ -40,6 +40,7 @@ class InitializeCommand extends AbstractCommand
      * @param IndexDatabase  $indexDatabase
      * @param BuiltinIndexer $builtinIndexer
      * @param ProjectIndexer $projectIndexer
+     * @param Cache          $cache
      */
     public function __construct(
         IndexDatabase $indexDatabase,
