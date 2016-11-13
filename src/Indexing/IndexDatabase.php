@@ -29,6 +29,11 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     protected $connection;
 
     /**
+     * @var string
+     */
+    protected $databasePath;
+
+    /**
      * @param string $databasePath
      */
     public function __construct($databasePath)
