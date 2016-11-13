@@ -490,9 +490,7 @@ abstract class AbstractApplication
     public function setDatabaseFile($databaseFile)
     {
         if ($this->databaseFile !== $databaseFile) {
-            $indexDatabase = $this->getContainer()->get('indexDatabase');
-
-            $indexDatabase->setDatabasePath($databaseFile);
+            $this->getContainer()->get('indexDatabase')->setDatabasePath($databaseFile);
         }
 
         $this->databaseFile = $databaseFile;
