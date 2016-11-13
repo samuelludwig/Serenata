@@ -8,14 +8,7 @@ use PhpIntegrator\UserInterface\JsonRpcApplication;
 
 require 'Bootstrap.php';
 
-$options = getopt('p:', [
-    'server'
-]);
-
-if (!isset($options['server'])) {
-    echo (new \PhpIntegrator\UserInterface\CliApplication())->handleCommandLineArguments($argv);
-    return;
-}
+$options = getopt('p:');
 
 if (!isset($options['p'])) {
     die('A port must be passed in order to run in socket server mode');
