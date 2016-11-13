@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\UserInterface;
 
-use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\ArrayCache;
 
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
@@ -53,8 +53,6 @@ use PhpParser\ParserFactory;
 
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use Symfony\Component\ExpressionLanguage\Expression;
 
 /**
  * Main application class.
@@ -133,8 +131,7 @@ abstract class AbstractApplication
         $container->setAlias('parser', 'parser.cachingParserProxy');
 
         $container
-            ->register('cache', FilesystemCache::class)
-            ->setArguments([new Expression("service('application').getCacheDirectory()")]);
+            ->register('cache', ArrayCache::class);
 
         $container
             ->register('variableScanner', VariableScanner::class);
@@ -437,25 +434,6 @@ abstract class AbstractApplication
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)
             ->setArguments([new Reference('indexDatabase')]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getCacheDirectory()
-    {
-        $cachePath = sys_get_temp_dir() .
-            '/php-integrator-base/' .
-            get_current_user() . '/' .
-            $this->getProjectName() . '/' .
-            IndexDatabase::SCHEMA_VERSION .
-            '/';
-
-        if (!file_exists($cachePath)) {
-            mkdir($cachePath, 0777, true);
-        }
-
-        return $cachePath;
     }
 
     /**
