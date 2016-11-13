@@ -1,42 +1,48 @@
 ## 2.0.0
-### Features and improvements
+### Major changes
 * A great deal of refactoring has occurred, which paved the way for performance improvements in several areas, such as type deduction.
   * Indexing should be slightly faster.
   * Everything should feel a bit more responsive.
   * Semantic linting should be significantly faster, especially for large files.
-* A socket server implementation is now available that will allow communication
+* Passing command line arguments is no longer supported and has been replaced with a socket server implementation. This offers various benefits:
+  * Bootstrapping is performed only once, allowing for responses from the server with lower latency.
+  * Only a single process is managing a single database. This should solve the problems that some users had with the database suddenly being locked or unwritable.
+  * Only a single process is spawned. No more spawning concurrent processes to perform different tasks, which might heavily burden the CPU on a user's system as well as has a lot of overhead.
+    * Sockets will also naturally queue requests, so they are handled one by one as soon as the server is ready.
+  * Caching is no longer performed via file caching, but entirely in memory. This means users that don't want to, don't know how to, or can't set up a tmpfs or ramdisk will now also benefit from the better performance of memory caching.
+    * Additionally this completely obsoletes the need for wonky file locks and concurrent cache file access.
 
-* The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them..
-* A new command, `NamespaceList`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
-* When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.
-* `ResolveType` and `LocalizeType` now support a `kind` parameter to determine the kind of the type (or rather: name) that needs to be resolved.
+### Commands
+* A new command, `namespaceList`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
+* `resolveType` and `localizeType` now support a `kind` parameter to determine the kind of the type (or rather: name) that needs to be resolved.
   * This is necessary to distinguish between classlike, constant and function name resolving based on use statements. (Yes, duplicate use statements may exist in PHP, as long as their `kind` is different).
 * `implementation` has had a necessary backwards compatibility break because the data returned must be an array instead of a single value. The reasoning behind this is that a method can in fact implement multiple interface methods simultaneously and not just one.
-* The truncate command was merged into the initialize command and has thus vanished.
-  * To reinitialize a project, simply send the initialize command a second time.
+* The `truncate` command was merged into the `initialize` command. To reinitialize a project, simply send the initialize command a second time.
 
-### Bugs fixed
-* Unqualified global constants will now correctly be resolved.
-* Unqualified global functions will now correctly be resolved.
-* Documentation for built-in functions was escaping underscores with a slash.
-* Built-in interface methods had `isAbstract` set to `true` instead of `false`.
-* Semantic linting was incorrectly processing unqualified global function names.
-* Semantic linting was incorrectly processing unqualified global constant names.
-* The status bar was not showing progress when a project index happened through a repository status change.
-* In single line docblocks, the terminator `*/` was not being ignored (and taken up in the last tag's data).
-* Use statements for constants (i.e. `use const`) will now be properly analyzed when checking for unused use statements.
-* Use statements for functions (i.e. `use function`) will now be properly analyzed when checking for unused use statements.
+### Global functions and constants
+* Unqualified global constants and functions will now correctly be resolved.
+* Semantic linting was incorrectly processing unqualified global function and constant names.
+* Use statements for constants (i.e. `use const`) and functions (i.e. `use function`) will now be properly analyzed when checking for unused use statements.
+
+### Docblocks and documentation
+* In documentation for built-in functions, underscores in the description were incorrectly escaped with a slash.
+* In single line docblocks, the terminator `*/` was not being ignored (and taken up in the last tag in the docblock).
 * Class annotations were sometimes being picked up as being part of the description of other tags (such as `@var`, `@param`, ...).
-* Use statements were incorrectly reported as unused when they were being used for extension or implementation by anonymous classes.
-* Editing a file that did not meet the allowed extensions specified in the project settings still caused it to be added to the index.
-* Assigning a global constant to something caused the type of that something to become the name of the constant as class name instead.
+* Variadic parameters with type hints were incorrectly matched with their docblock types and, by consequence, incorrectly reported as having a mismatching type.
+
+### Other
+* Attempting to index a file that did not meet the passed allowed extensions still caused it to be added to the index.
+* Assigning a global constant to something caused the type of that left operand to become the name of the constant instead.
+* Use statements were incorrectly reported as unused when they were being used as extension or implementation for anonymous classes.
 * PHP setups with the `cli.pager` option set will now no longer duplicate JSON output. (thanks to [molovo](https://github.com/molovo))
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
-* Variadic parameters with type hints were incorrectly matched with their docblock types and, by consequence, incorrectly reported as having a mismatching type.
+* The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them.
 * Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
-* Caching will now add an additional folder with the name of the active user in it. This solves a problem where instances from multiple users on the same system would try to use the same cache entries.
+* When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.
 * Parent members of built-in classlikes were being indexed twice: once for the parent and once for the child, which was resulting in incorrect inheritance resolution results, unnecessary data storage and a (minor) performance hit.
 * Built-in interfaces no longer have `isAbstract` set to true. They _are_ abstract in a certain sense, but this property is meant to indicate if a classlike has been defined using the abstract keyword. It was also not consistent with the behavior for non-built-in interfaces.
+  * Built-in interface methods also had `isAbstract` set to `true` instead of `false`.
+
 * The indexer was assigning an incorrect type to variadic parameters. You can now use elements of type hinted variadic parameters as expected in a foreach:
 
 ```php
