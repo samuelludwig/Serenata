@@ -20,8 +20,7 @@
         "nikic/php-parser": "~2.1.0",
         "doctrine/dbal": "~2.5",
         "symfony/dependency-injection": "~2.8.0",
-        "react/socket": "0.4.*",
-        "symfony/expression-language": "~2.8.0"
+        "react/socket": "0.4.*"
     },
 
     "require-dev": {
