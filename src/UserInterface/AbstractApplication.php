@@ -79,12 +79,22 @@ abstract class AbstractApplication
     protected function getContainer()
     {
         if (!$this->container) {
-            $this->container = new ContainerBuilder();
-
-            $this->registerServices($this->container);
+            $this->container = $this->createContainer();
         }
 
         return $this->container;
+    }
+
+    /**
+     * @return ContainerBuilder
+     */
+    protected function createContainer()
+    {
+        $container = new ContainerBuilder();
+
+        $this->registerServices($container);
+
+        return $container;
     }
 
     /**
