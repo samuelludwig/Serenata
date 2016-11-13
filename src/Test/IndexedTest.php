@@ -20,9 +20,11 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
     static $testContainerBuiltinStructuralElements;
 
     /**
+     * @param bool $includeBuiltinItems
+     *
      * @return ContainerBuilder
      */
-    protected function createTestContainer()
+    protected function createTestContainer($includeBuiltinItems = false)
     {
         $app = new CliApplication();
 
@@ -38,7 +40,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
         $container->get('indexDatabase')->setDatabasePath(':memory:');
 
-        $success = $container->get('initializeCommand')->initialize(false);
+        $success = $container->get('initializeCommand')->initialize($includeBuiltinItems);
 
         $this->assertTrue($success);
 
@@ -73,8 +75,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
     {
         // Indexing builtin items is a fairy large performance hit to run every test, so keep the property static.
         if (!self::$testContainerBuiltinStructuralElements) {
-            self::$testContainerBuiltinStructuralElements = $this->createTestContainer();
-            self::$testContainerBuiltinStructuralElements->get('builtinIndexer')->index();
+            self::$testContainerBuiltinStructuralElements = $this->createTestContainer(true);
         }
 
         return self::$testContainerBuiltinStructuralElements;
