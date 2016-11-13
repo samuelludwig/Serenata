@@ -26,7 +26,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
      */
     protected function getDatabase()
     {
-        return new IndexDatabase(':memory:', 1);
+        return new IndexDatabase(':memory:');
     }
 
     /**
