@@ -1,16 +1,17 @@
-## 1.3.0
+## 2.0.0
 ### Features and improvements
 * A great deal of refactoring has occurred, which paved the way for performance improvements in several areas, such as type deduction.
   * Indexing should be slightly faster.
   * Everything should feel a bit more responsive.
   * Semantic linting should be significantly faster, especially for large files.
 * The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them..
-* A new command, `--namespace-list`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
+* A new command, `NamespaceList`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
 * When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.
 * `ResolveType` and `LocalizeType` now support a `kind` parameter to determine the kind of the type (or rather: name) that needs to be resolved.
   * This is necessary to distinguish between classlike, constant and function name resolving based on use statements. (Yes, duplicate use statements may exist in PHP, as long as their `kind` is different).
 * `implementation` has had a necessary backwards compatibility break because the data returned must be an array instead of a single value. The reasoning behind this is that a method can in fact implement multiple interface methods simultaneously and not just one.
-* The truncate command was merged into the initialize command.
+* The truncate command was merged into the initialize command and has thus vanished.
+  * To reinitialize a project, simply send the initialize command a second time.
 
 ### Bugs fixed
 * Unqualified global constants will now correctly be resolved.
