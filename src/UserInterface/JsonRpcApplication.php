@@ -177,7 +177,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
                 'progress'  => $progress
             ]);
 
-            $jsonRpcResponseSender->send($jsonRpcResponse);
+            // $jsonRpcResponseSender->send($jsonRpcResponse);
         };
     }
 
