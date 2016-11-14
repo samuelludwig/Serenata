@@ -166,6 +166,13 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     {
         $responseContent = json_encode($response);
 
+        if (empty($responseContent)) {
+            trigger_error(
+                'Empty JSON body encountered after encoding, JSON reports "' . json_last_error_msg() . '"',
+                E_USER_WARNING
+            );
+        }
+
         $this->writeRawResponse($responseContent);
     }
 
