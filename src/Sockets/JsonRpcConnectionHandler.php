@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Sockets;
 
+use UnexpectedValueException;
+
 use React\Socket\Connection;
 
 /**
@@ -133,10 +135,24 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             $this->request['bytesRead'] += $bytesRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
-                $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
-                $jsonRpcResponse = $this->getJsonRpcResponseForJsonRpcRequest($jsonRpcRequest);
+                $jsonRpcRequest = null;
 
-                $this->send($jsonRpcResponse);
+                try {
+                    $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
+                } catch (UnexpectedValueException $e) {
+                    $jsonRpcRequest = null;
+                }
+
+                if ($jsonRpcRequest !== null) {
+                    $jsonRpcResponse = $this->getJsonRpcResponseForJsonRpcRequest($jsonRpcRequest);
+
+                    $this->send($jsonRpcResponse);
+                } else {
+                    trigger_error(
+                        'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
+                        E_USER_WARNING
+                    );
+                }
 
                 $this->resetRequestState();
             }

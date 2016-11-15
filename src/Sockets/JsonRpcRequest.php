@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Sockets;
 
 use JsonSerializable;
+use UnexpectedValueException;
 
 /**
  * A request in JSON-RPC 2.0 format.
@@ -100,11 +101,17 @@ class JsonRpcRequest implements JsonSerializable
     /**
      * @param string $json
      *
+     * @throws UnexpectedValueException
+     *
      * @return static
      */
     public static function createFromJson($json)
     {
         $data = json_decode($json, true);
+
+        if (!is_array($data)) {
+            throw new UnexpectedValueException('The specified JSON did not evaluate to an array');
+        }
 
         return static::createFromArray($data);
     }
