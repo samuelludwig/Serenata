@@ -248,7 +248,8 @@ abstract class AbstractApplication
             ->setArguments([[
                 new Reference('classlikeExistanceChecker'),
                 new Reference('globalFunctionExistanceChecker'),
-                new Reference('globalConstantExistanceChecker')
+                new Reference('globalConstantExistanceChecker'),
+                new Reference('fileTypeResolverFactory.cachingDecorator')
             ]]);
 
         $container
