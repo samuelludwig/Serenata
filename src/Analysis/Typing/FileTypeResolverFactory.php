@@ -7,7 +7,7 @@ use UnexpectedValueException;
 /**
  * Factory that creates instances of {@see FileTypeResolver}.
  */
-class FileTypeResolverFactory
+class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
 {
     /**
      * @var TypeResolver
@@ -32,11 +32,7 @@ class FileTypeResolverFactory
     }
 
     /**
-     * @param string $filePath
-     *
-     * @throws UnexpectedValueException if no namespaces exist for a file.
-     *
-     * @return FileTypeResolver
+     * @inheritDoc
      */
     public function create($filePath)
     {
