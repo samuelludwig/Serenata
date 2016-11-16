@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\Typing;
 use UnexpectedValueException;
 
 /**
- * Factory that creates instances of {@see FileTypeResolver}.
+ * Interface for factories that creates instances of {@see FileTypeResolver}.
  */
 interface FileTypeResolverFactoryInterface
 {
