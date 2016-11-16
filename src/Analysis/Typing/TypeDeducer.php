@@ -11,8 +11,6 @@ use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\TypeResolver;
-use PhpIntegrator\Analysis\Typing\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
 
 use PhpIntegrator\Analysis\Visiting\TypeQueryingVisitor;
 use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
@@ -249,7 +247,7 @@ class TypeDeducer
         } elseif (preg_match("/({$classRegexPart})/", $firstElement, $matches) === 1) {
             $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
-            $fqcn = $this->getTypeResolverForFile($file)->resolve($matches[0], $line);
+            $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($matches[0], $line);
 
             $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
 
@@ -592,7 +590,7 @@ class TypeDeducer
                     $variableTypeInfo['bestTypeOverrideMatchLine'] :
                     $line;
 
-                $type = $this->getTypeResolverForFile($file)->resolve($type, $typeLine);
+                $type = $this->fileTypeResolverFactory->create($file)->resolve($type, $typeLine);
             }
 
             if ($isArraySyntaxTypeHint) {
@@ -749,19 +747,5 @@ class TypeDeducer
         }
 
         return $this->fileClassListMap[$file];
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return FileTypeResolver
-     */
-    protected function getTypeResolverForFile($file)
-    {
-        if (!isset($this->fileTypeResolverMap[$file])) {
-            $this->fileTypeResolverMap[$file] = $this->fileTypeResolverFactory->create($file);
-        }
-
-        return $this->fileTypeResolverMap[$file];
     }
 }

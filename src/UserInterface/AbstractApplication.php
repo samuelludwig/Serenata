@@ -31,6 +31,7 @@ use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
+use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryCachingDecorator;
 
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;
@@ -179,8 +180,15 @@ abstract class AbstractApplication
             ->register('methodConverter', MethodConverter::class);
 
         $container
-            ->register('fileTypeResolverFactory', FileTypeResolverFactory::class)
+            ->register('fileTypeResolverFactory.instance', FileTypeResolverFactory::class)
             ->setArguments([new Reference('typeResolver'), new Reference('indexDatabase')]);
+
+        $container
+            ->register('fileTypeResolverFactory.cachingDecorator', FileTypeResolverFactoryCachingDecorator::class)
+            ->setArguments([new Reference('fileTypeResolverFactory.instance')]);
+
+        $container
+            ->setAlias('fileTypeResolverFactory', 'fileTypeResolverFactory.cachingDecorator');
 
         $container
             ->register('projectTypeResolverFactory', ProjectTypeResolverFactory::class)
