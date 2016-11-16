@@ -31,6 +31,7 @@ use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
+use PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryCachingDecorator;
 
 use PhpIntegrator\Indexing\Indexer;
@@ -180,6 +181,16 @@ abstract class AbstractApplication
             ->register('methodConverter', MethodConverter::class);
 
         $container
+            ->setAlias('fileClassListProvider.instance', 'classListCommand');
+
+        $container
+            ->register('fileClassListProvider.cachingDecorator', FileClassListProviderCachingDecorator::class)
+            ->setArguments([new Reference('fileClassListProvider.instance')]);
+
+        $container
+            ->setAlias('fileClassListProvider', 'fileClassListProvider.cachingDecorator');
+
+        $container
             ->register('fileTypeResolverFactory.instance', FileTypeResolverFactory::class)
             ->setArguments([new Reference('typeResolver'), new Reference('indexDatabase')]);
 
@@ -249,7 +260,8 @@ abstract class AbstractApplication
                 new Reference('classlikeExistanceChecker'),
                 new Reference('globalFunctionExistanceChecker'),
                 new Reference('globalConstantExistanceChecker'),
-                new Reference('fileTypeResolverFactory.cachingDecorator')
+                new Reference('fileTypeResolverFactory.cachingDecorator'),
+                new Reference('fileClassListProvider.cachingDecorator')
             ]]);
 
         $container
@@ -290,7 +302,7 @@ abstract class AbstractApplication
             ->register('typeDeducer', TypeDeducer::class)
             ->setArguments([
                 new Reference('parser'),
-                new Reference('classListCommand'),
+                new Reference('fileClassListProvider'),
                 new Reference('docblockParser'),
                 new Reference('partialParser'),
                 new Reference('typeAnalyzer'),

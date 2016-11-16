@@ -722,7 +722,7 @@ class TypeDeducer
      */
     protected function getCurrentClassAtLine($file, $source, $line)
     {
-        $classes = $this->getClassListForFile($file);
+        $classes = $this->fileClassListProvider->getClassListForFile($file);
 
         foreach ($classes as $fqcn => $class) {
             if ($line >= $class['startLine'] && $line <= $class['endLine']) {
@@ -731,19 +731,5 @@ class TypeDeducer
         }
 
         return null;
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return array
-     */
-    protected function getClassListForFile($file)
-    {
-        if (!isset($this->fileClassListMap[$file])) {
-            $this->fileClassListMap[$file] = $this->fileClassListProvider->getClassListForFile($file);
-        }
-
-        return $this->fileClassListMap[$file];
     }
 }
