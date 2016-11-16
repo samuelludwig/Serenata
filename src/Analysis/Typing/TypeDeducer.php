@@ -20,8 +20,6 @@ use PhpIntegrator\Indexing\IndexDatabase;
 use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\DocblockParser;
 
-use PhpIntegrator\UserInterface\Command\ClassListCommand;
-
 use PhpIntegrator\Utility\NodeHelpers;
 use PhpIntegrator\Utility\SourceCodeHelpers;
 
@@ -41,9 +39,9 @@ class TypeDeducer
     protected $parser;
 
     /**
-     * @var ClassListCommand
+     * @var FileClassListProviderInterface
      */
-    protected $classListCommand;
+    protected $fileClassListProvider;
 
     /**
      * @var DocblockParser
@@ -111,7 +109,7 @@ class TypeDeducer
 
     /**
      * @param Parser                           $parser
-     * @param ClassListCommand                 $classListCommand
+     * @param FileClassListProviderInterface   $fileClassListProvider
      * @param DocblockParser                   $docblockParser
      * @param PartialParser                    $partialParser
      * @param TypeAnalyzer                     $typeAnalyzer
@@ -124,7 +122,7 @@ class TypeDeducer
      */
     public function __construct(
         Parser $parser,
-        ClassListCommand $classListCommand,
+        FileClassListProviderInterface $fileClassListProvider,
         DocblockParser $docblockParser,
         PartialParser $partialParser,
         TypeAnalyzer $typeAnalyzer,
@@ -136,7 +134,7 @@ class TypeDeducer
         ConstantConverter $constantConverter
     ) {
         $this->parser = $parser;
-        $this->classListCommand = $classListCommand;
+        $this->fileClassListProvider = $fileClassListProvider;
         $this->docblockParser = $docblockParser;
         $this->partialParser = $partialParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -743,7 +741,7 @@ class TypeDeducer
     protected function getClassListForFile($file)
     {
         if (!isset($this->fileClassListMap[$file])) {
-            $this->fileClassListMap[$file] = $this->classListCommand->getClassList($file);
+            $this->fileClassListMap[$file] = $this->fileClassListProvider->getClassListForFile($file);
         }
 
         return $this->fileClassListMap[$file];

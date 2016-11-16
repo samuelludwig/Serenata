@@ -19,6 +19,7 @@ use PhpIntegrator\Analysis\Relations\InheritanceResolver;
 use PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 
@@ -27,7 +28,7 @@ use PhpIntegrator\UserInterface\ClasslikeInfoBuilderWhiteHolingProxyProvider;
 /**
  * Command that shows a list of available classes, interfaces and traits.
  */
-class ClassListCommand extends AbstractCommand
+class ClassListCommand extends AbstractCommand implements FileClassListProviderInterface
 {
     /**
      * @var ConstantConverter
@@ -181,5 +182,13 @@ class ClassListCommand extends AbstractCommand
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getClassListForFile($filePath)
+    {
+        return $this->getClassList($filePath);
     }
 }
