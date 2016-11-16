@@ -15,17 +15,17 @@ class ProjectTypeResolverFactoryFacade
     protected $projectTypeResolverFactory;
 
     /**
-     * @var FileTypeResolverFactory
+     * @var FileTypeResolverFactoryInterface
      */
     protected $fileTypeResolverFactory;
 
     /**
-     * @param ProjectTypeResolverFactory $projectTypeResolverFactory
-     * @param FileTypeResolverFactory    $fileTypeResolverFactory
+     * @param ProjectTypeResolverFactory       $projectTypeResolverFactory
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      */
     public function __construct(
         ProjectTypeResolverFactory $projectTypeResolverFactory,
-        FileTypeResolverFactory $fileTypeResolverFactory
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory
     ) {
         $this->projectTypeResolverFactory = $projectTypeResolverFactory;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;

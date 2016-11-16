@@ -13,7 +13,7 @@ use PhpIntegrator\Analysis\GlobalConstantExistanceChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
+use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -40,7 +40,7 @@ class SemanticLintCommand extends AbstractCommand
     protected $parser;
 
     /**
-     * @var FileTypeResolverFactory
+     * @var FileTypeResolverFactoryInterface
      */
     protected $fileTypeResolverFactory;
 
@@ -85,22 +85,22 @@ class SemanticLintCommand extends AbstractCommand
     protected $globalFunctionExistanceChecker;
 
     /**
-     * @param SourceCodeStreamReader         $sourceCodeStreamReader
-     * @param Parser                         $parser
-     * @param FileTypeResolverFactory        $fileTypeResolverFactory
-     * @param TypeDeducer                    $typeDeducer
-     * @param ClasslikeInfoBuilder           $classlikeInfoBuilder
-     * @param DocblockParser                 $docblockParser
-     * @param TypeAnalyzer                   $typeAnalyzer
-     * @param DocblockAnalyzer               $docblockAnalyzer
-     * @param ClasslikeExistanceChecker      $classlikeExistanceChecker
-     * @param GlobalConstantExistanceChecker $globalConstantExistanceChecker
-     * @param GlobalFunctionExistanceChecker $globalFunctionExistanceChecker
+     * @param SourceCodeStreamReader           $sourceCodeStreamReader
+     * @param Parser                           $parser
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param TypeDeducer                      $typeDeducer
+     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
+     * @param DocblockParser                   $docblockParser
+     * @param TypeAnalyzer                     $typeAnalyzer
+     * @param DocblockAnalyzer                 $docblockAnalyzer
+     * @param ClasslikeExistanceChecker        $classlikeExistanceChecker
+     * @param GlobalConstantExistanceChecker   $globalConstantExistanceChecker
+     * @param GlobalFunctionExistanceChecker   $globalFunctionExistanceChecker
      */
     public function __construct(
         SourceCodeStreamReader $sourceCodeStreamReader,
         Parser $parser,
-        FileTypeResolverFactory $fileTypeResolverFactory,
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         TypeDeducer $typeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,

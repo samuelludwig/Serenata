@@ -68,7 +68,7 @@ class TypeDeducer
     protected $typeResolver;
 
     /**
-     * @var FileTypeResolverFactory
+     * @var FileTypeResolverFactoryInterface
      */
     protected $fileTypeResolverFactory;
 
@@ -112,17 +112,17 @@ class TypeDeducer
     protected $fileTypeResolverMap = [];
 
     /**
-     * @param Parser                  $parser
-     * @param ClassListCommand        $classListCommand
-     * @param DocblockParser          $docblockParser
-     * @param PartialParser           $partialParser
-     * @param TypeAnalyzer            $typeAnalyzer
-     * @param TypeResolver            $typeResolver
-     * @param FileTypeResolverFactory $fileTypeResolverFactory
-     * @param IndexDatabase           $indexDatabase
-     * @param ClasslikeInfoBuilder    $classlikeInfoBuilder
-     * @param FunctionConverter       $functionConverter
-     * @param ConstantConverter       $constantConverter
+     * @param Parser                           $parser
+     * @param ClassListCommand                 $classListCommand
+     * @param DocblockParser                   $docblockParser
+     * @param PartialParser                    $partialParser
+     * @param TypeAnalyzer                     $typeAnalyzer
+     * @param TypeResolver                     $typeResolver
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param IndexDatabase                    $indexDatabase
+     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
+     * @param FunctionConverter                $functionConverter
+     * @param ConstantConverter                $constantConverter
      */
     public function __construct(
         Parser $parser,
@@ -131,7 +131,7 @@ class TypeDeducer
         PartialParser $partialParser,
         TypeAnalyzer $typeAnalyzer,
         TypeResolver $typeResolver,
-        FileTypeResolverFactory $fileTypeResolverFactory,
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         IndexDatabase $indexDatabase,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         FunctionConverter $functionConverter,
