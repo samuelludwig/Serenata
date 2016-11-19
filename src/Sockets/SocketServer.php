@@ -18,7 +18,7 @@ class SocketServer extends Server
     protected $connectionMap;
 
     /**
-     * @var ConnectionHandlerFactory
+     * @var JsonRpcConnectionHandlerFactory
      */
     protected $connectionHandlerFactory;
 
