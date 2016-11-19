@@ -178,7 +178,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @inheritDoc
      */
-    public function send(JsonRpcResponse $response)
+    public function send(JsonRpcResponse $response, $force = false)
     {
         $responseContent = json_encode($response);
 
@@ -189,7 +189,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             );
         }
 
-        $this->writeRawResponse($responseContent);
+        $this->writeRawResponse($responseContent, $force);
     }
 
     /**
@@ -222,12 +222,20 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 
     /**
      * @param string $content
+     * @param bool   $force
      */
-    protected function writeRawResponse($content)
+    protected function writeRawResponse($content, $force = false)
     {
         $this->connection->write('Content-Length: ' . strlen($content) . self::HEADER_DELIMITER);
         $this->connection->write(self::HEADER_DELIMITER);
         $this->connection->write($content);
+
+        if ($force) {
+            // The data we write to the socket is internally buffered until the next event loop tick. If the caller
+            // is attempting to stream data (i.e. he is in a loop itself), the data will never be written until that
+            // loop exits. This way we can force the buffer to be drained now.
+            $this->connection->getBuffer()->handleWrite();
+        }
     }
 
     /**

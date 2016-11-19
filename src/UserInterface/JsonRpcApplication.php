@@ -273,7 +273,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
                 'progress'  => $progress
             ]);
 
-            // $jsonRpcResponseSender->send($jsonRpcResponse);
+            // We may well be sending data to the connection as needed, but during this process we never end up back in
+            // the main loop, thus the writes are never actually performed by the React event loop. For this reason
+            // we force the write.
+            $jsonRpcResponseSender->send($jsonRpcResponse, true);
         };
     }
 
