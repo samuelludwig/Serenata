@@ -9,6 +9,9 @@ use React\Socket\Connection;
 
 /**
  * Represents a socket server that handles communication with the core.
+ *
+ * This class simply requests a configured factory to create a handler for each new connection and does not handle any
+ * communication itself.
  */
 class SocketServer extends Server
 {
