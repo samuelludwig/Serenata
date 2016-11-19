@@ -60,10 +60,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
         $loop = \React\EventLoop\Factory::create();
-        $socket = new SocketServer($loop, $connectionHandlerFactory);
+        $requestHandlingSocketServer = new SocketServer($loop, $connectionHandlerFactory);
 
         try {
-            $socket->listen($options['p']);
+            $requestHandlingSocketServer->listen($options['p']);
         } catch (ConnectionException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($stdinStream);
