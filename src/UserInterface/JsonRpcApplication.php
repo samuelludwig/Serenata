@@ -2,18 +2,19 @@
 
 namespace PhpIntegrator\UserInterface;
 
+use React;
 use ArrayObject;
 
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
-use PhpIntegrator\Sockets\SocketServer;
 use PhpIntegrator\Sockets\JsonRpcError;
+use PhpIntegrator\Sockets\SocketServer;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\RequestParsingException;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\Socket\ConnectionException;
@@ -57,13 +58,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $this->stdinStream = fopen('php://memory', 'w+');
 
-        $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
-
-        $loop = \React\EventLoop\Factory::create();
-        $requestHandlingSocketServer = new SocketServer($loop, $connectionHandlerFactory);
+        $loop = React\EventLoop\Factory::create();
 
         try {
-            $requestHandlingSocketServer->listen($options['p']);
+            $this->setupSocketServers($loop, $options['p']);
         } catch (ConnectionException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($stdinStream);
@@ -75,6 +73,27 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         fclose($stdinStream);
 
         return 0;
+    }
+
+    /**
+     * @param React\EventLoop\LoopInterface $loop
+     * @param int                           $requestHandlingPort
+     */
+    protected function setupSocketServers(React\EventLoop\LoopInterface $loop, $requestHandlingPort)
+    {
+        $this->setupRequestHandlingSocketServer($loop, $requestHandlingPort);
+    }
+
+    /**
+     * @param React\EventLoop\LoopInterface $loop
+     * @param int                           $requestHandlingPort
+     */
+    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, $requestHandlingPort)
+    {
+        $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
+
+        $requestHandlingSocketServer = new SocketServer($loop, $connectionHandlerFactory);
+        $requestHandlingSocketServer->listen($requestHandlingPort);
     }
 
     /**
