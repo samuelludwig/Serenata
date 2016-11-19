@@ -62,7 +62,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $loop = React\EventLoop\Factory::create();
 
         try {
-            $this->setupSocketServers($loop, $requestHandlingPort);
+            $this->setupRequestHandlingSocketServer($loop, $requestHandlingPort);
         } catch (ConnectionException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($this->stdinStream);
@@ -92,15 +92,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         }
 
         throw new UnexpectedValueException('A socket port for handling requests must be specified');
-    }
-
-    /**
-     * @param React\EventLoop\LoopInterface $loop
-     * @param int                           $requestHandlingPort
-     */
-    protected function setupSocketServers(React\EventLoop\LoopInterface $loop, $requestHandlingPort)
-    {
-        $this->setupRequestHandlingSocketServer($loop, $requestHandlingPort);
     }
 
     /**
