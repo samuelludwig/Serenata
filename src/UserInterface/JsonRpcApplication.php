@@ -4,6 +4,7 @@ namespace PhpIntegrator\UserInterface;
 
 use React;
 use ArrayObject;
+use UnexpectedValueException;
 
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
@@ -48,20 +49,20 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      */
     public function run()
     {
-        $options = getopt('p:');
+        $options = getopt('p:', [
+            'port:'
+        ]);
 
-        if (!isset($options['p'])) {
-            return 'A port must be passed in order to run in socket server mode';
-        }
+        $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
 
-        echo "Starting socket server on port {$options['p']}...\n";
+        echo "Starting socket server on port {$requestHandlingPort}...\n";
 
         $this->stdinStream = fopen('php://memory', 'w+');
 
         $loop = React\EventLoop\Factory::create();
 
         try {
-            $this->setupSocketServers($loop, $options['p']);
+            $this->setupSocketServers($loop, $requestHandlingPort);
         } catch (ConnectionException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($this->stdinStream);
@@ -73,6 +74,22 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         fclose($this->stdinStream);
 
         return 0;
+    }
+
+    /**
+     * @param array $options
+     *
+     * @return int
+     */
+    protected function getRequestHandlingPortFromOptions(array $options)
+    {
+        if (isset($options['p'])) {
+            return (int) $options['p'];
+        } elseif (isset($options['port'])) {
+            return (int) $options['port'];
+        }
+
+        throw new UnexpectedValueException('A socket port for handling requests must be specified');
     }
 
     /**
