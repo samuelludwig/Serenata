@@ -86,9 +86,9 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
     /**
      * @param React\EventLoop\LoopInterface $loop
-     * @param int                           $requestHandlingPort
+     * @param int                           $port
      */
-    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, $requestHandlingPort)
+    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, $port)
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
