@@ -11,8 +11,11 @@ use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\RequestParsingException;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
+
+use React\Socket\ConnectionException;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -39,11 +42,38 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     protected $stdinStream;
 
     /**
-     * @param resource|null $stdinStream
+     * @inheritDoc
      */
-    public function __construct($stdinStream = null)
+    public function run()
     {
-        $this->stdinStream = $stdinStream;
+        $options = getopt('p:');
+
+        if (!isset($options['p'])) {
+            return 'A port must be passed in order to run in socket server mode';
+        }
+
+        echo "Starting socket server on port {$options['p']}...\n";
+
+        $this->stdinStream = fopen('php://memory', 'w+');
+
+        $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
+
+        $loop = \React\EventLoop\Factory::create();
+        $socket = new \PhpIntegrator\Sockets\SocketServer($loop, $connectionHandlerFactory);
+
+        try {
+            $socket->listen($options['p']);
+        } catch (ConnectionException $e) {
+            fwrite(STDERR, 'Socket already in use!');
+            fclose($stdinStream);
+            return 2;
+        }
+
+        $loop->run();
+
+        fclose($stdinStream);
+
+        return 0;
     }
 
     /**

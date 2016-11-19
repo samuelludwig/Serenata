@@ -458,6 +458,11 @@ abstract class AbstractApplication
     }
 
     /**
+     * @return mixed
+     */
+    abstract public function run();
+
+    /**
      * @return resource|null
      */
     abstract public function getStdinStream();
