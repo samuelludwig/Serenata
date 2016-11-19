@@ -64,13 +64,13 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $this->setupSocketServers($loop, $options['p']);
         } catch (ConnectionException $e) {
             fwrite(STDERR, 'Socket already in use!');
-            fclose($stdinStream);
+            fclose($this->stdinStream);
             return 2;
         }
 
         $loop->run();
 
-        fclose($stdinStream);
+        fclose($this->stdinStream);
 
         return 0;
     }
