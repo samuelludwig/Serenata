@@ -18,15 +18,15 @@ class SocketServer extends Server
     protected $connectionMap;
 
     /**
-     * @var JsonRpcConnectionHandlerFactory
+     * @var ConnectionHandlerFactoryInterface
      */
     protected $connectionHandlerFactory;
 
     /**
-     * @param LoopInterface                   $loop
-     * @param JsonRpcConnectionHandlerFactory $connectionHandlerFactory
+     * @param LoopInterface                     $loop
+     * @param ConnectionHandlerFactoryInterface $connectionHandlerFactory
      */
-    public function __construct(LoopInterface $loop, JsonRpcConnectionHandlerFactory $connectionHandlerFactory)
+    public function __construct(LoopInterface $loop, ConnectionHandlerFactoryInterface $connectionHandlerFactory)
     {
         parent::__construct($loop);
 

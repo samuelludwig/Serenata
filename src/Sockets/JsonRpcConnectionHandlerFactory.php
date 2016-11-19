@@ -7,7 +7,7 @@ use React\Socket\Connection;
 /**
  * Factory that creates instances of {@see JsonRpcConnectionHandler}.
  */
-class JsonRpcConnectionHandlerFactory
+class JsonRpcConnectionHandlerFactory implements ConnectionHandlerFactoryInterface
 {
     /**
      * @var JsonRpcRequestHandlerInterface
@@ -23,9 +23,7 @@ class JsonRpcConnectionHandlerFactory
     }
 
     /**
-     * @param Connection $connection
-     *
-     * @return JsonRpcConnectionHandler
+     * @inheritDoc
      */
     public function create(Connection $connection)
     {
