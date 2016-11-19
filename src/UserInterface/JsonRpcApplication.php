@@ -112,7 +112,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
         $requestHandlingSocketServer = new SocketServer($loop, $connectionHandlerFactory);
-        $requestHandlingSocketServer->listen($requestHandlingPort);
+        $requestHandlingSocketServer->listen($port);
     }
 
     /**
