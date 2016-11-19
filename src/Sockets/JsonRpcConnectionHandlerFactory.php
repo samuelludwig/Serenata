@@ -24,6 +24,8 @@ class JsonRpcConnectionHandlerFactory
 
     /**
      * @param Connection $connection
+     *
+     * @return JsonRpcConnectionHandler
      */
     public function create(Connection $connection)
     {
