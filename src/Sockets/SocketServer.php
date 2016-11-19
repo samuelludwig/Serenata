@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Sockets;
 
+use SplObjectStorage;
+
 use React\EventLoop\LoopInterface;
 
 use React\Socket\Server;
@@ -16,7 +18,7 @@ use React\Socket\Connection;
 class SocketServer extends Server
 {
     /**
-     * @var array
+     * @var SplObjectStorage
      */
     protected $connectionMap;
 
@@ -33,6 +35,7 @@ class SocketServer extends Server
     {
         parent::__construct($loop);
 
+        $this->connectionMap = new SplObjectStorage();
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 
         $this->on('connection', [$this, 'onConnectionEstablished']);
@@ -43,9 +46,9 @@ class SocketServer extends Server
      */
     protected function onConnectionEstablished(Connection $connection)
     {
-        $key = $this->getKeyForConnection($connection);
+        $handler = $this->connectionHandlerFactory->create($connection);
 
-        $this->connectionMap[$key] = $this->connectionHandlerFactory->create($connection);
+        $this->connectionMap->attach($connection, $handler);
 
         $connection->on('close', [$this, 'onConnectionClosed']);
     }
@@ -55,18 +58,6 @@ class SocketServer extends Server
      */
     protected function onConnectionClosed(Connection $connection)
     {
-        $key = $this->getKeyForConnection($connection);
-
-        unset($this->connectionMap[$key]);
-    }
-
-    /**
-     * @param Connection $connection
-     *
-     * @return string
-     */
-    protected function getKeyForConnection(Connection $connection)
-    {
-        return spl_object_hash($connection);
+        $this->connectionMap->detach($connection);
     }
 }
