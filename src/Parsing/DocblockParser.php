@@ -305,7 +305,10 @@ class DocblockParser
             'Attributes',
 
             // PHPMD tags, see also https://phpmd.org/documentation/suppress-warnings.html
-            'SuppressWarnings'
+            'SuppressWarnings',
+
+            // PhpStorm tags
+            'noinspection'
         ], true);
     }
 

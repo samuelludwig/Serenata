@@ -28,6 +28,7 @@
 * In documentation for built-in functions, underscores in the description were incorrectly escaped with a slash.
 * In single line docblocks, the terminator `*/` was not being ignored (and taken up in the last tag in the docblock).
 * Class annotations were sometimes being picked up as being part of the description of other tags (such as `@var`, `@param`, ...).
+* `@noinspection` is no longer linted as invalid tag, so you can now not be blinded by errors when reading the code of a colleague using PhpStorm.
 * Variadic parameters with type hints were incorrectly matched with their docblock types and, by consequence, incorrectly reported as having a mismatching type.
 
 ### Other
