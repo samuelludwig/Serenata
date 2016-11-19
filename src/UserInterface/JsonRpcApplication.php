@@ -6,13 +6,14 @@ use ArrayObject;
 
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
+use PhpIntegrator\Sockets\SocketServer;
 use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\RequestParsingException;
-use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\Socket\ConnectionException;
@@ -59,7 +60,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
         $loop = \React\EventLoop\Factory::create();
-        $socket = new \PhpIntegrator\Sockets\SocketServer($loop, $connectionHandlerFactory);
+        $socket = new SocketServer($loop, $connectionHandlerFactory);
 
         try {
             $socket->listen($options['p']);
