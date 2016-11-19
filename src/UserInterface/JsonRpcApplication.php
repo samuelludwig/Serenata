@@ -79,6 +79,8 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @param array $options
      *
+     * @throws UnexpectedValueException
+     *
      * @return int
      */
     protected function getRequestHandlingPortFromOptions(array $options)
