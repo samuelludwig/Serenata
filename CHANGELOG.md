@@ -1,5 +1,7 @@
 ## 2.0.0
 ### Major changes
+* PHP 5.6 is now required. PHP 5.5 has been end of life for a couple of months now.
+  * If you're running the server and upgrading is truly not an option at the moment, you can temporarily switch back the version check in the Main.php file as currently no PHP 5.6 features are used yet. However, in due time, they might.
 * A great deal of refactoring has occurred, which paved the way for performance improvements in several areas, such as type deduction.
   * Indexing should be slightly faster.
   * Everything should feel a bit more responsive.
