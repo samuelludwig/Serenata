@@ -478,6 +478,8 @@ abstract class AbstractApplication
 
         if ($indexDatabase->getDatabasePath() !== $databaseFile) {
             $indexDatabase->setDatabasePath($databaseFile);
+
+            $this->getContainer()->get('cacheClearingEventMediator.clearableCache')->clearCache();
         }
 
         return $this;
