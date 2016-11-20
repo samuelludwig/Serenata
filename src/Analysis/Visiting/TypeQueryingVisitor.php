@@ -122,7 +122,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         $typeData = $this->parseCondition($node->cond);
 
         foreach ($typeData as $variable => $newConditionalTypes) {
-            $this->variableTypeInfoMap->mergeConditionalTypes($variable, $newConditionalTypes);
+            $info = $this->variableTypeInfoMap->get($variable);
+
+            foreach ($newConditionalTypes as $type => $possibility) {
+                $info->setPossibilityOfType($type, $possibility);
+            }
         }
     }
 

@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use OutOfBoundsException;
-
 use PhpParser\Node;
 
 /**
@@ -19,15 +17,11 @@ class VariableTypeInfoMap
     /**
      * @param string $variable
      *
-     * @throws OutOfBoundsException
-     *
      * @return VariableTypeInfo
      */
     public function get($variable)
     {
-        if (!isset($this->map[$variable])) {
-            throw new OutOfBoundsException("The variable {$variable} was not found");
-        }
+        $this->createIfNecessary($variable);
 
         return $this->map[$variable];
     }
@@ -50,7 +44,7 @@ class VariableTypeInfoMap
     {
         $this->createIfNecessary($variable);
 
-        $this->get($variable)->setConditionalTypes([]);
+        $this->get($variable)->setTypePossibilities([]);
         $this->get($variable)->setBestMatch($bestMatch);
     }
 
@@ -65,20 +59,6 @@ class VariableTypeInfoMap
 
         $this->get($variable)->setBestTypeOverrideMatch($type);
         $this->get($variable)->setBestTypeOverrideMatchLine($line);
-    }
-
-    /**
-     * @param string $variable
-     * @param array  $conditionalTypes
-     */
-    public function mergeConditionalTypes($variable, array $conditionalTypes)
-    {
-        $this->createIfNecessary($variable);
-
-        $this->get($variable)->setConditionalTypes(array_merge(
-            $this->get($variable)->getConditionalTypes(),
-            $conditionalTypes
-        ));
     }
 
     /**

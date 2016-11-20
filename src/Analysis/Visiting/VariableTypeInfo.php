@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
+use OutOfBoundsException;
+
 use PhpParser\Node;
 
 /**
@@ -54,7 +56,7 @@ class VariableTypeInfo
      *
      * @var array
      */
-    protected $conditionalTypes = [];
+    protected $typePossibilities = [];
 
     /**
      * @return Node|null
@@ -114,21 +116,49 @@ class VariableTypeInfo
     }
 
     /**
-     * @return array
+     * @param string $type
+     *
+     * @throws OutOfBoundsException
+     *
+     * @return TypePossibility[]
      */
-    public function getConditionalTypes()
+    public function getPossibilityOfType($type)
     {
-        return $this->conditionalTypes;
+        if (!isset($this->typePossibilities[$type])) {
+            throw new OutOfBoundsException('No such type found in the list of type possibilities');
+        }
+
+        return $this->typePossibilities;
     }
 
     /**
-     * @param array $conditionalTypes
+     * @param string $type
+     * @param int    $possibility
      *
      * @return static
      */
-    public function setConditionalTypes(array $conditionalTypes)
+    public function setPossibilityOfType($type, $possibility)
     {
-        $this->conditionalTypes = $conditionalTypes;
+        $this->typePossibilities[$type] = $possibility;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTypePossibilities()
+    {
+        return $this->typePossibilities;
+    }
+
+    /**
+     * @param array $typePossibilities
+     *
+     * @return static
+     */
+    public function setTypePossibilities(array $typePossibilities)
+    {
+        $this->typePossibilities = $typePossibilities;
         return $this;
     }
 
