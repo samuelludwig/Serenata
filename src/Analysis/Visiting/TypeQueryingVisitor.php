@@ -20,21 +20,6 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    const TYPE_CONDITIONALLY_GUARANTEED = 1;
-
-    /**
-     * @var int
-     */
-    const TYPE_CONDITIONALLY_POSSIBLE   = 2;
-
-    /**
-     * @var int
-     */
-    const TYPE_CONDITIONALLY_IMPOSSIBLE = 4;
-
-    /**
-     * @var int
-     */
     protected $position;
 
     /**
@@ -222,11 +207,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         ) {
             if ($node->left instanceof Node\Expr\Variable) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $types[$node->left->name]['null'] = self::TYPE_CONDITIONALLY_GUARANTEED;
+                    $types[$node->left->name]['null'] = VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED;
                 }
             } elseif ($node->right instanceof Node\Expr\Variable) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $types[$node->right->name]['null'] = self::TYPE_CONDITIONALLY_GUARANTEED;
+                    $types[$node->right->name]['null'] = VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED;
                 }
             }
         } elseif (
@@ -235,42 +220,42 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         ) {
             if ($node->left instanceof Node\Expr\Variable) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $types[$node->left->name]['null'] = self::TYPE_CONDITIONALLY_IMPOSSIBLE;
+                    $types[$node->left->name]['null'] = VariableTypeInfo::TYPE_CONDITIONALLY_IMPOSSIBLE;
                 }
             } elseif ($node->right instanceof Node\Expr\Variable) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $types[$node->right->name]['null'] = self::TYPE_CONDITIONALLY_IMPOSSIBLE;
+                    $types[$node->right->name]['null'] = VariableTypeInfo::TYPE_CONDITIONALLY_IMPOSSIBLE;
                 }
             }
         } elseif ($node instanceof Node\Expr\BooleanNot) {
             if ($node->expr instanceof Node\Expr\Variable) {
-                $types[$node->expr->name]['int']    = self::TYPE_CONDITIONALLY_POSSIBLE; // 0
-                $types[$node->expr->name]['string'] = self::TYPE_CONDITIONALLY_POSSIBLE; // ''
-                $types[$node->expr->name]['float']  = self::TYPE_CONDITIONALLY_POSSIBLE; // 0.0
-                $types[$node->expr->name]['array']  = self::TYPE_CONDITIONALLY_POSSIBLE; // []
-                $types[$node->expr->name]['null']   = self::TYPE_CONDITIONALLY_POSSIBLE; // null
+                $types[$node->expr->name]['int']    = VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE; // 0
+                $types[$node->expr->name]['string'] = VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE; // ''
+                $types[$node->expr->name]['float']  = VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE; // 0.0
+                $types[$node->expr->name]['array']  = VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE; // []
+                $types[$node->expr->name]['null']   = VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE; // null
             } else {
                 $subTypes = $this->parseCondition($node->expr);
 
                 // Reverse the possiblity of the types.
                 foreach ($subTypes as $variable => $typeData) {
                     foreach ($typeData as $subType => $possibility) {
-                        if ($possibility === self::TYPE_CONDITIONALLY_GUARANTEED) {
-                            $types[$variable][$subType] = self::TYPE_CONDITIONALLY_IMPOSSIBLE;
-                        } elseif ($possibility === self::TYPE_CONDITIONALLY_IMPOSSIBLE) {
-                            $types[$variable][$subType] = self::TYPE_CONDITIONALLY_GUARANTEED;
-                        } elseif ($possibility === self::TYPE_CONDITIONALLY_POSSIBLE) {
+                        if ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED) {
+                            $types[$variable][$subType] = VariableTypeInfo::TYPE_CONDITIONALLY_IMPOSSIBLE;
+                        } elseif ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_IMPOSSIBLE) {
+                            $types[$variable][$subType] = VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED;
+                        } elseif ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE) {
                             // Possible types are effectively negated and disappear.
                         }
                     }
                 }
             }
         } elseif ($node instanceof Node\Expr\Variable) {
-            $types[$node->name]['null'] = self::TYPE_CONDITIONALLY_IMPOSSIBLE;
+            $types[$node->name]['null'] = VariableTypeInfo::TYPE_CONDITIONALLY_IMPOSSIBLE;
         } elseif ($node instanceof Node\Expr\Instanceof_) {
             if ($node->expr instanceof Node\Expr\Variable) {
                 if ($node->class instanceof Node\Name) {
-                    $types[$node->expr->name][NodeHelpers::fetchClassName($node->class)] = self::TYPE_CONDITIONALLY_GUARANTEED;
+                    $types[$node->expr->name][NodeHelpers::fetchClassName($node->class)] = VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED;
                 } else {
                     // This is an expression, we could fetch its return type, but that still won't tell us what
                     // the actual class is, so it's useless at the moment.
@@ -305,7 +290,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                         $guaranteedTypes = $variableHandlingFunctionTypeMap[$node->name->toString()];
 
                         foreach ($guaranteedTypes as $guaranteedType) {
-                            $types[$node->args[0]->value->name][$guaranteedType] = self::TYPE_CONDITIONALLY_GUARANTEED;
+                            $types[$node->args[0]->value->name][$guaranteedType] = VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED;
                         }
                     }
                 }

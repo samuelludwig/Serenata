@@ -12,6 +12,21 @@ use PhpParser\Node;
 class VariableTypeInfo
 {
     /**
+     * @var int
+     */
+    const TYPE_CONDITIONALLY_GUARANTEED = 1;
+
+    /**
+     * @var int
+     */
+    const TYPE_CONDITIONALLY_POSSIBLE   = 2;
+
+    /**
+     * @var int
+     */
+    const TYPE_CONDITIONALLY_IMPOSSIBLE = 4;
+
+    /**
      * The node that best describes the item.
      *
      * This is usually a node such as an assignment expression or a method parameter that the item is involved in. For

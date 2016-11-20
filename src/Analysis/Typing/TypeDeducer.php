@@ -488,9 +488,9 @@ class TypeDeducer
         $typePossibilities = $variableTypeInfo->getTypePossibilities();
 
         foreach ($typePossibilities as $type => $possibility) {
-            if ($possibility === TypeQueryingVisitor::TYPE_CONDITIONALLY_GUARANTEED) {
+            if ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED) {
                 $guaranteedTypes[] = $type;
-            } elseif ($possibility === TypeQueryingVisitor::TYPE_CONDITIONALLY_POSSIBLE) {
+            } elseif ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_POSSIBLE) {
                 $possibleTypeMap[$type] = true;
             }
         }
@@ -511,11 +511,11 @@ class TypeDeducer
             if (isset($typePossibilities[$type])) {
                 $possibility = $typePossibilities[$type];
 
-                if ($possibility === TypeQueryingVisitor::TYPE_CONDITIONALLY_IMPOSSIBLE) {
+                if ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_IMPOSSIBLE) {
                     continue;
                 } elseif (isset($possibleTypeMap[$type])) {
                     $filteredTypes[] = $type;
-                } elseif ($possibility === TypeQueryingVisitor::TYPE_CONDITIONALLY_GUARANTEED) {
+                } elseif ($possibility === VariableTypeInfo::TYPE_CONDITIONALLY_GUARANTEED) {
                     $filteredTypes[] = $type;
                 }
             } elseif (empty($possibleTypeMap)) {
