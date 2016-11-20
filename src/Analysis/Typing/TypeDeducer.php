@@ -97,20 +97,6 @@ class TypeDeducer
     protected $constantConverter;
 
     /**
-     * Serves as cache to avoid refetching class lists for the same file multiple times.
-     *
-     * @var array
-     */
-    protected $fileClassListMap = [];
-
-    /**
-     * Serves as cache to avoid rebuilding file type resolvers for the same file multiple times.
-     *
-     * @var array
-     */
-    protected $fileTypeResolverMap = [];
-
-    /**
      * @param Parser                           $parser
      * @param FileClassListProviderInterface   $fileClassListProvider
      * @param DocblockParser                   $docblockParser
