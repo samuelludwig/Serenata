@@ -7,6 +7,7 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
+use PhpParser\NodeAbstract;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
@@ -87,20 +88,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Stmt\ElseIf_ ||
             $node instanceof Node\Expr\Ternary
         ) {
-            // There can be conditional expressions inside the current scope (think variables assigned to a ternary
-            // expression). In that case we don't want to actually look at the condition for type deduction unless
-            // we're inside the scope of that conditional.
-            if ($this->position >= $startFilePos && $this->position <= $endFilePos) {
-                $typeData = $this->parseCondition($node->cond);
-
-                foreach ($typeData as $variable => $newConditionalTypes) {
-                    $conditionalTypes = isset($this->variableTypeInfoMap[$variable]['conditionalTypes']) ?
-                        $this->variableTypeInfoMap[$variable]['conditionalTypes'] :
-                        [];
-
-                    $this->variableTypeInfoMap[$variable]['conditionalTypes'] = array_merge($conditionalTypes, $newConditionalTypes);
-                }
-            }
+            $this->parseConditional($node);
         } elseif ($node instanceof Node\Expr\Assign) {
             $this->parseAssignment($node);
         } elseif ($node instanceof Node\Stmt\Foreach_) {
@@ -108,6 +96,30 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         }
 
         $this->checkForScopeChange($node);
+    }
+
+    /**
+     * @param NodeAbstract $node
+     */
+    protected function parseConditional(NodeAbstract $node)
+    {
+        $startFilePos = $node->getAttribute('startFilePos');
+        $endFilePos = $node->getAttribute('endFilePos');
+
+        // There can be conditional expressions inside the current scope (think variables assigned to a ternary
+        // expression). In that case we don't want to actually look at the condition for type deduction unless
+        // we're inside the scope of that conditional.
+        if ($this->position >= $startFilePos && $this->position <= $endFilePos) {
+            $typeData = $this->parseCondition($node->cond);
+
+            foreach ($typeData as $variable => $newConditionalTypes) {
+                $conditionalTypes = isset($this->variableTypeInfoMap[$variable]['conditionalTypes']) ?
+                    $this->variableTypeInfoMap[$variable]['conditionalTypes'] :
+                    [];
+
+                $this->variableTypeInfoMap[$variable]['conditionalTypes'] = array_merge($conditionalTypes, $newConditionalTypes);
+            }
+        }
     }
 
     /**
