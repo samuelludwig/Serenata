@@ -116,12 +116,20 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         } elseif ($node instanceof Node\Stmt\Foreach_) {
-            if (!$node->valueVar instanceof Node\Expr\List_) {
-                $this->setBestMatch($node->valueVar->name, $node);
-            }
+            $this->parseForeach($node);
         }
 
         $this->checkForScopeChange($node);
+    }
+
+    /**
+     * @param Node\Stmt\Foreach_ $node
+     */
+    protected function parseForeach(Node\Stmt\Foreach_ $node)
+    {
+        if (!$node->valueVar instanceof Node\Expr\List_) {
+            $this->setBestMatch($node->valueVar->name, $node);
+        }
     }
 
     /**
