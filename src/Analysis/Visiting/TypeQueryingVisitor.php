@@ -65,7 +65,6 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         $startFilePos = $node->getAttribute('startFilePos');
-        $endFilePos = $node->getAttribute('endFilePos');
 
         if ($startFilePos >= $this->position) {
             if ($startFilePos == $this->position) {
