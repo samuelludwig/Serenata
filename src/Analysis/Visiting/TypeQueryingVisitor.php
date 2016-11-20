@@ -366,7 +366,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
+     * Retrieves a string representing an expression.
+     *
      * @param Node\Expr $expression
+     *
+     * @throws DomainException
      *
      * @return string
      */
