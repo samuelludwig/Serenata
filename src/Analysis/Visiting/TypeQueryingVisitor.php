@@ -28,9 +28,9 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected $docblockParser;
 
     /**
-     * @var VariableTypeInfoMap
+     * @var ExpressionTypeInfoMap
      */
-    protected $variableTypeInfoMap;
+    protected $expressionTypeInfoMap;
 
     /**
      * Constructor.
@@ -42,7 +42,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         $this->docblockParser = $docblockParser;
         $this->position = $position;
-        $this->variableTypeInfoMap = new VariableTypeInfoMap();
+        $this->expressionTypeInfoMap = new ExpressionTypeInfoMap();
     }
 
     /**
@@ -87,7 +87,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseCatch(Node\Stmt\Catch_ $node)
     {
-        $this->variableTypeInfoMap->setBestMatch($node->var, $node->type);
+        $this->expressionTypeInfoMap->setBestMatch($node->var, $node->type);
     }
 
     /**
@@ -107,7 +107,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         $typeData = $this->parseCondition($node->cond);
 
         foreach ($typeData as $variable => $newConditionalTypes) {
-            $info = $this->variableTypeInfoMap->get($variable);
+            $info = $this->expressionTypeInfoMap->get($variable);
 
             foreach ($newConditionalTypes as $type => $possibility) {
                 $info->setPossibilityOfType($type, $possibility);
@@ -126,7 +126,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->variableTypeInfoMap->setBestMatch((string) $node->var->name, $node);
+        $this->expressionTypeInfoMap->setBestMatch((string) $node->var->name, $node);
     }
 
     /**
@@ -135,7 +135,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected function parseForeach(Node\Stmt\Foreach_ $node)
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
-            $this->variableTypeInfoMap->setBestMatch($node->valueVar->name, $node);
+            $this->expressionTypeInfoMap->setBestMatch($node->valueVar->name, $node);
         }
     }
 
@@ -151,8 +151,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Node\Stmt\ClassLike) {
-            $this->variableTypeInfoMap->clear();
-            $this->variableTypeInfoMap->setBestMatch('this', $node);
+            $this->expressionTypeInfoMap->clear();
+            $this->expressionTypeInfoMap->setBestMatch('this', $node);
         } elseif ($node instanceof Node\FunctionLike) {
             $variablesOutsideCurrentScope = ['this'];
 
@@ -164,10 +164,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
 
-            $this->variableTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
+            $this->expressionTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
 
             foreach ($node->getParams() as $param) {
-                $this->variableTypeInfoMap->setBestMatch($param->name, $node);
+                $this->expressionTypeInfoMap->setBestMatch($param->name, $node);
             }
         }
     }
@@ -311,7 +311,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         $reverseRegexTypeAnnotation = "/\/\*\*\s*@var\s+\\\$([A-Za-z0-9_])\s+(({$classRegexPart}(?:\[\])?))\s*(\s.*)?\*\//";
 
         if (preg_match($reverseRegexTypeAnnotation, $docblock, $matches) === 1) {
-            $this->variableTypeInfoMap->setBestTypeOverrideMatch(
+            $this->expressionTypeInfoMap->setBestTypeOverrideMatch(
                 $matches[1],
                 $matches[2],
                 $node->getLine()
@@ -323,7 +323,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
             foreach ($docblockData['var'] as $variableName => $data) {
                 if ($data['type']) {
-                    $this->variableTypeInfoMap->setBestTypeOverrideMatch(
+                    $this->expressionTypeInfoMap->setBestTypeOverrideMatch(
                         mb_substr($variableName, 1),
                         $data['type'],
                         $node->getLine()
@@ -334,10 +334,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return VariableTypeInfoMap
+     * @return ExpressionTypeInfoMap
      */
-    public function getVariableTypeInfoMap()
+    public function getExpressionTypeInfoMap()
     {
-        return $this->variableTypeInfoMap;
+        return $this->expressionTypeInfoMap;
     }
 }

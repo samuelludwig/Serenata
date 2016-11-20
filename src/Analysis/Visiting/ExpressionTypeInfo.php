@@ -7,9 +7,9 @@ use OutOfBoundsException;
 use PhpParser\Node;
 
 /**
- * Holds information about a variable's type.
+ * Holds information about an expression's type.
  */
-class VariableTypeInfo
+class ExpressionTypeInfo
 {
     /**
      * The node that best describes the item.
