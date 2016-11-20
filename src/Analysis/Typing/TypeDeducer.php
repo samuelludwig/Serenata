@@ -12,6 +12,7 @@ use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\TypeResolver;
 
+use PhpIntegrator\Analysis\Visiting\VariableTypeInfo;
 use PhpIntegrator\Analysis\Visiting\VariableTypeInfoMap;
 use PhpIntegrator\Analysis\Visiting\TypeQueryingVisitor;
 use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
@@ -468,25 +469,23 @@ class TypeDeducer
     }
 
     /**
-     * @param array  $variableTypeInfo
-     * @param string $variable
-     * @param string $file
-     * @param string $code
+     * @param VariableTypeInfo $variableTypeInfo
+     * @param string           $variable
+     * @param string           $file
+     * @param string           $code
      *
      * @return string[]
      */
-    protected function getTypes($variableTypeInfo, $variable, $file, $code)
+    protected function getTypes(VariableTypeInfo $variableTypeInfo, $variable, $file, $code)
     {
-        if (isset($variableTypeInfo['bestTypeOverrideMatch'])) {
-            return $this->typeAnalyzer->getTypesForTypeSpecification($variableTypeInfo['bestTypeOverrideMatch']);
+        if ($variableTypeInfo->hasBestTypeOverrideMatch()) {
+            return $this->typeAnalyzer->getTypesForTypeSpecification($variableTypeInfo->getBestTypeOverrideMatch());
         }
 
         $guaranteedTypes = [];
         $possibleTypeMap = [];
 
-        $conditionalTypes = isset($variableTypeInfo['conditionalTypes']) ?
-            $variableTypeInfo['conditionalTypes'] :
-            [];
+        $conditionalTypes = $variableTypeInfo->getConditionalTypes();
 
         foreach ($conditionalTypes as $type => $possibility) {
             if ($possibility === TypeQueryingVisitor::TYPE_CONDITIONALLY_GUARANTEED) {
@@ -502,15 +501,15 @@ class TypeDeducer
         // never have executed in the first place).
         if (!empty($guaranteedTypes)) {
             $types = $guaranteedTypes;
-        } elseif (isset($variableTypeInfo['bestMatch'])) {
-            $types = $this->getTypesForNode($variable, $variableTypeInfo['bestMatch'], $file, $code);
+        } elseif ($variableTypeInfo->hasBestMatch()) {
+            $types = $this->getTypesForNode($variable, $variableTypeInfo->getBestMatch(), $file, $code);
         }
 
         $filteredTypes = [];
 
         foreach ($types as $type) {
-            if (isset($variableTypeInfo['conditionalTypes'][$type])) {
-                $possibility = $variableTypeInfo['conditionalTypes'][$type];
+            if (isset($conditionalTypes[$type])) {
+                $possibility = $conditionalTypes[$type];
 
                 if ($possibility === TypeQueryingVisitor::TYPE_CONDITIONALLY_IMPOSSIBLE) {
                     continue;
@@ -589,8 +588,8 @@ class TypeDeducer
             }
 
             if ($this->typeAnalyzer->isClassType($type)) {
-                $typeLine = isset($variableTypeInfo['bestTypeOverrideMatchLine']) ?
-                    $variableTypeInfo['bestTypeOverrideMatchLine'] :
+                $typeLine = $variableTypeInfo->hasBestTypeOverrideMatch() ?
+                    $variableTypeInfo->getBestTypeOverrideMatchLine() :
                     $line;
 
                 $type = $this->fileTypeResolverFactory->create($file)->resolve($type, $typeLine);

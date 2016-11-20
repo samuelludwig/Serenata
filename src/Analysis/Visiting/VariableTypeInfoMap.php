@@ -7,7 +7,7 @@ use OutOfBoundsException;
 use PhpParser\Node;
 
 /**
- * Maps a variable to information about its type.
+ * Keeps track of {@see VariableTypeInfo} objects for a set of variable( name)s.
  */
 class VariableTypeInfoMap
 {
@@ -21,7 +21,7 @@ class VariableTypeInfoMap
      *
      * @throws OutOfBoundsException
      *
-     * @return array
+     * @return VariableTypeInfo
      */
     public function get($variable)
     {
@@ -48,8 +48,10 @@ class VariableTypeInfoMap
      */
     public function setBestMatch($variable, Node $bestMatch = null)
     {
-        $this->map[$variable]['conditionalTypes'] = [];
-        $this->map[$variable]['bestMatch'] = $bestMatch;
+        $this->createIfNecessary($variable);
+
+        $this->get($variable)->setConditionalTypes([]);
+        $this->get($variable)->setBestMatch($bestMatch);
     }
 
     /**
@@ -59,8 +61,10 @@ class VariableTypeInfoMap
      */
     public function setBestTypeOverrideMatch($variable, $type, $line)
     {
-        $this->map[$variable]['bestTypeOverrideMatch'] = $type;
-        $this->map[$variable]['bestTypeOverrideMatchLine'] = $line;
+        $this->createIfNecessary($variable);
+
+        $this->get($variable)->setBestTypeOverrideMatch($type);
+        $this->get($variable)->setBestTypeOverrideMatchLine($line);
     }
 
     /**
@@ -69,11 +73,12 @@ class VariableTypeInfoMap
      */
     public function mergeConditionalTypes($variable, array $conditionalTypes)
     {
-        $existingConditionalTypes = isset($this->map[$variable]['conditionalTypes']) ?
-            $this->map[$variable]['conditionalTypes'] :
-            [];
+        $this->createIfNecessary($variable);
 
-        $this->map[$variable]['conditionalTypes'] = array_merge($existingConditionalTypes, $conditionalTypes);
+        $this->get($variable)->setConditionalTypes(array_merge(
+            $this->get($variable)->getConditionalTypes(),
+            $conditionalTypes
+        ));
     }
 
     /**
@@ -98,5 +103,25 @@ class VariableTypeInfoMap
     public function clear()
     {
         $this->map = [];
+    }
+
+    /**
+     * @param string $variable
+     */
+    protected function createIfNecessary($variable)
+    {
+        if ($this->has($variable)) {
+            return;
+        }
+
+        $this->create($variable);
+    }
+
+    /**
+     * @param string $variable
+     */
+    protected function create($variable)
+    {
+        $this->map[$variable] = new VariableTypeInfo();
     }
 }
