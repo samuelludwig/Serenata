@@ -20,6 +20,8 @@ class VariableTypeInfoMap
      * @param string $variable
      *
      * @throws OutOfBoundsException
+     *
+     * @return array
      */
     public function get($variable)
     {
