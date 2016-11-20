@@ -468,11 +468,6 @@ abstract class AbstractApplication
     abstract public function getStdinStream();
 
     /**
-     * @return string
-     */
-    abstract public function getProjectName();
-
-    /**
      * @param string $databaseFile
      *
      * @return static

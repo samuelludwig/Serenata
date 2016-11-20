@@ -30,11 +30,6 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHandlerInterface
 {
     /**
-     * @var string
-     */
-    protected $projectName;
-
-    /**
      * A stream that is used to read and write STDIN data from.
      *
      * As there is no actual STDIN when working with sockets, this temporary stream is used to transparently replace
@@ -160,21 +155,11 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             rewind($this->stdinStream);
         }
 
-        if (!isset($params['projectName'])) {
-            throw new RequestParsingException('Malformed request content received (expected a \'projectName\' field)');
-        }
-
-        $this->projectName = $params['projectName'];
-
         if (isset($params['database'])) {
             $this->setDatabaseFile($params['database']);
         }
 
-        unset(
-            $params['stdinData'],
-            $params['projectName'],
-            $params['database']
-        );
+        unset($params['stdinData'], $params['database']);
 
         $command = $this->getCommandByMethod($request->getMethod());
 
@@ -269,13 +254,5 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             // we force the write.
             $jsonRpcResponseSender->send($jsonRpcResponse, true);
         };
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getProjectName()
-    {
-        return $this->projectName;
     }
 }
