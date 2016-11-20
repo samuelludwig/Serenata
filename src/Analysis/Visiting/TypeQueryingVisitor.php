@@ -101,7 +101,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseCatch(Node\Stmt\Catch_ $node)
     {
-        $this->setBestMatch($node->var, $node->type);
+        $this->setBestMatchFor($node->var, $node->type);
     }
 
     /**
@@ -140,7 +140,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->setBestMatch((string) $node->var->name, $node);
+        $this->setBestMatchFor((string) $node->var->name, $node);
     }
 
     /**
@@ -149,7 +149,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected function parseForeach(Node\Stmt\Foreach_ $node)
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
-            $this->setBestMatch($node->valueVar->name, $node);
+            $this->setBestMatchFor($node->valueVar->name, $node);
         }
     }
 
@@ -357,7 +357,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      *
      * @return static
      */
-    protected function setBestMatch($variable, Node $bestMatch = null)
+    protected function setBestMatchFor($variable, Node $bestMatch = null)
     {
         $this->resetConditionalState($variable);
 
