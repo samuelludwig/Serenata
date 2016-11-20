@@ -43,9 +43,9 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected $docblockParser;
 
     /**
-     * @var array
+     * @var VariableTypeInfoMap
      */
-    protected $variableTypeInfoMap = [];
+    protected $variableTypeInfoMap;
 
     /**
      * Constructor.
@@ -57,6 +57,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         $this->docblockParser = $docblockParser;
         $this->position = $position;
+        $this->variableTypeInfoMap = new VariableTypeInfoMap();
     }
 
     /**
@@ -101,7 +102,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseCatch(Node\Stmt\Catch_ $node)
     {
-        $this->setBestMatchFor($node->var, $node->type);
+        $this->variableTypeInfoMap->setBestMatch($node->var, $node->type);
     }
 
     /**
@@ -121,11 +122,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         $typeData = $this->parseCondition($node->cond);
 
         foreach ($typeData as $variable => $newConditionalTypes) {
-            $conditionalTypes = isset($this->variableTypeInfoMap[$variable]['conditionalTypes']) ?
-                $this->variableTypeInfoMap[$variable]['conditionalTypes'] :
-                [];
-
-            $this->variableTypeInfoMap[$variable]['conditionalTypes'] = array_merge($conditionalTypes, $newConditionalTypes);
+            $this->variableTypeInfoMap->mergeConditionalTypes($variable, $newConditionalTypes);
         }
     }
 
@@ -140,7 +137,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->setBestMatchFor((string) $node->var->name, $node);
+        $this->variableTypeInfoMap->setBestMatch((string) $node->var->name, $node);
     }
 
     /**
@@ -149,7 +146,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected function parseForeach(Node\Stmt\Foreach_ $node)
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
-            $this->setBestMatchFor($node->valueVar->name, $node);
+            $this->variableTypeInfoMap->setBestMatch($node->valueVar->name, $node);
         }
     }
 
@@ -165,9 +162,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Node\Stmt\ClassLike) {
-            $this->resetStateForNewScope();
-
-            $this->variableTypeInfoMap['this']['bestMatch'] = $node;
+            $this->variableTypeInfoMap->clear();
+            $this->variableTypeInfoMap->setBestMatch('this', $node);
         } elseif ($node instanceof Node\FunctionLike) {
             $variablesOutsideCurrentScope = ['this'];
 
@@ -179,10 +175,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
 
-            $this->resetStateForNewScopeForAllBut($variablesOutsideCurrentScope);
+            $this->variableTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
 
             foreach ($node->getParams() as $param) {
-                $this->variableTypeInfoMap[$param->name]['bestMatch'] = $node;
+                $this->variableTypeInfoMap->setBestMatch($param->name, $node);
             }
         }
     }
@@ -333,10 +329,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         $reverseRegexTypeAnnotation = "/\/\*\*\s*@var\s+\\\$([A-Za-z0-9_])\s+(({$classRegexPart}(?:\[\])?))\s*(\s.*)?\*\//";
 
         if (preg_match($reverseRegexTypeAnnotation, $docblock, $matches) === 1) {
-            $variable = $matches[1];
-
-            $this->variableTypeInfoMap[$variable]['bestTypeOverrideMatch'] = $matches[2];
-            $this->variableTypeInfoMap[$variable]['bestTypeOverrideMatchLine'] = $node->getLine();
+            $this->variableTypeInfoMap->setBestTypeOverrideMatch(
+                $matches[1],
+                $matches[2],
+                $node->getLine()
+            );
         } else {
             $docblockData = $this->docblockParser->parse((string) $docblock, [
                 DocblockParser::VAR_TYPE
@@ -344,62 +341,18 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
             foreach ($docblockData['var'] as $variableName => $data) {
                 if ($data['type']) {
-                    $this->variableTypeInfoMap[mb_substr($variableName, 1)]['bestTypeOverrideMatch'] = $data['type'];
-                    $this->variableTypeInfoMap[mb_substr($variableName, 1)]['bestTypeOverrideMatchLine'] = $node->getLine();
+                    $this->variableTypeInfoMap->setBestTypeOverrideMatch(
+                        mb_substr($variableName, 1),
+                        $data['type'],
+                        $node->getLine()
+                    );
                 }
             }
         }
     }
 
     /**
-     * @param string    $variable
-     * @param Node|null $bestMatch
-     *
-     * @return static
-     */
-    protected function setBestMatchFor($variable, Node $bestMatch = null)
-    {
-        $this->resetConditionalState($variable);
-
-        $this->variableTypeInfoMap[$variable]['bestMatch'] = $bestMatch;
-
-        return $this;
-    }
-
-    /**
-     * @param string $variable
-     */
-    protected function resetConditionalState($variable)
-    {
-        $this->variableTypeInfoMap[$variable]['conditionalTypes'] = [];
-    }
-
-    /**
-     * @return void
-     */
-    protected function resetStateForNewScope()
-    {
-        $this->variableTypeInfoMap = [];
-    }
-
-    /**
-     * @param array $exclusionList
-     */
-    protected function resetStateForNewScopeForAllBut(array $exclusionList)
-    {
-        $newMap = [];
-
-        foreach ($this->variableTypeInfoMap as $variable => $data) {
-            if (in_array($variable, $exclusionList)) {
-                $newMap[$variable] = $data;
-            }
-        }
-
-        $this->variableTypeInfoMap = $newMap;
-    }
-
-    /**
-     * @return array
+     * @return VariableTypeInfoMap
      */
     public function getVariableTypeInfoMap()
     {

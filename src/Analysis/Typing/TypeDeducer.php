@@ -12,6 +12,7 @@ use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\TypeResolver;
 
+use PhpIntegrator\Analysis\Visiting\VariableTypeInfoMap;
 use PhpIntegrator\Analysis\Visiting\TypeQueryingVisitor;
 use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
 
@@ -365,6 +366,10 @@ class TypeDeducer
         $variableTypeInfoMap = $this->typeQueryingVisitor->getVariableTypeInfoMap();
         $offsetLine = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
+        if (!$variableTypeInfoMap->has($variableName)) {
+            return [];
+        }
+
         return $this->getResolvedTypes($variableTypeInfoMap, $variableName, $file, $offsetLine, $code);
     }
 
@@ -528,16 +533,16 @@ class TypeDeducer
      * Retrieves a list of types for the variable, with any referencing types (self, static, $this, ...)
      * resolved to their actual types.
      *
-     * @param array  $variableTypeInfoMap
-     * @param string $variable
-     * @param string $file
-     * @param string $code
+     * @param VariableTypeInfoMap $variableTypeInfoMap
+     * @param string              $variable
+     * @param string              $file
+     * @param string              $code
      *
      * @return string[]
      */
-    protected function getUnreferencedTypes($variableTypeInfoMap, $variable, $file, $code)
+    protected function getUnreferencedTypes(VariableTypeInfoMap $variableTypeInfoMap, $variable, $file, $code)
     {
-        $variableTypeInfo = isset($variableTypeInfoMap[$variable]) ? $variableTypeInfoMap[$variable] : [];
+        $variableTypeInfo = $variableTypeInfoMap->get($variable);
 
         $types = $this->getTypes($variableTypeInfo, $variable, $file, $code);
 
@@ -560,19 +565,19 @@ class TypeDeducer
     /**
      * Retrieves a list of fully resolved types for the variable.
      *
-     * @param array  $variableTypeInfoMap
-     * @param string $variable
-     * @param string $file
-     * @param int    $line
-     * @param string $code
+     * @param VariableTypeInfoMap $variableTypeInfoMap
+     * @param string              $variable
+     * @param string              $file
+     * @param int                 $line
+     * @param string              $code
      *
      * @return string[]
      */
-    protected function getResolvedTypes($variableTypeInfoMap, $variable, $file, $line, $code)
+    protected function getResolvedTypes(VariableTypeInfoMap $variableTypeInfoMap, $variable, $file, $line, $code)
     {
         $types = $this->getUnreferencedTypes($variableTypeInfoMap, $variable, $file, $code);
 
-        $variableTypeInfo = isset($variableTypeInfoMap[$variable]) ? $variableTypeInfoMap[$variable] : [];
+        $variableTypeInfo = $variableTypeInfoMap->get($variable);
 
         $resolvedTypes = [];
 
