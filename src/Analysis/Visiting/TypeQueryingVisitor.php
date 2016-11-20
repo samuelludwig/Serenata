@@ -352,8 +352,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node|null $bestMatch
      * @param string    $variable
+     * @param Node|null $bestMatch
      *
      * @return static
      */
