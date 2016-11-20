@@ -87,7 +87,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseCatch(Node\Stmt\Catch_ $node)
     {
-        $this->expressionTypeInfoMap->setBestMatch($node->var, $node->type);
+        $this->expressionTypeInfoMap->setBestMatch('$' . $node->var, $node->type);
     }
 
     /**
@@ -126,7 +126,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->expressionTypeInfoMap->setBestMatch((string) $node->var->name, $node);
+        $this->expressionTypeInfoMap->setBestMatch('$' . ((string) $node->var->name), $node);
     }
 
     /**
@@ -135,7 +135,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected function parseForeach(Node\Stmt\Foreach_ $node)
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
-            $this->expressionTypeInfoMap->setBestMatch($node->valueVar->name, $node);
+            $this->expressionTypeInfoMap->setBestMatch('$' . $node->valueVar->name, $node);
         }
     }
 
@@ -152,22 +152,22 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\Stmt\ClassLike) {
             $this->expressionTypeInfoMap->clear();
-            $this->expressionTypeInfoMap->setBestMatch('this', $node);
+            $this->expressionTypeInfoMap->setBestMatch('$this', $node);
         } elseif ($node instanceof Node\FunctionLike) {
-            $variablesOutsideCurrentScope = ['this'];
+            $variablesOutsideCurrentScope = ['$this'];
 
             // If a variable is in a use() statement of a closure, we can't reset the state as we still need to
             // examine the parent scope of the closure where the variable is defined.
             if ($node instanceof Node\Expr\Closure) {
                 foreach ($node->uses as $closureUse) {
-                    $variablesOutsideCurrentScope[] = $closureUse->var;
+                    $variablesOutsideCurrentScope[] = '$' . $closureUse->var;
                 }
             }
 
             $this->expressionTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
 
             foreach ($node->getParams() as $param) {
-                $this->expressionTypeInfoMap->setBestMatch($param->name, $node);
+                $this->expressionTypeInfoMap->setBestMatch('$' . $param->name, $node);
             }
         }
     }
@@ -207,11 +207,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         ) {
             if ($node->left instanceof Node\Expr\Variable) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $types[$node->left->name]['null'] = TypePossibility::TYPE_GUARANTEED;
+                    $types['$' . $node->left->name]['null'] = TypePossibility::TYPE_GUARANTEED;
                 }
             } elseif ($node->right instanceof Node\Expr\Variable) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $types[$node->right->name]['null'] = TypePossibility::TYPE_GUARANTEED;
+                    $types['$' . $node->right->name]['null'] = TypePossibility::TYPE_GUARANTEED;
                 }
             }
         } elseif (
@@ -220,20 +220,20 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         ) {
             if ($node->left instanceof Node\Expr\Variable) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $types[$node->left->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
+                    $types['$' . $node->left->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
                 }
             } elseif ($node->right instanceof Node\Expr\Variable) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $types[$node->right->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
+                    $types['$' . $node->right->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
                 }
             }
         } elseif ($node instanceof Node\Expr\BooleanNot) {
             if ($node->expr instanceof Node\Expr\Variable) {
-                $types[$node->expr->name]['int']    = TypePossibility::TYPE_POSSIBLE; // 0
-                $types[$node->expr->name]['string'] = TypePossibility::TYPE_POSSIBLE; // ''
-                $types[$node->expr->name]['float']  = TypePossibility::TYPE_POSSIBLE; // 0.0
-                $types[$node->expr->name]['array']  = TypePossibility::TYPE_POSSIBLE; // []
-                $types[$node->expr->name]['null']   = TypePossibility::TYPE_POSSIBLE; // null
+                $types['$' . $node->expr->name]['int']    = TypePossibility::TYPE_POSSIBLE; // 0
+                $types['$' . $node->expr->name]['string'] = TypePossibility::TYPE_POSSIBLE; // ''
+                $types['$' . $node->expr->name]['float']  = TypePossibility::TYPE_POSSIBLE; // 0.0
+                $types['$' . $node->expr->name]['array']  = TypePossibility::TYPE_POSSIBLE; // []
+                $types['$' . $node->expr->name]['null']   = TypePossibility::TYPE_POSSIBLE; // null
             } else {
                 $subTypes = $this->parseCondition($node->expr);
 
@@ -244,11 +244,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         } elseif ($node instanceof Node\Expr\Variable) {
-            $types[$node->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
+            $types['$' . $node->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
         } elseif ($node instanceof Node\Expr\Instanceof_) {
             if ($node->expr instanceof Node\Expr\Variable) {
                 if ($node->class instanceof Node\Name) {
-                    $types[$node->expr->name][NodeHelpers::fetchClassName($node->class)] = TypePossibility::TYPE_GUARANTEED;
+                    $types['$' . $node->expr->name][NodeHelpers::fetchClassName($node->class)] = TypePossibility::TYPE_GUARANTEED;
                 } else {
                     // This is an expression, we could fetch its return type, but that still won't tell us what
                     // the actual class is, so it's useless at the moment.
@@ -283,7 +283,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                         $guaranteedTypes = $variableHandlingFunctionTypeMap[$node->name->toString()];
 
                         foreach ($guaranteedTypes as $guaranteedType) {
-                            $types[$node->args[0]->value->name][$guaranteedType] = TypePossibility::TYPE_GUARANTEED;
+                            $types['$' . $node->args[0]->value->name][$guaranteedType] = TypePossibility::TYPE_GUARANTEED;
                         }
                     }
                 }
@@ -308,7 +308,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         // they aren't consistent with the standard syntax "@var <type> <name>", but they are still used by some IDE's.
         // For this reason we support them, but only their most elementary form.
         $classRegexPart = "?:\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*";
-        $reverseRegexTypeAnnotation = "/\/\*\*\s*@var\s+\\\$([A-Za-z0-9_])\s+(({$classRegexPart}(?:\[\])?))\s*(\s.*)?\*\//";
+        $reverseRegexTypeAnnotation = "/\/\*\*\s*@var\s+(\\\$[A-Za-z0-9_])\s+(({$classRegexPart}(?:\[\])?))\s*(\s.*)?\*\//";
 
         if (preg_match($reverseRegexTypeAnnotation, $docblock, $matches) === 1) {
             $this->expressionTypeInfoMap->setBestTypeOverrideMatch(
@@ -324,7 +324,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             foreach ($docblockData['var'] as $variableName => $data) {
                 if ($data['type']) {
                     $this->expressionTypeInfoMap->setBestTypeOverrideMatch(
-                        mb_substr($variableName, 1),
+                        $variableName,
                         $data['type'],
                         $node->getLine()
                     );

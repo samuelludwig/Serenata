@@ -354,16 +354,14 @@ class TypeDeducer
     /**
      * @param string     $file
      * @param string     $code
-     * @param string     $name
+     * @param string     $variableName
      * @param int        $offset
      *
      * @return string[]
      */
-    protected function getVariableTypes($file, $code, $name, $offset)
+    protected function getVariableTypes($file, $code, $variableName, $offset)
     {
         $this->walkTypeQueryingVisitorTo($code, $offset);
-
-        $variableName = mb_substr($name, 1);
 
         $expressionTypeInfoMap = $this->typeQueryingVisitor->getExpressionTypeInfoMap();
         $offsetLine = SourceCodeHelpers::calculateLineByOffset($code, $offset);
@@ -427,7 +425,7 @@ class TypeDeducer
             }
         } elseif ($node instanceof Node\FunctionLike) {
             foreach ($node->getParams() as $param) {
-                if ($param->name === $variable) {
+                if ($param->name === mb_substr($variable, 1)) {
                     if ($docBlock = $node->getDocComment()) {
                         // Analyze the docblock's @param tags.
                         $name = null;
@@ -440,9 +438,9 @@ class TypeDeducer
                             DocblockParser::PARAM_TYPE
                         ], $name, true);
 
-                        if (isset($result['params']['$' . $variable])) {
+                        if (isset($result['params'][$variable])) {
                             return $this->typeAnalyzer->getTypesForTypeSpecification(
-                                $result['params']['$' . $variable]['type']
+                                $result['params'][$variable]['type']
                             );
                         }
                     }
@@ -552,7 +550,7 @@ class TypeDeducer
             if (in_array($type, ['self', 'static', '$this'], true)) {
                 $unreferencedTypes = array_merge(
                     $unreferencedTypes,
-                    $this->getUnreferencedTypes($expressionTypeInfoMap, 'this', $file, $code)
+                    $this->getUnreferencedTypes($expressionTypeInfoMap, '$this', $file, $code)
                 );
             } else {
                 $unreferencedTypes[] = $type;
