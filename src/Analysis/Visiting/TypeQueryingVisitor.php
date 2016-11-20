@@ -103,22 +103,23 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseConditional(NodeAbstract $node)
     {
-        $startFilePos = $node->getAttribute('startFilePos');
-        $endFilePos = $node->getAttribute('endFilePos');
-
         // There can be conditional expressions inside the current scope (think variables assigned to a ternary
         // expression). In that case we don't want to actually look at the condition for type deduction unless
         // we're inside the scope of that conditional.
-        if ($this->position >= $startFilePos && $this->position <= $endFilePos) {
-            $typeData = $this->parseCondition($node->cond);
+        if ($this->position < $node->getAttribute('startFilePos') ||
+            $this->position > $node->getAttribute('endFilePos')
+        ) {
+            return;
+        }
 
-            foreach ($typeData as $variable => $newConditionalTypes) {
-                $conditionalTypes = isset($this->variableTypeInfoMap[$variable]['conditionalTypes']) ?
-                    $this->variableTypeInfoMap[$variable]['conditionalTypes'] :
-                    [];
+        $typeData = $this->parseCondition($node->cond);
 
-                $this->variableTypeInfoMap[$variable]['conditionalTypes'] = array_merge($conditionalTypes, $newConditionalTypes);
-            }
+        foreach ($typeData as $variable => $newConditionalTypes) {
+            $conditionalTypes = isset($this->variableTypeInfoMap[$variable]['conditionalTypes']) ?
+                $this->variableTypeInfoMap[$variable]['conditionalTypes'] :
+                [];
+
+            $this->variableTypeInfoMap[$variable]['conditionalTypes'] = array_merge($conditionalTypes, $newConditionalTypes);
         }
     }
 
