@@ -121,27 +121,39 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             }
         }
 
-        if ($startFilePos <= $this->position && $endFilePos >= $this->position) {
-            if ($node instanceof Node\Stmt\ClassLike) {
-                $this->resetStateForNewScope();
+        $this->checkForScopeChange($node);
+    }
 
-                $this->variableTypeInfoMap['this']['bestMatch'] = $node;
-            } elseif ($node instanceof Node\FunctionLike) {
-                $variablesOutsideCurrentScope = ['this'];
+    /**
+     * @param Node $node
+     */
+    protected function checkForScopeChange(Node $node)
+    {
+        if ($node->getAttribute('startFilePos') > $this->position ||
+            $node->getAttribute('endFilePos') < $this->position
+        ) {
+            return;
+        }
 
-                // If a variable is in a use() statement of a closure, we can't reset the state as we still need to
-                // examine the parent scope of the closure where the variable is defined.
-                if ($node instanceof Node\Expr\Closure) {
-                    foreach ($node->uses as $closureUse) {
-                        $variablesOutsideCurrentScope[] = $closureUse->var;
-                    }
+        if ($node instanceof Node\Stmt\ClassLike) {
+            $this->resetStateForNewScope();
+
+            $this->variableTypeInfoMap['this']['bestMatch'] = $node;
+        } elseif ($node instanceof Node\FunctionLike) {
+            $variablesOutsideCurrentScope = ['this'];
+
+            // If a variable is in a use() statement of a closure, we can't reset the state as we still need to
+            // examine the parent scope of the closure where the variable is defined.
+            if ($node instanceof Node\Expr\Closure) {
+                foreach ($node->uses as $closureUse) {
+                    $variablesOutsideCurrentScope[] = $closureUse->var;
                 }
+            }
 
-                $this->resetStateForNewScopeForAllBut($variablesOutsideCurrentScope);
+            $this->resetStateForNewScopeForAllBut($variablesOutsideCurrentScope);
 
-                foreach ($node->getParams() as $param) {
-                    $this->variableTypeInfoMap[$param->name]['bestMatch'] = $node;
-                }
+            foreach ($node->getParams() as $param) {
+                $this->variableTypeInfoMap[$param->name]['bestMatch'] = $node;
             }
         }
     }
