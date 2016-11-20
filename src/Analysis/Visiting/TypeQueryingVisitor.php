@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
+use DomainException;
+
 use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpIntegrator\Utility\NodeHelpers;
@@ -126,7 +128,9 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->expressionTypeInfoMap->setBestMatch('$' . ((string) $node->var->name), $node);
+        $name = $this->getExpressionString($node->var);
+
+        $this->expressionTypeInfoMap->setBestMatch($name, $node);
     }
 
     /**
@@ -135,7 +139,9 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected function parseForeach(Node\Stmt\Foreach_ $node)
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
-            $this->expressionTypeInfoMap->setBestMatch('$' . $node->valueVar->name, $node);
+            $key = $this->getExpressionString($node->valueVar);
+
+            $this->expressionTypeInfoMap->setBestMatch($key, $node);
         }
     }
 
@@ -207,11 +213,15 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         ) {
             if ($node->left instanceof Node\Expr\Variable) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $types['$' . $node->left->name]['null'] = TypePossibility::TYPE_GUARANTEED;
+                    $key = $this->getExpressionString($node->left);
+
+                    $types[$key]['null'] = TypePossibility::TYPE_GUARANTEED;
                 }
             } elseif ($node->right instanceof Node\Expr\Variable) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $types['$' . $node->right->name]['null'] = TypePossibility::TYPE_GUARANTEED;
+                    $key = $this->getExpressionString($node->right);
+
+                    $types[$key]['null'] = TypePossibility::TYPE_GUARANTEED;
                 }
             }
         } elseif (
@@ -220,20 +230,26 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         ) {
             if ($node->left instanceof Node\Expr\Variable) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $types['$' . $node->left->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
+                    $key = $this->getExpressionString($node->left);
+
+                    $types[$key]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
                 }
             } elseif ($node->right instanceof Node\Expr\Variable) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $types['$' . $node->right->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
+                    $key = $this->getExpressionString($node->right);
+
+                    $types[$key]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
                 }
             }
         } elseif ($node instanceof Node\Expr\BooleanNot) {
             if ($node->expr instanceof Node\Expr\Variable) {
-                $types['$' . $node->expr->name]['int']    = TypePossibility::TYPE_POSSIBLE; // 0
-                $types['$' . $node->expr->name]['string'] = TypePossibility::TYPE_POSSIBLE; // ''
-                $types['$' . $node->expr->name]['float']  = TypePossibility::TYPE_POSSIBLE; // 0.0
-                $types['$' . $node->expr->name]['array']  = TypePossibility::TYPE_POSSIBLE; // []
-                $types['$' . $node->expr->name]['null']   = TypePossibility::TYPE_POSSIBLE; // null
+                $key = $this->getExpressionString($node->expr);
+
+                $types[$key]['int']    = TypePossibility::TYPE_POSSIBLE; // 0
+                $types[$key]['string'] = TypePossibility::TYPE_POSSIBLE; // ''
+                $types[$key]['float']  = TypePossibility::TYPE_POSSIBLE; // 0.0
+                $types[$key]['array']  = TypePossibility::TYPE_POSSIBLE; // []
+                $types[$key]['null']   = TypePossibility::TYPE_POSSIBLE; // null
             } else {
                 $subTypes = $this->parseCondition($node->expr);
 
@@ -244,11 +260,15 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         } elseif ($node instanceof Node\Expr\Variable) {
-            $types['$' . $node->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
+            $key = $this->getExpressionString($node);
+
+            $types[$key]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
         } elseif ($node instanceof Node\Expr\Instanceof_) {
             if ($node->expr instanceof Node\Expr\Variable) {
                 if ($node->class instanceof Node\Name) {
-                    $types['$' . $node->expr->name][NodeHelpers::fetchClassName($node->class)] = TypePossibility::TYPE_GUARANTEED;
+                    $key = $this->getExpressionString($node->expr);
+
+                    $types[$key][NodeHelpers::fetchClassName($node->class)] = TypePossibility::TYPE_GUARANTEED;
                 } else {
                     // This is an expression, we could fetch its return type, but that still won't tell us what
                     // the actual class is, so it's useless at the moment.
@@ -282,8 +302,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                     ) {
                         $guaranteedTypes = $variableHandlingFunctionTypeMap[$node->name->toString()];
 
+                        $key = $this->getExpressionString($node->args[0]->value);
+
                         foreach ($guaranteedTypes as $guaranteedType) {
-                            $types['$' . $node->args[0]->value->name][$guaranteedType] = TypePossibility::TYPE_GUARANTEED;
+                            $types[$key][$guaranteedType] = TypePossibility::TYPE_GUARANTEED;
                         }
                     }
                 }
@@ -331,6 +353,22 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         }
+    }
+
+    /**
+     * @param Node\Expr $expression
+     *
+     * @return string
+     */
+    protected function getExpressionString(Node\Expr $expression)
+    {
+        if ($expression instanceof Node\Expr\Variable) {
+            return '$' . ((string) $expression->name);
+        }
+
+        throw new DomainException(
+            "Don't know how to retrieve a string from expression of type " . get_class($expression)
+        );
     }
 
     /**
