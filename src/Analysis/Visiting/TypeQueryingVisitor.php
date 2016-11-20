@@ -82,9 +82,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         $this->parseNodeDocblock($node);
 
         if ($node instanceof Node\Stmt\Catch_) {
-            $this->setBestMatch($node->var, $node->type);
-        } elseif (
-            $node instanceof Node\Stmt\If_ ||
+            $this->parseCatch($node);
+        } elseif ($node instanceof Node\Stmt\If_ ||
             $node instanceof Node\Stmt\ElseIf_ ||
             $node instanceof Node\Expr\Ternary
         ) {
@@ -96,6 +95,14 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         }
 
         $this->checkForScopeChange($node);
+    }
+
+    /**
+     * @param Node\Stmt\Catch_ $node
+     */
+    protected function parseCatch(Node\Stmt\Catch_ $node)
+    {
+        $this->setBestMatch($node->var, $node->type);
     }
 
     /**
