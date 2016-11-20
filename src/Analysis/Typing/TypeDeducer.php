@@ -352,6 +352,11 @@ class TypeDeducer
     }
 
     /**
+     * Retrieves the types of a expression based on what's happening to it in a local scope.
+     *
+     * This can be used to deduce the type of local variables, class properties, ... that are influenced by local
+     * assignments, if statements, ...
+     *
      * @param string     $file
      * @param string     $code
      * @param string     $expression
