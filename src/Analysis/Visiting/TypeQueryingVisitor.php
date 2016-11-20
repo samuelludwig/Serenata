@@ -124,7 +124,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         if ($node->getAttribute('endFilePos') > $this->position) {
             return;
-        } elseif (!$node->var instanceof Node\Expr\Variable) {
+        } elseif (!$this->isExpressionSubjectToTypePossibilities($node->var)) {
             return;
         }
 
@@ -211,13 +211,13 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Expr\BinaryOp\Equal ||
             $node instanceof Node\Expr\BinaryOp\Identical
         ) {
-            if ($node->left instanceof Node\Expr\Variable) {
+            if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
                     $key = $this->getExpressionString($node->left);
 
                     $types[$key]['null'] = TypePossibility::TYPE_GUARANTEED;
                 }
-            } elseif ($node->right instanceof Node\Expr\Variable) {
+            } elseif ($this->isExpressionSubjectToTypePossibilities($node->right)) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
                     $key = $this->getExpressionString($node->right);
 
@@ -228,13 +228,13 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Expr\BinaryOp\NotEqual ||
             $node instanceof Node\Expr\BinaryOp\NotIdentical
         ) {
-            if ($node->left instanceof Node\Expr\Variable) {
+            if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
                 if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
                     $key = $this->getExpressionString($node->left);
 
                     $types[$key]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
                 }
-            } elseif ($node->right instanceof Node\Expr\Variable) {
+            } elseif ($this->isExpressionSubjectToTypePossibilities($node->right)) {
                 if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
                     $key = $this->getExpressionString($node->right);
 
@@ -242,7 +242,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         } elseif ($node instanceof Node\Expr\BooleanNot) {
-            if ($node->expr instanceof Node\Expr\Variable) {
+            if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
                 $key = $this->getExpressionString($node->expr);
 
                 $types[$key]['int']    = TypePossibility::TYPE_POSSIBLE; // 0
@@ -259,12 +259,12 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                     }
                 }
             }
-        } elseif ($node instanceof Node\Expr\Variable) {
+        } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
             $key = $this->getExpressionString($node);
 
             $types[$key]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
         } elseif ($node instanceof Node\Expr\Instanceof_) {
-            if ($node->expr instanceof Node\Expr\Variable) {
+            if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
                 if ($node->class instanceof Node\Name) {
                     $key = $this->getExpressionString($node->expr);
 
@@ -298,7 +298,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                     if (
                         !empty($node->args) &&
                         !$node->args[0]->unpack &&
-                        $node->args[0]->value instanceof Node\Expr\Variable
+                        $this->isExpressionSubjectToTypePossibilities($node->args[0]->value)
                     ) {
                         $guaranteedTypes = $variableHandlingFunctionTypeMap[$node->name->toString()];
 
@@ -353,6 +353,16 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         }
+    }
+
+    /**
+     * @param Node\Expr $expression
+     *
+     * @return bool
+     */
+    protected function isExpressionSubjectToTypePossibilities(Node\Expr $expression)
+    {
+        return $expression instanceof Node\Expr\Variable;
     }
 
     /**
