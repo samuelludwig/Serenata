@@ -237,16 +237,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             } else {
                 $subTypes = $this->parseCondition($node->expr);
 
-                // Reverse the possiblity of the types.
-                $reversedTypes = [];
-
                 foreach ($subTypes as $variable => $typeData) {
                     foreach ($typeData as $subType => $possibility) {
-                        $reversedTypes[$variable][$subType] = TypePossibility::getReverse($possibility);
+                        $types[$variable][$subType] = TypePossibility::getReverse($possibility);
                     }
                 }
-
-                $types = array_merge($types, $reversedTypes);
             }
         } elseif ($node instanceof Node\Expr\Variable) {
             $types[$node->name]['null'] = TypePossibility::TYPE_IMPOSSIBLE;
