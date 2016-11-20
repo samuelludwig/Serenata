@@ -8,12 +8,6 @@ use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
 use PhpIntegrator\Test\IndexedTest;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-
-use PhpParser\Lexer;
-use PhpParser\Parser;
-use PhpParser\ParserFactory;
-
 class DeduceTypesCommandTest extends IndexedTest
 {
     protected function deduceTypes($file, array $expressionParts)
