@@ -102,24 +102,26 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         } elseif ($node instanceof Node\Expr\Assign) {
-            if ($node->var instanceof Node\Expr\Variable) {
-                $variableName = null;
-
-                if ($node->var->name instanceof Node\Name) {
-                    $variableName = (string) $node->var->name;
-                } elseif (is_string($node->var->name)) {
-                    $variableName = $node->var->name;
-                }
-
-                if ($variableName && $endFilePos <= $this->position) {
-                    $this->setBestMatch($variableName, $node);
-                }
-            }
+            $this->parseAssignment($node);
         } elseif ($node instanceof Node\Stmt\Foreach_) {
             $this->parseForeach($node);
         }
 
         $this->checkForScopeChange($node);
+    }
+
+    /**
+     * @param Node\Expr\Assign $node
+     */
+    protected function parseAssignment(Node\Expr\Assign $node)
+    {
+        if ($node->getAttribute('endFilePos') > $this->position) {
+            return;
+        } elseif (!$node->var instanceof Node\Expr\Variable) {
+            return;
+        }
+
+        $this->setBestMatch((string) $node->var->name, $node);
     }
 
     /**
