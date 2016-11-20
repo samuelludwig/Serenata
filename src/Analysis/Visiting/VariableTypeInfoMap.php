@@ -34,6 +34,8 @@ class VariableTypeInfoMap
 
     /**
      * @param string $variable
+     *
+     * @return bool
      */
     public function has($variable)
     {
