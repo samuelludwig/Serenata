@@ -8,6 +8,9 @@ use PhpIntegrator\Parsing\PartialParser;
 
 class PartialParserTest extends \PHPUnit_Framework_TestCase
 {
+        /**
+         * @return void
+         */
     public function testStripPairContentCorrectlyStripsParantheses()
     {
         $partialParser = new PartialParser();
@@ -70,6 +73,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackCorrectlyStopsWithNoText()
     {
         $partialParser = new PartialParser();
@@ -90,6 +96,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackSanitizesCommentsAtTheStartOfTheCallStack()
     {
         $partialParser = new PartialParser();
@@ -114,6 +123,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackSanitizesCallStacksThatStartWithANewInstance()
     {
         $partialParser = new PartialParser();
@@ -134,6 +146,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackSanitizesCallStacksThatStartWithANewInstanceSpreadOverSeveralLines()
     {
         $partialParser = new PartialParser();
@@ -156,6 +171,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackSanitizesClosures()
     {
         $partialParser = new PartialParser();
@@ -178,6 +196,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackSanitizesComplexCallStacks()
     {
         $partialParser = new PartialParser();
@@ -233,6 +254,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBasicFunctionCalls()
     {
         $partialParser = new PartialParser();
@@ -251,6 +275,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtStaticClassNames()
     {
         $partialParser = new PartialParser();
@@ -273,6 +300,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtStaticClassNamesContainingANamespace()
     {
         $partialParser = new PartialParser();
@@ -295,6 +325,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtControlKeywords()
     {
         $partialParser = new PartialParser();
@@ -317,6 +350,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBuiltinConstructs()
     {
         $partialParser = new PartialParser();
@@ -339,6 +375,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtKeywordsSuchAsSelfAndParent()
     {
         $partialParser = new PartialParser();
@@ -361,6 +400,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtTernaryOperatorsFirstOperand()
     {
         $partialParser = new PartialParser();
@@ -379,6 +421,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtTernaryOperatorsLastOperand()
     {
         $partialParser = new PartialParser();
@@ -397,6 +442,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtConcatenationOperators()
     {
         $partialParser = new PartialParser();
@@ -415,6 +463,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
     {
         $partialParser = new PartialParser();
@@ -437,6 +488,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtCasts()
     {
         $partialParser = new PartialParser();
@@ -455,6 +509,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
     {
         $partialParser = new PartialParser();
@@ -476,6 +533,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtTheNewKeyword()
     {
         $partialParser = new PartialParser();
@@ -494,6 +554,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
     {
         $partialParser = new PartialParser();
@@ -516,6 +579,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
     {
         $partialParser = new PartialParser();
@@ -535,6 +601,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
     {
         $partialParser = new PartialParser();
@@ -554,6 +623,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
     {
         $partialParser = new PartialParser();
@@ -572,6 +644,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtSanitizesComplexCallStack()
     {
         $partialParser = new PartialParser();
@@ -619,6 +694,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtSanitizesStaticCallWithStaticKeyword()
     {
         $partialParser = new PartialParser();
@@ -637,6 +715,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtAssignmentSymbol()
     {
         $partialParser = new PartialParser();
@@ -655,6 +736,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtMultiplicationOperator()
     {
         $partialParser = new PartialParser();
@@ -673,6 +757,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtDivisionOperator()
     {
         $partialParser = new PartialParser();
@@ -691,6 +778,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtPlusOperator()
     {
         $partialParser = new PartialParser();
@@ -709,6 +799,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtModulusOperator()
     {
         $partialParser = new PartialParser();
@@ -727,6 +820,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtMinusOperator()
     {
         $partialParser = new PartialParser();
@@ -745,6 +841,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBitwisoOrOperator()
     {
         $partialParser = new PartialParser();
@@ -763,6 +862,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBitwiseAndOperator()
     {
         $partialParser = new PartialParser();
@@ -781,6 +883,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBitwiseXorOperator()
     {
         $partialParser = new PartialParser();
@@ -799,6 +904,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBitwiseNotOperator()
     {
         $partialParser = new PartialParser();
@@ -817,6 +925,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBooleanLessOperator()
     {
         $partialParser = new PartialParser();
@@ -835,6 +946,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBooleanGreaterOperator()
     {
         $partialParser = new PartialParser();
@@ -853,6 +967,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtBooleanNotOperator()
     {
         $partialParser = new PartialParser();
@@ -871,6 +988,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsAtSilencingOperator()
     {
         $partialParser = new PartialParser();
@@ -889,6 +1009,9 @@ SOURCE;
         );
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithSingleLineInvocation()
     {
         $partialParser = new PartialParser();
@@ -906,6 +1029,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithMultiLineInvocation()
     {
         $partialParser = new PartialParser();
@@ -926,6 +1052,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithMoreComplexNestedArguments1()
     {
         $partialParser = new PartialParser();
@@ -949,6 +1078,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithMoreComplexNestedArguments2()
     {
         $partialParser = new PartialParser();
@@ -970,6 +1102,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithMoreComplexNestedArguments3()
     {
         $partialParser = new PartialParser();
@@ -991,6 +1126,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithTrailingCommas()
     {
         $partialParser = new PartialParser();
@@ -1009,6 +1147,9 @@ SOURCE;
         $this->assertEquals(1, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithNestedParantheses()
     {
         $partialParser = new PartialParser();
@@ -1029,6 +1170,9 @@ SOURCE;
         $this->assertEquals(1, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithSqlStringArguments()
     {
         $partialParser = new PartialParser();
@@ -1044,6 +1188,9 @@ SOURCE;
         $this->assertEquals(1, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithSqlStringArgumentsContainingParantheses()
     {
         $partialParser = new PartialParser();
@@ -1061,6 +1208,9 @@ SOURCE;
         $this->assertEquals(0, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassName()
     {
         $partialParser = new PartialParser();
@@ -1082,6 +1232,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
     {
         $partialParser = new PartialParser();
@@ -1103,6 +1256,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
     {
         $partialParser = new PartialParser();
@@ -1124,6 +1280,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithConstructorCalls2()
     {
         $partialParser = new PartialParser();
@@ -1145,6 +1304,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtWithConstructorCalls3()
     {
         $partialParser = new PartialParser();
@@ -1166,6 +1328,9 @@ SOURCE;
         $this->assertEquals(2, $result['argumentIndex']);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation1()
     {
         $partialParser = new PartialParser();
@@ -1185,6 +1350,9 @@ SOURCE;
         $this->assertNull($result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation2()
     {
         $partialParser = new PartialParser();
@@ -1200,6 +1368,9 @@ SOURCE;
         $this->assertNull($result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation3()
     {
         $partialParser = new PartialParser();
@@ -1217,6 +1388,9 @@ SOURCE;
         $this->assertNull($result);
     }
 
+    /**
+     * @return void
+     */
     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation4()
     {
         $partialParser = new PartialParser();
