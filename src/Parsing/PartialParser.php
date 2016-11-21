@@ -164,22 +164,7 @@ class PartialParser
      */
     protected function retrieveSanitizedCallStack($text)
     {
-        $text = trim($text);
-        $text = preg_replace('/\/\/.*\n/', '', $text);         // Remove singe line comments.
-        $text = preg_replace('/\/\*(.|\n)*?\*\//', '', $text); // Remove multi-line comments.
-
-        // The start of the call stack may be wrapped in parentheses, e.g. ""(new Foo())->test", unwrap them. Note that
-        // "($this)->" is invalid (at least in PHP 5.6).
-        $text = preg_replace_callback('/^\(new\s+(.|\n)+?\)/', function ($match) {
-            return mb_substr($match[0], 1, -1);
-        }, $text);
-
-        if (preg_match('/function\s+([A-Za-z0-9_]\s*)?\(/', $text) === 1) {
-            $text = $this->stripPairContent($text, '{', '}');
-        }
-
-        // Remove content inside parantheses (including nested parantheses).
-        $text = $this->stripPairContent($text, '(', ')');
+        $text = $this->getSanitizedCode($text);
 
         $newElements = [];
 
@@ -192,6 +177,33 @@ class PartialParser
         }
 
         return $newElements;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return string
+     */
+    protected function getSanitizedCode($code)
+    {
+        $code = trim($code);
+        $code = preg_replace('/\/\/.*\n/', '', $code);         // Remove singe line comments.
+        $code = preg_replace('/\/\*(.|\n)*?\*\//', '', $code); // Remove multi-line comments.
+
+        // The start of the call stack may be wrapped in parentheses, e.g. ""(new Foo())->test", unwrap them. Note that
+        // "($this)->" is invalid (at least in PHP 5.6).
+        $code = preg_replace_callback('/^\(new\s+(.|\n)+?\)/', function ($match) {
+            return mb_substr($match[0], 1, -1);
+        }, $code);
+
+        if (preg_match('/function\s+([A-Za-z0-9_]\s*)?\(/', $code) === 1) {
+            $code = $this->stripPairContent($code, '{', '}');
+        }
+
+        // Remove content inside parantheses (including nested parantheses).
+        $code = $this->stripPairContent($code, '(', ')');
+
+        return $code;
     }
 
     /**
