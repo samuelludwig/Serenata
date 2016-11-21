@@ -657,6 +657,8 @@ class TypeDeducer
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             if ($node->name->toString() === 'true' || $node->name->toString() === 'false') {
                 return ['true'];
+            } else {
+                return [NodeHelpers::fetchClassName($node->name)];
             }
         } elseif ($node instanceof Node\Scalar\String_) {
             return ['""'];
