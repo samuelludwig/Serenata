@@ -144,12 +144,17 @@ class PartialParser
     }
 
     /**
-     * @param string $source
+     * @param string   $source
+     * @param int|null $offset
      *
      * @return string[]
      */
-    public function retrieveSanitizedCallStackAt($source)
+    public function retrieveSanitizedCallStackAt($source, $offset = null)
     {
+        if ($offset !== null) {
+            $source = substr($source, 0, $offset);
+        }
+
         $boundary = $this->getStartOfExpression($source);
 
         $expression = substr($source, $boundary);
@@ -333,7 +338,7 @@ class PartialParser
                     break;
                 }
 
-                $callStack = $this->retrieveSanitizedCallStackAt(substr($code, 0, $i));
+                $callStack = $this->retrieveSanitizedCallStackAt($code, $i);
 
                 if (!empty($callStack)) {
                     $type = 'function';

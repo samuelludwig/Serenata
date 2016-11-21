@@ -74,7 +74,7 @@ class DeduceTypesCommand extends AbstractCommand
         if (isset($arguments['part'])) {
             $parts = $arguments['part'];
         } else {
-            $parts = $this->partialParser->retrieveSanitizedCallStackAt(substr($code, 0, $offset));
+            $parts = $this->partialParser->retrieveSanitizedCallStackAt($code, $offset);
 
             if (!empty($parts) && isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
                 array_pop($parts);
