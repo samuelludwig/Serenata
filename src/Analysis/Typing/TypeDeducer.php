@@ -680,7 +680,7 @@ class TypeDeducer
             }
         } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
             if (is_string($node->name) && $node->class instanceof Node\Name) {
-                return [$node->class->toString(), $node->name];
+                return [$node->class->toString(), '$' . $node->name];
             }
         } elseif ($node instanceof Node\Expr\FuncCall) {
             if ($node->name instanceof Node\Name) {
