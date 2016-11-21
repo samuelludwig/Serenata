@@ -160,17 +160,17 @@ class PartialParser
         $expression = substr($source, $boundary);
         $expression = $this->getSanitizedExpression($expression);
 
-        $newElements = [];
+        $callStack = [];
 
         if ($expression) {
             foreach (explode('->', $expression) as $part) {
                 foreach (explode('::', $part) as $subPart) {
-                    $newElements[] = $subPart;
+                    $callStack[] = $subPart;
                 }
             }
         }
 
-        return $newElements;
+        return $callStack;
     }
 
     /**
