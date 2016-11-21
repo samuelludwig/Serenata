@@ -158,23 +158,12 @@ class PartialParser
         $boundary = $this->getStartOfExpression($source);
 
         $expression = substr($source, $boundary);
-
-        return $this->retrieveSanitizedCallStack($expression);
-    }
-
-    /**
-     * @param string $text
-     *
-     * @return string[]
-     */
-    protected function retrieveSanitizedCallStack($text)
-    {
-        $text = $this->getSanitizedCode($text);
+        $expression = $this->getSanitizedCode($expression);
 
         $newElements = [];
 
-        if ($text) {
-            foreach (explode('->', $text) as $part) {
+        if ($expression) {
+            foreach (explode('->', $expression) as $part) {
                 foreach (explode('::', $part) as $subPart) {
                     $newElements[] = $subPart;
                 }

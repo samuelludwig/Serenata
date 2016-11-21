@@ -76,19 +76,19 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackCorrectlyStopsWithNoText()
+    public function testGetSanitizedCodeCorrectlyStopsWithNoText()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('retrieveSanitizedCallStack');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
 
 SOURCE;
 
-        $expectedResult = [];
+        $expectedResult = '';
 
         $this->assertEquals(
             $expectedResult,
@@ -99,12 +99,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackSanitizesCommentsAtTheStartOfTheCallStack()
+    public function testGetSanitizedCodeSanitizesCommentsAtTheStartOfTheCallStack()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('retrieveSanitizedCallStack');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -115,7 +115,7 @@ SOURCE;
             Foo::myFunc
 SOURCE;
 
-        $expectedResult = ['Foo', 'myFunc'];
+        $expectedResult = 'Foo::myFunc';
 
         $this->assertEquals(
             $expectedResult,
@@ -126,19 +126,19 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackSanitizesCallStacksThatStartWithANewInstance()
+    public function testGetSanitizedCodeSanitizesCallStacksThatStartWithANewInstance()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('retrieveSanitizedCallStack');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
             (new Foo())->myFunc
 SOURCE;
 
-        $expectedResult = ['new Foo()', 'myFunc'];
+        $expectedResult = 'new Foo()->myFunc';
 
         $this->assertEquals(
             $expectedResult,
@@ -149,12 +149,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackSanitizesCallStacksThatStartWithANewInstanceSpreadOverSeveralLines()
+    public function testGetSanitizedCodeSanitizesCallStacksThatStartWithANewInstanceSpreadOverSeveralLines()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('retrieveSanitizedCallStack');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -163,7 +163,7 @@ SOURCE;
             ))->myFunc
 SOURCE;
 
-        $expectedResult = ['new Foo()', 'myFunc'];
+        $expectedResult = 'new Foo()->myFunc';
 
         $this->assertEquals(
             $expectedResult,
@@ -174,12 +174,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackSanitizesClosures()
+    public function testGetSanitizedCodeSanitizesClosures()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('retrieveSanitizedCallStack');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -188,7 +188,7 @@ SOURCE;
             }
 SOURCE;
 
-        $expectedResult = ['function () {}'];
+        $expectedResult = 'function () {}';
 
         $this->assertEquals(
             $expectedResult,
@@ -199,12 +199,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackSanitizesComplexCallStacks()
+    public function testGetSanitizedCodeSanitizesComplexCallStacks()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('retrieveSanitizedCallStack');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -240,14 +240,7 @@ SOURCE;
                 ->testChai
 SOURCE;
 
-        $expectedResult = [
-            '$this',
-            'testChaining()',
-            'testChaining()',
-            'testChaining()',
-            'testChaining()',
-            'testChai'
-        ];
+        $expectedResult = '$this->testChaining()->testChaining()->testChaining()->testChaining()->testChai';
 
         $this->assertEquals(
             $expectedResult,
