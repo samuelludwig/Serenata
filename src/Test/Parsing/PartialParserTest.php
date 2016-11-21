@@ -76,12 +76,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetSanitizedCodeCorrectlyStopsWithNoText()
+    public function testGetSanitizedExpressionCorrectlyStopsWithNoText()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedExpression');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -99,12 +99,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetSanitizedCodeSanitizesCommentsAtTheStartOfTheCallStack()
+    public function testGetSanitizedExpressionSanitizesCommentsAtTheStartOfTheCallStack()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedExpression');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -126,12 +126,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetSanitizedCodeSanitizesCallStacksThatStartWithANewInstance()
+    public function testGetSanitizedExpressionSanitizesCallStacksThatStartWithANewInstance()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedExpression');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -149,12 +149,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetSanitizedCodeSanitizesCallStacksThatStartWithANewInstanceSpreadOverSeveralLines()
+    public function testGetSanitizedExpressionSanitizesCallStacksThatStartWithANewInstanceSpreadOverSeveralLines()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedExpression');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -174,12 +174,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetSanitizedCodeSanitizesClosures()
+    public function testGetSanitizedExpressionSanitizesClosures()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedExpression');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'
@@ -199,12 +199,12 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetSanitizedCodeSanitizesComplexCallStacks()
+    public function testGetSanitizedExpressionSanitizesComplexCallStacks()
     {
         $partialParser = new PartialParser();
 
         $reflectionClass = new ReflectionClass(get_class($partialParser));
-        $reflectionMethod = $reflectionClass->getMethod('getSanitizedCode');
+        $reflectionMethod = $reflectionClass->getMethod('getSanitizedExpression');
         $reflectionMethod->setAccessible(true);
 
         $source = <<<'SOURCE'

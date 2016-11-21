@@ -158,7 +158,7 @@ class PartialParser
         $boundary = $this->getStartOfExpression($source);
 
         $expression = substr($source, $boundary);
-        $expression = $this->getSanitizedCode($expression);
+        $expression = $this->getSanitizedExpression($expression);
 
         $newElements = [];
 
@@ -178,31 +178,31 @@ class PartialParser
      *
      * @return string
      */
-    protected function getSanitizedCode($code)
+    protected function getSanitizedExpression($expression)
     {
-        $code = trim($code);
-        $code = preg_replace('/\/\/.*\n/', '', $code);         // Remove singe line comments.
-        $code = preg_replace('/\/\*(.|\n)*?\*\//', '', $code); // Remove multi-line comments.
+        $expression = trim($expression);
+        $expression = preg_replace('/\/\/.*\n/', '', $expression);         // Remove singe line comments.
+        $expression = preg_replace('/\/\*(.|\n)*?\*\//', '', $expression); // Remove multi-line comments.
 
         // The start of the call stack may be wrapped in parentheses, e.g. ""(new Foo())->test", unwrap them. Note that
         // "($this)->" is invalid (at least in PHP 5.6).
-        $code = preg_replace_callback('/^\(new\s+(.|\n)+?\)/', function ($match) {
+        $expression = preg_replace_callback('/^\(new\s+(.|\n)+?\)/', function ($match) {
             return mb_substr($match[0], 1, -1);
-        }, $code);
+        }, $expression);
 
-        if (preg_match('/function\s+([A-Za-z0-9_]\s*)?\(/', $code) === 1) {
-            $code = $this->stripPairContent($code, '{', '}');
+        if (preg_match('/function\s+([A-Za-z0-9_]\s*)?\(/', $expression) === 1) {
+            $expression = $this->stripPairContent($expression, '{', '}');
         }
 
         // Remove content inside parantheses (including nested parantheses).
-        $code = $this->stripPairContent($code, '(', ')');
+        $expression = $this->stripPairContent($expression, '(', ')');
 
         // Trim whitespace around member-related operators.
-        $code = trim($code);
-        $code = preg_replace('/\s+(?=(::|->))/', '', $code);
-        $code = preg_replace('/(?<=(::|->))\s+/', '', $code);
+        $expression = trim($expression);
+        $expression = preg_replace('/\s+(?=(::|->))/', '', $expression);
+        $expression = preg_replace('/(?<=(::|->))\s+/', '', $expression);
 
-        return $code;
+        return $expression;
     }
 
     /**
