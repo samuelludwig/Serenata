@@ -176,7 +176,7 @@ class PartialParser
         if ($text) {
             foreach (explode('->', $text) as $part) {
                 foreach (explode('::', $part) as $subPart) {
-                    $newElements[] = trim($subPart);
+                    $newElements[] = $subPart;
                 }
             }
         }
@@ -207,6 +207,11 @@ class PartialParser
 
         // Remove content inside parantheses (including nested parantheses).
         $code = $this->stripPairContent($code, '(', ')');
+
+        // Trim whitespace around member-related operators.
+        $code = trim($code);
+        $code = preg_replace('/\s+(?=(::|->))/', '', $code);
+        $code = preg_replace('/(?<=(::|->))\s+/', '', $code);
 
         return $code;
     }
