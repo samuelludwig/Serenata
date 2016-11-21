@@ -230,7 +230,8 @@ SOURCE;
                     }
                 )
 
-                ->testChaining(
+                // Add a superfluous leading space on purpose.
+                -> testChaining(
                 //------------
                     nestedCall() - (2 * 5),
                     nestedCall() - 3
