@@ -684,7 +684,7 @@ class TypeDeducer
             }
         } elseif ($node instanceof Node\Expr\FuncCall) {
             if ($node->name instanceof Node\Name) {
-                return [$node->name->toString() . '()'];
+                return [NodeHelpers::fetchClassName($node->name) . '()'];
             }
         } elseif ($node instanceof Node\Name) {
             return [NodeHelpers::fetchClassName($node)];
