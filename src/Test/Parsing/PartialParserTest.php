@@ -8,9 +8,9 @@ use PhpIntegrator\Parsing\PartialParser;
 
 class PartialParserTest extends \PHPUnit_Framework_TestCase
 {
-        /**
-         * @return void
-         */
+    /**
+     * @return void
+     */
     public function testStripPairContentCorrectlyStripsParantheses()
     {
         $partialParser = new PartialParser();
