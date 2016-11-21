@@ -174,7 +174,7 @@ class PartialParser
     }
 
     /**
-     * @param string $code
+     * @param string $expression
      *
      * @return string
      */
