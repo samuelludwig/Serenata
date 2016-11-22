@@ -268,7 +268,7 @@ class PartialParser implements Parser
 
     protected function tryParse($code)
     {
-        // TODO: Stop creating repeatedly.
+        // TODO: Stop creating repeatedly and DI.
         $parserFactory = new \PhpParser\ParserFactory();
         $parser = $parserFactory->create(\PhpParser\ParserFactory::PREFER_PHP7, new \PhpParser\Lexer());
 
