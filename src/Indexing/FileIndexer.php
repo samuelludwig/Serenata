@@ -16,8 +16,6 @@ use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
-use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
-
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\NodeTraverser;
@@ -53,7 +51,7 @@ class FileIndexer
     protected $typeAnalyzer;
 
     /**
-     * @var DeduceTypesCommand
+     * @var TypeDeducer
      */
     protected $typeDeducer;
 
