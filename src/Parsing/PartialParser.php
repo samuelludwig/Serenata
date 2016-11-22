@@ -105,13 +105,13 @@ class PartialParser
             } elseif ($code[$i] === '}') {
                 ++$squiggleBracketsClosed;
 
-                if ($parenthesesOpened === $parenthesesClosed) {
+                if ($parenthesesOpened === $parenthesesClosed && $squareBracketsOpened === $squareBracketsClosed) {
                     $nextToken = $currentTokenIndex > 0 ? $tokens[$currentTokenIndex - 1] : null;
                     $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
 
                     // Subscopes can only exist when e.g. a closure is embedded as an argument to a function call,
-                    // in which case they will be inside parentheses. If we find a subscope outside parentheses, it
-                    // means we've moved beyond the call stack to e.g. the end of an if statement.
+                    // in which case they will be inside parentheses or brackets. If we find a subscope outside these
+                    // simbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
                     if ($nextTokenType !== T_VARIABLE) {
                         return ++$i;
                     }
