@@ -673,7 +673,7 @@ class DeduceTypesCommandTest extends IndexedTest
         $this->assertEquals(['string'], $this->deduceTypes($file, ['"test"']));
         $this->assertEquals(['string'], $this->deduceTypes($file, ['\'test\'']));
         $this->assertEquals(['array'], $this->deduceTypes($file, ['[$test1, function() {}]']));
-        $this->assertEquals(['array'], $this->deduceTypes($file, ['array($test1, function())']));
+        $this->assertEquals(['array'], $this->deduceTypes($file, ['array($test1, function() {})']));
 
         $this->assertEquals(['string'], $this->deduceTypes($file, ['"
             test
