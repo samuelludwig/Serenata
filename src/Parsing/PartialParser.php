@@ -34,7 +34,6 @@ class PartialParser implements Parser
         $squiggleBracketsOpened = 0;
         $squiggleBracketsClosed = 0;
 
-        $didStartInsideString = null;
         $startedStaticClassName = false;
 
         $token = null;
@@ -61,17 +60,13 @@ class PartialParser implements Parser
                     'type' => is_array($token) ? $token[0] : null,
                     'text' => $tokenString
                 ];
-
-                if ($didStartInsideString === null) {
-                    $didStartInsideString = ($token['type'] === T_STRING);
-                }
             }
 
             if (
                 $token['type'] === T_COMMENT ||
                 $token['type'] === T_DOC_COMMENT ||
                 $token['type'] === T_CONSTANT_ENCAPSED_STRING ||
-                ($didStartInsideString && $token['type'] === T_STRING)
+                $token['type'] === T_STRING
             ) {
                 // Do nothing, we just keep parsing. (Comments can occur inside call stacks.)
             } elseif ($code[$i] === '(') {
