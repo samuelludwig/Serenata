@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Parsing;
+
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
@@ -690,6 +692,8 @@ class TypeDeducer
             }
         } elseif ($node instanceof Node\Name) {
             return [NodeHelpers::fetchClassName($node)];
+        } elseif ($node instanceof Parsing\Node\Keyword\Static_) {
+            return ['static'];
         }
 
         return null;

@@ -6,6 +6,8 @@ use ReflectionClass;
 
 use PhpIntegrator\Parsing\PartialParser;
 
+use PhpParser\Node;
+
 class PartialParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -261,12 +263,10 @@ SOURCE;
             array_walk
 SOURCE;
 
-        $expectedResult = ['array_walk'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\ConstFetch::class, $result);
+        $this->assertEquals('array_walk', $result->name->toString());
     }
 
     /**
@@ -286,12 +286,11 @@ SOURCE;
             Bar::testProperty
 SOURCE;
 
-        $expectedResult = ['Bar', 'testProperty'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
+        $this->assertEquals('Bar', $result->class->toString());
+        $this->assertEquals('testProperty', $result->name);
     }
 
     /**
@@ -311,12 +310,11 @@ SOURCE;
             NamespaceTest\Bar::staticmethod()
 SOURCE;
 
-        $expectedResult = ['NamespaceTest\Bar', 'staticmethod()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\StaticCall::class, $result);
+        $this->assertEquals('NamespaceTest\Bar', $result->class->toString());
+        $this->assertEquals('staticmethod', $result->name);
     }
 
     /**
@@ -336,12 +334,11 @@ SOURCE;
             return $this->someProperty
 SOURCE;
 
-        $expectedResult = ['$this', 'someProperty'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('someProperty', $result->name);
     }
 
     /**
@@ -361,12 +358,11 @@ SOURCE;
             echo $this->someProperty
 SOURCE;
 
-        $expectedResult = ['$this', 'someProperty'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('someProperty', $result->name);
     }
 
     /**
@@ -386,12 +382,13 @@ SOURCE;
             self::$someProperty->test
 SOURCE;
 
-        $expectedResult = ['self', '$someProperty', 'test'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->var);
+        $this->assertEquals('self', $result->var->class);
+        $this->assertEquals('someProperty', $result->var->name);
+        $this->assertEquals('test', $result->name);
     }
 
     /**
@@ -407,12 +404,11 @@ SOURCE;
             $a = $b ? $c->foo()
 SOURCE;
 
-        $expectedResult = ['$c', 'foo()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertEquals('c', $result->var->name);
+        $this->assertEquals('foo', $result->name);
     }
 
     /**
@@ -428,12 +424,11 @@ SOURCE;
             $a = $b ? $c->foo() : $d->bar()
 SOURCE;
 
-        $expectedResult = ['$d', 'bar()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertEquals('d', $result->var->name);
+        $this->assertEquals('bar', $result->name);
     }
 
     /**
@@ -449,12 +444,11 @@ SOURCE;
             $a = $b . $c->bar()
 SOURCE;
 
-        $expectedResult = ['$c', 'bar()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertEquals('c', $result->var->name);
+        $this->assertEquals('bar', $result->name);
     }
 
     /**
@@ -474,12 +468,15 @@ SOURCE;
             $this->{$foo}()->test()
 SOURCE;
 
-        $expectedResult = ['$this', '{$foo}()', 'test()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->var->var);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->var->name);
+        $this->assertEquals('this', $result->var->var->name);
+        $this->assertEquals('foo', $result->var->name->name);
+        $this->assertEquals('test', $result->name);
     }
 
     /**
@@ -495,12 +492,11 @@ SOURCE;
             $test = (int) $this->test
 SOURCE;
 
-        $expectedResult = ['$this', 'test'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('test', $result->name);
     }
 
     /**
@@ -519,12 +515,11 @@ SOURCE;
                 FROM {$this->
 SOURCE;
 
-        $expectedResult = ['$this', ''];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('', $result->name);
     }
 
     /**
@@ -540,12 +535,11 @@ SOURCE;
             $test = new $this->
 SOURCE;
 
-        $expectedResult = ['$this', ''];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('', $result->name);
     }
 
     /**
@@ -565,12 +559,12 @@ SOURCE;
             (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $expectedResult = ['new Foo\Bar()', 'doFoo()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
+        $this->assertEquals('Foo\Bar', $result->var->class);
+        $this->assertEquals('doFoo', $result->name);
     }
 
     /**
@@ -587,12 +581,12 @@ SOURCE;
                 'test' => (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $expectedResult = ['new Foo\Bar()', 'doFoo()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
+        $this->assertEquals('Foo\Bar', $result->var->class);
+        $this->assertEquals('doFoo', $result->name);
     }
 
     /**
@@ -609,12 +603,12 @@ SOURCE;
                 (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $expectedResult = ['new Foo\Bar()', 'doFoo()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
+        $this->assertEquals('Foo\Bar', $result->var->class);
+        $this->assertEquals('doFoo', $result->name);
     }
 
     /**
@@ -630,12 +624,12 @@ SOURCE;
             foo(firstArg($test), (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $expectedResult = ['new Foo\Bar()', 'doFoo()'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
+        $this->assertEquals('Foo\Bar', $result->var->class);
+        $this->assertEquals('doFoo', $result->name);
     }
 
     /**
@@ -682,10 +676,18 @@ SOURCE;
 
         $expectedResult = ['$this', 'testChaining()', 'testChaining()', 'testChaining()', 'testChaining()', 'testChai'];
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var);
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var->var);
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var->var->var);
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var->var->var->var);
+        $this->assertEquals('testChaining', $result->var->name);
+        $this->assertEquals('testChaining', $result->var->var->name);
+        $this->assertEquals('testChaining', $result->var->var->var->name);
+        $this->assertEquals('testChaining', $result->var->var->var->var->name);
+        $this->assertEquals('testChai', $result->name);
     }
 
     /**
@@ -701,12 +703,11 @@ SOURCE;
             static::doSome
 SOURCE;
 
-        $expectedResult = ['static', 'doSome'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
+        $this->assertEquals('static', $result->class);
+        $this->assertEquals('doSome', $result->name);
     }
 
     /**
@@ -722,12 +723,11 @@ SOURCE;
             $test = $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -743,12 +743,11 @@ SOURCE;
             5 * $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -764,12 +763,11 @@ SOURCE;
             5 / $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -785,12 +783,11 @@ SOURCE;
             5 + $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -806,12 +803,11 @@ SOURCE;
             5 % $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -827,12 +823,11 @@ SOURCE;
             5 - $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -848,12 +843,11 @@ SOURCE;
             5 | $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -869,12 +863,11 @@ SOURCE;
             5 & $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -890,12 +883,11 @@ SOURCE;
             5 ^ $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -911,12 +903,11 @@ SOURCE;
             5 ~ $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -932,12 +923,11 @@ SOURCE;
             5 < $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -953,12 +943,11 @@ SOURCE;
             5 < $this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -974,12 +963,11 @@ SOURCE;
             !$this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**
@@ -995,410 +983,409 @@ SOURCE;
             @$this->one
 SOURCE;
 
-        $expectedResult = ['$this', 'one'];
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
 
-        $this->assertEquals(
-            $expectedResult,
-            $partialParser->retrieveSanitizedCallStackAt($source)
-        );
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithSingleLineInvocation()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-            <?php
-
-            $this->test(1, 2, 3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(42, $result['offset']);
-        $this->assertEquals(['$this', 'test'], $result['callStack']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithMultiLineInvocation()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        $this->test(
-            1,
-            2,
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(34, $result['offset']);
-        $this->assertEquals(['$this', 'test'], $result['callStack']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithMoreComplexNestedArguments1()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        builtin_func(
-            ['test', $this->foo()],
-            function ($a) {
-                // Something here.
-                $this->something();
-            },
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(35, $result['offset']);
-        $this->assertEquals(['builtin_func'], $result['callStack']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithMoreComplexNestedArguments2()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        builtin_func(/* test */
-            "]",// a comment
-            "}",/*}*/
-            ['test'
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(35, $result['offset']);
-        $this->assertEquals(['builtin_func'], $result['callStack']);
-        $this->assertEquals('function', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithMoreComplexNestedArguments3()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        builtin_func(
-            $this->foo(),
-            $array['key'],
-            $array['ke
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(35, $result['offset']);
-        $this->assertEquals(['builtin_func'], $result['callStack']);
-        $this->assertEquals('function', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithTrailingCommas()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        builtin_func(
-            foo(),
-            [
-                'Trailing comma',
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(1, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithNestedParantheses()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        builtin_func(
-            foo(),
-            ($a + $b
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(35, $result['offset']);
-        $this->assertEquals(['builtin_func'], $result['callStack']);
-        $this->assertEquals('function', $result['type']);
-        $this->assertEquals(1, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithSqlStringArguments()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        foo("SELECT a.one, a.two, a.three FROM test", second
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(1, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithSqlStringArgumentsContainingParantheses()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        foo('IF(
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(['foo'], $result['callStack']);
-        $this->assertEquals('function', $result['type']);
-        $this->assertEquals(0, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassName()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        new MyObject(
-            1,
-            2,
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(35, $result['offset']);
-        $this->assertEquals(['MyObject'], $result['callStack']);
-        $this->assertEquals('instantiation', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        new \MyObject(
-            1,
-            2,
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(36, $result['offset']);
-        $this->assertEquals(['\MyObject'], $result['callStack']);
-        $this->assertEquals('instantiation', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        new \MyNamespace\MyObject(
-            1,
-            2,
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(48, $result['offset']);
-        $this->assertEquals(['\MyNamespace\MyObject'], $result['callStack']);
-        $this->assertEquals('instantiation', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithConstructorCalls2()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        new static(
-            1,
-            2,
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(33, $result['offset']);
-        $this->assertEquals(['static'], $result['callStack']);
-        $this->assertEquals('instantiation', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtWithConstructorCalls3()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        new self(
-            1,
-            2,
-            3
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertEquals(31, $result['offset']);
-        $this->assertEquals(['self'], $result['callStack']);
-        $this->assertEquals('instantiation', $result['type']);
-        $this->assertEquals(2, $result['argumentIndex']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation1()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        if ($this->test() as $test) {
-            if (true) {
-
-            }
-        }
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertNull($result);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation2()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        $this->test();
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertNull($result);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation3()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        function test($a, $b)
-        {
-
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertNull($result);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation4()
-    {
-        $partialParser = new PartialParser();
-
-        $source = <<<'SOURCE'
-        <?php
-
-        if (preg_match('/^array\s*\(/', $firstElement) === 1) {
-            $className = 'array';
-        } elseif (
-SOURCE;
-
-        $result = $partialParser->getInvocationInfoAt($source);
-
-        $this->assertNull($result);
-    }
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithSingleLineInvocation()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//             <?php
+//
+//             $this->test(1, 2, 3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(42, $result['offset']);
+//         $this->assertEquals(['$this', 'test'], $result['callStack']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithMultiLineInvocation()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         $this->test(
+//             1,
+//             2,
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(34, $result['offset']);
+//         $this->assertEquals(['$this', 'test'], $result['callStack']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithMoreComplexNestedArguments1()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         builtin_func(
+//             ['test', $this->foo()],
+//             function ($a) {
+//                 // Something here.
+//                 $this->something();
+//             },
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(35, $result['offset']);
+//         $this->assertEquals(['builtin_func'], $result['callStack']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithMoreComplexNestedArguments2()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         builtin_func(/* test */
+//             "]",// a comment
+//             "}",/*}*/
+//             ['test'
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(35, $result['offset']);
+//         $this->assertEquals(['builtin_func'], $result['callStack']);
+//         $this->assertEquals('function', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithMoreComplexNestedArguments3()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         builtin_func(
+//             $this->foo(),
+//             $array['key'],
+//             $array['ke
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(35, $result['offset']);
+//         $this->assertEquals(['builtin_func'], $result['callStack']);
+//         $this->assertEquals('function', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithTrailingCommas()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         builtin_func(
+//             foo(),
+//             [
+//                 'Trailing comma',
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(1, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithNestedParantheses()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         builtin_func(
+//             foo(),
+//             ($a + $b
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(35, $result['offset']);
+//         $this->assertEquals(['builtin_func'], $result['callStack']);
+//         $this->assertEquals('function', $result['type']);
+//         $this->assertEquals(1, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithSqlStringArguments()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         foo("SELECT a.one, a.two, a.three FROM test", second
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(1, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithSqlStringArgumentsContainingParantheses()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         foo('IF(
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(['foo'], $result['callStack']);
+//         $this->assertEquals('function', $result['type']);
+//         $this->assertEquals(0, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassName()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         new MyObject(
+//             1,
+//             2,
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(35, $result['offset']);
+//         $this->assertEquals(['MyObject'], $result['callStack']);
+//         $this->assertEquals('instantiation', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         new \MyObject(
+//             1,
+//             2,
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(36, $result['offset']);
+//         $this->assertEquals(['\MyObject'], $result['callStack']);
+//         $this->assertEquals('instantiation', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         new \MyNamespace\MyObject(
+//             1,
+//             2,
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(48, $result['offset']);
+//         $this->assertEquals(['\MyNamespace\MyObject'], $result['callStack']);
+//         $this->assertEquals('instantiation', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithConstructorCalls2()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         new static(
+//             1,
+//             2,
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(33, $result['offset']);
+//         $this->assertEquals(['static'], $result['callStack']);
+//         $this->assertEquals('instantiation', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtWithConstructorCalls3()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         new self(
+//             1,
+//             2,
+//             3
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertEquals(31, $result['offset']);
+//         $this->assertEquals(['self'], $result['callStack']);
+//         $this->assertEquals('instantiation', $result['type']);
+//         $this->assertEquals(2, $result['argumentIndex']);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation1()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         if ($this->test() as $test) {
+//             if (true) {
+//
+//             }
+//         }
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertNull($result);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation2()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         $this->test();
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertNull($result);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation3()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         function test($a, $b)
+//         {
+//
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertNull($result);
+//     }
+//
+//     /**
+//      * @return void
+//      */
+//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation4()
+//     {
+//         $partialParser = new PartialParser();
+//
+//         $source = <<<'SOURCE'
+//         <?php
+//
+//         if (preg_match('/^array\s*\(/', $firstElement) === 1) {
+//             $className = 'array';
+//         } elseif (
+// SOURCE;
+//
+//         $result = $partialParser->getInvocationInfoAt($source);
+//
+//         $this->assertNull($result);
+//     }
 }

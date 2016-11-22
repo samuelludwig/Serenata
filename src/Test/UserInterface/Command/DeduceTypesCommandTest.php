@@ -12,11 +12,11 @@ class DeduceTypesCommandTest extends IndexedTest
 {
     /**
      * @param string $file
-     * @param array  $expressionParts
+     * @param string $expression
      *
      * @return string[]
      */
-    protected function deduceTypes($file, array $expressionParts)
+    protected function deduceTypesFromExpression($file, $expression)
     {
         $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
 
@@ -33,10 +33,10 @@ class DeduceTypesCommandTest extends IndexedTest
         );
 
         $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
-        $reflectionMethod = $reflectionClass->getMethod('deduceTypes');
+        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
         $reflectionMethod->setAccessible(true);
 
-        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expressionParts, $markerOffset);
+        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset);
     }
 
     /**
@@ -59,19 +59,19 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesTypeOverrideAnnotations()
     {
-        $output = $this->deduceTypes('TypeOverrideAnnotations.phpt', ['$a']);
+        $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$a');
 
         $this->assertEquals(['\Traversable'], $output);
 
-        $output = $this->deduceTypes('TypeOverrideAnnotations.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$b');
 
         $this->assertEquals(['\Traversable'], $output);
 
-        $output = $this->deduceTypes('TypeOverrideAnnotations.phpt', ['$c']);
+        $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$c');
 
         $this->assertEquals(['\A\C', 'null'], $output);
 
-        $output = $this->deduceTypes('TypeOverrideAnnotations.phpt', ['$d']);
+        $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$d');
 
         $this->assertEquals(['\A\D'], $output);
     }
@@ -81,7 +81,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyResolvesThisInClass()
     {
-        $output = $this->deduceTypes('ThisInClass.phpt', ['$this']);
+        $output = $this->deduceTypesFromExpression('ThisInClass.phpt', '$this');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -91,7 +91,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyResolvesThisOutsideClass()
     {
-        $output = $this->deduceTypes('ThisOutsideClass.phpt', ['$this']);
+        $output = $this->deduceTypesFromExpression('ThisOutsideClass.phpt', '$this');
 
         $this->assertEquals([], $output);
     }
@@ -101,7 +101,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesFunctionTypeHints()
     {
-        $output = $this->deduceTypes('FunctionParameterTypeHint.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('FunctionParameterTypeHint.phpt', '$b');
 
         $this->assertEquals(['\B'], $output);
     }
@@ -111,7 +111,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesFunctionDocblocks()
     {
-        $output = $this->deduceTypes('FunctionParameterDocblock.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('FunctionParameterDocblock.phpt', '$b');
 
         $this->assertEquals(['\B'], $output);
     }
@@ -121,7 +121,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesMethodTypeHints()
     {
-        $output = $this->deduceTypes('MethodParameterTypeHint.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('MethodParameterTypeHint.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -131,7 +131,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesMethodDocblocks()
     {
-        $output = $this->deduceTypes('MethodParameterDocblock.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('MethodParameterDocblock.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -141,7 +141,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesClosureTypeHints()
     {
-        $output = $this->deduceTypes('ClosureParameterTypeHint.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('ClosureParameterTypeHint.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -151,19 +151,19 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyMovesBeyondClosureScopeForVariableUses()
     {
-        $output = $this->deduceTypes('ClosureVariableUseStatement.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
 
-        $output = $this->deduceTypes('ClosureVariableUseStatement.phpt', ['$c']);
+        $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$c');
 
         $this->assertEquals(['\A\C'], $output);
 
-        $output = $this->deduceTypes('ClosureVariableUseStatement.phpt', ['$d']);
+        $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$d');
 
         $this->assertEquals(['\A\D'], $output);
 
-        $output = $this->deduceTypes('ClosureVariableUseStatement.phpt', ['$e']);
+        $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$e');
 
         $this->assertEquals([], $output);
     }
@@ -173,7 +173,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesCatchBlockTypeHints()
     {
-        $output = $this->deduceTypes('CatchBlockTypeHint.phpt', ['$e']);
+        $output = $this->deduceTypesFromExpression('CatchBlockTypeHint.phpt', '$e');
 
         $this->assertEquals(['\UnexpectedValueException'], $output);
     }
@@ -183,7 +183,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesIfStatementWithInstanceof()
     {
-        $output = $this->deduceTypes('InstanceofIf.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofIf.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -193,7 +193,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndVariableInsideCondition()
     {
-        $output = $this->deduceTypes('InstanceofComplexIfVariableInsideCondition.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofComplexIfVariableInsideCondition.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -203,7 +203,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndAnd()
     {
-        $output = $this->deduceTypes('InstanceofComplexIfAnd.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofComplexIfAnd.phpt', '$b');
 
         $this->assertEquals(['\A\B', '\A\C', '\A\D'], $output);
     }
@@ -213,7 +213,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndOr()
     {
-        $output = $this->deduceTypes('InstanceofComplexIfOr.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofComplexIfOr.phpt', '$b');
 
         $this->assertEquals(['\A\B', '\A\C', '\A\D', '\A\E'], $output);
     }
@@ -223,7 +223,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesNestedIfStatementWithInstanceof()
     {
-        $output = $this->deduceTypes('InstanceofNestedIf.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofNestedIf.phpt', '$b');
 
         $this->assertEquals(['\A\B', '\A\A'], $output);
     }
@@ -233,7 +233,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesNestedIfStatementWithInstanceofAndNegation()
     {
-        $output = $this->deduceTypes('InstanceofNestedIfWithNegation.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofNestedIfWithNegation.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -243,7 +243,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesNestedIfStatementWithInstanceofAndReassignment()
     {
-        $output = $this->deduceTypes('InstanceofNestedIfReassignment.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofNestedIfReassignment.phpt', '$b');
 
         $this->assertEquals(['\A\A'], $output);
     }
@@ -253,7 +253,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesIfStatementWithNotInstanceof()
     {
-        $output = $this->deduceTypes('IfNotInstanceof.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfNotInstanceof.phpt', '$b');
 
         $this->assertEquals(['\A\A'], $output);
     }
@@ -263,7 +263,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithNotStrictlyEqualsNull()
     {
-        $output = $this->deduceTypes('IfNotStrictlyEqualsNull.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfNotStrictlyEqualsNull.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -273,7 +273,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithNotLooselyEqualsNull()
     {
-        $output = $this->deduceTypes('IfNotLooselyEqualsNull.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfNotLooselyEqualsNull.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -283,7 +283,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithStrictlyEqualsNull()
     {
-        $output = $this->deduceTypes('IfStrictlyEqualsNull.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfStrictlyEqualsNull.phpt', '$b');
 
         $this->assertEquals(['null'], $output);
     }
@@ -293,7 +293,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithLooselyEqualsNull()
     {
-        $output = $this->deduceTypes('IfLooselyEqualsNull.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfLooselyEqualsNull.phpt', '$b');
 
         $this->assertEquals(['null'], $output);
     }
@@ -303,7 +303,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesIfStatementWithTruthy()
     {
-        $output = $this->deduceTypes('IfTruthy.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfTruthy.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -313,7 +313,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesIfStatementWithFalsy()
     {
-        $output = $this->deduceTypes('IfFalsy.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfFalsy.phpt', '$b');
 
         $this->assertEquals(['null'], $output);
     }
@@ -323,7 +323,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testTypeOverrideAnnotationsStillTakePrecedenceOverConditionals()
     {
-        $output = $this->deduceTypes('IfWithTypeOverride.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfWithTypeOverride.phpt', '$b');
 
         $this->assertEquals(['string'], $output);
     }
@@ -333,7 +333,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesComplexIfStatementWithVariableHandlingFunction()
     {
-        $output = $this->deduceTypes('IfVariableHandlingFunction.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('IfVariableHandlingFunction.phpt', '$b');
 
         $this->assertEquals([
             'array',
@@ -353,7 +353,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyTreatsIfConditionAsSeparateScope()
     {
-        $output = $this->deduceTypes('InstanceofIfSeparateScope.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofIfSeparateScope.phpt', '$b');
 
         $this->assertEquals([], $output);
     }
@@ -363,7 +363,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesElseIfStatementWithInstanceof()
     {
-        $output = $this->deduceTypes('InstanceofElseIf.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofElseIf.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -373,7 +373,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyConfinesTreatsElseIfConditionAsSeparateScope()
     {
-        $output = $this->deduceTypes('InstanceofElseIfSeparateScope.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofElseIfSeparateScope.phpt', '$b');
 
         $this->assertEquals([], $output);
     }
@@ -383,7 +383,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesTernaryExpressionWithInstanceof()
     {
-        $output = $this->deduceTypes('InstanceofTernary.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofTernary.phpt', '$b');
 
         $this->assertEquals(['\A\B'], $output);
     }
@@ -393,7 +393,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyConfinesTreatsTernaryExpressionConditionAsSeparateScope()
     {
-        $output = $this->deduceTypes('InstanceofTernarySeparateScope.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('InstanceofTernarySeparateScope.phpt', '$b');
 
         $this->assertEquals([], $output);
     }
@@ -403,19 +403,19 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesTernaryExpression()
     {
-        $output = $this->deduceTypes('TernaryExpression.phpt', ['$a']);
+        $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$a');
 
         $this->assertEquals(['\A'], $output);
 
-        $output = $this->deduceTypes('TernaryExpression.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$b');
 
         $this->assertEquals(['\B'], $output);
 
-        $output = $this->deduceTypes('TernaryExpression.phpt', ['$c']);
+        $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$c');
 
         $this->assertEquals(['\C', 'null'], $output);
 
-        $output = $this->deduceTypes('TernaryExpression.phpt', ['$d']);
+        $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$d');
 
         $this->assertEquals(['\A', '\C', 'null'], $output);
     }
@@ -425,7 +425,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesForeach()
     {
-        $output = $this->deduceTypes('Foreach.phpt', ['$a']);
+        $output = $this->deduceTypesFromExpression('Foreach.phpt', '$a');
 
         $this->assertEquals(['\DateTime'], $output);
     }
@@ -435,7 +435,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesAssignments()
     {
-        $output = $this->deduceTypes('Assignment.phpt', ['$a']);
+        $output = $this->deduceTypesFromExpression('Assignment.phpt', '$a');
 
         $this->assertEquals(['\DateTime'], $output);
     }
@@ -445,7 +445,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyIgnoresAssignmentsOutOfScope()
     {
-        $output = $this->deduceTypes('AssignmentOutOfScope.phpt', ['$a']);
+        $output = $this->deduceTypesFromExpression('AssignmentOutOfScope.phpt', '$a');
 
         $this->assertEquals(['\DateTime'], $output);
     }
@@ -455,7 +455,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testDocblockTakesPrecedenceOverTypeHint()
     {
-        $output = $this->deduceTypes('DocblockPrecedence.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('DocblockPrecedence.phpt', '$b');
 
         $this->assertEquals(['\B'], $output);
     }
@@ -465,7 +465,7 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testVariadicTypesForParametersAreCorrectlyAnalyzed()
     {
-        $output = $this->deduceTypes('FunctionVariadicParameter.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('FunctionVariadicParameter.phpt', '$b');
 
         $this->assertEquals(['\A\B[]'], $output);
     }
@@ -475,15 +475,15 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testSpecialTypesForParametersResolveCorrectly()
     {
-        $output = $this->deduceTypes('FunctionParameterTypeHintSpecial.phpt', ['$a']);
+        $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintSpecial.phpt', '$a');
 
         $this->assertEquals(['\A\C'], $output);
 
-        $output = $this->deduceTypes('FunctionParameterTypeHintSpecial.phpt', ['$b']);
+        $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintSpecial.phpt', '$b');
 
         $this->assertEquals(['\A\C'], $output);
 
-        $output = $this->deduceTypes('FunctionParameterTypeHintSpecial.phpt', ['$c']);
+        $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintSpecial.phpt', '$c');
 
         $this->assertEquals(['\A\C'], $output);
     }
@@ -493,9 +493,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesStaticPropertyAccess()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'StaticPropertyAccess.phpt',
-            ['Bar', '$testProperty']
+            'Bar::$testProperty'
         );
 
         $this->assertEquals(['\DateTime'], $result);
@@ -506,9 +506,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesSelf()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'Self.phpt',
-            ['self', '$testProperty']
+            'self::$testProperty'
         );
 
         $this->assertEquals(['\B'], $result);
@@ -519,9 +519,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesStatic()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'Static.phpt',
-            ['static', '$testProperty']
+            'static::$testProperty'
         );
 
         $this->assertEquals(['\B'], $result);
@@ -532,9 +532,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesParent()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'Parent.phpt',
-            ['parent', '$testProperty']
+            'parent::$testProperty'
         );
 
         $this->assertEquals(['\B'], $result);
@@ -545,9 +545,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesThis()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'This.phpt',
-            ['$this', 'testProperty']
+            '$this->testProperty'
         );
 
         $this->assertEquals(['\B'], $result);
@@ -558,9 +558,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesVariables()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'Variable.phpt',
-            ['$var', 'testProperty']
+            '$var->testProperty'
         );
 
         $this->assertEquals(['\B'], $result);
@@ -571,9 +571,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesGlobalFunctions()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'GlobalFunction.phpt',
-            ['\global_function()']
+            '\global_function()'
         );
 
         $this->assertEquals(['\B', 'null'], $result);
@@ -584,9 +584,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesGlobalConstants()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'GlobalConstant.phpt',
-            ['\GLOBAL_CONSTANT']
+            '\GLOBAL_CONSTANT'
         );
 
         $this->assertEquals(['string'], $result);
@@ -597,9 +597,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesGlobalConstantsAssignedToOtherGlobalConstants()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'GlobalConstant.phpt',
-            ['\ANOTHER_GLOBAL_CONSTANT']
+            '\ANOTHER_GLOBAL_CONSTANT'
         );
 
         $this->assertEquals(['string'], $result);
@@ -610,9 +610,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesClosures()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'Closure.phpt',
-            ['$var']
+            '$var'
         );
 
         $this->assertEquals(['\Closure'], $result);
@@ -623,9 +623,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesNewWithStatic()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'NewWithStatic.phpt',
-            ['new static']
+            'new static'
         );
 
         $this->assertEquals(['\Bar'], $result);
@@ -636,9 +636,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesClone()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'Clone.phpt',
-            ['clone $var']
+            'clone $var'
         );
 
         $this->assertEquals(['\Bar'], $result);
@@ -649,9 +649,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyAnalyzesLongerChains()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'LongerChain.phpt',
-            ['$this', 'testProperty', 'aMethod()', 'anotherProperty']
+            '$this->testProperty->aMethod()->anotherProperty'
         );
 
         $this->assertEquals(['\DateTime'], $result);
@@ -664,24 +664,24 @@ class DeduceTypesCommandTest extends IndexedTest
     {
         $file = 'ScalarType.phpt';
 
-        $this->assertEquals(['int'], $this->deduceTypes($file, ['5']));
-        $this->assertEquals(['int'], $this->deduceTypes($file, ['05']));
-        $this->assertEquals(['int'], $this->deduceTypes($file, ['0x5']));
-        $this->assertEquals(['float'], $this->deduceTypes($file, ['5.5']));
-        $this->assertEquals(['bool'], $this->deduceTypes($file, ['true']));
-        $this->assertEquals(['bool'], $this->deduceTypes($file, ['false']));
-        $this->assertEquals(['string'], $this->deduceTypes($file, ['"test"']));
-        $this->assertEquals(['string'], $this->deduceTypes($file, ['\'test\'']));
-        $this->assertEquals(['array'], $this->deduceTypes($file, ['[$test1, function() {}]']));
-        $this->assertEquals(['array'], $this->deduceTypes($file, ['array($test1, function() {})']));
+        $this->assertEquals(['int'], $this->deduceTypesFromExpression($file, '5'));
+        $this->assertEquals(['int'], $this->deduceTypesFromExpression($file, '05'));
+        $this->assertEquals(['int'], $this->deduceTypesFromExpression($file, '0x5'));
+        $this->assertEquals(['float'], $this->deduceTypesFromExpression($file, '5.5'));
+        $this->assertEquals(['bool'], $this->deduceTypesFromExpression($file, 'true'));
+        $this->assertEquals(['bool'], $this->deduceTypesFromExpression($file, 'false'));
+        $this->assertEquals(['string'], $this->deduceTypesFromExpression($file, '"test"'));
+        $this->assertEquals(['string'], $this->deduceTypesFromExpression($file, '\'test\''));
+        $this->assertEquals(['array'], $this->deduceTypesFromExpression($file, '[$test1, function() {}]'));
+        $this->assertEquals(['array'], $this->deduceTypesFromExpression($file, 'array($test1, function() {})'));
 
-        $this->assertEquals(['string'], $this->deduceTypes($file, ['"
+        $this->assertEquals(['string'], $this->deduceTypesFromExpression($file, '"
             test
-        "']));
+        "'));
 
-        $this->assertEquals(['string'], $this->deduceTypes($file, ['\'
+        $this->assertEquals(['string'], $this->deduceTypesFromExpression($file, '\'
             test
-        \'']));
+        \''));
     }
 
     /**
@@ -689,23 +689,23 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyProcessesSelfAssign()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'SelfAssign.phpt',
-            ['$foo1']
+            '$foo1'
         );
 
         $this->assertEquals(['\A\Foo'], $result);
 
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'SelfAssign.phpt',
-            ['$foo2']
+            '$foo2'
         );
 
         $this->assertEquals(['\A\Foo'], $result);
 
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'SelfAssign.phpt',
-            ['$foo3']
+            '$foo3'
         );
 
         $this->assertEquals(['\A\Foo'], $result);
@@ -716,9 +716,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyProcessesStaticMethodCallAssignedToVariableWithFqcnWithLeadingSlash()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'StaticMethodCallFqcnLeadingSlash.phpt',
-            ['$data']
+            '$data'
         );
 
         $this->assertEquals(['\A\B'], $result);
@@ -729,9 +729,9 @@ class DeduceTypesCommandTest extends IndexedTest
      */
     public function testCorrectlyReturnsMultipleTypes()
     {
-        $result = $this->deduceTypes(
+        $result = $this->deduceTypesFromExpression(
             'MultipleTypes.phpt',
-            ['$this', 'testProperty']
+            '$this->testProperty'
         );
 
         $this->assertEquals([

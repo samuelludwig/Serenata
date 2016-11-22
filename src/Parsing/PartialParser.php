@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Parsing;
 
+use PhpParser\Node;
+
 /**
  * Parses partial (incomplete) PHP code.
  *
@@ -140,6 +142,7 @@ class PartialParser
             }
         }
 
+
         return $i;
     }
 
@@ -155,13 +158,111 @@ class PartialParser
             $source = substr($source, 0, $offset);
         }
 
+        if (mb_substr(trim($source), 0, 5) !== '<?php') {
+            $source = '<?php ' . $source;
+        };
+
+
         $boundary = $this->getStartOfExpression($source);
 
-        $expression = substr($source, $boundary);
-        $expression = $this->getSanitizedExpression($expression);
+        // TODO: This should never be < 0, fix this in getStartOfExpression.
+        $boundary = max($boundary, 0);
 
-        return $this->getCallStackFromExpression($expression);
+        $expression = substr($source, $boundary);
+        $expression = trim($expression);
+
+        $correctedExpression = '<?php ' . $expression;
+
+        $nodes = $this->tryParse($correctedExpression);
+
+        if ($nodes === null) {
+            $nodes = $this->tryParse($correctedExpression . ';');
+        }
+
+        if ($nodes === null) {
+            if ($expression === 'static') {
+                $nodes = [new \PhpIntegrator\Parsing\Node\Keyword\Static_()];
+            }
+        }
+
+        $removeDummy = false;
+        $dummyName = '____DUMMY____';
+
+        if ($nodes === null) {
+            $newExpression = $correctedExpression;
+
+            // if (!in_array(mb_substr($correctedExpression, -2), ['::', '->'])) {
+            //     $newExpression .= '::';
+            // }
+
+            $newExpression .= $dummyName . ';';
+
+            $nodes = $this->tryParse($newExpression);
+
+            $removeDummy = true;
+        }
+
+        if ($nodes === null) {
+            throw new \Exception('Could not parse ' . $expression);
+            return null;
+        }
+
+        if (count($nodes) > 1) {
+            die(var_dump(__FILE__ . ':' . __LINE__, 'Too many nodes'));
+        }
+
+        $node = array_shift($nodes);
+
+        if ($removeDummy) {
+            // TODO: Perhaps we can replace the ____DUMMY____ 'property fetch' node with a node that extends from a
+            // property fetch but represents a "dummy" variant so other parts of the code can check for it to ignore it.
+
+            if ($node instanceof Node\Expr\ClassConstFetch ||
+                $node instanceof Node\Expr\PropertyFetch) {
+                if ($node->name === $dummyName) {
+                    $node->name = '';
+                }
+            }
+
+            // die(var_dump(__FILE__ . ':' . __LINE__, $node, $correctedExpression));
+        }
+
+        return $node;
+
+        // TODO: Rename method.
+        // TODO: Rename tests, they aren't testing boundary stopping anymore.
+        // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
+        // TODO: Reenable getInvocationInfo tests.
+
+        // die(var_dump(__FILE__ . ':' . __LINE__, $expression));
+
+
+
+
+        // $expression = $this->getSanitizedExpression($expression);
+
+        // return $this->getCallStackFromExpression($expression);
     }
+
+
+    protected function tryParse($code)
+    {
+        // TODO: Stop creating repeatedly.
+        $parserFactory = new \PhpParser\ParserFactory();
+        $parser = $parserFactory->create(\PhpParser\ParserFactory::PREFER_PHP7, new \PhpParser\Lexer());
+
+        try {
+            return $parser->parse($code);
+        } catch (\PhpParser\Error $e) {
+            return null;
+        }
+
+        return null;
+    }
+
+
+
+
 
     /**
      * @param string $expression

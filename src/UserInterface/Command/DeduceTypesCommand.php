@@ -11,6 +11,8 @@ use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
+use PhpParser\Node;
+
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
  */
@@ -69,22 +71,32 @@ class DeduceTypesCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        $parts = [];
+
+
+
+        // TODO: Part support has to go away, the entire expression has to be passed as string. Refactor all locations
+        // that pass parts to do this.
 
         if (isset($arguments['part'])) {
-            $parts = $arguments['part'];
-        } else {
-            $parts = $this->partialParser->retrieveSanitizedCallStackAt($code, $offset);
-
-            if (!empty($parts) && isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
-                array_pop($parts);
-            }
+            $code = implode('->', $arguments['part']);
         }
 
+
+        $node = $this->partialParser->retrieveSanitizedCallStackAt($code, $offset);
+
+        if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
+            die(var_dump(__FILE__ . ':' . __LINE__, $node));
+
+            // TODO: If this is a PropertyFetch, MethodCall, Static property fetch, static call, ... (any type of call
+            // with a -> or ::, really), throw out its last part.
+            // array_pop($parts);
+        }
+
+        // $result = $this->deduceTypes(
         $result = $this->deduceTypes(
            isset($arguments['file']) ? $arguments['file'] : null,
            $code,
-           $parts,
+           $node,
            $offset
         );
 
@@ -92,15 +104,30 @@ class DeduceTypesCommand extends AbstractCommand
     }
 
     /**
-     * @param string   $file
-     * @param string   $code
-     * @param string[] $parts
-     * @param int      $offset
+     * @param string $file
+     * @param string $code
+     * @param Node   $node
+     * @param int    $offset
      *
      * @return string[]
      */
-    protected function deduceTypes($file, $code, array $parts, $offset)
+    protected function deduceTypes($file, $code, Node $node, $offset)
     {
-        return $this->typeDeducer->deduceTypes($file, $code, $parts, $offset);
+        return $this->typeDeducer->deduceTypesFromNode($file, $code, $node, $offset);
+    }
+
+    /**
+     * @param string $file
+     * @param string $code
+     * @param string $expression
+     * @param int    $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromExpression($file, $code, $expression, $offset)
+    {
+        $node = $this->partialParser->retrieveSanitizedCallStackAt($expression, $offset);
+
+        return $this->deduceTypes($file, $code, $node, $offset);
     }
 }
