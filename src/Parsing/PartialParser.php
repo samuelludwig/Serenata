@@ -70,6 +70,7 @@ class PartialParser implements Parser
             if (
                 $token['type'] === T_COMMENT ||
                 $token['type'] === T_DOC_COMMENT ||
+                $token['type'] === T_CONSTANT_ENCAPSED_STRING ||
                 ($didStartInsideString && $token['type'] === T_STRING)
             ) {
                 // Do nothing, we just keep parsing. (Comments can occur inside call stacks.)

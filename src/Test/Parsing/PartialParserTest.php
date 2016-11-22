@@ -212,6 +212,25 @@ SOURCE;
     /**
      * @return void
      */
+    public function testRetrieveSanitizedCallStackAtReadsStringWithDotsAndColonsInIt()
+    {
+        $partialParser = new PartialParser();
+
+        $source = <<<'SOURCE'
+            <?php
+
+            $a = '.:'
+SOURCE;
+
+        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\String_::class, $result);
+        $this->assertEquals('.:', $result->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testRetrieveSanitizedCallStackAtStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
     {
         $partialParser = new PartialParser();
