@@ -160,7 +160,7 @@ class TypeDeducer
      *
      * @return string[]
      */
-    public function deduceTypes($file, $code, array $expressionParts, $offset)
+    protected function deduceTypes($file, $code, array $expressionParts, $offset)
     {
         // TODO: Using regular expressions here is kind of silly. We should refactor this to actually analyze php-parser
         // nodes at a later stage. At the moment this is just a one-to-one translation of the original CoffeeScript
