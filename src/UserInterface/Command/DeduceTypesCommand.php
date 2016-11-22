@@ -81,15 +81,10 @@ class DeduceTypesCommand extends AbstractCommand
             $code = implode('->', $arguments['part']);
         }
 
-
         $node = $this->partialParser->retrieveSanitizedCallStackAt($code, $offset);
 
         if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
-            die(var_dump(__FILE__ . ':' . __LINE__, $node));
-
-            // TODO: If this is a PropertyFetch, MethodCall, Static property fetch, static call, ... (any type of call
-            // with a -> or ::, really), throw out its last part.
-            // array_pop($parts);
+            $this->removeLastElementFromNode($node);
         }
 
         // $result = $this->deduceTypes(
@@ -101,6 +96,18 @@ class DeduceTypesCommand extends AbstractCommand
         );
 
         return $result;
+    }
+
+    /**
+     * @param Node $node
+     */
+    protected function removeLastElementFromNode(Node $node)
+    {
+        die(var_dump(__FILE__ . ':' . __LINE__, $node));
+
+        // TODO: If this is a PropertyFetch, MethodCall, Static property fetch, static call, ... (any type of call
+        // with a -> or ::, really), throw out its last part.
+        // array_pop($parts);
     }
 
     /**
