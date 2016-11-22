@@ -4,6 +4,7 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
+use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
@@ -51,6 +52,11 @@ class FileIndexer
     protected $typeAnalyzer;
 
     /**
+     * @var Parser
+     */
+    protected $parser;
+
+    /**
      * @var TypeDeducer
      */
     protected $typeDeducer;
@@ -58,7 +64,7 @@ class FileIndexer
     /**
      * @var Parser
      */
-    protected $parser;
+    protected $defaultValueParser;
 
     /**
      * @var array
@@ -75,6 +81,7 @@ class FileIndexer
      * @param TypeAnalyzer     $typeAnalyzer
      * @param TypeResolver     $typeResolver
      * @param DocblockParser   $docblockParser
+     * @param Parser           $defaultValueParser
      * @param TypeDeducer      $typeDeducer
      * @param Parser           $parser
      */
@@ -83,6 +90,7 @@ class FileIndexer
         TypeAnalyzer $typeAnalyzer,
         TypeResolver $typeResolver,
         DocblockParser $docblockParser,
+        Parser $defaultValueParser,
         TypeDeducer $typeDeducer,
         Parser $parser
     ) {
@@ -90,6 +98,7 @@ class FileIndexer
         $this->typeAnalyzer = $typeAnalyzer;
         $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
+        $this->defaultValueParser = $defaultValueParser;
         $this->typeDeducer = $typeDeducer;
         $this->parser = $parser;
     }
@@ -473,12 +482,20 @@ class FileIndexer
                 $rawData['startLine'],
                 $fileTypeResolver
             );
-        } elseif ($rawData['defaultValue']) {
+        } elseif (!empty($rawData['defaultValue'])) {
             try {
-                $typeList = $this->typeDeducer->deduceTypes(
+                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+
+                if (empty($nodes)) {
+                    throw new LogicException(
+                        'Could not parse default value "' . $rawData['defaultValue'] . '" of built-in constant'
+                    );
+                }
+
+                $typeList = $this->typeDeducer->deduceTypesFromNode(
                     $filePath,
                     $rawData['defaultValue'],
-                    [$rawData['defaultValue']],
+                    $nodes[0],
                     0
                 );
 
@@ -559,10 +576,18 @@ class FileIndexer
             ];
         } elseif ($rawData['defaultValue']) {
             try {
-                $typeList = $this->typeDeducer->deduceTypes(
+                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+
+                if (empty($nodes)) {
+                    throw new LogicException(
+                        'Could not parse default value "' . $rawData['defaultValue'] . '" of built-in constant'
+                    );
+                }
+
+                $typeList = $this->typeDeducer->deduceTypesFromNode(
                     $filePath,
                     $rawData['defaultValue'],
-                    [$rawData['defaultValue']],
+                    $nodes[0],
                     0
                 );
 

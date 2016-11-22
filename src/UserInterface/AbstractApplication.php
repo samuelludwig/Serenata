@@ -319,6 +319,7 @@ abstract class AbstractApplication
             ->setArguments([
                 new Reference('indexDatabase'),
                 new Reference('typeAnalyzer'),
+                new Reference('partialParser'),
                 new Reference('typeDeducer')
             ]);
 
@@ -329,6 +330,7 @@ abstract class AbstractApplication
                 new Reference('typeAnalyzer'),
                 new Reference('typeResolver'),
                 new Reference('docblockParser'),
+                new Reference('partialParser'),
                 new Reference('typeDeducer'),
                 new Reference('parser')
             ]);

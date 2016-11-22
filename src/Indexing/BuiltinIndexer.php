@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Indexing;
 
 use Exception;
+use LogicException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionFunction;
@@ -13,6 +14,8 @@ use ReflectionFunctionAbstract;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+
+use PhpParser\Parser;
 
 /**
  * Handles indexation of built-in classes, global constants and global functions.
@@ -30,6 +33,11 @@ class BuiltinIndexer
      * @var TypeAnalyzer
      */
     protected $typeAnalyzer;
+
+    /**
+     * @var Parser
+     */
+    protected $parser;
 
     /**
      * @var TypeDeducer
@@ -59,12 +67,18 @@ class BuiltinIndexer
     /**
      * @param StorageInterface $storage
      * @param TypeAnalyzer     $typeAnalyzer
+     * @param Parser           $parser
      * @param TypeDeducer      $typeDeducer
      */
-    public function __construct(StorageInterface $storage, TypeAnalyzer $typeAnalyzer, TypeDeducer $typeDeducer)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        TypeAnalyzer $typeAnalyzer,
+        Parser $parser,
+        TypeDeducer $typeDeducer
+    ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->parser = $parser;
         $this->typeDeducer = $typeDeducer;
     }
 
@@ -161,17 +175,27 @@ class BuiltinIndexer
 
         $defaultValue = json_encode($value, $encodingOptions);
 
-        try {
-            $typeList = $this->typeDeducer->deduceTypes(
-                'test',
-                $defaultValue,
-                [$defaultValue],
-                0
-            );
+        $types = [];
 
-            $types = $this->getTypeDataForTypeList($typeList);
-        } catch (UnexpectedValueException $e) {
-            $types = [];
+        if (!empty($defaultValue)) {
+            try {
+                $nodes = $this->parser->parse($defaultValue);
+
+                if (empty($nodes)) {
+                    throw new LogicException('Could not parse default value "' . $defaultValue . '" of built-in constant');
+                }
+
+                $typeList = $this->typeDeducer->deduceTypesFromNode(
+                    'test',
+                    $defaultValue,
+                    $nodes[0],
+                    0
+                );
+
+                $types = $this->getTypeDataForTypeList($typeList);
+            } catch (UnexpectedValueException $e) {
+                $types = [];
+            }
         }
 
         return $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
