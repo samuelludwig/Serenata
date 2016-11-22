@@ -62,8 +62,7 @@ class PartialParser implements Parser
                 ];
             }
 
-            if (
-                $token['type'] === T_COMMENT ||
+            if ($token['type'] === T_COMMENT ||
                 $token['type'] === T_DOC_COMMENT ||
                 $token['type'] === T_CONSTANT_ENCAPSED_STRING ||
                 $token['type'] === T_STRING
