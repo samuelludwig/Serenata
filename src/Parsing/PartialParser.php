@@ -216,6 +216,7 @@ class PartialParser implements Parser
         }
 
         if ($nodes === null) {
+            die(var_dump(__FILE__ . ':' . __LINE__, "Could not parse", $expression, $code, $boundary));
             throw new \Exception('Could not parse ' . $expression);
             return null;
         }
