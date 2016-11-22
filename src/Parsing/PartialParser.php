@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Parsing;
 
 use PhpParser\Node;
+use PhpParser\Parser;
 
 /**
  * Parses partial (incomplete) PHP code.
@@ -11,7 +12,7 @@ use PhpParser\Node;
  * php-parser. This is necessary for being able to deal with incomplete expressions such as "$this->" to see what the
  * type of the expression is. This information can in turn be used by client functionality such as autocompletion.
  */
-class PartialParser
+class PartialParser implements Parser
 {
     /**
      * Retrieves the start of the expression (as byte offset) that ends at the end of the specified source code string.
@@ -158,17 +159,28 @@ class PartialParser
             $source = substr($source, 0, $offset);
         }
 
-        if (mb_substr(trim($source), 0, 5) !== '<?php') {
-            $source = '<?php ' . $source;
+        $nodes = $this->parse($source);
+
+        return array_shift($nodes);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function parse($code)
+    {
+        if (mb_substr(trim($code), 0, 5) !== '<?php') {
+            $code = '<?php ' . $code;
         };
 
 
-        $boundary = $this->getStartOfExpression($source);
+        $boundary = $this->getStartOfExpression($code);
 
         // TODO: This should never be < 0, fix this in getStartOfExpression.
         $boundary = max($boundary, 0);
 
-        $expression = substr($source, $boundary);
+        $expression = substr($code, $boundary);
         $expression = trim($expression);
 
         $correctedExpression = '<?php ' . $expression;
@@ -212,7 +224,7 @@ class PartialParser
             die(var_dump(__FILE__ . ':' . __LINE__, 'Too many nodes'));
         }
 
-        $node = array_shift($nodes);
+        $node = $nodes[count($nodes) - 1];
 
         if ($removeDummy) {
             // TODO: Perhaps we can replace the ____DUMMY____ 'property fetch' node with a node that extends from a
@@ -228,7 +240,7 @@ class PartialParser
             // die(var_dump(__FILE__ . ':' . __LINE__, $node, $correctedExpression));
         }
 
-        return $node;
+        return $nodes;
 
         // TODO: Rename method.
         // TODO: Rename tests, they aren't testing boundary stopping anymore.
@@ -243,6 +255,14 @@ class PartialParser
         // $expression = $this->getSanitizedExpression($expression);
 
         // return $this->getCallStackFromExpression($expression);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getErrors()
+    {
+        return [];
     }
 
 
@@ -260,6 +280,9 @@ class PartialParser
 
         return null;
     }
+
+
+
 
 
 
