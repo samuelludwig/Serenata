@@ -32,7 +32,7 @@ class BuiltinIndexer
     protected $typeAnalyzer;
 
     /**
-     * @var DeduceTypesCommand
+     * @var TypeDeducer
      */
     protected $typeDeducer;
 
@@ -59,6 +59,7 @@ class BuiltinIndexer
     /**
      * @param StorageInterface $storage
      * @param TypeAnalyzer     $typeAnalyzer
+     * @param TypeDeducer      $typeDeducer
      */
     public function __construct(StorageInterface $storage, TypeAnalyzer $typeAnalyzer, TypeDeducer $typeDeducer)
     {
