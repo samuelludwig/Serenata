@@ -248,11 +248,6 @@ class PartialParser implements Parser
         // TODO: Reenable getInvocationInfo tests.
 
         // die(var_dump(__FILE__ . ':' . __LINE__, $expression));
-
-
-
-
-        // $expression = $this->getSanitizedExpression($expression);
     }
 
     /**
@@ -277,78 +272,6 @@ class PartialParser implements Parser
         }
 
         return null;
-    }
-
-    /**
-     * @param string $expression
-     *
-     * @return string
-     */
-    protected function getSanitizedExpression($expression)
-    {
-        $expression = trim($expression);
-        $expression = preg_replace('/\/\/.*\n/', '', $expression);         // Remove singe line comments.
-        $expression = preg_replace('/\/\*(.|\n)*?\*\//', '', $expression); // Remove multi-line comments.
-
-        // The start of the call stack may be wrapped in parentheses, e.g. ""(new Foo())->test", unwrap them. Note that
-        // "($this)->" is invalid (at least in PHP 5.6).
-        $expression = preg_replace_callback('/^\(new\s+(.|\n)+?\)/', function ($match) {
-            return mb_substr($match[0], 1, -1);
-        }, $expression);
-
-        if (preg_match('/function\s+([A-Za-z0-9_]\s*)?\(/', $expression) === 1) {
-            $expression = $this->stripPairContent($expression, '{', '}');
-        }
-
-        // Remove content inside parantheses (including nested parantheses).
-        $expression = $this->stripPairContent($expression, '(', ')');
-
-        // Trim whitespace around member-related operators.
-        $expression = trim($expression);
-        $expression = preg_replace('/\s+(?=(::|->))/', '', $expression);
-        $expression = preg_replace('/(?<=(::|->))\s+/', '', $expression);
-
-        return $expression;
-    }
-
-    /**
-     * @param string $text
-     * @param string $openCharacter
-     * @param string $closeCharacter
-     *
-     * @return string
-     */
-    protected function stripPairContent($text, $openCharacter, $closeCharacter)
-    {
-        $openCount = 0;
-        $closeCount = 0;
-        $startIndex = -1;
-        $length = mb_strlen($text);
-
-        for ($i = 0; $i < $length; ++$i) {
-            if ($text[$i] === $openCharacter) {
-                ++$openCount;
-
-                if ($openCount === 1) {
-                    $startIndex = $i;
-                }
-            } elseif ($text[$i] === $closeCharacter) {
-                ++$closeCount;
-
-                if ($closeCount === $openCount) {
-                    $originalLength = mb_strlen($text);
-                    $text = mb_substr($text, 0, $startIndex + 1) . mb_substr($text, $i);
-
-                    $length = mb_strlen($text);
-                    $i -= ($originalLength - $length);
-
-                    $openCount = 0;
-                    $closeCount = 0;
-                }
-            }
-        }
-
-        return $text;
     }
 
     /**
