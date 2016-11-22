@@ -180,6 +180,7 @@ class PartialParser
         }
 
         if ($nodes === null) {
+            // TODO: It is likely that "self" and "parent" need the same treatment. Add tests and add them.
             if ($expression === 'static') {
                 $nodes = [new \PhpIntegrator\Parsing\Node\Keyword\Static_()];
             }
