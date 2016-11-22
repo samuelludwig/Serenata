@@ -253,8 +253,6 @@ class PartialParser implements Parser
 
 
         // $expression = $this->getSanitizedExpression($expression);
-
-        // return $this->getCallStackFromExpression($expression);
     }
 
     /**
@@ -279,35 +277,6 @@ class PartialParser implements Parser
         }
 
         return null;
-    }
-
-
-
-
-
-
-
-
-    /**
-     * @param string $expression
-     *
-     * @return string[]
-     */
-    public function getCallStackFromExpression($expression)
-    {
-        if (!$expression) {
-            return [];
-        }
-
-        $callStack = [];
-
-        foreach (explode('->', $expression) as $part) {
-            foreach (explode('::', $part) as $subPart) {
-                $callStack[] = $subPart;
-            }
-        }
-
-        return $callStack;
     }
 
     /**
