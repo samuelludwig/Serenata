@@ -245,10 +245,6 @@ class TypeDeducer
             $types = [];
 
             foreach ($typesOfVar as $type) {
-                if (!$this->typeAnalyzer->isClassType($type)) {
-                    continue; // Can't fetch members of non-class type.
-                }
-
                 try {
                     $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
                 } catch (UnexpectedValueException $e) {
@@ -280,10 +276,6 @@ class TypeDeducer
             $types = [];
 
             foreach ($typesOfVar as $type) {
-                if (!$this->typeAnalyzer->isClassType($type)) {
-                    continue; // Can't fetch members of non-class type.
-                }
-
                 try {
                     $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
                 } catch (UnexpectedValueException $e) {
@@ -309,10 +301,6 @@ class TypeDeducer
             $types = [];
 
             foreach ($typesOfVar as $type) {
-                if (!$this->typeAnalyzer->isClassType($type)) {
-                    continue; // Can't fetch members of non-class type.
-                }
-
                 try {
                     $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
                 } catch (UnexpectedValueException $e) {
@@ -337,8 +325,6 @@ class TypeDeducer
         return [];
 
         // TODO: getTypesForNode can be (partially) merged into this method.
-        // TODO: Is it necessary that we check if a type is a class type? The linter will pick this up and if the user
-        // is doing a method call with a type such as an int, we should probably still try to fetch it as a class.
         // TODO: Refactor (extract methods such as deduceTypesFromMethodCall, deduceTypesFromPropertyFetch, ...).
     }
 
