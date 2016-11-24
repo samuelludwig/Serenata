@@ -185,7 +185,10 @@ class PartialParser implements Parser
         $code = $this->getNormalizedCode($code);
         $boundary = $this->getStartOfExpression($code);
 
-        $boundary = max($boundary, 0); // TODO: This should never be < 0, fix this in getStartOfExpression.
+        // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
+        // TODO: Reenable getInvocationInfo tests.
+        // TODO: This should never be < 0, fix this in getStartOfExpression.
+        $boundary = max($boundary, 0);
 
         $expression = substr($code, $boundary);
         $expression = trim($expression);
@@ -210,9 +213,6 @@ class PartialParser implements Parser
         }
 
         return $nodes;
-
-        // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
-        // TODO: Reenable getInvocationInfo tests.
     }
 
     /**
