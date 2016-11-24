@@ -11,7 +11,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBasicFunctionCalls()
+    public function testGetLastNodeAtStopsAtBasicFunctionCalls()
     {
         $partialParser = new PartialParser();
 
@@ -21,7 +21,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
             array_walk
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ConstFetch::class, $result);
         $this->assertEquals('array_walk', $result->name->toString());
@@ -30,7 +30,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtStaticClassNames()
+    public function testGetLastNodeAtStopsAtStaticClassNames()
     {
         $partialParser = new PartialParser();
 
@@ -44,7 +44,7 @@ SOURCE;
             Bar::testProperty
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
         $this->assertEquals('Bar', $result->class->toString());
@@ -54,7 +54,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtStaticClassNamesContainingANamespace()
+    public function testGetLastNodeAtStopsAtStaticClassNamesContainingANamespace()
     {
         $partialParser = new PartialParser();
 
@@ -68,7 +68,7 @@ SOURCE;
             NamespaceTest\Bar::staticmethod()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\StaticCall::class, $result);
         $this->assertEquals('NamespaceTest\Bar', $result->class->toString());
@@ -78,7 +78,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtControlKeywords()
+    public function testGetLastNodeAtStopsAtControlKeywords()
     {
         $partialParser = new PartialParser();
 
@@ -92,7 +92,7 @@ SOURCE;
             return $this->someProperty
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -102,7 +102,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBuiltinConstructs()
+    public function testGetLastNodeAtStopsAtBuiltinConstructs()
     {
         $partialParser = new PartialParser();
 
@@ -116,7 +116,7 @@ SOURCE;
             echo $this->someProperty
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -126,7 +126,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtKeywordsSuchAsSelfAndParent()
+    public function testGetLastNodeAtStopsAtKeywordsSuchAsSelfAndParent()
     {
         $partialParser = new PartialParser();
 
@@ -140,7 +140,7 @@ SOURCE;
             self::$someProperty->test
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->var);
@@ -152,7 +152,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtTernaryOperatorsFirstOperand()
+    public function testGetLastNodeAtStopsAtTernaryOperatorsFirstOperand()
     {
         $partialParser = new PartialParser();
 
@@ -162,7 +162,7 @@ SOURCE;
             $a = $b ? $c->foo()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertEquals('c', $result->var->name);
@@ -172,7 +172,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtTernaryOperatorsLastOperand()
+    public function testGetLastNodeAtStopsAtTernaryOperatorsLastOperand()
     {
         $partialParser = new PartialParser();
 
@@ -182,7 +182,7 @@ SOURCE;
             $a = $b ? $c->foo() : $d->bar()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertEquals('d', $result->var->name);
@@ -192,7 +192,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtConcatenationOperators()
+    public function testGetLastNodeAtStopsAtConcatenationOperators()
     {
         $partialParser = new PartialParser();
 
@@ -202,7 +202,7 @@ SOURCE;
             $a = $b . $c->bar()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertEquals('c', $result->var->name);
@@ -212,7 +212,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtReadsStringWithDotsAndColonsInIt()
+    public function testGetLastNodeAtReadsStringWithDotsAndColonsInIt()
     {
         $partialParser = new PartialParser();
 
@@ -222,7 +222,7 @@ SOURCE;
             $a = '.:'
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\String_::class, $result);
         $this->assertEquals('.:', $result->value);
@@ -231,7 +231,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
+    public function testGetLastNodeAtStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
     {
         $partialParser = new PartialParser();
 
@@ -245,7 +245,7 @@ SOURCE;
             $this->{$foo}()->test()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var);
@@ -259,7 +259,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtCasts()
+    public function testGetLastNodeAtStopsAtCasts()
     {
         $partialParser = new PartialParser();
 
@@ -269,7 +269,7 @@ SOURCE;
             $test = (int) $this->test
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -279,7 +279,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
+    public function testGetLastNodeAtStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
     {
         $partialParser = new PartialParser();
 
@@ -292,7 +292,7 @@ SOURCE;
                 FROM {$this->
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -302,7 +302,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtTheNewKeyword()
+    public function testGetLastNodeAtStopsAtTheNewKeyword()
     {
         $partialParser = new PartialParser();
 
@@ -312,7 +312,7 @@ SOURCE;
             $test = new $this->
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -322,7 +322,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
+    public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
     {
         $partialParser = new PartialParser();
 
@@ -336,7 +336,7 @@ SOURCE;
             (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -347,7 +347,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
+    public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
     {
         $partialParser = new PartialParser();
 
@@ -358,7 +358,7 @@ SOURCE;
                 'test' => (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -369,7 +369,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
+    public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
     {
         $partialParser = new PartialParser();
 
@@ -380,7 +380,7 @@ SOURCE;
                 (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -391,7 +391,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
+    public function testGetLastNodeAtStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
     {
         $partialParser = new PartialParser();
 
@@ -401,7 +401,7 @@ SOURCE;
             foo(firstArg($test), (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -412,7 +412,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtSanitizesComplexCallStack()
+    public function testGetLastNodeAtSanitizesComplexCallStack()
     {
         $partialParser = new PartialParser();
 
@@ -453,7 +453,7 @@ SOURCE;
 
         $expectedResult = ['$this', 'testChaining()', 'testChaining()', 'testChaining()', 'testChaining()', 'testChai'];
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var);
@@ -470,7 +470,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtSanitizesStaticCallWithStaticKeyword()
+    public function testGetLastNodeAtSanitizesStaticCallWithStaticKeyword()
     {
         $partialParser = new PartialParser();
 
@@ -480,7 +480,7 @@ SOURCE;
             static::doSome
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
         $this->assertEquals('static', $result->class);
@@ -490,7 +490,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtAssignmentSymbol()
+    public function testGetLastNodeAtStopsAtAssignmentSymbol()
     {
         $partialParser = new PartialParser();
 
@@ -500,7 +500,7 @@ SOURCE;
             $test = $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -510,7 +510,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtMultiplicationOperator()
+    public function testGetLastNodeAtStopsAtMultiplicationOperator()
     {
         $partialParser = new PartialParser();
 
@@ -520,7 +520,7 @@ SOURCE;
             5 * $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -530,7 +530,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtDivisionOperator()
+    public function testGetLastNodeAtStopsAtDivisionOperator()
     {
         $partialParser = new PartialParser();
 
@@ -540,7 +540,7 @@ SOURCE;
             5 / $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -550,7 +550,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtPlusOperator()
+    public function testGetLastNodeAtStopsAtPlusOperator()
     {
         $partialParser = new PartialParser();
 
@@ -560,7 +560,7 @@ SOURCE;
             5 + $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -570,7 +570,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtModulusOperator()
+    public function testGetLastNodeAtStopsAtModulusOperator()
     {
         $partialParser = new PartialParser();
 
@@ -580,7 +580,7 @@ SOURCE;
             5 % $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -590,7 +590,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtMinusOperator()
+    public function testGetLastNodeAtStopsAtMinusOperator()
     {
         $partialParser = new PartialParser();
 
@@ -600,7 +600,7 @@ SOURCE;
             5 - $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -610,7 +610,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBitwisoOrOperator()
+    public function testGetLastNodeAtStopsAtBitwisoOrOperator()
     {
         $partialParser = new PartialParser();
 
@@ -620,7 +620,7 @@ SOURCE;
             5 | $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -630,7 +630,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBitwiseAndOperator()
+    public function testGetLastNodeAtStopsAtBitwiseAndOperator()
     {
         $partialParser = new PartialParser();
 
@@ -640,7 +640,7 @@ SOURCE;
             5 & $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -650,7 +650,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBitwiseXorOperator()
+    public function testGetLastNodeAtStopsAtBitwiseXorOperator()
     {
         $partialParser = new PartialParser();
 
@@ -660,7 +660,7 @@ SOURCE;
             5 ^ $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -670,7 +670,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBitwiseNotOperator()
+    public function testGetLastNodeAtStopsAtBitwiseNotOperator()
     {
         $partialParser = new PartialParser();
 
@@ -680,7 +680,7 @@ SOURCE;
             5 ~ $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -690,7 +690,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBooleanLessOperator()
+    public function testGetLastNodeAtStopsAtBooleanLessOperator()
     {
         $partialParser = new PartialParser();
 
@@ -700,7 +700,7 @@ SOURCE;
             5 < $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -710,7 +710,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBooleanGreaterOperator()
+    public function testGetLastNodeAtStopsAtBooleanGreaterOperator()
     {
         $partialParser = new PartialParser();
 
@@ -720,7 +720,7 @@ SOURCE;
             5 < $this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -730,7 +730,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtBooleanNotOperator()
+    public function testGetLastNodeAtStopsAtBooleanNotOperator()
     {
         $partialParser = new PartialParser();
 
@@ -740,7 +740,7 @@ SOURCE;
             !$this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -750,7 +750,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testRetrieveSanitizedCallStackAtStopsAtSilencingOperator()
+    public function testGetLastNodeAtStopsAtSilencingOperator()
     {
         $partialParser = new PartialParser();
 
@@ -760,7 +760,7 @@ SOURCE;
             @$this->one
 SOURCE;
 
-        $result = $partialParser->retrieveSanitizedCallStackAt($source);
+        $result = $partialParser->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);

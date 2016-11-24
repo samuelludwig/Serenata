@@ -81,7 +81,7 @@ class DeduceTypesCommand extends AbstractCommand
             $code = implode('->', $arguments['part']);
         }
 
-        $node = $this->partialParser->retrieveSanitizedCallStackAt($code, $offset);
+        $node = $this->partialParser->getLastNodeAt($code, $offset);
 
         if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
             $node = $this->getNodeWithoutLastElement($node);
@@ -139,7 +139,7 @@ class DeduceTypesCommand extends AbstractCommand
      */
     protected function deduceTypesFromExpression($file, $code, $expression, $offset)
     {
-        $node = $this->partialParser->retrieveSanitizedCallStackAt($expression, $offset);
+        $node = $this->partialParser->getLastNodeAt($expression, $offset);
 
         return $this->deduceTypes($file, $code, $node, $offset);
     }

@@ -157,12 +157,16 @@ class PartialParser implements Parser
     }
 
     /**
+     * Retrieves the last node (i.e. expression, statement, ...) at the specified location.
+     *
+     * This will also attempt to deal with incomplete expressions and statements.
+     *
      * @param string   $source
      * @param int|null $offset
      *
      * @return string[]
      */
-    public function retrieveSanitizedCallStackAt($source, $offset = null)
+    public function getLastNodeAt($source, $offset = null)
     {
         if ($offset !== null) {
             $source = substr($source, 0, $offset);
@@ -207,7 +211,6 @@ class PartialParser implements Parser
 
         return $nodes;
 
-        // TODO: Rename method.
         // TODO: Rename tests, they aren't testing boundary stopping anymore.
         // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
         // TODO: Reenable getInvocationInfo tests.
@@ -390,7 +393,7 @@ class PartialParser implements Parser
                     break;
                 }
 
-                $callStack = $this->retrieveSanitizedCallStackAt($code, $i);
+                $callStack = $this->getLastNodeAt($code, $i);
 
                 if (!empty($callStack)) {
                     $type = 'function';
