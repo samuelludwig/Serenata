@@ -211,7 +211,6 @@ class PartialParser implements Parser
 
         return $nodes;
 
-        // TODO: Rename tests, they aren't testing boundary stopping anymore.
         // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
         // TODO: Reenable getInvocationInfo tests.
     }

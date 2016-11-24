@@ -11,7 +11,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBasicFunctionCalls()
+    public function testGetLastNodeAtCorrectlyDealsWithFunctionCalls()
     {
         $partialParser = new PartialParser();
 
@@ -30,7 +30,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtStaticClassNames()
+    public function testGetLastNodeAtCorrectlyDealsWithStaticClassNames()
     {
         $partialParser = new PartialParser();
 
@@ -54,7 +54,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtStaticClassNamesContainingANamespace()
+    public function testGetLastNodeAtCorrectlyDealsWithStaticClassNamesContainingANamespace()
     {
         $partialParser = new PartialParser();
 
@@ -78,7 +78,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtControlKeywords()
+    public function testGetLastNodeAtCorrectlyDealsWithControlKeywords()
     {
         $partialParser = new PartialParser();
 
@@ -102,7 +102,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBuiltinConstructs()
+    public function testGetLastNodeAtCorrectlyDealsWithBuiltinConstructs()
     {
         $partialParser = new PartialParser();
 
@@ -126,7 +126,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtKeywordsSuchAsSelfAndParent()
+    public function testGetLastNodeAtCorrectlyDealsWithKeywordsSuchAsSelfAndParent()
     {
         $partialParser = new PartialParser();
 
@@ -152,7 +152,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtTernaryOperatorsFirstOperand()
+    public function testGetLastNodeAtCorrectlyDealsWithTernaryOperatorsFirstOperand()
     {
         $partialParser = new PartialParser();
 
@@ -172,7 +172,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtTernaryOperatorsLastOperand()
+    public function testGetLastNodeAtCorrectlyDealsWithTernaryOperatorsLastOperand()
     {
         $partialParser = new PartialParser();
 
@@ -192,7 +192,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtConcatenationOperators()
+    public function testGetLastNodeAtCorrectlyDealsWithConcatenationOperators()
     {
         $partialParser = new PartialParser();
 
@@ -259,7 +259,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtCasts()
+    public function testGetLastNodeAtCorrectlyDealsWithCasts()
     {
         $partialParser = new PartialParser();
 
@@ -302,7 +302,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtTheNewKeyword()
+    public function testGetLastNodeAtCorrectlyDealsWithTheNewKeyword()
     {
         $partialParser = new PartialParser();
 
@@ -490,7 +490,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtAssignmentSymbol()
+    public function testGetLastNodeAtCorrectlyDealsWithAssignmentSymbol()
     {
         $partialParser = new PartialParser();
 
@@ -510,7 +510,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtMultiplicationOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithMultiplicationOperator()
     {
         $partialParser = new PartialParser();
 
@@ -530,7 +530,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtDivisionOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithDivisionOperator()
     {
         $partialParser = new PartialParser();
 
@@ -550,7 +550,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtPlusOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithPlusOperator()
     {
         $partialParser = new PartialParser();
 
@@ -570,7 +570,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtModulusOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithModulusOperator()
     {
         $partialParser = new PartialParser();
 
@@ -590,7 +590,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtMinusOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithMinusOperator()
     {
         $partialParser = new PartialParser();
 
@@ -610,7 +610,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBitwisoOrOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBitwisoOrOperator()
     {
         $partialParser = new PartialParser();
 
@@ -630,7 +630,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBitwiseAndOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBitwiseAndOperator()
     {
         $partialParser = new PartialParser();
 
@@ -650,7 +650,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBitwiseXorOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBitwiseXorOperator()
     {
         $partialParser = new PartialParser();
 
@@ -670,7 +670,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBitwiseNotOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBitwiseNotOperator()
     {
         $partialParser = new PartialParser();
 
@@ -690,7 +690,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBooleanLessOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBooleanLessOperator()
     {
         $partialParser = new PartialParser();
 
@@ -710,7 +710,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBooleanGreaterOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBooleanGreaterOperator()
     {
         $partialParser = new PartialParser();
 
@@ -730,7 +730,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtBooleanNotOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithBooleanNotOperator()
     {
         $partialParser = new PartialParser();
 
@@ -750,7 +750,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsAtSilencingOperator()
+    public function testGetLastNodeAtCorrectlyDealsWithSilencingOperator()
     {
         $partialParser = new PartialParser();
 
