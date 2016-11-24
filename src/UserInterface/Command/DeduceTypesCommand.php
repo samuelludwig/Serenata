@@ -84,7 +84,7 @@ class DeduceTypesCommand extends AbstractCommand
         $node = $this->partialParser->retrieveSanitizedCallStackAt($code, $offset);
 
         if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
-            $this->removeLastElementFromNode($node);
+            $node = $this->getNodeWithoutLastElement($node);
         }
 
         // $result = $this->deduceTypes(
@@ -100,14 +100,21 @@ class DeduceTypesCommand extends AbstractCommand
 
     /**
      * @param Node $node
+     *
+     * @return Node
      */
-    protected function removeLastElementFromNode(Node $node)
+    protected function getNodeWithoutLastElement(Node $node)
     {
-        die(var_dump(__FILE__ . ':' . __LINE__, $node));
+        if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
+            return $node->var;
+        } elseif ($node instanceof Node\Expr\StaticCall ||
+            $node instanceof Node\Expr\StaticPropertyFetch ||
+            $node instanceof Node\Expr\ClassConstFetch
+        ) {
+            return $node->class;
+        }
 
-        // TODO: If this is a PropertyFetch, MethodCall, Static property fetch, static call, ... (any type of call
-        // with a -> or ::, really), throw out its last part.
-        // array_pop($parts);
+        return $node;
     }
 
     /**
