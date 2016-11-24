@@ -2,8 +2,12 @@
 
 namespace PhpIntegrator\Parsing;
 
+use UnexpectedValueException;
+
 use PhpParser\Node;
+use PhpParser\Lexer;
 use PhpParser\Parser;
+use PhpParser\ParserFactory;
 
 /**
  * Parses partial (incomplete) PHP code.
@@ -14,6 +18,16 @@ use PhpParser\Parser;
  */
 class PartialParser implements Parser
 {
+    /**
+     * @var ParserFactory
+     */
+    protected $parserFactory;
+
+    /**
+     * @var Parser
+     */
+    protected $strictParser;
+
     /**
      * Retrieves the start of the expression (as byte offset) that ends at the end of the specified source code string.
      *
@@ -165,72 +179,31 @@ class PartialParser implements Parser
      */
     public function parse($code)
     {
-        if (mb_substr(trim($code), 0, 5) !== '<?php') {
-            $code = '<?php ' . $code;
-        };
-
-
+        $code = $this->getNormalizedCode($code);
         $boundary = $this->getStartOfExpression($code);
 
-        // TODO: This should never be < 0, fix this in getStartOfExpression.
-        $boundary = max($boundary, 0);
+        $boundary = max($boundary, 0); // TODO: This should never be < 0, fix this in getStartOfExpression.
 
         $expression = substr($code, $boundary);
         $expression = trim($expression);
 
-        $correctedExpression = '<?php ' . $expression;
+        if (empty($expression)) {
+            return [];
+        }
+
+        $correctedExpression = $this->getNormalizedCode($expression);
 
         $nodes = $this->tryParse($correctedExpression);
-
-        if ($nodes === null) {
-            $nodes = $this->tryParse($correctedExpression . ';');
-        }
-
-        if ($nodes === null) {
-            // TODO: It is likely that "self" and "parent" need the same treatment. Add tests and add them.
-            if ($expression === 'static') {
-                $nodes = [new \PhpIntegrator\Parsing\Node\Keyword\Static_()];
-            }
-        }
-
-        $removeDummy = false;
-        $dummyName = '____DUMMY____';
-
-        if ($nodes === null) {
-            $newExpression = $correctedExpression;
-
-            // if (!in_array(mb_substr($correctedExpression, -2), ['::', '->'])) {
-            //     $newExpression .= '::';
-            // }
-
-            $newExpression .= $dummyName . ';';
-
-            $nodes = $this->tryParse($newExpression);
-
-            $removeDummy = true;
-        }
+        $nodes = $nodes ?: $this->tryParseWithKeywordCorrection($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         if (empty($nodes)) {
-            die(var_dump(__FILE__ . ':' . __LINE__, "Could not parse", $expression, $code, $boundary));
-            throw new \Exception('Could not parse ' . $expression);
-            return null;
-        }
-
-        if (count($nodes) > 1) {
-            die(var_dump(__FILE__ . ':' . __LINE__, 'Too many nodes'));
-        }
-
-        $node = $nodes[count($nodes) - 1];
-
-        if ($removeDummy) {
-            if ($node instanceof Node\Expr\ClassConstFetch ||
-                $node instanceof Node\Expr\PropertyFetch) {
-                if ($node->name === $dummyName) {
-                    $node->name = '';
-                }
-            }
-
-            // die(var_dump(__FILE__ . ':' . __LINE__, $node, $correctedExpression));
+            throw new \PhpParser\Error('Could not parse the code, even after attempting corrections');
+        } elseif (count($nodes) > 1) {
+            throw new UnexpectedValueException(
+                'Parsing succeeded, but more than one node was returned for a single expression'
+            );
         }
 
         return $nodes;
@@ -239,8 +212,6 @@ class PartialParser implements Parser
         // TODO: Rename tests, they aren't testing boundary stopping anymore.
         // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
         // TODO: Reenable getInvocationInfo tests.
-
-        // die(var_dump(__FILE__ . ':' . __LINE__, $expression));
     }
 
     /**
@@ -251,15 +222,81 @@ class PartialParser implements Parser
         return [];
     }
 
+    /**
+     * @param string $code
+     *
+     * @return string
+     */
+    protected function getNormalizedCode($code)
+    {
+        if (mb_substr(trim($code), 0, 5) !== '<?php') {
+            return '<?php ' . $code;
+        };
 
+        return $code;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
+    protected function tryParseWithKeywordCorrection($code)
+    {
+        // TODO: It is likely that "self" and "parent" need the same treatment. Add tests and add them.
+        if (mb_strrpos($code, 'static') === (mb_strlen($code) - mb_strlen('static'))) {
+            return [new \PhpIntegrator\Parsing\Node\Keyword\Static_()];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
+    protected function tryParseWithTrailingSemicolonCorrection($code)
+    {
+        return $this->tryParse($code . ';');
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
+    protected function tryParseWithDummyInsertion($code)
+    {
+        $removeDummy = false;
+        $dummyName = '____DUMMY____';
+
+        $nodes = $this->tryParse($code . $dummyName . ';');
+
+        if (empty($nodes)) {
+            return null;
+        }
+
+        $node = $nodes[count($nodes) - 1];
+
+        if ($node instanceof Node\Expr\ClassConstFetch || $node instanceof Node\Expr\PropertyFetch) {
+            if ($node->name === $dummyName) {
+                $node->name = '';
+            }
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
     protected function tryParse($code)
     {
-        // TODO: Stop creating repeatedly and DI.
-        $parserFactory = new \PhpParser\ParserFactory();
-        $parser = $parserFactory->create(\PhpParser\ParserFactory::PREFER_PHP7, new \PhpParser\Lexer());
-
         try {
-            return $parser->parse($code);
+            return $this->getStrictParser()->parse($code);
         } catch (\PhpParser\Error $e) {
             return null;
         }
@@ -451,5 +488,29 @@ class PartialParser implements Parser
         ];
 
         return $expressionBoundaryTokens;
+    }
+
+    /**
+     * @return ParserFactory
+     */
+    protected function getParserFactory()
+    {
+        if (!$this->parserFactory instanceof ParserFactory) {
+            $this->parserFactory = new ParserFactory();
+        }
+
+        return $this->parserFactory;
+    }
+
+    /**
+     * @return Parser
+     */
+    protected function getStrictParser()
+    {
+        if (!$this->strictParser instanceof Parser) {
+            $this->strictParser = $this->getParserFactory()->create(ParserFactory::PREFER_PHP7, new Lexer());
+        }
+
+        return $this->strictParser;
     }
 }
