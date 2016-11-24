@@ -87,7 +87,6 @@ class DeduceTypesCommand extends AbstractCommand
             $node = $this->getNodeWithoutLastElement($node);
         }
 
-        // $result = $this->deduceTypes(
         $result = $this->deduceTypes(
            isset($arguments['file']) ? $arguments['file'] : null,
            $code,
