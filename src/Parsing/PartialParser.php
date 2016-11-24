@@ -173,7 +173,6 @@ class PartialParser implements Parser
         return array_shift($nodes);
     }
 
-
     /**
      * @inheritDoc
      */
