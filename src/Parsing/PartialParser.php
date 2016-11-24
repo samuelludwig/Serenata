@@ -223,9 +223,6 @@ class PartialParser implements Parser
         $node = $nodes[count($nodes) - 1];
 
         if ($removeDummy) {
-            // TODO: Perhaps we can replace the ____DUMMY____ 'property fetch' node with a node that extends from a
-            // property fetch but represents a "dummy" variant so other parts of the code can check for it to ignore it.
-
             if ($node instanceof Node\Expr\ClassConstFetch ||
                 $node instanceof Node\Expr\PropertyFetch) {
                 if ($node->name === $dummyName) {
