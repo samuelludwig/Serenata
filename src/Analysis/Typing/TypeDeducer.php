@@ -174,6 +174,10 @@ class TypeDeducer
 
             $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
 
+            if (!$globalConstant) {
+                return [];
+            }
+
             $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
 
             return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
