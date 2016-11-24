@@ -244,9 +244,12 @@ class PartialParser implements Parser
      */
     protected function tryParseWithKeywordCorrection($code)
     {
-        // TODO: It is likely that "self" and "parent" need the same treatment. Add tests and add them.
-        if (mb_strrpos($code, 'static') === (mb_strlen($code) - mb_strlen('static'))) {
+        if (mb_strrpos($code, 'self') === (mb_strlen($code) - mb_strlen('self'))) {
+            return [new \PhpIntegrator\Parsing\Node\Keyword\Self_()];
+        } elseif (mb_strrpos($code, 'static') === (mb_strlen($code) - mb_strlen('static'))) {
             return [new \PhpIntegrator\Parsing\Node\Keyword\Static_()];
+        } elseif (mb_strrpos($code, 'parent') === (mb_strlen($code) - mb_strlen('parent'))) {
+            return [new \PhpIntegrator\Parsing\Node\Keyword\Parent_()];
         }
 
         return null;

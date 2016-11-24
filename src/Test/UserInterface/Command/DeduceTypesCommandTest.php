@@ -624,11 +624,37 @@ class DeduceTypesCommandTest extends IndexedTest
     public function testCorrectlyAnalyzesNewWithStatic()
     {
         $result = $this->deduceTypesFromExpression(
-            'NewWithStatic.phpt',
+            'NewWithKeyword.phpt',
             'new static'
         );
 
         $this->assertEquals(['\Bar'], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesNewWithSelf()
+    {
+        $result = $this->deduceTypesFromExpression(
+            'NewWithKeyword.phpt',
+            'new self'
+        );
+
+        $this->assertEquals(['\Bar'], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesNewWithParent()
+    {
+        $result = $this->deduceTypesFromExpression(
+            'NewWithKeyword.phpt',
+            'new parent'
+        );
+
+        $this->assertEquals(['\Foo'], $result);
     }
 
     /**

@@ -189,10 +189,12 @@ class TypeDeducer
             return $this->deduceTypesFromNode($file, $code, $node->expr, $offset);
         } elseif ($node instanceof Node\Expr\Array_) {
             return ['array'];
+        } elseif ($node instanceof Parsing\Node\Keyword\Self_) {
+            return $this->deduceTypesFromNode($file, $code, new Node\Name('self'), $offset);
         } elseif ($node instanceof Parsing\Node\Keyword\Static_) {
-            $currentClass = $this->getCurrentClassAt($file, $code, $offset);
-
-            return [$this->typeAnalyzer->getNormalizedFqcn($currentClass)];
+            return $this->deduceTypesFromNode($file, $code, new Node\Name('static'), $offset);
+        } elseif ($node instanceof Parsing\Node\Keyword\Parent_) {
+            return $this->deduceTypesFromNode($file, $code, new Node\Name('parent'), $offset);
         } elseif ($node instanceof Node\Name) {
             $nameString = NodeHelpers::fetchClassName($node);
 

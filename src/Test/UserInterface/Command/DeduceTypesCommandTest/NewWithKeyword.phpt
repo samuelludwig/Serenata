@@ -1,6 +1,8 @@
 <?php
 
-class Bar
+class Foo {}
+
+class Bar extends Foo
 {
     public function __construct()
     {
