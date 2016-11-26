@@ -203,9 +203,6 @@ class PartialParser implements Parser
         $code = $this->getNormalizedCode($code);
         $boundary = $this->getStartOfExpression($code);
 
-        // TODO: This should never be < 0, fix this in getStartOfExpression.
-        $boundary = max($boundary, 0);
-
         $expression = substr($code, $boundary);
         $expression = trim($expression);
 
