@@ -31,7 +31,9 @@ use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpParser\Node;
 use PhpParser\Error;
 use PhpParser\Parser;
+use PhpParser\PrettyPrinter;
 use PhpParser\NodeTraverser;
+use PhpParser\PrettyPrinterAbstract;
 
 /**
  * Deduces the type(s) of an expression.
@@ -99,6 +101,11 @@ class TypeDeducer
     protected $constantConverter;
 
     /**
+     * @var PrettyPrinterAbstract
+     */
+    protected $prettyPrinter;
+
+    /**
      * @param Parser                           $parser
      * @param FileClassListProviderInterface   $fileClassListProvider
      * @param DocblockParser                   $docblockParser
@@ -110,6 +117,7 @@ class TypeDeducer
      * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
      * @param FunctionConverter                $functionConverter
      * @param ConstantConverter                $constantConverter
+     * @param PrettyPrinterAbstract            $prettyPrinter
      */
     public function __construct(
         Parser $parser,
@@ -122,7 +130,8 @@ class TypeDeducer
         IndexDatabase $indexDatabase,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         FunctionConverter $functionConverter,
-        ConstantConverter $constantConverter
+        ConstantConverter $constantConverter,
+        PrettyPrinterAbstract $prettyPrinter
     ) {
         $this->parser = $parser;
         $this->fileClassListProvider = $fileClassListProvider;
@@ -135,6 +144,7 @@ class TypeDeducer
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->functionConverter = $functionConverter;
         $this->constantConverter = $constantConverter;
+        $this->prettyPrinter = $prettyPrinter;
     }
 
     /**
@@ -275,7 +285,21 @@ class TypeDeducer
                 return []; // Can't currently deduce type of an expression such as "$this->{$foo}";
             }
 
-            $objectNode = ($node instanceof Node\Expr\PropertyFetch) ? $node->var : $node->class;
+            $objectNode = null;
+
+            if ($node instanceof Node\Expr\PropertyFetch) {
+                $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
+
+                $types = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset);
+
+                if (!empty($types)) {
+                    return $types;
+                }
+
+                $objectNode = $node->var;
+            } else {
+                $objectNode = $node->class;
+            }
 
             $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
 
@@ -357,7 +381,7 @@ class TypeDeducer
         }
 
         $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
-        $this->typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $offset);
+        $this->typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $this->prettyPrinter, $offset);
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($scopeLimitingVisitor);

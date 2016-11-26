@@ -191,6 +191,16 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndProperty()
+    {
+        $output = $this->deduceTypesFromExpression('InstanceofIfWithProperty.phpt', '$this->foo');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndVariableInsideCondition()
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfVariableInsideCondition.phpt', '$b');

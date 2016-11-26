@@ -316,7 +316,8 @@ abstract class AbstractApplication
                 new Reference('indexDatabase'),
                 new Reference('classlikeInfoBuilder'),
                 new Reference('functionConverter'),
-                new Reference('constantConverter')
+                new Reference('constantConverter'),
+                new Reference('prettyPrinter')
             ]);
 
         $container

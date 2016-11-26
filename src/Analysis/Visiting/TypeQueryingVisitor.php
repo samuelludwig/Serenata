@@ -12,6 +12,7 @@ use PhpParser\Node;
 use PhpParser\NodeAbstract;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+use PhpParser\PrettyPrinterAbstract;
 
 /**
  * Visitor that walks to a specific position, building a list of information about variables and their possible and
@@ -35,15 +36,23 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected $expressionTypeInfoMap;
 
     /**
+     * @var PrettyPrinterAbstract
+     */
+    protected $prettyPrinter;
+
+    /**
      * Constructor.
      *
-     * @param DocblockParser $docblockParser
-     * @param int            $position
+     * @param DocblockParser        $docblockParser
+     * @param PrettyPrinterAbstract $prettyPrinter
+     * @param int                   $position
      */
-    public function __construct(DocblockParser $docblockParser, $position)
+    public function __construct(DocblockParser $docblockParser, PrettyPrinterAbstract $prettyPrinter, $position)
     {
         $this->docblockParser = $docblockParser;
+        $this->prettyPrinter = $prettyPrinter;
         $this->position = $position;
+
         $this->expressionTypeInfoMap = new ExpressionTypeInfoMap();
     }
 
@@ -362,7 +371,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function isExpressionSubjectToTypePossibilities(Node\Expr $expression)
     {
-        return $expression instanceof Node\Expr\Variable;
+        return $expression instanceof Node\Expr\Variable ||
+               $expression instanceof Node\Expr\PropertyFetch;
     }
 
     /**
@@ -378,6 +388,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         if ($expression instanceof Node\Expr\Variable) {
             return '$' . ((string) $expression->name);
+        } elseif ($expression instanceof Node\Expr\PropertyFetch) {
+            return $this->prettyPrinter->prettyPrintExpr($expression);
         }
 
         throw new DomainException(
