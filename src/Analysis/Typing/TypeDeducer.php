@@ -347,9 +347,6 @@ class TypeDeducer
         }
 
         return [];
-
-        // TODO: getTypesForNode can be (partially) merged into this method.
-        // TODO: Refactor (extract methods such as deduceTypesFromMethodCall, deduceTypesFromPropertyFetch, ...).
     }
 
     /**
