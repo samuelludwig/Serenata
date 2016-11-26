@@ -23,6 +23,17 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
     protected $position;
 
     /**
+     * Keeps track of previous values of node properties.
+     *
+     * As this traverser modifies node properties during traversal, this map provides a way to restore them to their
+     * original values on exit (see also {@see leaveNode}). If this didn't happen, the change would be destructive and
+     * for the original state to be retrieved the entire source would need to be reparsed.
+     *
+     * @var array
+     */
+    protected $memorizedNodeProperties;
+
+    /**
      * Constructor.
      *
      * @param int $position
@@ -67,6 +78,8 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
 
                 foreach ($elseIfNodes as $elseIfNode) {
                     if ($elseIfNode->getAttribute('startFilePos') < $this->position) {
+                        $this->memorizeNodeProperties($node, ['stmts', 'elseifs', 'cond']);
+
                         $node->stmts = [];
                         $node->elseifs = [$elseIfNode];
                         $node->cond = new DummyExprNode();
@@ -75,6 +88,8 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
                 }
 
                 if ($node->else && $node->else->getAttribute('startFilePos') < $this->position) {
+                    $this->memorizeNodeProperties($node, ['stmts', 'elseifs', 'cond']);
+
                     $node->stmts = [];
                     $node->elseifs = [];
                     $node->cond = new DummyExprNode();
@@ -88,6 +103,8 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
 
                 foreach ($caseNodes as $caseNode) {
                     if ($caseNode->getAttribute('startFilePos') < $this->position) {
+                        $this->memorizeNodeProperties($node, ['cases']);
+
                         $node->cases = [$caseNode];
                         break;
                     }
@@ -97,6 +114,8 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
 
                 foreach ($catchNodes as $catchNode) {
                     if ($catchNode->getAttribute('startFilePos') < $this->position) {
+                        $this->memorizeNodeProperties($node, ['stmts', 'catches']);
+
                         $node->stmts = [];
                         $node->catches = [$catchNode];
                         break;
@@ -107,10 +126,64 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
                 // won't be entirely correct, but it's the best we can do. See also
                 // https://github.com/nikic/PHP-Parser/issues/254
                 if ($node->finallyStmts && $node->finallyStmts[0]->getAttribute('startFilePos') < $this->position) {
+                    $this->memorizeNodeProperties($node, ['stmts', 'catches']);
+
                     $node->stmts = [];
                     $node->catches = [];
                 }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function leaveNode(Node $node)
+    {
+        $this->restoreNodeProperties($node);
+    }
+
+    /**
+     * @param Node  $node
+     * @param array $properties
+     */
+    protected function memorizeNodeProperties(Node $node, array $properties)
+    {
+        $key = $this->getMemorizedPropertiesKeyForNode($node);
+
+        $this->memorizedNodeProperties[$key] = [];
+
+        foreach ($properties as $property) {
+            $this->memorizedNodeProperties[$key][$property] = $node->{$property};
+        }
+    }
+
+    /**
+     * @param Node  $node
+     * @param array $properties
+     */
+    protected function restoreNodeProperties(Node $node)
+    {
+        $key = $this->getMemorizedPropertiesKeyForNode($node);
+
+        if (!isset($this->memorizedNodeProperties[$key])) {
+            return;
+        }
+
+        foreach ($this->memorizedNodeProperties[$key] as $property => $value) {
+            $node->{$property} = $value;
+        }
+
+        unset($this->memorizedNodeProperties[$key]);
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return string
+     */
+    protected function getMemorizedPropertiesKeyForNode(Node $node)
+    {
+        return spl_object_hash($node);
     }
 }
