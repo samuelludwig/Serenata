@@ -18,7 +18,7 @@
 * A new command, `namespaceList`, is now available, which can optionally be filtered by file, to retrieve a list of namespaces. (thanks to [pszczekutowicz](https://github.com/pszczekutowicz))
 * `resolveType` and `localizeType` now require a `kind` parameter to determine the kind of the type (or rather: name) that needs to be resolved.
   * This is necessary to distinguish between classlike, constant and function name resolving based on use statements. (Yes, duplicate use statements may exist in PHP, as long as their `kind` is different).
-* `implementation` has had a necessary backwards compatibility break because the data returned must be an array instead of a single value. The reasoning behind this is that a method can in fact implement multiple interface methods simultaneously and not just one.
+* `implementation` changed to `implementations` because the data returned must be an array instead of a single value. The reasoning behind this is that a method can in fact implement multiple interface methods simultaneously (as opposed to just one).
 * The `truncate` command was merged into the `initialize` command. To reinitialize a project, simply send the initialize command a second time.
 * `invocationInfo` will now also return the name of the invoked function, method or constructor's class.
 * `invocationInfo` now returns `method` instead of `function` for class methods (as opposed to global functions).
