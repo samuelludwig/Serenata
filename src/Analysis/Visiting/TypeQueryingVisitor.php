@@ -371,8 +371,13 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function isExpressionSubjectToTypePossibilities(Node\Expr $expression)
     {
-        return $expression instanceof Node\Expr\Variable ||
-               $expression instanceof Node\Expr\PropertyFetch;
+        if ($expression instanceof Node\Expr\Variable && is_string($expression->name)) {
+            return true;
+        } elseif ($expression instanceof Node\Expr\PropertyFetch && is_string($expression->name)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
