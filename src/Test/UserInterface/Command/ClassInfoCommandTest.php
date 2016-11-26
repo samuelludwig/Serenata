@@ -1538,7 +1538,7 @@ class ClassInfoCommandTest extends IndexedTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals(['\A\FirstInterface', '\A\SecondInterface', '\A\BaseInterface'], $output['interfaces']);
+        $this->assertEquals(['\A\BaseInterface', '\A\FirstInterface', '\A\SecondInterface'], $output['interfaces']);
         $this->assertEquals(['\A\FirstInterface', '\A\SecondInterface'], $output['directInterfaces']);
 
         $this->assertThat($output['constants'], $this->arrayHasKey('FIRST_INTERFACE_CONSTANT'));

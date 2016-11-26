@@ -179,47 +179,14 @@ class ClasslikeInfoBuilder
             $this->storage->getStructureRawTraitUsers($id),
             $this->storage->getStructureRawConstants($id),
             $this->storage->getStructureRawProperties($id),
-            $this->storage->getStructureRawMethods($id)
+            $this->storage->getStructureRawMethods($id),
+            $this->storage->getStructureTraitAliasesAssoc($id),
+            $this->storage->getStructureTraitPrecedencesAssoc($id)
         );
 
-        $traitAliases = [];
-        $traitPrecedences = [];
-
-        if (!empty($classlike['directTraits'])) {
-            $traitAliases = $this->storage->getStructureTraitAliasesAssoc($id);
-            $traitPrecedences = $this->storage->getStructureTraitPrecedencesAssoc($id);
-        }
-
-        $this->resolveClasslikeRelations($classlike, $traitAliases, $traitPrecedences);
         $this->resolveSpecialTypes($classlike, $classlike['name']);
 
         return $classlike;
-    }
-
-    /**
-     * @param ArrayObject $classlike
-     * @param array       $traitAliases
-     * @param array       $traitPrecedences
-     */
-    protected function resolveClasslikeRelations(ArrayObject $classlike, array $traitAliases, array $traitPrecedences)
-    {
-        foreach ($classlike['directTraits'] as $trait) {
-            $traitInfo = $this->getCheckedClasslikeInfo($trait, $classlike['name']);
-
-            $this->traitUsageResolver->resolveUseOf($traitInfo, $classlike, $traitAliases, $traitPrecedences);
-        }
-
-        foreach ($classlike['directParents'] as $parent) {
-            $parentInfo = $this->getCheckedClasslikeInfo($parent, $classlike['name']);
-
-            $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlike);
-        }
-
-        foreach ($classlike['directInterfaces'] as $interface) {
-            $interfaceInfo = $this->getCheckedClasslikeInfo($interface, $classlike['name']);
-
-            $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
-        }
     }
 
     /**
@@ -236,6 +203,8 @@ class ClasslikeInfoBuilder
      * @param array $constants
      * @param array $properties
      * @param array $methods
+     * @param array $traitAliases
+     * @param array $traitPrecedences
      *
      * @return ArrayObject
      */
@@ -249,7 +218,9 @@ class ClasslikeInfoBuilder
         array $traitUsers,
         array $constants,
         array $properties,
-        array $methods
+        array $methods,
+        array $traitAliases,
+        array $traitPrecedences
     ) {
         $classlike = new ArrayObject($this->classlikeConverter->convert($element) + [
             'parents'            => [],
@@ -301,19 +272,31 @@ class ClasslikeInfoBuilder
             );
         }
 
+        foreach ($traits as $trait) {
+            $classlike['traits'][] = $trait['fqcn'];
+            $classlike['directTraits'][] = $trait['fqcn'];
+
+            $traitInfo = $this->getCheckedClasslikeInfo($trait['fqcn'], $classlike['name']);
+
+            $this->traitUsageResolver->resolveUseOf($traitInfo, $classlike, $traitAliases, $traitPrecedences);
+        }
+
         foreach ($parents as $parent) {
             $classlike['parents'][] = $parent['fqcn'];
             $classlike['directParents'][] = $parent['fqcn'];
+
+            $parentInfo = $this->getCheckedClasslikeInfo($parent['fqcn'], $classlike['name']);
+
+            $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlike);
         }
 
         foreach ($interfaces as $interface) {
             $classlike['interfaces'][] = $interface['fqcn'];
             $classlike['directInterfaces'][] = $interface['fqcn'];
-        }
 
-        foreach ($traits as $trait) {
-            $classlike['traits'][] = $trait['fqcn'];
-            $classlike['directTraits'][] = $trait['fqcn'];
+            $interfaceInfo = $this->getCheckedClasslikeInfo($interface['fqcn'], $classlike['name']);
+
+            $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
         }
 
         return $classlike;
