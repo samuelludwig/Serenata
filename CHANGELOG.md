@@ -20,6 +20,9 @@
   * This is necessary to distinguish between classlike, constant and function name resolving based on use statements. (Yes, duplicate use statements may exist in PHP, as long as their `kind` is different).
 * `implementation` has had a necessary backwards compatibility break because the data returned must be an array instead of a single value. The reasoning behind this is that a method can in fact implement multiple interface methods simultaneously and not just one.
 * The `truncate` command was merged into the `initialize` command. To reinitialize a project, simply send the initialize command a second time.
+* `invocationInfo` will now also return the name of the invoked function, method or constructor's class.
+* `invocationInfo` now returns `method` instead of `function` for class methods (as opposed to global functions).
+* `deduceTypes` now expects the full expression to be passed via the new `expression` parameter. The `part` parameter has been removed.
 
 ### Global functions and constants
 * Unqualified global constants and functions will now correctly be resolved.
