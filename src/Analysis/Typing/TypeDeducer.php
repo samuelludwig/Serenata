@@ -31,7 +31,6 @@ use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpParser\Node;
 use PhpParser\Error;
 use PhpParser\Parser;
-use PhpParser\PrettyPrinter;
 use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinterAbstract;
 
