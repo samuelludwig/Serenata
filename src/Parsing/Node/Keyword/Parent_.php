@@ -2,12 +2,12 @@
 
 namespace PhpIntegrator\Parsing\Node\Keyword;
 
-use PhpParser\NodeAbstract;
+use PhpParser\Node\Expr;
 
 /**
  * Represents the parent keyword.
  */
-class Parent_ extends NodeAbstract
+class Parent_ extends Expr
 {
     /**
      * @inheritDoc

@@ -4,10 +4,13 @@ namespace PhpIntegrator\Parsing;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use PhpParser\PrettyPrinterAbstract;
 
 /**
  * Parses partial (incomplete) PHP code.
@@ -19,14 +22,29 @@ use PhpParser\ParserFactory;
 class PartialParser implements Parser
 {
     /**
+     * @var Parser
+     */
+    protected $strictParser;
+
+    /**
      * @var ParserFactory
      */
     protected $parserFactory;
 
     /**
-     * @var Parser
+     * @var PrettyPrinterAbstract
      */
-    protected $strictParser;
+    protected $prettyPrinter;
+
+    /**
+     * @param ParserFactory         $parserFactory
+     * @param PrettyPrinterAbstract $prettyPrinter
+     */
+    public function __construct(ParserFactory $parserFactory, PrettyPrinterAbstract $prettyPrinter)
+    {
+        $this->parserFactory = $parserFactory;
+        $this->prettyPrinter = $prettyPrinter;
+    }
 
     /**
      * Retrieves the start of the expression (as byte offset) that ends at the end of the specified source code string.
@@ -185,8 +203,6 @@ class PartialParser implements Parser
         $code = $this->getNormalizedCode($code);
         $boundary = $this->getStartOfExpression($code);
 
-        // TODO: Investigate how to deal with call tips (invocation info), as we can hardly serialize the nodes.
-        // TODO: Reenable getInvocationInfo tests.
         // TODO: This should never be < 0, fix this in getStartOfExpression.
         $boundary = max($boundary, 0);
 
@@ -395,30 +411,60 @@ class PartialParser implements Parser
                     break;
                 }
 
-                $callStack = $this->getLastNodeAt($code, $i);
+                $node = $this->getLastNodeAt($code, $i);
 
-                if (!empty($callStack)) {
-                    $type = 'function';
+                if ($node) {
+                    $type = null;
 
-                    for ($j = $currentTokenIndex - 2; $j >= 0; --$j) {
-                        if (
-                            is_array($tokens[$j]) &&
-                            in_array($tokens[$j][0], [T_WHITESPACE, T_NS_SEPARATOR, T_NEW, T_STRING])
-                        ) {
-                            if ($tokens[$j][0] === T_NEW) {
-                                $type = 'instantiation';
-                                break;
+                    if ($node instanceof Node\Expr\PropertyFetch ||
+                        $node instanceof Node\Expr\StaticPropertyFetch ||
+                        $node instanceof Node\Expr\MethodCall ||
+                        $node instanceof Node\Expr\StaticCall ||
+                        $node instanceof Node\Expr\ClassConstFetch
+                    ) {
+                        $type = 'method';
+                    } else {
+                        $type = 'function';
+
+                        for ($j = $currentTokenIndex - 2; $j >= 0; --$j) {
+                            if (
+                                is_array($tokens[$j]) &&
+                                in_array($tokens[$j][0], [T_WHITESPACE, T_NS_SEPARATOR, T_NEW, T_STRING])
+                            ) {
+                                if ($tokens[$j][0] === T_NEW) {
+                                    $type = 'instantiation';
+                                    break;
+                                }
+
+
+                                continue;
                             }
 
-
-                            continue;
+                            break;
                         }
+                    }
 
-                        break;
+                    $name = null;
+
+                    if (isset($node->name)) {
+                        if ($node->name instanceof Node\Expr) {
+                            $name = $this->prettyPrinter->prettyPrintExpr($node->name);
+                        } elseif ($node->name instanceof Node\Name) {
+                            $name = NodeHelpers::fetchClassName($node->name);
+                        } elseif (is_string($node->name)) {
+                            $name = ((string) $node->name);
+                        } else {
+                            throw new UnexpectedValueException("Don't know how to handle type " . get_class($node->name));
+                        }
+                    } elseif ($node instanceof Node\Expr) {
+                        $name = $this->prettyPrinter->prettyPrintExpr($node);
+                    } else {
+                        throw new UnexpectedValueException("Don't know how to handle node of type " . get_class($node));
                     }
 
                     return [
-                        'callStack'      => $callStack,
+                        'name'           => $name,
+                        'expression'     => $this->prettyPrinter->prettyPrintExpr($node),
                         'type'           => $type,
                         'argumentIndex'  => $argumentIndex,
                         'offset'         => $i
@@ -495,24 +541,12 @@ class PartialParser implements Parser
     }
 
     /**
-     * @return ParserFactory
-     */
-    protected function getParserFactory()
-    {
-        if (!$this->parserFactory instanceof ParserFactory) {
-            $this->parserFactory = new ParserFactory();
-        }
-
-        return $this->parserFactory;
-    }
-
-    /**
      * @return Parser
      */
     protected function getStrictParser()
     {
         if (!$this->strictParser instanceof Parser) {
-            $this->strictParser = $this->getParserFactory()->create(ParserFactory::PREFER_PHP7, new Lexer());
+            $this->strictParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, new Lexer());
         }
 
         return $this->strictParser;

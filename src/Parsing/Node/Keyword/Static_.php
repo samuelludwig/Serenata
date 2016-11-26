@@ -2,12 +2,12 @@
 
 namespace PhpIntegrator\Parsing\Node\Keyword;
 
-use PhpParser\NodeAbstract;
+use PhpParser\Node\Expr;
 
 /**
  * Represents the static keyword.
  */
-class Static_ extends NodeAbstract
+class Static_ extends Expr
 {
     /**
      * @inheritDoc

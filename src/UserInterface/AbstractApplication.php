@@ -43,6 +43,7 @@ use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Mediating\CacheClearingEventMediator;
 
+use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Parsing\CachingParserProxy;
@@ -150,7 +151,11 @@ abstract class AbstractApplication
             ->setArguments([new Reference('typeAnalyzer')]);
 
         $container
-            ->register('partialParser', PartialParser::class);
+            ->register('prettyPrinter', PrettyPrinter::class);
+
+        $container
+            ->register('partialParser', PartialParser::class)
+            ->setArguments([new Reference('parser.phpParserFactory'), new Reference('prettyPrinter')]);
 
         $container
             ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)

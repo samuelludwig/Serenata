@@ -2,18 +2,36 @@
 
 namespace PhpIntegrator\Test\Parsing;
 
+use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\PartialParser;
 
 use PhpParser\Node;
+use PhpParser\ParserFactory;
 
 class PartialParserTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return ParserFactory
+     */
+    protected function getParserFactoryStub()
+    {
+        return new ParserFactory();
+    }
+
+    /**
+     * @return ParserFactory
+     */
+    protected function getPrettyPrinterStub()
+    {
+        return new PrettyPrinter();
+    }
+
     /**
      * @return void
      */
     public function testGetLastNodeAtCorrectlyDealsWithFunctionCalls()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -32,7 +50,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithStaticClassNames()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -56,7 +74,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithStaticClassNamesContainingANamespace()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -80,7 +98,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithControlKeywords()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -104,7 +122,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBuiltinConstructs()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -128,7 +146,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithKeywordsSuchAsSelfAndParent()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -154,7 +172,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithTernaryOperatorsFirstOperand()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -174,7 +192,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithTernaryOperatorsLastOperand()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -194,7 +212,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithConcatenationOperators()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -214,7 +232,7 @@ SOURCE;
      */
     public function testGetLastNodeAtReadsStringWithDotsAndColonsInIt()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -233,7 +251,7 @@ SOURCE;
      */
     public function testGetLastNodeAtStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -261,7 +279,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithCasts()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -281,7 +299,7 @@ SOURCE;
      */
     public function testGetLastNodeAtStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -304,7 +322,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithTheNewKeyword()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -324,7 +342,7 @@ SOURCE;
      */
     public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -349,7 +367,7 @@ SOURCE;
      */
     public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -371,7 +389,7 @@ SOURCE;
      */
     public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -393,7 +411,7 @@ SOURCE;
      */
     public function testGetLastNodeAtStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -414,7 +432,7 @@ SOURCE;
      */
     public function testGetLastNodeAtSanitizesComplexCallStack()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -472,7 +490,7 @@ SOURCE;
      */
     public function testGetLastNodeAtSanitizesStaticCallWithStaticKeyword()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -492,7 +510,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithAssignmentSymbol()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -512,7 +530,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithMultiplicationOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -532,7 +550,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithDivisionOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -552,7 +570,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithPlusOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -572,7 +590,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithModulusOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -592,7 +610,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithMinusOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -612,7 +630,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBitwisoOrOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -632,7 +650,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBitwiseAndOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -652,7 +670,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBitwiseXorOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -672,7 +690,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBitwiseNotOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -692,7 +710,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBooleanLessOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -712,7 +730,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBooleanGreaterOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -732,7 +750,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithBooleanNotOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -752,7 +770,7 @@ SOURCE;
      */
     public function testGetLastNodeAtCorrectlyDealsWithSilencingOperator()
     {
-        $partialParser = new PartialParser();
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
 
         $source = <<<'SOURCE'
             <?php
@@ -767,402 +785,417 @@ SOURCE;
         $this->assertEquals('one', $result->name);
     }
 
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithSingleLineInvocation()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//             <?php
-//
-//             $this->test(1, 2, 3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(42, $result['offset']);
-//         $this->assertEquals(['$this', 'test'], $result['callStack']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithMultiLineInvocation()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         $this->test(
-//             1,
-//             2,
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(34, $result['offset']);
-//         $this->assertEquals(['$this', 'test'], $result['callStack']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithMoreComplexNestedArguments1()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         builtin_func(
-//             ['test', $this->foo()],
-//             function ($a) {
-//                 // Something here.
-//                 $this->something();
-//             },
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(35, $result['offset']);
-//         $this->assertEquals(['builtin_func'], $result['callStack']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithMoreComplexNestedArguments2()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         builtin_func(/* test */
-//             "]",// a comment
-//             "}",/*}*/
-//             ['test'
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(35, $result['offset']);
-//         $this->assertEquals(['builtin_func'], $result['callStack']);
-//         $this->assertEquals('function', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithMoreComplexNestedArguments3()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         builtin_func(
-//             $this->foo(),
-//             $array['key'],
-//             $array['ke
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(35, $result['offset']);
-//         $this->assertEquals(['builtin_func'], $result['callStack']);
-//         $this->assertEquals('function', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithTrailingCommas()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         builtin_func(
-//             foo(),
-//             [
-//                 'Trailing comma',
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(1, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithNestedParantheses()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         builtin_func(
-//             foo(),
-//             ($a + $b
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(35, $result['offset']);
-//         $this->assertEquals(['builtin_func'], $result['callStack']);
-//         $this->assertEquals('function', $result['type']);
-//         $this->assertEquals(1, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithSqlStringArguments()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         foo("SELECT a.one, a.two, a.three FROM test", second
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(1, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithSqlStringArgumentsContainingParantheses()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         foo('IF(
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(['foo'], $result['callStack']);
-//         $this->assertEquals('function', $result['type']);
-//         $this->assertEquals(0, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassName()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         new MyObject(
-//             1,
-//             2,
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(35, $result['offset']);
-//         $this->assertEquals(['MyObject'], $result['callStack']);
-//         $this->assertEquals('instantiation', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         new \MyObject(
-//             1,
-//             2,
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(36, $result['offset']);
-//         $this->assertEquals(['\MyObject'], $result['callStack']);
-//         $this->assertEquals('instantiation', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         new \MyNamespace\MyObject(
-//             1,
-//             2,
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(48, $result['offset']);
-//         $this->assertEquals(['\MyNamespace\MyObject'], $result['callStack']);
-//         $this->assertEquals('instantiation', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithConstructorCalls2()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         new static(
-//             1,
-//             2,
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(33, $result['offset']);
-//         $this->assertEquals(['static'], $result['callStack']);
-//         $this->assertEquals('instantiation', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtWithConstructorCalls3()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         new self(
-//             1,
-//             2,
-//             3
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertEquals(31, $result['offset']);
-//         $this->assertEquals(['self'], $result['callStack']);
-//         $this->assertEquals('instantiation', $result['type']);
-//         $this->assertEquals(2, $result['argumentIndex']);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation1()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         if ($this->test() as $test) {
-//             if (true) {
-//
-//             }
-//         }
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertNull($result);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation2()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         $this->test();
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertNull($result);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation3()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         function test($a, $b)
-//         {
-//
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertNull($result);
-//     }
-//
-//     /**
-//      * @return void
-//      */
-//     public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation4()
-//     {
-//         $partialParser = new PartialParser();
-//
-//         $source = <<<'SOURCE'
-//         <?php
-//
-//         if (preg_match('/^array\s*\(/', $firstElement) === 1) {
-//             $className = 'array';
-//         } elseif (
-// SOURCE;
-//
-//         $result = $partialParser->getInvocationInfoAt($source);
-//
-//         $this->assertNull($result);
-//     }
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithSingleLineInvocation()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+            <?php
+
+            $this->test(1, 2, 3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(42, $result['offset']);
+        $this->assertEquals('test', $result['name']);
+        $this->assertEquals('$this->test', $result['expression']);
+        $this->assertEquals('method', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithMultiLineInvocation()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        $this->test(
+            1,
+            2,
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(34, $result['offset']);
+        $this->assertEquals('test', $result['name']);
+        $this->assertEquals('$this->test', $result['expression']);
+        $this->assertEquals('method', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithMoreComplexNestedArguments1()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        builtin_func(
+            ['test', $this->foo()],
+            function ($a) {
+                // Something here.
+                $this->something();
+            },
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(35, $result['offset']);
+        $this->assertEquals('builtin_func', $result['name']);
+        $this->assertEquals('builtin_func', $result['expression']);
+        $this->assertEquals('function', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithMoreComplexNestedArguments2()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        builtin_func(/* test */
+            "]",// a comment
+            "}",/*}*/
+            ['test'
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(35, $result['offset']);
+        $this->assertEquals('builtin_func', $result['name']);
+        $this->assertEquals('builtin_func', $result['expression']);
+        $this->assertEquals('function', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithMoreComplexNestedArguments3()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        builtin_func(
+            $this->foo(),
+            $array['key'],
+            $array['ke
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(35, $result['offset']);
+        $this->assertEquals('builtin_func', $result['name']);
+        $this->assertEquals('builtin_func', $result['expression']);
+        $this->assertEquals('function', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithTrailingCommas()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        builtin_func(
+            foo(),
+            [
+                'Trailing comma',
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(1, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithNestedParantheses()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        builtin_func(
+            foo(),
+            ($a + $b
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(35, $result['offset']);
+        $this->assertEquals('builtin_func', $result['name']);
+        $this->assertEquals('builtin_func', $result['expression']);
+        $this->assertEquals('function', $result['type']);
+        $this->assertEquals(1, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithSqlStringArguments()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        foo("SELECT a.one, a.two, a.three FROM test", second
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(1, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithSqlStringArgumentsContainingParantheses()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        foo('IF(
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals('foo', $result['name']);
+        $this->assertEquals('foo', $result['expression']);
+        $this->assertEquals('function', $result['type']);
+        $this->assertEquals(0, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassName()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        new MyObject(
+            1,
+            2,
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(35, $result['offset']);
+        $this->assertEquals('MyObject', $result['name']);
+        $this->assertEquals('MyObject', $result['expression']);
+        $this->assertEquals('instantiation', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        new \MyObject(
+            1,
+            2,
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(36, $result['offset']);
+        $this->assertEquals('\MyObject', $result['name']);
+        $this->assertEquals('\MyObject', $result['expression']);
+        $this->assertEquals('instantiation', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        new \MyNamespace\MyObject(
+            1,
+            2,
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(48, $result['offset']);
+        $this->assertEquals('\MyNamespace\MyObject', $result['name']);
+        $this->assertEquals('\MyNamespace\MyObject', $result['expression']);
+        $this->assertEquals('instantiation', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithConstructorCalls2()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        new static(
+            1,
+            2,
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(33, $result['offset']);
+        $this->assertEquals('static', $result['name']);
+        $this->assertEquals('static', $result['expression']);
+        $this->assertEquals('instantiation', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtWithConstructorCalls3()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        new self(
+            1,
+            2,
+            3
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertEquals(31, $result['offset']);
+        $this->assertEquals('self', $result['name']);
+        $this->assertEquals('self', $result['expression']);
+        $this->assertEquals('instantiation', $result['type']);
+        $this->assertEquals(2, $result['argumentIndex']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation1()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        if ($this->test() as $test) {
+            if (true) {
+
+            }
+        }
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertNull($result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation2()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        $this->test();
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertNull($result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation3()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        function test($a, $b)
+        {
+
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertNull($result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation4()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+        <?php
+
+        if (preg_match('/^array\s*\(/', $firstElement) === 1) {
+            $className = 'array';
+        } elseif (
+SOURCE;
+
+        $result = $partialParser->getInvocationInfoAt($source);
+
+        $this->assertNull($result);
+    }
 }

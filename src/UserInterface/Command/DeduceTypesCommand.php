@@ -71,17 +71,13 @@ class DeduceTypesCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
+        $codeWithExpression = $code;
 
-
-
-        // TODO: Part support has to go away, the entire expression has to be passed as string. Refactor all locations
-        // that pass parts to do this.
-
-        if (isset($arguments['part'])) {
-            $code = implode('->', $arguments['part']);
+        if (isset($arguments['expression'])) {
+            $codeWithExpression = $arguments['expression'];
         }
 
-        $node = $this->partialParser->getLastNodeAt($code, $offset);
+        $node = $this->partialParser->getLastNodeAt($codeWithExpression, $offset);
 
         if ($node === null) {
             return [];

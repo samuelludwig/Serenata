@@ -2,12 +2,12 @@
 
 namespace PhpIntegrator\Parsing\Node\Keyword;
 
-use PhpParser\NodeAbstract;
+use PhpParser\Node\Expr;
 
 /**
  * Represents the self keyword.
  */
-class Self_ extends NodeAbstract
+class Self_ extends Expr
 {
     /**
      * @inheritDoc
