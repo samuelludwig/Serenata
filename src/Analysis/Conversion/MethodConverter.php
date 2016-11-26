@@ -28,8 +28,8 @@ class MethodConverter extends FunctionConverter
             'isAbstract'      => !!$rawInfo['is_abstract'],
             'isFinal'         => !!$rawInfo['is_final'],
 
-            'override'       => null,
-            'implementation' => [],
+            'override'        => null,
+            'implementations' => [],
 
             'declaringClass' => [
                 'name'            => $class['name'],

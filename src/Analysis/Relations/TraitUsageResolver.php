@@ -118,7 +118,7 @@ class TraitUsageResolver extends AbstractResolver
             $childMethod = $class['methods'][$traitMethodData['name']];
 
             if ($traitMethodData['declaringStructure']['type'] === 'interface') {
-                $implementationData = array_merge($childMethod['implementation'], [
+                $implementationData = array_merge($childMethod['implementations'], [
                     [
                         'declaringClass'     => $childMethod['declaringClass'],
                         'declaringStructure' => $traitMethodData['declaringStructure'],
@@ -209,8 +209,8 @@ class TraitUsageResolver extends AbstractResolver
         }
 
         $class['methods'][$traitMethodData['name']] = array_merge($traitMethodData, $childMethod, $inheritedData, [
-            'override'       => $overrideData,
-            'implementation' => $implementationData,
+            'override'        => $overrideData,
+            'implementations' => $implementationData,
 
             'declaringClass' => [
                 'name'            => $class['name'],

@@ -70,7 +70,7 @@ class InterfaceImplementationResolver extends AbstractResolver
             $childMethod = $class['methods'][$interfaceMethodData['name']];
 
             if ($childMethod['declaringStructure']['type'] !== 'interface') {
-                $childMethod['implementation'][] = [
+                $childMethod['implementations'][] = [
                     'declaringClass'     => $interfaceMethodData['declaringClass'],
                     'declaringStructure' => $interfaceMethodData['declaringStructure'],
                     'startLine'          => $interfaceMethodData['startLine'],

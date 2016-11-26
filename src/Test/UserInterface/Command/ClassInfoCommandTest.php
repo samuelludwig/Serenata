@@ -397,7 +397,7 @@ class ClassInfoCommandTest extends IndexedTest
             'isAbstract'         => false,
             'isFinal'            => false,
             'override'           => null,
-            'implementation'     => [],
+            'implementations'    => [],
 
             'declaringClass'     => [
                 'name'      => '\A\TestClass',
@@ -934,7 +934,7 @@ class ClassInfoCommandTest extends IndexedTest
             ]
         ], $output['methods']['interfaceMethod']['override']);
 
-        $this->assertEmpty($output['methods']['interfaceMethod']['implementation']);
+        $this->assertEmpty($output['methods']['interfaceMethod']['implementations']);
 
         $this->assertEquals(20, $output['methods']['interfaceMethod']['startLine']);
         $this->assertEquals(23, $output['methods']['interfaceMethod']['endLine']);
@@ -972,7 +972,7 @@ class ClassInfoCommandTest extends IndexedTest
                     'endLineMember'   => 7
                 ]
             ]
-        ], $output['methods']['interfaceMethod']['implementation']);
+        ], $output['methods']['interfaceMethod']['implementations']);
 
         $this->assertEquals([
             'startLine'   => 12,
@@ -1140,7 +1140,7 @@ class ClassInfoCommandTest extends IndexedTest
                     'endLineMember'   => 7
                 ]
             ]
-        ], $output['methods']['parentInterfaceMethod']['implementation']);
+        ], $output['methods']['parentInterfaceMethod']['implementations']);
 
         $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['name']);
         $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['name']);
@@ -1178,7 +1178,7 @@ class ClassInfoCommandTest extends IndexedTest
                     'endLineMember'   => 7
                 ]
             ]
-        ], $output['methods']['interfaceParentMethod']['implementation']);
+        ], $output['methods']['interfaceParentMethod']['implementations']);
 
         $this->assertNull($output['methods']['interfaceParentMethod']['override']);
 
@@ -1218,7 +1218,7 @@ class ClassInfoCommandTest extends IndexedTest
                     'endLineMember'   => 7
                 ]
             ]
-        ], $output['methods']['interfaceMethod']['implementation']);
+        ], $output['methods']['interfaceMethod']['implementations']);
 
         $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['name']);
         $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['name']);
@@ -1626,7 +1626,7 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['name']);
         $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['name']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementation']);
+        $this->assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1644,7 +1644,7 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['name']);
         $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['name']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementation']);
+        $this->assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1662,7 +1662,7 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['name']);
         $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['name']);
 
-        $this->assertEmpty($output['methods']['interfaceMethod']['implementation']);
+        $this->assertEmpty($output['methods']['interfaceMethod']['implementations']);
     }
 
     /**
@@ -1677,8 +1677,8 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
         $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
 
-        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation'][0]['declaringClass']['name']);
-        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementation'][0]['declaringStructure']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['name']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }
@@ -1695,7 +1695,7 @@ class ClassInfoCommandTest extends IndexedTest
         $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
         $this->assertEquals('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['name']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementation']);
+        $this->assertEmpty($output['methods']['someMethod']['implementations']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }
@@ -1771,7 +1771,7 @@ class ClassInfoCommandTest extends IndexedTest
                 'startLine' => 12,
                 'endLine'   => 12
             ]
-        ], $output['methods']['someMethod']['implementation']);
+        ], $output['methods']['someMethod']['implementations']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }
@@ -1834,7 +1834,7 @@ class ClassInfoCommandTest extends IndexedTest
                 'startLine' => 12,
                 'endLine'   => 12
             ]
-        ], $output['methods']['someMethod']['implementation']);
+        ], $output['methods']['someMethod']['implementations']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }
@@ -1897,7 +1897,7 @@ class ClassInfoCommandTest extends IndexedTest
                 'startLine' => 12,
                 'endLine'   => 12
             ]
-        ], $output['methods']['someMethod']['implementation']);
+        ], $output['methods']['someMethod']['implementations']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }
@@ -2198,7 +2198,7 @@ class ClassInfoCommandTest extends IndexedTest
             'isAbstract'         => false,
             'isFinal'            => false,
             'override'           => null,
-            'implementation'     => null,
+            'implementations'    => null,
 
             'declaringClass' => [
                 'name'      => '\IteratorAggregate',
