@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Utility;
 
+use OutOfBoundsException;
+
 /**
  * Contains static utility functionality for dealing with source code.
  */
@@ -13,12 +15,18 @@ class SourceCodeHelpers
      * @param string $source
      * @param int    $offset
      *
+     * @throws OutOfBoundsException
+     *
      * @return int
      */
     public static function calculateLineByOffset($source, $offset)
     {
         if (!$offset) {
             return 1;
+        }
+
+        if ($offset > strlen($source)) {
+            throw new OutOfBoundsException('The offset is larger than the length of the string');
         }
 
         return substr_count($source, "\n", 0, $offset) + 1;
