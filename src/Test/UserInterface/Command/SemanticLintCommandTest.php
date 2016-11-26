@@ -8,6 +8,10 @@ use PhpIntegrator\Test\IndexedTest;
 
 class SemanticLintCommandTest extends IndexedTest
 {
+    /**
+     * @param string $file
+     * @param bool   $indexingMayFail
+     */
     protected function lintFile($file, $indexingMayFail = false)
     {
         $path = __DIR__ . '/SemanticLintCommandTest/' . $file;
@@ -33,6 +37,9 @@ class SemanticLintCommandTest extends IndexedTest
         return $command->semanticLint($path, file_get_contents($path));
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesSyntaxErrors()
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
@@ -40,6 +47,9 @@ class SemanticLintCommandTest extends IndexedTest
         $this->assertEquals(2, count($output['errors']['syntaxErrors']));
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnknownClassesWithNoNamespace()
     {
         $output = $this->lintFile('UnknownClassesNoNamespace.phpt');
@@ -54,6 +64,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownClasses']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnknownClassesWithSingleNamespace()
     {
         $output = $this->lintFile('UnknownClassesSingleNamespace.phpt');
@@ -74,6 +87,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownClasses']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnknownClassesWithMultipleNamespaces()
     {
         $output = $this->lintFile('UnknownClassesMultipleNamespaces.phpt');
@@ -95,6 +111,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownClasses']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnknownClassesInDocBlocks()
     {
         $output = $this->lintFile('UnknownClassesDocblock.phpt');
@@ -137,6 +156,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownClasses']);
     }
 
+    /**
+     * @return void
+     */
     public function testDoesNotComplainAboutUnknownClassesInGroupedUseStatements()
     {
         $output = $this->lintFile('GroupedUseStatements.phpt');
@@ -144,6 +166,9 @@ class SemanticLintCommandTest extends IndexedTest
         $this->assertEquals([], $output['errors']['unknownClasses']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsInvalidMemberCallsOnAnExpressionWithoutAType()
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoType.phpt');
@@ -157,6 +182,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownMembers']['expressionHasNoType']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsInvalidMemberCallsOnAnExpressionThatDoesNotReturnAClasslike()
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoClasslike.phpt');
@@ -178,6 +206,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownMembers']['expressionIsNotClasslike']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsInvalidMemberCallsOnAnExpressionThatReturnsAClasslikeWithNoSuchMember()
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.phpt');
@@ -206,6 +237,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownMembers']['expressionHasNoSuchMember']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsInvalidMemberCallsOnAnExpressionThatReturnsAClasslikeWithNoSuchMemberCausingANewMemberToBeCreated()
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.phpt');
@@ -234,6 +268,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unknownMembers']['expressionNewMemberWillBeCreated']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnknownGlobalFunctions()
     {
         $output = $this->lintFile('UnknownGlobalFunctions.phpt');
@@ -259,6 +296,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownGlobalFunctions']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnknownGlobalConstants()
     {
         $output = $this->lintFile('UnknownGlobalConstants.phpt');
@@ -284,6 +324,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['errors']['unknownGlobalConstants']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnusedUseStatementsWithSingleNamespace()
     {
         $output = $this->lintFile('UnusedUseStatementsSingleNamespace.phpt');
@@ -298,6 +341,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnusedUseStatementsWithMultipleNamespaces()
     {
         $output = $this->lintFile('UnusedUseStatementsMultipleNamespaces.phpt');
@@ -319,6 +365,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnusedUseStatementsWithGroupedUseStatements()
     {
         $output = $this->lintFile('GroupedUseStatements.phpt');
@@ -347,6 +396,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnusedUseStatementsForConstants()
     {
         $output = $this->lintFile('UnusedUseStatementsConstant.phpt');
@@ -361,6 +413,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testReportsUnusedUseStatementsForFunctions()
     {
         $output = $this->lintFile('UnusedUseStatementsFunction.phpt');
@@ -375,6 +430,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testSeesUseStatementsAsUsedIfTheyAppearInComments()
     {
         $output = $this->lintFile('UnusedUseStatementsDocblock.phpt');
@@ -396,6 +454,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testSeesUseStatementsAsUsedIfTheyAppearInAnonymousClasses()
     {
         $output = $this->lintFile('UnusedUseStatementsAnonymousClass.phpt');
@@ -403,6 +464,9 @@ class SemanticLintCommandTest extends IndexedTest
         $this->assertEquals([], $output['warnings']['unusedUseStatements']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesMissingDocumentation()
     {
         $output = $this->lintFile('DocblockCorrectnessMissingDocumentation.phpt');
@@ -445,6 +509,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['missingDocumentation']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDocblockMissingParameter()
     {
         $output = $this->lintFile('DocblockCorrectnessMissingParameter.phpt');
@@ -460,6 +527,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterMissing']);
     }
 
+    /**
+     * @return void
+     */
     public function testDoesNotComplainAboutMissingParameterWhenItIsAReference()
     {
         $output = $this->lintFile('DocblockCorrectnessParamWithReference.phpt');
@@ -469,6 +539,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterMissing']);
     }
 
+    /**
+     * @return void
+     */
     public function testDoesNotComplainAboutMissingParameterWhenItIsVariadic()
     {
         $output = $this->lintFile('DocblockCorrectnessVariadicParam.phpt');
@@ -478,6 +551,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterMissing']);
     }
 
+    /**
+     * @return void
+     */
     public function testDoesNotComplainAboutDocblocksHavingFullInheritance()
     {
         $output = $this->lintFile('DocblockCorrectnessFullInheritance.phpt');
@@ -487,6 +563,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterMissing']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDocblockParameterTypeMismatch()
     {
         $output = $this->lintFile('DocblockCorrectnessParameterTypeMismatch.phpt');
@@ -502,6 +581,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyInterpretsVariadicParametersWhenCheckingForParameterTypeMismatches()
     {
         $output = $this->lintFile('DocblockCorrectnessVariadicParam.phpt');
@@ -511,6 +593,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDocblockSuperfluousParameters()
     {
         $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');
@@ -526,6 +611,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['superfluousParameter']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDocblockMissingVarTag()
     {
         $output = $this->lintFile('DocblockCorrectnessMissingVarTag.phpt');
@@ -547,6 +635,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['varTagMissing']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDeprecatedCategoryTag()
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedCategoryTag.phpt');
@@ -561,6 +652,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['deprecatedCategoryTag']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDeprecatedSubpackageTag()
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedSubpackageTag.phpt');
@@ -575,6 +669,9 @@ class SemanticLintCommandTest extends IndexedTest
         ], $output['warnings']['docblockIssues']['deprecatedSubpackageTag']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDeprecatedLinkTag()
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedLinkTag.phpt');
