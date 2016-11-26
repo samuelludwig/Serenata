@@ -239,39 +239,106 @@ class ClasslikeInfoBuilder
             'methods'            => []
         ]);
 
+        $this->buildDirectChildrenInfo($classlike, $children);
+        $this->buildDirectImplementorsInfo($classlike, $implementors);
+        $this->buildTraitUsersInfo($classlike, $traitUsers);
+        $this->buildConstantInfo($classlike, $constants);
+        $this->buildPropertyInfo($classlike, $properties);
+        $this->buildMethodInfo($classlike, $methods);
+        $this->buildTraitInfo($classlike, $traits, $traitAliases, $traitPrecedences);
+        $this->buildParentInfo($classlike, $parents);
+        $this->buildInterfaceInfo($classlike, $interfaces);
+
+        return $classlike;
+    }
+
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $children
+     */
+    protected function buildDirectChildrenInfo(ArrayObject $classlike, array $children)
+    {
         foreach ($children as $child) {
             $classlike['directChildren'][] = $child['fqcn'];
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $implementors
+     */
+    protected function buildDirectImplementorsInfo(ArrayObject $classlike, array $implementors)
+    {
         foreach ($implementors as $implementor) {
             $classlike['directImplementors'][] = $implementor['fqcn'];
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $traitUsers
+     */
+    protected function buildTraitUsersInfo(ArrayObject $classlike, array $traitUsers)
+    {
         foreach ($traitUsers as $trait) {
             $classlike['directTraitUsers'][] = $trait['fqcn'];
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $constants
+     */
+    protected function buildConstantInfo(ArrayObject $classlike, array $constants)
+    {
         foreach ($constants as $rawConstantData) {
             $classlike['constants'][$rawConstantData['name']] = $this->classlikeConstantConverter->convertForClass(
                 $rawConstantData,
                 $classlike
             );
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $properties
+     */
+    protected function buildPropertyInfo(ArrayObject $classlike, array $properties)
+    {
         foreach ($properties as $rawPropertyData) {
             $classlike['properties'][$rawPropertyData['name']] = $this->propertyConverter->convertForClass(
                 $rawPropertyData,
                 $classlike
             );
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $methods
+     */
+    protected function buildMethodInfo(ArrayObject $classlike, array $methods)
+    {
         foreach ($methods as $rawMethodData) {
             $classlike['methods'][$rawMethodData['name']] = $this->methodConverter->convertForClass(
                 $rawMethodData,
                 $classlike
             );
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $traits
+     * @param array       $traitAliases
+     * @param array       $traitPrecedences
+     */
+    protected function buildTraitInfo(
+        ArrayObject $classlike,
+        array $traits,
+        array $traitAliases,
+        array $traitPrecedences
+    ) {
         foreach ($traits as $trait) {
             $classlike['traits'][] = $trait['fqcn'];
             $classlike['directTraits'][] = $trait['fqcn'];
@@ -280,7 +347,14 @@ class ClasslikeInfoBuilder
 
             $this->traitUsageResolver->resolveUseOf($traitInfo, $classlike, $traitAliases, $traitPrecedences);
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $parents
+     */
+    protected function buildParentInfo(ArrayObject $classlike, array $parents)
+    {
         foreach ($parents as $parent) {
             $classlike['parents'][] = $parent['fqcn'];
             $classlike['directParents'][] = $parent['fqcn'];
@@ -289,7 +363,14 @@ class ClasslikeInfoBuilder
 
             $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlike);
         }
+    }
 
+    /**
+     * @param ArrayObject $classlike
+     * @param array       $interfaces
+     */
+    protected function buildInterfaceInfo(ArrayObject $classlike, array $interfaces)
+    {
         foreach ($interfaces as $interface) {
             $classlike['interfaces'][] = $interface['fqcn'];
             $classlike['directInterfaces'][] = $interface['fqcn'];
@@ -298,8 +379,6 @@ class ClasslikeInfoBuilder
 
             $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
         }
-
-        return $classlike;
     }
 
     /**
