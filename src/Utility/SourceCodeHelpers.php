@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Utility;
 
-use UnexpectedValueException;
-
 /**
  * Contains static utility functionality for dealing with source code.
  */
