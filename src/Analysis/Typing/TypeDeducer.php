@@ -75,11 +75,6 @@ class TypeDeducer
     protected $fileTypeResolverFactory;
 
     /**
-     * @var TypeQueryingVisitor
-     */
-    protected $typeQueryingVisitor;
-
-    /**
      * @var IndexDatabase
      */
     protected $indexDatabase;
@@ -362,6 +357,8 @@ class TypeDeducer
      * @param int    $offset
      *
      * @throws UnexpectedValueException
+     *
+     * @return TypeQueryingVisitor
      */
     protected function walkTypeQueryingVisitorTo($code, $offset)
     {
@@ -380,12 +377,14 @@ class TypeDeducer
         }
 
         $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
-        $this->typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $this->prettyPrinter, $offset);
+        $typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $this->prettyPrinter, $offset);
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($scopeLimitingVisitor);
-        $traverser->addVisitor($this->typeQueryingVisitor);
+        $traverser->addVisitor($typeQueryingVisitor);
         $traverser->traverse($nodes);
+
+        return $typeQueryingVisitor;
     }
 
     /**
@@ -403,9 +402,9 @@ class TypeDeducer
      */
     protected function getLocalExpressionTypes($file, $code, $expression, $offset)
     {
-        $this->walkTypeQueryingVisitorTo($code, $offset);
+        $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($code, $offset);
 
-        $expressionTypeInfoMap = $this->typeQueryingVisitor->getExpressionTypeInfoMap();
+        $expressionTypeInfoMap = $typeQueryingVisitor->getExpressionTypeInfoMap();
         $offsetLine = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
         if (!$expressionTypeInfoMap->has($expression)) {
