@@ -60,5 +60,36 @@ protected function foo(Bar ...$bars)
 }
 ```
 
+* The type deducer can now (finally) cope with conditionals on properties, next to variables:
+
+```php
+class Foo
+{
+    /**
+     * @var \Iterator
+     */
+    protected $bar;
+
+    public function fooMethod()
+    {
+        // Before:
+        $this->bar = new \SplObjectStorage();
+        $this->bar-> // Still lists members of Iterator.
+
+        if ($this->bar instanceof \DateTime) {
+            $this->bar-> // Still lists members of Iterator.
+        }
+
+        // After:
+        $this->bar = new \SplObjectStorage();
+        $this->bar-> // Lists members of SplObjectStorage.
+
+        if ($this->bar instanceof \DateTime) {
+            $this->bar-> // Lists members of DateTime.
+        }
+    }
+}
+```
+
 ## 1.2.0
 * Initial split from the [php-integrator/atom-base](https://github.com/php-integrator/atom-base) repository. See [its changelog](https://github.com/php-integrator/atom-base/blob/master/CHANGELOG.md) for what changed in older versions.
