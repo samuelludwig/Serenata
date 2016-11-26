@@ -83,6 +83,10 @@ class DeduceTypesCommand extends AbstractCommand
 
         $node = $this->partialParser->getLastNodeAt($code, $offset);
 
+        if ($node === null) {
+            return [];
+        }
+
         if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
             $node = $this->getNodeWithoutLastElement($node);
         }
