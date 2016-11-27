@@ -241,7 +241,7 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNestedIfStatementWithInstanceof()
+    public function testIfWithInstanceofContainingIfWithDifferentInstanceofGivesNestedTypePrecedenceOverFirst()
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIf.phpt', '$b');
 
