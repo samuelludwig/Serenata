@@ -44,8 +44,8 @@ class ExpressionTypeInfoMap
     {
         $this->createIfNecessary($expression);
 
-        $this->get($expression)->setTypePossibilities([]);
         $this->get($expression)->setBestMatch($bestMatch);
+        $this->get($expression)->getTypePossibilityMap()->clear();
     }
 
     /**

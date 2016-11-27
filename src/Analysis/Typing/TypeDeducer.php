@@ -524,7 +524,7 @@ class TypeDeducer
             $types = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code);
         }
 
-        return $expressionTypeInfo->getApplicableTypesFromTypes($types);
+        return $expressionTypeInfo->getTypePossibilityMap()->getApplicableTypesFromTypes($types);
     }
 
     /**
