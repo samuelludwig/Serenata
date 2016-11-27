@@ -230,26 +230,18 @@ class ExpressionTypeInfo
     {
         $guaranteedTypes = $this->getGuaranteedTypes();
 
-        $types = $guaranteedTypes;
+        // Types guaranteed by conditionals take precendece over the best match types as if they did not apply, we
+        // could never have ended up in the conditional in the first place. However, sometimes conditionals don't
+        // know the exact type, but only know that the type must be one in a list of possible types (e.g. in an if
+        // statement such as "if (!$a)" $a could still be an int, a float, a string, ...). In this case, the list
+        // of conditionals is effectively narrowed down further by the type specified by a best match (i.e. the
+        // best match types act as a whitelist for the conditional types).
+        $types = array_intersect($guaranteedTypes, $typeList);
 
-        if (empty($guaranteedTypes)) {
-            $types = $typeList;
-        } elseif (!empty($typeList)) {
-            $types = [];
-
-            // Types guaranteed by conditionals take precendece over the best match types as if they did not apply, we
-            // could never have ended up in the conditional in the first place. However, sometimes conditionals don't
-            // know the exact type, but only know that the type must be one in a list of possible types (e.g. in an if
-            // statement such as "if (!$a)" $a could still be an int, a float, a string, ...). In this case, the list
-            // of conditionals is effectively narrowed down further by the type specified by a best match (i.e. the
-            // best match types act as a whitelist for the conditional types).
-            foreach ($guaranteedTypes as $guaranteedType) {
-                if (in_array($guaranteedType, $typeList, true)) {
-                    $types[] = $guaranteedType;
-                }
-            }
-
-            if (empty($types)) {
+        if (empty($types)) {
+            if (empty($guaranteedTypes)) {
+                $types = $typeList;
+            } else {
                 // We got inside the if statement, so the type MUST be of one of the guaranteed types. However, if
                 // an assignment said that $a is a string and the if statement checks if $a is a bool, in theory we
                 // can never end up in the if statement at all as the condition will never pass. Still, for the
