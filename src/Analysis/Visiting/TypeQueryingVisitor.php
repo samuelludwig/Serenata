@@ -102,7 +102,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param NodeAbstract $node
+     * @param Node\Stmt\If_|Node\Stmt\ElseIf_|Node\Expr\Ternary $node
      */
     protected function parseConditional(NodeAbstract $node)
     {
