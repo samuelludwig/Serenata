@@ -518,58 +518,13 @@ class TypeDeducer
             return $this->typeAnalyzer->getTypesForTypeSpecification($expressionTypeInfo->getBestTypeOverrideMatch());
         }
 
-        $bestMatchTypes = null;
+        $types = [];
 
         if ($expressionTypeInfo->hasBestMatch()) {
-            $bestMatchTypes = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code);
+            $types = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code);
         }
 
-        $types = null;
-        $guaranteedTypes = $expressionTypeInfo->getGuaranteedTypes();
-
-        if (empty($guaranteedTypes)) {
-            $types = $bestMatchTypes;
-        } elseif ($bestMatchTypes !== null) {
-            $types = [];
-
-            // Types guaranteed by conditionals take precendece over the best match types as if they did not apply, we
-            // could never have ended up in the conditional in the first place. However, sometimes conditionals don't
-            // know the exact type, but only know that the type must be one in a list of possible types (e.g. in an if
-            // statement such as "if (!$a)" $a could still be an int, a float, a string, ...). In this case, the list
-            // of conditionals is effectively narrowed down further by the type specified by a best match (i.e. the
-            // best match types act as a whitelist for the conditional types).
-            $atLeastOneGuaranteedTypeWasABestMatch = false;
-
-            foreach ($guaranteedTypes as $guaranteedType) {
-                if (in_array($guaranteedType, $bestMatchTypes, true)) {
-                    $types[] = $guaranteedType;
-                    $atLeastOneGuaranteedTypeWasABestMatch = true;
-                }
-            }
-
-            if (!$atLeastOneGuaranteedTypeWasABestMatch) {
-                // We got inside the if statement, so the type MUST be of one of the guaranteed types. However, if
-                // an assignment said that $a is a string and the if statement checks if $a is a bool, in theory we
-                // can never end up in the if statement at all as the condition will never pass. Still, for the
-                // sake of deducing the type, we choose to return the types guaranteed by the if statement rather
-                // than no types at all (as that isn't useful to anyone).
-                $types = $guaranteedTypes;
-            }
-        } else {
-            $types = $guaranteedTypes;
-        }
-
-        $typesWithImpossibleTypesRemoved = [];
-
-        foreach ($types as $type) {
-            if ($expressionTypeInfo->isTypeImpossible($type)) {
-                continue;
-            }
-
-            $typesWithImpossibleTypesRemoved[] = $type;
-        }
-
-        return $typesWithImpossibleTypesRemoved ?: [];
+        return $expressionTypeInfo->getApplicableTypesFromTypes($types);
     }
 
     /**

@@ -214,4 +214,65 @@ class ExpressionTypeInfo
     {
         return ($this->getBestTypeOverrideMatch() !== null);
     }
+
+    /**
+     * Retrieves a list of applicable types based on type information.
+     *
+     * This takes a list of types (that e.g. a variable is supposed to have) and filters out any types that do not apply
+     * based on the information from this object. Note that in some cases, the types returned do not necessarily contain
+     * any of the types specified in the parameter.
+     *
+     * @param array $typeList
+     *
+     * @return array
+     */
+    public function getApplicableTypesFromTypes(array $typeList)
+    {
+        $types = null;
+        $guaranteedTypes = $this->getGuaranteedTypes();
+
+        if (empty($guaranteedTypes)) {
+            $types = $typeList;
+        } elseif (!empty($typeList)) {
+            $types = [];
+
+            // Types guaranteed by conditionals take precendece over the best match types as if they did not apply, we
+            // could never have ended up in the conditional in the first place. However, sometimes conditionals don't
+            // know the exact type, but only know that the type must be one in a list of possible types (e.g. in an if
+            // statement such as "if (!$a)" $a could still be an int, a float, a string, ...). In this case, the list
+            // of conditionals is effectively narrowed down further by the type specified by a best match (i.e. the
+            // best match types act as a whitelist for the conditional types).
+            $atLeastOneGuaranteedTypeWasABestMatch = false;
+
+            foreach ($guaranteedTypes as $guaranteedType) {
+                if (in_array($guaranteedType, $typeList, true)) {
+                    $types[] = $guaranteedType;
+                    $atLeastOneGuaranteedTypeWasABestMatch = true;
+                }
+            }
+
+            if (!$atLeastOneGuaranteedTypeWasABestMatch) {
+                // We got inside the if statement, so the type MUST be of one of the guaranteed types. However, if
+                // an assignment said that $a is a string and the if statement checks if $a is a bool, in theory we
+                // can never end up in the if statement at all as the condition will never pass. Still, for the
+                // sake of deducing the type, we choose to return the types guaranteed by the if statement rather
+                // than no types at all (as that isn't useful to anyone).
+                $types = $guaranteedTypes;
+            }
+        } else {
+            $types = $guaranteedTypes;
+        }
+
+        $typesWithImpossibleTypesRemoved = [];
+
+        foreach ($types as $type) {
+            if ($this->isTypeImpossible($type)) {
+                continue;
+            }
+
+            $typesWithImpossibleTypesRemoved[] = $type;
+        }
+
+        return $typesWithImpossibleTypesRemoved ?: [];
+    }
 }
