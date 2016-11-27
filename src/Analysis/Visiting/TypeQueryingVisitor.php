@@ -303,44 +303,53 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 }
             }
         } elseif ($node instanceof Node\Expr\FuncCall) {
-            if ($node->name instanceof Node\Name) {
-                $variableHandlingFunctionTypeMap = [
-                    'is_array'    => ['array'],
-                    'is_bool'     => ['bool'],
-                    'is_callable' => ['callable'],
-                    'is_double'   => ['float'],
-                    'is_float'    => ['float'],
-                    'is_int'      => ['int'],
-                    'is_integer'  => ['int'],
-                    'is_long'     => ['int'],
-                    'is_null'     => ['null'],
-                    'is_numeric'  => ['int', 'float', 'string'],
-                    'is_object'   => ['object'],
-                    'is_real'     => ['float'],
-                    'is_resource' => ['resource'],
-                    'is_scalar'   => ['int', 'float', 'string', 'bool'],
-                    'is_string'   => ['string']
-                ];
+            $this->processConditionFuncCall($types, $node);
+        }
 
-                if (isset($variableHandlingFunctionTypeMap[$node->name->toString()])) {
-                    if (
-                        !empty($node->args) &&
-                        !$node->args[0]->unpack &&
-                        $this->isExpressionSubjectToTypePossibilities($node->args[0]->value)
-                    ) {
-                        $guaranteedTypes = $variableHandlingFunctionTypeMap[$node->name->toString()];
+        return $types;
+    }
 
-                        $key = $this->getExpressionString($node->args[0]->value);
+    /**
+     * @param TypePossibilityMap[] &$types
+     * @param Node\Expr\FuncCall   $node
+     */
+    protected function processConditionFuncCall(array &$types, Node\Expr\FuncCall $node)
+    {
+        if ($node->name instanceof Node\Name) {
+            $variableHandlingFunctionTypeMap = [
+                'is_array'    => ['array'],
+                'is_bool'     => ['bool'],
+                'is_callable' => ['callable'],
+                'is_double'   => ['float'],
+                'is_float'    => ['float'],
+                'is_int'      => ['int'],
+                'is_integer'  => ['int'],
+                'is_long'     => ['int'],
+                'is_null'     => ['null'],
+                'is_numeric'  => ['int', 'float', 'string'],
+                'is_object'   => ['object'],
+                'is_real'     => ['float'],
+                'is_resource' => ['resource'],
+                'is_scalar'   => ['int', 'float', 'string', 'bool'],
+                'is_string'   => ['string']
+            ];
 
-                        foreach ($guaranteedTypes as $guaranteedType) {
-                            $this->setTypePossibilityForExpression($types, $key, $guaranteedType, TypePossibility::TYPE_GUARANTEED);
-                        }
+            if (isset($variableHandlingFunctionTypeMap[$node->name->toString()])) {
+                if (
+                    !empty($node->args) &&
+                    !$node->args[0]->unpack &&
+                    $this->isExpressionSubjectToTypePossibilities($node->args[0]->value)
+                ) {
+                    $guaranteedTypes = $variableHandlingFunctionTypeMap[$node->name->toString()];
+
+                    $key = $this->getExpressionString($node->args[0]->value);
+
+                    foreach ($guaranteedTypes as $guaranteedType) {
+                        $this->setTypePossibilityForExpression($types, $key, $guaranteedType, TypePossibility::TYPE_GUARANTEED);
                     }
                 }
             }
         }
-
-        return $types;
     }
 
     /**
