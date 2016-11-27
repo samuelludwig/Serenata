@@ -222,7 +222,7 @@ class ExpressionTypeInfo
      * based on the information from this object. Note that in some cases, the types returned do not necessarily contain
      * any of the types specified in the parameter.
      *
-     * @param array $typeList
+     * @param string[] $typeList
      *
      * @return string[]
      */
@@ -267,7 +267,7 @@ class ExpressionTypeInfo
     }
 
     /**
-     * @param array $types
+     * @param string[] $types
      *
      * @return string[]
      */
