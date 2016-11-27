@@ -228,8 +228,9 @@ class ExpressionTypeInfo
      */
     public function getApplicableTypesFromTypes(array $typeList)
     {
-        $types = null;
         $guaranteedTypes = $this->getGuaranteedTypes();
+
+        $types = $guaranteedTypes;
 
         if (empty($guaranteedTypes)) {
             $types = $typeList;
@@ -259,8 +260,6 @@ class ExpressionTypeInfo
                 // than no types at all (as that isn't useful to anyone).
                 $types = $guaranteedTypes;
             }
-        } else {
-            $types = $guaranteedTypes;
         }
 
         return $this->filterImpossibleTypesFromTypes($types);
