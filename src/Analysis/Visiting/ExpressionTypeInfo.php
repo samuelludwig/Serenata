@@ -159,22 +159,6 @@ class ExpressionTypeInfo
     }
 
     /**
-     * @return string[]
-     */
-    public function getGuaranteedTypes()
-    {
-        $guaranteedTypes = [];
-
-        foreach ($this->getTypePossibilities() as $type => $possibility) {
-            if ($possibility === TypePossibility::TYPE_GUARANTEED) {
-                $guaranteedTypes[] = $type;
-            }
-        }
-
-        return $guaranteedTypes;
-    }
-
-    /**
      * @param string $type
      *
      * @return bool
@@ -252,6 +236,22 @@ class ExpressionTypeInfo
         }
 
         return $this->filterImpossibleTypesFromTypes($types);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getGuaranteedTypes()
+    {
+        $guaranteedTypes = [];
+
+        foreach ($this->getTypePossibilities() as $type => $possibility) {
+            if ($possibility === TypePossibility::TYPE_GUARANTEED) {
+                $guaranteedTypes[] = $type;
+            }
+        }
+
+        return $guaranteedTypes;
     }
 
     /**
