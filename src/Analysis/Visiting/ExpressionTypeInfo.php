@@ -116,7 +116,7 @@ class ExpressionTypeInfo
      *
      * @throws OutOfBoundsException
      *
-     * @return TypePossibility[]
+     * @return int
      */
     public function getPossibilityOfType($type)
     {
@@ -124,7 +124,7 @@ class ExpressionTypeInfo
             throw new OutOfBoundsException('No such type found in the list of type possibilities');
         }
 
-        return $this->typePossibilities;
+        return $this->typePossibilities[$type];
     }
 
     /**
@@ -156,6 +156,36 @@ class ExpressionTypeInfo
     public function getTypePossibilities()
     {
         return $this->typePossibilities;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getGuaranteedTypes()
+    {
+        $guaranteedTypes = [];
+
+        foreach ($this->getTypePossibilities() as $type => $possibility) {
+            if ($possibility === TypePossibility::TYPE_GUARANTEED) {
+                $guaranteedTypes[] = $type;
+            }
+        }
+
+        return $guaranteedTypes;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function isTypeImpossible($type)
+    {
+        try {
+            return $this->getPossibilityOfType($type) === TypePossibility::TYPE_IMPOSSIBLE;
+        } catch (OutOfBoundsException $e) {
+            return false;
+        }
     }
 
     /**

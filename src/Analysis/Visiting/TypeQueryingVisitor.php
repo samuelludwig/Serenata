@@ -275,11 +275,11 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
                 $key = $this->getExpressionString($node->expr);
 
-                $types[$key]['int']    = TypePossibility::TYPE_POSSIBLE; // 0
-                $types[$key]['string'] = TypePossibility::TYPE_POSSIBLE; // ''
-                $types[$key]['float']  = TypePossibility::TYPE_POSSIBLE; // 0.0
-                $types[$key]['array']  = TypePossibility::TYPE_POSSIBLE; // []
-                $types[$key]['null']   = TypePossibility::TYPE_POSSIBLE; // null
+                $types[$key]['int']    = TypePossibility::TYPE_GUARANTEED; // 0
+                $types[$key]['string'] = TypePossibility::TYPE_GUARANTEED; // ''
+                $types[$key]['float']  = TypePossibility::TYPE_GUARANTEED; // 0.0
+                $types[$key]['array']  = TypePossibility::TYPE_GUARANTEED; // []
+                $types[$key]['null']   = TypePossibility::TYPE_GUARANTEED; // null
             } else {
                 $subTypes = $this->parseCondition($node->expr);
 
