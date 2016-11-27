@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use OutOfBoundsException;
-
 use PhpParser\Node;
 
 /**
@@ -109,22 +107,6 @@ class ExpressionTypeInfo
     {
         $this->bestTypeOverrideMatchLine = $bestTypeOverrideMatchLine;
         return $this;
-    }
-
-    /**
-     * @param string $type
-     *
-     * @throws OutOfBoundsException
-     *
-     * @return int
-     */
-    public function getPossibilityOfType($type)
-    {
-        if (!isset($this->typePossibilities[$type])) {
-            throw new OutOfBoundsException('No such type found in the list of type possibilities');
-        }
-
-        return $this->typePossibilities[$type];
     }
 
     /**
