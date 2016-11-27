@@ -91,5 +91,23 @@ class Foo
 }
 ```
 
+* Type deduction with conditionals has improved in many ways, for example:
+
+```php
+if ($a instanceof A || $a instanceof B) {
+    if ($a instanceof A) {
+        // $a is now correctly A instead of A|B.
+    }
+}
+```
+
+```php
+$b = '';
+
+if ($b) {
+    // $b is now correctly string instead of string|bool.
+}
+```
+
 ## 1.2.0
 * Initial split from the [php-integrator/atom-base](https://github.com/php-integrator/atom-base) repository. See [its changelog](https://github.com/php-integrator/atom-base/blob/master/CHANGELOG.md) for what changed in older versions.
