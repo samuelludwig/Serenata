@@ -234,14 +234,14 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             $this->processConditionInequalityOperators($node, $types);
         } elseif ($node instanceof Node\Expr\BooleanNot) {
             $this->processConditionBooleanNot($node, $types);
-        } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
-            $key = $this->getExpressionString($node);
-
-            $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
         } elseif ($node instanceof Node\Expr\Instanceof_) {
             $this->processConditionInstanceof($node, $types);
         } elseif ($node instanceof Node\Expr\FuncCall) {
             $this->processConditionFuncCall($node, $types);
+        } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
+            $key = $this->getExpressionString($node);
+
+            $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
         }
 
         return $types;
