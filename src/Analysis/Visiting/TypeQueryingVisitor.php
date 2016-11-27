@@ -205,7 +205,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr $node
      *
-     * @return array
+     * @return TypePossibilityMap[] with expression names as keys.
      */
     protected function parseCondition(Node\Expr $node)
     {
@@ -344,10 +344,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param array  $types
-     * @param string $expression
-     * @param string $type
-     * @param int    $possibility
+     * @param TypePossibilityMap[] &$types
+     * @param string               $expression
+     * @param string               $type
+     * @param int                  $possibility
      */
     protected function setTypePossibilityForExpression(array &$types, $expression, $type, $possibility)
     {
