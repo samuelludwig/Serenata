@@ -35,7 +35,7 @@ class TypePossibilityMap
      *
      * @return static
      */
-    public function setPossibilityOfType($type, $possibility)
+    public function set($type, $possibility)
     {
         $this->map[$type] = $possibility;
         return $this;
@@ -46,7 +46,7 @@ class TypePossibilityMap
      *
      * @return static
      */
-    public function removePossibilityOfType($type)
+    public function remove($type)
     {
         unset($this->map[$type]);
         return $this;
@@ -55,20 +55,9 @@ class TypePossibilityMap
     /**
      * @return array
      */
-    public function getTypePossibilities()
+    public function getAll()
     {
         return $this->map;
-    }
-
-    /**
-     * @param array $map
-     *
-     * @return static
-     */
-    public function setTypePossibilities(array $map)
-    {
-        $this->map = $map;
-        return $this;
     }
 
     /**
@@ -82,9 +71,9 @@ class TypePossibilityMap
      *
      * @return string[]
      */
-    public function getApplicableTypesFromTypes(array $typeList)
+    public function determineApplicableTypes(array $typeList)
     {
-        $guaranteedTypes = $this->getTypesWithPossibility(TypePossibility::TYPE_GUARANTEED);
+        $guaranteedTypes = $this->getAllWithPossibility(TypePossibility::TYPE_GUARANTEED);
 
         // Types guaranteed by conditionals take precendece over the best match types as if they did not apply, we
         // could never have ended up in the conditional in the first place. However, sometimes conditionals don't
@@ -107,7 +96,7 @@ class TypePossibilityMap
             }
         }
 
-        $impossibleTypes = $this->getTypesWithPossibility(TypePossibility::TYPE_IMPOSSIBLE);
+        $impossibleTypes = $this->getAllWithPossibility(TypePossibility::TYPE_IMPOSSIBLE);
 
         return array_diff($types, $impossibleTypes);
     }
@@ -117,11 +106,11 @@ class TypePossibilityMap
      *
      * @return string[]
      */
-    protected function getTypesWithPossibility($possibility)
+    protected function getAllWithPossibility($possibility)
     {
         $guaranteedTypes = [];
 
-        foreach ($this->getTypePossibilities() as $type => $typePossibility) {
+        foreach ($this->getAll() as $type => $typePossibility) {
             if ($typePossibility === $possibility) {
                 $guaranteedTypes[] = $type;
             }
