@@ -263,16 +263,24 @@ class ExpressionTypeInfo
             $types = $guaranteedTypes;
         }
 
-        $typesWithImpossibleTypesRemoved = [];
+        return $this->filterImpossibleTypesFromTypes($types);
+    }
+
+    /**
+     * @param array $types
+     *
+     * @return string[]
+     */
+    protected function filterImpossibleTypesFromTypes(array $types)
+    {
+        $filteredTypes = [];
 
         foreach ($types as $type) {
-            if ($this->isTypeImpossible($type)) {
-                continue;
+            if (!$this->isTypeImpossible($type)) {
+                $filteredTypes[] = $type;
             }
-
-            $typesWithImpossibleTypesRemoved[] = $type;
         }
 
-        return $typesWithImpossibleTypesRemoved ?: [];
+        return $filteredTypes;
     }
 }
