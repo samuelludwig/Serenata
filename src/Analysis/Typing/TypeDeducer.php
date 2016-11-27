@@ -534,9 +534,9 @@ class TypeDeducer
 
         $types = [];
 
-        // Types guaranteed by a conditional statement take precedence (if they didn't apply, the if statement could
-        // never have executed in the first place).
         if (!empty($guaranteedTypes)) {
+            // Types guaranteed by a conditional statement take precedence (if they didn't apply, the if statement
+            // could never have executed in the first place).
             $types = $guaranteedTypes;
         } elseif ($expressionTypeInfo->hasBestMatch()) {
             $types = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code);
