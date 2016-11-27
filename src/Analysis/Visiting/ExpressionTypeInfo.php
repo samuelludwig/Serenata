@@ -224,7 +224,7 @@ class ExpressionTypeInfo
      *
      * @param array $typeList
      *
-     * @return array
+     * @return string[]
      */
     public function getApplicableTypesFromTypes(array $typeList)
     {
