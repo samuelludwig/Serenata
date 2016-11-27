@@ -117,6 +117,27 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
         $typeData = $this->parseCondition($node->cond);
 
+        $variablesWithNewGuaranteedTypes = [];
+
+        foreach ($typeData as $variable => $newConditionalTypes) {
+            foreach ($newConditionalTypes as $type => $possibility) {
+                if ($possibility === TypePossibility::TYPE_GUARANTEED) {
+                    $variablesWithNewGuaranteedTypes[] = $variable;
+                    break;
+                }
+            }
+        }
+
+        foreach ($variablesWithNewGuaranteedTypes as $variablesWithNewGuaranteedType) {
+            $info = $this->expressionTypeInfoMap->get($variablesWithNewGuaranteedType);
+
+            foreach ($info->getTypePossibilities() as $type => $possibility) {
+                if ($possibility === TypePossibility::TYPE_GUARANTEED) {
+                    $info->removePossibilityOfType($type);
+                }
+            }
+        }
+
         foreach ($typeData as $variable => $newConditionalTypes) {
             $info = $this->expressionTypeInfoMap->get($variable);
 

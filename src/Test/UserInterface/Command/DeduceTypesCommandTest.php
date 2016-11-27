@@ -231,11 +231,21 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyIfStatementWithInstanceofAndOrTakesPrecedenceOverFunctionTypeHint()
+    {
+        $output = $this->deduceTypesFromExpression('InstanceofIfOrWithTypeHint.phpt', '$b');
+
+        $this->assertEquals(['\A\B', '\A\C'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesNestedIfStatementWithInstanceof()
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIf.phpt', '$b');
 
-        $this->assertEquals(['\A\B', '\A\A'], $output);
+        $this->assertEquals(['\A\A'], $output);
     }
 
     /**

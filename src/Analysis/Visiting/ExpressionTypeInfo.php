@@ -144,6 +144,17 @@ class ExpressionTypeInfo
     }
 
     /**
+     * @param string $type
+     *
+     * @return static
+     */
+    public function removePossibilityOfType($type)
+    {
+        unset($this->typePossibilities[$type]);
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getTypePossibilities()
