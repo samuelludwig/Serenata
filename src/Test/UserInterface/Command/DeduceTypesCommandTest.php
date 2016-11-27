@@ -391,9 +391,9 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
-    public function testIfStatementCorrectlyNarrowsDownDetectedTypeOfVariable()
+    public function testIfStatementCorrectlyNarrowsDownDetectedTypeOfStringVariable()
     {
-        $output = $this->deduceTypesFromExpression('IfStatementNarrowsTypeOfVariable.phpt', '$b');
+        $output = $this->deduceTypesFromExpression('IfStatementNarrowsTypeOfStringVariable.phpt', '$b');
 
         $this->assertEquals(['string'], $output);
     }
