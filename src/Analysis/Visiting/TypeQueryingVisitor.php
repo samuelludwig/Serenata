@@ -117,32 +117,22 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
         $typeData = $this->parseCondition($node->cond);
 
-        $variablesWithNewGuaranteedTypes = [];
-
         foreach ($typeData as $variable => $typePossibilityMap) {
-            foreach ($typePossibilityMap->getAll() as $type => $possibility) {
-                if ($possibility === TypePossibility::TYPE_GUARANTEED) {
-                    $variablesWithNewGuaranteedTypes[] = $variable;
-                    break;
-                }
+            $existingTypePossibilityMap = $this->expressionTypeInfoMap->get($variable)->getTypePossibilityMap();
+            $existingGuaranteedTypes = $existingTypePossibilityMap->getAllGuaranteed();
+
+            $newGuaranteedTypes = $typePossibilityMap->determineApplicableTypes($existingGuaranteedTypes);
+
+            foreach ($existingGuaranteedTypes as $existingGuaranteedType) {
+                $existingTypePossibilityMap->remove($existingGuaranteedType);
             }
-        }
 
-        foreach ($variablesWithNewGuaranteedTypes as $variablesWithNewGuaranteedType) {
-            $info = $this->expressionTypeInfoMap->get($variablesWithNewGuaranteedType);
-
-            foreach ($info->getTypePossibilityMap()->getAll() as $type => $possibility) {
-                if ($possibility === TypePossibility::TYPE_GUARANTEED) {
-                    $info->getTypePossibilityMap()->remove($type);
-                }
+            foreach ($newGuaranteedTypes as $newGuaranteedType) {
+                $existingTypePossibilityMap->set($newGuaranteedType, TypePossibility::TYPE_GUARANTEED);
             }
-        }
 
-        foreach ($typeData as $variable => $typePossibilityMap) {
-            $info = $this->expressionTypeInfoMap->get($variable);
-
-            foreach ($typePossibilityMap->getAll() as $type => $possibility) {
-                $info->getTypePossibilityMap()->set($type, $possibility);
+            foreach ($typePossibilityMap->getAllImpossible() as $impossibleType) {
+                $existingTypePossibilityMap->set($impossibleType, TypePossibility::TYPE_IMPOSSIBLE);
             }
         }
     }

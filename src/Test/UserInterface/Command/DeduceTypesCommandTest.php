@@ -401,6 +401,16 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testNestedIfStatementDoesNotExpandTypeListAgainIfPreviousIfStatementWasSpecific()
+    {
+        $output = $this->deduceTypesFromExpression('IfStatementDoesNotExpandTypeListOfVariable.phpt', '$b');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyConfinesTreatsElseIfConditionAsSeparateScope()
     {
         $output = $this->deduceTypesFromExpression('InstanceofElseIfSeparateScope.phpt', '$b');

@@ -102,6 +102,22 @@ class TypePossibilityMap
     }
 
     /**
+     * @return string[]
+     */
+    public function getAllGuaranteed()
+    {
+        return $this->getAllWithPossibility(TypePossibility::TYPE_GUARANTEED);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllImpossible()
+    {
+        return $this->getAllWithPossibility(TypePossibility::TYPE_IMPOSSIBLE);
+    }
+
+    /**
      * @param int $possibility
      *
      * @return string[]
