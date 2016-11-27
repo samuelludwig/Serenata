@@ -159,6 +159,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     protected function parseForeach(Node\Stmt\Foreach_ $node)
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
+            if (!$this->isExpressionSubjectToTypePossibilities($node->valueVar)) {
+                return;
+            }
+
             $key = $this->getExpressionString($node->valueVar);
 
             $this->expressionTypeInfoMap->setBestMatch($key, $node);
