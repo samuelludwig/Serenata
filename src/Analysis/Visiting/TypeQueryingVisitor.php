@@ -231,16 +231,14 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Expr\BinaryOp\NotIdentical
         ) {
             $this->processConditionInequalityOperators($node, $types);
+        } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
+            $this->processConditionBoolean($node, $types);
         } elseif ($node instanceof Node\Expr\BooleanNot) {
             $this->processConditionBooleanNot($node, $types);
         } elseif ($node instanceof Node\Expr\Instanceof_) {
             $this->processConditionInstanceof($node, $types);
         } elseif ($node instanceof Node\Expr\FuncCall) {
             $this->processConditionFuncCall($node, $types);
-        } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
-            $key = $this->getExpressionString($node);
-
-            $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
         }
 
         return $types;
@@ -308,6 +306,17 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
                 $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
             }
         }
+    }
+
+    /**
+     * @param Node\Expr            $node
+     * @param TypePossibilityMap[] &$types
+     */
+    protected function processConditionBoolean(Node\Expr $node, array &$types)
+    {
+        $key = $this->getExpressionString($node);
+
+        $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
     }
 
     /**
