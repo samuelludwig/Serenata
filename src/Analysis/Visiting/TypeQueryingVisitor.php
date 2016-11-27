@@ -211,8 +211,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         $types = [];
 
-        if (
-            $node instanceof Node\Expr\BinaryOp\BitwiseAnd ||
+        if ($node instanceof Node\Expr\BinaryOp\BitwiseAnd ||
             $node instanceof Node\Expr\BinaryOp\BitwiseOr ||
             $node instanceof Node\Expr\BinaryOp\BitwiseXor ||
             $node instanceof Node\Expr\BinaryOp\BooleanAnd ||
