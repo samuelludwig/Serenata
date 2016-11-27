@@ -221,99 +221,144 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Expr\BinaryOp\LogicalOr ||
             $node instanceof Node\Expr\BinaryOp\LogicalXor
         ) {
-            $leftTypes = $this->parseCondition($node->left);
-            $rightTypes = $this->parseCondition($node->right);
-
-            foreach ($leftTypes as $variable => $typePossibilityMap) {
-                foreach ($typePossibilityMap->getAll() as $conditionalType => $possibility) {
-                    $this->setTypePossibilityForExpression($types, $variable, $conditionalType, $possibility);
-                }
-            }
-
-            foreach ($rightTypes as $variable => $typePossibilityMap) {
-                foreach ($typePossibilityMap->getAll() as $conditionalType => $possibility) {
-                    $this->setTypePossibilityForExpression($types, $variable, $conditionalType, $possibility);
-                }
-            }
+            $this->processConditionLogicalOperators($node, $types);
         } elseif (
             $node instanceof Node\Expr\BinaryOp\Equal ||
             $node instanceof Node\Expr\BinaryOp\Identical
         ) {
-            if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
-                if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $key = $this->getExpressionString($node->left);
-
-                    $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_GUARANTEED);
-                }
-            } elseif ($this->isExpressionSubjectToTypePossibilities($node->right)) {
-                if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $key = $this->getExpressionString($node->right);
-
-                    $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_GUARANTEED);
-                }
-            }
+            $this->processConditionEqualityOperators($node, $types);
         } elseif (
             $node instanceof Node\Expr\BinaryOp\NotEqual ||
             $node instanceof Node\Expr\BinaryOp\NotIdentical
         ) {
-            if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
-                if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
-                    $key = $this->getExpressionString($node->left);
-
-                    $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
-                }
-            } elseif ($this->isExpressionSubjectToTypePossibilities($node->right)) {
-                if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
-                    $key = $this->getExpressionString($node->right);
-
-                    $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
-                }
-            }
+            $this->processConditionInequalityOperators($node, $types);
         } elseif ($node instanceof Node\Expr\BooleanNot) {
-            if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
-                $key = $this->getExpressionString($node->expr);
-
-                $this->setTypePossibilityForExpression($types, $key, 'int', TypePossibility::TYPE_GUARANTEED);    // 0
-                $this->setTypePossibilityForExpression($types, $key, 'string', TypePossibility::TYPE_GUARANTEED); // ''
-                $this->setTypePossibilityForExpression($types, $key, 'float', TypePossibility::TYPE_GUARANTEED);  // 0.0
-                $this->setTypePossibilityForExpression($types, $key, 'array', TypePossibility::TYPE_GUARANTEED);  // []
-                $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_GUARANTEED);   // null
-            } else {
-                $subTypes = $this->parseCondition($node->expr);
-
-                foreach ($subTypes as $variable => $typePossibilityMap) {
-                    foreach ($typePossibilityMap->getAll() as $subType => $possibility) {
-                        $this->setTypePossibilityForExpression($types, $variable, $subType, TypePossibility::getReverse($possibility));
-                    }
-                }
-            }
+            $this->processConditionBooleanNot($node, $types);
         } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
             $key = $this->getExpressionString($node);
 
             $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
         } elseif ($node instanceof Node\Expr\Instanceof_) {
-            if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
-                if ($node->class instanceof Node\Name) {
-                    $key = $this->getExpressionString($node->expr);
-
-                    $this->setTypePossibilityForExpression($types, $key, NodeHelpers::fetchClassName($node->class), TypePossibility::TYPE_GUARANTEED);
-                } else {
-                    // This is an expression, we could fetch its return type, but that still won't tell us what
-                    // the actual class is, so it's useless at the moment.
-                }
-            }
+            $this->processConditionInstanceof($node, $types);
         } elseif ($node instanceof Node\Expr\FuncCall) {
-            $this->processConditionFuncCall($types, $node);
+            $this->processConditionFuncCall($node, $types);
         }
 
         return $types;
     }
 
     /**
+     * @param Node\Expr\BinaryOp   $node
      * @param TypePossibilityMap[] &$types
-     * @param Node\Expr\FuncCall   $node
      */
-    protected function processConditionFuncCall(array &$types, Node\Expr\FuncCall $node)
+    protected function processConditionLogicalOperators(Node\Expr\BinaryOp $node, array &$types)
+    {
+        $leftTypes = $this->parseCondition($node->left);
+        $rightTypes = $this->parseCondition($node->right);
+
+        foreach ($leftTypes as $variable => $typePossibilityMap) {
+            foreach ($typePossibilityMap->getAll() as $conditionalType => $possibility) {
+                $this->setTypePossibilityForExpression($types, $variable, $conditionalType, $possibility);
+            }
+        }
+
+        foreach ($rightTypes as $variable => $typePossibilityMap) {
+            foreach ($typePossibilityMap->getAll() as $conditionalType => $possibility) {
+                $this->setTypePossibilityForExpression($types, $variable, $conditionalType, $possibility);
+            }
+        }
+    }
+
+    /**
+     * @param Node\Expr\BinaryOp\Equal|Node\Expr\BinaryOp\Identical $node
+     * @param TypePossibilityMap[]                                  &$types
+     */
+    protected function processConditionEqualityOperators(Node\Expr\BinaryOp $node, array &$types)
+    {
+        if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
+            if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
+                $key = $this->getExpressionString($node->left);
+
+                $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_GUARANTEED);
+            }
+        } elseif ($this->isExpressionSubjectToTypePossibilities($node->right)) {
+            if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
+                $key = $this->getExpressionString($node->right);
+
+                $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_GUARANTEED);
+            }
+        }
+    }
+
+    /**
+     * @param Node\Expr\BinaryOp\NotEqual|Node\Expr\BinaryOp\NotIdentical $node
+     * @param TypePossibilityMap[]                                        &$types
+     */
+    protected function processConditionInequalityOperators(Node\Expr\BinaryOp $node, array &$types)
+    {
+        if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
+            if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
+                $key = $this->getExpressionString($node->left);
+
+                $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
+            }
+        } elseif ($this->isExpressionSubjectToTypePossibilities($node->right)) {
+            if ($node->left instanceof Node\Expr\ConstFetch && $node->left->name->toString() === 'null') {
+                $key = $this->getExpressionString($node->right);
+
+                $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_IMPOSSIBLE);
+            }
+        }
+    }
+
+    /**
+     * @param Node\Expr\BooleanNot $node
+     * @param TypePossibilityMap[] &$types
+     */
+    protected function processConditionBooleanNot(Node\Expr\BooleanNot $node, array &$types)
+    {
+        if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
+            $key = $this->getExpressionString($node->expr);
+
+            $this->setTypePossibilityForExpression($types, $key, 'int', TypePossibility::TYPE_GUARANTEED);    // 0
+            $this->setTypePossibilityForExpression($types, $key, 'string', TypePossibility::TYPE_GUARANTEED); // ''
+            $this->setTypePossibilityForExpression($types, $key, 'float', TypePossibility::TYPE_GUARANTEED);  // 0.0
+            $this->setTypePossibilityForExpression($types, $key, 'array', TypePossibility::TYPE_GUARANTEED);  // []
+            $this->setTypePossibilityForExpression($types, $key, 'null', TypePossibility::TYPE_GUARANTEED);   // null
+        } else {
+            $subTypes = $this->parseCondition($node->expr);
+
+            foreach ($subTypes as $variable => $typePossibilityMap) {
+                foreach ($typePossibilityMap->getAll() as $subType => $possibility) {
+                    $this->setTypePossibilityForExpression($types, $variable, $subType, TypePossibility::getReverse($possibility));
+                }
+            }
+        }
+    }
+
+    /**
+     * @param Node\Expr\FuncCall   $node
+     * @param TypePossibilityMap[] &$types
+     */
+    protected function processConditionInstanceof(Node\Expr\Instanceof_ $node, array &$types)
+    {
+        if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
+            if ($node->class instanceof Node\Name) {
+                $key = $this->getExpressionString($node->expr);
+
+                $this->setTypePossibilityForExpression($types, $key, NodeHelpers::fetchClassName($node->class), TypePossibility::TYPE_GUARANTEED);
+            } else {
+                // This is an expression, we could fetch its return type, but that still won't tell us what
+                // the actual class is, so it's useless at the moment.
+            }
+        }
+    }
+
+    /**
+     * @param Node\Expr\FuncCall   $node
+     * @param TypePossibilityMap[] &$types
+     */
+    protected function processConditionFuncCall(Node\Expr\FuncCall $node, array &$types)
     {
         if (!$node->name instanceof Node\Name) {
             return;
