@@ -159,20 +159,6 @@ class ExpressionTypeInfo
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    public function isTypeImpossible($type)
-    {
-        try {
-            return $this->getPossibilityOfType($type) === TypePossibility::TYPE_IMPOSSIBLE;
-        } catch (OutOfBoundsException $e) {
-            return false;
-        }
-    }
-
-    /**
      * @param array $typePossibilities
      *
      * @return static
@@ -212,7 +198,7 @@ class ExpressionTypeInfo
      */
     public function getApplicableTypesFromTypes(array $typeList)
     {
-        $guaranteedTypes = $this->getGuaranteedTypes();
+        $guaranteedTypes = $this->getTypesWithPossibility(TypePossibility::TYPE_GUARANTEED);
 
         // Types guaranteed by conditionals take precendece over the best match types as if they did not apply, we
         // could never have ended up in the conditional in the first place. However, sometimes conditionals don't
@@ -235,40 +221,26 @@ class ExpressionTypeInfo
             }
         }
 
-        return $this->filterImpossibleTypesFromTypes($types);
+        $impossibleTypes = $this->getTypesWithPossibility(TypePossibility::TYPE_IMPOSSIBLE);
+
+        return array_diff($types, $impossibleTypes);
     }
 
     /**
+     * @param int $possibility
+     *
      * @return string[]
      */
-    protected function getGuaranteedTypes()
+    protected function getTypesWithPossibility($possibility)
     {
         $guaranteedTypes = [];
 
-        foreach ($this->getTypePossibilities() as $type => $possibility) {
-            if ($possibility === TypePossibility::TYPE_GUARANTEED) {
+        foreach ($this->getTypePossibilities() as $type => $typePossibility) {
+            if ($typePossibility === $possibility) {
                 $guaranteedTypes[] = $type;
             }
         }
 
         return $guaranteedTypes;
-    }
-
-    /**
-     * @param string[] $types
-     *
-     * @return string[]
-     */
-    protected function filterImpossibleTypesFromTypes(array $types)
-    {
-        $filteredTypes = [];
-
-        foreach ($types as $type) {
-            if (!$this->isTypeImpossible($type)) {
-                $filteredTypes[] = $type;
-            }
-        }
-
-        return $filteredTypes;
     }
 }
