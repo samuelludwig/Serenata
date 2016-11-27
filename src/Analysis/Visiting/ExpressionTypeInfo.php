@@ -48,11 +48,7 @@ class ExpressionTypeInfo
      * if the condition passes, the type of the expression must be null. At that point it doesn't matter if the type
      * could previously be "Foo|null", as the conditional has now effectively limited the possible types.
      *
-     * Conditional types can be:
-     *   - Guaranteed - For example, in "if ($a === null)", the type of $a is guaranteed to be "null".
-     *   - Possible   - For example, in "if (!$a)", the type of $a is possibly "null", "int" (with value 0), "string"
-     *                  (empty value), ...
-     *   - Impossible - For example, in "if ($a !== null)", the type of $a could never possibly be "null".
+     * @see TypePossibility
      *
      * @var array
      */
