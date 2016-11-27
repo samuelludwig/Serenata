@@ -243,16 +243,13 @@ class ExpressionTypeInfo
             // statement such as "if (!$a)" $a could still be an int, a float, a string, ...). In this case, the list
             // of conditionals is effectively narrowed down further by the type specified by a best match (i.e. the
             // best match types act as a whitelist for the conditional types).
-            $atLeastOneGuaranteedTypeWasABestMatch = false;
-
             foreach ($guaranteedTypes as $guaranteedType) {
                 if (in_array($guaranteedType, $typeList, true)) {
                     $types[] = $guaranteedType;
-                    $atLeastOneGuaranteedTypeWasABestMatch = true;
                 }
             }
 
-            if (!$atLeastOneGuaranteedTypeWasABestMatch) {
+            if (empty($types)) {
                 // We got inside the if statement, so the type MUST be of one of the guaranteed types. However, if
                 // an assignment said that $a is a string and the if statement checks if $a is a bool, in theory we
                 // can never end up in the if statement at all as the condition will never pass. Still, for the
