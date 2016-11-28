@@ -278,17 +278,17 @@ class TypeDeducer
                 return []; // Can't currently deduce type of an expression such as "$this->{$foo}";
             }
 
+            $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
+
+            $types = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset);
+
+            if (!empty($types)) {
+                return $types;
+            }
+
             $objectNode = null;
 
             if ($node instanceof Node\Expr\PropertyFetch) {
-                $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
-
-                $types = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset);
-
-                if (!empty($types)) {
-                    return $types;
-                }
-
                 $objectNode = $node->var;
             } else {
                 $objectNode = $node->class;

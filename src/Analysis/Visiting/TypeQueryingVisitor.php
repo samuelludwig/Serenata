@@ -475,6 +475,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             return true;
         } elseif ($expression instanceof Node\Expr\PropertyFetch && is_string($expression->name)) {
             return true;
+        } elseif ($expression instanceof Node\Expr\StaticPropertyFetch && is_string($expression->name)) {
+            return true;
         }
 
         return false;
@@ -493,7 +495,9 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         if ($expression instanceof Node\Expr\Variable) {
             return '$' . ((string) $expression->name);
-        } elseif ($expression instanceof Node\Expr\PropertyFetch) {
+        } elseif ($expression instanceof Node\Expr\PropertyFetch ||
+                  $expression instanceof Node\Expr\StaticPropertyFetch
+        ) {
             return $this->prettyPrinter->prettyPrintExpr($expression);
         }
 

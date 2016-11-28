@@ -201,6 +201,46 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndPropertyWithParentKeyword()
+    {
+        $output = $this->deduceTypesFromExpression('InstanceofIfWithPropertyWithParentKeyword.phpt', 'parent::$foo');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndStaticPropertyWithClassName()
+    {
+        $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithClassName.phpt', 'Test::$foo');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndStaticPropertyWithSelfKeyword()
+    {
+        $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithSelfKeyword.phpt', 'self::$foo');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndStaticPropertyWithStaticKeyword()
+    {
+        $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithStaticKeyword.phpt', 'static::$foo');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndVariableInsideCondition()
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfVariableInsideCondition.phpt', '$b');
