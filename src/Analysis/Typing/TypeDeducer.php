@@ -184,6 +184,8 @@ class TypeDeducer
             return $this->deduceTypesFromPropertyFetch($node, $file, $code, $offset);
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
             return $this->deduceTypesFromClassConstFetchNode($file, $code, $node, $offset);
+        } elseif ($node instanceof Node\Expr\Assign) {
+            return $this->deduceTypesFromAssignNode($file, $code, $node, $offset);
         }
 
         return [];
@@ -544,6 +546,42 @@ class TypeDeducer
     }
 
     /**
+     * @param string|null      $file
+     * @param string           $code
+     * @param Node\Expr\Assign $node
+     * @param int              $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromAssignNode($file, $code, Node\Expr\Assign $node, $offset)
+    {
+        if ($node->expr instanceof Node\Expr\Ternary) {
+            $firstOperandType = $this->deduceTypesFromNode(
+                $file,
+                $code,
+                $node->expr->if ?: $node->expr->cond,
+                $node->getAttribute('startFilePos')
+            );
+
+            $secondOperandType = $this->deduceTypesFromNode(
+                $file,
+                $code,
+                $node->expr->else,
+                $node->getAttribute('startFilePos')
+            );
+
+            return array_unique(array_merge($firstOperandType, $secondOperandType));
+        }
+
+        return $this->deduceTypesFromNode(
+            $file,
+            $code,
+            $node->expr,
+            $node->getAttribute('startFilePos')
+        );
+    }
+
+    /**
      * @param string $code
      * @param int    $offset
      *
@@ -602,7 +640,7 @@ class TypeDeducer
             return [];
         }
 
-        return $this->getResolvedTypes($expressionTypeInfoMap, $expression, $file, $offsetLine, $code);
+        return $this->getResolvedTypes($expressionTypeInfoMap, $expression, $file, $offsetLine, $code, $offset);
     }
 
     /**
@@ -610,37 +648,13 @@ class TypeDeducer
      * @param Node   $node
      * @param string $file
      * @param string $code
+     * @param int    $offset
      *
      * @return string[]
      */
-    protected function getTypesForNode($variable, Node $node, $file, $code)
+    protected function getTypesForNode($variable, Node $node, $file, $code, $offset)
     {
-        if ($node instanceof Node\Expr\Assign) {
-            if ($node->expr instanceof Node\Expr\Ternary) {
-                $firstOperandType = $this->deduceTypesFromNode(
-                    $file,
-                    $code,
-                    $node->expr->if ?: $node->expr->cond,
-                    $node->getAttribute('startFilePos')
-                );
-
-                $secondOperandType = $this->deduceTypesFromNode(
-                    $file,
-                    $code,
-                    $node->expr->else,
-                    $node->getAttribute('startFilePos')
-                );
-
-                return array_unique(array_merge($firstOperandType, $secondOperandType));
-            } else {
-                return $this->deduceTypesFromNode(
-                    $file,
-                    $code,
-                    $node->expr,
-                    $node->getAttribute('startFilePos')
-                );
-            }
-        } elseif ($node instanceof Node\Stmt\Foreach_) {
+        if ($node instanceof Node\Stmt\Foreach_) {
             $types = $this->deduceTypesFromNode(
                 $file,
                 $code,
@@ -696,7 +710,7 @@ class TypeDeducer
             return [NodeHelpers::fetchClassName($node)];
         }
 
-        return [];
+        return $this->deduceTypesFromNode($file, $code, $node, $offset);
     }
 
     /**
@@ -704,10 +718,11 @@ class TypeDeducer
      * @param string             $expression
      * @param string             $file
      * @param string             $code
+     * @param int                $offset
      *
      * @return string[]
      */
-    protected function getTypes(ExpressionTypeInfo $expressionTypeInfo, $expression, $file, $code)
+    protected function getTypes(ExpressionTypeInfo $expressionTypeInfo, $expression, $file, $code, $offset)
     {
         if ($expressionTypeInfo->hasBestTypeOverrideMatch()) {
             return $this->typeAnalyzer->getTypesForTypeSpecification($expressionTypeInfo->getBestTypeOverrideMatch());
@@ -716,7 +731,7 @@ class TypeDeducer
         $types = [];
 
         if ($expressionTypeInfo->hasBestMatch()) {
-            $types = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code);
+            $types = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code, $offset);
         }
 
         return $expressionTypeInfo->getTypePossibilityMap()->determineApplicableTypes($types);
@@ -730,14 +745,20 @@ class TypeDeducer
      * @param string                $expression
      * @param string                $file
      * @param string                $code
+     * @param int                   $offset
      *
      * @return string[]
      */
-    protected function getUnreferencedTypes(ExpressionTypeInfoMap $expressionTypeInfoMap, $expression, $file, $code)
-    {
+    protected function getUnreferencedTypes(
+        ExpressionTypeInfoMap $expressionTypeInfoMap,
+        $expression,
+        $file,
+        $code,
+        $offset
+    ) {
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
-        $types = $this->getTypes($expressionTypeInfo, $expression, $file, $code);
+        $types = $this->getTypes($expressionTypeInfo, $expression, $file, $code, $offset);
 
         $unreferencedTypes = [];
 
@@ -745,7 +766,7 @@ class TypeDeducer
             if (in_array($type, ['self', 'static', '$this'], true)) {
                 $unreferencedTypes = array_merge(
                     $unreferencedTypes,
-                    $this->getUnreferencedTypes($expressionTypeInfoMap, '$this', $file, $code)
+                    $this->getUnreferencedTypes($expressionTypeInfoMap, '$this', $file, $code, $offset)
                 );
             } else {
                 $unreferencedTypes[] = $type;
@@ -763,12 +784,19 @@ class TypeDeducer
      * @param string                $file
      * @param int                   $line
      * @param string                $code
+     * @param int                   $offset
      *
      * @return string[]
      */
-    protected function getResolvedTypes(ExpressionTypeInfoMap $expressionTypeInfoMap, $expression, $file, $line, $code)
-    {
-        $types = $this->getUnreferencedTypes($expressionTypeInfoMap, $expression, $file, $code);
+    protected function getResolvedTypes(
+        ExpressionTypeInfoMap $expressionTypeInfoMap,
+        $expression,
+        $file,
+        $line,
+        $code,
+        $offset
+    ) {
+        $types = $this->getUnreferencedTypes($expressionTypeInfoMap, $expression, $file, $code, $offset);
 
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
