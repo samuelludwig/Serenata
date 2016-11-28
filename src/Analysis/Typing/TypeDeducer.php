@@ -720,8 +720,6 @@ class TypeDeducer
             }
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             return [(string) $node->name];
-        } elseif ($node instanceof Node\Name) {
-            return [NodeHelpers::fetchClassName($node)];
         }
 
         return $this->deduceTypesFromNode($file, $code, $node, $offset);
