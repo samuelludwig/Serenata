@@ -615,6 +615,52 @@ class TypeDeducer
     }
 
     /**
+     * @param Node\FunctionLike $node
+     * @param string            $parameterName
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromFunctionLikeParameter(Node\FunctionLike $node, $parameterName)
+    {
+        foreach ($node->getParams() as $param) {
+            if ($param->name === mb_substr($parameterName, 1)) {
+                if ($docBlock = $node->getDocComment()) {
+                    // Analyze the docblock's @param tags.
+                    $name = null;
+
+                    if ($node instanceof Node\Stmt\Function_ || $node instanceof Node\Stmt\ClassMethod) {
+                        $name = $node->name;
+                    }
+
+                    $result = $this->docblockParser->parse((string) $docBlock, [
+                        DocblockParser::PARAM_TYPE
+                    ], $name, true);
+
+                    if (isset($result['params'][$parameterName])) {
+                        return $this->typeAnalyzer->getTypesForTypeSpecification(
+                            $result['params'][$parameterName]['type']
+                        );
+                    }
+                }
+
+                if ($param->type instanceof Node\Name) {
+                    $typeHintType = NodeHelpers::fetchClassName($param->type);
+
+                    if ($param->variadic) {
+                        $typeHintType .= '[]';
+                    }
+
+                    return [$typeHintType];
+                }
+
+                return $param->type ? [$param->type] : [];
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * @param string $code
      * @param int    $offset
      *
@@ -690,40 +736,7 @@ class TypeDeducer
         if ($node instanceof Node\Stmt\Foreach_) {
             return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
-            foreach ($node->getParams() as $param) {
-                if ($param->name === mb_substr($variable, 1)) {
-                    if ($docBlock = $node->getDocComment()) {
-                        // Analyze the docblock's @param tags.
-                        $name = null;
-
-                        if ($node instanceof Node\Stmt\Function_ || $node instanceof Node\Stmt\ClassMethod) {
-                            $name = $node->name;
-                        }
-
-                        $result = $this->docblockParser->parse((string) $docBlock, [
-                            DocblockParser::PARAM_TYPE
-                        ], $name, true);
-
-                        if (isset($result['params'][$variable])) {
-                            return $this->typeAnalyzer->getTypesForTypeSpecification(
-                                $result['params'][$variable]['type']
-                            );
-                        }
-                    }
-
-                    if ($param->type instanceof Node\Name) {
-                        $typeHintType = NodeHelpers::fetchClassName($param->type);
-
-                        if ($param->variadic) {
-                            $typeHintType .= '[]';
-                        }
-
-                        return [$typeHintType];
-                    }
-
-                    return $param->type ? [$param->type] : [];
-                }
-            }
+            return $this->deduceTypesFromFunctionLikeParameter($node, $variable);
         }
 
         return $this->deduceTypesFromNode($node, $file, $code, $offset);
