@@ -493,9 +493,9 @@ class FileIndexer
                 }
 
                 $typeList = $this->typeDeducer->deduceTypesFromNode(
+                    $nodes[0],
                     $filePath,
                     $rawData['defaultValue'],
-                    $nodes[0],
                     0
                 );
 
@@ -585,9 +585,9 @@ class FileIndexer
                 }
 
                 $typeList = $this->typeDeducer->deduceTypesFromNode(
+                    $nodes[0],
                     $filePath,
                     $rawData['defaultValue'],
-                    $nodes[0],
                     0
                 );
 

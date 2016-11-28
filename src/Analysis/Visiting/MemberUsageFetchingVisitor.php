@@ -124,9 +124,9 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
         }
 
         $objectTypes = $this->typeDeducer->deduceTypesFromNode(
+            $nodeToDeduceTypeFrom,
             $this->file,
             $this->code,
-            $nodeToDeduceTypeFrom,
             $node->getAttribute('startFilePos')
         );
 

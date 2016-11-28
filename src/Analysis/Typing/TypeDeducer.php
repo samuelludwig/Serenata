@@ -141,14 +141,14 @@ class TypeDeducer
     }
 
     /**
+     * @param Node        $node
      * @param string|null $file
      * @param string      $code
-     * @param Node        $node
      * @param int         $offset
      *
      * @return string[]
      */
-    public function deduceTypesFromNode($file, $code, Node $node, $offset)
+    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
     {
         if ($node instanceof Node\Expr\Variable) {
             return $this->deduceTypesFromVariableNode($node, $file, $code, $offset);
@@ -293,7 +293,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromNewNode(Node\Expr\New_ $node, $file, $code, $offset)
     {
-        return $this->deduceTypesFromNode($file, $code, $node->class, $offset);
+        return $this->deduceTypesFromNode($node->class, $file, $code, $offset);
     }
 
     /**
@@ -306,7 +306,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromCloneNode(Node\Expr\Clone_ $node, $file, $code, $offset)
     {
-        return $this->deduceTypesFromNode($file, $code, $node->expr, $offset);
+        return $this->deduceTypesFromNode($node->expr, $file, $code, $offset);
     }
 
     /**
@@ -329,7 +329,7 @@ class TypeDeducer
      */
     protected function deduceNodesFromSelfNode(Parsing\Node\Keyword\Self_ $node, $file, $code, $offset)
     {
-        return $this->deduceTypesFromNode($file, $code, new Node\Name('self'), $offset);
+        return $this->deduceTypesFromNode(new Node\Name('self'), $file, $code, $offset);
     }
 
     /**
@@ -342,7 +342,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromStaticNode(Parsing\Node\Keyword\Static_ $node, $file, $code, $offset)
     {
-        return $this->deduceTypesFromNode($file, $code, new Node\Name('static'), $offset);
+        return $this->deduceTypesFromNode(new Node\Name('static'), $file, $code, $offset);
     }
 
     /**
@@ -355,7 +355,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromParentNode(Parsing\Node\Keyword\Parent_ $node, $file, $code, $offset)
     {
-        return $this->deduceTypesFromNode($file, $code, new Node\Name('parent'), $offset);
+        return $this->deduceTypesFromNode(new Node\Name('parent'), $file, $code, $offset);
     }
 
     /**
@@ -436,7 +436,7 @@ class TypeDeducer
         }
 
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
-        $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
+        $typesOfVar = $this->deduceTypesFromNode($objectNode, $file, $code, $offset);
 
         $types = [];
 
@@ -492,7 +492,7 @@ class TypeDeducer
             $objectNode = $node->class;
         }
 
-        $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
+        $typesOfVar = $this->deduceTypesFromNode($objectNode, $file, $code, $offset);
 
         $types = [];
 
@@ -528,7 +528,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromClassConstFetchNode(Node\Expr\ClassConstFetch $node, $file, $code, $offset)
     {
-        $typesOfVar = $this->deduceTypesFromNode($file, $code, $node->class, $offset);
+        $typesOfVar = $this->deduceTypesFromNode($node->class, $file, $code, $offset);
 
         $types = [];
 
@@ -566,23 +566,23 @@ class TypeDeducer
     {
         if ($node->expr instanceof Node\Expr\Ternary) {
             $firstOperandType = $this->deduceTypesFromNode(
+                $node->expr->if ?: $node->expr->cond,
                 $file,
                 $code,
-                $node->expr->if ?: $node->expr->cond,
                 $node->getAttribute('startFilePos')
             );
 
             $secondOperandType = $this->deduceTypesFromNode(
+                $node->expr->else,
                 $file,
                 $code,
-                $node->expr->else,
                 $node->getAttribute('startFilePos')
             );
 
             return array_unique(array_merge($firstOperandType, $secondOperandType));
         }
 
-        return $this->deduceTypesFromNode($file, $code, $node->expr, $node->getAttribute('startFilePos'));
+        return $this->deduceTypesFromNode($node->expr, $file, $code, $node->getAttribute('startFilePos'));
     }
 
     /**
@@ -603,7 +603,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromLoopValueInForeachNode(Node\Stmt\Foreach_ $node, $file, $code, $offset)
     {
-        $types = $this->deduceTypesFromNode($file, $code, $node->expr, $node->getAttribute('startFilePos'));
+        $types = $this->deduceTypesFromNode($node->expr, $file, $code, $node->getAttribute('startFilePos'));
 
         foreach ($types as $type) {
             if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
@@ -726,7 +726,7 @@ class TypeDeducer
             }
         }
 
-        return $this->deduceTypesFromNode($file, $code, $node, $offset);
+        return $this->deduceTypesFromNode($node, $file, $code, $offset);
     }
 
     /**

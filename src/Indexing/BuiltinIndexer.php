@@ -186,9 +186,9 @@ class BuiltinIndexer
                 }
 
                 $typeList = $this->typeDeducer->deduceTypesFromNode(
+                    $nodes[0],
                     'test',
                     $defaultValue,
-                    $nodes[0],
                     0
                 );
 

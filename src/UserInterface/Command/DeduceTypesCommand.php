@@ -126,7 +126,7 @@ class DeduceTypesCommand extends AbstractCommand
      */
     protected function deduceTypes($file, $code, Node $node, $offset)
     {
-        return $this->typeDeducer->deduceTypesFromNode($file, $code, $node, $offset);
+        return $this->typeDeducer->deduceTypesFromNode($node, $file, $code, $offset);
     }
 
     /**
