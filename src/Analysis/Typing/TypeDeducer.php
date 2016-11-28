@@ -723,26 +723,6 @@ class TypeDeducer
     }
 
     /**
-     * @param string $expression
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
-     *
-     * @return string[]
-     */
-    protected function getTypesForBestMatchNode($expression, Node $node, $file, $code, $offset)
-    {
-        if ($node instanceof Node\Stmt\Foreach_) {
-            return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
-        } elseif ($node instanceof Node\FunctionLike) {
-            return $this->deduceTypesFromFunctionLikeParameter($node, $expression);
-        }
-
-        return $this->deduceTypesFromNode($node, $file, $code, $offset);
-    }
-
-    /**
      * @param ExpressionTypeInfo $expressionTypeInfo
      * @param string             $expression
      * @param string             $file
@@ -764,6 +744,26 @@ class TypeDeducer
         }
 
         return $expressionTypeInfo->getTypePossibilityMap()->determineApplicableTypes($types);
+    }
+
+    /**
+     * @param string $expression
+     * @param Node   $node
+     * @param string $file
+     * @param string $code
+     * @param int    $offset
+     *
+     * @return string[]
+     */
+    protected function getTypesForBestMatchNode($expression, Node $node, $file, $code, $offset)
+    {
+        if ($node instanceof Node\Stmt\Foreach_) {
+            return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
+        } elseif ($node instanceof Node\FunctionLike) {
+            return $this->deduceTypesFromFunctionLikeParameter($node, $expression);
+        }
+
+        return $this->deduceTypesFromNode($node, $file, $code, $offset);
     }
 
     /**
