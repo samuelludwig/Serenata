@@ -573,12 +573,7 @@ class TypeDeducer
             return array_unique(array_merge($firstOperandType, $secondOperandType));
         }
 
-        return $this->deduceTypesFromNode(
-            $file,
-            $code,
-            $node->expr,
-            $node->getAttribute('startFilePos')
-        );
+        return $this->deduceTypesFromNode($file, $code, $node->expr, $node->getAttribute('startFilePos'));
     }
 
     /**
@@ -591,11 +586,7 @@ class TypeDeducer
      */
     protected function deduceTypesFromLoopValueInForeachNode($file, $code, Node\Stmt\Foreach_ $node, $offset)
     {
-        $types = $this->deduceTypesFromNode($file,
-            $code,
-            $node->expr,
-            $node->getAttribute('startFilePos')
-        );
+        $types = $this->deduceTypesFromNode($file, $code, $node->expr, $node->getAttribute('startFilePos'));
 
         foreach ($types as $type) {
             if ($type && mb_strpos($type, '[]') !== false) {
