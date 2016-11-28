@@ -723,7 +723,7 @@ class TypeDeducer
     }
 
     /**
-     * @param string $variable
+     * @param string $expression
      * @param Node   $node
      * @param string $file
      * @param string $code
@@ -731,12 +731,12 @@ class TypeDeducer
      *
      * @return string[]
      */
-    protected function getTypesForNode($variable, Node $node, $file, $code, $offset)
+    protected function getTypesForNode($expression, Node $node, $file, $code, $offset)
     {
         if ($node instanceof Node\Stmt\Foreach_) {
             return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
-            return $this->deduceTypesFromFunctionLikeParameter($node, $variable);
+            return $this->deduceTypesFromFunctionLikeParameter($node, $expression);
         }
 
         return $this->deduceTypesFromNode($node, $file, $code, $offset);
