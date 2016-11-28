@@ -186,6 +186,8 @@ class TypeDeducer
             return $this->deduceTypesFromClassConstFetchNode($file, $code, $node, $offset);
         } elseif ($node instanceof Node\Expr\Assign) {
             return $this->deduceTypesFromAssignNode($file, $code, $node, $offset);
+        } elseif ($node instanceof Node\Stmt\ClassLike) {
+            return $this->deduceTypesFromClassLikeNode($node);
         }
 
         return [];
@@ -577,6 +579,14 @@ class TypeDeducer
     }
 
     /**
+     * @param Node\Stmt\ClassLike $node
+     */
+    protected function deduceTypesFromClassLikeNode(Node\Stmt\ClassLike $node)
+    {
+        return [(string) $node->name];
+    }
+
+    /**
      * @param string|null        $file
      * @param string             $code
      * @param Node\Stmt\Foreach_ $node
@@ -707,8 +717,6 @@ class TypeDeducer
                     return $param->type ? [$param->type] : [];
                 }
             }
-        } elseif ($node instanceof Node\Stmt\ClassLike) {
-            return [(string) $node->name];
         }
 
         return $this->deduceTypesFromNode($file, $code, $node, $offset);
