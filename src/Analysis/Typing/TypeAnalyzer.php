@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
+use UnexpectedValueException;
+
 /**
  * Provides functionality for analyzing type names.
  */
@@ -11,6 +13,11 @@ class TypeAnalyzer implements TypeNormalizerInterface
      * @var string
      */
     const TYPE_SPLITTER   = '|';
+
+    /**
+     * @var string
+     */
+    const ARRAY_TYPE_HINT_REGEX = '/^(.+)\[\]$/';
 
     /**
      * Indicates if a type is "special", i.e. it is not an actual class type, but rather a basic type (e.g. "int",
@@ -126,6 +133,22 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function isArraySyntaxTypeHint($type)
     {
-        return (preg_match('/^.+\[\]$/', $type) === 1);
+        return (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type) === 1);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string|null
+     */
+    public function getValueTypeFromArraySyntaxTypeHint($type)
+    {
+        $matches = [];
+
+        if (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type, $matches) === 1) {
+            return $matches[1];
+        }
+
+        throw new UnexpectedValueException('"' . $type . '" is not an array type hint');
     }
 }

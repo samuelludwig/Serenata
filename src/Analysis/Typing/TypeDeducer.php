@@ -589,10 +589,8 @@ class TypeDeducer
         $types = $this->deduceTypesFromNode($file, $code, $node->expr, $node->getAttribute('startFilePos'));
 
         foreach ($types as $type) {
-            if ($type && mb_strpos($type, '[]') !== false) {
-                $type = mb_substr($type, 0, -2);
-
-                return $type ? [$type] : [];
+            if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
+                return [$this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type)];
             }
         }
 
