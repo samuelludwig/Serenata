@@ -731,7 +731,7 @@ class TypeDeducer
      *
      * @return string[]
      */
-    protected function getTypesForNode($expression, Node $node, $file, $code, $offset)
+    protected function getTypesForBestMatchNode($expression, Node $node, $file, $code, $offset)
     {
         if ($node instanceof Node\Stmt\Foreach_) {
             return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
@@ -760,7 +760,7 @@ class TypeDeducer
         $types = [];
 
         if ($expressionTypeInfo->hasBestMatch()) {
-            $types = $this->getTypesForNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code, $offset);
+            $types = $this->getTypesForBestMatchNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code, $offset);
         }
 
         return $expressionTypeInfo->getTypePossibilityMap()->determineApplicableTypes($types);
