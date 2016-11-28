@@ -582,6 +582,33 @@ class TypeDeducer
     }
 
     /**
+     * @param string|null        $file
+     * @param string             $code
+     * @param Node\Stmt\Foreach_ $node
+     * @param int                $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromLoopValueInForeachNode($file, $code, Node\Stmt\Foreach_ $node, $offset)
+    {
+        $types = $this->deduceTypesFromNode($file,
+            $code,
+            $node->expr,
+            $node->getAttribute('startFilePos')
+        );
+
+        foreach ($types as $type) {
+            if ($type && mb_strpos($type, '[]') !== false) {
+                $type = mb_substr($type, 0, -2);
+
+                return $type ? [$type] : [];
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * @param string $code
      * @param int    $offset
      *
@@ -655,20 +682,7 @@ class TypeDeducer
     protected function getTypesForNode($variable, Node $node, $file, $code, $offset)
     {
         if ($node instanceof Node\Stmt\Foreach_) {
-            $types = $this->deduceTypesFromNode(
-                $file,
-                $code,
-                $node->expr,
-                $node->getAttribute('startFilePos')
-            );
-
-            foreach ($types as $type) {
-                if ($type && mb_strpos($type, '[]') !== false) {
-                    $type = mb_substr($type, 0, -2);
-
-                    return $type ? [$type] : [];
-                }
-            }
+            return $this->deduceTypesFromLoopValueInForeachNode($file, $code, $node, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
             foreach ($node->getParams() as $param) {
                 if ($param->name === mb_substr($variable, 1)) {
