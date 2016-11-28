@@ -151,201 +151,396 @@ class TypeDeducer
     public function deduceTypesFromNode($file, $code, Node $node, $offset)
     {
         if ($node instanceof Node\Expr\Variable) {
-            if ($node->name instanceof Node\Expr) {
-                return []; // Can't currently deduce type of a variable such as "$$this".
-            }
-
-            return $this->getLocalExpressionTypes($file, $code, '$' . $node->name, $offset);
+            return $this->deduceTypesFromVariableNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\Scalar\LNumber) {
-            return ['int'];
+            return $this->deduceTypesFromLNumberNode($node);
         } elseif ($node instanceof Node\Scalar\DNumber) {
-            return ['float'];
+            return $this->deduceTypesFromDNumberNode($node);
         } elseif ($node instanceof Node\Scalar\String_) {
-            return ['string'];
+            return $this->deduceTypesFromStringNode($node);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
-            $name = NodeHelpers::fetchClassName($node->name);
-
-            if ($name === 'null') {
-                return ['null'];
-            } elseif ($name === 'true' || $name === 'false') {
-                return ['bool'];
-            }
-
-            $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
-            $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($name, $line);
-
-            $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
-
-            if (!$globalConstant) {
-                return [];
-            }
-
-            $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
-
-            return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
+            return $this->deduceTypesFromConstFetchNode($node, $code, $offset, $file);
         } elseif ($node instanceof Node\Expr\Closure) {
-            return ['\Closure'];
+            return $this->deduceTypesFromClosureNode();
         } elseif ($node instanceof Node\Expr\New_) {
-            return $this->deduceTypesFromNode($file, $code, $node->class, $offset);
+            return $this->deduceTypesFromNewNode($file, $code, $node, $offset);
         } elseif ($node instanceof Node\Expr\Clone_) {
-            return $this->deduceTypesFromNode($file, $code, $node->expr, $offset);
+            return $this->deduceTypesFromCloneNode($file, $code, $node, $offset);
         } elseif ($node instanceof Node\Expr\Array_) {
-            return ['array'];
+            return $this->deduceTypesFromArrayNode();
         } elseif ($node instanceof Parsing\Node\Keyword\Self_) {
-            return $this->deduceTypesFromNode($file, $code, new Node\Name('self'), $offset);
+            return $this->deduceNodesFromSelfNode($file, $code, $offset);
         } elseif ($node instanceof Parsing\Node\Keyword\Static_) {
-            return $this->deduceTypesFromNode($file, $code, new Node\Name('static'), $offset);
+            return $this->deduceTypesFromStaticNode($file, $code, $offset);
         } elseif ($node instanceof Parsing\Node\Keyword\Parent_) {
-            return $this->deduceTypesFromNode($file, $code, new Node\Name('parent'), $offset);
+            return $this->deduceTypesFromParentNode($file, $code, $offset);
         } elseif ($node instanceof Node\Name) {
-            $nameString = NodeHelpers::fetchClassName($node);
-
-            if ($nameString === 'static' || $nameString === 'self') {
-                $currentClass = $this->getCurrentClassAt($file, $code, $offset);
-
-                return [$this->typeAnalyzer->getNormalizedFqcn($currentClass)];
-            } elseif ($nameString === 'parent') {
-                $currentClassName = $this->getCurrentClassAt($file, $code, $offset);
-
-                if (!$currentClassName) {
-                    return [];
-                }
-
-                $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($currentClassName);
-
-                if ($classInfo && !empty($classInfo['parents'])) {
-                    $type = $classInfo['parents'][0];
-
-                    return [$this->typeAnalyzer->getNormalizedFqcn($type)];
-                }
-            } else {
-                $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
-                $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($nameString, $line);
-
-                return [$fqcn];
-            }
+            return $this->deduceTypesFromNameNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\Expr\FuncCall) {
-            if ($node->name instanceof Node\Expr) {
-                return []; // Can't currently deduce type of an expression such as "{$foo}()";
-            }
-
-            $name = NodeHelpers::fetchClassName($node->name);
-
-            $globalFunction = $this->indexDatabase->getGlobalFunctionByFqcn($name);
-
-            if (!$globalFunction) {
-                return [];
-            }
-
-            $convertedGlobalFunction = $this->functionConverter->convert($globalFunction);
-
-            return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalFunction['returnTypes']);
+            return $this->deduceTypesFromFuncCallNode($node);
         } elseif ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\StaticCall) {
-            if ($node->name instanceof Node\Expr) {
-                return []; // Can't currently deduce type of an expression such as "$this->{$foo}()";
-            }
-
-            $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
-
-            $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
-
-            $types = [];
-
-            foreach ($typesOfVar as $type) {
-                try {
-                    $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
-                } catch (UnexpectedValueException $e) {
-                    continue;
-                }
-
-                if (isset($info['methods'][$node->name])) {
-                    $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['methods'][$node->name]['returnTypes']);
-
-                    if (!empty($fetchedTypes)) {
-                        $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-                    }
-                }
-            }
-
-            // We use an associative array so we automatically avoid duplicate types.
-            $types = array_keys($types);
-
-            return $types;
+            return $this->deduceTypesFromMethodCallNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\Expr\PropertyFetch || $node instanceof Node\Expr\StaticPropertyFetch) {
-            if ($node->name instanceof Node\Expr) {
-                return []; // Can't currently deduce type of an expression such as "$this->{$foo}";
-            }
-
-            $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
-
-            $types = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset);
-
-            if (!empty($types)) {
-                return $types;
-            }
-
-            $objectNode = null;
-
-            if ($node instanceof Node\Expr\PropertyFetch) {
-                $objectNode = $node->var;
-            } else {
-                $objectNode = $node->class;
-            }
-
-            $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
-
-            $types = [];
-
-            foreach ($typesOfVar as $type) {
-                try {
-                    $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
-                } catch (UnexpectedValueException $e) {
-                    continue;
-                }
-
-                if (isset($info['properties'][$node->name])) {
-                    $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['properties'][$node->name]['types']);
-
-                    if (!empty($fetchedTypes)) {
-                        $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-                    }
-                }
-            }
-
-            // We use an associative array so we automatically avoid duplicate types.
-            $types = array_keys($types);
-
-            return $types;
+            return $this->deduceTypesFromPropertyFetch($node, $file, $code, $offset);
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
-            $typesOfVar = $this->deduceTypesFromNode($file, $code, $node->class, $offset);
-
-            $types = [];
-
-            foreach ($typesOfVar as $type) {
-                try {
-                    $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
-                } catch (UnexpectedValueException $e) {
-                    continue;
-                }
-
-                if (isset($info['constants'][$node->name])) {
-                    $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name]['types']);
-
-                    if (!empty($fetchedTypes)) {
-                        $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-                    }
-                }
-            }
-
-            // We use an associative array so we automatically avoid duplicate types.
-            $types = array_keys($types);
-
-            return $types;
+            return $this->deduceTypesFromClassConstFetchNode($file, $code, $node, $offset);
         }
 
         return [];
+    }
+
+    /**
+     * @param Node\Expr\Variable $node
+     * @param string|null        $file
+     * @param string             $code
+     * @param int                $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromVariableNode(Node\Expr\Variable $node, $file, $code, $offset)
+    {
+        if ($node->name instanceof Node\Expr) {
+            return []; // Can't currently deduce type of a variable such as "$$this".
+        }
+
+        return $this->getLocalExpressionTypes($file, $code, '$' . $node->name, $offset);
+    }
+
+    /**
+     * @param Node\Scalar\LNumber $node
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromLNumberNode(Node\Scalar\LNumber $node)
+    {
+        return ['int'];
+    }
+
+    /**
+     * @param Node\Scalar\DNumber $node
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromDNumberNode(Node\Scalar\DNumber $node)
+    {
+        return ['float'];
+    }
+
+    /**
+     * @param Node\Scalar\String_ $node
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromStringNode(Node\Scalar\String_ $node)
+    {
+        return ['string'];
+    }
+
+    /**
+     * @param Node\Expr\ConstFetch $node
+     * @param string               $code
+     * @param int                  $offset
+     * @param string|null          $file
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromConstFetchNode(Node\Expr\ConstFetch $node, $code, $offset, $file)
+    {
+        $name = NodeHelpers::fetchClassName($node->name);
+
+        if ($name === 'null') {
+            return ['null'];
+        } elseif ($name === 'true' || $name === 'false') {
+            return ['bool'];
+        }
+
+        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+        $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($name, $line);
+
+        $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
+
+        if (!$globalConstant) {
+            return [];
+        }
+
+        $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
+
+        return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function deduceTypesFromClosureNode()
+    {
+        return ['\Closure'];
+    }
+
+    /**
+     * @param string|null    $file
+     * @param string         $code
+     * @param Node\Expr\New_ $node
+     * @param int            $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromNewNode($file, $code, Node\Expr\New_ $node, $offset)
+    {
+        return $this->deduceTypesFromNode($file, $code, $node->class, $offset);
+    }
+
+    /**
+     * @param string|null      $file
+     * @param string           $code
+     * @param Node\Expr\Clone_ $node
+     * @param int              $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromCloneNode($file, $code, Node\Expr\Clone_ $node, $offset)
+    {
+        return $this->deduceTypesFromNode($file, $code, $node->expr, $offset);
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function deduceTypesFromArrayNode()
+    {
+        return ['array'];
+    }
+
+    /**
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceNodesFromSelfNode($file, $code, $offset)
+    {
+        return $this->deduceTypesFromNode($file, $code, new Node\Name('self'), $offset);
+    }
+
+    /**
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromStaticNode($file, $code, $offset)
+    {
+        return $this->deduceTypesFromNode($file, $code, new Node\Name('static'), $offset);
+    }
+
+    /**
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromParentNode($file, $code, $offset)
+    {
+        return $this->deduceTypesFromNode($file, $code, new Node\Name('parent'), $offset);
+    }
+
+    /**
+     * @param Node\Name   $node
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromNameNode(Node\Name $node, $file, $code, $offset)
+    {
+        $nameString = NodeHelpers::fetchClassName($node);
+
+        if ($nameString === 'static' || $nameString === 'self') {
+            $currentClass = $this->getCurrentClassAt($file, $code, $offset);
+
+            return [$this->typeAnalyzer->getNormalizedFqcn($currentClass)];
+        } elseif ($nameString === 'parent') {
+            $currentClassName = $this->getCurrentClassAt($file, $code, $offset);
+
+            if (!$currentClassName) {
+                return [];
+            }
+
+            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($currentClassName);
+
+            if ($classInfo && !empty($classInfo['parents'])) {
+                $type = $classInfo['parents'][0];
+
+                return [$this->typeAnalyzer->getNormalizedFqcn($type)];
+            }
+        } else {
+            $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+            $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($nameString, $line);
+
+            return [$fqcn];
+        }
+    }
+
+    /**
+     * @param Node\Expr\FuncCall $node
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromFuncCallNode(Node\Expr\FuncCall $node)
+    {
+        if ($node->name instanceof Node\Expr) {
+            return []; // Can't currently deduce type of an expression such as "{$foo}()";
+        }
+
+        $name = NodeHelpers::fetchClassName($node->name);
+
+        $globalFunction = $this->indexDatabase->getGlobalFunctionByFqcn($name);
+
+        if (!$globalFunction) {
+            return [];
+        }
+
+        $convertedGlobalFunction = $this->functionConverter->convert($globalFunction);
+
+        return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalFunction['returnTypes']);
+    }
+
+    /**
+     * @param Node\Expr\MethodCall|Node\Expr\StaticCall $node
+     * @param string|null                               $file
+     * @param string                                    $code
+     * @param int                                       $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromMethodCallNode($node, $file, $code, $offset)
+    {
+        if ($node->name instanceof Node\Expr) {
+            return []; // Can't currently deduce type of an expression such as "$this->{$foo}()";
+        }
+
+        $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
+        $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
+
+        $types = [];
+
+        foreach ($typesOfVar as $type) {
+            $info = null;
+
+            try {
+                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
+            } catch (UnexpectedValueException $e) {
+                continue;
+            }
+
+            if (isset($info['methods'][$node->name])) {
+                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['methods'][$node->name]['returnTypes']);
+
+                if (!empty($fetchedTypes)) {
+                    $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
+                }
+            }
+        }
+
+        // We use an associative array so we automatically avoid duplicate types.
+        return array_keys($types);
+    }
+
+    /**
+     * @param Node\Expr\PropertyFetch|Node\Expr\StaticPropertyFetch $node
+     * @param string|null                                           $file
+     * @param string                                                $code
+     * @param int                                                   $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromPropertyFetch($node, $file, $code, $offset)
+    {
+        if ($node->name instanceof Node\Expr) {
+            return []; // Can't currently deduce type of an expression such as "$this->{$foo}";
+        }
+
+        $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
+
+        $types = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset);
+
+        if (!empty($types)) {
+            return $types;
+        }
+
+        $objectNode = null;
+
+        if ($node instanceof Node\Expr\PropertyFetch) {
+            $objectNode = $node->var;
+        } else {
+            $objectNode = $node->class;
+        }
+
+        $typesOfVar = $this->deduceTypesFromNode($file, $code, $objectNode, $offset);
+
+        $types = [];
+
+        foreach ($typesOfVar as $type) {
+            $info = null;
+
+            try {
+                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
+            } catch (UnexpectedValueException $e) {
+                continue;
+            }
+
+            if (isset($info['properties'][$node->name])) {
+                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['properties'][$node->name]['types']);
+
+                if (!empty($fetchedTypes)) {
+                    $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
+                }
+            }
+        }
+
+        // We use an associative array so we automatically avoid duplicate types.
+        return array_keys($types);
+    }
+
+    /**
+     * @param string|null               $file
+     * @param string                    $code
+     * @param Node\Expr\ClassConstFetch $node
+     * @param int                       $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromClassConstFetchNode($file, $code, Node\Expr\ClassConstFetch $node, $offset)
+    {
+        $typesOfVar = $this->deduceTypesFromNode($file, $code, $node->class, $offset);
+
+        $types = [];
+
+        foreach ($typesOfVar as $type) {
+            $info = null;
+
+            try {
+                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
+            } catch (UnexpectedValueException $e) {
+                continue;
+            }
+
+            if (isset($info['constants'][$node->name])) {
+                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name]['types']);
+
+                if (!empty($fetchedTypes)) {
+                    $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
+                }
+            }
+        }
+
+        // We use an associative array so we automatically avoid duplicate types.
+        return array_keys($types);
     }
 
     /**
