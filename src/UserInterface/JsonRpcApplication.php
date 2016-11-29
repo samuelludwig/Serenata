@@ -18,6 +18,8 @@ use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
+use React\EventLoop\LoopInterface;
+
 use React\Socket\ConnectionException;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -54,6 +56,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $this->stdinStream = fopen('php://memory', 'w+');
 
+        /** @var LoopInterface $loop */
         $loop = React\EventLoop\Factory::create();
 
         try {
@@ -253,6 +256,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             // the main loop, thus the writes are never actually performed by the React event loop. For this reason
             // we force the write.
             $jsonRpcResponseSender->send($jsonRpcResponse, true);
+
         };
     }
 }
