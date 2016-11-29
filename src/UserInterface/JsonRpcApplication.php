@@ -256,7 +256,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             // the main loop, thus the writes are never actually performed by the React event loop. For this reason
             // we force the write.
             $jsonRpcResponseSender->send($jsonRpcResponse, true);
-
         };
     }
 }
