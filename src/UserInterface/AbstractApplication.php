@@ -7,6 +7,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
@@ -482,12 +483,15 @@ abstract class AbstractApplication
      */
     public function setDatabaseFile($databaseFile)
     {
+        /** @var IndexDatabase $indexDatabase */
         $indexDatabase = $this->getContainer()->get('indexDatabase');
 
         if ($indexDatabase->getDatabasePath() !== $databaseFile) {
             $indexDatabase->setDatabasePath($databaseFile);
 
-            $this->getContainer()->get('cacheClearingEventMediator.clearableCache')->clearCache();
+            /** @var ClearableCacheInterface $clearableCache */
+            $clearableCache = $this->getContainer()->get('cacheClearingEventMediator.clearableCache');
+            $clearableCache->clearCache();
         }
 
         return $this;
