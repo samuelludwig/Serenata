@@ -240,6 +240,8 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @param JsonRpcRequest                      $request
      * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
+     *
+     * @return \Closure
      */
     public function createProgressStreamingCallback(
         JsonRpcRequest $request,
