@@ -9,6 +9,7 @@ use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
@@ -242,11 +243,18 @@ abstract class AbstractApplication
             ->register('indexDatabase', IndexDatabase::class);
 
         $container
-            ->register('classlikeInfoBuilderProviderCachingProxy', ClasslikeInfoBuilderProviderCachingProxy::class)
-            ->setArguments([new Reference('indexDatabase'), new Reference('cache')]);
+            ->setAlias('classlikeInfoBuilderProvider.backend', 'indexDatabase');
 
         $container
-            ->setAlias('classlikeInfoBuilderProvider', 'classlikeInfoBuilderProviderCachingProxy');
+            ->register('classlikeInfoBuilderProvider.instance', ClasslikeInfoBuilderProvider::class)
+            ->setArguments([new Reference('classlikeInfoBuilderProvider.backend')]);
+
+        $container
+            ->register('classlikeInfoBuilderProvider.cachingProxy', ClasslikeInfoBuilderProviderCachingProxy::class)
+            ->setArguments([new Reference('classlikeInfoBuilderProvider.instance'), new Reference('cache')]);
+
+        $container
+            ->setAlias('classlikeInfoBuilderProvider', 'classlikeInfoBuilderProvider.cachingProxy');
 
         $container
             ->register('classlikeExistanceChecker', CachingClasslikeExistanceChecker::class)

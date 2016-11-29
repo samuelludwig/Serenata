@@ -112,7 +112,53 @@ class ClassInfoCommandTest extends IndexedTest
             'directChildren'     => [],
             'directImplementors' => [],
             'directTraitUsers'   => [],
-            'constants'          => [],
+            'constants'          => [
+                'class' => [
+                    'name'               => 'class',
+                    'fqcn'               => null,
+                    'isBuiltin'          => true,
+                    'startLine'          => 0,
+                    'endLine'            => 0,
+                    'defaultValue'       => 'ignored',
+                    'filename'           => null,
+                    'isPublic'           => true,
+                    'isProtected'        => false,
+                    'isPrivate'          => false,
+                    'isStatic'           => true,
+                    'isDeprecated'       => false,
+                    'hasDocblock'        => false,
+                    'hasDocumentation'   => false,
+
+                    'shortDescription'   => 'PHP built-in class constant that evaluates to the FCQN.',
+                    'longDescription'    => null,
+                    'typeDescription'    => null,
+
+                    'types'             => [                        [
+                            'type'         => 'string',
+                            'fqcn'         => 'string',
+                            'resolvedType' => 'string'
+                        ]
+                    ],
+
+                    'declaringClass'     => [
+                        'name'      => '\A\SimpleClass',
+                        'filename'  => $this->getPathFor($fileName),
+                        'startLine' => 10,
+                        'endLine'   => 13,
+                        'type'      => 'class'
+                    ],
+
+                    'declaringStructure' => [
+                        'name'            => '\A\SimpleClass',
+                        'filename'        => $this->getPathFor($fileName),
+                        'startLine'       => 10,
+                        'endLine'         => 13,
+                        'type'            => 'class',
+                        'startLineMember' => 0,
+                        'endLineMember'   => 0
+                    ]
+                ]
+            ],
             'properties'         => [],
             'methods'            => []
         ], $output);

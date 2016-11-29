@@ -39,6 +39,7 @@
 ### Other
 * Attempting to index a file that did not meet the passed allowed extensions still caused it to be added to the index.
 * Assigning a global constant to something caused the type of that left operand to become the name of the constant instead.
+* The `class` member that each class has since PHP 5.5 (that evaluates to its FQCN) is now returned along with class constant data.
 * Use statements were incorrectly reported as unused when they were being used as extension or implementation for anonymous classes.
 * PHP setups with the `cli.pager` option set will now no longer duplicate JSON output. (thanks to [molovo](https://github.com/molovo))
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
