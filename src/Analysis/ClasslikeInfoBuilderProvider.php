@@ -3,7 +3,10 @@
 namespace PhpIntegrator\Analysis;
 
 /**
- * Defines functionality that must be exposed by classes that provide data to an ClasslikeInfoBuilder.
+ * Provides data for {@see ClasslikeInfoBuilder} instances.
+ *
+ * This class uses another backend to handle the actual provision of the raw data (e.g. from persistent storage).
+ * Additional relevant data is then applied (decorated) on top of the data from the other provider (e.g. the index).
  */
 class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterface
 {
