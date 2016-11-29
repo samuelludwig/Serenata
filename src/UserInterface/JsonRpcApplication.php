@@ -6,6 +6,7 @@ use React;
 use ArrayObject;
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 use PhpIntegrator\Sockets\JsonRpcError;
@@ -201,7 +202,9 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $progressStreamingCallback = $this->createProgressStreamingCallback($request, $jsonRpcResponseSender);
         }
 
-        $this->getContainer()->get('indexer')->setProgressStreamingCallback($progressStreamingCallback);
+        /** @var Indexer $indexer */
+        $indexer = $this->getContainer()->get('indexer');
+        $indexer->setProgressStreamingCallback($progressStreamingCallback);
     }
 
     /**
