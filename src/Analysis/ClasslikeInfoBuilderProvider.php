@@ -118,7 +118,19 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     {
         $constants = $this->backend->getClasslikeRawConstants($id);
 
-        $classConstantData = [
+        array_unshift($constants, $this->getMagicClassConstantRawData($id));
+
+        return $constants;
+    }
+
+    /**
+     * @param int $structureId
+     *
+     * @return array
+     */
+    protected function getMagicClassConstantRawData($structureId)
+    {
+        return [
             'id'                => -1,
             'name'              => 'class',
             'fqcn'              => null,
@@ -134,11 +146,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
             'long_description'  => null,
             'type_description'  => null,
             'types_serialized'  => serialize([['type' => 'string', 'fqcn' => 'string']]),
-            'structure_id'      => $id
+            'structure_id'      => $structureId
         ];
-
-        array_unshift($constants, $classConstantData);
-
-        return $constants;
     }
 }
