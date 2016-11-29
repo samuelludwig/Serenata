@@ -271,7 +271,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function getStructureRawInfoQueryBuilder()
+    protected function getClasslikeRawInfoQueryBuilder()
     {
         return $this->getConnection()->createQueryBuilder()
             ->select(
@@ -296,7 +296,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      */
     public function getAllStructuresRawInfo($file)
     {
-        $queryBuilder = $this->getStructureRawInfoQueryBuilder();
+        $queryBuilder = $this->getClasslikeRawInfoQueryBuilder();
 
         if ($file) {
             $queryBuilder
@@ -310,9 +310,9 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawInfo($fqcn)
+    public function getClasslikeRawInfo($fqcn)
     {
-        return $this->getStructureRawInfoQueryBuilder()
+        return $this->getClasslikeRawInfoQueryBuilder()
             ->where('se.fqcn = ?')
             ->setParameter(0, $fqcn)
             ->execute()
@@ -322,7 +322,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawParents($id)
+    public function getClasslikeRawParents($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -338,7 +338,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawChildren($id)
+    public function getClasslikeRawChildren($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -355,7 +355,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawInterfaces($id)
+    public function getClasslikeRawInterfaces($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -371,7 +371,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawImplementors($id)
+    public function getClasslikeRawImplementors($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -388,7 +388,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawTraits($id)
+    public function getClasslikeRawTraits($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -404,7 +404,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawTraitUsers($id)
+    public function getClasslikeRawTraitUsers($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -421,7 +421,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawConstants($id)
+    public function getClasslikeRawConstants($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('c.*', 'fi.path')
@@ -436,7 +436,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawProperties($id)
+    public function getClasslikeRawProperties($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('p.*', 'am.name AS access_modifier')
@@ -451,7 +451,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureRawMethods($id)
+    public function getClasslikeRawMethods($id)
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fu.*', 'fi.path', 'am.name AS access_modifier')
@@ -467,7 +467,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureTraitAliasesAssoc($id)
+    public function getClasslikeTraitAliasesAssoc($id)
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('seta.*', 'se.fqcn AS trait_fqcn', 'am.name AS access_modifier')
@@ -490,7 +490,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureTraitPrecedencesAssoc($id)
+    public function getClasslikeTraitPrecedencesAssoc($id)
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('setp.*', 'se.fqcn AS trait_fqcn')

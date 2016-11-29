@@ -34,7 +34,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawInfo($fqcn)
+    public function getClasslikeRawInfo($fqcn)
     {
         $cacheId = $this->getCacheId(__FUNCTION__, func_get_args());
 
@@ -48,7 +48,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawParents($id)
+    public function getClasslikeRawParents($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -56,7 +56,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawChildren($id)
+    public function getClasslikeRawChildren($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -64,7 +64,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawInterfaces($id)
+    public function getClasslikeRawInterfaces($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -72,7 +72,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawImplementors($id)
+    public function getClasslikeRawImplementors($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -80,7 +80,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawTraits($id)
+    public function getClasslikeRawTraits($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -88,7 +88,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawTraitUsers($id)
+    public function getClasslikeRawTraitUsers($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -96,7 +96,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawConstants($id)
+    public function getClasslikeRawConstants($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -104,7 +104,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawProperties($id)
+    public function getClasslikeRawProperties($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -112,7 +112,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureRawMethods($id)
+    public function getClasslikeRawMethods($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -120,7 +120,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureTraitAliasesAssoc($id)
+    public function getClasslikeTraitAliasesAssoc($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -128,7 +128,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getStructureTraitPrecedencesAssoc($id)
+    public function getClasslikeTraitPrecedencesAssoc($id)
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }

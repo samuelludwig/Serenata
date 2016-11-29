@@ -12,75 +12,75 @@ interface ClasslikeInfoBuilderProviderInterface extends ClasslikeRawConstantData
      *
      * @return array
      */
-    public function getStructureRawInfo($fqcn);
+    public function getClasslikeRawInfo($fqcn);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawParents($id);
+    public function getClasslikeRawParents($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawChildren($id);
+    public function getClasslikeRawChildren($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawInterfaces($id);
+    public function getClasslikeRawInterfaces($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawImplementors($id);
+    public function getClasslikeRawImplementors($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawTraits($id);
+    public function getClasslikeRawTraits($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawTraitUsers($id);
+    public function getClasslikeRawTraitUsers($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawProperties($id);
+    public function getClasslikeRawProperties($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureRawMethods($id);
+    public function getClasslikeRawMethods($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureTraitAliasesAssoc($id);
+    public function getClasslikeTraitAliasesAssoc($id);
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getStructureTraitPrecedencesAssoc($id);
+    public function getClasslikeTraitPrecedencesAssoc($id);
 }

@@ -161,7 +161,7 @@ class ClasslikeInfoBuilder
      */
     protected function getUncheckedClasslikeInfo($fqcn)
     {
-        $rawInfo = $this->storage->getStructureRawInfo($fqcn);
+        $rawInfo = $this->storage->getClasslikeRawInfo($fqcn);
 
         if (!$rawInfo) {
             throw new UnexpectedValueException('The structural element "' . $fqcn . '" was not found!');
@@ -171,17 +171,17 @@ class ClasslikeInfoBuilder
 
         $classlike = $this->fetchFlatClasslikeInfo(
             $rawInfo,
-            $this->storage->getStructureRawParents($id),
-            $this->storage->getStructureRawChildren($id),
-            $this->storage->getStructureRawInterfaces($id),
-            $this->storage->getStructureRawImplementors($id),
-            $this->storage->getStructureRawTraits($id),
-            $this->storage->getStructureRawTraitUsers($id),
-            $this->storage->getStructureRawConstants($id),
-            $this->storage->getStructureRawProperties($id),
-            $this->storage->getStructureRawMethods($id),
-            $this->storage->getStructureTraitAliasesAssoc($id),
-            $this->storage->getStructureTraitPrecedencesAssoc($id)
+            $this->storage->getClasslikeRawParents($id),
+            $this->storage->getClasslikeRawChildren($id),
+            $this->storage->getClasslikeRawInterfaces($id),
+            $this->storage->getClasslikeRawImplementors($id),
+            $this->storage->getClasslikeRawTraits($id),
+            $this->storage->getClasslikeRawTraitUsers($id),
+            $this->storage->getClasslikeRawConstants($id),
+            $this->storage->getClasslikeRawProperties($id),
+            $this->storage->getClasslikeRawMethods($id),
+            $this->storage->getClasslikeTraitAliasesAssoc($id),
+            $this->storage->getClasslikeTraitPrecedencesAssoc($id)
         );
 
         $this->resolveSpecialTypes($classlike, $classlike['name']);
