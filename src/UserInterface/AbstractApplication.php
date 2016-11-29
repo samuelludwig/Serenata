@@ -161,7 +161,7 @@ abstract class AbstractApplication
 
         $container
             ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)
-            ->setArguments([$this->stdinStream]);
+            ->setArguments([$this->getStdinStream()]);
 
         $container
             ->register('docblockParser', DocblockParser::class);
