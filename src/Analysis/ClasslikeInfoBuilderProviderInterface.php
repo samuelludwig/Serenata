@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * Defines functionality that must be exposed by classes that provide data to an ClasslikeInfoBuilder.
  */
-interface ClasslikeInfoBuilderProviderInterface
+interface ClasslikeInfoBuilderProviderInterface extends ClasslikeRawConstantDataProviderInterface
 {
     /**
      * @param string $fqcn
@@ -55,13 +55,6 @@ interface ClasslikeInfoBuilderProviderInterface
      * @return array
      */
     public function getStructureRawTraitUsers($id);
-
-    /**
-     * @param int $id
-     *
-     * @return array
-     */
-    public function getStructureRawConstants($id);
 
     /**
      * @param int $id
