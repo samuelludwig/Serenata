@@ -238,14 +238,14 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @param JsonRpcRequest                      $request
-     * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
+     * @param JsonRpcRequest                 $request
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      *
      * @return \Closure
      */
     public function createProgressStreamingCallback(
         JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender
     ) {
         return function ($progress) use ($request, $jsonRpcResponseSender) {
             $jsonRpcResponse = new JsonRpcResponse(null, [
