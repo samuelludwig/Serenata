@@ -53,6 +53,11 @@ class FileIndexer
     protected $typeAnalyzer;
 
     /**
+     * @var TypeResolver
+     */
+    protected $typeResolver;
+
+    /**
      * @var Parser
      */
     protected $parser;
