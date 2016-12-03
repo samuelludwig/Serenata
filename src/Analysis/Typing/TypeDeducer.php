@@ -11,7 +11,6 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
-use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfo;
