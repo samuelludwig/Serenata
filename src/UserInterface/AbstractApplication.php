@@ -11,13 +11,13 @@ use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
+use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
 
 use PhpIntegrator\Analysis\Conversion\MethodConverter;
-use PhpIntegrator\Analysis\Conversion\ConstantConverter;
-use PhpIntegrator\Analysis\Conversion\PropertyConverter;
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
+use PhpIntegrator\Analysis\Conversion\PropertyConverter;
+use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter;
 
@@ -26,9 +26,10 @@ use PhpIntegrator\Analysis\Relations\InheritanceResolver;
 use PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
-use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeLocalizer;
+use PhpIntegrator\Analysis\Typing\DocblockTypeResolver;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
 use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
 use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
@@ -39,14 +40,14 @@ use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryCachingDecorator;
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;
 use PhpIntegrator\Indexing\IndexDatabase;
-use PhpIntegrator\Indexing\ProjectIndexer;
 use PhpIntegrator\Indexing\BuiltinIndexer;
+use PhpIntegrator\Indexing\ProjectIndexer;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Mediating\CacheClearingEventMediator;
 
-use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\PartialParser;
+use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Parsing\CachingParserProxy;
 
@@ -143,8 +144,14 @@ abstract class AbstractApplication
             ->register('typeAnalyzer', TypeAnalyzer::class);
 
         $container
-            ->register('typeResolver', TypeResolver::class)
+            ->register('typeResolver.backend', TypeResolver::class)
             ->setArguments([new Reference('typeAnalyzer')]);
+
+        $container
+            ->register('typeResolver.docblock', DocblockTypeResolver::class)
+            ->setArguments([new Reference('typeResolver.backend'), new Reference('typeAnalyzer')]);
+
+        $container->setAlias('typeResolver', 'typeResolver.docblock');
 
         $container
             ->register('typeLocalizer', TypeLocalizer::class)

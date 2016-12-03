@@ -23,7 +23,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @var int
      */
-    const SCHEMA_VERSION = 29;
+    const SCHEMA_VERSION = 30;
 
     /**
      * @var Connection
