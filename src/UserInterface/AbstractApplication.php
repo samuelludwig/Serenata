@@ -318,7 +318,6 @@ abstract class AbstractApplication
                 new Reference('docblockParser'),
                 new Reference('partialParser'),
                 new Reference('typeAnalyzer'),
-                new Reference('typeResolver'),
                 new Reference('fileTypeResolverFactory'),
                 new Reference('indexDatabase'),
                 new Reference('classlikeInfoBuilder'),

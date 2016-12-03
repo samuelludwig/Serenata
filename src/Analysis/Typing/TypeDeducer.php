@@ -65,11 +65,6 @@ class TypeDeducer
     protected $typeAnalyzer;
 
     /**
-     * @var TypeResolver
-     */
-    protected $typeResolver;
-
-    /**
      * @var FileTypeResolverFactoryInterface
      */
     protected $fileTypeResolverFactory;
@@ -105,7 +100,6 @@ class TypeDeducer
      * @param DocblockParser                   $docblockParser
      * @param PartialParser                    $partialParser
      * @param TypeAnalyzer                     $typeAnalyzer
-     * @param TypeResolver                     $typeResolver
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param IndexDatabase                    $indexDatabase
      * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
@@ -119,7 +113,6 @@ class TypeDeducer
         DocblockParser $docblockParser,
         PartialParser $partialParser,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolver $typeResolver,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         IndexDatabase $indexDatabase,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
@@ -132,7 +125,6 @@ class TypeDeducer
         $this->docblockParser = $docblockParser;
         $this->partialParser = $partialParser;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->indexDatabase = $indexDatabase;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
