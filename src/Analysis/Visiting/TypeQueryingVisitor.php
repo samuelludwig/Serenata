@@ -345,8 +345,8 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node\Expr\FuncCall   $node
-     * @param TypePossibilityMap[] &$types
+     * @param Node\Expr\Instanceof_ $node
+     * @param TypePossibilityMap[]  &$types
      */
     protected function processConditionInstanceof(Node\Expr\Instanceof_ $node, array &$types)
     {
