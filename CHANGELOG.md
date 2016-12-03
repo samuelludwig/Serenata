@@ -36,19 +36,7 @@
 * `@noinspection` is no longer linted as invalid tag, so you can now not be blinded by errors when reading the code of a colleague using PhpStorm.
 * Variadic parameters with type hints were incorrectly matched with their docblock types and, by consequence, incorrectly reported as having a mismatching type.
 
-### Other
-* Attempting to index a file that did not meet the passed allowed extensions still caused it to be added to the index.
-* Assigning a global constant to something caused the type of that left operand to become the name of the constant instead.
-* The `class` member that each class has since PHP 5.5 (that evaluates to its FQCN) is now returned along with class constant data.
-* Use statements were incorrectly reported as unused when they were being used as extension or implementation for anonymous classes.
-* PHP setups with the `cli.pager` option set will now no longer duplicate JSON output. (thanks to [molovo](https://github.com/molovo))
-* Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
-* The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them.
-* Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
-* When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.
-* Parent members of built-in classlikes were being indexed twice: once for the parent and once for the child, which was resulting in incorrect inheritance resolution results, unnecessary data storage and a (minor) performance hit.
-* Built-in interfaces no longer have `isAbstract` set to true. They _are_ abstract in a certain sense, but this property is meant to indicate if a classlike has been defined using the abstract keyword. It was also not consistent with the behavior for non-built-in interfaces.
-  * Built-in interface methods also had `isAbstract` set to `true` instead of `false`.
+### Type deduction
 
 * The indexer was assigning an incorrect type to variadic parameters. You can now use elements of type hinted variadic parameters as expected in a foreach:
 
@@ -116,6 +104,20 @@ if ($b) {
 /** @var \DateTime[] $foo */
 $foo[0]-> // The type is \DateTime.
 ```
+
+### Other
+* Attempting to index a file that did not meet the passed allowed extensions still caused it to be added to the index.
+* Assigning a global constant to something caused the type of that left operand to become the name of the constant instead.
+* The `class` member that each class has since PHP 5.5 (that evaluates to its FQCN) is now returned along with class constant data.
+* Use statements were incorrectly reported as unused when they were being used as extension or implementation for anonymous classes.
+* PHP setups with the `cli.pager` option set will now no longer duplicate JSON output. (thanks to [molovo](https://github.com/molovo))
+* Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
+* The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them.
+* Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
+* When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.
+* Parent members of built-in classlikes were being indexed twice: once for the parent and once for the child, which was resulting in incorrect inheritance resolution results, unnecessary data storage and a (minor) performance hit.
+* Built-in interfaces no longer have `isAbstract` set to true. They _are_ abstract in a certain sense, but this property is meant to indicate if a classlike has been defined using the abstract keyword. It was also not consistent with the behavior for non-built-in interfaces.
+  * Built-in interface methods also had `isAbstract` set to `true` instead of `false`.
 
 ## 1.2.0
 * Initial split from the [php-integrator/atom-base](https://github.com/php-integrator/atom-base) repository. See [its changelog](https://github.com/php-integrator/atom-base/blob/master/CHANGELOG.md) for what changed in older versions.
