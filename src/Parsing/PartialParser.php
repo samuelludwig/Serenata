@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Parsing;
 
+use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Utility\NodeHelpers;
@@ -9,6 +10,7 @@ use PhpIntegrator\Utility\NodeHelpers;
 use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinterAbstract;
 
@@ -198,8 +200,12 @@ class PartialParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse($code)
+    public function parse($code, ErrorHandler $errorHandler = null)
     {
+        if ($errorHandler) {
+            throw new LogicException('Error handling is not supported as error recovery will be attempted automatically');
+        }
+
         $code = $this->getNormalizedCode($code);
         $boundary = $this->getStartOfExpression($code);
 
@@ -226,14 +232,6 @@ class PartialParser implements Parser
         }
 
         return $nodes;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getErrors()
-    {
-        return [];
     }
 
     /**

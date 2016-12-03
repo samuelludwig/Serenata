@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Parsing;
 
 use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 
 /**
  * Proxy class for a Parser that caches nodes to avoid parsing the same file or source code multiple times.
@@ -20,12 +21,7 @@ class CachingParserProxy implements Parser
     /**
      * @var array|null
      */
-    protected $nodesCache = null;
-
-    /**
-     * @var array|null
-     */
-    protected $errorsCache = null;
+    protected $cache = null;
 
     /**
      * @var string|null
@@ -43,25 +39,16 @@ class CachingParserProxy implements Parser
     /**
      * @inheritDoc
      */
-    public function parse($code)
+    public function parse($code, ErrorHandler $errorHandler = null)
     {
-        $cacheKey = md5($code);
+        $cacheKey = md5($code) . spl_object_hash($errorHandler);
 
-        if ($cacheKey !== $this->lastCacheKey || $this->nodesCache === null) {
-            $this->nodesCache = $this->proxiedObject->parse($code);
-            $this->errorsCache = $this->proxiedObject->getErrors();
+        if ($cacheKey !== $this->lastCacheKey || $this->cache === null) {
+            $this->cache = $this->proxiedObject->parse($code, $errorHandler);
         }
 
         $this->lastCacheKey = $cacheKey;
 
-        return $this->nodesCache;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getErrors()
-    {
-        return $this->errorsCache !== null ? $this->errorsCache : $this->proxiedObject->getErrors();
+        return $this->cache;
     }
 }

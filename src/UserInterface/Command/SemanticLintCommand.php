@@ -21,6 +21,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use PhpParser\Error;
 use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
 /**
@@ -180,7 +181,9 @@ class SemanticLintCommand extends AbstractCommand
         $nodes = [];
         $parser = $this->parser;
 
-        $nodes = $parser->parse($code);
+        $handler = new ErrorHandler\Collecting();
+
+        $nodes = $parser->parse($code, $handler);
 
         $output = [
             'errors'   => [
@@ -190,7 +193,7 @@ class SemanticLintCommand extends AbstractCommand
             'warnings' => []
         ];
 
-        foreach ($parser->getErrors() as $e) {
+        foreach ($handler->getErrors() as $e) {
             $output['errors']['syntaxErrors'][] = [
                 'startLine'   => $e->getStartLine() >= 0 ? $e->getStartLine() : null,
                 'endLine'     => $e->getEndLine() >= 0 ? $e->getEndLine() : null,

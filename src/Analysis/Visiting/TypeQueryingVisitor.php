@@ -98,7 +98,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseCatch(Node\Stmt\Catch_ $node)
     {
-        $this->expressionTypeInfoMap->setBestMatch('$' . $node->var, $node->type);
+        $this->expressionTypeInfoMap->setBestMatch('$' . $node->var, $node);
     }
 
     /**

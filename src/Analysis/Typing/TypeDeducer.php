@@ -30,6 +30,7 @@ use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpParser\Node;
 use PhpParser\Error;
 use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinterAbstract;
 
@@ -460,6 +461,11 @@ class TypeDeducer
 
         // We use an associative array so we automatically avoid duplicate types.
         return array_keys($types);
+
+
+
+
+
     }
 
     /**
@@ -661,6 +667,28 @@ class TypeDeducer
     }
 
     /**
+     * @param Node\Stmt\Catch_ $node
+     * @param string           $parameterName
+     * @param string           $file
+     * @param string           $code
+     * @param int              $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromCatchParameter(Node\Stmt\Catch_ $node, $parameterName, $file, $code, $offset)
+    {
+        $types = array_map(function (Node\Name $name) use ($file, $code, $offset) {
+            return $this->deduceTypesFromNode($name, $file, $code, $offset);
+        }, $node->types);
+
+        $types = array_reduce($types, function (array $subTypes, $carry) {
+            return array_merge($carry, $subTypes);
+        }, []);
+
+        return $types;
+    }
+
+    /**
      * @param string $code
      * @param int    $offset
      *
@@ -672,8 +700,10 @@ class TypeDeducer
     {
         $nodes = null;
 
+        $handler = new ErrorHandler\Collecting();
+
         try {
-            $nodes = $this->parser->parse($code);
+            $nodes = $this->parser->parse($code, $handler);
         } catch (Error $e) {
             throw new UnexpectedValueException('Parsing the file failed!');
         }
@@ -761,6 +791,8 @@ class TypeDeducer
             return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
             return $this->deduceTypesFromFunctionLikeParameter($node, $expression);
+        } elseif ($node instanceof Node\Stmt\Catch_) {
+            return $this->deduceTypesFromCatchParameter($node, $expression, $file, $code, $offset);
         }
 
         return $this->deduceTypesFromNode($node, $file, $code, $offset);

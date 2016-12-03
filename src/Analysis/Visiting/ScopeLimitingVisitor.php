@@ -125,7 +125,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
                 // Finally statements have no own node, so use the first statement as a reference point instead. This
                 // won't be entirely correct, but it's the best we can do. See also
                 // https://github.com/nikic/PHP-Parser/issues/254
-                if ($node->finallyStmts && $node->finallyStmts[0]->getAttribute('startFilePos') < $this->position) {
+                if ($node->finally && $node->finally->getAttribute('startFilePos') < $this->position) {
                     $this->memorizeNodeProperties($node, ['stmts', 'catches']);
 
                     $node->stmts = [];

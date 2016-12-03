@@ -125,9 +125,7 @@ abstract class AbstractApplication
         $container
             ->register('parser.phpParser', Parser::class)
             ->setFactory([new Reference('parser.phpParserFactory'), 'create'])
-            ->setArguments([ParserFactory::PREFER_PHP7, new Reference('lexer'), [
-                'throwOnError' => false
-            ]]);
+            ->setArguments([ParserFactory::PREFER_PHP7, new Reference('lexer')]);
 
         $container
             ->register('parser.cachingParserProxy', CachingParserProxy::class)

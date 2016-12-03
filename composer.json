@@ -17,7 +17,7 @@
         "php": ">=5.5.0",
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
-        "nikic/php-parser": "~2.1.0",
+        "nikic/php-parser": "~3.0.0",
         "doctrine/dbal": "~2.5",
         "symfony/dependency-injection": "~2.8.0",
         "react/socket": "0.4.*"

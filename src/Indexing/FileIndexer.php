@@ -19,6 +19,7 @@ use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpParser\Error;
 use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
 /**
@@ -113,8 +114,10 @@ class FileIndexer
      */
     public function index($filePath, $code)
     {
+        $handler = new ErrorHandler\Collecting();
+
         try {
-            $nodes = $this->getParser()->parse($code);
+            $nodes = $this->getParser()->parse($code, $handler);
 
             if ($nodes === null) {
                 throw new Error('Unknown syntax error encountered');

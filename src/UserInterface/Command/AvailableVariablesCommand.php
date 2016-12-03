@@ -10,6 +10,7 @@ use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 
 /**
  * Command that shows information about the scopes at a specific position in a file.
@@ -81,7 +82,9 @@ class AvailableVariablesCommand extends AbstractCommand
      */
      public function getAvailableVariables($code, $offset)
      {
-         $nodes = $this->parse($code);
+         $handler = new ErrorHandler\Collecting();
+
+         $nodes = $this->parse($code, $handler);
 
          return $this->variableScanner->getAvailableVariables($nodes, $offset);
      }
