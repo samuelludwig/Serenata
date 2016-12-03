@@ -37,7 +37,6 @@
 * Variadic parameters with type hints were incorrectly matched with their docblock types and, by consequence, incorrectly reported as having a mismatching type.
 
 ### Type deduction
-
 * The indexer was assigning an incorrect type to variadic parameters. You can now use elements of type hinted variadic parameters as expected in a foreach:
 
 ```php
