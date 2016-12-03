@@ -24,12 +24,12 @@ class FileTypeResolver implements FileTypeResolverInterface
     protected $imports;
 
     /**
-     * @var TypeResolver
+     * @var TypeResolverInterface
      */
     protected $typeResolver;
 
     /**
-     * @param TypeResolver $typeResolver
+     * @param TypeResolverInterface $typeResolver
      * @param array {
      *     @var string   $name
      *     @var int      $startLine
@@ -42,7 +42,7 @@ class FileTypeResolver implements FileTypeResolverInterface
      *     @var int    $line
      * } $imports
      */
-    public function __construct(TypeResolver $typeResolver, array $namespaces, array $imports)
+    public function __construct(TypeResolverInterface $typeResolver, array $namespaces, array $imports)
     {
         $this->typeResolver = $typeResolver;
         $this->namespaces = $namespaces;

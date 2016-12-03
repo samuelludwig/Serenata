@@ -10,7 +10,7 @@ use UnexpectedValueException;
 class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
 {
     /**
-     * @var TypeResolver
+     * @var TypeResolverInterface
      */
     protected $typeResolver;
 
@@ -20,11 +20,11 @@ class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
     protected $namespaceImportProviderInterface;
 
     /**
-     * @param TypeResolver                     $typeResolver
+     * @param TypeResolverInterface            $typeResolver
      * @param NamespaceImportProviderInterface $namespaceImportProviderInterface
      */
     public function __construct(
-        TypeResolver $typeResolver,
+        TypeResolverInterface $typeResolver,
         NamespaceImportProviderInterface $namespaceImportProviderInterface
     ) {
         $this->typeResolver = $typeResolver;

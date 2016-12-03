@@ -9,8 +9,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\FileTypeResolver;
+use PhpIntegrator\Analysis\Typing\TypeResolverInterface;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
@@ -53,7 +53,7 @@ class FileIndexer
     protected $typeAnalyzer;
 
     /**
-     * @var TypeResolver
+     * @var TypeResolverInterface
      */
     protected $typeResolver;
 
@@ -83,18 +83,18 @@ class FileIndexer
     protected $structureTypeMap;
 
     /**
-     * @param StorageInterface $storage
-     * @param TypeAnalyzer     $typeAnalyzer
-     * @param TypeResolver     $typeResolver
-     * @param DocblockParser   $docblockParser
-     * @param Parser           $defaultValueParser
-     * @param TypeDeducer      $typeDeducer
-     * @param Parser           $parser
+     * @param StorageInterface      $storage
+     * @param TypeAnalyzer          $typeAnalyzer
+     * @param TypeResolverInterface $typeResolver
+     * @param DocblockParser        $docblockParser
+     * @param Parser                $defaultValueParser
+     * @param TypeDeducer           $typeDeducer
+     * @param Parser                $parser
      */
     public function __construct(
         StorageInterface $storage,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolver $typeResolver,
+        TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
         Parser $defaultValueParser,
         TypeDeducer $typeDeducer,
