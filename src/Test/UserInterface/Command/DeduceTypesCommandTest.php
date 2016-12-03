@@ -701,6 +701,46 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithObjects()
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjects.phpt', '$b');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesTypeOfElementsOfString()
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfString.phpt', '$b');
+
+        $this->assertEquals(['string'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesTypeOfElementsOfTypeNotAccessibleAsArray()
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfTypeNotAccessibleAsArray.phpt', '$b');
+
+        $this->assertEquals(['mixed'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithObjectsOfMultipleTypes()
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjectsOfMultipleTypes.phpt', '$b');
+
+        $this->assertEquals(['\A\B', '\A\C'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesNewWithStatic()
     {
         $result = $this->deduceTypesFromExpression(

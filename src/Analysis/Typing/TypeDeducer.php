@@ -161,6 +161,8 @@ class TypeDeducer
             return $this->deduceTypesFromStringNode($node);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->deduceTypesFromConstFetchNode($node, $file, $code, $offset);
+        } elseif ($node instanceof Node\Expr\ArrayDimFetch) {
+            return $this->deduceTypesFromArrayDimFetchNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\Expr\Closure) {
             return $this->deduceTypesFromClosureNode($node);
         } elseif ($node instanceof Node\Expr\New_) {
@@ -272,6 +274,33 @@ class TypeDeducer
         $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
 
         return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
+    }
+
+    /**
+     * @param Node\Expr\ArrayDimFetch $node
+     * @param string|null             $file
+     * @param string                  $code
+     * @param int                     $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromArrayDimFetchNode(Node\Expr\ArrayDimFetch $node, $file, $code, $offset)
+    {
+        $types = $this->deduceTypesFromNode($node->var, $file, $code, $offset);
+
+        $elementTypes = [];
+
+        foreach ($types as $type) {
+            if ($type === 'string') {
+                $elementTypes[] = 'string';
+            } elseif ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
+                $elementTypes[] = $this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type);
+            } else {
+                $elementTypes[] = 'mixed';
+            }
+        }
+
+        return array_unique($elementTypes);
     }
 
     /**

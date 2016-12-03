@@ -110,5 +110,12 @@ if ($b) {
 }
 ```
 
+* Array indexing will now properly deduce the type if the type of the array is known:
+
+```php
+/** @var \DateTime[] $foo */
+$foo[0]-> // The type is \DateTime.
+```
+
 ## 1.2.0
 * Initial split from the [php-integrator/atom-base](https://github.com/php-integrator/atom-base) repository. See [its changelog](https://github.com/php-integrator/atom-base/blob/master/CHANGELOG.md) for what changed in older versions.
