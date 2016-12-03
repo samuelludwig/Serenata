@@ -461,11 +461,6 @@ class TypeDeducer
 
         // We use an associative array so we automatically avoid duplicate types.
         return array_keys($types);
-
-
-
-
-
     }
 
     /**
