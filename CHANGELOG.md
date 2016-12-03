@@ -97,7 +97,7 @@ if ($b) {
 }
 ```
 
-* Array indexing will now properly deduce the type if the type of the array is known:
+* Array indexing will now properly deduce the type of array elements if the type of the array is known:
 
 ```php
 /** @var \DateTime[] $foo */
