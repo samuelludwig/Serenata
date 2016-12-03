@@ -7,7 +7,7 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 /**
  * Resolves local types to their FQCN.
  */
-class TypeResolver
+class TypeResolver implements TypeResolverInterface
 {
     /**
      * @var TypeAnalyzer
@@ -25,20 +25,7 @@ class TypeResolver
     }
 
     /**
-     * Resolves and determines the FQCN of the specified type.
-     *
-     * @param string      $type
-     * @param string|null $namespaceName
-     * @param array {
-     *     @var string|null $name
-     *     @var string      $alias
-     *     @var string      $kind
-     * } $imports
-     * @param string      $kind
-     *
-     * @throws TypeResolutionImpossibleException when unqualified constants or functions are encountered.
-     *
-     * @return string|null
+     * @inheritDoc
      */
     public function resolve($name, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
     {
