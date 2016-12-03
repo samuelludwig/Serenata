@@ -182,7 +182,7 @@ class PartialParser implements Parser
      * @param string   $source
      * @param int|null $offset
      *
-     * @return string[]
+     * @return Node|null
      */
     public function getLastNodeAt($source, $offset = null)
     {
