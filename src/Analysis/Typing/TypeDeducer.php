@@ -880,25 +880,11 @@ class TypeDeducer
         $resolvedTypes = [];
 
         foreach ($types as $type) {
-            $isArraySyntaxTypeHint = $this->typeAnalyzer->isArraySyntaxTypeHint($type);
+            $typeLine = $expressionTypeInfo->hasBestTypeOverrideMatch() ?
+                $expressionTypeInfo->getBestTypeOverrideMatchLine() :
+                $line;
 
-            if ($isArraySyntaxTypeHint) {
-                $type = mb_substr($type, 0, -2);
-            }
-
-            if ($this->typeAnalyzer->isClassType($type)) {
-                $typeLine = $expressionTypeInfo->hasBestTypeOverrideMatch() ?
-                    $expressionTypeInfo->getBestTypeOverrideMatchLine() :
-                    $line;
-
-                $type = $this->fileTypeResolverFactory->create($file)->resolve($type, $typeLine);
-            }
-
-            if ($isArraySyntaxTypeHint) {
-                $type .= '[]';
-            }
-
-            $resolvedTypes[] = $type;
+            $resolvedTypes[] = $this->fileTypeResolverFactory->create($file)->resolve($type, $typeLine);
         }
 
         return $resolvedTypes;
