@@ -33,6 +33,8 @@ class TypeResolver implements TypeResolverInterface
             return null;
         } elseif ($name[0] === '\\') {
             return $name;
+        } elseif (!$this->typeAnalyzer->isClassType($name)) {
+            return $name;
         }
 
         $fullName = null;

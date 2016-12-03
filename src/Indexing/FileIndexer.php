@@ -433,15 +433,9 @@ class FileIndexer
         $types = [];
 
         foreach ($typeList as $type) {
-            $fqcn = $type;
-
-            if ($this->typeAnalyzer->isClassType($type)) {
-                $fqcn = $fileTypeResolver->resolve($type, $line);
-            }
-
             $types[] = [
                 'type' => $type,
-                'fqcn' => $fqcn
+                'fqcn' => $fileTypeResolver->resolve($type, $line)
             ];
         }
 
