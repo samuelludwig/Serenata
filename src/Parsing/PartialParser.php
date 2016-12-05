@@ -172,7 +172,6 @@ class PartialParser implements Parser
             }
         }
 
-
         return $i;
     }
 
