@@ -528,6 +528,38 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithEncapsedString()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+            <?php
+
+            "(($version{0} * 10000) + ($version{2} * 100) + $version{4}"
+SOURCE;
+
+        $result = $partialParser->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
+        $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[0]);
+        $this->assertEquals('((', $result->parts[0]->value);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->parts[1]);
+        $this->assertEquals('version', $result->parts[1]->name);
+        $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[2]);
+        $this->assertEquals('{0} * 10000) + (', $result->parts[2]->value);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->parts[3]);
+        $this->assertEquals('version', $result->parts[3]->name);
+        $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[4]);
+        $this->assertEquals('{2} * 100) + ', $result->parts[4]->value);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->parts[5]);
+        $this->assertEquals('version', $result->parts[5]->name);
+        $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[6]);
+        $this->assertEquals('{4}', $result->parts[6]->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithMultiplicationOperator()
     {
         $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
