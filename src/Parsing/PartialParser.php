@@ -75,6 +75,7 @@ class PartialParser implements Parser
         $currentTokenIndex = count($tokens);
         $tokenStartOffset = strlen($code);
 
+        $skippableTokens = $this->getSkippableTokens();
         $castBoundaryTokens = $this->getCastBoundaryTokens();
         $expressionBoundaryTokens = $this->getExpressionBoundaryTokens();
 
@@ -96,12 +97,7 @@ class PartialParser implements Parser
                 ];
             }
 
-            if ($token['type'] === T_COMMENT ||
-                $token['type'] === T_DOC_COMMENT ||
-                $token['type'] === T_ENCAPSED_AND_WHITESPACE ||
-                $token['type'] === T_CONSTANT_ENCAPSED_STRING ||
-                $token['type'] === T_STRING
-            ) {
+            if (in_array($token['type'], $skippableTokens)) {
                 // Do nothing, we just keep parsing. (These can occur inside call stacks.)
             } elseif ($code[$i] === '(') {
                 ++$parenthesesOpened;
@@ -346,6 +342,7 @@ class PartialParser implements Parser
         $currentTokenIndex = count($tokens);
         $tokenStartOffset = strlen($code);
 
+        $skippableTokens = $this->getSkippableTokens();
         $expressionBoundaryTokens = $this->getExpressionBoundaryTokens();
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
@@ -361,7 +358,7 @@ class PartialParser implements Parser
                 ];
             }
 
-            if (in_array($token['type'], [T_COMMENT, T_STRING, T_CONSTANT_ENCAPSED_STRING, T_ENCAPSED_AND_WHITESPACE])) {
+            if (in_array($token['type'], $skippableTokens)) {
                 continue;
             } elseif ($code[$i] === '}') {
                 ++$scopesClosed;
@@ -533,6 +530,20 @@ class PartialParser implements Parser
         ];
 
         return $expressionBoundaryTokens;
+    }
+
+    /**
+     * @see https://secure.php.net/manual/en/tokens.php
+     *
+     * @return int[]
+     */
+    protected function getSkippableTokens()
+    {
+        $tokens = [
+            T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING
+        ];
+
+        return $tokens;
     }
 
     /**
