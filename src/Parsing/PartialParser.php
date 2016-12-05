@@ -101,7 +101,7 @@ class PartialParser implements Parser
                 $token['type'] === T_CONSTANT_ENCAPSED_STRING ||
                 $token['type'] === T_STRING
             ) {
-                // Do nothing, we just keep parsing. (Comments can occur inside call stacks.)
+                // Do nothing, we just keep parsing. (These can occur inside call stacks.)
             } elseif ($code[$i] === '(') {
                 ++$parenthesesOpened;
 
