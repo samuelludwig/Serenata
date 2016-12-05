@@ -490,7 +490,7 @@ class FileIndexer
 
                 if (empty($nodes)) {
                     throw new LogicException(
-                        'Could not parse default value "' . $rawData['defaultValue'] . '" of built-in constant'
+                        'Could not parse default value "' . $rawData['defaultValue'] . '" of constant'
                     );
                 }
 
@@ -582,7 +582,7 @@ class FileIndexer
 
                 if (empty($nodes)) {
                     throw new LogicException(
-                        'Could not parse default value "' . $rawData['defaultValue'] . '" of built-in constant'
+                        'Could not parse default value "' . $rawData['defaultValue'] . '" of constant'
                     );
                 }
 
