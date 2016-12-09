@@ -3,13 +3,11 @@
 namespace PhpIntegrator\Indexing;
 
 use Exception;
-use LogicException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionFunction;
 use ReflectionProperty;
 use ReflectionParameter;
-use UnexpectedValueException;
 use ReflectionFunctionAbstract;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
@@ -178,24 +176,16 @@ class BuiltinIndexer
         $types = [];
 
         if (!empty($defaultValue)) {
-            try {
-                $nodes = $this->parser->parse($defaultValue);
+            $nodes = $this->parser->parse($defaultValue);
 
-                if (empty($nodes)) {
-                    throw new LogicException('Could not parse default value "' . $defaultValue . '" of built-in constant');
-                }
+            $typeList = $this->typeDeducer->deduceTypesFromNode(
+                $nodes[0],
+                'test',
+                $defaultValue,
+                0
+            );
 
-                $typeList = $this->typeDeducer->deduceTypesFromNode(
-                    $nodes[0],
-                    'test',
-                    $defaultValue,
-                    0
-                );
-
-                $types = $this->getTypeDataForTypeList($typeList);
-            } catch (UnexpectedValueException $e) {
-                $types = [];
-            }
+            $types = $this->getTypeDataForTypeList($typeList);
         }
 
         return $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [

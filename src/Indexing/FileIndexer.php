@@ -4,7 +4,6 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
-use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeDeducer;
@@ -485,26 +484,16 @@ class FileIndexer
                 $fileTypeResolver
             );
         } elseif (!empty($rawData['defaultValue'])) {
-            try {
-                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+            $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
 
-                if (empty($nodes)) {
-                    throw new LogicException(
-                        'Could not parse default value "' . $rawData['defaultValue'] . '" of constant'
-                    );
-                }
+            $typeList = $this->typeDeducer->deduceTypesFromNode(
+                $nodes[0],
+                $filePath,
+                $rawData['defaultValue'],
+                0
+            );
 
-                $typeList = $this->typeDeducer->deduceTypesFromNode(
-                    $nodes[0],
-                    $filePath,
-                    $rawData['defaultValue'],
-                    0
-                );
-
-                $types = $this->getTypeDataForTypeList($typeList, $rawData['startLine'], $fileTypeResolver);
-            } catch (UnexpectedValueException $e) {
-                $types = [];
-            }
+            $types = $this->getTypeDataForTypeList($typeList, $rawData['startLine'], $fileTypeResolver);
         }
 
         $constantId = $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
@@ -577,26 +566,16 @@ class FileIndexer
                 ]
             ];
         } elseif ($rawData['defaultValue']) {
-            try {
-                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+            $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
 
-                if (empty($nodes)) {
-                    throw new LogicException(
-                        'Could not parse default value "' . $rawData['defaultValue'] . '" of constant'
-                    );
-                }
+            $typeList = $this->typeDeducer->deduceTypesFromNode(
+                $nodes[0],
+                $filePath,
+                $rawData['defaultValue'],
+                0
+            );
 
-                $typeList = $this->typeDeducer->deduceTypesFromNode(
-                    $nodes[0],
-                    $filePath,
-                    $rawData['defaultValue'],
-                    0
-                );
-
-                $types = $this->getTypeDataForTypeList($typeList, $rawData['startLine'], $fileTypeResolver);
-            } catch (UnexpectedValueException $e) {
-                $types = [];
-            }
+            $types = $this->getTypeDataForTypeList($typeList, $rawData['startLine'], $fileTypeResolver);
         }
 
         $propertyId = $this->storage->insert(IndexStorageItemEnum::PROPERTIES, [
