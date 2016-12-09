@@ -222,9 +222,7 @@ class PartialParser implements Parser
         if (empty($nodes)) {
             throw new \PhpParser\Error('Could not parse the code, even after attempting corrections');
         } elseif (count($nodes) > 1) {
-            throw new UnexpectedValueException(
-                'Parsing succeeded, but more than one node was returned for a single expression'
-            );
+            throw new \PhpParser\Error('Parsing succeeded, but more than one node was returned for a single expression');
         }
 
         return $nodes;
