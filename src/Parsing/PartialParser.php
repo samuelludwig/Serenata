@@ -217,6 +217,7 @@ class PartialParser implements Parser
         $nodes = $this->tryParse($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithKeywordCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         if (empty($nodes)) {
@@ -268,6 +269,16 @@ class PartialParser implements Parser
     protected function tryParseWithTrailingSemicolonCorrection($code)
     {
         return $this->tryParse($code . ';');
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
+    protected function tryParseWithHeredocTerminationCorrection($code)
+    {
+        return $this->tryParse($code . ";\n"); // Heredocs need to be suffixed by a semicolon and a newline.
     }
 
     /**
@@ -482,8 +493,8 @@ class PartialParser implements Parser
             T_IS_GREATER_OR_EQUAL, T_IS_IDENTICAL, T_IS_NOT_EQUAL, T_IS_NOT_IDENTICAL, T_IS_SMALLER_OR_EQUAL,
             T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR, T_MINUS_EQUAL, T_MOD_EQUAL, T_MUL_EQUAL, T_NAMESPACE, T_NEW,
             T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_OR_EQUAL, T_PLUS_EQUAL, T_PRINT, T_PRIVATE, T_PUBLIC, T_PROTECTED,
-            T_REQUIRE, T_REQUIRE_ONCE, T_RETURN, T_SL, T_SL_EQUAL, T_SR, T_SR_EQUAL, T_START_HEREDOC, T_SWITCH,
-            T_THROW, T_TRAIT, T_TRY, T_USE, T_VAR, T_WHILE, T_XOR_EQUAL
+            T_REQUIRE, T_REQUIRE_ONCE, T_RETURN, T_SL, T_SL_EQUAL, T_SR, T_SR_EQUAL, T_SWITCH, T_THROW, T_TRAIT, T_TRY,
+            T_USE, T_VAR, T_WHILE, T_XOR_EQUAL
         ];
 
         // PHP >= 5.5

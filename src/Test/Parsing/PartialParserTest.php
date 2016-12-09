@@ -560,6 +560,27 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithHeredoc()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+<?php
+
+<<<EOF
+TEST
+EOF
+SOURCE;
+
+        $result = $partialParser->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\String_::class, $result);
+        $this->assertEquals('TEST', $result->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithMultiplicationOperator()
     {
         $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());

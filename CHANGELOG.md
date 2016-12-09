@@ -105,6 +105,7 @@ $foo[0]-> // The type is \DateTime.
 ```
 
 ### Other
+* Heredocs were not correctly being parsed when analyzing default values of constants and properties.
 * Attempting to index a file that did not meet the passed allowed extensions still caused it to be added to the index.
 * Assigning a global constant to something caused the type of that left operand to become the name of the constant instead.
 * The `class` member that each class has since PHP 5.5 (that evaluates to its FQCN) is now returned along with class constant data.
