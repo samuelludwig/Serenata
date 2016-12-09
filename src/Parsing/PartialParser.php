@@ -209,7 +209,7 @@ class PartialParser implements Parser
         $expression = trim($expression);
 
         if (empty($expression)) {
-            return [];
+            throw new \PhpParser\Error('Could not determine the last expression');
         }
 
         $correctedExpression = $this->getNormalizedCode($expression);
