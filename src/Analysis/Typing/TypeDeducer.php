@@ -497,14 +497,6 @@ class TypeDeducer
             return []; // Can't currently deduce type of an expression such as "$this->{$foo}";
         }
 
-        $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
-
-        $types = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset);
-
-        if (!empty($types)) {
-            return $types;
-        }
-
         $objectNode = null;
 
         if ($node instanceof Node\Expr\PropertyFetch) {
@@ -536,7 +528,17 @@ class TypeDeducer
         }
 
         // We use an associative array so we automatically avoid duplicate types.
-        return array_keys($types);
+        $types = array_keys($types);
+
+        $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
+
+        $localTypes = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset, $types);
+
+        if (!empty($localTypes)) {
+            return $localTypes;
+        }
+
+        return $types;
     }
 
     /**
@@ -750,10 +752,11 @@ class TypeDeducer
      * @param string     $code
      * @param string     $expression
      * @param int        $offset
+     * @param string[]   $defaultTypes
      *
      * @return string[]
      */
-    protected function getLocalExpressionTypes($file, $code, $expression, $offset)
+    protected function getLocalExpressionTypes($file, $code, $expression, $offset, $defaultTypes = [])
     {
         $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($code, $offset);
 
@@ -764,7 +767,15 @@ class TypeDeducer
             return [];
         }
 
-        return $this->getResolvedTypes($expressionTypeInfoMap, $expression, $file, $offsetLine, $code, $offset);
+        return $this->getResolvedTypes(
+            $expressionTypeInfoMap,
+            $expression,
+            $file,
+            $offsetLine,
+            $code,
+            $offset,
+            $defaultTypes
+        );
     }
 
     /**
@@ -773,16 +784,23 @@ class TypeDeducer
      * @param string             $file
      * @param string             $code
      * @param int                $offset
+     * @param string[]           $defaultTypes
      *
      * @return string[]
      */
-    protected function getTypes(ExpressionTypeInfo $expressionTypeInfo, $expression, $file, $code, $offset)
-    {
+    protected function getTypes(
+        ExpressionTypeInfo $expressionTypeInfo,
+        $expression,
+        $file,
+        $code,
+        $offset,
+        $defaultTypes = []
+    ) {
         if ($expressionTypeInfo->hasBestTypeOverrideMatch()) {
             return $this->typeAnalyzer->getTypesForTypeSpecification($expressionTypeInfo->getBestTypeOverrideMatch());
         }
 
-        $types = [];
+        $types = $defaultTypes;
 
         if ($expressionTypeInfo->hasBestMatch()) {
             $types = $this->getTypesForBestMatchNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code, $offset);
@@ -822,6 +840,7 @@ class TypeDeducer
      * @param string                $file
      * @param string                $code
      * @param int                   $offset
+     * @param string[]              $defaultTypes
      *
      * @return string[]
      */
@@ -830,11 +849,12 @@ class TypeDeducer
         $expression,
         $file,
         $code,
-        $offset
+        $offset,
+        $defaultTypes = []
     ) {
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
-        $types = $this->getTypes($expressionTypeInfo, $expression, $file, $code, $offset);
+        $types = $this->getTypes($expressionTypeInfo, $expression, $file, $code, $offset, $defaultTypes);
 
         $unreferencedTypes = [];
 
@@ -861,6 +881,7 @@ class TypeDeducer
      * @param int                   $line
      * @param string                $code
      * @param int                   $offset
+     * @param string[]              $defaultTypes
      *
      * @return string[]
      */
@@ -870,9 +891,10 @@ class TypeDeducer
         $file,
         $line,
         $code,
-        $offset
+        $offset,
+        $defaultTypes = []
     ) {
-        $types = $this->getUnreferencedTypes($expressionTypeInfoMap, $expression, $file, $code, $offset);
+        $types = $this->getUnreferencedTypes($expressionTypeInfoMap, $expression, $file, $code, $offset, $defaultTypes);
 
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 

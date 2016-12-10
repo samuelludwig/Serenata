@@ -471,6 +471,16 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyStartsFromTheDocblockTypeOfPropertiesBeforeApplyingConditionals()
+    {
+        $output = $this->deduceTypesFromExpression('IfWithProperty.phpt', '$b->foo');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyConfinesTreatsTernaryExpressionConditionAsSeparateScope()
     {
         $output = $this->deduceTypesFromExpression('InstanceofTernarySeparateScope.phpt', '$b');
