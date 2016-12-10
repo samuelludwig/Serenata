@@ -478,7 +478,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
             'defaultValue' => substr(
                 $this->code,
                 $node->args[1]->getAttribute('startFilePos'),
-                $node->args[1]->getAttribute('endFilePos') - $node->args[1]->value->getAttribute('startFilePos') + 1
+                $node->args[1]->getAttribute('endFilePos') - $node->args[1]->getAttribute('startFilePos') + 1
             )
         ];
     }

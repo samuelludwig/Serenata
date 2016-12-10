@@ -82,4 +82,22 @@ class GlobalConstantsCommandTest extends IndexedTest
             ]
         ], $output['\PHP_EOL']['types']);
     }
+
+    public function testCorrectlyFetchesDefaultValueOfDefineWithExpression()
+    {
+        $path = __DIR__ . '/GlobalConstantsCommandTest/' . 'DefineWithExpression.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = new GlobalConstantsCommand(
+            $container->get('constantConverter'),
+            $container->get('indexDatabase')
+        );
+
+        $output = $command->getGlobalConstants();
+
+        $this->assertEquals('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
+    }
 }
