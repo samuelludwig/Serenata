@@ -113,6 +113,7 @@ $foo[0]-> // The type is \DateTime.
 * Use statements were incorrectly reported as unused when they were being used as extension or implementation for anonymous classes.
 * PHP setups with the `cli.pager` option set will now no longer duplicate JSON output. (thanks to [molovo](https://github.com/molovo))
 * Parantheses inside strings were sometimes interfering with invocation info information, causing the wrong information to be returned.
+* When encountering UTF-8 encoding errors, a recovery will be attempted by performing a conversion (thanks to [Geelik](https://github.com/Geelik)).
 * The type of built-in global constants is now deduced from their default value as Reflection can't be used to fetch their type nor do we have any documentation data about them.
 * Previously a fix was applied to make FQCN's actually contain a leading slash to clearly indicate that they were fully qualified. This still didn't happen everywhere, which has been corrected now.
 * When a class has a method that overrides a base class method and implements an interface method from one of its own interfaces, both the `implementation` and `override` data will now be set as they are both relevant.

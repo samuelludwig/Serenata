@@ -199,7 +199,40 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      */
     protected function getEncodedResponse(JsonRpcResponse $response)
     {
-        return json_encode($response);
+        $data = json_encode($response);
+
+        // See also #147 and #248.
+        if (json_last_error() === JSON_ERROR_UTF8) {
+            trigger_error(
+                'The response could not be encoded in UTF-8 properly. Attempting to recover.',
+                E_USER_WARNING
+            );
+
+            $serializedData = $response->jsonSerialize();
+            $serializedData = $this->getCorrectedUtf8Data($serializedData);
+
+            $data = json_encode($serializedData);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return mixed
+     */
+    protected function getCorrectedUtf8Data($data)
+    {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->getCorrectedUtf8Data($value);
+            }
+        } elseif (is_string($data)) {
+            return utf8_encode($data);
+        }
+
+        return $data;
     }
 
     /**
