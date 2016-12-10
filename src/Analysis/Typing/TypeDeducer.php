@@ -392,11 +392,11 @@ class TypeDeducer
         $nameString = NodeHelpers::fetchClassName($node);
 
         if ($nameString === 'static' || $nameString === 'self') {
-            $currentClass = $this->getCurrentClassAt($file, $code, $offset);
+            $currentClass = $this->findCurrentClassAt($file, $code, $offset);
 
             return [$this->typeAnalyzer->getNormalizedFqcn($currentClass)];
         } elseif ($nameString === 'parent') {
-            $currentClassName = $this->getCurrentClassAt($file, $code, $offset);
+            $currentClassName = $this->findCurrentClassAt($file, $code, $offset);
 
             if (!$currentClassName) {
                 return [];
@@ -916,11 +916,11 @@ class TypeDeducer
      *
      * @return string|null
      */
-    protected function getCurrentClassAt($file, $source, $offset)
+    protected function findCurrentClassAt($file, $source, $offset)
     {
         $line = SourceCodeHelpers::calculateLineByOffset($source, $offset);
 
-        return $this->getCurrentClassAtLine($file, $source, $line);
+        return $this->findCurrentClassAtLine($file, $source, $line);
     }
 
     /**
@@ -930,7 +930,7 @@ class TypeDeducer
      *
      * @return string|null
      */
-    protected function getCurrentClassAtLine($file, $source, $line)
+    protected function findCurrentClassAtLine($file, $source, $line)
     {
         $classes = $this->fileClassListProvider->getClassListForFile($file);
 
