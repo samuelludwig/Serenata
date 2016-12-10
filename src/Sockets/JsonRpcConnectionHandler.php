@@ -180,7 +180,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      */
     public function send(JsonRpcResponse $response, $force = false)
     {
-        $responseContent = json_encode($response);
+        $responseContent = $this->getEncodedResponse($response);
 
         if (empty($responseContent)) {
             trigger_error(
@@ -190,6 +190,16 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
         }
 
         $this->writeRawResponse($responseContent, $force);
+    }
+
+    /**
+     * @param JsonRpcResponse $response
+     *
+     * @return string
+     */
+    protected function getEncodedResponse(JsonRpcResponse $response)
+    {
+        return json_encode($response);
     }
 
     /**
