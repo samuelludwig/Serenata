@@ -507,7 +507,7 @@ class TypeDeducer
 
         $typesOfVar = $this->deduceTypesFromNode($objectNode, $file, $code, $offset);
 
-        $types = [];
+        $typeMap = [];
 
         foreach ($typesOfVar as $type) {
             $info = null;
@@ -522,13 +522,13 @@ class TypeDeducer
                 $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['properties'][$node->name]['types']);
 
                 if (!empty($fetchedTypes)) {
-                    $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
+                    $typeMap += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
                 }
             }
         }
 
         // We use an associative array so we automatically avoid duplicate types.
-        $types = array_keys($types);
+        $types = array_keys($typeMap);
 
         $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
 
