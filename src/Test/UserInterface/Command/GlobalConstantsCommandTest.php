@@ -39,6 +39,9 @@ class GlobalConstantsCommandTest extends IndexedTest
         return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
     }
 
+    /**
+     * @return void
+     */
     public function testGlobalConstants()
     {
         $output = $this->getGlobalConstants('GlobalConstants.phpt');
@@ -103,6 +106,9 @@ class GlobalConstantsCommandTest extends IndexedTest
         ], $output['\PHP_EOL']['types']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyFetchesDefaultValueOfDefineWithExpression()
     {
         $output = $this->getGlobalConstants('DefineWithExpression.phpt');
