@@ -8,9 +8,14 @@ use PhpIntegrator\Test\IndexedTest;
 
 class GlobalConstantsCommandTest extends IndexedTest
 {
-    public function testGlobalConstants()
+    /**
+     * @param string $file
+     *
+     * @return array
+     */
+    protected function getGlobalConstants($file)
     {
-        $path = __DIR__ . '/GlobalConstantsCommandTest/' . 'GlobalConstants.phpt';
+        $path = $this->getPathFor($file);
 
         $container = $this->createTestContainer();
 
@@ -21,7 +26,22 @@ class GlobalConstantsCommandTest extends IndexedTest
             $container->get('indexDatabase')
         );
 
-        $output = $command->getGlobalConstants();
+        return $command->getGlobalConstants();
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor($file)
+    {
+        return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
+    }
+
+    public function testGlobalConstants()
+    {
+        $output = $this->getGlobalConstants('GlobalConstants.phpt');
 
         $this->assertThat($output, $this->arrayHasKey('\DEFINE_CONSTANT'));
         $this->assertEquals($output['\DEFINE_CONSTANT']['name'], 'DEFINE_CONSTANT');
@@ -85,18 +105,7 @@ class GlobalConstantsCommandTest extends IndexedTest
 
     public function testCorrectlyFetchesDefaultValueOfDefineWithExpression()
     {
-        $path = __DIR__ . '/GlobalConstantsCommandTest/' . 'DefineWithExpression.phpt';
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $command = new GlobalConstantsCommand(
-            $container->get('constantConverter'),
-            $container->get('indexDatabase')
-        );
-
-        $output = $command->getGlobalConstants();
+        $output = $this->getGlobalConstants('DefineWithExpression.phpt');
 
         $this->assertEquals('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
     }
