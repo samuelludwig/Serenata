@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Test\Parsing;
+namespace PhpIntegrator\Tests\Parsing;
 
 use PhpIntegrator\Parsing\DocblockParser;
 

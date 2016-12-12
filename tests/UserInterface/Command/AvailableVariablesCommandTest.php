@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Test\UserInterface\Command;
+namespace PhpIntegrator\Tests\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\AvailableVariablesCommand;
 
-use PhpIntegrator\Test\IndexedTest;
+use PhpIntegrator\Tests\IndexedTest;
 
 class AvailableVariablesCommandTest extends IndexedTest
 {

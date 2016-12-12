@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Test\UserInterface\Command;
+namespace PhpIntegrator\Tests\UserInterface\Command;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 use PhpIntegrator\UserInterface\Command\LocalizeTypeCommand;
 
-use PhpIntegrator\Test\IndexedTest;
+use PhpIntegrator\Tests\IndexedTest;
 
 class LocalizeTypeCommandTest extends IndexedTest
 {
