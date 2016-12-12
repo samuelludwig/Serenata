@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Test\UserInterface\Command;
+namespace PhpIntegrator\Tests\UserInterface\Command;
 
 use ReflectionClass;
 
 use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
-use PhpIntegrator\Test\IndexedTest;
+use PhpIntegrator\Tests\IndexedTest;
 
 class DeduceTypesCommandTest extends IndexedTest
 {

@@ -13,6 +13,12 @@
         }
     },
 
+    "autoload-dev": {
+        "psr-4": {
+            "PhpIntegrator\\Tests\\": "tests/"
+        }
+    },
+
     "require": {
         "php": ">=5.5.0",
         "ext-mbstring": "*",

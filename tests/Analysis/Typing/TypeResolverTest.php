@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Test\Analysis\Typing;
+namespace PhpIntegrator\Tests\Analysis\Typing;
 
 use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;

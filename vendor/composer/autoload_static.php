@@ -29,6 +29,7 @@ class ComposerStaticInit6d911d2c0317086b52990384597ba6c1
         'P' => 
         array (
             'PhpParser\\' => 10,
+            'PhpIntegrator\\Tests\\' => 20,
             'PhpIntegrator\\' => 14,
         ),
         'D' => 
@@ -73,6 +74,10 @@ class ComposerStaticInit6d911d2c0317086b52990384597ba6c1
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
+        ),
+        'PhpIntegrator\\Tests\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
         ),
         'PhpIntegrator\\' => 
         array (
@@ -639,21 +644,6 @@ class ComposerStaticInit6d911d2c0317086b52990384597ba6c1
         'PhpIntegrator\\Sockets\\JsonRpcResponseSenderInterface' => __DIR__ . '/../..' . '/src/Sockets/JsonRpcResponseSenderInterface.php',
         'PhpIntegrator\\Sockets\\RequestParsingException' => __DIR__ . '/../..' . '/src/Sockets/RequestParsingException.php',
         'PhpIntegrator\\Sockets\\SocketServer' => __DIR__ . '/../..' . '/src/Sockets/SocketServer.php',
-        'PhpIntegrator\\Test\\Analysis\\Typing\\TypeResolverTest' => __DIR__ . '/../..' . '/src/Test/Analysis/Typing/TypeResolverTest.php',
-        'PhpIntegrator\\Test\\Analysis\\Visiting\\ScopeLimitingVisitorTest' => __DIR__ . '/../..' . '/src/Test/Analysis/Visiting/ScopeLimitingVisitorTest.php',
-        'PhpIntegrator\\Test\\IndexedTest' => __DIR__ . '/../..' . '/src/Test/IndexedTest.php',
-        'PhpIntegrator\\Test\\Parsing\\DocblockParserTest' => __DIR__ . '/../..' . '/src/Test/Parsing/DocblockParserTest.php',
-        'PhpIntegrator\\Test\\Parsing\\PartialParserTest' => __DIR__ . '/../..' . '/src/Test/Parsing/PartialParserTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\AvailableVariablesCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/AvailableVariablesCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\ClassInfoCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/ClassInfoCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\ClassListCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/ClassListCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\DeduceTypesCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/DeduceTypesCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\GlobalConstantsCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/GlobalConstantsCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\GlobalFunctionsCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/GlobalFunctionsCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\LocalizeTypeCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/LocalizeTypeCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\NamespaceListCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/NamespaceListCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\ResolveTypeCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/ResolveTypeCommandTest.php',
-        'PhpIntegrator\\Test\\UserInterface\\Command\\SemanticLintCommandTest' => __DIR__ . '/../..' . '/src/Test/UserInterface/Command/SemanticLintCommandTest.php',
         'PhpIntegrator\\UserInterface\\AbstractApplication' => __DIR__ . '/../..' . '/src/UserInterface/AbstractApplication.php',
         'PhpIntegrator\\UserInterface\\ClasslikeInfoBuilderProviderCachingProxy' => __DIR__ . '/../..' . '/src/UserInterface/ClasslikeInfoBuilderProviderCachingProxy.php',
         'PhpIntegrator\\UserInterface\\ClasslikeInfoBuilderWhiteHolingProxyProvider' => __DIR__ . '/../..' . '/src/UserInterface/ClasslikeInfoBuilderWhiteHolingProxyProvider.php',
