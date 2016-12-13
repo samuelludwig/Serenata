@@ -1,4 +1,5 @@
 ## 2.0.1
+* Fix the class keyword being used as constant as default value for properties generating an error.
 * Fix (hopefully) PHP 7.1 nullable types generating parsing errors.
   * This only fixes them generating errors during indexing, but they aren't fully supported just yet.
 

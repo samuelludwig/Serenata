@@ -581,6 +581,26 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithSpecialClassConstantClassKeyword()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+<?php
+
+Test::class
+SOURCE;
+
+        $result = $partialParser->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
+        $this->assertEquals('Test', $result->class->toString());
+        $this->assertEquals('class', $result->name);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithMultiplicationOperator()
     {
         $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
