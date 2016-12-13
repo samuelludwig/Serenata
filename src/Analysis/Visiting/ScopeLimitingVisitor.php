@@ -159,8 +159,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node  $node
-     * @param array $properties
+     * @param Node $node
      */
     protected function restoreNodeProperties(Node $node)
     {
