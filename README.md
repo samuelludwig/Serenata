@@ -15,6 +15,7 @@ via composer. This in turn requests that the users of those plugins have compose
 entry barrier for new users.
 
 ## Where is it used?
-Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also [the list of projects](https://github.com/php-integrator).
+Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
+[the list of projects](https://github.com/php-integrator).
 
 ![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)
