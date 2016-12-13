@@ -4,9 +4,9 @@
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ">Send me some coffee beans</a>
 </p>
 
-PHP Integrator indexes PHP code and performs static analysis. This information is stored in an index database and the
-command line can then be used to fetch information in JSON format to provide various functionalities, such as
-autocompletion, code navigation and tooltips.
+PHP Integrator is a server that indexes PHP code and performs static analysis. It stores its information in a database
+and can retrieve information about your code to clients by communicating over sockets. Clients can use this information
+to provide various functionalities, such as autocompletion, code navigation and tooltips.
 
 ## Why are the Composer dependencies in Git?
 This is something I'd rather have avoided, but as this code acts as a sort of payload for editor extensions and plugins
