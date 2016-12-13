@@ -209,7 +209,7 @@ class PartialParser implements Parser
         $expression = trim($expression);
 
         if (empty($expression)) {
-            return [];
+            throw new \PhpParser\Error('Could not parse last expression for code, the last expression was "' . $expression . '"');
         }
 
         $correctedExpression = $this->getNormalizedCode($expression);
@@ -412,7 +412,13 @@ class PartialParser implements Parser
                     break;
                 }
 
-                $node = $this->getLastNodeAt($code, $i);
+                $node = null;
+
+                try {
+                    $node = $this->getLastNodeAt($code, $i);
+                } catch (\PhpParser\Error $e) {
+                    $node = null;
+                }
 
                 if ($node) {
                     $type = null;
