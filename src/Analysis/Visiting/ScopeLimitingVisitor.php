@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use PhpIntegrator\Utility\DummyExprNode;
+use PhpIntegrator\Parsing\Node\Expr\Dummy;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
@@ -82,7 +82,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
 
                         $node->stmts = [];
                         $node->elseifs = [$elseIfNode];
-                        $node->cond = new DummyExprNode();
+                        $node->cond = new Dummy();
                         break;
                     }
                 }
@@ -92,7 +92,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
 
                     $node->stmts = [];
                     $node->elseifs = [];
-                    $node->cond = new DummyExprNode();
+                    $node->cond = new Dummy();
                 }
             } elseif ($node instanceof Node\Stmt\Switch_) {
                 // Case statements do encompass their statements with their start and end position, but they do not
