@@ -3,7 +3,7 @@
   "main": "./lib/Main",
   "version": "2.0.0",
   "description": "Core package for PHP integrator, which contains the PHP payload for php-integrator-base.",
-  "repository": "https://github.com/php-integrator/core.git",
+  "repository": "php-integrator/core",
   "license": "GPL-3.0",
   "engines": {},
   "dependencies": {},
