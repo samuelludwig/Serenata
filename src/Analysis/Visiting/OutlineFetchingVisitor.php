@@ -315,9 +315,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         foreach ($node->getParams() as $i => $param) {
             $localType = null;
 
+            // TODO: Support NullableType (PHP 7.1).
             if ($param->type instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($param->type);
-            } elseif ($param->type) {
+            } elseif (is_string($param->type)) {
                 $localType = (string) $param->type;
             }
 
@@ -346,9 +347,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $localType = null;
         $nodeType = $node->getReturnType();
 
+        // TODO: Support NullableType (PHP 7.1).
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
-        } elseif ($nodeType) {
+        } elseif (is_string($nodeType)) {
             $localType = (string) $nodeType;
         }
 
@@ -357,9 +359,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         foreach ($node->getParams() as $i => $param) {
             $resolvedType = null;
 
+            // TODO: Support NullableType (PHP 7.1).
             if ($param->type instanceof Node\Name) {
                 $resolvedType = NodeHelpers::fetchClassName($param->type->getAttribute('resolvedName'));
-            } elseif ($param->type) {
+            } elseif (is_string($param->type)) {
                 $resolvedType = (string) $param->type;
             }
 
@@ -369,9 +372,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $resolvedType = null;
         $nodeType = $node->getReturnType();
 
+        // TODO: Support NullableType (PHP 7.1).
         if ($nodeType instanceof Node\Name) {
             $resolvedType = NodeHelpers::fetchClassName($nodeType);
-        } elseif ($nodeType) {
+        } elseif (is_string($nodeType)) {
             $resolvedType = (string) $nodeType;
         }
 

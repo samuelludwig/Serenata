@@ -666,6 +666,7 @@ class TypeDeducer
                     }
                 }
 
+                // TODO: Support NullableType (PHP 7.1).
                 if ($param->type instanceof Node\Name) {
                     $typeHintType = NodeHelpers::fetchClassName($param->type);
 
@@ -674,9 +675,11 @@ class TypeDeducer
                     }
 
                     return [$typeHintType];
+                } elseif (is_string($param->type)) {
+                    return [$param->type];
                 }
 
-                return $param->type ? [$param->type] : [];
+                return [];
             }
         }
 
