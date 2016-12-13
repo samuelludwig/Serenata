@@ -30,7 +30,7 @@ class CacheClearingEventMediator
     protected $eventName;
 
     /**
-    * @param ClearableCacheInterface $clearableCache
+     * @param ClearableCacheInterface $clearableCache
      * @param EventEmitterInterface   $eventEmitter
      * @param string                  $eventName
      */
