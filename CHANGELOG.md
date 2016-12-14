@@ -1,3 +1,6 @@
+## 2.0.2
+* Fix an error message `Call to a member function handleError() on null` showing up when duplicate use statements were found.
+
 ## 2.0.1
 * Fix the class keyword being used as constant as default value for properties generating an error.
 * Fix (hopefully) PHP 7.1 nullable types generating parsing errors.
