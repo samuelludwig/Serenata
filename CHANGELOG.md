@@ -1,4 +1,5 @@
 ## 2.0.2
+* Fix a database transaction not being terminated correctly when indexing failed.
 * Fix an error message `Call to a member function handleError() on null` showing up when duplicate use statements were found.
 
 ## 2.0.1
