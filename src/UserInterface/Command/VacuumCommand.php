@@ -31,7 +31,7 @@ class VacuumCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        $success = $this->initialize();
+        $success = $this->vacuum();
 
         return $success;
     }
@@ -39,7 +39,7 @@ class VacuumCommand extends AbstractCommand
     /**
      * @return bool
      */
-    public function initialize()
+    public function vacuum()
     {
         $this->projectIndexer->pruneRemovedFiles();
 
