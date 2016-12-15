@@ -795,6 +795,23 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithShiftLeftExpressionWithAZeroAsRightOperand()
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            1 << 0
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result);
+        $this->assertEquals(0, $result->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithBooleanNotOperator()
     {
         $source = <<<'SOURCE'
