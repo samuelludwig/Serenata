@@ -821,6 +821,46 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithShiftLeftOperator()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+            <?php
+
+            5 << $this->one
+SOURCE;
+
+        $result = $partialParser->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetLastNodeAtCorrectlyDealsWithShiftRightOperator()
+    {
+        $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
+
+        $source = <<<'SOURCE'
+            <?php
+
+            5 >> $this->one
+SOURCE;
+
+        $result = $partialParser->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithBooleanNotOperator()
     {
         $partialParser = new PartialParser($this->getParserFactoryStub(), $this->getPrettyPrinterStub());
