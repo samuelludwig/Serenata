@@ -208,7 +208,7 @@ class PartialParser implements Parser
         $expression = substr($code, $boundary);
         $expression = trim($expression);
 
-        if (empty($expression)) {
+        if ($expression === '') {
             throw new \PhpParser\Error('Could not parse last expression for code, the last expression was "' . $expression . '"');
         }
 

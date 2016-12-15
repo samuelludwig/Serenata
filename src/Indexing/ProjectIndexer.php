@@ -149,8 +149,6 @@ class ProjectIndexer
         $iterator = new Iterating\ExclusionFilterIterator($iterator, $excludedPaths);
         $iterator = new Iterating\ModificationTimeFilterIterator($iterator, $fileModifiedMap);
 
-        $this->storage->beginTransaction();
-
         $this->logMessage('Scanning and indexing files that need (re)indexing...');
 
         $totalItems = iterator_count($iterator);
@@ -187,8 +185,6 @@ class ProjectIndexer
 
             $this->sendProgress(++$i, $totalItems);
         }
-
-        $this->storage->commitTransaction();
     }
 
     /**

@@ -56,6 +56,8 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     public function __construct(TypeNormalizerInterface $typeNormalizer, $code)
     {
+        parent::__construct();
+
         $this->typeNormalizer = $typeNormalizer;
         $this->code = $code;
     }
