@@ -862,14 +862,18 @@ class TypeDeducer
         $unreferencedTypes = [];
 
         foreach ($types as $type) {
+            $unrefencedTypesForType = [];
+
             if (in_array($type, ['self', 'static', '$this'], true)) {
-                $unreferencedTypes = array_merge(
-                    $unreferencedTypes,
-                    $this->getUnreferencedTypes($expressionTypeInfoMap, '$this', $file, $code, $offset)
-                );
+                $unrefencedTypesForType = $this->getUnreferencedTypes($expressionTypeInfoMap, '$this', $file, $code, $offset);
             } else {
-                $unreferencedTypes[] = $type;
+                $unrefencedTypesForType = [$type];
             }
+
+            $unreferencedTypes = array_merge(
+                $unreferencedTypes,
+                $unrefencedTypesForType
+            );
         }
 
         return $unreferencedTypes;
