@@ -350,6 +350,18 @@ class TypeDeducer
      */
     protected function deduceNodesFromSelfNode(Parsing\Node\Keyword\Self_ $node, $file, $code, $offset)
     {
+        return $this->deduceTypesFromSelf($file, $code, $offset);
+    }
+
+    /**
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromSelf($file, $code, $offset)
+    {
         return $this->deduceTypesFromNode(new Node\Name('self'), $file, $code, $offset);
     }
 
@@ -363,6 +375,18 @@ class TypeDeducer
      */
     protected function deduceTypesFromStaticNode(Parsing\Node\Keyword\Static_ $node, $file, $code, $offset)
     {
+        return $this->deduceTypesFromStatic($file, $code, $offset);
+    }
+
+    /**
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromStatic($file, $code, $offset)
+    {
         return $this->deduceTypesFromNode(new Node\Name('static'), $file, $code, $offset);
     }
 
@@ -375,6 +399,18 @@ class TypeDeducer
      * @return string[]
      */
     protected function deduceTypesFromParentNode(Parsing\Node\Keyword\Parent_ $node, $file, $code, $offset)
+    {
+        return $this->deduceTypesFromParent($file, $code, $offset);
+    }
+
+    /**
+     * @param string|null $file
+     * @param string      $code
+     * @param int         $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromParent($file, $code, $offset)
     {
         return $this->deduceTypesFromNode(new Node\Name('parent'), $file, $code, $offset);
     }
