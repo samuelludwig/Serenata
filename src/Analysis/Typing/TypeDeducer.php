@@ -900,8 +900,10 @@ class TypeDeducer
         foreach ($types as $type) {
             $unrefencedTypesForType = [];
 
-            if (in_array($type, ['self', 'static', '$this'], true)) {
-                $unrefencedTypesForType = $this->getUnreferencedTypes($expressionTypeInfoMap, '$this', $file, $code, $offset);
+            if ($type === 'self') {
+                $unreferencedTypes = $this->deduceTypesFromSelf($file, $code, $offset);
+            } elseif ($type === 'static' || $type === '$this') {
+                $unreferencedTypes = $this->deduceTypesFromStatic($file, $code, $offset);
             } else {
                 $unrefencedTypesForType = [$type];
             }
