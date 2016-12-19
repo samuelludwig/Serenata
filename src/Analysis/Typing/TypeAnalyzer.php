@@ -20,6 +20,21 @@ class TypeAnalyzer implements TypeNormalizerInterface
     const ARRAY_TYPE_HINT_REGEX = '/^(.+)\[\]$/';
 
     /**
+     * @var string
+     */
+    const TYPE_SELF = 'self';
+
+    /**
+     * @var string
+     */
+    const TYPE_STATIC = 'static';
+
+    /**
+     * @var string
+     */
+    const TYPE_THIS = '$this';
+
+    /**
      * Indicates if a type is "special", i.e. it is not an actual class type, but rather a basic type (e.g. "int",
      * "bool", ...) or another special type (e.g. "$this", "false", ...).
      *
@@ -150,5 +165,77 @@ class TypeAnalyzer implements TypeNormalizerInterface
         }
 
         throw new UnexpectedValueException('"' . $type . '" is not an array type hint');
+    }
+
+    /**
+     * Takes an actual (single) docblock type that contains self and replaces it with the designated type.
+     *
+     * @param string $docblockType
+     * @param string $newType
+     *
+     * @example "self" with new type "Foo" becomes "Foo".
+     * @example "self[]" with new type "\A\B" becomes "\A\B[]".
+     *
+     * @return string
+     */
+    public function interchangeSelfWithActualType($docblockType, $newType)
+    {
+        return $this->interchangeType($docblockType, self::TYPE_SELF, $newType);
+    }
+
+    /**
+     * Takes an actual (single) docblock type that contains static and replaces it with the designated type.
+     *
+     * @param string $docblockType
+     * @param string $newType
+     *
+     * @example "static" with new type "Foo" becomes "Foo".
+     * @example "static[]" with new type "\A\B" becomes "\A\B[]".
+     *
+     * @return string
+     */
+    public function interchangeStaticWithActualType($docblockType, $newType)
+    {
+        return $this->interchangeType($docblockType, self::TYPE_STATIC, $newType);
+    }
+
+    /**
+     * Takes an actual (single) docblock type that contains self and replaces it with the designated type.
+     *
+     * @param string $docblockType
+     * @param string $newType
+     *
+     * @example "self" with new type "Foo" becomes "Foo".
+     * @example "self[]" with new type "\A\B" becomes "\A\B[]".
+     *
+     * @return string
+     */
+    public function interchangeThisWithActualType($docblockType, $newType)
+    {
+        return $this->interchangeType($docblockType, self::TYPE_THIS, $newType);
+    }
+
+    /**
+     * Takes an actual (single) docblock type and replaces it with the designated type.
+     *
+     * @param string $docblockType
+     * @param string $oldType
+     * @param string $newType
+     *
+     * @return string
+     */
+    protected function interchangeType($docblockType, $oldType, $newType)
+    {
+        if ($this->isArraySyntaxTypeHint($docblockType)) {
+            $valueType = $this->getValueTypeFromArraySyntaxTypeHint($docblockType);
+
+            if ($valueType === $oldType) {
+                return $newType . '[]';
+            }
+        } elseif ($docblockType === $oldType) {
+            return $newType;
+        }
+
+        return $docblockType;
     }
 }

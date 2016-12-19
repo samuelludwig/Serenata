@@ -897,21 +897,20 @@ class TypeDeducer
 
         $unreferencedTypes = [];
 
+        $selfType = $this->deduceTypesFromSelf($file, $code, $offset);
+        $selfType = array_shift($selfType);
+        $selfType = $selfType ?: '';
+
+        $staticType = $this->deduceTypesFromStatic($file, $code, $offset);
+        $staticType = array_shift($staticType);
+        $staticType = $staticType ?: '';
+
         foreach ($types as $type) {
-            $unrefencedTypesForType = [];
+            $type = $this->typeAnalyzer->interchangeSelfWithActualType($type, $selfType);
+            $type = $this->typeAnalyzer->interchangeStaticWithActualType($type, $staticType);
+            $type = $this->typeAnalyzer->interchangeThisWithActualType($type, $staticType);
 
-            if ($type === 'self') {
-                $unreferencedTypes = $this->deduceTypesFromSelf($file, $code, $offset);
-            } elseif ($type === 'static' || $type === '$this') {
-                $unreferencedTypes = $this->deduceTypesFromStatic($file, $code, $offset);
-            } else {
-                $unrefencedTypesForType = [$type];
-            }
-
-            $unreferencedTypes = array_merge(
-                $unreferencedTypes,
-                $unrefencedTypesForType
-            );
+            $unreferencedTypes[] = $type;
         }
 
         return $unreferencedTypes;
