@@ -37,6 +37,9 @@ use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
 use PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryCachingDecorator;
 
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerFactory;
+
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;
 use PhpIntegrator\Indexing\IndexDatabase;
@@ -318,7 +321,7 @@ abstract class AbstractApplication
             ]);
 
         $container
-            ->register('typeDeducer', TypeDeducer::class)
+            ->register('nodeTypeDeducerFactory', NodeTypeDeducerFactory::class)
             ->setArguments([
                 new Reference('parser'),
                 new Reference('fileClassListProvider'),
@@ -334,12 +337,16 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('nodeTypeDeducer', NodeTypeDeducer::class)
+            ->setArguments([new Reference('nodeTypeDeducerFactory')]);
+
+        $container
             ->register('builtinIndexer', BuiltinIndexer::class)
             ->setArguments([
                 new Reference('indexDatabase'),
                 new Reference('typeAnalyzer'),
                 new Reference('partialParser'),
-                new Reference('typeDeducer')
+                new Reference('nodeTypeDeducer')
             ]);
 
         $container
@@ -350,7 +357,7 @@ abstract class AbstractApplication
                 new Reference('typeResolver'),
                 new Reference('docblockParser'),
                 new Reference('partialParser'),
-                new Reference('typeDeducer'),
+                new Reference('nodeTypeDeducer'),
                 new Reference('parser')
             ]);
 
@@ -443,7 +450,7 @@ abstract class AbstractApplication
                 new Reference('sourceCodeStreamReader'),
                 new Reference('parser'),
                 new Reference('fileTypeResolverFactory'),
-                new Reference('typeDeducer'),
+                new Reference('nodeTypeDeducer'),
                 new Reference('classlikeInfoBuilder'),
                 new Reference('docblockParser'),
                 new Reference('typeAnalyzer'),
@@ -464,7 +471,7 @@ abstract class AbstractApplication
         $container
             ->register('deduceTypesCommand', Command\DeduceTypesCommand::class)
             ->setArguments([
-                    new Reference('typeDeducer'),
+                    new Reference('nodeTypeDeducer'),
                     new Reference('partialParser'),
                     new Reference('sourceCodeStreamReader')
                 ]);

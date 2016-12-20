@@ -5,13 +5,14 @@ namespace PhpIntegrator\Indexing;
 use Exception;
 use ReflectionClass;
 use ReflectionMethod;
-use ReflectionFunction;
 use ReflectionProperty;
+use ReflectionFunction;
 use ReflectionParameter;
 use ReflectionFunctionAbstract;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpParser\Parser;
 
@@ -38,9 +39,9 @@ class BuiltinIndexer
     protected $parser;
 
     /**
-     * @var TypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $typeDeducer;
+    protected $nodeTypeDeducer;
 
     /**
      * @var array
@@ -63,21 +64,21 @@ class BuiltinIndexer
     protected $documentationData;
 
     /**
-     * @param StorageInterface $storage
-     * @param TypeAnalyzer     $typeAnalyzer
-     * @param Parser           $parser
-     * @param TypeDeducer      $typeDeducer
+     * @param StorageInterface         $storage
+     * @param TypeAnalyzer             $typeAnalyzer
+     * @param Parser                   $parser
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
      */
     public function __construct(
         StorageInterface $storage,
         TypeAnalyzer $typeAnalyzer,
         Parser $parser,
-        TypeDeducer $typeDeducer
+        NodeTypeDeducerInterface $nodeTypeDeducer
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->parser = $parser;
-        $this->typeDeducer = $typeDeducer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**
@@ -178,7 +179,7 @@ class BuiltinIndexer
         if (!empty($defaultValue)) {
             $nodes = $this->parser->parse($defaultValue);
 
-            $typeList = $this->typeDeducer->deduceTypesFromNode(
+            $typeList = $this->nodeTypeDeducer->deduceTypesFromNode(
                 $nodes[0],
                 'test',
                 $defaultValue,

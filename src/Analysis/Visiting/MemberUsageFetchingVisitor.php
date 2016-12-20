@@ -6,8 +6,9 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -58,9 +59,9 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     protected $code;
 
     /**
-     * @var TypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $typeDeducer;
+    protected $nodeTypeDeducer;
 
     /**
      * @var TypeAnalyzer
@@ -73,20 +74,20 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     protected $classlikeInfoBuilder;
 
     /**
-     * @param TypeDeducer          $typeDeducer
-     * @param ClasslikeInfoBuilder $classlikeInfoBuilder
-     * @param TypeAnalyzer         $typeAnalyzer
-     * @param string               $file
-     * @param string               $code
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
+     * @param TypeAnalyzer             $typeAnalyzer
+     * @param string                   $file
+     * @param string                   $code
      */
     public function __construct(
-        TypeDeducer $typeDeducer,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
         $file,
         $code
     ) {
-        $this->typeDeducer = $typeDeducer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->file = $file;
@@ -123,7 +124,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
             $nodeToDeduceTypeFrom = $node->class;
         }
 
-        $objectTypes = $this->typeDeducer->deduceTypesFromNode(
+        $objectTypes = $this->nodeTypeDeducer->deduceTypesFromNode(
             $nodeToDeduceTypeFrom,
             $this->file,
             $this->code,

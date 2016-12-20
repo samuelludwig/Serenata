@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Parsing\PartialParser;
 
@@ -19,9 +19,9 @@ use PhpParser\Node;
 class DeduceTypesCommand extends AbstractCommand
 {
     /**
-     * @var TypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $typeDeducer;
+    protected $nodeTypeDeducer;
 
     /**
      * @var PartialParser
@@ -34,16 +34,16 @@ class DeduceTypesCommand extends AbstractCommand
     protected $sourceCodeStreamReader;
 
     /**
-     * @param TypeDeducer            $typeDeducer
-     * @param PartialParser          $partialParser
-     * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @param PartialParser            $partialParser
+     * @param SourceCodeStreamReader   $sourceCodeStreamReader
      */
     public function __construct(
-        TypeDeducer $typeDeducer,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         PartialParser $partialParser,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
-        $this->typeDeducer = $typeDeducer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->partialParser = $partialParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
@@ -126,7 +126,7 @@ class DeduceTypesCommand extends AbstractCommand
      */
     protected function deduceTypes($file, $code, Node $node, $offset)
     {
-        return $this->typeDeducer->deduceTypesFromNode($node, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduceTypesFromNode($node, $file, $code, $offset);
     }
 
     /**

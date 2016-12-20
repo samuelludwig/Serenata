@@ -6,10 +6,11 @@ use DateTime;
 use Exception;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\FileTypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeResolverInterface;
+
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
@@ -62,9 +63,9 @@ class FileIndexer
     protected $parser;
 
     /**
-     * @var TypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $typeDeducer;
+    protected $nodeTypeDeducer;
 
     /**
      * @var Parser
@@ -82,13 +83,13 @@ class FileIndexer
     protected $structureTypeMap;
 
     /**
-     * @param StorageInterface      $storage
-     * @param TypeAnalyzer          $typeAnalyzer
-     * @param TypeResolverInterface $typeResolver
-     * @param DocblockParser        $docblockParser
-     * @param Parser                $defaultValueParser
-     * @param TypeDeducer           $typeDeducer
-     * @param Parser                $parser
+     * @param StorageInterface         $storage
+     * @param TypeAnalyzer             $typeAnalyzer
+     * @param TypeResolverInterface    $typeResolver
+     * @param DocblockParser           $docblockParser
+     * @param Parser                   $defaultValueParser
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @param Parser                   $parser
      */
     public function __construct(
         StorageInterface $storage,
@@ -96,7 +97,7 @@ class FileIndexer
         TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
         Parser $defaultValueParser,
-        TypeDeducer $typeDeducer,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         Parser $parser
     ) {
         $this->storage = $storage;
@@ -104,7 +105,7 @@ class FileIndexer
         $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
         $this->defaultValueParser = $defaultValueParser;
-        $this->typeDeducer = $typeDeducer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
     }
 
@@ -486,7 +487,7 @@ class FileIndexer
         } elseif (!empty($rawData['defaultValue'])) {
             $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
 
-            $typeList = $this->typeDeducer->deduceTypesFromNode(
+            $typeList = $this->nodeTypeDeducer->deduceTypesFromNode(
                 $nodes[0],
                 $filePath,
                 $rawData['defaultValue'],
@@ -568,7 +569,7 @@ class FileIndexer
         } elseif ($rawData['defaultValue']) {
             $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
 
-            $typeList = $this->typeDeducer->deduceTypesFromNode(
+            $typeList = $this->nodeTypeDeducer->deduceTypesFromNode(
                 $nodes[0],
                 $filePath,
                 $rawData['defaultValue'],

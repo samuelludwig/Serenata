@@ -24,7 +24,7 @@ class SemanticLintCommandTest extends IndexedTest
             $container->get('sourceCodeStreamReader'),
             $container->get('parser'),
             $container->get('fileTypeResolverFactory'),
-            $container->get('typeDeducer'),
+            $container->get('nodeTypeDeducer'),
             $container->get('classlikeInfoBuilder'),
             $container->get('docblockParser'),
             $container->get('typeAnalyzer'),

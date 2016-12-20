@@ -8,12 +8,13 @@ use PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\ClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\GlobalFunctionExistanceChecker;
 use PhpIntegrator\Analysis\GlobalConstantExistanceChecker;
+use PhpIntegrator\Analysis\GlobalFunctionExistanceChecker;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
+
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -46,9 +47,9 @@ class SemanticLintCommand extends AbstractCommand
     protected $fileTypeResolverFactory;
 
     /**
-     * @var TypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $typeDeducer;
+    protected $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
@@ -89,7 +90,7 @@ class SemanticLintCommand extends AbstractCommand
      * @param SourceCodeStreamReader           $sourceCodeStreamReader
      * @param Parser                           $parser
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeDeducer                      $typeDeducer
+     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
      * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
@@ -102,7 +103,7 @@ class SemanticLintCommand extends AbstractCommand
         SourceCodeStreamReader $sourceCodeStreamReader,
         Parser $parser,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        TypeDeducer $typeDeducer,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
@@ -114,7 +115,7 @@ class SemanticLintCommand extends AbstractCommand
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->parser = $parser;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeDeducer = $typeDeducer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -227,7 +228,7 @@ class SemanticLintCommand extends AbstractCommand
 
             if ($retrieveUnknownMembers) {
                 $unknownMemberAnalyzer = new Linting\UnknownMemberAnalyzer(
-                    $this->typeDeducer,
+                    $this->nodeTypeDeducer,
                     $this->classlikeInfoBuilder,
                     $this->typeAnalyzer,
                     $file,
