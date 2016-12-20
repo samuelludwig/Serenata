@@ -2,7 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing\Deduction;
 
-use LogicException;
 use UnexpectedValueException;
 
 use PhpParser\Node;
