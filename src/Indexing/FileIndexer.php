@@ -487,7 +487,7 @@ class FileIndexer
         } elseif (!empty($rawData['defaultValue'])) {
             $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
 
-            $typeList = $this->nodeTypeDeducer->deduceTypesFromNode(
+            $typeList = $this->nodeTypeDeducer->deduce(
                 $nodes[0],
                 $filePath,
                 $rawData['defaultValue'],
@@ -569,7 +569,7 @@ class FileIndexer
         } elseif ($rawData['defaultValue']) {
             $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
 
-            $typeList = $this->nodeTypeDeducer->deduceTypesFromNode(
+            $typeList = $this->nodeTypeDeducer->deduce(
                 $nodes[0],
                 $filePath,
                 $rawData['defaultValue'],

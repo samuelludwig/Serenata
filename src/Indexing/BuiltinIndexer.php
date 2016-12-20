@@ -179,7 +179,7 @@ class BuiltinIndexer
         if (!empty($defaultValue)) {
             $nodes = $this->parser->parse($defaultValue);
 
-            $typeList = $this->nodeTypeDeducer->deduceTypesFromNode(
+            $typeList = $this->nodeTypeDeducer->deduce(
                 $nodes[0],
                 'test',
                 $defaultValue,

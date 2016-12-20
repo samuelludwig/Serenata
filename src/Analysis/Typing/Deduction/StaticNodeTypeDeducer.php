@@ -30,7 +30,7 @@ class StaticNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, $file, $code, $offset)
     {
         if (!$node instanceof Parsing\Node\Keyword\Static_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -53,7 +53,7 @@ class StaticNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node);
 
-            return $nodeTypeDeducer->deduceTypesFromNode($node, $file, $code, $offset);
+            return $nodeTypeDeducer->deduce($node, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
             return [];
         }

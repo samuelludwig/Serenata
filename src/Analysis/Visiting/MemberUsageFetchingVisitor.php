@@ -124,7 +124,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
             $nodeToDeduceTypeFrom = $node->class;
         }
 
-        $objectTypes = $this->nodeTypeDeducer->deduceTypesFromNode(
+        $objectTypes = $this->nodeTypeDeducer->deduce(
             $nodeToDeduceTypeFrom,
             $this->file,
             $this->code,

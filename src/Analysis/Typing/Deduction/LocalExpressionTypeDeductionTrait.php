@@ -234,7 +234,7 @@ trait LocalExpressionTypeDeductionTrait
         try {
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node);
 
-            return $nodeTypeDeducer->deduceTypesFromNode($node, $file, $code, $offset);
+            return $nodeTypeDeducer->deduce($node, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
             return [];
         }

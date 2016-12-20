@@ -28,7 +28,7 @@ class NewNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, $file, $code, $offset)
     {
         if (!$node instanceof Node\Expr\New_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -50,7 +50,7 @@ class NewNodeTypeDeducer extends AbstractNodeTypeDeducer
         try {
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node->class);
 
-            return $nodeTypeDeducer->deduceTypesFromNode($node->class, $file, $code, $offset);
+            return $nodeTypeDeducer->deduce($node->class, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
             return [];
         }

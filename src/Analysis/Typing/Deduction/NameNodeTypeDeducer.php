@@ -61,7 +61,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, $file, $code, $offset)
     {
         if (!$node instanceof Node\Name) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));

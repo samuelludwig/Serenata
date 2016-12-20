@@ -38,7 +38,7 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, $file, $code, $offset)
     {
         if (!$node instanceof Node\Expr\MethodCall && !$node instanceof Node\Expr\StaticCall) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -68,7 +68,7 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
         try {
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($objectNode);
 
-            $typesOfVar = $nodeTypeDeducer->deduceTypesFromNode($objectNode, $file, $code, $offset);
+            $typesOfVar = $nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
             return [];
         }

@@ -22,5 +22,5 @@ interface NodeTypeDeducerInterface
      *
      * @return string[]
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset);
+    public function deduce(Node $node, $file, $code, $offset);
 }

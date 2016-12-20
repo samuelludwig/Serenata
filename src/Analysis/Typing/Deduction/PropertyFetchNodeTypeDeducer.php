@@ -61,7 +61,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, $file, $code, $offset)
     {
         if (!$node instanceof Node\Expr\PropertyFetch && !$node instanceof Node\Expr\StaticPropertyFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -97,7 +97,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         try {
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($objectNode);
 
-            $typesOfVar = $nodeTypeDeducer->deduceTypesFromNode($objectNode, $file, $code, $offset);
+            $typesOfVar = $nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
             return [];
         }

@@ -36,7 +36,7 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduceTypesFromNode(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, $file, $code, $offset)
     {
         if (!$node instanceof Node\Expr\ArrayDimFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -60,7 +60,7 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         try {
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node->var);
 
-            $types = $nodeTypeDeducer->deduceTypesFromNode($node->var, $file, $code, $offset);
+            $types = $nodeTypeDeducer->deduce($node->var, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
             return [];
         }
