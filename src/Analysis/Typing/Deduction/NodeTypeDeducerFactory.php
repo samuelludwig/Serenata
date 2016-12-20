@@ -190,6 +190,8 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
             return new AssignNodeTypeDeducer($this);
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             return new ClassLikeNodeTypeDeducer();
+        } elseif ($node instanceof Node\Expr\Ternary) {
+            return new TernaryNodeTypeDeducer($this);
         }
 
         throw new NoTypeDeducerFoundException("No type deducer known for node of type " . get_class($node));

@@ -46,41 +46,6 @@ class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromAssignNode(Node\Expr\Assign $node, $file, $code, $offset)
     {
-        if ($node->expr instanceof Node\Expr\Ternary) {
-            $firstOperandTypes = [];
-            $relevantNode = $node->expr->if ?: $node->expr->cond;
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($relevantNode);
-
-            try {
-                $firstOperandTypes = $nodeTypeDeducer->deduce(
-                    $relevantNode,
-                    $file,
-                    $code,
-                    $node->getAttribute('startFilePos')
-                );
-            } catch (UnexpectedValueException $e) {
-                $firstOperandTypes = [];
-            }
-
-            $secondOperandTypes = [];
-            $relevantNode = $node->expr->else;
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($relevantNode);
-
-            try {
-
-                $secondOperandTypes = $nodeTypeDeducer->deduce(
-                    $relevantNode,
-                    $file,
-                    $code,
-                    $node->getAttribute('startFilePos')
-                );
-            } catch (UnexpectedValueException $e) {
-                $secondOperandTypes = [];
-            }
-
-            return array_unique(array_merge($firstOperandTypes, $secondOperandTypes));
-        }
-
         try {
             $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node->expr);
 
