@@ -25,7 +25,6 @@ use PhpIntegrator\Analysis\Relations\TraitUsageResolver;
 use PhpIntegrator\Analysis\Relations\InheritanceResolver;
 use PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver;
 
-use PhpIntegrator\Analysis\Typing\TypeDeducer;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeLocalizer;
