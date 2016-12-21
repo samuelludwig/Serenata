@@ -326,7 +326,6 @@ class LocalTypeScanner
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
 
-
     /**
      * @param Node\Stmt\Foreach_ $node
      * @param string|null        $file
