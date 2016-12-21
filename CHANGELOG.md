@@ -1,3 +1,6 @@
+## 2.1.0
+* Fix `self`, `static` and `$this` in combination with array syntax not being resolved properly (https://github.com/php-integrator/atom-autocompletion/issues/85).
+
 ## 2.0.2
 * Fix a database transaction not being terminated correctly when indexing failed.
 * Fix constant and property default values ending in a zero (e.g. `1 << 0`) not being correctly indexed.
