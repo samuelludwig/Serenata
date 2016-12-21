@@ -57,6 +57,7 @@ use PhpIntegrator\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\ExpressionLocalTypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\PropertyFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer;
@@ -388,14 +389,21 @@ abstract class AbstractApplication
     protected function registerTypeDeductionServices(ContainerBuilder $container)
     {
         $container
-            ->register('localTypeScanner', LocalTypeScanner::class)
+            ->register('expressionLocalTypeAnalyzer', ExpressionLocalTypeAnalyzer::class)
             ->setArguments([
                 new Reference('parser'),
                 new Reference('docblockParser'),
-                new Reference('prettyPrinter'),
+                new Reference('prettyPrinter')
+            ]);
+
+        $container
+            ->register('localTypeScanner', LocalTypeScanner::class)
+            ->setArguments([
+                new Reference('docblockParser'),
                 new Reference('fileTypeResolverFactory'),
                 new Reference('typeAnalyzer'),
-                new Reference('nodeTypeDeducer')
+                new Reference('nodeTypeDeducer'),
+                new Reference('expressionLocalTypeAnalyzer')
             ]);
 
         $container

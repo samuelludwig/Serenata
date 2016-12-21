@@ -2,16 +2,12 @@
 
 namespace PhpIntegrator\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
 use PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfo;
-use PhpIntegrator\Analysis\Visiting\TypeQueryingVisitor;
-use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;
 
 use PhpIntegrator\Parsing\DocblockParser;
@@ -20,10 +16,6 @@ use PhpIntegrator\Utility\NodeHelpers;
 use PhpIntegrator\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
-use PhpParser\PrettyPrinterAbstract;
 
 /**
  * Scans for types affecting expressions (e.g. variables and properties) in a local scope in a file.
@@ -34,19 +26,9 @@ use PhpParser\PrettyPrinterAbstract;
 class LocalTypeScanner
 {
     /**
-     * @var Parser
-     */
-    protected $parser;
-
-    /**
      * @var DocblockParser
      */
     protected $docblockParser;
-
-    /**
-     * @var PrettyPrinterAbstract
-     */
-    protected $prettyPrinter;
 
     /**
      * @var FileTypeResolverFactoryInterface
@@ -64,27 +46,29 @@ class LocalTypeScanner
     protected $nodeTypeDeducer;
 
     /**
-     * @param Parser                           $parser
+     * @var ExpressionLocalTypeAnalyzer
+     */
+    protected $expressionLocalTypeAnalyzer;
+
+    /**
      * @param DocblockParser                   $docblockParser
-     * @param PrettyPrinterAbstract            $prettyPrinter
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param TypeAnalyzer                     $typeAnalyzer
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
+     * @param ExpressionLocalTypeAnalyzer      $expressionLocalTypeAnalyzer
      */
     public function __construct(
-        Parser $parser,
         DocblockParser $docblockParser,
-        PrettyPrinterAbstract $prettyPrinter,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         TypeAnalyzer $typeAnalyzer,
-        NodeTypeDeducerInterface $nodeTypeDeducer
+        NodeTypeDeducerInterface $nodeTypeDeducer,
+        ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer
     ) {
-        $this->parser = $parser;
         $this->docblockParser = $docblockParser;
-        $this->prettyPrinter = $prettyPrinter;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
+        $this->expressionLocalTypeAnalyzer = $expressionLocalTypeAnalyzer;
     }
 
     /**
@@ -103,9 +87,7 @@ class LocalTypeScanner
      */
     public function getLocalExpressionTypes($file, $code, $expression, $offset, $defaultTypes = [])
     {
-        $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($code, $offset);
-
-        $expressionTypeInfoMap = $typeQueryingVisitor->getExpressionTypeInfoMap();
+        $expressionTypeInfoMap = $this->expressionLocalTypeAnalyzer->analyze($code, $offset);
         $offsetLine = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
         if (!$expressionTypeInfoMap->has($expression)) {
@@ -121,43 +103,6 @@ class LocalTypeScanner
             $offset,
             $defaultTypes
         );
-    }
-
-    /**
-     * @param string $code
-     * @param int    $offset
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return TypeQueryingVisitor
-     */
-    protected function walkTypeQueryingVisitorTo($code, $offset)
-    {
-        $nodes = null;
-
-        $handler = new ErrorHandler\Collecting();
-
-        try {
-            $nodes = $this->parser->parse($code, $handler);
-        } catch (\PhpParser\Error $e) {
-            throw new UnexpectedValueException('Parsing the file failed!');
-        }
-
-        // In php-parser 2.x, this happens when you enter $this-> before an if-statement, because of a syntax error that
-        // it can not recover from.
-        if ($nodes === null) {
-            throw new UnexpectedValueException('Parsing the file failed!');
-        }
-
-        $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
-        $typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $this->prettyPrinter, $offset);
-
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($scopeLimitingVisitor);
-        $traverser->addVisitor($typeQueryingVisitor);
-        $traverser->traverse($nodes);
-
-        return $typeQueryingVisitor;
     }
 
     /**
