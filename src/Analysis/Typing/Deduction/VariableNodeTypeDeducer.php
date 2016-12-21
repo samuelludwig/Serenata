@@ -11,30 +11,17 @@ use PhpParser\Node;
  */
 class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
-    use LocalExpressionTypeDeductionTrait;
+    /**
+     * @var LocalTypeScanner
+     */
+    protected $localTypeScanner;
 
     /**
-     * @param \PhpParser\Parser                                               $parser
-     * @param \PhpIntegrator\Parsing\DocblockParser                           $docblockParser
-     * @param \PhpParser\PrettyPrinterAbstract                                $prettyPrinter
-     * @param \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param \PhpIntegrator\Analysis\Typing\TypeAnalyzer                     $typeAnalyzer
-     * @param NodeTypeDeducerInterface                                        $nodeTypeDeducer
+     * @param LocalTypeScanner $localTypeScanner
      */
-    public function __construct(
-        \PhpParser\Parser $parser,
-        \PhpIntegrator\Parsing\DocblockParser $docblockParser,
-        \PhpParser\PrettyPrinterAbstract $prettyPrinter,
-        \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        \PhpIntegrator\Analysis\Typing\TypeAnalyzer $typeAnalyzer,
-        NodeTypeDeducerInterface $nodeTypeDeducer
-    ) {
-        $this->parser = $parser;
-        $this->docblockParser = $docblockParser;
-        $this->prettyPrinter = $prettyPrinter;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeAnalyzer = $typeAnalyzer;
-        $this->nodeTypeDeducer = $nodeTypeDeducer;
+    public function __construct(LocalTypeScanner $localTypeScanner)
+    {
+        $this->localTypeScanner = $localTypeScanner;
     }
 
     /**
@@ -63,6 +50,6 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
             return []; // Can't currently deduce type of a variable such as "$$this".
         }
 
-        return $this->getLocalExpressionTypes($file, $code, '$' . $node->name, $offset);
+        return $this->localTypeScanner->getLocalExpressionTypes($file, $code, '$' . $node->name, $offset);
     }
 }

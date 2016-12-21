@@ -37,7 +37,9 @@ use PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator;
 use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryCachingDecorator;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner;
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerFactory;
+use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;
@@ -320,24 +322,50 @@ abstract class AbstractApplication
             ]);
 
         $container
-            ->register('nodeTypeDeducerFactory', NodeTypeDeducerFactory::class)
+            ->register('nodeTypeDeducer', NodeTypeDeducer::class)
+            ->setArguments([
+                new Reference('nodeTypeDeducerFactory')
+            ]);
+
+        $container
+            ->register('localTypeScanner', LocalTypeScanner::class)
             ->setArguments([
                 new Reference('parser'),
-                new Reference('fileClassListProvider'),
                 new Reference('docblockParser'),
-                new Reference('partialParser'),
+                new Reference('prettyPrinter'),
+                new Reference('fileTypeResolverFactory'),
+                new Reference('typeAnalyzer'),
+                new Reference('nodeTypeDeducer')
+            ]);
+
+        $container
+            ->register('nodeTypeDeducerFactory', NodeTypeDeducerFactory::class)
+            ->setArguments([
+                new Reference('fileClassListProvider'),
                 new Reference('typeAnalyzer'),
                 new Reference('fileTypeResolverFactory'),
                 new Reference('indexDatabase'),
                 new Reference('classlikeInfoBuilder'),
                 new Reference('functionConverter'),
                 new Reference('constantConverter'),
-                new Reference('prettyPrinter')
+                new Reference('prettyPrinter'),
+                new Reference('localTypeScanner')
             ]);
 
         $container
-            ->register('nodeTypeDeducer', NodeTypeDeducer::class)
+            ->register('nodeTypeDeducer.instance', NodeTypeDeducer::class)
             ->setArguments([new Reference('nodeTypeDeducerFactory')]);
+
+        $container
+            ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)
+            ->setArguments([])
+            ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $configurableDelegatingNodeTypeDeducer) use ($container) {
+                // Avoid circular references due to two-way object usage.
+                $configurableDelegatingNodeTypeDeducer->setNodeTypeDeducer($container->get('nodeTypeDeducer.instance'));
+            });
+
+        $container
+            ->setAlias('nodeTypeDeducer', 'nodeTypeDeducer.configurableDelegator');
 
         $container
             ->register('builtinIndexer', BuiltinIndexer::class)

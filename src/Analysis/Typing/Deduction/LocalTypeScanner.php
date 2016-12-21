@@ -26,11 +26,12 @@ use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinterAbstract;
 
 /**
- * Trait for classes that need to resolve local types (based on conditionals, local type overrides, ...)
+ * Scans for types affecting expressions (e.g. variables and properties) in a local scope in a file.
  *
- * TODO: Move this somewhere else, preferably a separate class that can handle this responsibility.
+ * This class can be used to scan for types that apply to an expression based on local rules, such as conditionals and
+ * type overrides.
  */
-trait LocalExpressionTypeDeductionTrait
+class LocalTypeScanner
 {
     /**
      * @var Parser
@@ -63,6 +64,30 @@ trait LocalExpressionTypeDeductionTrait
     protected $nodeTypeDeducer;
 
     /**
+     * @param Parser                           $parser
+     * @param DocblockParser                   $docblockParser
+     * @param PrettyPrinterAbstract            $prettyPrinter
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param TypeAnalyzer                     $typeAnalyzer
+     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
+     */
+    public function __construct(
+        Parser $parser,
+        DocblockParser $docblockParser,
+        PrettyPrinterAbstract $prettyPrinter,
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        TypeAnalyzer $typeAnalyzer,
+        NodeTypeDeducerInterface $nodeTypeDeducer
+    ) {
+        $this->parser = $parser;
+        $this->docblockParser = $docblockParser;
+        $this->prettyPrinter = $prettyPrinter;
+        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->typeAnalyzer = $typeAnalyzer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
+    }
+
+    /**
      * Retrieves the types of a expression based on what's happening to it in a local scope.
      *
      * This can be used to deduce the type of local variables, class properties, ... that are influenced by local
@@ -76,7 +101,7 @@ trait LocalExpressionTypeDeductionTrait
      *
      * @return string[]
      */
-    protected function getLocalExpressionTypes($file, $code, $expression, $offset, $defaultTypes = [])
+    public function getLocalExpressionTypes($file, $code, $expression, $offset, $defaultTypes = [])
     {
         $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($code, $offset);
 

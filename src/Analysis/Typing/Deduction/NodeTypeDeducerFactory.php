@@ -15,11 +15,7 @@ use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 
-use PhpIntegrator\Parsing\PartialParser;
-use PhpIntegrator\Parsing\DocblockParser;
-
 use PhpParser\Node;
-use PhpParser\Parser;
 use PhpParser\PrettyPrinterAbstract;
 
 /**
@@ -28,24 +24,9 @@ use PhpParser\PrettyPrinterAbstract;
 class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
 {
     /**
-     * @var Parser
-     */
-    protected $parser;
-
-    /**
      * @var FileClassListProviderInterface
      */
     protected $fileClassListProvider;
-
-    /**
-     * @var DocblockParser
-     */
-    protected $docblockParser;
-
-    /**
-     * @var PartialParser
-     */
-    protected $partialParser;
 
     /**
      * @var TypeAnalyzer
@@ -83,10 +64,12 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
     protected $prettyPrinter;
 
     /**
-     * @param Parser                           $parser
+     * @var LocalTypeScanner
+     */
+    protected $localTypeScanner;
+
+    /**
      * @param FileClassListProviderInterface   $fileClassListProvider
-     * @param DocblockParser                   $docblockParser
-     * @param PartialParser                    $partialParser
      * @param TypeAnalyzer                     $typeAnalyzer
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param IndexDatabase                    $indexDatabase
@@ -94,24 +77,20 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
      * @param FunctionConverter                $functionConverter
      * @param ConstantConverter                $constantConverter
      * @param PrettyPrinterAbstract            $prettyPrinter
+     * @param LocalTypeScanner                 $localTypeScanner
      */
     public function __construct(
-        Parser $parser,
         FileClassListProviderInterface $fileClassListProvider,
-        DocblockParser $docblockParser,
-        PartialParser $partialParser,
         TypeAnalyzer $typeAnalyzer,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         IndexDatabase $indexDatabase,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         FunctionConverter $functionConverter,
         ConstantConverter $constantConverter,
-        PrettyPrinterAbstract $prettyPrinter
+        PrettyPrinterAbstract $prettyPrinter,
+        LocalTypeScanner $localTypeScanner
     ) {
-        $this->parser = $parser;
         $this->fileClassListProvider = $fileClassListProvider;
-        $this->docblockParser = $docblockParser;
-        $this->partialParser = $partialParser;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->indexDatabase = $indexDatabase;
@@ -119,6 +98,7 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
         $this->functionConverter = $functionConverter;
         $this->constantConverter = $constantConverter;
         $this->prettyPrinter = $prettyPrinter;
+        $this->localTypeScanner = $localTypeScanner;
     }
 
     /**
@@ -127,14 +107,7 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
     public function create(Node $node)
     {
         if ($node instanceof Node\Expr\Variable) {
-            return new VariableNodeTypeDeducer(
-                $this->parser,
-                $this->docblockParser,
-                $this->prettyPrinter,
-                $this->fileTypeResolverFactory,
-                $this->typeAnalyzer,
-                $this->getGenericNodeTypeDeducer()
-            );
+            return new VariableNodeTypeDeducer($this->localTypeScanner);
         } elseif ($node instanceof Node\Scalar\LNumber) {
             return new LNumberNodeTypeDeducer();
         } elseif ($node instanceof Node\Scalar\DNumber) {
@@ -176,13 +149,10 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
             return new MethodCallNodeTypeDeducer($this->getGenericNodeTypeDeducer(), $this->classlikeInfoBuilder);
         } elseif ($node instanceof Node\Expr\PropertyFetch || $node instanceof Node\Expr\StaticPropertyFetch) {
             return new PropertyFetchNodeTypeDeducer(
-                $this->classlikeInfoBuilder,
-                $this->parser,
-                $this->docblockParser,
+                $this->localTypeScanner,
+                $this->getGenericNodeTypeDeducer(),
                 $this->prettyPrinter,
-                $this->fileTypeResolverFactory,
-                $this->typeAnalyzer,
-                $this->getGenericNodeTypeDeducer()
+                $this->classlikeInfoBuilder
             );
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
             return new ClassConstFetchNodeTypeDeducer($this->getGenericNodeTypeDeducer(), $this->classlikeInfoBuilder);

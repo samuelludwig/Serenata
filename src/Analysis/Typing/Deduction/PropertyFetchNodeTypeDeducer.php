@@ -14,17 +14,20 @@ use PhpParser\PrettyPrinterAbstract;
  */
 class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
-    use LocalExpressionTypeDeductionTrait;
+    /**
+     * @var LocalTypeScanner
+     */
+    protected $localTypeScanner;
 
-    // /**
-    //  * @var NodeTypeDeducerInterface
-    //  */
-    // protected $nodeTypeDeducer;
-    //
-    // /**
-    //  * @var PrettyPrinterAbstract
-    //  */
-    // protected $prettyPrinter;
+    /**
+     * @var NodeTypeDeducerInterface
+     */
+    protected $nodeTypeDeducer;
+
+    /**
+     * @var PrettyPrinterAbstract
+     */
+    protected $prettyPrinter;
 
     /**
      * @var ClasslikeInfoBuilder
@@ -32,30 +35,21 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     protected $classlikeInfoBuilder;
 
     /**
-     * @param ClasslikeInfoBuilder                                            $classlikeInfoBuilder
-     * @param \PhpParser\Parser                                               $parser
-     * @param \PhpIntegrator\Parsing\DocblockParser                           $docblockParser
-     * @param PrettyPrinterAbstract                                           $prettyPrinter
-     * @param \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param \PhpIntegrator\Analysis\Typing\TypeAnalyzer                     $typeAnalyzer
-     * @param NodeTypeDeducerInterface                                        $nodeTypeDeducer
+     * @param LocalTypeScanner         $localTypeScanner
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @param PrettyPrinterAbstract    $prettyPrinter
+     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
      */
     public function __construct(
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
-        \PhpParser\Parser $parser,
-        \PhpIntegrator\Parsing\DocblockParser $docblockParser,
+        LocalTypeScanner $localTypeScanner,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         PrettyPrinterAbstract $prettyPrinter,
-        \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        \PhpIntegrator\Analysis\Typing\TypeAnalyzer $typeAnalyzer,
-        NodeTypeDeducerInterface $nodeTypeDeducer
+        ClasslikeInfoBuilder $classlikeInfoBuilder
     ) {
-        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-        $this->parser = $parser;
-        $this->docblockParser = $docblockParser;
-        $this->prettyPrinter = $prettyPrinter;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->localTypeScanner = $localTypeScanner;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
+        $this->prettyPrinter = $prettyPrinter;
+        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
     /**
@@ -119,7 +113,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
 
-        $localTypes = $this->getLocalExpressionTypes($file, $code, $expressionString, $offset, $types);
+        $localTypes = $this->localTypeScanner->getLocalExpressionTypes($file, $code, $expressionString, $offset, $types);
 
         if (!empty($localTypes)) {
             return $localTypes;
