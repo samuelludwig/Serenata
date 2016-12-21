@@ -12,12 +12,6 @@ PHP Integrator is a server that indexes PHP code and performs static analysis. I
 and can retrieve information about your code to clients by communicating over sockets. Clients can use this information
 to provide various functionalities, such as autocompletion, code navigation and tooltips.
 
-## Why are the Composer dependencies in Git?
-This is something I'd rather have avoided, but as this code acts as a sort of payload for editor extensions and plugins
-that are usually written in another language, stripping the dependencies requires those plugins to install them again
-via composer. This in turn requests that the users of those plugins have composer installed as well, which increases the
-entry barrier for new users.
-
 ## Where is it used?
 Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
 [the list of projects](https://github.com/php-integrator).
