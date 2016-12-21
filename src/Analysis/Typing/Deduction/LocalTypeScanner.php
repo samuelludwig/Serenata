@@ -319,8 +319,6 @@ class LocalTypeScanner
             return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
             return $this->deduceTypesFromFunctionLikeParameter($node, $expression);
-        } elseif ($node instanceof Node\Stmt\Catch_) {
-            return $this->deduceTypesFromCatchParameter($node, $expression, $file, $code, $offset);
         }
 
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
@@ -394,27 +392,5 @@ class LocalTypeScanner
         }
 
         return [];
-    }
-
-    /**
-     * @param Node\Stmt\Catch_ $node
-     * @param string           $parameterName
-     * @param string           $file
-     * @param string           $code
-     * @param int              $offset
-     *
-     * @return string[]
-     */
-    protected function deduceTypesFromCatchParameter(Node\Stmt\Catch_ $node, $parameterName, $file, $code, $offset)
-    {
-        $types = array_map(function (Node\Name $name) use ($file, $code, $offset) {
-            return $this->nodeTypeDeducer->deduce($name, $file, $code, $offset);
-        }, $node->types);
-
-        $types = array_reduce($types, function (array $subTypes, $carry) {
-            return array_merge($carry, $subTypes);
-        }, []);
-
-        return $types;
     }
 }

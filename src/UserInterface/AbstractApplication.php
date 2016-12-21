@@ -41,6 +41,7 @@ use PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner;
 use PhpIntegrator\Analysis\Typing\Deduction\NewNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\SelfNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\NameNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\CatchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\CloneNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ArrayNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\StringNodeTypeDeducer;
@@ -498,6 +499,10 @@ abstract class AbstractApplication
             ->setArguments([]);
 
         $container
+            ->register('catchNodeTypeDeducer', CatchNodeTypeDeducer::class)
+            ->setArguments([new Reference('nodeTypeDeducer')]);
+
+        $container
             ->register('nodeTypeDeducer.instance', NodeTypeDeducer::class)
             ->setArguments([
                 new Reference('variableNodeTypeDeducer'),
@@ -520,7 +525,8 @@ abstract class AbstractApplication
                 new Reference('classConstFetchNodeTypeDeducer'),
                 new Reference('assignNodeTypeDeducer'),
                 new Reference('ternaryNodeTypeDeducer'),
-                new Reference('classLikeNodeTypeDeducer')
+                new Reference('classLikeNodeTypeDeducer'),
+                new Reference('catchNodeTypeDeducer')
             ]);
 
         $container
