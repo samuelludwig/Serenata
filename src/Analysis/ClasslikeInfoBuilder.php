@@ -395,7 +395,7 @@ class ClasslikeInfoBuilder
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
-        $doResolveTypes = function (array &$type) use ($elementFqcn, $typeAnalyzer) {
+        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
             if ($type['type'] === TypeAnalyzer::TYPE_SELF) {
                 // self takes the type from the classlike it is first resolved in, so only resolve it once to ensure
                 // that it doesn't get overwritten.
@@ -403,31 +403,7 @@ class ClasslikeInfoBuilder
                     $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
                 }
             }
-        };
-
-        foreach ($result['methods'] as $name => &$method) {
-            foreach ($method['parameters'] as &$parameter) {
-                foreach ($parameter['types'] as &$type) {
-                    $doResolveTypes($type);
-                }
-            }
-
-            foreach ($method['returnTypes'] as &$returnType) {
-                $doResolveTypes($returnType);
-            }
-        }
-
-        foreach ($result['properties'] as $name => &$property) {
-            foreach ($property['types'] as &$type) {
-                $doResolveTypes($type);
-            }
-        }
-
-        foreach ($result['constants'] as $name => &$constants) {
-            foreach ($constants['types'] as &$type) {
-                $doResolveTypes($type);
-            }
-        }
+        });
     }
 
     /**
@@ -438,35 +414,11 @@ class ClasslikeInfoBuilder
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
-        $doResolveTypes = function (array &$type) use ($elementFqcn, $typeAnalyzer) {
+        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
             if ($type['type'] === TypeAnalyzer::TYPE_THIS || $type['type'] === TypeAnalyzer::TYPE_STATIC) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
             }
-        };
-
-        foreach ($result['methods'] as $name => &$method) {
-            foreach ($method['parameters'] as &$parameter) {
-                foreach ($parameter['types'] as &$type) {
-                    $doResolveTypes($type);
-                }
-            }
-
-            foreach ($method['returnTypes'] as &$returnType) {
-                $doResolveTypes($returnType);
-            }
-        }
-
-        foreach ($result['properties'] as $name => &$property) {
-            foreach ($property['types'] as &$type) {
-                $doResolveTypes($type);
-            }
-        }
-
-        foreach ($result['constants'] as $name => &$constants) {
-            foreach ($constants['types'] as &$type) {
-                $doResolveTypes($type);
-            }
-        }
+        });
     }
 
     /**
@@ -476,7 +428,7 @@ class ClasslikeInfoBuilder
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
-        $doResolveTypes = function (array &$type) use ($typeAnalyzer) {
+        $this->walkTypes($result, function (array &$type) use ($typeAnalyzer) {
             if ($type['type'] === TypeAnalyzer::TYPE_SELF ||
                 $type['type'] === TypeAnalyzer::TYPE_THIS ||
                 $type['type'] === TypeAnalyzer::TYPE_STATIC
@@ -487,29 +439,36 @@ class ClasslikeInfoBuilder
             } else {
                 $type['resolvedType'] = $type['fqcn'];
             }
-        };
+        });
+    }
 
+    /**
+     * @param ArrayObject $result
+     * @param callable    $callable
+     */
+    protected function walkTypes(ArrayObject $result, callable $callable)
+    {
         foreach ($result['methods'] as $name => &$method) {
             foreach ($method['parameters'] as &$parameter) {
                 foreach ($parameter['types'] as &$type) {
-                    $doResolveTypes($type);
+                    $callable($type);
                 }
             }
 
             foreach ($method['returnTypes'] as &$returnType) {
-                $doResolveTypes($returnType);
+                $callable($returnType);
             }
         }
 
         foreach ($result['properties'] as $name => &$property) {
             foreach ($property['types'] as &$type) {
-                $doResolveTypes($type);
+                $callable($type);
             }
         }
 
         foreach ($result['constants'] as $name => &$constants) {
             foreach ($constants['types'] as &$type) {
-                $doResolveTypes($type);
+                $callable($type);
             }
         }
     }
