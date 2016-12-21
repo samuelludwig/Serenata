@@ -247,13 +247,13 @@ class ClasslikeInfoBuilder
         $this->buildMethodsInfo($classlike, $methods);
         $this->buildTraitsInfo($classlike, $traits, $traitAliases, $traitPrecedences);
 
+        $this->resolveNormalTypes($classlike);
         $this->resolveSelfTypesTo($classlike, $classlike['name']);
 
         $this->buildParentsInfo($classlike, $parents);
         $this->buildInterfacesInfo($classlike, $interfaces);
 
         $this->resolveStaticTypesTo($classlike, $classlike['name']);
-        $this->resolveNormalTypes($classlike);
 
         return $classlike;
     }
@@ -396,9 +396,7 @@ class ClasslikeInfoBuilder
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
-            if ($type['type'] === TypeAnalyzer::TYPE_SELF) {
-                $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
-            }
+            $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType($type['resolvedType'], $elementFqcn);
         });
     }
 
@@ -412,7 +410,8 @@ class ClasslikeInfoBuilder
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
             if ($type['type'] === TypeAnalyzer::TYPE_THIS || $type['type'] === TypeAnalyzer::TYPE_STATIC) {
-                $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
+                $type['resolvedType'] = $typeAnalyzer->interchangeStaticWithActualType($type['type'], $elementFqcn);
+                $type['resolvedType'] = $typeAnalyzer->interchangeThisWithActualType($type['resolvedType'], $elementFqcn);
             }
         });
     }
@@ -425,12 +424,7 @@ class ClasslikeInfoBuilder
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($typeAnalyzer) {
-            if ($type['type'] === TypeAnalyzer::TYPE_SELF ||
-                $type['type'] === TypeAnalyzer::TYPE_THIS ||
-                $type['type'] === TypeAnalyzer::TYPE_STATIC
-            ) {
-                return;
-            } elseif ($typeAnalyzer->isClassType($type['fqcn'])) {
+            if ($typeAnalyzer->isClassType($type['fqcn'])) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['fqcn']);
             } else {
                 $type['resolvedType'] = $type['fqcn'];

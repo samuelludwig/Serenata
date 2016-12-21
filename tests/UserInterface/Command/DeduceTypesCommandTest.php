@@ -523,6 +523,16 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesForeachWithStaticMethodCallReturningArrayWithSelfObjects()
+    {
+        $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithSelfObjects.phpt', '$b');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesAssignments()
     {
         $output = $this->deduceTypesFromExpression('Assignment.phpt', '$a');
@@ -746,6 +756,16 @@ class DeduceTypesCommandTest extends IndexedTest
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjectsOfMultipleTypes.phpt', '$b');
 
         $this->assertEquals(['\A\B', '\A\C'], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithSelfElementsReturnedByStaticMethodCall()
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithSelfElementsFromStaticMethodCall.phpt', '$b');
+
+        $this->assertEquals(['\A\B'], $output);
     }
 
     /**
