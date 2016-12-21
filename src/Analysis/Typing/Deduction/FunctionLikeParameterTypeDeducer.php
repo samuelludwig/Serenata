@@ -81,9 +81,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
             ], '', true);
 
             if (isset($result['params']['$' . $node->name])) {
-                return $this->typeAnalyzer->getTypesForTypeSpecification(
-                    $result['params']['$' . $node->name]['type']
-                );
+                return $this->typeAnalyzer->getTypesForTypeSpecification($result['params']['$' . $node->name]['type']);
             }
         }
 
