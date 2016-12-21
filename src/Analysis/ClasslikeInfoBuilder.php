@@ -397,11 +397,7 @@ class ClasslikeInfoBuilder
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
             if ($type['type'] === TypeAnalyzer::TYPE_SELF) {
-                // self takes the type from the classlike it is first resolved in, so only resolve it once to ensure
-                // that it doesn't get overwritten.
-                if ($type['resolvedType'] === TypeAnalyzer::TYPE_SELF) {
-                    $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
-                }
+                $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
             }
         });
     }
