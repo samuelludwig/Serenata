@@ -327,95 +327,95 @@ class LocalTypeScanner
     }
 
 
-        /**
-         * @param Node\Stmt\Foreach_ $node
-         * @param string|null        $file
-         * @param string             $code
-         * @param int                $offset
-         *
-         * @return string[]
-         */
-        protected function deduceTypesFromLoopValueInForeachNode(Node\Stmt\Foreach_ $node, $file, $code, $offset)
-        {
-            $types = $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
+    /**
+     * @param Node\Stmt\Foreach_ $node
+     * @param string|null        $file
+     * @param string             $code
+     * @param int                $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromLoopValueInForeachNode(Node\Stmt\Foreach_ $node, $file, $code, $offset)
+    {
+        $types = $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
 
-            foreach ($types as $type) {
-                if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
-                    return [$this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type)];
-                }
+        foreach ($types as $type) {
+            if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
+                return [$this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type)];
             }
-
-            return [];
         }
 
-        /**
-         * @param Node\FunctionLike $node
-         * @param string            $parameterName
-         *
-         * @return string[]
-         */
-        protected function deduceTypesFromFunctionLikeParameter(Node\FunctionLike $node, $parameterName)
-        {
-            foreach ($node->getParams() as $param) {
-                if ($param->name === mb_substr($parameterName, 1)) {
-                    if ($docBlock = $node->getDocComment()) {
-                        // Analyze the docblock's @param tags.
-                        $name = null;
+        return [];
+    }
 
-                        if ($node instanceof Node\Stmt\Function_ || $node instanceof Node\Stmt\ClassMethod) {
-                            $name = $node->name;
-                        }
+    /**
+     * @param Node\FunctionLike $node
+     * @param string            $parameterName
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromFunctionLikeParameter(Node\FunctionLike $node, $parameterName)
+    {
+        foreach ($node->getParams() as $param) {
+            if ($param->name === mb_substr($parameterName, 1)) {
+                if ($docBlock = $node->getDocComment()) {
+                    // Analyze the docblock's @param tags.
+                    $name = null;
 
-                        $result = $this->docblockParser->parse((string) $docBlock, [
-                            DocblockParser::PARAM_TYPE
-                        ], $name, true);
-
-                        if (isset($result['params'][$parameterName])) {
-                            return $this->typeAnalyzer->getTypesForTypeSpecification(
-                                $result['params'][$parameterName]['type']
-                            );
-                        }
+                    if ($node instanceof Node\Stmt\Function_ || $node instanceof Node\Stmt\ClassMethod) {
+                        $name = $node->name;
                     }
 
-                    // TODO: Support NullableType (PHP 7.1).
-                    if ($param->type instanceof Node\Name) {
-                        $typeHintType = NodeHelpers::fetchClassName($param->type);
+                    $result = $this->docblockParser->parse((string) $docBlock, [
+                        DocblockParser::PARAM_TYPE
+                    ], $name, true);
 
-                        if ($param->variadic) {
-                            $typeHintType .= '[]';
-                        }
+                    if (isset($result['params'][$parameterName])) {
+                        return $this->typeAnalyzer->getTypesForTypeSpecification(
+                            $result['params'][$parameterName]['type']
+                        );
+                    }
+                }
 
-                        return [$typeHintType];
-                    } elseif (is_string($param->type)) {
-                        return [$param->type];
+                // TODO: Support NullableType (PHP 7.1).
+                if ($param->type instanceof Node\Name) {
+                    $typeHintType = NodeHelpers::fetchClassName($param->type);
+
+                    if ($param->variadic) {
+                        $typeHintType .= '[]';
                     }
 
-                    return [];
+                    return [$typeHintType];
+                } elseif (is_string($param->type)) {
+                    return [$param->type];
                 }
+
+                return [];
             }
-
-            return [];
         }
 
-        /**
-         * @param Node\Stmt\Catch_ $node
-         * @param string           $parameterName
-         * @param string           $file
-         * @param string           $code
-         * @param int              $offset
-         *
-         * @return string[]
-         */
-        protected function deduceTypesFromCatchParameter(Node\Stmt\Catch_ $node, $parameterName, $file, $code, $offset)
-        {
-            $types = array_map(function (Node\Name $name) use ($file, $code, $offset) {
-                return $this->nodeTypeDeducer->deduce($name, $file, $code, $offset);
-            }, $node->types);
+        return [];
+    }
 
-            $types = array_reduce($types, function (array $subTypes, $carry) {
-                return array_merge($carry, $subTypes);
-            }, []);
+    /**
+     * @param Node\Stmt\Catch_ $node
+     * @param string           $parameterName
+     * @param string           $file
+     * @param string           $code
+     * @param int              $offset
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromCatchParameter(Node\Stmt\Catch_ $node, $parameterName, $file, $code, $offset)
+    {
+        $types = array_map(function (Node\Name $name) use ($file, $code, $offset) {
+            return $this->nodeTypeDeducer->deduce($name, $file, $code, $offset);
+        }, $node->types);
 
-            return $types;
-        }
+        $types = array_reduce($types, function (array $subTypes, $carry) {
+            return array_merge($carry, $subTypes);
+        }, []);
+
+        return $types;
+    }
 }
