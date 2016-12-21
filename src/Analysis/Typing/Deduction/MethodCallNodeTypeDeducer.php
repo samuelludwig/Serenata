@@ -14,9 +14,9 @@ use PhpParser\Node;
 class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
@@ -24,14 +24,14 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     protected $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
-     * @param ClasslikeInfoBuilder            $classlikeInfoBuilder
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
      */
     public function __construct(
-        NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder
     ) {
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
@@ -63,15 +63,7 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
 
-        $typesOfVar = [];
-
-        try {
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($objectNode);
-
-            $typesOfVar = $nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
+        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 
         $types = [];
 

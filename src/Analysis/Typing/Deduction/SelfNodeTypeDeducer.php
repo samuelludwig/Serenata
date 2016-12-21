@@ -2,7 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing\Deduction;
 
-use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Parsing;
@@ -15,16 +14,16 @@ use PhpParser\Node;
 class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
-     * @param NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
      */
-    public function __construct(NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory)
+    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer)
     {
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**
@@ -48,16 +47,8 @@ class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromSelf($file, $code, $offset)
     {
-        try {
-            $node = new Node\Name('self');
+        $node = new Node\Name('self');
 
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node);
-
-            return $nodeTypeDeducer->deduce($node, $file, $code, $offset);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
-
-        throw new LogicException('Should never be reached');
+        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
 }

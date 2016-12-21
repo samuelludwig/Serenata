@@ -133,7 +133,7 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
                 $this->prettyPrinter,
                 $this->fileTypeResolverFactory,
                 $this->typeAnalyzer,
-                $this
+                $this->getGenericNodeTypeDeducer()
             );
         } elseif ($node instanceof Node\Scalar\LNumber) {
             return new LNumberNodeTypeDeducer();
@@ -148,21 +148,21 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
                 $this->constantConverter
             );
         } elseif ($node instanceof Node\Expr\ArrayDimFetch) {
-            return new ArrayDimFetchNodeTypeDeducer($this->typeAnalyzer, $this);
+            return new ArrayDimFetchNodeTypeDeducer($this->typeAnalyzer, $this->getGenericNodeTypeDeducer());
         } elseif ($node instanceof Node\Expr\Closure) {
             return new ClosureNodeTypeDeducer();
         } elseif ($node instanceof Node\Expr\New_) {
-            return new NewNodeTypeDeducer($this);
+            return new NewNodeTypeDeducer($this->getGenericNodeTypeDeducer());
         } elseif ($node instanceof Node\Expr\Clone_) {
             return new CloneNodeTypeDeducer($this);
         } elseif ($node instanceof Node\Expr\Array_) {
             return new ArrayNodeTypeDeducer();
         } elseif ($node instanceof Parsing\Node\Keyword\Self_) {
-            return new SelfNodeTypeDeducer($this);
+            return new SelfNodeTypeDeducer($this->getGenericNodeTypeDeducer());
         } elseif ($node instanceof Parsing\Node\Keyword\Static_) {
-            return new StaticNodeTypeDeducer($this);
+            return new StaticNodeTypeDeducer($this->getGenericNodeTypeDeducer());
         } elseif ($node instanceof Parsing\Node\Keyword\Parent_) {
-            return new ParentNodeTypeDeducer($this);
+            return new ParentNodeTypeDeducer($this->getGenericNodeTypeDeducer());
         } elseif ($node instanceof Node\Name) {
             return new NameNodeTypeDeducer(
                 $this->typeAnalyzer,
@@ -173,7 +173,7 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
         } elseif ($node instanceof Node\Expr\FuncCall) {
             return new FuncCallNodeTypeDeducer($this->indexDatabase, $this->functionConverter);
         } elseif ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\StaticCall) {
-            return new MethodCallNodeTypeDeducer($this, $this->classlikeInfoBuilder);
+            return new MethodCallNodeTypeDeducer($this->getGenericNodeTypeDeducer(), $this->classlikeInfoBuilder);
         } elseif ($node instanceof Node\Expr\PropertyFetch || $node instanceof Node\Expr\StaticPropertyFetch) {
             return new PropertyFetchNodeTypeDeducer(
                 $this->classlikeInfoBuilder,
@@ -182,18 +182,26 @@ class NodeTypeDeducerFactory implements NodeTypeDeducerFactoryInterface
                 $this->prettyPrinter,
                 $this->fileTypeResolverFactory,
                 $this->typeAnalyzer,
-                $this
+                $this->getGenericNodeTypeDeducer()
             );
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
-            return new ClassConstFetchNodeTypeDeducer($this, $this->classlikeInfoBuilder);
+            return new ClassConstFetchNodeTypeDeducer($this->getGenericNodeTypeDeducer(), $this->classlikeInfoBuilder);
         } elseif ($node instanceof Node\Expr\Assign) {
-            return new AssignNodeTypeDeducer($this);
+            return new AssignNodeTypeDeducer($this->getGenericNodeTypeDeducer());
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             return new ClassLikeNodeTypeDeducer();
         } elseif ($node instanceof Node\Expr\Ternary) {
-            return new TernaryNodeTypeDeducer($this);
+            return new TernaryNodeTypeDeducer($this->getGenericNodeTypeDeducer());
         }
 
         throw new NoTypeDeducerFoundException("No type deducer known for node of type " . get_class($node));
+    }
+
+    /**
+     * @return NodeTypeDeducer
+     */
+    protected function getGenericNodeTypeDeducer()
+    {
+        return new NodeTypeDeducer($this);
     }
 }

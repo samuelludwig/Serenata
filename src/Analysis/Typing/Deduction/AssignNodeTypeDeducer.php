@@ -12,16 +12,16 @@ use PhpParser\Node;
 class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
-     * @param NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
      */
-    public function __construct(NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory)
+    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer)
     {
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**
@@ -46,12 +46,6 @@ class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromAssignNode(Node\Expr\Assign $node, $file, $code, $offset)
     {
-        try {
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node->expr);
-
-            return $nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
+        return $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
     }
 }

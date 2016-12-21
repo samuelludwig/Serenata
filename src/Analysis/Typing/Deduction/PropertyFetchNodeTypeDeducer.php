@@ -17,9 +17,9 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     use LocalExpressionTypeDeductionTrait;
 
     // /**
-    //  * @var NodeTypeDeducerFactoryInterface
+    //  * @var NodeTypeDeducerInterface
     //  */
-    // protected $nodeTypeDeducerFactory;
+    // protected $nodeTypeDeducer;
     //
     // /**
     //  * @var PrettyPrinterAbstract
@@ -38,7 +38,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      * @param PrettyPrinterAbstract                                           $prettyPrinter
      * @param \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param \PhpIntegrator\Analysis\Typing\TypeAnalyzer                     $typeAnalyzer
-     * @param NodeTypeDeducerFactoryInterface                                 $nodeTypeDeducerFactory
+     * @param NodeTypeDeducerInterface                                        $nodeTypeDeducer
      */
     public function __construct(
         ClasslikeInfoBuilder $classlikeInfoBuilder,
@@ -47,7 +47,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         PrettyPrinterAbstract $prettyPrinter,
         \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         \PhpIntegrator\Analysis\Typing\TypeAnalyzer $typeAnalyzer,
-        NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+        NodeTypeDeducerInterface $nodeTypeDeducer
     ) {
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->parser = $parser;
@@ -55,7 +55,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         $this->prettyPrinter = $prettyPrinter;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**
@@ -92,15 +92,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             $objectNode = $node->class;
         }
 
-        $typesOfVar = [];
-
-        try {
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($objectNode);
-
-            $typesOfVar = $nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
+        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 
         $typeMap = [];
 

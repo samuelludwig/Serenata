@@ -19,7 +19,7 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
      * @param \PhpParser\PrettyPrinterAbstract                                $prettyPrinter
      * @param \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param \PhpIntegrator\Analysis\Typing\TypeAnalyzer                     $typeAnalyzer
-     * @param NodeTypeDeducerFactoryInterface                                 $nodeTypeDeducerFactory
+     * @param NodeTypeDeducerInterface                                        $nodeTypeDeducer
      */
     public function __construct(
         \PhpParser\Parser $parser,
@@ -27,14 +27,14 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
         \PhpParser\PrettyPrinterAbstract $prettyPrinter,
         \PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         \PhpIntegrator\Analysis\Typing\TypeAnalyzer $typeAnalyzer,
-        NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+        NodeTypeDeducerInterface $nodeTypeDeducer
     ) {
         $this->parser = $parser;
         $this->docblockParser = $docblockParser;
         $this->prettyPrinter = $prettyPrinter;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**

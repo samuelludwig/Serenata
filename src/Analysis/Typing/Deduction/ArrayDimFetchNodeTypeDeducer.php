@@ -19,18 +19,18 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     protected $typeAnalyzer;
 
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
-     * @param TypeAnalyzer                    $typeAnalyzer
-     * @param NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+     * @param TypeAnalyzer             $typeAnalyzer
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory)
+    public function __construct(TypeAnalyzer $typeAnalyzer, NodeTypeDeducerInterface $nodeTypeDeducer)
     {
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**
@@ -55,15 +55,7 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromArrayDimFetchNode(Node\Expr\ArrayDimFetch $node, $file, $code, $offset)
     {
-        $types = [];
-
-        try {
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node->var);
-
-            $types = $nodeTypeDeducer->deduce($node->var, $file, $code, $offset);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
+        $types = $this->nodeTypeDeducer->deduce($node->var, $file, $code, $offset);
 
         $elementTypes = [];
 

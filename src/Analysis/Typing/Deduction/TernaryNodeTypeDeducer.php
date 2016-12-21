@@ -12,16 +12,16 @@ use PhpParser\Node;
 class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
-     * @param NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
      */
-    public function __construct(NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory)
+    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer)
     {
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
 
     /**
@@ -46,36 +46,19 @@ class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromTernaryNode(Node\Expr\Ternary $node, $file, $code, $offset)
     {
-        $firstOperandTypes = [];
-        $relevantNode = $node->if ?: $node->cond;
-        $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($relevantNode);
+        $firstOperandTypes = $this->nodeTypeDeducer->deduce(
+            $node->if ?: $node->cond,
+            $file,
+            $code,
+            $node->getAttribute('startFilePos')
+        );
 
-        try {
-            $firstOperandTypes = $nodeTypeDeducer->deduce(
-                $relevantNode,
-                $file,
-                $code,
-                $node->getAttribute('startFilePos')
-            );
-        } catch (UnexpectedValueException $e) {
-            $firstOperandTypes = [];
-        }
-
-        $secondOperandTypes = [];
-        $relevantNode = $node->else;
-        $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($relevantNode);
-
-        try {
-
-            $secondOperandTypes = $nodeTypeDeducer->deduce(
-                $relevantNode,
-                $file,
-                $code,
-                $node->getAttribute('startFilePos')
-            );
-        } catch (UnexpectedValueException $e) {
-            $secondOperandTypes = [];
-        }
+        $secondOperandTypes = $this->nodeTypeDeducer->deduce(
+            $node->else,
+            $file,
+            $code,
+            $node->getAttribute('startFilePos')
+        );
 
         return array_unique(array_merge($firstOperandTypes, $secondOperandTypes));
     }

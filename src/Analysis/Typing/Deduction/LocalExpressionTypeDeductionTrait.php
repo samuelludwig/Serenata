@@ -2,7 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing\Deduction;
 
-use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Parsing;
@@ -59,9 +58,9 @@ trait LocalExpressionTypeDeductionTrait
     protected $typeAnalyzer;
 
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
      * Retrieves the types of a expression based on what's happening to it in a local scope.
@@ -222,27 +221,6 @@ trait LocalExpressionTypeDeductionTrait
     }
 
     /**
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
-     *
-     * @return string[]
-     */
-    protected function deduceTypesFromGenericNode(Node $node, $file, $code, $offset)
-    {
-        try {
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node);
-
-            return $nodeTypeDeducer->deduce($node, $file, $code, $offset);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
-
-        throw new LogicException('Should never be reached');
-    }
-
-    /**
      * @param string $file
      * @param string $code
      * @param int    $offset
@@ -253,7 +231,7 @@ trait LocalExpressionTypeDeductionTrait
     {
         $dummyNode = new Parsing\Node\Keyword\Self_();
 
-        return $this->deduceTypesFromGenericNode($dummyNode, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce($dummyNode, $file, $code, $offset);
     }
 
     /**
@@ -267,7 +245,7 @@ trait LocalExpressionTypeDeductionTrait
     {
         $dummyNode = new Parsing\Node\Keyword\Static_();
 
-        return $this->deduceTypesFromGenericNode($dummyNode, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce($dummyNode, $file, $code, $offset);
     }
 
     /**
@@ -320,7 +298,7 @@ trait LocalExpressionTypeDeductionTrait
             return $this->deduceTypesFromCatchParameter($node, $expression, $file, $code, $offset);
         }
 
-        return $this->deduceTypesFromGenericNode($node, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
 
 
@@ -334,7 +312,7 @@ trait LocalExpressionTypeDeductionTrait
          */
         protected function deduceTypesFromLoopValueInForeachNode(Node\Stmt\Foreach_ $node, $file, $code, $offset)
         {
-            $types = $this->deduceTypesFromGenericNode($node->expr, $file, $code, $node->getAttribute('startFilePos'));
+            $types = $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
 
             foreach ($types as $type) {
                 if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
@@ -406,7 +384,7 @@ trait LocalExpressionTypeDeductionTrait
         protected function deduceTypesFromCatchParameter(Node\Stmt\Catch_ $node, $parameterName, $file, $code, $offset)
         {
             $types = array_map(function (Node\Name $name) use ($file, $code, $offset) {
-                return $this->deduceTypesFromGenericNode($name, $file, $code, $offset);
+                return $this->nodeTypeDeducer->deduce($name, $file, $code, $offset);
             }, $node->types);
 
             $types = array_reduce($types, function (array $subTypes, $carry) {

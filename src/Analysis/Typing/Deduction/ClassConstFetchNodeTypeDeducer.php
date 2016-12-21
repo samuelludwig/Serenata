@@ -14,9 +14,9 @@ use PhpParser\Node;
 class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerFactoryInterface
+     * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducerFactory;
+    protected $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
@@ -24,14 +24,14 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     protected $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
      * @param ClasslikeInfoBuilder            $classlikeInfoBuilder
      */
     public function __construct(
-        NodeTypeDeducerFactoryInterface $nodeTypeDeducerFactory,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder
     ) {
-        $this->nodeTypeDeducerFactory = $nodeTypeDeducerFactory;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
@@ -57,15 +57,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromClassConstFetchNode(Node\Expr\ClassConstFetch $node, $file, $code, $offset)
     {
-        $typesOfVar = [];
-
-        try {
-            $nodeTypeDeducer = $this->nodeTypeDeducerFactory->create($node->class);
-
-            $typesOfVar = $nodeTypeDeducer->deduce($node->class, $file, $code, $offset);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
+        $typesOfVar = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $offset);
 
         $types = [];
 
