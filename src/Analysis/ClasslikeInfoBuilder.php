@@ -186,8 +186,6 @@ class ClasslikeInfoBuilder
             $this->storage->getClasslikeTraitPrecedencesAssoc($id)
         );
 
-        $this->resolveSpecialTypes($classlike, $classlike['name']);
-
         return $classlike;
     }
 
@@ -248,8 +246,14 @@ class ClasslikeInfoBuilder
         $this->buildPropertiesInfo($classlike, $properties);
         $this->buildMethodsInfo($classlike, $methods);
         $this->buildTraitsInfo($classlike, $traits, $traitAliases, $traitPrecedences);
+
+        $this->resolveSelfTypesTo($classlike, $classlike['name']);
+
         $this->buildParentsInfo($classlike, $parents);
         $this->buildInterfacesInfo($classlike, $interfaces);
+
+        $this->resolveStaticTypesTo($classlike, $classlike['name']);
+        $this->resolveNormalTypes($classlike);
 
         return $classlike;
     }
@@ -387,7 +391,7 @@ class ClasslikeInfoBuilder
      * @param ArrayObject $result
      * @param string      $elementFqcn
      */
-    protected function resolveSpecialTypes(ArrayObject $result, $elementFqcn)
+    protected function resolveSelfTypesTo(ArrayObject $result, $elementFqcn)
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
@@ -398,8 +402,86 @@ class ClasslikeInfoBuilder
                 if ($type['resolvedType'] === TypeAnalyzer::TYPE_SELF) {
                     $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
                 }
-            } elseif ($type['type'] === TypeAnalyzer::TYPE_THIS || $type['type'] === TypeAnalyzer::TYPE_STATIC) {
+            }
+        };
+
+        foreach ($result['methods'] as $name => &$method) {
+            foreach ($method['parameters'] as &$parameter) {
+                foreach ($parameter['types'] as &$type) {
+                    $doResolveTypes($type);
+                }
+            }
+
+            foreach ($method['returnTypes'] as &$returnType) {
+                $doResolveTypes($returnType);
+            }
+        }
+
+        foreach ($result['properties'] as $name => &$property) {
+            foreach ($property['types'] as &$type) {
+                $doResolveTypes($type);
+            }
+        }
+
+        foreach ($result['constants'] as $name => &$constants) {
+            foreach ($constants['types'] as &$type) {
+                $doResolveTypes($type);
+            }
+        }
+    }
+
+    /**
+     * @param ArrayObject $result
+     * @param string      $elementFqcn
+     */
+    protected function resolveStaticTypesTo(ArrayObject $result, $elementFqcn)
+    {
+        $typeAnalyzer = $this->typeAnalyzer;
+
+        $doResolveTypes = function (array &$type) use ($elementFqcn, $typeAnalyzer) {
+            if ($type['type'] === TypeAnalyzer::TYPE_THIS || $type['type'] === TypeAnalyzer::TYPE_STATIC) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
+            }
+        };
+
+        foreach ($result['methods'] as $name => &$method) {
+            foreach ($method['parameters'] as &$parameter) {
+                foreach ($parameter['types'] as &$type) {
+                    $doResolveTypes($type);
+                }
+            }
+
+            foreach ($method['returnTypes'] as &$returnType) {
+                $doResolveTypes($returnType);
+            }
+        }
+
+        foreach ($result['properties'] as $name => &$property) {
+            foreach ($property['types'] as &$type) {
+                $doResolveTypes($type);
+            }
+        }
+
+        foreach ($result['constants'] as $name => &$constants) {
+            foreach ($constants['types'] as &$type) {
+                $doResolveTypes($type);
+            }
+        }
+    }
+
+    /**
+     * @param ArrayObject $result
+     */
+    protected function resolveNormalTypes(ArrayObject $result)
+    {
+        $typeAnalyzer = $this->typeAnalyzer;
+
+        $doResolveTypes = function (array &$type) use ($typeAnalyzer) {
+            if ($type['type'] === TypeAnalyzer::TYPE_SELF ||
+                $type['type'] === TypeAnalyzer::TYPE_THIS ||
+                $type['type'] === TypeAnalyzer::TYPE_STATIC
+            ) {
+                return;
             } elseif ($typeAnalyzer->isClassType($type['fqcn'])) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['fqcn']);
             } else {
