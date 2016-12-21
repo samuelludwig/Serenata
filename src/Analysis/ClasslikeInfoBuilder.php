@@ -5,6 +5,8 @@ namespace PhpIntegrator\Analysis;
 use ArrayObject;
 use UnexpectedValueException;
 
+use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+
 /**
  * Adapts and resolves data from the index as needed to receive an appropriate output data format.
  */
@@ -390,13 +392,13 @@ class ClasslikeInfoBuilder
         $typeAnalyzer = $this->typeAnalyzer;
 
         $doResolveTypes = function (array &$type) use ($elementFqcn, $typeAnalyzer) {
-            if ($type['type'] === 'self') {
+            if ($type['type'] === TypeAnalyzer::TYPE_SELF) {
                 // self takes the type from the classlike it is first resolved in, so only resolve it once to ensure
                 // that it doesn't get overwritten.
-                if ($type['resolvedType'] === 'self') {
+                if ($type['resolvedType'] === TypeAnalyzer::TYPE_SELF) {
                     $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
                 }
-            } elseif ($type['type'] === '$this' || $type['type'] === 'static') {
+            } elseif ($type['type'] === TypeAnalyzer::TYPE_THIS || $type['type'] === TypeAnalyzer::TYPE_STATIC) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($elementFqcn);
             } elseif ($typeAnalyzer->isClassType($type['fqcn'])) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['fqcn']);
