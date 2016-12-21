@@ -12,7 +12,6 @@ use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
-use PhpIntegrator\Utility\NodeHelpers;
 use PhpIntegrator\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
@@ -46,6 +45,16 @@ class LocalTypeScanner
     protected $nodeTypeDeducer;
 
     /**
+     * @var ForeachNodeLoopValueTypeDeducer
+     */
+    protected $foreachNodeLoopValueTypeDeducer;
+
+    /**
+     * @var FunctionLikeParameterTypeDeducer
+     */
+    protected $functionLikeParameterTypeDeducer;
+
+    /**
      * @var ExpressionLocalTypeAnalyzer
      */
     protected $expressionLocalTypeAnalyzer;
@@ -55,6 +64,8 @@ class LocalTypeScanner
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param TypeAnalyzer                     $typeAnalyzer
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
+     * @param ForeachNodeLoopValueTypeDeducer  $foreachNodeLoopValueTypeDeducer
+     * @param FunctionLikeParameterTypeDeducer $functionLikeParameterTypeDeducer
      * @param ExpressionLocalTypeAnalyzer      $expressionLocalTypeAnalyzer
      */
     public function __construct(
@@ -62,12 +73,16 @@ class LocalTypeScanner
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
+        ForeachNodeLoopValueTypeDeducer $foreachNodeLoopValueTypeDeducer,
+        FunctionLikeParameterTypeDeducer $functionLikeParameterTypeDeducer,
         ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer
     ) {
         $this->docblockParser = $docblockParser;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
+        $this->foreachNodeLoopValueTypeDeducer = $foreachNodeLoopValueTypeDeducer;
+        $this->functionLikeParameterTypeDeducer = $functionLikeParameterTypeDeducer;
         $this->expressionLocalTypeAnalyzer = $expressionLocalTypeAnalyzer;
     }
 
@@ -261,78 +276,35 @@ class LocalTypeScanner
     protected function getTypesForBestMatchNode($expression, Node $node, $file, $code, $offset)
     {
         if ($node instanceof Node\Stmt\Foreach_) {
-            return $this->deduceTypesFromLoopValueInForeachNode($node, $file, $code, $offset);
+            return $this->foreachNodeLoopValueTypeDeducer->deduce($node, $file, $code, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
-            return $this->deduceTypesFromFunctionLikeParameter($node, $expression);
+            return $this->deduceTypesFromFunctionLikeParameter($node, $expression, $file, $code, $offset);
         }
 
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
 
     /**
-     * @param Node\Stmt\Foreach_ $node
-     * @param string|null        $file
-     * @param string             $code
-     * @param int                $offset
-     *
-     * @return string[]
-     */
-    protected function deduceTypesFromLoopValueInForeachNode(Node\Stmt\Foreach_ $node, $file, $code, $offset)
-    {
-        $types = $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
-
-        foreach ($types as $type) {
-            if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
-                return [$this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type)];
-            }
-        }
-
-        return [];
-    }
-
-    /**
      * @param Node\FunctionLike $node
      * @param string            $parameterName
+     * @param string            $file
+     * @param string            $code
+     * @param int               $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromFunctionLikeParameter(Node\FunctionLike $node, $parameterName)
-    {
+    protected function deduceTypesFromFunctionLikeParameter(
+        Node\FunctionLike $node,
+        $parameterName,
+        $file,
+        $code,
+        $offset
+    ) {
         foreach ($node->getParams() as $param) {
             if ($param->name === mb_substr($parameterName, 1)) {
-                if ($docBlock = $node->getDocComment()) {
-                    // Analyze the docblock's @param tags.
-                    $name = null;
+                $this->functionLikeParameterTypeDeducer->setFunctionDocblock($node->getDocComment());
 
-                    if ($node instanceof Node\Stmt\Function_ || $node instanceof Node\Stmt\ClassMethod) {
-                        $name = $node->name;
-                    }
-
-                    $result = $this->docblockParser->parse((string) $docBlock, [
-                        DocblockParser::PARAM_TYPE
-                    ], $name, true);
-
-                    if (isset($result['params'][$parameterName])) {
-                        return $this->typeAnalyzer->getTypesForTypeSpecification(
-                            $result['params'][$parameterName]['type']
-                        );
-                    }
-                }
-
-                // TODO: Support NullableType (PHP 7.1).
-                if ($param->type instanceof Node\Name) {
-                    $typeHintType = NodeHelpers::fetchClassName($param->type);
-
-                    if ($param->variadic) {
-                        $typeHintType .= '[]';
-                    }
-
-                    return [$typeHintType];
-                } elseif (is_string($param->type)) {
-                    return [$param->type];
-                }
-
-                return [];
+                return $this->functionLikeParameterTypeDeducer->deduce($param, $file, $code, $offset);
             }
         }
 

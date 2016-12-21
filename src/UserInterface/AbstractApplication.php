@@ -61,6 +61,8 @@ use PhpIntegrator\Analysis\Typing\Deduction\ExpressionLocalTypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\PropertyFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\ForeachNodeLoopValueTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use PhpIntegrator\Indexing\Indexer;
@@ -403,6 +405,8 @@ abstract class AbstractApplication
                 new Reference('fileTypeResolverFactory'),
                 new Reference('typeAnalyzer'),
                 new Reference('nodeTypeDeducer'),
+                new Reference('foreachNodeLoopValueTypeDeducer'),
+                new Reference('functionLikeParameterTypeDeducer'),
                 new Reference('expressionLocalTypeAnalyzer')
             ]);
 
@@ -509,6 +513,18 @@ abstract class AbstractApplication
         $container
             ->register('catchNodeTypeDeducer', CatchNodeTypeDeducer::class)
             ->setArguments([new Reference('nodeTypeDeducer')]);
+
+        $container
+            ->register('foreachNodeLoopValueTypeDeducer', ForeachNodeLoopValueTypeDeducer::class)
+            ->setArguments([new Reference('nodeTypeDeducer'), new Reference('typeAnalyzer')]);
+
+        $container
+            ->register('functionLikeParameterTypeDeducer', FunctionLikeParameterTypeDeducer::class)
+            ->setArguments([
+                new Reference('nodeTypeDeducer'),
+                new Reference('typeAnalyzer'),
+                new Reference('docblockParser')
+            ]);
 
         $container
             ->register('nodeTypeDeducer.instance', NodeTypeDeducer::class)
