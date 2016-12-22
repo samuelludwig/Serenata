@@ -6,7 +6,7 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 

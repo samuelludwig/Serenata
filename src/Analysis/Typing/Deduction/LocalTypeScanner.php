@@ -5,7 +5,8 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 use PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
+
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfo;
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;

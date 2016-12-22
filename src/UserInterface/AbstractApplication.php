@@ -26,13 +26,7 @@ use PhpIntegrator\Analysis\Relations\InheritanceResolver;
 use PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeResolver;
-use PhpIntegrator\Analysis\Typing\DocblockTypeResolver;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactory;
-use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactory;
-use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
 use PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryCachingDecorator;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner;
@@ -65,6 +59,13 @@ use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeduce
 
 use PhpIntegrator\Analysis\Typing\Localization\TypeLocalizer;
 use PhpIntegrator\Analysis\Typing\Localization\FileTypeLocalizerFactory;
+
+use PhpIntegrator\Analysis\Typing\Resolving\TypeResolver;
+use PhpIntegrator\Analysis\Typing\Resolving\DocblockTypeResolver;
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory;
+use PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactory;
+use PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade;
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryCachingDecorator;
 
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;

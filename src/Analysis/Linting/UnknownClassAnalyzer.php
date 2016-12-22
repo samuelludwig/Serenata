@@ -5,7 +5,8 @@ namespace PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\ClasslikeExistanceCheckerInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverInterface;
+
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
