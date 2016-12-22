@@ -9,16 +9,25 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 class TypeResolverTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return TypeAnalyzer
+     */
     protected function createTypeAnalyzer()
     {
         return new TypeAnalyzer();
     }
 
+    /**
+     * @return TypeResolver
+     */
     protected function createTypeResolver()
     {
         return new TypeResolver($this->createTypeAnalyzer());
     }
 
+    /**
+     * @return void
+     */
     public function testEmptyTypeReturnsNull()
     {
         $object = $this->createTypeResolver();
@@ -26,6 +35,9 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($object->resolve(null, null, []));
     }
 
+    /**
+     * @return void
+     */
     public function testTypeWithLeadingSlashIsNotResolved()
     {
         $object = $this->createTypeResolver();
@@ -33,6 +45,9 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\A\B', $object->resolve('\A\B', null, []));
     }
 
+    /**
+     * @return void
+     */
     public function testRelativeTypeIsRelativeToNamespace()
     {
         $object = $this->createTypeResolver();
@@ -44,6 +59,9 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('\A\B', $object->resolve('B', 'A', []));
     }
 
+    /**
+     * @return void
+     */
     public function testRelativeTypeIsRelativeToUseStatements()
     {
         $namespace = 'A';
