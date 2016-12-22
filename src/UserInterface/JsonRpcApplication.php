@@ -53,8 +53,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
 
-        echo "Starting socket server on port {$requestHandlingPort}...\n";
-
         $this->stdinStream = fopen('php://memory', 'w+');
 
         /** @var LoopInterface $loop */
@@ -67,6 +65,8 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             fclose($this->stdinStream);
             return 2;
         }
+
+        echo "Starting socket server on port {$requestHandlingPort}...\n";
 
         $loop->run();
 
