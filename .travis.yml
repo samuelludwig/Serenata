@@ -1,13 +1,14 @@
 language: php
 
 matrix:
-    include:
-        - php: 5.6
-          env: PREFER_LOWEST=--prefer-lowest
-        - php: 7.0
-          env: PREFER_LOWEST=
-        - php: 7.1
-          env: PREFER_LOWEST=
+  include:
+    - php: 5.6
+      env: PREFER_LOWEST=--prefer-lowest
+    - php: 7.0
+      env: PREFER_LOWEST=
+    - php: 7.1
+      env: PREFER_LOWEST=
+          
 sudo: false
 
 install:
@@ -17,4 +18,4 @@ script:
   - vendor/bin/phpunit --coverage-clover clover.xml
 
 after_script:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
