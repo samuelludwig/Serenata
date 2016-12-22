@@ -9,37 +9,37 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 class TypeResolverTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getTypeAnalyzer()
+    protected function createTypeAnalyzer()
     {
         return new TypeAnalyzer();
     }
 
-    protected function getTypeResolver()
+    protected function createTypeResolver()
     {
-        return new TypeResolver($this->getTypeAnalyzer());
+        return new TypeResolver($this->createTypeAnalyzer());
     }
 
     public function testEmptyTypeReturnsNull()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $this->assertNull($object->resolve(null, null, []));
     }
 
     public function testTypeWithLeadingSlashIsNotResolved()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\A\B', $object->resolve('\A\B', null, []));
     }
 
     public function testRelativeTypeIsRelativeToNamespace()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\A', $object->resolve('A', null, []));
 
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\A\B', $object->resolve('B', 'A', []));
     }
@@ -61,7 +61,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\B\C', $object->resolve('Alias', $namespace, $imports));
         $this->assertEquals('\B\C\E', $object->resolve('Alias\E', $namespace, $imports));
@@ -74,7 +74,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnqualifiedConstantsGenerateException()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $object->resolve('SOME_CONSTANT', null, [], UseStatementKind::TYPE_CONSTANT);
     }
@@ -84,7 +84,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnqualifiedConstantsWithNamespacePrefixGenerateException()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $object->resolve('A\SOME_CONSTANT', null, [], UseStatementKind::TYPE_CONSTANT);
     }
@@ -94,7 +94,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnqualifiedFunctionsGenerateException()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $object->resolve('some_function', null, [], UseStatementKind::TYPE_FUNCTION);
     }
@@ -104,7 +104,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnqualifiedFunctionsWithNamespacePrefixGenerateException()
     {
-        $object = $this->getTypeResolver();
+        $object = $this->createTypeResolver();
 
         $object->resolve('A\some_function', null, [], UseStatementKind::TYPE_FUNCTION);
     }
