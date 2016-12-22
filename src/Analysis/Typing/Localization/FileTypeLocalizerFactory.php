@@ -1,8 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace PhpIntegrator\Analysis\Typing\Localization;
 
 use LogicException;
+
+use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
 
 /**
  * Factory that creates instances of {@see FileTypeLocalizer}.
