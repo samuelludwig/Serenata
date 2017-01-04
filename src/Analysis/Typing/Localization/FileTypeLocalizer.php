@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace PhpIntegrator\Analysis\Typing\Localization;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 

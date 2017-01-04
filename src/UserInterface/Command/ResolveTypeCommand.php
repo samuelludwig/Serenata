@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\ProjectTypeResolverFactoryFacade;
+use PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 

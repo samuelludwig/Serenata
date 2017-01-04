@@ -1,11 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace PhpIntegrator\Analysis\Typing\Resolving;
 
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\GlobalConstantExistanceCheckerInterface;
 use PhpIntegrator\Analysis\GlobalFunctionExistanceCheckerInterface;
+
+use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
 
 /**
  * Factory that creates instances of {@see ProjectTypeResolver}.

@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\FileTypeLocalizerFactory;
+use PhpIntegrator\Analysis\Typing\Localization\FileTypeLocalizerFactory;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 

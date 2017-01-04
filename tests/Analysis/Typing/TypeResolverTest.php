@@ -2,43 +2,67 @@
 
 namespace PhpIntegrator\Tests\Analysis\Typing;
 
-use PhpIntegrator\Analysis\Typing\TypeResolver;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+
+use PhpIntegrator\Analysis\Typing\Resolving\TypeResolver;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 class TypeResolverTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getTypeAnalyzer()
+    /**
+     * @return TypeAnalyzer
+     */
+    protected function createTypeAnalyzer()
     {
         return new TypeAnalyzer();
     }
 
+    /**
+     * @return TypeResolver
+     */
+    protected function createTypeResolver()
+    {
+        return new TypeResolver($this->createTypeAnalyzer());
+    }
+
+    /**
+     * @return void
+     */
     public function testEmptyTypeReturnsNull()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $this->assertNull($object->resolve(null, null, []));
     }
 
+    /**
+     * @return void
+     */
     public function testTypeWithLeadingSlashIsNotResolved()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\A\B', $object->resolve('\A\B', null, []));
     }
 
+    /**
+     * @return void
+     */
     public function testRelativeTypeIsRelativeToNamespace()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\A', $object->resolve('A', null, []));
 
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\A\B', $object->resolve('B', 'A', []));
     }
 
+    /**
+     * @return void
+     */
     public function testRelativeTypeIsRelativeToUseStatements()
     {
         $namespace = 'A';
@@ -56,7 +80,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $this->assertEquals('\B\C', $object->resolve('Alias', $namespace, $imports));
         $this->assertEquals('\B\C\E', $object->resolve('Alias\E', $namespace, $imports));
@@ -65,41 +89,41 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
     public function testUnqualifiedConstantsGenerateException()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $object->resolve('SOME_CONSTANT', null, [], UseStatementKind::TYPE_CONSTANT);
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
     public function testUnqualifiedConstantsWithNamespacePrefixGenerateException()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $object->resolve('A\SOME_CONSTANT', null, [], UseStatementKind::TYPE_CONSTANT);
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
     public function testUnqualifiedFunctionsGenerateException()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $object->resolve('some_function', null, [], UseStatementKind::TYPE_FUNCTION);
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\Typing\TypeResolutionImpossibleException
+     * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
     public function testUnqualifiedFunctionsWithNamespacePrefixGenerateException()
     {
-        $object = new TypeResolver($this->getTypeAnalyzer());
+        $object = $this->createTypeResolver();
 
         $object->resolve('A\some_function', null, [], UseStatementKind::TYPE_FUNCTION);
     }

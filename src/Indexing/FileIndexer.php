@@ -7,10 +7,11 @@ use Exception;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\TypeResolverInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
+use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;

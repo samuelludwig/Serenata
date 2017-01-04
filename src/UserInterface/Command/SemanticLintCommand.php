@@ -12,7 +12,7 @@ use PhpIntegrator\Analysis\GlobalConstantExistanceChecker;
 use PhpIntegrator\Analysis\GlobalFunctionExistanceChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
