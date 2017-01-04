@@ -1,3 +1,6 @@
+## 2.1.1
+* Fix the `static[]` not working properly when indirectly resolved from another class (https://github.com/php-integrator/atom-autocompletion/issues/85).
+
 ## 2.1.0
 * A couple dependencies have been updated.
 * Composer dependencies are now no longer in Git.

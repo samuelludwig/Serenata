@@ -533,6 +533,16 @@ class DeduceTypesCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesForeachWithStaticMethodCallReturningArrayWithStaticObjects()
+    {
+        $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithStaticObjects.phpt', '$b');
+
+        $this->assertEquals(['\A\B'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesAssignments()
     {
         $output = $this->deduceTypesFromExpression('Assignment.phpt', '$a');

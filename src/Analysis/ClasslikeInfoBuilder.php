@@ -409,9 +409,11 @@ class ClasslikeInfoBuilder
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
-            if ($type['type'] === TypeAnalyzer::TYPE_THIS || $type['type'] === TypeAnalyzer::TYPE_STATIC) {
-                $type['resolvedType'] = $typeAnalyzer->interchangeStaticWithActualType($type['type'], $elementFqcn);
-                $type['resolvedType'] = $typeAnalyzer->interchangeThisWithActualType($type['resolvedType'], $elementFqcn);
+            $replacedThingy = $typeAnalyzer->interchangeStaticWithActualType($type['type'], $elementFqcn);
+            $replacedThingy = $typeAnalyzer->interchangeThisWithActualType($replacedThingy, $elementFqcn);
+
+            if ($type['type'] !== $replacedThingy) {
+                $type['resolvedType'] = $replacedThingy;
             }
         });
     }
