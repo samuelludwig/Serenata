@@ -6,6 +6,8 @@ if (version_compare(PHP_VERSION, '5.6.0') === -1) {
 
 if (!function_exists('mb_substr')) {
     die('Multibyte String support in your PHP installation is required. See also https://secure.php.net/manual/en/book.mbstring.php');
+} elseif (ini_get('mbstring.func_overload')) {
+    die('You have mbstring.func_overload enabled, which is not compatible. Please disable this option in your php.ini.');
 }
 
 // If cli.pager is set to less/more or the like, it causes the JSON response to be duplicated when read by the

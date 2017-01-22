@@ -1,5 +1,6 @@
 ## 2.1.2
 * Fix symlinks not being followed in projects that have them.
+* Terminate if `mbstring.func_overload` is enabled, as it is not compatible.
 
 ## 2.1.1
 * Fix the `static[]` not working properly when indirectly resolved from another class (https://github.com/php-integrator/atom-autocompletion/issues/85).
