@@ -10,8 +10,7 @@ if (!function_exists('mb_substr')) {
     die('You have mbstring.func_overload enabled, which is not compatible. Please disable this option in your php.ini.');
 }
 
-// If cli.pager is set to less/more or the like, it causes the JSON response to be duplicated when read by the
-// coffeescript API. This unsets the option, so that the JSON response is returned correctly.
+// If cli.pager is set to less/more or the like, it causes non-serial STDOUT/STDERR output. This confuses clients.
 ini_set('cli.pager', null);
 
 // Show us pretty much everything so we can properly debug what is going wrong.
