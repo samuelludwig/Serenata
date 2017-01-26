@@ -126,4 +126,21 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
             '\UnexpectedValueException' => 'Some description'
         ], $result['throws']);
     }
+
+    /**
+     * @return void
+     */
+    public function testThrowsTagWithoutDescription()
+    {
+        $parser = new DocblockParser();
+        $result = $parser->parse('
+            /**
+             * @throws \UnexpectedValueException
+             */
+        ', [DocblockParser::THROWS], '');
+
+        $this->assertEquals([
+            '\UnexpectedValueException' => null
+        ], $result['throws']);
+    }
 }

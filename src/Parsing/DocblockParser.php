@@ -500,7 +500,7 @@ class DocblockParser
             foreach ($tags[static::THROWS] as $tag) {
                 list($type, $description) = $this->filterParameterTag($tag, 2);
 
-                if ($type && $description) {
+                if ($type) {
                     $throws[$type] = $description;
                 }
             }

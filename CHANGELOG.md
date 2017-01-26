@@ -1,4 +1,5 @@
 ## 2.1.2
+* Fix `@throws` tags without a description being ignored.
 * Fix symlinks not being followed in projects that have them.
 * Terminate if `mbstring.func_overload` is enabled, as it is not compatible.
 
