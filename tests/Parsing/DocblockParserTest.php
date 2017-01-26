@@ -6,6 +6,9 @@ use PhpIntegrator\Parsing\DocblockParser;
 
 class DocblockParserTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     */
     public function testParamTagAtEndIsInterpretedCorrectly()
     {
         $parser = new DocblockParser();
@@ -25,6 +28,9 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
         ], $result['params']);
     }
 
+    /**
+     * @return void
+     */
     public function testParamTagWithAtSymbolIsInterpretedCorrectly()
     {
         $parser = new DocblockParser();
@@ -44,6 +50,9 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
         ], $result['params']);
     }
 
+    /**
+     * @return void
+     */
     public function testCorrectlyProcessesRussianUnicodeSequences()
     {
         $parser = new DocblockParser();
@@ -61,6 +70,9 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
         ], $result['params']);
     }
 
+    /**
+     * @return void
+     */
     public function testVarTagDescriptionStopsAtNextTag()
     {
         $parser = new DocblockParser();
@@ -80,6 +92,9 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
         ], $result['var']);
     }
 
+    /**
+     * @return void
+     */
     public function testVarTagInSingleLineCommentIsCorrectlyIdentified()
     {
         $parser = new DocblockParser();
