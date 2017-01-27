@@ -1,5 +1,5 @@
 ## 3.0.0
-* At least PHP 7 is now required.
+* At least PHP 7.1 is now required.
 
 ## 2.1.2
 * Fix `@throws` tags without a description being ignored.
