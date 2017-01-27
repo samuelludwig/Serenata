@@ -32,7 +32,9 @@ class MultiRecursivePathIterator extends AppendIterator
             if ($fileInfo->isDir()) {
                 $directoryIterator = new RecursiveDirectoryIterator(
                     $fileInfo->getPathname(),
-                    FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::SKIP_DOTS
+                    FilesystemIterator::KEY_AS_PATHNAME |
+                    FilesystemIterator::SKIP_DOTS |
+                    FilesystemIterator::FOLLOW_SYMLINKS
                 );
 
                 $iterator = new RecursiveIteratorIterator(
