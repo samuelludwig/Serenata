@@ -1,7 +1,7 @@
 <?php
 
-if (version_compare(PHP_VERSION, '5.6.0') === -1) {
-    die('You need at least PHP 5.6, your current version is PHP ' . PHP_VERSION);
+if (version_compare(PHP_VERSION, '7.0.0') === -1) {
+    die('You need at least PHP 7.0, your current version is PHP ' . PHP_VERSION);
 }
 
 if (!function_exists('mb_substr')) {
