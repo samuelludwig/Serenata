@@ -11,7 +11,7 @@ use PhpIntegrator\Tests\IndexedTest;
 class ResolveTypeCommandTest extends IndexedTest
 {
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesVariousTypes(): void
     {
@@ -40,7 +40,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesUnqualifiedConstantsWhenNotInNamespace(): void
     {
@@ -59,7 +59,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndNoConstantRelativeToTheNamespaceExists(): void
     {
@@ -78,7 +78,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndConstantRelativeToTheNamespaceExists(): void
     {
@@ -97,7 +97,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesUnqualifiedFunctionsWhenNotInNamespace(): void
     {
@@ -116,7 +116,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndNoFunctionRelativeToTheNamespaceExists(): void
     {
@@ -135,7 +135,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndFunctionRelativeToTheNamespaceExists(): void
     {
@@ -154,7 +154,7 @@ class ResolveTypeCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyIgnoresMismatchedKinds(): void
     {
