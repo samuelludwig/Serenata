@@ -346,13 +346,13 @@ class DocblockParser
     /**
      * Filters out information about the return value of the function or method.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterReturn(string $docblock, string $itemName, array $tags): array
+    protected function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
         if (isset($tags[static::RETURN_VALUE])) {
             list($type, $description) = $this->filterParameterTag($tags[static::RETURN_VALUE][0], 2);
@@ -379,13 +379,13 @@ class DocblockParser
     /**
      * Filters out information about the parameters of the function or method.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterParams(string $docblock, string $itemName, array $tags): array
+    protected function filterParams(?string $docblock, string $itemName, array $tags): array
     {
         $params = [];
 
@@ -423,13 +423,13 @@ class DocblockParser
     /**
      * Filters out information about the variable.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterVar(string $docblock, string $itemName, array $tags): array
+    protected function filterVar(?string $docblock, string $itemName, array $tags): array
     {
         $vars = [];
 
@@ -470,13 +470,13 @@ class DocblockParser
     /**
      * Filters out deprecation information.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterDeprecated(string $docblock, string $itemName, array $tags): array
+    protected function filterDeprecated(?string $docblock, string $itemName, array $tags): array
     {
         return [
             'deprecated' => isset($tags[static::DEPRECATED])
@@ -486,13 +486,13 @@ class DocblockParser
     /**
      * Filters out information about what exceptions the method can throw.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterThrows(string $docblock, string $itemName, array $tags): array
+    protected function filterThrows(?string $docblock, string $itemName, array $tags): array
     {
         $throws = [];
 
@@ -514,13 +514,13 @@ class DocblockParser
     /**
      * Filters out information about the magic methods of a class.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterMethod(string $docblock, string $itemName, array $tags): array
+    protected function filterMethod(?string $docblock, string $itemName, array $tags): array
     {
         $methods = [];
 
@@ -626,11 +626,11 @@ class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string $tagName
-     * @param string $keyName
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string      $tagName
+     * @param string      $keyName
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
@@ -664,13 +664,13 @@ class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterProperty(string $docblock, string $itemName, array $tags): array
+    protected function filterProperty(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY, 'properties', $docblock, $itemName, $tags);
     }
@@ -678,13 +678,13 @@ class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterPropertyRead(string $docblock, string $itemName, array $tags): array
+    protected function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_READ, 'propertiesReadOnly', $docblock, $itemName, $tags);
     }
@@ -692,25 +692,25 @@ class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterPropertyWrite(string $docblock, string $itemName, array $tags): array
+    protected function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_WRITE, 'propertiesWriteOnly', $docblock, $itemName, $tags);
     }
 
     /**
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterCategory(string $docblock, string $itemName, array $tags): array
+    protected function filterCategory(?string $docblock, string $itemName, array $tags): array
     {
         $description = null;
 
@@ -724,13 +724,13 @@ class DocblockParser
     }
 
     /**
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterSubpackage(string $docblock, string $itemName, array $tags): array
+    protected function filterSubpackage(?string $docblock, string $itemName, array $tags): array
     {
         $name = null;
 
@@ -744,13 +744,13 @@ class DocblockParser
     }
 
     /**
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterLink(string $docblock, string $itemName, array $tags): array
+    protected function filterLink(?string $docblock, string $itemName, array $tags): array
     {
         $links = [];
 
@@ -771,13 +771,13 @@ class DocblockParser
     /**
      * Filters out annotation information.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterAnnotation(string $docblock, string $itemName, array $tags): array
+    protected function filterAnnotation(?string $docblock, string $itemName, array $tags): array
     {
         return [
             'annotation' => isset($tags[static::ANNOTATION])
@@ -787,13 +787,13 @@ class DocblockParser
     /**
      * Filters out information about the description.
      *
-     * @param string $docblock
-     * @param string $itemName
-     * @param array  $tags
+     * @param string|null $docblock
+     * @param string      $itemName
+     * @param array       $tags
      *
      * @return array
      */
-    protected function filterDescription(string $docblock, string $itemName, array $tags): array
+    protected function filterDescription(?string $docblock, string $itemName, array $tags): array
     {
         $summary = '';
         $description = '';
