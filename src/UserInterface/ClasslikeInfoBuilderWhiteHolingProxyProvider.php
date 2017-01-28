@@ -50,11 +50,11 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo(int $id): ?array
+    public function getClasslikeRawInfo(string $fqcn): ?array
     {
         return ($this->structureRawInfo !== null) ?
             $this->structureRawInfo :
-            $this->proxiedObject->getClasslikeRawInfo($id);
+            $this->proxiedObject->getClasslikeRawInfo($fqcn);
     }
 
     /**
