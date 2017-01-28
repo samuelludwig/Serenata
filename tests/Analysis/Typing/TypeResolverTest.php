@@ -33,7 +33,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->createTypeResolver();
 
-        $this->assertNull($object->resolve(null, null, []));
+        $this->assertNull($object->resolve('', null, []));
     }
 
     /**
