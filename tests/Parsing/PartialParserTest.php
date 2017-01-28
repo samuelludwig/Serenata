@@ -19,9 +19,9 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ParserFactory
+     * @return PrettyPrinter
      */
-    protected function createPrettyPrinterStub(): ParserFactory
+    protected function createPrettyPrinterStub(): PrettyPrinter
     {
         return new PrettyPrinter();
     }
