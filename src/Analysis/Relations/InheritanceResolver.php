@@ -169,7 +169,7 @@ class InheritanceResolver extends AbstractResolver
 
             if ($parentMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
                 $inheritedData = $this->extractInheritedMethodInfo($parentMethodData, $childMethod);
-            } else {
+            } elseif ($childMethod['longDescription'] !== null && $parentMethodData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childMethod['longDescription'],
                     $parentMethodData['longDescription']
