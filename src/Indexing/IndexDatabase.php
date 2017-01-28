@@ -316,13 +316,15 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo(string $fqcn): array
+    public function getClasslikeRawInfo(string $fqcn): ?array
     {
-        return $this->getClasslikeRawInfoQueryBuilder()
+        $item = $this->getClasslikeRawInfoQueryBuilder()
             ->where('se.fqcn = ?')
             ->setParameter(0, $fqcn)
             ->execute()
             ->fetch();
+
+        return $item ?: null;
     }
 
     /**
