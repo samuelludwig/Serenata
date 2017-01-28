@@ -14,7 +14,7 @@ class ClassInfoCommandTest extends IndexedTest
      *
      * @return array
      */
-    protected function getClassInfo($file, $fqcn)
+    protected function getClassInfo(string $file, string $fqcn): array
     {
         $path = $this->getPathFor($file);
 
@@ -35,7 +35,7 @@ class ClassInfoCommandTest extends IndexedTest
      *
      * @return array
      */
-    protected function getBuiltinClassInfo($fqcn)
+    protected function getBuiltinClassInfo(string $fqcn): array
     {
         $container = $this->createTestContainerForBuiltinStructuralElements();
 
@@ -52,7 +52,7 @@ class ClassInfoCommandTest extends IndexedTest
      *
      * @return string
      */
-    protected function getPathFor($file)
+    protected function getPathFor(string $file): string
     {
         return __DIR__ . '/ClassInfoCommandTest/' . $file;
     }
