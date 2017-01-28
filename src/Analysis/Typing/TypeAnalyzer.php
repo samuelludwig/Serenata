@@ -146,9 +146,9 @@ class TypeAnalyzer implements TypeNormalizerInterface
     /**
      * @param string $type
      *
-     * @return void
+     * @return bool
      */
-    public function isArraySyntaxTypeHint(string $type): void
+    public function isArraySyntaxTypeHint(string $type): bool
     {
         return (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type) === 1);
     }
