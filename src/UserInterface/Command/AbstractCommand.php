@@ -9,8 +9,5 @@ use ArrayAccess;
  */
 abstract class AbstractCommand implements CommandInterface
 {
-    /**
-     * @inheritDoc
-     */
-    abstract public function execute(ArrayAccess $arguments): string;
+
 }
