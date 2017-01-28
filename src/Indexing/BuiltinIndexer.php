@@ -233,6 +233,15 @@ class BuiltinIndexer
                     continue;
                 }
 
+                if (!mb_check_encoding($function->getName(), 'UTF-8')) {
+                    // See also https://github.com/Gert-dev/php-integrator-base/issues/147 .
+                    $this->logMessage(
+                        '  - WARNING: Ignoring function with non-UTF-8 name ' . $function->getName()
+                    );
+
+                    continue;
+                }
+
                 $this->indexFunction($function);
             }
         }
@@ -257,15 +266,6 @@ class BuiltinIndexer
                     'fqcn' => $this->typeAnalyzer->getNormalizedFqcn((string) $returnType)
                 ];
             }
-        }
-
-        if (!mb_check_encoding($function->getName(), 'UTF-8')) {
-            // See also https://github.com/Gert-dev/php-integrator-base/issues/147 .
-            $this->logMessage(
-                '  - WARNING: Ignoring function with non-UTF-8 name ' . $function->getName()
-            );
-
-            return;
         }
 
         $functionIndexData = [
