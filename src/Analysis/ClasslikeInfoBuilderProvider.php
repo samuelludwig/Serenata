@@ -26,7 +26,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo(string $fqcn): array
+    public function getClasslikeRawInfo(string $fqcn): ?array
     {
         return $this->backend->getClasslikeRawInfo($fqcn);
     }

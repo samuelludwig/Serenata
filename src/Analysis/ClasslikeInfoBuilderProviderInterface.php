@@ -12,7 +12,7 @@ interface ClasslikeInfoBuilderProviderInterface extends ClasslikeRawConstantData
      *
      * @return array
      */
-    public function getClasslikeRawInfo(string $fqcn): array;
+    public function getClasslikeRawInfo(string $fqcn): ?array;
 
     /**
      * @param int $id

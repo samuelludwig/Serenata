@@ -34,7 +34,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo(string $fqcn): array
+    public function getClasslikeRawInfo(string $fqcn): ?array
     {
         $cacheId = $this->getCacheId(__FUNCTION__, func_get_args());
 
