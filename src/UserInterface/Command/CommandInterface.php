@@ -14,6 +14,8 @@ interface CommandInterface
      *
      * @param ArrayAccess $arguments
      *
+     * @throws InvalidArgumentsException
+     *
      * @return string Output to return to the user.
      */
     public function execute(ArrayAccess $arguments): string;
