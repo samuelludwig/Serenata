@@ -23,7 +23,7 @@ class InheritanceResolver extends AbstractResolver
 
         if (!$class['longDescription']) {
             $class['longDescription'] = $parent['longDescription'];
-        } else {
+        } elseif ($class['longDescription'] !== null && $parent['longDescription'] !== null) {
             $class['longDescription'] = $this->resolveInheritDoc($class['longDescription'], $parent['longDescription']);
         }
 
