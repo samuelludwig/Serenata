@@ -50,7 +50,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         return $markerOffset;
     }
 
-    public function testReturnsOnlyVariablesRelevantToTheGlobalScope()
+    public function testReturnsOnlyVariablesRelevantToTheGlobalScope(): void
     {
         $output = $this->getAvailableVariables('GlobalScope.phpt');
 
@@ -61,7 +61,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         ], $output);
     }
 
-    public function testReturnsOnlyVariablesRelevantToTheCurrentFunction()
+    public function testReturnsOnlyVariablesRelevantToTheCurrentFunction(): void
     {
         $output = $this->getAvailableVariables('FunctionScope.phpt');
 
@@ -72,7 +72,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         ], $output);
     }
 
-    public function testReturnsOnlyVariablesRelevantToTheCurrentMethod()
+    public function testReturnsOnlyVariablesRelevantToTheCurrentMethod(): void
     {
         $output = $this->getAvailableVariables('ClassMethodScope.phpt');
 
@@ -84,7 +84,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         ], $output);
     }
 
-    public function testReturnsOnlyVariablesRelevantToTheCurrentClosure()
+    public function testReturnsOnlyVariablesRelevantToTheCurrentClosure(): void
     {
         $output = $this->getAvailableVariables('ClosureScope.phpt');
 
@@ -96,7 +96,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         ], $output);
     }
 
-    public function testCorrectlyIgnoresVariousStatements()
+    public function testCorrectlyIgnoresVariousStatements(): void
     {
         $file = 'VariousStatements.phpt';
         $fullPath = $this->getTestFilePath($file);

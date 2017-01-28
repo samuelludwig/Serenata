@@ -9,7 +9,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testParamTagAtEndIsInterpretedCorrectly()
+    public function testParamTagAtEndIsInterpretedCorrectly(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('
@@ -31,7 +31,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testParamTagWithAtSymbolIsInterpretedCorrectly()
+    public function testParamTagWithAtSymbolIsInterpretedCorrectly(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('
@@ -53,7 +53,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testCorrectlyProcessesRussianUnicodeSequences()
+    public function testCorrectlyProcessesRussianUnicodeSequences(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('/**
@@ -73,7 +73,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testVarTagDescriptionStopsAtNextTag()
+    public function testVarTagDescriptionStopsAtNextTag(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('
@@ -95,7 +95,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testVarTagInSingleLineCommentIsCorrectlyIdentified()
+    public function testVarTagInSingleLineCommentIsCorrectlyIdentified(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('
@@ -113,7 +113,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testThrowsTagWithDescription()
+    public function testThrowsTagWithDescription(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('
@@ -130,7 +130,7 @@ class DocblockParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testThrowsTagWithoutDescription()
+    public function testThrowsTagWithoutDescription(): void
     {
         $parser = new DocblockParser();
         $result = $parser->parse('

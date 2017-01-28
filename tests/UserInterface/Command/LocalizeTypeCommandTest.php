@@ -10,7 +10,7 @@ use PhpIntegrator\Tests\IndexedTest;
 
 class LocalizeTypeCommandTest extends IndexedTest
 {
-    public function testCorrectlyLocalizesVariousTypes()
+    public function testCorrectlyLocalizesVariousTypes(): void
     {
         $path = __DIR__ . '/LocalizeTypeCommandTest/' . 'LocalizeType.phpt';
 
@@ -41,7 +41,7 @@ class LocalizeTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyIgnoresMismatchedKinds()
+    public function testCorrectlyIgnoresMismatchedKinds(): void
     {
         $path = __DIR__ . '/LocalizeTypeCommandTest/' . 'LocalizeType.phpt';
 
@@ -62,7 +62,7 @@ class LocalizeTypeCommandTest extends IndexedTest
     /**
      * @expectedException \PhpIntegrator\UserInterface\Command\InvalidArgumentsException
      */
-    public function testThrowsExceptionOnUnknownFile()
+    public function testThrowsExceptionOnUnknownFile(): void
     {
         $container = $this->createTestContainer();
 

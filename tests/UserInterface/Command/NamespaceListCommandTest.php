@@ -8,7 +8,7 @@ use PhpIntegrator\Tests\IndexedTest;
 
 class NamespaceListCommandTest extends IndexedTest
 {
-    public function testNamespaceList()
+    public function testNamespaceList(): void
     {
         $path = __DIR__ . '/NamespaceListCommandTest/';
 

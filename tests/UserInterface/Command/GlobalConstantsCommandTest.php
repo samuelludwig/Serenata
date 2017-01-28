@@ -42,7 +42,7 @@ class GlobalConstantsCommandTest extends IndexedTest
     /**
      * @return void
      */
-    public function testGlobalConstants()
+    public function testGlobalConstants(): void
     {
         $output = $this->getGlobalConstants('GlobalConstants.phpt');
 
@@ -65,7 +65,7 @@ class GlobalConstantsCommandTest extends IndexedTest
         $this->assertThat($output, $this->logicalNot($this->arrayHasKey('SHOULD_NOT_SHOW_UP')));
     }
 
-    public function testBuiltinGlobalConstants()
+    public function testBuiltinGlobalConstants(): void
     {
         $container = $this->createTestContainerForBuiltinStructuralElements();
 
@@ -109,7 +109,7 @@ class GlobalConstantsCommandTest extends IndexedTest
     /**
      * @return void
      */
-    public function testCorrectlyFetchesDefaultValueOfDefineWithExpression()
+    public function testCorrectlyFetchesDefaultValueOfDefineWithExpression(): void
     {
         $output = $this->getGlobalConstants('DefineWithExpression.phpt');
 

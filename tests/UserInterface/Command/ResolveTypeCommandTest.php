@@ -13,7 +13,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesVariousTypes()
+    public function testCorrectlyResolvesVariousTypes(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
 
@@ -42,7 +42,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesUnqualifiedConstantsWhenNotInNamespace()
+    public function testCorrectlyResolvesUnqualifiedConstantsWhenNotInNamespace(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
 
@@ -61,7 +61,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndNoConstantRelativeToTheNamespaceExists()
+    public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndNoConstantRelativeToTheNamespaceExists(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
 
@@ -80,7 +80,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndConstantRelativeToTheNamespaceExists()
+    public function testCorrectlyResolvesUnqualifiedConstantsWhenInNamespaceAndConstantRelativeToTheNamespaceExists(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
 
@@ -99,7 +99,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesUnqualifiedFunctionsWhenNotInNamespace()
+    public function testCorrectlyResolvesUnqualifiedFunctionsWhenNotInNamespace(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
 
@@ -118,7 +118,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndNoFunctionRelativeToTheNamespaceExists()
+    public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndNoFunctionRelativeToTheNamespaceExists(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
 
@@ -137,7 +137,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndFunctionRelativeToTheNamespaceExists()
+    public function testCorrectlyResolvesUnqualifiedFunctionsWhenInNamespaceAndFunctionRelativeToTheNamespaceExists(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
 
@@ -156,7 +156,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      *
      */
-    public function testCorrectlyIgnoresMismatchedKinds()
+    public function testCorrectlyIgnoresMismatchedKinds(): void
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
 
@@ -176,7 +176,7 @@ class ResolveTypeCommandTest extends IndexedTest
     /**
      * @expectedException \PhpIntegrator\UserInterface\Command\InvalidArgumentsException
      */
-    public function testThrowsExceptionOnUnknownFile()
+    public function testThrowsExceptionOnUnknownFile(): void
     {
         $container = $this->createTestContainer();
 

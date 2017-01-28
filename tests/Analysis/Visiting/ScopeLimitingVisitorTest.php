@@ -13,7 +13,7 @@ class ScopeLimitingVisitorTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testThatTheVisitingOperationIsNonDestructiveAndNodesAreNotPermanentlyModifiedButOnlyDuringTraversal()
+    public function testThatTheVisitingOperationIsNonDestructiveAndNodesAreNotPermanentlyModifiedButOnlyDuringTraversal(): void
     {
         $code = <<<'SOURCE'
             <?php

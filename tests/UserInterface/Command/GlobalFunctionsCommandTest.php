@@ -8,7 +8,7 @@ use PhpIntegrator\Tests\IndexedTest;
 
 class GlobalFunctionsCommandTest extends IndexedTest
 {
-    public function testGlobalFunctions()
+    public function testGlobalFunctions(): void
     {
         $path = __DIR__ . '/GlobalFunctionsCommandTest/' . 'GlobalFunctions.phpt';
 
@@ -32,7 +32,7 @@ class GlobalFunctionsCommandTest extends IndexedTest
         $this->assertThat($output, $this->logicalNot($this->arrayHasKey('shouldNotShowUp')));
     }
 
-    public function testBuiltinGlobalFunctions()
+    public function testBuiltinGlobalFunctions(): void
     {
         $container = $this->createTestContainerForBuiltinStructuralElements();
 

@@ -29,7 +29,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testEmptyTypeReturnsNull()
+    public function testEmptyTypeReturnsNull(): void
     {
         $object = $this->createTypeResolver();
 
@@ -39,7 +39,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testTypeWithLeadingSlashIsNotResolved()
+    public function testTypeWithLeadingSlashIsNotResolved(): void
     {
         $object = $this->createTypeResolver();
 
@@ -49,7 +49,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testRelativeTypeIsRelativeToNamespace()
+    public function testRelativeTypeIsRelativeToNamespace(): void
     {
         $object = $this->createTypeResolver();
 
@@ -63,7 +63,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testRelativeTypeIsRelativeToUseStatements()
+    public function testRelativeTypeIsRelativeToUseStatements(): void
     {
         $namespace = 'A';
         $imports = [
@@ -91,7 +91,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
-    public function testUnqualifiedConstantsGenerateException()
+    public function testUnqualifiedConstantsGenerateException(): void
     {
         $object = $this->createTypeResolver();
 
@@ -101,7 +101,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
-    public function testUnqualifiedConstantsWithNamespacePrefixGenerateException()
+    public function testUnqualifiedConstantsWithNamespacePrefixGenerateException(): void
     {
         $object = $this->createTypeResolver();
 
@@ -111,7 +111,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
-    public function testUnqualifiedFunctionsGenerateException()
+    public function testUnqualifiedFunctionsGenerateException(): void
     {
         $object = $this->createTypeResolver();
 
@@ -121,7 +121,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
      */
-    public function testUnqualifiedFunctionsWithNamespacePrefixGenerateException()
+    public function testUnqualifiedFunctionsWithNamespacePrefixGenerateException(): void
     {
         $object = $this->createTypeResolver();
 

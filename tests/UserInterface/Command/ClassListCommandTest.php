@@ -8,7 +8,7 @@ use PhpIntegrator\Tests\IndexedTest;
 
 class ClassListCommandTest extends IndexedTest
 {
-    public function testClassList()
+    public function testClassList(): void
     {
         $path = __DIR__ . '/ClassListCommandTest/' . 'ClassList.phpt';
 
