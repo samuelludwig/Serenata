@@ -518,7 +518,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function insertStructure(array $data): void
+    public function insertStructure(array $data): int
     {
         return $this->insert(IndexStorageItemEnum::STRUCTURES, $data);
     }

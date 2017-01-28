@@ -79,7 +79,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function insertStructure(array $data): void
+    public function insertStructure(array $data): int
     {
         $callback = $this->insertStructureCallback;
         $callback($data['fqcn']);

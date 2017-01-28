@@ -49,10 +49,8 @@ interface StorageInterface
      * @param array  $data
      *
      * @return int The unique identifier assigned to the inserted data.
-     *
-     * @return void
      */
-    public function insertStructure(array $data): void;
+    public function insertStructure(array $data): int;
 
     /**
      * Inserts the specified index item into the storage.
