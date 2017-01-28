@@ -324,9 +324,9 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
     /**
      * @param Node\FunctionLike $node
      *
-     * @return void
+     * @return array
      */
-    protected function extractFunctionLikeNodeData(Node\FunctionLike $node): void
+    protected function extractFunctionLikeNodeData(Node\FunctionLike $node): array
     {
         $parameters = [];
 
