@@ -482,7 +482,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
         } else {
             $docblockData = $this->docblockParser->parse((string) $docblock, [
                 DocblockParser::VAR_TYPE
-            ], null);
+            ], '');
 
             foreach ($docblockData['var'] as $variableName => $data) {
                 if ($data['type']) {
