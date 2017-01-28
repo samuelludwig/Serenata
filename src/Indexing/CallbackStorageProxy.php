@@ -100,7 +100,7 @@ class CallbackStorageProxy implements StorageInterface
      */
     public function update(string $indexStorageItem, $id, array $data): void
     {
-        return $this->storage->update($indexStorageItem, $id, $data);
+        $this->storage->update($indexStorageItem, $id, $data);
     }
 
     /**
