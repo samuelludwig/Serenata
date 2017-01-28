@@ -467,7 +467,9 @@ class BuiltinIndexer
 
                 $data = [
                     'types_serialized' => serialize($types),
-                    'description'      => $this->getNormalizedDocumentation($parameterInfo['desc'])
+                    'description'      => ($parameterInfo['desc'] !== null) ?
+                        $this->getNormalizedDocumentation($parameterInfo['desc']) :
+                        null
                 ];
 
                 return $data;
