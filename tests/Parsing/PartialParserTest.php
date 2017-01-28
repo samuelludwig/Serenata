@@ -13,7 +13,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createParserFactoryStub()
+    protected function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
     }
@@ -21,7 +21,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPrettyPrinterStub()
+    protected function createPrettyPrinterStub(): ParserFactory
     {
         return new PrettyPrinter();
     }
@@ -29,7 +29,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return PartialParser
      */
-    protected function createPartialParser()
+    protected function createPartialParser(): PartialParser
     {
         return new PartialParser($this->createParserFactoryStub(), $this->createPrettyPrinterStub());
     }
