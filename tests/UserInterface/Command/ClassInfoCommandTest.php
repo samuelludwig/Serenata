@@ -66,7 +66,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testLeadingSlashIsResolvedCorrectly(): void
     {
@@ -79,7 +79,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDataIsCorrectForASimpleClass(): void
     {
@@ -165,7 +165,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testAnnotationClassIsCorrectlyPickedUp(): void
     {
@@ -177,7 +177,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testFinalClassIsCorrectlyPickedUp(): void
     {
@@ -189,7 +189,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDataIsCorrectForClassProperties(): void
     {
@@ -251,7 +251,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testPropertyDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary(): void
     {
@@ -264,7 +264,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCompoundClassPropertyStatementsHaveTheirDocblocksAnalyzedCorrectly(): void
     {
@@ -296,7 +296,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testPropertyTypeDeductionFallsBackToUsingItsDefaultValue(): void
     {
@@ -322,7 +322,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testConstantTypeDeductionFallsBackToUsingItsDefaultValue(): void
     {
@@ -340,7 +340,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDataIsCorrectForClassMethods(): void
     {
@@ -466,7 +466,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testFinalMethodIsCorrectlyPickedUp(): void
     {
@@ -478,7 +478,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDataIsCorrectForClassConstants(): void
     {
@@ -541,7 +541,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testConstantDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary(): void
     {
@@ -554,7 +554,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDocblockInheritanceWorksProperlyForClasses(): void
     {
@@ -574,7 +574,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDocblockInheritanceWorksProperlyForMethods(): void
     {
@@ -629,7 +629,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDocblockInheritanceWorksProperlyForProperties(): void
     {
@@ -672,7 +672,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodOverridingIsAnalyzedCorrectly(): void
     {
@@ -948,7 +948,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodOverridingOfParentImplementationIsAnalyzedCorrectly(): void
     {
@@ -987,7 +987,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodOverridingAndImplementationSimultaneouslyIsAnalyzedCorrectly(): void
     {
@@ -1049,7 +1049,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testPropertyOverridingIsAnalyzedCorrectly(): void
     {
@@ -1128,7 +1128,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceReferencedByParentClass(): void
     {
@@ -1193,7 +1193,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceParent(): void
     {
@@ -1233,7 +1233,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationIsAnalyzedCorrectlyWhenImplementingMethodFromInterfaceDirectlyReferenced(): void
     {
@@ -1271,7 +1271,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodParameterTypesFallBackToDocblock(): void
     {
@@ -1287,7 +1287,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodParameterTypeIsCorrectlyDeducedIfParameterIsVariadic(): void
     {
@@ -1300,7 +1300,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMagicClassPropertiesArePickedUpCorrectly(): void
     {
@@ -1395,7 +1395,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMagicClassMethodsArePickedUpCorrectly(): void
     {
@@ -1540,7 +1540,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testDataIsCorrectForClassInheritance(): void
     {
@@ -1576,7 +1576,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testInterfaceImplementationIsCorrectlyProcessed(): void
     {
@@ -1606,7 +1606,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testTraitUsageIsCorrectlyProcessed(): void
     {
@@ -1658,7 +1658,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodOverrideDataIsCorrectWhenClassHasMethodThatIsAlsoDefinedByOneOfItsOwnTraits(): void
     {
@@ -1676,7 +1676,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodOverrideDataIsCorrectWhenClassHasMethodThatIsAlsoDefinedByOneOfItsOwnTraitsAndByTheParent(): void
     {
@@ -1694,7 +1694,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodOverrideDataIsCorrectWhenInterfaceOverridesParentInterfaceMethod(): void
     {
@@ -1712,7 +1712,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationDataIsCorrectWhenTraitMethodIndirectlyImplementsInterfaceMethod(): void
     {
@@ -1730,7 +1730,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationDataIsCorrectWhenClassReceivesSameInterfaceMethodFromTwoInterfacesAndDoesNotImplementMethod(): void
     {
@@ -1747,7 +1747,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodDeclaringStructureIsCorrectWhenMethodDirectlyOriginatesFromTrait(): void
     {
@@ -1760,7 +1760,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationDataIsCorrectWhenClassMethodImplementsMultipleInterfaceMethodsSimultaneously(): void
     {
@@ -1823,7 +1823,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationDataIsCorrectWhenClassTraitMethodImplementsMultipleInterfaceMethodsSimultaneously(): void
     {
@@ -1886,7 +1886,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodImplementationDataIsCorrectWhenClassMethodImplementsMultipleDirectAndIndirectInterfaceMethodsSimultaneously(): void
     {
@@ -1949,7 +1949,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testSpecialTypesAreCorrectlyResolved(): void
     {
@@ -2137,7 +2137,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testMethodDocblockParameterTypesGetPrecedenceOverTypeHints(): void
     {
@@ -2152,7 +2152,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testItemsWithoutDocblockAndDefaultValueHaveNoTypes(): void
     {
@@ -2166,7 +2166,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyFindsClassesInNamelessNamespace(): void
     {
@@ -2178,7 +2178,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testCorrectlyAnalyzesBuiltinItems(): void
     {
@@ -2267,7 +2267,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testBuiltinInterfaceMethodsAreNotMarkedAsAbstract(): void
     {
@@ -2277,7 +2277,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testBuiltinClassesDoNotAutomaticallyOverrideMethodsFromTheirParents(): void
     {
@@ -2287,7 +2287,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testBuiltinClassesDoNotAutomaticallyOverridePropertiesFromTheirParents(): void
     {
@@ -2297,7 +2297,7 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     *
+     * @return void
      */
     public function testBuiltinClassesDoNotAutomaticallyOverrideConstantsFromTheirParents(): void
     {
