@@ -101,6 +101,14 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     }
 
     /**
+     * @return string
+     */
+    public function hasDatabasePathConfigured(): bool
+    {
+        return !!$this->databasePath;
+    }
+
+    /**
      * Retrieves the currently set databasePath.
      *
      * @return string

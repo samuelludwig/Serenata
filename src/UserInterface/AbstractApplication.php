@@ -699,7 +699,7 @@ abstract class AbstractApplication
         /** @var IndexDatabase $indexDatabase */
         $indexDatabase = $this->getContainer()->get('indexDatabase');
 
-        if ($indexDatabase->getDatabasePath() !== $databaseFile) {
+        if (!$indexDatabase->hasDatabasePathConfigured() || $indexDatabase->getDatabasePath() !== $databaseFile) {
             $indexDatabase->setDatabasePath($databaseFile);
 
             /** @var ClearableCacheInterface $clearableCache */
