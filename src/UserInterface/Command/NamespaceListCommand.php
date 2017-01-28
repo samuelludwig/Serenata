@@ -27,7 +27,7 @@ class NamespaceListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments): string
+    public function execute(ArrayAccess $arguments)
     {
         $file = isset($arguments['file']) ? $arguments['file'] : null;
 

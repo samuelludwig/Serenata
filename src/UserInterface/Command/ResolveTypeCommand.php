@@ -40,7 +40,7 @@ class ResolveTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments): string
+    public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['type'])) {
             throw new InvalidArgumentsException('The type is required for this command.');

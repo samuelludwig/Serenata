@@ -16,7 +16,7 @@ interface CommandInterface
      *
      * @throws InvalidArgumentsException
      *
-     * @return string Output to return to the user.
+     * @return mixed
      */
-    public function execute(ArrayAccess $arguments): string;
+    public function execute(ArrayAccess $arguments);
 }

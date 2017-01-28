@@ -37,7 +37,7 @@ class InvocationInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments): string
+    public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');

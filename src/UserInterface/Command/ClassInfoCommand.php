@@ -26,7 +26,7 @@ class ClassInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments): string
+    public function execute(ArrayAccess $arguments)
     {
         if (!isset($arguments['name'])) {
             throw new InvalidArgumentsException(

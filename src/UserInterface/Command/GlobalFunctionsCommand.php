@@ -36,7 +36,7 @@ class GlobalFunctionsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-     public function execute(ArrayAccess $arguments): string
+     public function execute(ArrayAccess $arguments)
      {
          $result = $this->getGlobalFunctions();
 
