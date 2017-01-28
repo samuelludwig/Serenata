@@ -76,7 +76,7 @@ class TraitUsageResolver extends AbstractResolver
 
             if ($traitPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
                 $inheritedData = $this->extractInheritedPropertyInfo($traitPropertyData);
-            } else {
+            } elseif ($childProperty['longDescription'] !== null && $traitPropertyData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childProperty['longDescription'],
                     $traitPropertyData['longDescription']
