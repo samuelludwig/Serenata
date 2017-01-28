@@ -71,14 +71,6 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function getSetting(string $name): array
-    {
-        return $this->storage->getSetting($name);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function insertStructure(array $data): int
     {
         $callback = $this->insertStructureCallback;
