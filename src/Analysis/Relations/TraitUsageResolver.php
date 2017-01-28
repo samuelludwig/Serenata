@@ -15,14 +15,14 @@ class TraitUsageResolver extends AbstractResolver
      * @param array       $traitAliases
      * @param array       $traitPrecedences
      *
-     * @return ArrayObject
+     * @return void
      */
     public function resolveUseOf(
         ArrayObject $trait,
         ArrayObject $class,
         array $traitAliases,
         array $traitPrecedences
-    ): ArrayObject {
+    ): void {
         foreach ($trait['properties'] as $property) {
             $this->resolveTraitUseOfProperty($property, $class);
         }
