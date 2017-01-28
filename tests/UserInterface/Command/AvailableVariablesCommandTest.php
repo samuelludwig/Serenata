@@ -8,7 +8,7 @@ use PhpIntegrator\Tests\IndexedTest;
 
 class AvailableVariablesCommandTest extends IndexedTest
 {
-    protected function getCommand($file, $mayFail = false)
+    protected function getCommand(string $file, bool $mayFail = false): AvailableVariablesCommand
     {
         $path = $this->getTestFilePath($file);
 
@@ -25,12 +25,12 @@ class AvailableVariablesCommandTest extends IndexedTest
         return $command;
     }
 
-    protected function getTestFilePath($name)
+    protected function getTestFilePath(string $name): string
     {
         return __DIR__ . '/AvailableVariablesCommandTest/' . $name;
     }
 
-    protected function getAvailableVariables($file, $mayIndexingFail = false)
+    protected function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
     {
         $command = $this->getCommand($file, $mayIndexingFail);
 
@@ -41,7 +41,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         return $command->getAvailableVariables(file_get_contents($path), $markerOffset);
     }
 
-    protected function getMarkerOffset($path, $marker)
+    protected function getMarkerOffset(string $path, string $marker): int
     {
         $testFileContents = file_get_contents($path);
 
