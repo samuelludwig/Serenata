@@ -174,7 +174,7 @@ class TraitUsageResolver extends AbstractResolver
 
             if ($traitMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
                 $inheritedData = $this->extractInheritedMethodInfo($traitMethodData, $childMethod);
-            } else {
+            } elseif ($childMethod['longDescription'] !== null && $traitMethodData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childMethod['longDescription'],
                     $traitMethodData['longDescription']
