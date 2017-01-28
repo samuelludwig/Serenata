@@ -600,7 +600,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      */
     public function getGlobalFunctionByFqcn(string $fqcn): ?array
     {
-        return $this->getConnection()->createQueryBuilder()
+        $value = $this->getConnection()->createQueryBuilder()
             ->select('fu.*', 'fi.path')
             ->from(IndexStorageItemEnum::FUNCTIONS, 'fu')
             ->leftJoin('fu', IndexStorageItemEnum::FILES, 'fi', 'fi.id = fu.file_id')
@@ -609,6 +609,8 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
             ->setParameter(0, $fqcn)
             ->execute()
             ->fetch();
+
+        return $value ?: null;
     }
 
     /**
