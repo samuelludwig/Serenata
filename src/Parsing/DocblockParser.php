@@ -634,8 +634,13 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyTag($tagName, $keyName, $docblock, $itemName, array $tags)
-    {
+    protected function filterPropertyTag(
+        string $tagName,
+        string $keyName,
+        ?string $docblock,
+        string $itemName,
+        array $tags
+    ): array {
         $properties = [];
 
         if (isset($tags[$tagName])) {
