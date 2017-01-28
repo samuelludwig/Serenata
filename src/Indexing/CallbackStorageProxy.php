@@ -65,7 +65,7 @@ class CallbackStorageProxy implements StorageInterface
      */
     public function deleteFile(string $path): void
     {
-        return $this->storage->deleteFile($path);
+        $this->storage->deleteFile($path);
     }
 
     /**
