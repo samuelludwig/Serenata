@@ -17,9 +17,9 @@ class InterfaceImplementationResolver extends AbstractResolver
      * @param ArrayObject $interface
      * @param ArrayObject $class
      *
-     * @return ArrayObject
+     * @return void
      */
-    public function resolveImplementationOf(ArrayObject $interface, ArrayObject $class): ArrayObject
+    public function resolveImplementationOf(ArrayObject $interface, ArrayObject $class): void
     {
         foreach ($interface['constants'] as $constant) {
             $this->resolveInheritanceOfConstant($constant, $class);
