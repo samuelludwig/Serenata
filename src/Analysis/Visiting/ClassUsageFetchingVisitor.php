@@ -105,7 +105,7 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-     protected function isValidType(string $type): void
+     protected function isValidType(string $type): bool
      {
          return $this->typeAnalyzer->isClassType($type);
      }
