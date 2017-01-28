@@ -147,12 +147,12 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      * @param JsonRpcRequest                      $request
      * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
      *
-     * @return string
+     * @return mixed
      */
     protected function handleRequest(
         JsonRpcRequest $request,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
-    ): string {
+    ) {
         $params = $request->getParams();
 
         $this->configureProgressStreamingCallback($request, $jsonRpcResponseSender);
