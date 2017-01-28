@@ -306,9 +306,9 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @param string|null $file
      *
-     * @return \Traversable
+     * @return iterable
      */
-    public function getAllStructuresRawInfo(?string $file): \Traversable
+    public function getAllStructuresRawInfo(?string $file): iterable
     {
         $queryBuilder = $this->getClasslikeRawInfoQueryBuilder();
 
@@ -554,9 +554,9 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * Fetches a list of global constants.
      *
-     * @return \Traversable
+     * @return iterable
      */
-    public function getGlobalConstants(): \Traversable
+    public function getGlobalConstants(): iterable
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('c.*', 'fi.path')
@@ -589,9 +589,9 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * Fetches a list of global functions.
      *
-     * @return \Traversable
+     * @return iterable
      */
-    public function getGlobalFunctions(): \Traversable
+    public function getGlobalFunctions(): iterable
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fu.*', 'fi.path')
