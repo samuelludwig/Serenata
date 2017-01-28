@@ -151,7 +151,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      */
     protected function handleRequest(
         JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+        ?JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
     ) {
         $params = $request->getParams();
 
