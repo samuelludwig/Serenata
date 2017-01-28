@@ -86,6 +86,10 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
         if ($nameString === 'static' || $nameString === 'self') {
             $currentClass = $this->findCurrentClassAt($file, $code, $offset);
 
+            if ($currentClass === null) {
+                return [];
+            }
+
             return [$this->typeAnalyzer->getNormalizedFqcn($currentClass)];
         } elseif ($nameString === 'parent') {
             $currentClassName = $this->findCurrentClassAt($file, $code, $offset);
