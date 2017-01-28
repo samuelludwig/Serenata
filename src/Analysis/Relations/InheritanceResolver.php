@@ -99,7 +99,7 @@ class InheritanceResolver extends AbstractResolver
 
             if ($parentPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
                 $inheritedData = $this->extractInheritedPropertyInfo($parentPropertyData);
-            } else {
+            } elseif ($childProperty['longDescription'] !== null && $parentPropertyData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
                     $childProperty['longDescription'],
                     $parentPropertyData['longDescription']
