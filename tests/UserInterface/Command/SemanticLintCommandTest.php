@@ -11,8 +11,10 @@ class SemanticLintCommandTest extends IndexedTest
     /**
      * @param string $file
      * @param bool   $indexingMayFail
+     *
+     * @return array
      */
-    protected function lintFile($file, $indexingMayFail = false)
+    protected function lintFile(string $file, bool $indexingMayFail = false): array
     {
         $path = __DIR__ . '/SemanticLintCommandTest/' . $file;
 
