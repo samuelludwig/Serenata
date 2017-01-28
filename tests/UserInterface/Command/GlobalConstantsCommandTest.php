@@ -13,7 +13,7 @@ class GlobalConstantsCommandTest extends IndexedTest
      *
      * @return array
      */
-    protected function getGlobalConstants($file)
+    protected function getGlobalConstants(string $file): array
     {
         $path = $this->getPathFor($file);
 
@@ -34,7 +34,7 @@ class GlobalConstantsCommandTest extends IndexedTest
      *
      * @return string
      */
-    protected function getPathFor($file)
+    protected function getPathFor(string $file): string
     {
         return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
     }
