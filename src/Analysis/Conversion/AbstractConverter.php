@@ -8,11 +8,11 @@ namespace PhpIntegrator\Analysis\Conversion;
 abstract class AbstractConverter
 {
     /**
-     * @param array[] $serializedTypes
+     * @param string $serializedTypes
      *
      * @return array[]
      */
-    protected function getReturnTypeDataForSerializedTypes(array $serializedTypes): array
+    protected function getReturnTypeDataForSerializedTypes(string $serializedTypes): array
     {
         $types = [];
 
