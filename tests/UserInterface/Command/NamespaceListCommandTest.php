@@ -8,6 +8,9 @@ use PhpIntegrator\Tests\IndexedTest;
 
 class NamespaceListCommandTest extends IndexedTest
 {
+    /**
+     * @return void
+     */
     public function testNamespaceList(): void
     {
         $path = __DIR__ . '/NamespaceListCommandTest/';
