@@ -90,6 +90,8 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
+     *
+     * @return void
      */
     public function testUnqualifiedConstantsGenerateException(): void
     {
@@ -100,6 +102,8 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
+     *
+     * @return void
      */
     public function testUnqualifiedConstantsWithNamespacePrefixGenerateException(): void
     {
@@ -110,6 +114,8 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
+     *
+     * @return void
      */
     public function testUnqualifiedFunctionsGenerateException(): void
     {
@@ -120,6 +126,8 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \PhpIntegrator\Analysis\Typing\Resolving\TypeResolutionImpossibleException
+     *
+     * @return void
      */
     public function testUnqualifiedFunctionsWithNamespacePrefixGenerateException(): void
     {
