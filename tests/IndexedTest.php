@@ -24,7 +24,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
      *
      * @return ContainerBuilder
      */
-    protected function createTestContainer($indexBuiltinItems = false)
+    protected function createTestContainer(bool $indexBuiltinItems = false): ContainerBuilder
     {
         $app = new JsonRpcApplication();
 
@@ -51,8 +51,10 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
      * @param ContainerBuilder $container
      * @param string           $testPath
      * @param bool             $mayFail
+     *
+     * @return void
      */
-    protected function indexTestFile(ContainerBuilder $container, $testPath, $mayFail = false)
+    protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
         $success = $container->get('indexer')->reindex(
             [$testPath],
@@ -71,7 +73,7 @@ abstract class IndexedTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ContainerBuilder
      */
-    protected function createTestContainerForBuiltinStructuralElements()
+    protected function createTestContainerForBuiltinStructuralElements(): ContainerBuilder
     {
         // Indexing builtin items is a fairy large performance hit to run every test, so keep the property static.
         if (!self::$testContainerBuiltinStructuralElements) {
