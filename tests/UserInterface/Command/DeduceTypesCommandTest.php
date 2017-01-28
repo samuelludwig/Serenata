@@ -16,7 +16,7 @@ class DeduceTypesCommandTest extends IndexedTest
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpression($file, $expression)
+    protected function deduceTypesFromExpression(string $file, string $expression): array
     {
         $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
 
@@ -45,7 +45,7 @@ class DeduceTypesCommandTest extends IndexedTest
      *
      * @return int
      */
-    protected function getMarkerOffset($path, $marker)
+    protected function getMarkerOffset(string $path, string $marker): int
     {
         $testFileContents = @file_get_contents($path);
 
