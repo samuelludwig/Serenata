@@ -219,7 +219,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
             ->execute()
             ->fetchColumn();
 
-        return $result ? $result : null;
+        return $result ?: null;
     }
 
     /**
