@@ -209,7 +209,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getFileId(string $path): int
+    public function getFileId(string $path): ?int
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('id')
