@@ -353,12 +353,12 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildTraitsInfo(: void
+    protected function buildTraitsInfo(
         ArrayObject $classlike,
         array $traits,
         array $traitAliases,
         array $traitPrecedences
-    ) {
+    ): void {
         foreach ($traits as $trait) {
             $classlike['traits'][] = $trait['fqcn'];
             $classlike['directTraits'][] = $trait['fqcn'];
