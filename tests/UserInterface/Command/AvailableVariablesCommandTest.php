@@ -62,15 +62,15 @@ class AvailableVariablesCommandTest extends IndexedTest
      * @param string $path
      * @param string $marker
      *
-     * @return int
+     * @return int|null
      */
-    protected function getMarkerOffset(string $path, string $marker): int
+    protected function getMarkerOffset(string $path, string $marker): ?int
     {
         $testFileContents = file_get_contents($path);
 
         $markerOffset = mb_strpos($testFileContents, $marker);
 
-        return $markerOffset;
+        return $markerOffset !== false ? $markerOffset : null;
     }
 
     /**
@@ -147,7 +147,7 @@ class AvailableVariablesCommandTest extends IndexedTest
         while (true) {
             $markerOffset = $this->getMarkerOffset($fullPath, "MARKER_{$i}");
 
-            if ($markerOffset === false) {
+            if ($markerOffset === null) {
                 break;
             }
 
