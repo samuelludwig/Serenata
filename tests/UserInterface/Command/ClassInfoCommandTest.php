@@ -58,16 +58,6 @@ class ClassInfoCommandTest extends IndexedTest
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     *
-     * @return void
-     */
-    public function testFailsOnUnknownClass(): void
-    {
-        $output = $this->getClassInfo('SimpleClass.phpt', 'DoesNotExist');
-    }
-
-    /**
      * @return void
      */
     public function testLeadingSlashIsResolvedCorrectly(): void
@@ -2306,6 +2296,16 @@ class ClassInfoCommandTest extends IndexedTest
         $output = $this->getBuiltinClassInfo('\SplTempFileObject');
 
         $this->assertEquals('\SplFileObject', $output['constants']['DROP_NEW_LINE']['declaringClass']['name']);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
+    public function testFailsOnUnknownClass(): void
+    {
+        $output = $this->getClassInfo('SimpleClass.phpt', 'DoesNotExist');
     }
 
     /**
