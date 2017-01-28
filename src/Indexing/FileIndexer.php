@@ -318,7 +318,7 @@ class FileIndexer
 
                 $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_ALIASES, [
                     'structure_id'         => $seId,
-                    'trait_structure_fqcn' => $traitAlias['trait'] ? $this->typeAnalyzer->getNormalizedFqcn($traitAlias['trait']) : null,
+                    'trait_structure_fqcn' => ($traitAlias['trait'] !== null) ? $this->typeAnalyzer->getNormalizedFqcn($traitAlias['trait']) : null,
                     'access_modifier_id'   => $accessModifier ? $accessModifierMap[$accessModifier] : null,
                     'name'                 => $traitAlias['name'],
                     'alias'                => $traitAlias['alias']
