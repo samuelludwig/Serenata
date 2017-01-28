@@ -13,7 +13,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return TypeAnalyzer
      */
-    protected function createTypeAnalyzer()
+    protected function createTypeAnalyzer(): TypeAnalyzer
     {
         return new TypeAnalyzer();
     }
@@ -21,7 +21,7 @@ class TypeResolverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return TypeResolver
      */
-    protected function createTypeResolver()
+    protected function createTypeResolver(): TypeResolver
     {
         return new TypeResolver($this->createTypeAnalyzer());
     }
