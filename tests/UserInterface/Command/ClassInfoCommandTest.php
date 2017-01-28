@@ -59,6 +59,8 @@ class ClassInfoCommandTest extends IndexedTest
 
     /**
      * @expectedException \UnexpectedValueException
+     *
+     * @return void
      */
     public function testFailsOnUnknownClass(): void
     {
@@ -2308,6 +2310,8 @@ class ClassInfoCommandTest extends IndexedTest
 
     /**
      * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
+     *
+     * @return void
      */
     public function testThrowsExceptionOnCircularDependencyWithClassExtendingItself(): void
     {
@@ -2318,6 +2322,8 @@ class ClassInfoCommandTest extends IndexedTest
 
     /**
      * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
+     *
+     * @return void
      */
     public function testThrowsExceptionOnCircularDependencyWithClassImplementingItself(): void
     {
@@ -2328,6 +2334,8 @@ class ClassInfoCommandTest extends IndexedTest
 
     /**
      * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
+     *
+     * @return void
      */
     public function testThrowsExceptionOnCircularDependencyWithClassUsingItselfAsTrait(): void
     {
