@@ -420,9 +420,9 @@ class BuiltinIndexer
     /**
      * @param ReflectionParameter $parameter
      *
-     * @return void
+     * @return array
      */
-    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter): void
+    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter): array
     {
         $function = $parameter->getDeclaringFunction();
 
