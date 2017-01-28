@@ -68,9 +68,9 @@ class InvocationInfoCommand extends AbstractCommand
      * @param string $code
      * @param int    $offset
      *
-     * @return array
+     * @return array|null
      */
-    public function getInvocationInfoAt(string $code, int $offset): array
+    public function getInvocationInfoAt(string $code, int $offset): ?array
     {
         return $this->getInvocationInfo(substr($code, 0, $offset));
     }
@@ -78,9 +78,9 @@ class InvocationInfoCommand extends AbstractCommand
     /**
      * @param string $code
      *
-     * @return array
+     * @return array|null
      */
-    public function getInvocationInfo(string $code): array
+    public function getInvocationInfo(string $code): ?array
     {
         return $this->partialParser->getInvocationInfoAt($code);
     }
