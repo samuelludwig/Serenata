@@ -101,9 +101,9 @@ class ProjectTypeResolver implements FileTypeResolverInterface
     /**
      * @param int $line
      *
-     * @return array|null
+     * @return string|null
      */
-    protected function getRelevantNamespaceForLine(int $line): ?array
+    protected function getRelevantNamespaceForLine(int $line): ?string
     {
         foreach ($this->namespaces as $namespace) {
             if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
