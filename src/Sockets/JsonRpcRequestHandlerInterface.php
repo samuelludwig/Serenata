@@ -19,5 +19,8 @@ interface JsonRpcRequestHandlerInterface
      *
      * @return JsonRpcResponse
      */
-    public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender = null);
+    public function handle(
+        JsonRpcRequest $request,
+        ?JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+    ): JsonRpcResponse;
 }

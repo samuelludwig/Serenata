@@ -25,7 +25,7 @@ class GlobalConstantExistanceChecker implements GlobalConstantExistanceCheckerIn
     /**
      * @inheritDoc
      */
-    public function doesGlobalConstantExist($fqcn)
+    public function doesGlobalConstantExist(string $fqcn): bool
     {
         $globalConstantFqcnMap = $this->getGlobalConstantFqcnMap();
 
@@ -35,7 +35,7 @@ class GlobalConstantExistanceChecker implements GlobalConstantExistanceCheckerIn
     /**
      * @return array
      */
-    protected function getGlobalConstantFqcnMap()
+    protected function getGlobalConstantFqcnMap(): array
     {
         $globalConstantFqcnMap = [];
 

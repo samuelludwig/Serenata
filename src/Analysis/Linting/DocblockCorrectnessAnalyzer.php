@@ -56,7 +56,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      * @param DocblockAnalyzer     $docblockAnalyzer
      */
     public function __construct(
-        $code,
+        string $code,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
@@ -73,7 +73,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return [
             $this->outlineIndexingVisitor
@@ -83,7 +83,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         $docblockIssues = [
             'varTagMissing'           => [],
@@ -143,7 +143,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeStructureDocblock(array $structure)
+    protected function analyzeStructureDocblock(array $structure): array
     {
         $docblockIssues = [
             'missingDocumentation'    => [],
@@ -209,7 +209,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeMethodDocblock(array $structure, array $method)
+    protected function analyzeMethodDocblock(array $structure, array $method): array
     {
         if ($method['docComment']) {
             return $this->analyzeFunctionDocblock($method);
@@ -242,7 +242,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzePropertyDocblock(array $structure, array $property)
+    protected function analyzePropertyDocblock(array $structure, array $property): array
     {
         $docblockIssues = [
             'varTagMissing'        => [],
@@ -285,7 +285,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeClassConstantDocblock(array $structure, array $constant)
+    protected function analyzeClassConstantDocblock(array $structure, array $constant): array
     {
         $docblockIssues = [
             'varTagMissing'        => [],
@@ -320,7 +320,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeFunctionDocblock(array $function)
+    protected function analyzeFunctionDocblock(array $function): array
     {
         $docblockIssues = [
             'missingDocumentation'  => [],
@@ -409,7 +409,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array|null
      */
-    protected function getClassInfo($fqcn)
+    protected function getClassInfo(string $fqcn): ?array
     {
         if (!isset($classCache[$fqcn])) {
             try {

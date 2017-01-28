@@ -27,7 +27,7 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\Variable) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -44,8 +44,12 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromVariableNode(Node\Expr\Variable $node, $file, $code, $offset)
-    {
+    protected function deduceTypesFromVariableNode(
+        Node\Expr\Variable $node,
+        ?string $file,
+        string $code,
+        int $offset
+    ): array {
         if ($node->name instanceof Node\Expr) {
             return []; // Can't currently deduce type of a variable such as "$$this".
         }

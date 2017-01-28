@@ -19,8 +19,10 @@ class VariableScanner
      * @param int    $offset
      *
      * @throws UnexpectedValueException
+     *
+     * @return array
      */
-    public function getAvailableVariables(array $nodes, $offset)
+    public function getAvailableVariables(array $nodes, int $offset): array
     {
         $queryingVisitor = new VariableScanningVisitor($offset);
         $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);

@@ -10,15 +10,15 @@ class UseStatementKind
     /**
      * @var string
      */
-    const TYPE_CLASSLIKE = 'classlike';
+    public const TYPE_CLASSLIKE = 'classlike';
 
     /**
      * @var string
      */
-    const TYPE_FUNCTION = 'function';
+    public const TYPE_FUNCTION = 'function';
 
     /**
      * @var string
      */
-    const TYPE_CONSTANT = 'constant';
+    public const TYPE_CONSTANT = 'constant';
 }

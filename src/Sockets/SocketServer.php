@@ -43,8 +43,10 @@ class SocketServer extends Server
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
-    protected function onConnectionEstablished(Connection $connection)
+    protected function onConnectionEstablished(Connection $connection): void
     {
         $handler = $this->connectionHandlerFactory->create($connection);
 
@@ -55,8 +57,10 @@ class SocketServer extends Server
 
     /**
      * @param Connection $connection
+     *
+     * @return void
      */
-    protected function onConnectionClosed(Connection $connection)
+    protected function onConnectionClosed(Connection $connection): void
     {
         $this->connectionMap->detach($connection);
     }

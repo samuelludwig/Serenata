@@ -31,7 +31,7 @@ class FileTypeResolverFactoryCachingDecorator implements FileTypeResolverFactory
     /**
      * @inheritDoc
      */
-    public function create($filePath)
+    public function create(string $filePath): FileTypeResolver
     {
         if (!isset($this->cache[$filePath])) {
             $this->cache[$filePath] = $this->fileTypeResolverFactory->create($filePath);
@@ -43,7 +43,7 @@ class FileTypeResolverFactoryCachingDecorator implements FileTypeResolverFactory
     /**
      * @inheritDoc
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->cache = [];
     }

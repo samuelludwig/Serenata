@@ -40,7 +40,7 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\FuncCall) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -54,7 +54,7 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromFuncCallNode(Node\Expr\FuncCall $node)
+    protected function deduceTypesFromFuncCallNode(Node\Expr\FuncCall $node): array
     {
         if ($node->name instanceof Node\Expr) {
             return []; // Can't currently deduce type of an expression such as "{$foo}()";

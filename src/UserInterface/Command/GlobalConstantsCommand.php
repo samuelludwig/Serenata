@@ -36,7 +36,7 @@ class GlobalConstantsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         $constants = $this->getGlobalConstants();
 
@@ -46,7 +46,7 @@ class GlobalConstantsCommand extends AbstractCommand
     /**
      * @return array
      */
-    public function getGlobalConstants()
+    public function getGlobalConstants(): array
     {
         $constants = [];
 

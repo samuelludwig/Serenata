@@ -40,7 +40,7 @@ class ResolveTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['type'])) {
             throw new InvalidArgumentsException('The type is required for this command.');
@@ -72,7 +72,7 @@ class ResolveTypeCommand extends AbstractCommand
      *
      * @return string|null
      */
-    public function resolveType($name, $file, $line, $kind)
+    public function resolveType(string $name, string $file, int $line, string $kind): ?string
     {
         $recognizedKinds = [
             UseStatementKind::TYPE_CLASSLIKE,

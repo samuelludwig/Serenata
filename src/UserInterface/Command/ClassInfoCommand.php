@@ -26,7 +26,7 @@ class ClassInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['name'])) {
             throw new InvalidArgumentsException(
@@ -44,7 +44,7 @@ class ClassInfoCommand extends AbstractCommand
      *
      * @return array
      */
-    public function getClassInfo($fqcn)
+    public function getClassInfo(string $fqcn): array
     {
         $fqcn = $this->typeAnalyzer->getNormalizedFqcn($fqcn);
 

@@ -12,7 +12,7 @@ abstract class AbstractConverter
      *
      * @return array[]
      */
-    protected function getReturnTypeDataForSerializedTypes($serializedTypes)
+    protected function getReturnTypeDataForSerializedTypes(array $serializedTypes): array
     {
         $types = [];
 

@@ -128,7 +128,7 @@ class SemanticLintCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A file name is required for this command.');
@@ -169,15 +169,15 @@ class SemanticLintCommand extends AbstractCommand
      * @return array
      */
     public function semanticLint(
-        $file,
-        $code,
-        $retrieveUnknownClasses = true,
-        $retrieveUnknownMembers = true,
-        $retrieveUnknownGlobalFunctions = true,
-        $retrieveUnknownGlobalConstants = true,
-        $analyzeDocblockCorrectness = true,
-        $retrieveUnusedUseStatements = true
-    ) {
+        string $file,
+        string $code,
+        bool $retrieveUnknownClasses = true,
+        bool $retrieveUnknownMembers = true,
+        bool $retrieveUnknownGlobalFunctions = true,
+        bool $retrieveUnknownGlobalConstants = true,
+        bool $analyzeDocblockCorrectness = true,
+        bool $retrieveUnusedUseStatements = true
+    ): array {
         // Parse the file to fetch the information we need.
         $nodes = [];
         $parser = $this->parser;

@@ -19,7 +19,7 @@ class ExpressionTypeInfoMap
      *
      * @return ExpressionTypeInfo
      */
-    public function get($expression)
+    public function get(string $expression): ExpressionTypeInfo
     {
         $this->createIfNecessary($expression);
 
@@ -31,7 +31,7 @@ class ExpressionTypeInfoMap
      *
      * @return bool
      */
-    public function has($expression)
+    public function has(string $expression): bool
     {
         return isset($this->map[$expression]);
     }
@@ -39,8 +39,10 @@ class ExpressionTypeInfoMap
     /**
      * @param string    $expression
      * @param Node|null $bestMatch
+     *
+     * @return void
      */
-    public function setBestMatch($expression, Node $bestMatch = null)
+    public function setBestMatch(string $expression, ?Node $bestMatch): void
     {
         $this->createIfNecessary($expression);
 
@@ -52,8 +54,10 @@ class ExpressionTypeInfoMap
      * @param string $expression
      * @param string $type
      * @param int    $line
+     *
+     * @return void
      */
-    public function setBestTypeOverrideMatch($expression, $type, $line)
+    public function setBestTypeOverrideMatch(string $expression, string $type, int $line): void
     {
         $this->createIfNecessary($expression);
 
@@ -63,8 +67,10 @@ class ExpressionTypeInfoMap
 
     /**
      * @param string[] $exclusionList
+     *
+     * @return void
      */
-    public function removeAllExcept(array $exclusionList)
+    public function removeAllExcept(array $exclusionList): void
     {
         $newMap = [];
 
@@ -80,15 +86,17 @@ class ExpressionTypeInfoMap
     /**
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->map = [];
     }
 
     /**
      * @param string $expression
+     *
+     * @return void
      */
-    protected function createIfNecessary($expression)
+    protected function createIfNecessary(string $expression): void
     {
         if ($this->has($expression)) {
             return;
@@ -99,8 +107,10 @@ class ExpressionTypeInfoMap
 
     /**
      * @param string $expression
+     *
+     * @return void
      */
-    protected function create($expression)
+    protected function create(string $expression): void
     {
         $this->map[$expression] = new ExpressionTypeInfo();
     }

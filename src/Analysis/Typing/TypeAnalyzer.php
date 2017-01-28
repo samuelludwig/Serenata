@@ -12,27 +12,27 @@ class TypeAnalyzer implements TypeNormalizerInterface
     /**
      * @var string
      */
-    const TYPE_SPLITTER   = '|';
+    protected const TYPE_SPLITTER   = '|';
 
     /**
      * @var string
      */
-    const ARRAY_TYPE_HINT_REGEX = '/^(.+)\[\]$/';
+    protected const ARRAY_TYPE_HINT_REGEX = '/^(.+)\[\]$/';
 
     /**
      * @var string
      */
-    const TYPE_SELF = 'self';
+    protected const TYPE_SELF = 'self';
 
     /**
      * @var string
      */
-    const TYPE_STATIC = 'static';
+    protected const TYPE_STATIC = 'static';
 
     /**
      * @var string
      */
-    const TYPE_THIS = '$this';
+    protected const TYPE_THIS = '$this';
 
     /**
      * Indicates if a type is "special", i.e. it is not an actual class type, but rather a basic type (e.g. "int",
@@ -44,7 +44,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return bool
      */
-    public function isSpecialType($type)
+    public function isSpecialType(string $type): bool
     {
         $isReservedKeyword = in_array($type, [
             'string',
@@ -74,7 +74,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return bool
      */
-    public function isClassType($type)
+    public function isClassType(string $type): bool
     {
         return !$this->isSpecialType($type);
     }
@@ -82,7 +82,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
     /**
      * @inheritDoc
      */
-    public function getNormalizedFqcn($fqcn)
+    public function getNormalizedFqcn(string $fqcn): string
     {
         if ($fqcn && $fqcn[0] !== '\\') {
             return '\\' . $fqcn;
@@ -100,7 +100,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string[]
      */
-    public function getTypesForTypeSpecification($typeSpecification)
+    public function getTypesForTypeSpecification(string $typeSpecification): array
     {
         return explode(self::TYPE_SPLITTER, $typeSpecification);
     }
@@ -114,7 +114,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return bool
      */
-    public function isTypeConformantWithDocblockType($type, $typeSpecification)
+    public function isTypeConformantWithDocblockType(string $type, string $typeSpecification): bool
     {
         $docblockTypes = $this->getTypesForTypeSpecification($typeSpecification);
 
@@ -127,7 +127,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return bool
      */
-    protected function isTypeConformantWithDocblockTypes($type, array $docblockTypes)
+    protected function isTypeConformantWithDocblockTypes(string $type, array $docblockTypes): bool
     {
         $isPresent = in_array($type, $docblockTypes);
 
@@ -145,8 +145,10 @@ class TypeAnalyzer implements TypeNormalizerInterface
 
     /**
      * @param string $type
+     *
+     * @return void
      */
-    public function isArraySyntaxTypeHint($type)
+    public function isArraySyntaxTypeHint(string $type): void
     {
         return (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type) === 1);
     }
@@ -156,7 +158,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string|null
      */
-    public function getValueTypeFromArraySyntaxTypeHint($type)
+    public function getValueTypeFromArraySyntaxTypeHint(string $type): ?string
     {
         $matches = [];
 
@@ -178,7 +180,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string
      */
-    public function interchangeSelfWithActualType($docblockType, $newType)
+    public function interchangeSelfWithActualType(string $docblockType, string $newType): string
     {
         return $this->interchangeType($docblockType, self::TYPE_SELF, $newType);
     }
@@ -194,7 +196,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string
      */
-    public function interchangeStaticWithActualType($docblockType, $newType)
+    public function interchangeStaticWithActualType(string $docblockType, string $newType): string
     {
         return $this->interchangeType($docblockType, self::TYPE_STATIC, $newType);
     }
@@ -210,7 +212,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string
      */
-    public function interchangeThisWithActualType($docblockType, $newType)
+    public function interchangeThisWithActualType(string $docblockType, string $newType): string
     {
         return $this->interchangeType($docblockType, self::TYPE_THIS, $newType);
     }
@@ -224,7 +226,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string
      */
-    protected function interchangeType($docblockType, $oldType, $newType)
+    protected function interchangeType(string $docblockType, string $oldType, string $newType): string
     {
         if ($this->isArraySyntaxTypeHint($docblockType)) {
             $valueType = $this->getValueTypeFromArraySyntaxTypeHint($docblockType);

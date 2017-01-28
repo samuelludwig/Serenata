@@ -16,7 +16,7 @@ interface NamespaceImportProviderInterface
      *     @var int|null $endLine
      * }
      */
-    public function getNamespacesForFile($filePath);
+    public function getNamespacesForFile(string $filePath): array;
 
     /**
      * @param string $filePath
@@ -28,12 +28,12 @@ interface NamespaceImportProviderInterface
      *     @var int    $line
      * }
      */
-    public function getUseStatementsForFile($filePath);
+    public function getUseStatementsForFile(string $filePath): array;
 
     /**
      * @return array {
      *     @var string $name
      * }
      */
-    public function getNamespaces();
+    public function getNamespaces(): array;
 }

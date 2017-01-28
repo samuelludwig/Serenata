@@ -104,8 +104,10 @@ class BuiltinIndexer
      * Logs a single message for debugging purposes.
      *
      * @param string $message
+     *
+     * @return void
      */
-    protected function logMessage($message)
+    protected function logMessage(string $message): void
     {
         if (!$this->loggingStream) {
             return;
@@ -116,8 +118,10 @@ class BuiltinIndexer
 
     /**
      * Indexes built-in classes, global functions and global constants.
+     *
+     * @return void
      */
-    public function index()
+    public function index(): void
     {
         $this->storage->beginTransaction();
 
@@ -141,8 +145,10 @@ class BuiltinIndexer
 
     /**
      * Indexes built-in PHP constants.
+     *
+     * @return void
      */
-    protected function indexConstants()
+    protected function indexConstants(): void
     {
         foreach (get_defined_constants(true) as $namespace => $constantList) {
             if ($namespace === 'user') {
@@ -163,7 +169,7 @@ class BuiltinIndexer
      *
      * @return int
      */
-    protected function indexConstant($name, $value)
+    protected function indexConstant(string $name, $value): int
     {
         $encodingOptions = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
 
@@ -208,8 +214,10 @@ class BuiltinIndexer
 
     /**
      * Indexes built-in PHP functions.
+     *
+     * @return void
      */
-    protected function indexFunctions()
+    protected function indexFunctions(): void
     {
         foreach (get_defined_functions() as $group => $functions) {
             foreach ($functions as $functionName) {
@@ -235,7 +243,7 @@ class BuiltinIndexer
      *
      * @return int
      */
-    protected function indexFunctionLike(ReflectionFunctionAbstract $function)
+    protected function indexFunctionLike(ReflectionFunctionAbstract $function): int
     {
         $returnTypes = [];
 
@@ -369,7 +377,7 @@ class BuiltinIndexer
      *
      * @return array
      */
-    protected function getFunctionLikeDataFromDocumentation(ReflectionFunctionAbstract $function)
+    protected function getFunctionLikeDataFromDocumentation(ReflectionFunctionAbstract $function): array
     {
         $documentationName = $function->getName();
 
@@ -411,8 +419,10 @@ class BuiltinIndexer
 
     /**
      * @param ReflectionParameter $parameter
+     *
+     * @return void
      */
-    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter)
+    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter): void
     {
         $function = $parameter->getDeclaringFunction();
 
@@ -471,7 +481,7 @@ class BuiltinIndexer
      *
      * @return string
      */
-    protected function getNormalizedDocumentation($documentation)
+    protected function getNormalizedDocumentation(string $documentation): string
     {
         $documentation = str_replace('\\n', "\n", $documentation);
         $documentation = str_replace('\_', "_", $documentation);
@@ -486,7 +496,7 @@ class BuiltinIndexer
      *
      * @return array
      */
-    protected function getDocumentationEntry($entryName)
+    protected function getDocumentationEntry(string $entryName): array
     {
         $documentationData = $this->getDocumentationData();
         $entryName = mb_strtolower($entryName);
@@ -520,8 +530,10 @@ class BuiltinIndexer
 
     /**
      * Indexes built-in PHP classes, interfaces and traits.
+     *
+     * @return void
      */
-    protected function indexStructures()
+    protected function indexStructures(): void
     {
         foreach (get_declared_traits() as $trait) {
             $element = new ReflectionClass($trait);
@@ -552,8 +564,10 @@ class BuiltinIndexer
      * Indexes the specified built-in class, interface or trait.
      *
      * @param ReflectionClass $element
+     *
+     * @return void
      */
-    protected function indexStructure(ReflectionClass $element)
+    protected function indexStructure(ReflectionClass $element): void
     {
         $type = null;
         $parents = [];
@@ -636,8 +650,10 @@ class BuiltinIndexer
 
     /**
      * @param ReflectionFunction $function
+     *
+     * @return void
      */
-    protected function indexFunction(ReflectionFunction $function)
+    protected function indexFunction(ReflectionFunction $function): void
     {
         $functionId = $this->indexFunctionLike($function);
 
@@ -649,8 +665,10 @@ class BuiltinIndexer
     /**
      * @param ReflectionMethod $method
      * @param int              $structureId
+     *
+     * @return void
      */
-    protected function indexMethod(ReflectionMethod $method, $structureId)
+    protected function indexMethod(ReflectionMethod $method, int $structureId): void
     {
         $functionId = $this->indexFunctionLike($method);
 
@@ -679,8 +697,10 @@ class BuiltinIndexer
     /**
      * @param ReflectionProperty $property
      * @param int                $structureId
+     *
+     * @return void
      */
-    protected function indexProperty(ReflectionProperty $property, $structureId)
+    protected function indexProperty(ReflectionProperty $property, int $structureId): void
     {
         $accessModifierName = null;
 
@@ -727,8 +747,10 @@ class BuiltinIndexer
      * @param string $name
      * @param mixed  $value
      * @param int    $structureId
+     *
+     * @return void
      */
-    protected function indexClassConstant($name, $value, $structureId)
+    protected function indexClassConstant(string $name, $value, int $structureId): void
     {
         $constantId = $this->indexConstant($name, $value);
 
@@ -742,7 +764,7 @@ class BuiltinIndexer
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeList(array $typeList)
+    protected function getTypeDataForTypeList(array $typeList): array
     {
         $types = [];
 
@@ -774,7 +796,7 @@ class BuiltinIndexer
      *
      * @return string
      */
-    protected function getStructureShortName(ReflectionClass $element)
+    protected function getStructureShortName(ReflectionClass $element): string
     {
         $correctionMap = [
             'com'     => 'COM',
@@ -796,7 +818,7 @@ class BuiltinIndexer
      *
      * @return string
      */
-    protected function getStructureFqcn(ReflectionClass $element)
+    protected function getStructureFqcn(ReflectionClass $element): string
     {
         $correctionMap = [
             'com'     => 'COM',
@@ -814,7 +836,7 @@ class BuiltinIndexer
     /**
      * @return array
      */
-    protected function getDocumentationData()
+    protected function getDocumentationData(): array
     {
         if (!$this->documentationData) {
             $this->documentationData = json_decode(file_get_contents(__DIR__ . '/Resource/documentation-data.json'), true);
@@ -826,7 +848,7 @@ class BuiltinIndexer
     /**
      * @return array
      */
-    protected function getAccessModifierMap()
+    protected function getAccessModifierMap(): array
     {
         if (!$this->accessModifierMap) {
             $this->accessModifierMap = $this->storage->getAccessModifierMap();
@@ -838,7 +860,7 @@ class BuiltinIndexer
     /**
      * @return array
      */
-    protected function getStructureTypeMap()
+    protected function getStructureTypeMap(): array
     {
         if (!$this->structureTypeMap) {
             $this->structureTypeMap = $this->storage->getStructureTypeMap();

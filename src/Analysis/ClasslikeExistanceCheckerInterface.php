@@ -12,5 +12,5 @@ interface ClasslikeExistanceCheckerInterface
      *
      * @return bool
      */
-    public function doesClassExist($fqcn);
+    public function doesClassExist(string $fqcn): bool;
 }

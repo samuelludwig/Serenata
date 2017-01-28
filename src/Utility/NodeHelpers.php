@@ -16,7 +16,7 @@ class NodeHelpers
      *
      * @return string
      */
-    public static function fetchClassName(Node\Name $name)
+    public static function fetchClassName(Node\Name $name): string
     {
         $newName = (string) $name;
 

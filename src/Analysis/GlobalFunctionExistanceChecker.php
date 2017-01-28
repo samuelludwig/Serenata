@@ -25,7 +25,7 @@ class GlobalFunctionExistanceChecker implements GlobalFunctionExistanceCheckerIn
     /**
      * @inheritDoc
      */
-    public function doesGlobalFunctionExist($fqcn)
+    public function doesGlobalFunctionExist(string $fqcn): bool
     {
         $globalFunctionsFqcnMap = $this->getGlobalFunctionsFqcnMap();
 
@@ -35,7 +35,7 @@ class GlobalFunctionExistanceChecker implements GlobalFunctionExistanceCheckerIn
     /**
      * @return array
      */
-    protected function getGlobalFunctionsFqcnMap()
+    protected function getGlobalFunctionsFqcnMap(): array
     {
         $globalFunctionsFqcnMap = [];
 

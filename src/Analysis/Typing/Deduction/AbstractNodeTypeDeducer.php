@@ -12,7 +12,7 @@ abstract class AbstractNodeTypeDeducer implements NodeTypeDeducerInterface
      *
      * @return string
      */
-    protected function fetchResolvedTypeFromTypeArray(array $typeArray)
+    protected function fetchResolvedTypeFromTypeArray(array $typeArray): string
     {
         return $typeArray['resolvedType'];
     }
@@ -22,7 +22,7 @@ abstract class AbstractNodeTypeDeducer implements NodeTypeDeducerInterface
      *
      * @return string[]
      */
-    protected function fetchResolvedTypesFromTypeArrays(array $typeArrays)
+    protected function fetchResolvedTypesFromTypeArrays(array $typeArrays): array
     {
         return array_map([$this, 'fetchResolvedTypeFromTypeArray'], $typeArrays);
     }

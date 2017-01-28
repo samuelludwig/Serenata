@@ -14,7 +14,7 @@ class LNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Scalar\LNumber) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -28,7 +28,7 @@ class LNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromLNumberNode(Node\Scalar\LNumber $node)
+    protected function deduceTypesFromLNumberNode(Node\Scalar\LNumber $node): array
     {
         return ['int'];
     }

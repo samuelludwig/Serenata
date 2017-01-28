@@ -55,7 +55,7 @@ class PartialParser implements Parser
      *
      * @return int
      */
-    public function getStartOfExpression($code)
+    public function getStartOfExpression(string $code): int
     {
         if (empty($code)) {
             return 0;
@@ -182,7 +182,7 @@ class PartialParser implements Parser
      *
      * @return Node|null
      */
-    public function getLastNodeAt($source, $offset = null)
+    public function getLastNodeAt(string $source, ?int $offset = null)
     {
         if ($offset !== null) {
             $source = substr($source, 0, $offset);
@@ -234,7 +234,7 @@ class PartialParser implements Parser
      *
      * @return string
      */
-    protected function getNormalizedCode($code)
+    protected function getNormalizedCode(string $code): string
     {
         if (mb_substr(trim($code), 0, 5) !== '<?php') {
             return '<?php ' . $code;
@@ -248,7 +248,7 @@ class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithKeywordCorrection($code)
+    protected function tryParseWithKeywordCorrection(string $code): ?array
     {
         if (mb_strrpos($code, 'self') === (mb_strlen($code) - mb_strlen('self'))) {
             return [new \PhpIntegrator\Parsing\Node\Keyword\Self_()];
@@ -266,7 +266,7 @@ class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithTrailingSemicolonCorrection($code)
+    protected function tryParseWithTrailingSemicolonCorrection(string $code): ?array
     {
         return $this->tryParse($code . ';');
     }
@@ -276,7 +276,7 @@ class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithHeredocTerminationCorrection($code)
+    protected function tryParseWithHeredocTerminationCorrection(string $code): ?array
     {
         return $this->tryParse($code . ";\n"); // Heredocs need to be suffixed by a semicolon and a newline.
     }
@@ -286,7 +286,7 @@ class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithDummyInsertion($code)
+    protected function tryParseWithDummyInsertion(string $code): ?array
     {
         $removeDummy = false;
         $dummyName = '____DUMMY____';
@@ -313,7 +313,7 @@ class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParse($code)
+    protected function tryParse(string $code): ?array
     {
         try {
             return $this->getStrictParser()->parse($code);
@@ -335,7 +335,7 @@ class PartialParser implements Parser
      *                    parameter list the position is located at, and offset which denotes the byte offset the
      *                    invocation was found at. Returns 'null' if not in a method or function call.
      */
-    public function getInvocationInfoAt($code)
+    public function getInvocationInfoAt(string $code): ?array
     {
         $scopesOpened = 0;
         $scopesClosed = 0;
@@ -488,7 +488,7 @@ class PartialParser implements Parser
      *
      * @return int[]
      */
-    protected function getExpressionBoundaryTokens()
+    protected function getExpressionBoundaryTokens(): array
     {
         $expressionBoundaryTokens = [
             T_ABSTRACT, T_AND_EQUAL, T_AS, T_BOOLEAN_AND, T_BOOLEAN_OR, T_BREAK, T_CALLABLE, T_CASE, T_CATCH,
@@ -538,7 +538,7 @@ class PartialParser implements Parser
      *
      * @return int[]
      */
-    protected function getCastBoundaryTokens()
+    protected function getCastBoundaryTokens(): array
     {
         $expressionBoundaryTokens = [
             T_INT_CAST, T_UNSET_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_ARRAY_CAST, T_DOUBLE_CAST, T_STRING_CAST
@@ -552,7 +552,7 @@ class PartialParser implements Parser
      *
      * @return int[]
      */
-    protected function getSkippableTokens()
+    protected function getSkippableTokens(): array
     {
         $tokens = [
             T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING
@@ -564,7 +564,7 @@ class PartialParser implements Parser
     /**
      * @return Parser
      */
-    protected function getStrictParser()
+    protected function getStrictParser(): Parser
     {
         if (!$this->strictParser instanceof Parser) {
             $this->strictParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, new Lexer());

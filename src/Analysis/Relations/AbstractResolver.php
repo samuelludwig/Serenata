@@ -43,7 +43,7 @@ abstract class AbstractResolver
      *
      * @return bool
      */
-    protected function isInheritingFullDocumentation(array $processedData)
+    protected function isInheritingFullDocumentation(array $processedData): bool
     {
         return
             !$processedData['hasDocblock'] ||
@@ -61,7 +61,7 @@ abstract class AbstractResolver
      *
      * @return string
      */
-    protected function resolveInheritDoc($description, $parentDescription)
+    protected function resolveInheritDoc(string $description, string $parentDescription): string
     {
         return str_replace(DocblockParser::INHERITDOC, $parentDescription, $description);
     }
@@ -71,7 +71,7 @@ abstract class AbstractResolver
      *
      * @return array
      */
-    protected function extractInheritedPropertyInfo(array $propertyData)
+    protected function extractInheritedPropertyInfo(array $propertyData): array
     {
         $inheritedKeys = [
             'hasDocumentation',
@@ -99,7 +99,7 @@ abstract class AbstractResolver
      *
      * @return array
      */
-    protected function extractInheritedMethodInfo(array $methodData, array $inheritingMethodData)
+    protected function extractInheritedMethodInfo(array $methodData, array $inheritingMethodData): array
     {
         $inheritedKeys = [
             'hasDocumentation',

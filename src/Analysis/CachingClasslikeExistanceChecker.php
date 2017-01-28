@@ -15,7 +15,7 @@ class CachingClasslikeExistanceChecker extends ClasslikeExistanceChecker impleme
     /**
      * @inheritDoc
      */
-    protected function getClasslikeFqcnMap()
+    protected function getClasslikeFqcnMap(): array
     {
         if ($this->classlikeFqcnMap === null) {
             $this->classlikeFqcnMap = parent::getClasslikeFqcnMap();
@@ -27,7 +27,7 @@ class CachingClasslikeExistanceChecker extends ClasslikeExistanceChecker impleme
     /**
      * @inheritDoc
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->classlikeFqcnMap = null;
     }

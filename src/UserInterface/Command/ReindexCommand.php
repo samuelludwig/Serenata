@@ -27,7 +27,7 @@ class ReindexCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['source']) || empty($arguments['source'])) {
             throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');

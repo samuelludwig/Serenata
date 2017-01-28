@@ -26,7 +26,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo($fqcn)
+    public function getClasslikeRawInfo(string $fqcn): array
     {
         return $this->backend->getClasslikeRawInfo($fqcn);
     }
@@ -34,7 +34,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawParents($id)
+    public function getClasslikeRawParents(int $id): array
     {
         return $this->backend->getClasslikeRawParents($id);
     }
@@ -42,7 +42,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawChildren($id)
+    public function getClasslikeRawChildren(int $id): array
     {
         return $this->backend->getClasslikeRawChildren($id);
     }
@@ -50,7 +50,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInterfaces($id)
+    public function getClasslikeRawInterfaces(int $id): array
     {
         return $this->backend->getClasslikeRawInterfaces($id);
     }
@@ -58,7 +58,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawImplementors($id)
+    public function getClasslikeRawImplementors(int $id): array
     {
         return $this->backend->getClasslikeRawImplementors($id);
     }
@@ -66,7 +66,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraits($id)
+    public function getClasslikeRawTraits(int $id): array
     {
         return $this->backend->getClasslikeRawTraits($id);
     }
@@ -74,7 +74,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraitUsers($id)
+    public function getClasslikeRawTraitUsers(int $id): array
     {
         return $this->backend->getClasslikeRawTraitUsers($id);
     }
@@ -82,7 +82,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawProperties($id)
+    public function getClasslikeRawProperties(int $id): array
     {
         return $this->backend->getClasslikeRawProperties($id);
     }
@@ -90,7 +90,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawMethods($id)
+    public function getClasslikeRawMethods(int $id): array
     {
         return $this->backend->getClasslikeRawMethods($id);
     }
@@ -98,7 +98,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitAliasesAssoc($id)
+    public function getClasslikeTraitAliasesAssoc(int $id): array
     {
         return $this->backend->getClasslikeTraitAliasesAssoc($id);
     }
@@ -106,7 +106,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitPrecedencesAssoc($id)
+    public function getClasslikeTraitPrecedencesAssoc(int $id): array
     {
         return $this->backend->getClasslikeTraitPrecedencesAssoc($id);
     }
@@ -114,7 +114,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawConstants($id)
+    public function getClasslikeRawConstants(int $id): array
     {
         $constants = $this->backend->getClasslikeRawConstants($id);
 
@@ -128,7 +128,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
      *
      * @return array
      */
-    protected function getMagicClassConstantRawData($structureId)
+    protected function getMagicClassConstantRawData(int $structureId): array
     {
         return [
             'id'                => -1,

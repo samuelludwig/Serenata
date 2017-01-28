@@ -25,7 +25,7 @@ trait ParserAwareTrait
      *
      * @return \PhpParser\Node[]
      */
-    protected function parse($code, ErrorHandler $errorHandler = null)
+    protected function parse(string $code, ?ErrorHandler $errorHandler = null): array
     {
         try {
             $nodes = $this->parser->parse($code, $errorHandler);

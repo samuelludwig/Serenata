@@ -15,7 +15,7 @@ class CachingGlobalConstantExistanceChecker extends GlobalConstantExistanceCheck
     /**
      * @inheritDoc
      */
-    protected function getGlobalConstantFqcnMap()
+    protected function getGlobalConstantFqcnMap(): array
     {
         if ($this->globalConstantFqcnMap === null) {
             $this->globalConstantFqcnMap = parent::getGlobalConstantFqcnMap();
@@ -27,7 +27,7 @@ class CachingGlobalConstantExistanceChecker extends GlobalConstantExistanceCheck
     /**
      * @inheritDoc
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->globalConstantFqcnMap = null;
     }

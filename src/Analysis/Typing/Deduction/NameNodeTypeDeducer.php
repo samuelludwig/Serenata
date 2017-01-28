@@ -62,7 +62,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Name) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -79,7 +79,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromNameNode(Node\Name $node, $file, $code, $offset)
+    protected function deduceTypesFromNameNode(Node\Name $node, string $file, string $code, int $offset): array
     {
         $nameString = NodeHelpers::fetchClassName($node);
 
@@ -117,7 +117,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string|null
      */
-    protected function findCurrentClassAt($file, $source, $offset)
+    protected function findCurrentClassAt(string $file, string $source, int $offset): ?string
     {
         $line = SourceCodeHelpers::calculateLineByOffset($source, $offset);
 
@@ -131,7 +131,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string|null
      */
-    protected function findCurrentClassAtLine($file, $source, $line)
+    protected function findCurrentClassAtLine(string $file, string $source, int $line): ?string
     {
         $classes = $this->fileClassListProvider->getClassListForFile($file);
 

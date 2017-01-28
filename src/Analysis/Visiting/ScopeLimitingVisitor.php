@@ -38,7 +38,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
      *
      * @param int $position
      */
-    public function __construct($position)
+    public function __construct(int $position)
     {
         $this->position = $position;
     }
@@ -146,8 +146,10 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
     /**
      * @param Node  $node
      * @param array $properties
+     *
+     * @return void
      */
-    protected function memorizeNodeProperties(Node $node, array $properties)
+    protected function memorizeNodeProperties(Node $node, array $properties): void
     {
         $key = $this->getMemorizedPropertiesKeyForNode($node);
 
@@ -160,8 +162,10 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node $node
+     *
+     * @return void
      */
-    protected function restoreNodeProperties(Node $node)
+    protected function restoreNodeProperties(Node $node): void
     {
         $key = $this->getMemorizedPropertiesKeyForNode($node);
 
@@ -181,7 +185,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
      *
      * @return string
      */
-    protected function getMemorizedPropertiesKeyForNode(Node $node)
+    protected function getMemorizedPropertiesKeyForNode(Node $node): string
     {
         return spl_object_hash($node);
     }

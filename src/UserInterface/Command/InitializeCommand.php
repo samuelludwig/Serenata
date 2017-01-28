@@ -57,7 +57,7 @@ class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         $success = $this->initialize();
 
@@ -69,7 +69,7 @@ class InitializeCommand extends AbstractCommand
      *
      * @return bool
      */
-    public function initialize($includeBuiltinItems = true)
+    public function initialize(bool $includeBuiltinItems = true): bool
     {
         $this->ensureIndexDatabaseDoesNotExist();
 
@@ -87,7 +87,7 @@ class InitializeCommand extends AbstractCommand
     /**
      * @return void
      */
-    protected function ensureIndexDatabaseDoesNotExist()
+    protected function ensureIndexDatabaseDoesNotExist(): void
     {
         if (file_exists($this->indexDatabase->getDatabasePath())) {
             $this->indexDatabase->ensureConnectionClosed();
@@ -99,7 +99,7 @@ class InitializeCommand extends AbstractCommand
     /**
      * @return void
      */
-    protected function clearCache()
+    protected function clearCache(): void
     {
         if ($this->cache instanceof ClearableCache) {
             $this->cache->deleteAll();

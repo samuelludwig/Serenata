@@ -27,7 +27,7 @@ class NamespaceListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         $file = isset($arguments['file']) ? $arguments['file'] : null;
 
@@ -41,7 +41,7 @@ class NamespaceListCommand extends AbstractCommand
      *
      * @return array
      */
-    public function getNamespaceList($file = null)
+    public function getNamespaceList(?string $file = null): array
     {
         if ($file !== null) {
             return $this->indexDatabase->getNamespacesForFile($file);

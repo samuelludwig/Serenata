@@ -20,5 +20,5 @@ abstract class AbstractCommand implements CommandInterface
      *
      * @return string Output to pass back.
      */
-    abstract public function execute(ArrayAccess $arguments);
+    abstract public function execute(ArrayAccess $arguments): string;
 }

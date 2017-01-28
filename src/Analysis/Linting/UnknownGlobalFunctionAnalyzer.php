@@ -34,7 +34,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return [
             $this->globalFunctionUsageFetchingVisitor
@@ -44,7 +44,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         $globalFunctions = $this->globalFunctionUsageFetchingVisitor->getGlobalFunctionCallList();
 

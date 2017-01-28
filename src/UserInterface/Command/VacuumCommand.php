@@ -29,7 +29,7 @@ class VacuumCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         $success = $this->vacuum();
 
@@ -39,7 +39,7 @@ class VacuumCommand extends AbstractCommand
     /**
      * @return bool
      */
-    public function vacuum()
+    public function vacuum(): bool
     {
         $this->projectIndexer->pruneRemovedFiles();
 

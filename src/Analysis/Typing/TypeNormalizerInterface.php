@@ -14,5 +14,5 @@ interface TypeNormalizerInterface
      *
      * @return string
      */
-    public function getNormalizedFqcn($fqcn);
+    public function getNormalizedFqcn(string $fqcn): string;
 }

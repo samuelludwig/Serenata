@@ -14,7 +14,7 @@ class StringNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Scalar\String_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -28,7 +28,7 @@ class StringNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromStringNode(Node\Scalar\String_ $node)
+    protected function deduceTypesFromStringNode(Node\Scalar\String_ $node): array
     {
         return ['string'];
     }

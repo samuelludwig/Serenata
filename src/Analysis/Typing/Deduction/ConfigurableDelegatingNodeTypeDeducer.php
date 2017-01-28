@@ -27,7 +27,7 @@ class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$this->nodeTypeDeducer) {
             throw new UnexpectedValueException('No node type deducer to delegate to configured!');
@@ -39,7 +39,7 @@ class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @return NodeTypeDeducerInterface|null
      */
-    public function getNodeTypeDeducer()
+    public function getNodeTypeDeducer(): ?NodeTypeDeducerInterface
     {
         return $this->nodeTypeDeducer;
     }

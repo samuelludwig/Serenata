@@ -69,7 +69,7 @@ class ProjectTypeResolver implements FileTypeResolverInterface
      *
      * @return string|null
      */
-    public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
+    public function resolve(string $name, int $line, string $kind = UseStatementKind::TYPE_CLASSLIKE): ?string
     {
         try {
             return $this->typeResolver->resolve($name, $line, $kind);
@@ -103,7 +103,7 @@ class ProjectTypeResolver implements FileTypeResolverInterface
      *
      * @return array|null
      */
-    protected function getRelevantNamespaceForLine($line)
+    protected function getRelevantNamespaceForLine(int $line): ?array
     {
         foreach ($this->namespaces as $namespace) {
             if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
@@ -120,7 +120,7 @@ class ProjectTypeResolver implements FileTypeResolverInterface
      *
      * @return bool
      */
-    protected function lineLiesWithinNamespaceRange($line, array $namespace)
+    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
     {
         return (
             $line >= $namespace['startLine'] &&

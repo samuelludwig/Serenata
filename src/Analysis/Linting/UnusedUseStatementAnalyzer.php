@@ -61,7 +61,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return [
             $this->classUsageFetchingVisitor,
@@ -75,7 +75,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         $unusedUseStatements = array_merge(
             $this->getOutputForClasses(),
@@ -89,7 +89,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getOutputForClasses()
+    protected function getOutputForClasses(): array
     {
         // Cross-reference the found class names against the class map.
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -134,7 +134,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getOutputForConstants()
+    protected function getOutputForConstants(): array
     {
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -176,7 +176,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getOutputForFunctions()
+    protected function getOutputForFunctions(): array
     {
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();

@@ -110,7 +110,7 @@ abstract class AbstractApplication
     /**
      * @return ContainerBuilder
      */
-    protected function getContainer()
+    protected function getContainer(): ContainerBuilder
     {
         if (!$this->container) {
             $this->container = $this->createContainer();
@@ -122,7 +122,7 @@ abstract class AbstractApplication
     /**
      * @return ContainerBuilder
      */
-    protected function createContainer()
+    protected function createContainer(): ContainerBuilder
     {
         $container = new ContainerBuilder();
 
@@ -133,8 +133,10 @@ abstract class AbstractApplication
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
-    protected function registerServices(ContainerBuilder $container)
+    protected function registerServices(ContainerBuilder $container): void
     {
         $container
             ->register('application', AbstractApplication::class)
@@ -389,8 +391,10 @@ abstract class AbstractApplication
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
-    protected function registerTypeDeductionServices(ContainerBuilder $container)
+    protected function registerTypeDeductionServices(ContainerBuilder $container): void
     {
         $container
             ->register('expressionLocalTypeAnalyzer', ExpressionLocalTypeAnalyzer::class)
@@ -569,8 +573,10 @@ abstract class AbstractApplication
 
     /**
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
-    protected function registerCommandServices(ContainerBuilder $container)
+    protected function registerCommandServices(ContainerBuilder $container): void
     {
         $container
             ->register('initializeCommand', Command\InitializeCommand::class)
@@ -688,7 +694,7 @@ abstract class AbstractApplication
      *
      * @return static
      */
-    public function setDatabaseFile($databaseFile)
+    public function setDatabaseFile(string $databaseFile)
     {
         /** @var IndexDatabase $indexDatabase */
         $indexDatabase = $this->getContainer()->get('indexDatabase');

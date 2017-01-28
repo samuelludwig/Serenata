@@ -27,7 +27,7 @@ class CloneNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\Clone_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -44,7 +44,7 @@ class CloneNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromCloneNode(Node\Expr\Clone_ $node, $file, $code, $offset)
+    protected function deduceTypesFromCloneNode(Node\Expr\Clone_ $node, ?string $file, string $code, int $offset): array
     {
         return $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $offset);
     }

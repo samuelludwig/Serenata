@@ -20,5 +20,5 @@ interface FileTypeResolverInterface
      *
      * @return string|null
      */
-    public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE);
+    public function resolve(string $name, int $line, string $kind = UseStatementKind::TYPE_CLASSLIKE): ?string;
 }

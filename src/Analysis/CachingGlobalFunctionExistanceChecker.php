@@ -15,7 +15,7 @@ class CachingGlobalFunctionExistanceChecker extends GlobalFunctionExistanceCheck
     /**
      * @inheritDoc
      */
-    protected function getGlobalFunctionsFqcnMap()
+    protected function getGlobalFunctionsFqcnMap(): array
     {
         if ($this->globalFunctionsFqcnMap === null) {
             $this->globalFunctionsFqcnMap = parent::getGlobalFunctionsFqcnMap();
@@ -27,7 +27,7 @@ class CachingGlobalFunctionExistanceChecker extends GlobalFunctionExistanceCheck
     /**
      * @inheritDoc
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->globalFunctionsFqcnMap = null;
     }

@@ -12,5 +12,5 @@ interface GlobalConstantExistanceCheckerInterface
      *
      * @return bool
      */
-    public function doesGlobalConstantExist($fqcn);
+    public function doesGlobalConstantExist(string $fqcn): bool;
 }

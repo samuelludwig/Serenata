@@ -24,7 +24,7 @@ class TypePossibilityMap
     /**
      * @return void
      */
-    public function clear()
+    public function clear(): void
     {
         $this->map = [];
     }
@@ -35,7 +35,7 @@ class TypePossibilityMap
      *
      * @return static
      */
-    public function set($type, $possibility)
+    public function set(string $type, int $possibility)
     {
         $this->map[$type] = $possibility;
         return $this;
@@ -46,7 +46,7 @@ class TypePossibilityMap
      *
      * @return static
      */
-    public function remove($type)
+    public function remove(string $type)
     {
         unset($this->map[$type]);
         return $this;
@@ -55,7 +55,7 @@ class TypePossibilityMap
     /**
      * @return array
      */
-    public function getAll()
+    public function getAll(): array
     {
         return $this->map;
     }
@@ -71,7 +71,7 @@ class TypePossibilityMap
      *
      * @return string[]
      */
-    public function determineApplicableTypes(array $typeList)
+    public function determineApplicableTypes(array $typeList): array
     {
         $guaranteedTypes = $this->getAllWithPossibility(TypePossibility::TYPE_GUARANTEED);
 
@@ -104,7 +104,7 @@ class TypePossibilityMap
     /**
      * @return string[]
      */
-    public function getAllGuaranteed()
+    public function getAllGuaranteed(): array
     {
         return $this->getAllWithPossibility(TypePossibility::TYPE_GUARANTEED);
     }
@@ -112,7 +112,7 @@ class TypePossibilityMap
     /**
      * @return string[]
      */
-    public function getAllImpossible()
+    public function getAllImpossible(): array
     {
         return $this->getAllWithPossibility(TypePossibility::TYPE_IMPOSSIBLE);
     }
@@ -122,7 +122,7 @@ class TypePossibilityMap
      *
      * @return string[]
      */
-    protected function getAllWithPossibility($possibility)
+    protected function getAllWithPossibility(int $possibility): array
     {
         $guaranteedTypes = [];
 

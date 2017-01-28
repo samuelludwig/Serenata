@@ -101,8 +101,13 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    public function getLocalExpressionTypes($file, $code, $expression, $offset, $defaultTypes = [])
-    {
+    public function getLocalExpressionTypes(
+        string $file,
+        string $code,
+        string $expression,
+        int $offset,
+        array $defaultTypes = []
+    ): array {
         $expressionTypeInfoMap = $this->expressionLocalTypeAnalyzer->analyze($code, $offset);
         $offsetLine = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
@@ -136,13 +141,13 @@ class LocalTypeScanner
      */
     protected function getResolvedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
-        $expression,
-        $file,
-        $line,
-        $code,
-        $offset,
-        $defaultTypes = []
-    ) {
+        string $expression,
+        string $file,
+        int $line,
+        string $code,
+        int $offset,
+        array $defaultTypes = []
+    ): array {
         $types = $this->getUnreferencedTypes($expressionTypeInfoMap, $expression, $file, $code, $offset, $defaultTypes);
 
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
@@ -175,12 +180,12 @@ class LocalTypeScanner
      */
     protected function getUnreferencedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
-        $expression,
-        $file,
-        $code,
-        $offset,
-        $defaultTypes = []
-    ) {
+        string $expression,
+        string $file,
+        string $code,
+        int $offset,
+        array $defaultTypes = []
+    ): array {
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
         $types = $this->getTypes($expressionTypeInfo, $expression, $file, $code, $offset, $defaultTypes);
@@ -213,7 +218,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function deduceTypesFromSelf($file, $code, $offset)
+    protected function deduceTypesFromSelf(string $file, string $code, int $offset): array
     {
         $dummyNode = new Parsing\Node\Keyword\Self_();
 
@@ -227,7 +232,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function deduceTypesFromStatic($file, $code, $offset)
+    protected function deduceTypesFromStatic(string $file, string $code, int $offset): array
     {
         $dummyNode = new Parsing\Node\Keyword\Static_();
 
@@ -246,12 +251,12 @@ class LocalTypeScanner
      */
     protected function getTypes(
         ExpressionTypeInfo $expressionTypeInfo,
-        $expression,
-        $file,
-        $code,
-        $offset,
-        $defaultTypes = []
-    ) {
+        string $expression,
+        string $file,
+        string $code,
+        int $offset,
+        array $defaultTypes = []
+    ): array {
         if ($expressionTypeInfo->hasBestTypeOverrideMatch()) {
             return $this->typeAnalyzer->getTypesForTypeSpecification($expressionTypeInfo->getBestTypeOverrideMatch());
         }
@@ -274,8 +279,13 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function getTypesForBestMatchNode($expression, Node $node, $file, $code, $offset)
-    {
+    protected function getTypesForBestMatchNode(
+        string $expression,
+        Node $node,
+        string $file,
+        string $code,
+        int $offset
+    ): array {
         if ($node instanceof Node\Stmt\Foreach_) {
             return $this->foreachNodeLoopValueTypeDeducer->deduce($node, $file, $code, $offset);
         } elseif ($node instanceof Node\FunctionLike) {
@@ -296,11 +306,11 @@ class LocalTypeScanner
      */
     protected function deduceTypesFromFunctionLikeParameter(
         Node\FunctionLike $node,
-        $parameterName,
-        $file,
-        $code,
-        $offset
-    ) {
+        string $parameterName,
+        string $file,
+        string $code,
+        int $offset
+    ): array {
         foreach ($node->getParams() as $param) {
             if ($param->name === mb_substr($parameterName, 1)) {
                 $this->functionLikeParameterTypeDeducer->setFunctionDocblock($node->getDocComment());

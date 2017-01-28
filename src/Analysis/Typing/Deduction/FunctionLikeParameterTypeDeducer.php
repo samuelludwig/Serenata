@@ -55,7 +55,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Param) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -72,7 +72,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromFunctionLikeParameterNode(Node\Param $node, $file, $code, $offset)
+    protected function deduceTypesFromFunctionLikeParameterNode(Node\Param $node, ?string $file, string $code, int $offset): array
     {
         if ($docBlock = $this->getFunctionDocblock()) {
             // Analyze the docblock's @param tags.
@@ -104,7 +104,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @return string|null
      */
-    public function getFunctionDocblock()
+    public function getFunctionDocblock(): ?string
     {
         return $this->functionDocblock;
     }
@@ -114,7 +114,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return static
      */
-    public function setFunctionDocblock($functionDocblock)
+    public function setFunctionDocblock(?string $functionDocblock)
     {
         $this->functionDocblock = $functionDocblock;
         return $this;

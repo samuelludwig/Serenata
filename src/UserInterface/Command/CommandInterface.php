@@ -16,5 +16,5 @@ interface CommandInterface
      *
      * @return string Output to return to the user.
      */
-    public function execute(ArrayAccess $arguments);
+    public function execute(ArrayAccess $arguments): string;
 }

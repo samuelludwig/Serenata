@@ -12,75 +12,75 @@ interface ClasslikeInfoBuilderProviderInterface extends ClasslikeRawConstantData
      *
      * @return array
      */
-    public function getClasslikeRawInfo($fqcn);
+    public function getClasslikeRawInfo(string $fqcn): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawParents($id);
+    public function getClasslikeRawParents(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawChildren($id);
+    public function getClasslikeRawChildren(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawInterfaces($id);
+    public function getClasslikeRawInterfaces(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawImplementors($id);
+    public function getClasslikeRawImplementors(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawTraits($id);
+    public function getClasslikeRawTraits(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawTraitUsers($id);
+    public function getClasslikeRawTraitUsers(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawProperties($id);
+    public function getClasslikeRawProperties(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeRawMethods($id);
+    public function getClasslikeRawMethods(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeTraitAliasesAssoc($id);
+    public function getClasslikeTraitAliasesAssoc(int $id): array;
 
     /**
      * @param int $id
      *
      * @return array
      */
-    public function getClasslikeTraitPrecedencesAssoc($id);
+    public function getClasslikeTraitPrecedencesAssoc(int $id): array;
 }

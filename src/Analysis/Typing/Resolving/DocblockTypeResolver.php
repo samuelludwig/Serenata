@@ -37,8 +37,12 @@ class DocblockTypeResolver implements TypeResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve($name, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
-    {
+    public function resolve(
+        string $name,
+        ?string $namespaceName,
+        array $imports,
+        string $kind = UseStatementKind::TYPE_CLASSLIKE
+    ): ?string {
         if ($this->typeAnalyzer->isArraySyntaxTypeHint($name)) {
             $valueType = $this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($name);
 

@@ -47,7 +47,7 @@ class AvailableVariablesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
@@ -80,7 +80,7 @@ class AvailableVariablesCommand extends AbstractCommand
      *
      * @return array
      */
-     public function getAvailableVariables($code, $offset)
+     public function getAvailableVariables(string $code, int $offset): array
      {
          $handler = new ErrorHandler\Collecting();
 

@@ -56,7 +56,7 @@ class ExpressionLocalTypeAnalyzer
      *
      * @return ExpressionTypeInfoMap
      */
-    public function analyze($code, $offset)
+    public function analyze(string $code, int $offset): ExpressionTypeInfoMap
     {
         $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($code, $offset);
 
@@ -71,7 +71,7 @@ class ExpressionLocalTypeAnalyzer
      *
      * @return TypeQueryingVisitor
      */
-    protected function walkTypeQueryingVisitorTo($code, $offset)
+    protected function walkTypeQueryingVisitorTo(string $code, int $offset): TypeQueryingVisitor
     {
         $nodes = null;
 

@@ -19,7 +19,7 @@ class InterfaceImplementationResolver extends AbstractResolver
      *
      * @return ArrayObject
      */
-    public function resolveImplementationOf(ArrayObject $interface, ArrayObject $class)
+    public function resolveImplementationOf(ArrayObject $interface, ArrayObject $class): ArrayObject
     {
         foreach ($interface['constants'] as $constant) {
             $this->resolveInheritanceOfConstant($constant, $class);
@@ -33,8 +33,10 @@ class InterfaceImplementationResolver extends AbstractResolver
     /**
      * @param array       $interfaceConstantData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveInheritanceOfConstant(array $interfaceConstantData, ArrayObject $class)
+    protected function resolveInheritanceOfConstant(array $interfaceConstantData, ArrayObject $class): void
     {
         $class['constants'][$interfaceConstantData['name']] = $interfaceConstantData + [
             'declaringClass' => [
@@ -60,8 +62,10 @@ class InterfaceImplementationResolver extends AbstractResolver
     /**
      * @param array       $interfaceMethodData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveImplementationOfMethod(array $interfaceMethodData, ArrayObject $class)
+    protected function resolveImplementationOfMethod(array $interfaceMethodData, ArrayObject $class): void
     {
         $childMethod = [];
         $inheritedData = [];

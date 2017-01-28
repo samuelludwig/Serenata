@@ -16,5 +16,5 @@ interface FileTypeResolverFactoryInterface
      *
      * @return FileTypeResolver
      */
-    public function create($filePath);
+    public function create(string $filePath): FileTypeResolver;
 }

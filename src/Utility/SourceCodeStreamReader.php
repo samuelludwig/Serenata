@@ -23,7 +23,7 @@ class SourceCodeStreamReader
      * @param resource|null $stdinStream
      * @param bool          $autoConvertToUtf8
      */
-    public function __construct($stdinStream = null, $autoConvertToUtf8 = true)
+    public function __construct($stdinStream = null, bool $autoConvertToUtf8 = true)
     {
         $this->stdinStream = $stdinStream;
         $this->autoConvertToUtf8 = $autoConvertToUtf8;
@@ -51,7 +51,7 @@ class SourceCodeStreamReader
     /**
      * @return bool
      */
-    public function getAutoConvertToUtf8()
+    public function getAutoConvertToUtf8(): bool
     {
         return $this->autoConvertToUtf8;
     }
@@ -61,7 +61,7 @@ class SourceCodeStreamReader
      *
      * @return static
      */
-    public function setAutoConvertToUtf8($autoConvertToUtf8)
+    public function setAutoConvertToUtf8(bool $autoConvertToUtf8)
     {
         $this->autoConvertToUtf8 = $autoConvertToUtf8;
         return $this;
@@ -72,7 +72,7 @@ class SourceCodeStreamReader
      *
      * @return string
      */
-    public function getSourceCodeFromStdin()
+    public function getSourceCodeFromStdin(): string
     {
         $stream = $this->stdinStream;
         $stream = $stream ?: STDIN;
@@ -91,7 +91,7 @@ class SourceCodeStreamReader
      *
      * @return string
      */
-    public function getSourceCodeFromFile($file)
+    public function getSourceCodeFromFile(?string $file): string
     {
         if (!$file) {
             throw new UnexpectedValueException("The file {$file} does not exist!");
@@ -113,7 +113,7 @@ class SourceCodeStreamReader
      *
      * @return string
      */
-    protected function convertEncodingIfNecessary($code)
+    protected function convertEncodingIfNecessary(string $code): string
     {
         if ($this->autoConvertToUtf8) {
             return $this->convertEncodingToUtf8($code);
@@ -127,7 +127,7 @@ class SourceCodeStreamReader
      *
      * @return string
      */
-    protected function convertEncodingToUtf8($code)
+    protected function convertEncodingToUtf8(string $code): string
     {
         $encoding = mb_detect_encoding($code, null, true);
 

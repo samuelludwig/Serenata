@@ -25,5 +25,10 @@ interface TypeResolverInterface
      *
      * @return string|null
      */
-    public function resolve($name, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE);
+    public function resolve(
+        string $name,
+        ?string $namespaceName,
+        array $imports,
+        string $kind = UseStatementKind::TYPE_CLASSLIKE
+    ): ?string;
 }

@@ -23,7 +23,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @var int
      */
-    const SCHEMA_VERSION = 30;
+    public const SCHEMA_VERSION = 30;
 
     /**
      * @var Connection
@@ -42,7 +42,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return Connection
      */
-    protected function getConnection($checkVersion = true)
+    protected function getConnection(bool $checkVersion = true): Connection
     {
         if (!$this->connection) {
             $connection = $this->createConnection();
@@ -80,7 +80,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @return Connection
      */
-    protected function createConnection()
+    protected function createConnection(): Connection
     {
         if (!$this->databasePath) {
             throw new UnexpectedValueException('No database path configured!');
@@ -95,7 +95,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @return Configuration
      */
-    protected function getConfiguration()
+    protected function getConfiguration(): Configuration
     {
         return new Configuration();
     }
@@ -105,7 +105,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return string
      */
-    public function getDatabasePath()
+    public function getDatabasePath(): string
     {
         return $this->databasePath;
     }
@@ -115,7 +115,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return static
      */
-    public function setDatabasePath($databasePath)
+    public function setDatabasePath(string $databasePath)
     {
         $this->ensureConnectionClosed();
 
@@ -125,18 +125,22 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
 
     /**
      * @throws IncorrectDatabaseVersionException
+     *
+     * @return void
      */
-    public function checkDatabaseVersion()
+    public function checkDatabaseVersion(): void
     {
-        return $this->checkDatabaseVersionFor($this->getConnection(false));
+        $this->checkDatabaseVersionFor($this->getConnection(false));
     }
 
     /**
      * @param Connection $connection
      *
      * @throws IncorrectDatabaseVersionException
+     *
+     * @return void
      */
-    public function checkDatabaseVersionFor(Connection $connection)
+    public function checkDatabaseVersionFor(Connection $connection): void
     {
         $version = $connection->executeQuery('PRAGMA user_version')->fetchColumn();
 
@@ -150,7 +154,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @return void
      */
-    public function ensureConnectionClosed()
+    public function ensureConnectionClosed(): void
     {
         if ($this->connection) {
             $this->connection->close();
@@ -160,8 +164,10 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
 
     /**
      * (Re)creates the database tables in the database using the specified connection.
+     *
+     * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         $connection = $this->getConnection(false);
 
@@ -184,7 +190,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getFileModifiedMap()
+    public function getFileModifiedMap(): array
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('path', 'indexed_time')
@@ -203,7 +209,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getFileId($path)
+    public function getFileId(string $path): int
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('id')
@@ -219,7 +225,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getAccessModifierMap()
+    public function getAccessModifierMap(): array
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('*')
@@ -238,7 +244,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getStructureTypeMap()
+    public function getStructureTypeMap(): array
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('*')
@@ -257,7 +263,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function deleteFile($path)
+    public function deleteFile(string $path): void
     {
         $this->getConnection()->createQueryBuilder()
             ->delete(IndexStorageItemEnum::FILES)
@@ -271,7 +277,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function getClasslikeRawInfoQueryBuilder()
+    protected function getClasslikeRawInfoQueryBuilder(): \Doctrine\DBAL\Query\QueryBuilder
     {
         return $this->getConnection()->createQueryBuilder()
             ->select(
@@ -294,7 +300,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return \Traversable
      */
-    public function getAllStructuresRawInfo($file)
+    public function getAllStructuresRawInfo(?string $file): \Traversable
     {
         $queryBuilder = $this->getClasslikeRawInfoQueryBuilder();
 
@@ -310,7 +316,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo($fqcn)
+    public function getClasslikeRawInfo(string $fqcn): array
     {
         return $this->getClasslikeRawInfoQueryBuilder()
             ->where('se.fqcn = ?')
@@ -322,7 +328,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawParents($id)
+    public function getClasslikeRawParents(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -338,7 +344,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawChildren($id)
+    public function getClasslikeRawChildren(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -355,7 +361,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInterfaces($id)
+    public function getClasslikeRawInterfaces(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -371,7 +377,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawImplementors($id)
+    public function getClasslikeRawImplementors(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -388,7 +394,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraits($id)
+    public function getClasslikeRawTraits(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -404,7 +410,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraitUsers($id)
+    public function getClasslikeRawTraitUsers(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('se.id', 'se.fqcn')
@@ -421,7 +427,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawConstants($id)
+    public function getClasslikeRawConstants(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('c.*', 'fi.path')
@@ -436,7 +442,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawProperties($id)
+    public function getClasslikeRawProperties(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('p.*', 'am.name AS access_modifier')
@@ -451,7 +457,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawMethods($id)
+    public function getClasslikeRawMethods(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fu.*', 'fi.path', 'am.name AS access_modifier')
@@ -467,7 +473,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitAliasesAssoc($id)
+    public function getClasslikeTraitAliasesAssoc(int $id): array
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('seta.*', 'se.fqcn AS trait_fqcn', 'am.name AS access_modifier')
@@ -490,7 +496,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitPrecedencesAssoc($id)
+    public function getClasslikeTraitPrecedencesAssoc(int $id): array
     {
         $result = $this->getConnection()->createQueryBuilder()
             ->select('setp.*', 'se.fqcn AS trait_fqcn')
@@ -512,7 +518,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function insertStructure(array $data)
+    public function insertStructure(array $data): void
     {
         return $this->insert(IndexStorageItemEnum::STRUCTURES, $data);
     }
@@ -520,7 +526,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function insert($indexStorageItem, array $data)
+    public function insert(string $indexStorageItem, array $data): int
     {
         $this->getConnection()->insert($indexStorageItem, $data);
 
@@ -530,7 +536,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function update($indexStorageItem, $id, array $data)
+    public function update(string $indexStorageItem, $id, array $data): void
     {
         $this->getConnection()->update($indexStorageItem, $data, is_array($id) ? $id : ['id' => $id]);
     }
@@ -540,7 +546,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return \Traversable
      */
-    public function getGlobalConstants()
+    public function getGlobalConstants(): \Traversable
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('c.*', 'fi.path')
@@ -555,7 +561,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return array|null
      */
-    public function getGlobalConstantByFqcn($fqcn)
+    public function getGlobalConstantByFqcn(string $fqcn): ?array
     {
         $value = $this->getConnection()->createQueryBuilder()
             ->select('c.*', 'fi.path')
@@ -575,7 +581,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return \Traversable
      */
-    public function getGlobalFunctions()
+    public function getGlobalFunctions(): \Traversable
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fu.*', 'fi.path')
@@ -590,7 +596,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @return array|null
      */
-    public function getGlobalFunctionByFqcn($fqcn)
+    public function getGlobalFunctionByFqcn(string $fqcn): ?array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fu.*', 'fi.path')
@@ -606,7 +612,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getNamespacesForFile($filePath)
+    public function getNamespacesForFile(string $filePath): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fn.namespace AS name', 'fn.start_line AS startLine', 'fn.end_line AS endLine')
@@ -621,7 +627,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getUseStatementsForFile($filePath)
+    public function getUseStatementsForFile(string $filePath): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fni.name', 'fni.alias', 'fni.kind', 'fni.line')
@@ -637,7 +643,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @inheritDoc
      */
-    public function getNamespaces()
+    public function getNamespaces(): array
     {
         return $this->getConnection()->createQueryBuilder()
             ->select('fns.namespace')
@@ -650,25 +656,25 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     }
 
     /**
-     * Starts a transaction.
+     * @inheritDoc
      */
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
         $this->getConnection()->beginTransaction();
     }
 
     /**
-     * Commits a transaction.
+     * @inheritDoc
      */
-    public function commitTransaction()
+    public function commitTransaction(): void
     {
         $this->getConnection()->commit();
     }
 
     /**
-     * Rolls back a transaction.
+     * @inheritDoc
      */
-    public function rollbackTransaction()
+    public function rollbackTransaction(): void
     {
         $this->getConnection()->rollBack();
     }

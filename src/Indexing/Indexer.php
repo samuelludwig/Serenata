@@ -19,12 +19,12 @@ class Indexer implements EventEmitterInterface
     /**
      * @var string
      */
-    const INDEXING_FAILED_EVENT = 'indexingFailed';
+    public const INDEXING_FAILED_EVENT = 'indexingFailed';
 
     /**
      * @var string
      */
-    const INDEXING_SUCCEEDED_EVENT = 'indexingSucceeded';
+    public const INDEXING_SUCCEEDED_EVENT = 'indexingSucceeded';
 
     /**
      * @var ProjectIndexer
@@ -63,12 +63,12 @@ class Indexer implements EventEmitterInterface
      */
     public function reindex(
         array $paths,
-        $useStdin,
-        $showOutput,
-        $doStreamProgress,
+        bool $useStdin,
+        bool $showOutput,
+        bool $doStreamProgress,
         array $excludedPaths = [],
         array $extensionsToIndex = ['php']
-    ) {
+    ): bool {
         if ($doStreamProgress && !$this->getProgressStreamingCallback()) {
             throw new LogicException('No progress streaming callback configured whilst streaming was requestd!');
         }
@@ -99,7 +99,7 @@ class Indexer implements EventEmitterInterface
     /**
      * @return callable|null
      */
-    public function getProgressStreamingCallback()
+    public function getProgressStreamingCallback(): ?callable
     {
         return $this->progressStreamingCallback;
     }
@@ -109,7 +109,7 @@ class Indexer implements EventEmitterInterface
      *
      * @return static
      */
-    public function setProgressStreamingCallback(callable $progressStreamingCallback = null)
+    public function setProgressStreamingCallback(?callable $progressStreamingCallback)
     {
         $this->progressStreamingCallback = $progressStreamingCallback;
         return $this;

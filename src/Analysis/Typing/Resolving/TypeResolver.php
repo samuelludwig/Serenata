@@ -29,8 +29,12 @@ class TypeResolver implements TypeResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve($name, $namespaceName, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
-    {
+    public function resolve(
+        string $name,
+        ?string $namespaceName,
+        array $imports,
+        string $kind = UseStatementKind::TYPE_CLASSLIKE
+    ): ?string {
         if (empty($name)) {
             return null;
         } elseif ($name[0] === '\\') {

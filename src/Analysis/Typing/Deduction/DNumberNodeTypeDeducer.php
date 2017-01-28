@@ -14,7 +14,7 @@ class DNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Scalar\DNumber) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -28,7 +28,7 @@ class DNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromDNumberNode(Node\Scalar\DNumber $node)
+    protected function deduceTypesFromDNumberNode(Node\Scalar\DNumber $node): array
     {
         return ['float'];
     }

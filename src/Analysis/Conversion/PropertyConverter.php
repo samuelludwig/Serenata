@@ -15,7 +15,7 @@ class PropertyConverter extends AbstractConverter
      *
      * @return array
      */
-    public function convertForClass(array $rawInfo, ArrayAccess $class)
+    public function convertForClass(array $rawInfo, ArrayAccess $class): array
     {
         $data = [
             'name'               => $rawInfo['name'],

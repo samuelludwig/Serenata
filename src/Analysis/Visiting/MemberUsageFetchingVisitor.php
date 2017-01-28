@@ -21,22 +21,22 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    const TYPE_EXPRESSION_HAS_NO_TYPE = 1;
+    public const TYPE_EXPRESSION_HAS_NO_TYPE = 1;
 
     /**
      * @var int
      */
-    const TYPE_EXPRESSION_IS_NOT_CLASSLIKE = 2;
+    public const TYPE_EXPRESSION_IS_NOT_CLASSLIKE = 2;
 
     /**
      * @var int
      */
-    const TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER = 4;
+    public const TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER = 4;
 
     /**
      * @var int
      */
-    const TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED = 8;
+    public const TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED = 8;
 
     /**
      * @var array
@@ -84,8 +84,8 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
-        $file,
-        $code
+        string $file,
+        string $code
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -203,7 +203,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    protected function isClassExcluded($className)
+    protected function isClassExcluded(string $className): bool
     {
         $className = $this->typeAnalyzer->getNormalizedFqcn($className);
 
@@ -213,7 +213,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @return array
      */
-    public function getMemberCallList()
+    public function getMemberCallList(): array
     {
         return $this->memberCallList;
     }

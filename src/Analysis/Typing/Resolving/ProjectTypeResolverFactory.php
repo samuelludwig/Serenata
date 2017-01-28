@@ -52,7 +52,7 @@ class ProjectTypeResolverFactory
      *
      * @return ProjectTypeResolver
      */
-    public function create(FileTypeResolverInterface $typeResolver, $filePath)
+    public function create(FileTypeResolverInterface $typeResolver, string $filePath): ProjectTypeResolver
     {
         $namespaces = $this->namespaceImportProviderInterface->getNamespacesForFile($filePath);
 

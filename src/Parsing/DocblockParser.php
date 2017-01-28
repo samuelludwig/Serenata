@@ -14,89 +14,89 @@ class DocblockParser
      *
      * @var string
      */
-    const VAR_TYPE        = '@var';
+    public const VAR_TYPE        = '@var';
 
     /**
      * @var string
      */
-    const PARAM_TYPE      = '@param';
+    public const PARAM_TYPE      = '@param';
 
     /**
      * @var string
      */
-    const THROWS          = '@throws';
+    public const THROWS          = '@throws';
 
     /**
      * @var string
      */
-    const RETURN_VALUE    = '@return';
+    public const RETURN_VALUE    = '@return';
 
     /**
      * @var string
      */
-    const DEPRECATED      = '@deprecated';
+    public const DEPRECATED      = '@deprecated';
 
     /**
      * @var string
      */
-    const METHOD          = "@method";
+    public const METHOD          = "@method";
 
     /**
      * @var string
      */
-    const PROPERTY        = '@property';
+    public const PROPERTY        = '@property';
 
     /**
      * @var string
      */
-    const PROPERTY_READ   = '@property-read';
+    public const PROPERTY_READ   = '@property-read';
 
     /**
      * @var string
      */
-    const PROPERTY_WRITE  = '@property-write';
+    public const PROPERTY_WRITE  = '@property-write';
 
     /**
      * @var string
      */
-    const CATEGORY        = '@category';
+    public const CATEGORY        = '@category';
 
     /**
      * @var string
      */
-    const SUBPACKAGE      = '@subpackage';
+    public const SUBPACKAGE      = '@subpackage';
 
     /**
      * @var string
      */
-    const LINK            = '@link';
+    public const LINK            = '@link';
 
     /**
      * @var string
      */
-    const DESCRIPTION     = 'description';
+    public const DESCRIPTION     = 'description';
 
     /**
      * @var string
      */
-    const INHERITDOC      = '{@inheritDoc}';
+    public const INHERITDOC      = '{@inheritDoc}';
 
     /**
      * Non-standard tags.
      *
      * @var string
      */
-    const ANNOTATION      = '@Annotation';
+    public const ANNOTATION      = '@Annotation';
 
     /**
      * @var string
      */
-    const TYPE_SPLITTER   = '|';
+    public const TYPE_SPLITTER   = '|';
 
     /**
      * @var string
      */
-    const TAG_START_REGEX = '/^\s*(?:\/\*)?\*\s+(\@.+)(?:\*\/)?$/';
+    protected const TAG_START_REGEX = '/^\s*(?:\/\*)?\*\s+(\@.+)(?:\*\/)?$/';
 
     /**
      * @var DocblockAnalyzer
@@ -113,7 +113,7 @@ class DocblockParser
      *
      * @return array
      */
-    public function parse($docblock, array $filters, $itemName)
+    public function parse($docblock, array $filters, string $itemName): array
     {
         if (empty($filters)) {
             return [];
@@ -226,7 +226,7 @@ class DocblockParser
      *
      * @return bool
      */
-    public function isValidTag($tag)
+    public function isValidTag(string $tag): bool
     {
         return in_array($tag, [
             // PHPDOC tags, see also https://phpdoc.org/docs/latest/index.html .
@@ -322,7 +322,7 @@ class DocblockParser
      *
      * @return string[]
      */
-    protected function filterParameterTag($value, $partCount)
+    protected function filterParameterTag(string $value, int $partCount): array
     {
         $segments = [];
         $parts = explode(' ', $value);
@@ -352,7 +352,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterReturn($docblock, $itemName, array $tags)
+    protected function filterReturn(string $docblock, string $itemName, array $tags): array
     {
         if (isset($tags[static::RETURN_VALUE])) {
             list($type, $description) = $this->filterParameterTag($tags[static::RETURN_VALUE][0], 2);
@@ -385,7 +385,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterParams($docblock, $itemName, array $tags)
+    protected function filterParams(string $docblock, string $itemName, array $tags): array
     {
         $params = [];
 
@@ -429,7 +429,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterVar($docblock, $itemName, array $tags)
+    protected function filterVar(string $docblock, string $itemName, array $tags): array
     {
         $vars = [];
 
@@ -476,7 +476,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterDeprecated($docblock, $itemName, array $tags)
+    protected function filterDeprecated(string $docblock, string $itemName, array $tags): array
     {
         return [
             'deprecated' => isset($tags[static::DEPRECATED])
@@ -492,7 +492,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterThrows($docblock, $itemName, array $tags)
+    protected function filterThrows(string $docblock, string $itemName, array $tags): array
     {
         $throws = [];
 
@@ -520,7 +520,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterMethod($docblock, $itemName, array $tags)
+    protected function filterMethod(string $docblock, string $itemName, array $tags): array
     {
         $methods = [];
 
@@ -670,7 +670,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterProperty($docblock, $itemName, array $tags)
+    protected function filterProperty(string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY, 'properties', $docblock, $itemName, $tags);
     }
@@ -684,7 +684,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyRead($docblock, $itemName, array $tags)
+    protected function filterPropertyRead(string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_READ, 'propertiesReadOnly', $docblock, $itemName, $tags);
     }
@@ -698,7 +698,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyWrite($docblock, $itemName, array $tags)
+    protected function filterPropertyWrite(string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_WRITE, 'propertiesWriteOnly', $docblock, $itemName, $tags);
     }
@@ -710,7 +710,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterCategory($docblock, $itemName, array $tags)
+    protected function filterCategory(string $docblock, string $itemName, array $tags): array
     {
         $description = null;
 
@@ -730,7 +730,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterSubpackage($docblock, $itemName, array $tags)
+    protected function filterSubpackage(string $docblock, string $itemName, array $tags): array
     {
         $name = null;
 
@@ -750,7 +750,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterLink($docblock, $itemName, array $tags)
+    protected function filterLink(string $docblock, string $itemName, array $tags): array
     {
         $links = [];
 
@@ -777,7 +777,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterAnnotation($docblock, $itemName, array $tags)
+    protected function filterAnnotation(string $docblock, string $itemName, array $tags): array
     {
         return [
             'annotation' => isset($tags[static::ANNOTATION])
@@ -793,7 +793,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterDescription($docblock, $itemName, array $tags)
+    protected function filterDescription(string $docblock, string $itemName, array $tags): array
     {
         $summary = '';
         $description = '';
@@ -839,7 +839,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function sanitizeText($text)
+    protected function sanitizeText(string $text): string
     {
         return trim(htmlentities($text));
     }
@@ -852,7 +852,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function replaceNewlines($string, $replacement)
+    protected function replaceNewlines(string $string, string $replacement): string
     {
         return str_replace(["\n", "\r\n", PHP_EOL], $replacement, $string);
     }
@@ -864,7 +864,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function normalizeNewlines($string)
+    protected function normalizeNewlines(string $string): string
     {
         return $this->replaceNewlines($string, "\n");
     }
@@ -874,7 +874,7 @@ class DocblockParser
      *
      * @return DocblockAnalyzer
      */
-    protected function getDocblockAnalyzer()
+    protected function getDocblockAnalyzer(): DocblockAnalyzer
     {
         if (!$this->docblockAnalyzer instanceof DocblockAnalyzer) {
             $this->docblockAnalyzer = new DocblockAnalyzer();

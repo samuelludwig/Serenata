@@ -54,7 +54,7 @@ class ExpressionTypeInfo
     /**
      * @return Node|null
      */
-    public function getBestMatch()
+    public function getBestMatch(): ?Node
     {
         return $this->bestMatch;
     }
@@ -64,7 +64,7 @@ class ExpressionTypeInfo
      *
      * @return static
      */
-    public function setBestMatch(Node $bestMatch = null)
+    public function setBestMatch(?Node $bestMatch)
     {
         $this->bestMatch = $bestMatch;
         return $this;
@@ -73,7 +73,7 @@ class ExpressionTypeInfo
     /**
      * @return string|null
      */
-    public function getBestTypeOverrideMatch()
+    public function getBestTypeOverrideMatch(): ?string
     {
         return $this->bestTypeOverrideMatch;
     }
@@ -83,7 +83,7 @@ class ExpressionTypeInfo
      *
      * @return static
      */
-    public function setBestTypeOverrideMatch($bestTypeOverrideMatch)
+    public function setBestTypeOverrideMatch(?string $bestTypeOverrideMatch)
     {
         $this->bestTypeOverrideMatch = $bestTypeOverrideMatch;
         return $this;
@@ -92,7 +92,7 @@ class ExpressionTypeInfo
     /**
      * @return int|null
      */
-    public function getBestTypeOverrideMatchLine()
+    public function getBestTypeOverrideMatchLine(): ?int
     {
         return $this->bestTypeOverrideMatchLine;
     }
@@ -102,7 +102,7 @@ class ExpressionTypeInfo
      *
      * @return static
      */
-    public function setBestTypeOverrideMatchLine($bestTypeOverrideMatchLine)
+    public function setBestTypeOverrideMatchLine(?int $bestTypeOverrideMatchLine)
     {
         $this->bestTypeOverrideMatchLine = $bestTypeOverrideMatchLine;
         return $this;
@@ -111,7 +111,7 @@ class ExpressionTypeInfo
     /**
      * @return TypePossibilityMap
      */
-    public function getTypePossibilityMap()
+    public function getTypePossibilityMap(): TypePossibilityMap
     {
         return $this->typePossibilityMap;
     }
@@ -130,7 +130,7 @@ class ExpressionTypeInfo
     /**
      * @return bool
      */
-    public function hasBestMatch()
+    public function hasBestMatch(): bool
     {
         return ($this->getBestMatch() !== null);
     }
@@ -138,7 +138,7 @@ class ExpressionTypeInfo
     /**
      * @return bool
      */
-    public function hasBestTypeOverrideMatch()
+    public function hasBestTypeOverrideMatch(): bool
     {
         return ($this->getBestTypeOverrideMatch() !== null);
     }

@@ -73,7 +73,7 @@ class ProjectIndexer
     /**
      * @return callable|null
      */
-    public function getProgressStreamingCallback()
+    public function getProgressStreamingCallback(): ?callable
     {
         return $this->progressStreamingCallback;
     }
@@ -83,7 +83,7 @@ class ProjectIndexer
      *
      * @return static
      */
-    public function setProgressStreamingCallback($progressStreamingCallback)
+    public function setProgressStreamingCallback(?callable $progressStreamingCallback)
     {
         $this->progressStreamingCallback = $progressStreamingCallback;
         return $this;
@@ -93,8 +93,10 @@ class ProjectIndexer
      * Logs a single message for debugging purposes.
      *
      * @param string $message
+     *
+     * @return void
      */
-    protected function logMessage($message)
+    protected function logMessage($message): void
     {
         if (!$this->loggingStream) {
             return;
@@ -108,8 +110,10 @@ class ProjectIndexer
      *
      * @param int $itemNumber
      * @param int $totalItemCount
+     *
+     * @return void
      */
-    protected function sendProgress($itemNumber, $totalItemCount)
+    protected function sendProgress(int $itemNumber, int $totalItemCount): void
     {
         $callback = $this->getProgressStreamingCallback();
 
@@ -133,9 +137,15 @@ class ProjectIndexer
      * @param string[] $extensionsToIndex
      * @param string[] $excludedPaths
      * @param array    $sourceOverrideMap
+     *
+     * @return void
      */
-    public function index(array $items, array $extensionsToIndex, array $excludedPaths = [], $sourceOverrideMap = [])
-    {
+    public function index(
+        array $items,
+        array $extensionsToIndex,
+        array $excludedPaths = [],
+        array $sourceOverrideMap = []
+    ): void {
         $fileModifiedMap = $this->storage->getFileModifiedMap();
 
         // The modification time doesn't matter for files we have direct source code for, as this source code always
@@ -189,8 +199,10 @@ class ProjectIndexer
 
     /**
      * Prunes removed files from the index.
+     *
+     * @return void
      */
-    public function pruneRemovedFiles()
+    public function pruneRemovedFiles(): void
     {
         foreach ($this->storage->getFileModifiedMap() as $fileName => $indexedTime) {
             if (!file_exists($fileName)) {

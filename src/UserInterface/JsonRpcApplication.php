@@ -82,7 +82,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      *
      * @return int
      */
-    protected function getRequestHandlingPortFromOptions(array $options)
+    protected function getRequestHandlingPortFromOptions(array $options): int
     {
         if (isset($options['p'])) {
             return (int) $options['p'];
@@ -96,8 +96,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @param React\EventLoop\LoopInterface $loop
      * @param int                           $port
+     *
+     * @return void
      */
-    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, $port)
+    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
@@ -108,8 +110,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @inheritDoc
      */
-    public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender = null)
-    {
+    public function handle(
+        JsonRpcRequest $request,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+    ): JsonRpcResponse {
         $error = null;
         $result = null;
 
@@ -148,7 +152,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     protected function handleRequest(
         JsonRpcRequest $request,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
-    ) {
+    ): string {
         $params = $request->getParams();
 
         $this->configureProgressStreamingCallback($request, $jsonRpcResponseSender);
@@ -177,7 +181,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      *
      * @return Command\CommandInterface
      */
-    protected function getCommandByMethod($method)
+    protected function getCommandByMethod(string $method): Command\CommandInterface
     {
         try {
             return $this->getContainer()->get($method . 'Command');
@@ -191,11 +195,13 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @param JsonRpcRequest                      $request
      * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
+     *
+     * @return void
      */
     protected function configureProgressStreamingCallback(
         JsonRpcRequest $request,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
-    ) {
+    ): void {
         $progressStreamingCallback = null;
 
         if ($jsonRpcResponseSender) {
@@ -210,7 +216,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @inheritDoc
      */
-    protected function createContainer()
+    protected function createContainer(): ContainerBuilder
     {
         $value = parent::createContainer();
 
@@ -226,8 +232,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      * service, but do provide necessary interaction (i.e. they are required by the application itself).
      *
      * @param ContainerBuilder $container
+     *
+     * @return void
      */
-    protected function instantiateRequiredServices(ContainerBuilder $container)
+    protected function instantiateRequiredServices(ContainerBuilder $container): void
     {
         $container->get('cacheClearingEventMediator');
     }
@@ -249,7 +257,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     public function createProgressStreamingCallback(
         JsonRpcRequest $request,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender
-    ) {
+    ): \Closure {
         return function ($progress) use ($request, $jsonRpcResponseSender) {
             $jsonRpcResponse = new JsonRpcResponse(null, [
                 'type'      => 'reindexProgressInformation',

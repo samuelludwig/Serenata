@@ -37,13 +37,18 @@ class TypeLocalizer
      *     @var string      $alias
      *     @var string      $kind
      * } $imports
+     * @param string      $kind
      *
      * @example With use statement "use A\B as AliasB", unresolving "A\B\C\D" will yield "AliasB\C\D".
      *
      * @return string|null
      */
-    public function localize($name, $namespaceFqcn, array $imports, $kind = UseStatementKind::TYPE_CLASSLIKE)
-    {
+    public function localize(
+        string $name,
+        ?string $namespaceFqcn,
+        array $imports,
+        string $kind = UseStatementKind::TYPE_CLASSLIKE
+    ): ?string {
         $bestLocalizedType = null;
 
         if (!$name) {

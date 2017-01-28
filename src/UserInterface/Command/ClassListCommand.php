@@ -135,7 +135,7 @@ class ClassListCommand extends AbstractCommand implements FileClassListProviderI
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         $file = isset($arguments['file']) ? $arguments['file'] : null;
 
@@ -149,7 +149,7 @@ class ClassListCommand extends AbstractCommand implements FileClassListProviderI
      *
      * @return array
      */
-    public function getClassList($file)
+    public function getClassList(?string $file): array
     {
         $result = [];
 
@@ -187,7 +187,7 @@ class ClassListCommand extends AbstractCommand implements FileClassListProviderI
     /**
      * @inheritDoc
      */
-    public function getClassListForFile($filePath)
+    public function getClassListForFile(string $filePath): array
     {
         return $this->getClassList($filePath);
     }

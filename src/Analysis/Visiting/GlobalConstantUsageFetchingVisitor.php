@@ -46,7 +46,7 @@ class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
     *
     * @return bool
     */
-   protected function isConstantExcluded($name)
+   protected function isConstantExcluded(string $name): bool
    {
        return in_array(mb_strtolower($name), ['null', 'true', 'false'], true);
    }
@@ -54,7 +54,7 @@ class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
     /**
      * @return array
      */
-    public function getGlobalConstantList()
+    public function getGlobalConstantList(): array
     {
         return $this->globalConstantList;
     }

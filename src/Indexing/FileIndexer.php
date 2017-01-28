@@ -117,8 +117,10 @@ class FileIndexer
      * @param string $code
      *
      * @throws IndexingFailedException
+     *
+     * @return void
      */
-    public function index($filePath, $code)
+    public function index(string $filePath, string $code): void
     {
         $handler = new ErrorHandler\Collecting();
 
@@ -171,13 +173,15 @@ class FileIndexer
      * @param int                         $fileId
      * @param OutlineFetchingVisitor      $outlineIndexingVisitor
      * @param UseStatementFetchingVisitor $useStatementFetchingVisitor
+     *
+     * @return void
      */
     protected function indexVisitorResults(
-        $filePath,
-        $fileId,
+        string $filePath,
+        int $fileId,
         OutlineFetchingVisitor $outlineIndexingVisitor,
         UseStatementFetchingVisitor $useStatementFetchingVisitor
-    ) {
+    ): void {
         $imports = [];
         $namespaces = $useStatementFetchingVisitor->getNamespaces();
 
@@ -242,12 +246,12 @@ class FileIndexer
      */
     protected function indexStructure(
         array $rawData,
-        $filePath,
-        $fileId,
-        $fqcn,
-        $isBuiltin,
+        string $filePath,
+        int $fileId,
+        string $fqcn,
+        bool $isBuiltin,
         FileTypeResolver $fileTypeResolver
-    ) {
+    ): int {
         $structureTypeMap = $this->getStructureTypeMap();
 
         $documentation = $this->docblockParser->parse($rawData['docComment'], [
@@ -415,8 +419,11 @@ class FileIndexer
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeSpecification($typeSpecification, $line, FileTypeResolver $fileTypeResolver)
-    {
+    protected function getTypeDataForTypeSpecification(
+        string $typeSpecification,
+        int $line,
+        FileTypeResolver $fileTypeResolver
+    ): array {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
         return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
@@ -429,7 +436,7 @@ class FileIndexer
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeList(array $typeList, $line, FileTypeResolver $fileTypeResolver)
+    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
     {
         $types = [];
 
@@ -451,14 +458,16 @@ class FileIndexer
      * @param int              $fileId
      * @param int|null         $seId
      * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return void
      */
     protected function indexConstant(
         array $rawData,
-        $filePath,
-        $fileId,
-        $seId = null,
+        string $filePath,
+        int $fileId,
+        ?int $seId,
         FileTypeResolver $fileTypeResolver
-    ) {
+    ): void {
         $documentation = $this->docblockParser->parse($rawData['docComment'], [
             DocblockParser::VAR_TYPE,
             DocblockParser::DEPRECATED,
@@ -525,15 +534,17 @@ class FileIndexer
      * @param int              $seId
      * @param int              $amId
      * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return void
      */
     protected function indexProperty(
         array $rawData,
-        $filePath,
-        $fileId,
-        $seId,
-        $amId,
+        string $filePath,
+        int $fileId,
+        int $seId,
+        int $amId,
         FileTypeResolver $fileTypeResolver
-    ) {
+    ): void {
         $documentation = $this->docblockParser->parse($rawData['docComment'], [
             DocblockParser::VAR_TYPE,
             DocblockParser::DEPRECATED,
@@ -605,14 +616,16 @@ class FileIndexer
      * @param int              $seId
      * @param int              $amId
      * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return void
      */
     protected function indexMagicProperty(
         array $rawData,
-        $fileId,
-        $seId,
-        $amId,
+        int $fileId,
+        int $seId,
+        int $amId,
         FileTypeResolver $fileTypeResolver
-    ) {
+    ): void {
         $types = [];
 
         if ($rawData['type']) {
@@ -651,15 +664,17 @@ class FileIndexer
      * @param int|null         $amId
      * @param bool             $isMagic
      * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return void
      */
     protected function indexFunction(
         array $rawData,
-        $fileId,
-        $seId = null,
-        $amId = null,
-        $isMagic = false,
+        int $fileId,
+        ?int $seId,
+        ?int $amId,
+        bool $isMagic,
         FileTypeResolver $fileTypeResolver
-    ) {
+    ): void {
         $documentation = $this->docblockParser->parse($rawData['docComment'], [
             DocblockParser::THROWS,
             DocblockParser::PARAM_TYPE,
@@ -792,15 +807,17 @@ class FileIndexer
      * @param int|null         $amId
      * @param bool             $isMagic
      * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return void
      */
     protected function indexMagicMethod(
         array $rawData,
-        $fileId,
-        $seId = null,
-        $amId = null,
-        $isMagic = false,
+        int $fileId,
+        ?int $seId,
+        ?int $amId,
+        bool $isMagic,
         FileTypeResolver $fileTypeResolver
-    ) {
+    ): void {
         $returnTypes = [];
 
         if ($rawData['type']) {
@@ -899,7 +916,7 @@ class FileIndexer
      *
      * @throws UnexpectedValueException
      */
-    protected function parseAccessModifier(array $rawData, $returnNull = false)
+    protected function parseAccessModifier(array $rawData, bool $returnNull = false): string
     {
         if ($rawData['isPublic']) {
             return 'public';
@@ -917,7 +934,7 @@ class FileIndexer
     /**
      * @return array
      */
-    protected function getAccessModifierMap()
+    protected function getAccessModifierMap(): array
     {
         if (!$this->accessModifierMap) {
             $this->accessModifierMap = $this->storage->getAccessModifierMap();
@@ -929,7 +946,7 @@ class FileIndexer
     /**
      * @return array
      */
-    protected function getStructureTypeMap()
+    protected function getStructureTypeMap(): array
     {
         if (!$this->structureTypeMap) {
             $this->structureTypeMap = $this->storage->getStructureTypeMap();
@@ -941,7 +958,7 @@ class FileIndexer
     /**
      * @return Parser
      */
-    protected function getParser()
+    protected function getParser(): Parser
     {
         return $this->parser;
     }

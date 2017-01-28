@@ -75,8 +75,10 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Name $node
+     *
+     * @return void
      */
-    protected function processName(Node\Name $node)
+    protected function processName(Node\Name $node): void
     {
         if (!$this->lastNode instanceof Node\Expr\FuncCall &&
             !$this->lastNode instanceof Node\Expr\ConstFetch &&
@@ -103,7 +105,7 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-     protected function isValidType($type)
+     protected function isValidType(string $type): void
      {
          return $this->typeAnalyzer->isClassType($type);
      }
@@ -113,7 +115,7 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return array
      */
-    public function getClassUsageList()
+    public function getClassUsageList(): array
     {
         return $this->classUsageList;
     }

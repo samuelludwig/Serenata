@@ -38,7 +38,7 @@ class JsonRpcRequest implements JsonSerializable
      * @param array|null      $params
      * @param string          $jsonrpc The version.
      */
-    public function __construct($id, $method, array $params = null, $jsonrpc = '2.0')
+    public function __construct($id, string $method, ?array $params = null, string $jsonrpc = '2.0')
     {
         $this->id = $id;
         $this->method = $method;
@@ -49,7 +49,7 @@ class JsonRpcRequest implements JsonSerializable
     /**
      * @return string
      */
-    public function getJsonrpc()
+    public function getJsonrpc(): string
     {
         return $this->jsonrpc;
     }
@@ -59,7 +59,7 @@ class JsonRpcRequest implements JsonSerializable
      *
      * @return string
      */
-    public function getVersion()
+    public function getVersion(): string
     {
         return $this->getJsonrpc();
     }
@@ -75,7 +75,7 @@ class JsonRpcRequest implements JsonSerializable
     /**
      * @return string
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
@@ -83,7 +83,7 @@ class JsonRpcRequest implements JsonSerializable
     /**
      * @return array|null
      */
-    public function getParams()
+    public function getParams(): ?array
     {
         return $this->params;
     }
@@ -105,7 +105,7 @@ class JsonRpcRequest implements JsonSerializable
      *
      * @return static
      */
-    public static function createFromJson($json)
+    public static function createFromJson(string $json)
     {
         $data = json_decode($json, true);
 

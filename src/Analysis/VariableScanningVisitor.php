@@ -31,7 +31,7 @@ class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @param int $position
      */
-    public function __construct($position)
+    public function __construct(int $position)
     {
         $this->position = $position;
     }
@@ -79,8 +79,10 @@ class VariableScanningVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\Variable $node
+     *
+     * @return void
      */
-    protected function parseVariable(Node\Expr\Variable $node)
+    protected function parseVariable(Node\Expr\Variable $node): void
     {
         if (is_string($node->name)) {
             $this->variables[] = '$' . $node->name;
@@ -89,16 +91,20 @@ class VariableScanningVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\ClosureUse $node
+     *
+     * @return void
      */
-    protected function parseClosureUse(Node\Expr\ClosureUse $node)
+    protected function parseClosureUse(Node\Expr\ClosureUse $node): void
     {
         $this->variables[] = '$' . $node->var;
     }
 
     /**
      * @param Node\Param $node
+     *
+     * @return void
      */
-    protected function parseParam(Node\Param $node)
+    protected function parseParam(Node\Param $node): void
     {
         $this->variables[] = '$' . $node->name;
     }
@@ -108,7 +114,7 @@ class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @return string[]
      */
-    public function getVariables()
+    public function getVariables(): array
     {
         $variables = $this->variables;
 
@@ -125,7 +131,7 @@ class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @return string[]
      */
-    public function getVariablesSortedByProximity()
+    public function getVariablesSortedByProximity(): array
     {
         $variables = array_reverse($this->variables);
 

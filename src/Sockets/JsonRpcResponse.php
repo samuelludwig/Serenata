@@ -37,7 +37,7 @@ class JsonRpcResponse implements JsonSerializable
      * @param object|null     $error
      * @param string          $jsonrpc
      */
-    public function __construct($id, $result = null, $error = null, $jsonrpc = '2.0')
+    public function __construct($id, $result = null, $error = null, string $jsonrpc = '2.0')
     {
         $this->id = $id;
         $this->result = $result;
@@ -48,7 +48,7 @@ class JsonRpcResponse implements JsonSerializable
     /**
      * @return string
      */
-    public function getJsonrpc()
+    public function getJsonrpc(): string
     {
         return $this->jsonrpc;
     }
@@ -97,7 +97,7 @@ class JsonRpcResponse implements JsonSerializable
      *
      * @return static
      */
-    public static function createFromJson($json)
+    public static function createFromJson(string $json)
     {
         $data = json_decode($this->request['content'], true);
 

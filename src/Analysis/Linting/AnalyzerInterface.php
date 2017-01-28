@@ -12,7 +12,7 @@ interface AnalyzerInterface
      *
      * @return \PhpParser\NodeVisitor[]
      */
-    public function getVisitors();
+    public function getVisitors(): array;
 
     /**
      * Retrieves a list of problems found during traversal. When this method is called, the visitors have already
@@ -20,5 +20,5 @@ interface AnalyzerInterface
      *
      * @return array
      */
-    public function getOutput();
+    public function getOutput(): array;
 }

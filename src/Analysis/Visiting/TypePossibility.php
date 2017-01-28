@@ -27,7 +27,7 @@ class TypePossibility
      *
      * @var int
      */
-    const TYPE_GUARANTEED = 1;
+    public const TYPE_GUARANTEED = 1;
 
     /**
      * Indicates that a type is impossible.
@@ -40,14 +40,14 @@ class TypePossibility
      *
      * @var int
      */
-    const TYPE_IMPOSSIBLE = 2;
+    public const TYPE_IMPOSSIBLE = 2;
 
     /**
      * @param int $possibility
      *
      * @return int
      */
-    public static function getReverse($possibility)
+    public static function getReverse(int $possibility): int
     {
         if ($possibility === self::TYPE_GUARANTEED) {
             return self::TYPE_IMPOSSIBLE;

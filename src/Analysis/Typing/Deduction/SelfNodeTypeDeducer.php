@@ -29,7 +29,7 @@ class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Parsing\Node\Keyword\Self_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -45,7 +45,7 @@ class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromSelf($file, $code, $offset)
+    protected function deduceTypesFromSelf(?string $file, string $code, int $offset): array
     {
         $node = new Node\Name('self');
 

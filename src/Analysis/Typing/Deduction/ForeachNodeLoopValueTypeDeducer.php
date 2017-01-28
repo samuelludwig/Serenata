@@ -36,7 +36,7 @@ class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Stmt\Foreach_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -53,8 +53,12 @@ class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromForeachNode(Node\Stmt\Foreach_ $node, $file, $code, $offset)
-    {
+    protected function deduceTypesFromForeachNode(
+        Node\Stmt\Foreach_ $node,
+        ?string $file,
+        string $code,
+        int $offset
+    ): array {
         $types = $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
 
         foreach ($types as $type) {

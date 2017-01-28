@@ -41,7 +41,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
      *
      * @return $this
      */
-    public function setStructureRawInfo(array $rawInfo = null)
+    public function setStructureRawInfo(?array $rawInfo)
     {
         $this->structureRawInfo = $rawInfo;
         return $this;
@@ -50,7 +50,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo($id)
+    public function getClasslikeRawInfo(int $id): array
     {
         return ($this->structureRawInfo !== null) ?
             $this->structureRawInfo :
@@ -60,7 +60,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawParents($id)
+    public function getClasslikeRawParents(int $id): array
     {
         return [];
     }
@@ -68,7 +68,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawChildren($id)
+    public function getClasslikeRawChildren(int $id): array
     {
         return [];
     }
@@ -76,7 +76,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInterfaces($id)
+    public function getClasslikeRawInterfaces(int $id): array
     {
         return [];
     }
@@ -84,7 +84,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawImplementors($id)
+    public function getClasslikeRawImplementors(int $id): array
     {
         return [];
     }
@@ -92,7 +92,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraits($id)
+    public function getClasslikeRawTraits(int $id): array
     {
         return [];
     }
@@ -100,7 +100,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraitUsers($id)
+    public function getClasslikeRawTraitUsers(int $id): array
     {
         return [];
     }
@@ -108,7 +108,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawConstants($id)
+    public function getClasslikeRawConstants(int $id): array
     {
         return [];
     }
@@ -116,7 +116,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawProperties($id)
+    public function getClasslikeRawProperties(int $id): array
     {
         return [];
     }
@@ -124,7 +124,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawMethods($id)
+    public function getClasslikeRawMethods(int $id): array
     {
         return [];
     }
@@ -132,7 +132,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitAliasesAssoc($id)
+    public function getClasslikeTraitAliasesAssoc(int $id): array
     {
         return [];
     }
@@ -140,7 +140,7 @@ class ClasslikeInfoBuilderWhiteHolingProxyProvider implements ClasslikeInfoBuild
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitPrecedencesAssoc($id)
+    public function getClasslikeTraitPrecedencesAssoc(int $id): array
     {
         return [];
     }

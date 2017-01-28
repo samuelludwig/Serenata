@@ -12,7 +12,7 @@ class FunctionConverter extends AbstractConverter
      *
      * @return array
      */
-    public function convert(array $rawInfo)
+    public function convert(array $rawInfo): array
     {
         $rawParameters = unserialize($rawInfo['parameters_serialized']);
 

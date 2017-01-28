@@ -52,7 +52,7 @@ class FileTypeResolver implements FileTypeResolverInterface
     /**
      * @inheritDoc
      */
-    public function resolve($name, $line, $kind = UseStatementKind::TYPE_CLASSLIKE)
+    public function resolve(string $name, int $line, string $kind = UseStatementKind::TYPE_CLASSLIKE): ?string
     {
         $namespaceFqcn = null;
         $relevantImports = [];
@@ -73,7 +73,7 @@ class FileTypeResolver implements FileTypeResolverInterface
      *
      * @return array|null
      */
-    protected function getRelevantNamespaceForLine($line)
+    protected function getRelevantNamespaceForLine(int $line): ?array
     {
         foreach ($this->namespaces as $namespace) {
             if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
@@ -89,7 +89,7 @@ class FileTypeResolver implements FileTypeResolverInterface
      *
      * @return array
      */
-    protected function getRelevantUseStatementsForLine($line)
+    protected function getRelevantUseStatementsForLine(int $line): array
     {
         $namespace = $this->getRelevantNamespaceForLine($line);
 
@@ -114,7 +114,7 @@ class FileTypeResolver implements FileTypeResolverInterface
      *
      * @return bool
      */
-    protected function lineLiesWithinNamespaceRange($line, array $namespace)
+    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
     {
         return (
             $line >= $namespace['startLine'] &&

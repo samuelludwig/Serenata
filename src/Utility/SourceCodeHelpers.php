@@ -19,7 +19,7 @@ class SourceCodeHelpers
      *
      * @return int
      */
-    public static function calculateLineByOffset($source, $offset)
+    public static function calculateLineByOffset(string $source, int $offset): int
     {
         if (!$offset) {
             return 1;
@@ -41,7 +41,7 @@ class SourceCodeHelpers
      *
      * @return int
      */
-    // public static function getCharacterOffsetFromByteOffset($byteOffset, $string)
+    // public static function getCharacterOffsetFromByteOffset(int $byteOffset, string $string): int
     // {
     //     return mb_strlen(mb_strcut($string, 0, $byteOffset));
     // }
@@ -55,7 +55,7 @@ class SourceCodeHelpers
      *
      * @return int
      */
-    public static function getByteOffsetFromCharacterOffset($characterOffset, $string)
+    public static function getByteOffsetFromCharacterOffset(int $characterOffset, string $string): int
     {
         return strlen(mb_substr($string, 0, $characterOffset));
     }

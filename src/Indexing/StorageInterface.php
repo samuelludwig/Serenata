@@ -13,21 +13,21 @@ interface StorageInterface
      *
      * @return array
      */
-    public function getFileModifiedMap();
+    public function getFileModifiedMap(): array;
 
     /**
     * Retrieves a list of access modifiers mapped to their ID.
     *
     * @return array
     */
-    public function getAccessModifierMap();
+    public function getAccessModifierMap(): array;
 
      /**
      * Retrieves a list of structural element types mapped to their ID.
      *
      * @return array
      */
-    public function getStructureTypeMap();
+    public function getStructureTypeMap(): array;
 
     /**
      * Retrieves the ID of the file with the specified path.
@@ -36,19 +36,23 @@ interface StorageInterface
      *
      * @return int|null
      */
-    public function getFileId($path);
+    public function getFileId(string $path): ?int;
 
     /**
      * @param string $path
+     *
+     * @return void
      */
-    public function deleteFile($path);
+    public function deleteFile(string $path): void;
 
     /**
      * @param array  $data
      *
      * @return int The unique identifier assigned to the inserted data.
+     *
+     * @return void
      */
-    public function insertStructure(array $data);
+    public function insertStructure(array $data): void;
 
     /**
      * Inserts the specified index item into the storage.
@@ -58,7 +62,7 @@ interface StorageInterface
      *
      * @return int The unique identifier assigned to the inserted data.
      */
-    public function insert($indexStorageItem, array $data);
+    public function insert(string $indexStorageItem, array $data): int;
 
     /**
      * Updates the specified index item.
@@ -66,21 +70,23 @@ interface StorageInterface
      * @param string    $indexStorageItem
      * @param int|array $id
      * @param array     $data
+     *
+     * @return void
      */
-    public function update($indexStorageItem, $id, array $data);
+    public function update(string $indexStorageItem, $id, array $data): void;
 
     /**
-     * @inheritDoc
+     * Starts a transaction.
      */
-    public function beginTransaction();
+    public function beginTransaction(): void;
 
     /**
-     * @inheritDoc
+     * Commits a transaction.
      */
-    public function commitTransaction();
+    public function commitTransaction(): void;
 
     /**
-     * @inheritDoc
+     * Rolls back a transaction.
      */
-    public function rollbackTransaction();
+    public function rollbackTransaction(): void;
 }

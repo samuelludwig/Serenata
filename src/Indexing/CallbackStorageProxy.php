@@ -31,7 +31,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function getFileModifiedMap()
+    public function getFileModifiedMap(): array
     {
         return $this->storage->getFileModifiedMap();
     }
@@ -39,7 +39,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function getAccessModifierMap()
+    public function getAccessModifierMap(): array
     {
         return $this->storage->getAccessModifierMap();
     }
@@ -47,7 +47,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function getStructureTypeMap()
+    public function getStructureTypeMap(): array
     {
         return $this->storage->getStructureTypeMap();
     }
@@ -55,7 +55,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function getFileId($path)
+    public function getFileId(string $path): ?int
     {
         return $this->storage->getFileId($path);
     }
@@ -63,7 +63,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function deleteFile($path)
+    public function deleteFile(string $path): void
     {
         return $this->storage->deleteFile($path);
     }
@@ -71,7 +71,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function getSetting($name)
+    public function getSetting(string $name): array
     {
         return $this->storage->getSetting($name);
     }
@@ -79,7 +79,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function insertStructure(array $data)
+    public function insertStructure(array $data): void
     {
         $callback = $this->insertStructureCallback;
         $callback($data['fqcn']);
@@ -90,7 +90,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function insert($indexStorageItem, array $data)
+    public function insert(string $indexStorageItem, array $data): int
     {
         return $this->storage->insert($indexStorageItem, $data);
     }
@@ -98,7 +98,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function update($indexStorageItem, $id, array $data)
+    public function update(string $indexStorageItem, $id, array $data): void
     {
         return $this->storage->update($indexStorageItem, $id, $data);
     }
@@ -106,7 +106,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function beginTransaction()
+    public function beginTransaction(): void
     {
         $this->storage->beginTransaction();
     }
@@ -114,7 +114,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function commitTransaction()
+    public function commitTransaction(): void
     {
         $this->storage->commitTransaction();
     }
@@ -122,7 +122,7 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @inheritDoc
      */
-    public function rollbackTransaction()
+    public function rollbackTransaction(): void
     {
         $this->storage->rollbackTransaction();
     }

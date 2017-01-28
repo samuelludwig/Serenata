@@ -47,7 +47,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      * @param PrettyPrinterAbstract $prettyPrinter
      * @param int                   $position
      */
-    public function __construct(DocblockParser $docblockParser, PrettyPrinterAbstract $prettyPrinter, $position)
+    public function __construct(DocblockParser $docblockParser, PrettyPrinterAbstract $prettyPrinter, int $position)
     {
         $this->docblockParser = $docblockParser;
         $this->prettyPrinter = $prettyPrinter;
@@ -95,16 +95,20 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Stmt\Catch_ $node
+     *
+     * @return void
      */
-    protected function parseCatch(Node\Stmt\Catch_ $node)
+    protected function parseCatch(Node\Stmt\Catch_ $node): void
     {
         $this->expressionTypeInfoMap->setBestMatch('$' . $node->var, $node);
     }
 
     /**
      * @param Node\Stmt\If_|Node\Stmt\ElseIf_|Node\Expr\Ternary $node
+     *
+     * @return void
      */
-    protected function parseConditional(NodeAbstract $node)
+    protected function parseConditional(NodeAbstract $node): void
     {
         // There can be conditional expressions inside the current scope (think variables assigned to a ternary
         // expression). In that case we don't want to actually look at the condition for type deduction unless
@@ -139,8 +143,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\Assign $node
+     *
+     * @return void
      */
-    protected function parseAssignment(Node\Expr\Assign $node)
+    protected function parseAssignment(Node\Expr\Assign $node): void
     {
         if ($node->getAttribute('endFilePos') > $this->position) {
             return;
@@ -155,8 +161,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Stmt\Foreach_ $node
+     *
+     * @return void
      */
-    protected function parseForeach(Node\Stmt\Foreach_ $node)
+    protected function parseForeach(Node\Stmt\Foreach_ $node): void
     {
         if (!$node->valueVar instanceof Node\Expr\List_) {
             if (!$this->isExpressionSubjectToTypePossibilities($node->valueVar)) {
@@ -171,8 +179,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node $node
+     *
+     * @return void
      */
-    protected function checkForScopeChange(Node $node)
+    protected function checkForScopeChange(Node $node): void
     {
         if ($node->getAttribute('startFilePos') > $this->position ||
             $node->getAttribute('endFilePos') < $this->position
@@ -207,7 +217,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      *
      * @return TypePossibilityMap[] with expression names as keys.
      */
-    protected function parseCondition(Node\Expr $node)
+    protected function parseCondition(Node\Expr $node): array
     {
         $types = [];
 
@@ -247,8 +257,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr\BinaryOp   $node
      * @param TypePossibilityMap[] &$types
+     *
+     * @return void
      */
-    protected function processConditionLogicalOperators(Node\Expr\BinaryOp $node, array &$types)
+    protected function processConditionLogicalOperators(Node\Expr\BinaryOp $node, array &$types): void
     {
         $leftTypes = $this->parseCondition($node->left);
         $rightTypes = $this->parseCondition($node->right);
@@ -269,8 +281,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr\BinaryOp\Equal|Node\Expr\BinaryOp\Identical $node
      * @param TypePossibilityMap[]                                  &$types
+     *
+     * @return void
      */
-    protected function processConditionEqualityOperators(Node\Expr\BinaryOp $node, array &$types)
+    protected function processConditionEqualityOperators(Node\Expr\BinaryOp $node, array &$types): void
     {
         if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
             if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
@@ -290,8 +304,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr\BinaryOp\NotEqual|Node\Expr\BinaryOp\NotIdentical $node
      * @param TypePossibilityMap[]                                        &$types
+     *
+     * @return void
      */
-    protected function processConditionInequalityOperators(Node\Expr\BinaryOp $node, array &$types)
+    protected function processConditionInequalityOperators(Node\Expr\BinaryOp $node, array &$types): void
     {
         if ($this->isExpressionSubjectToTypePossibilities($node->left)) {
             if ($node->right instanceof Node\Expr\ConstFetch && $node->right->name->toString() === 'null') {
@@ -311,8 +327,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr            $node
      * @param TypePossibilityMap[] &$types
+     *
+     * @return void
      */
-    protected function processConditionBoolean(Node\Expr $node, array &$types)
+    protected function processConditionBoolean(Node\Expr $node, array &$types): void
     {
         $key = $this->getExpressionString($node);
 
@@ -322,8 +340,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr\BooleanNot $node
      * @param TypePossibilityMap[] &$types
+     *
+     * @return void
      */
-    protected function processConditionBooleanNot(Node\Expr\BooleanNot $node, array &$types)
+    protected function processConditionBooleanNot(Node\Expr\BooleanNot $node, array &$types): void
     {
         if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
             $key = $this->getExpressionString($node->expr);
@@ -347,8 +367,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr\Instanceof_ $node
      * @param TypePossibilityMap[]  &$types
+     *
+     * @return void
      */
-    protected function processConditionInstanceof(Node\Expr\Instanceof_ $node, array &$types)
+    protected function processConditionInstanceof(Node\Expr\Instanceof_ $node, array &$types): void
     {
         if ($this->isExpressionSubjectToTypePossibilities($node->expr)) {
             if ($node->class instanceof Node\Name) {
@@ -365,8 +387,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Expr\FuncCall   $node
      * @param TypePossibilityMap[] &$types
+     *
+     * @return void
      */
-    protected function processConditionFuncCall(Node\Expr\FuncCall $node, array &$types)
+    protected function processConditionFuncCall(Node\Expr\FuncCall $node, array &$types): void
     {
         if (!$node->name instanceof Node\Name) {
             return;
@@ -414,9 +438,15 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      * @param string               $expression
      * @param string               $type
      * @param int                  $possibility
+     *
+     * @return void
      */
-    protected function setTypePossibilityForExpression(array &$types, $expression, $type, $possibility)
-    {
+    protected function setTypePossibilityForExpression(
+        array &$types,
+        string $expression,
+        string $type,
+        int $possibility
+    ): void {
         if (!isset($types[$expression])) {
             $types[$expression] = new TypePossibilityMap();
         }
@@ -426,8 +456,10 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node $node
+     *
+     * @return void
      */
-    protected function parseNodeDocblock(Node $node)
+    protected function parseNodeDocblock(Node $node): void
     {
         $docblock = $node->getDocComment();
 
@@ -469,7 +501,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    protected function isExpressionSubjectToTypePossibilities(Node\Expr $expression)
+    protected function isExpressionSubjectToTypePossibilities(Node\Expr $expression): bool
     {
         if ($expression instanceof Node\Expr\Variable && is_string($expression->name)) {
             return true;
@@ -491,7 +523,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      *
      * @return string
      */
-    protected function getExpressionString(Node\Expr $expression)
+    protected function getExpressionString(Node\Expr $expression): string
     {
         if ($expression instanceof Node\Expr\Variable) {
             return '$' . ((string) $expression->name);
@@ -509,7 +541,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @return ExpressionTypeInfoMap
      */
-    public function getExpressionTypeInfoMap()
+    public function getExpressionTypeInfoMap(): ExpressionTypeInfoMap
     {
         return $this->expressionTypeInfoMap;
     }

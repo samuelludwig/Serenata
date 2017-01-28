@@ -12,5 +12,5 @@ interface ClasslikeRawConstantDataProviderInterface
      *
      * @return array
      */
-    public function getClasslikeRawConstants($id);
+    public function getClasslikeRawConstants(int $id): array;
 }

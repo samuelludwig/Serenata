@@ -12,5 +12,5 @@ interface FileClassListProviderInterface
      *
      * @return array
      */
-    public function getClassListForFile($filePath);
+    public function getClassListForFile(string $filePath): array;
 }

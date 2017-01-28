@@ -31,8 +31,8 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
-        $file,
-        $code
+        string $file,
+        string $code
     ) {
         $this->methodUsageFetchingVisitor = new MemberUsageFetchingVisitor(
             $nodeTypeDeducer,
@@ -46,7 +46,7 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return [
             $this->methodUsageFetchingVisitor
@@ -56,7 +56,7 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         $output = [
             'errors' => [

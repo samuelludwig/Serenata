@@ -51,7 +51,7 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
@@ -102,7 +102,7 @@ class DeduceTypesCommand extends AbstractCommand
      *
      * @return Node
      */
-    protected function getNodeWithoutLastElement(Node $node)
+    protected function getNodeWithoutLastElement(Node $node): Node
     {
         if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
             return $node->var;
@@ -124,7 +124,7 @@ class DeduceTypesCommand extends AbstractCommand
      *
      * @return string[]
      */
-    protected function deduceTypes($file, $code, Node $node, $offset)
+    protected function deduceTypes(string $file, string $code, Node $node, int $offset): array
     {
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
@@ -137,7 +137,7 @@ class DeduceTypesCommand extends AbstractCommand
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpression($file, $code, $expression, $offset)
+    protected function deduceTypesFromExpression(string $file, string $code, string $expression, int $offset): array
     {
         $node = $this->partialParser->getLastNodeAt($expression, $offset);
 

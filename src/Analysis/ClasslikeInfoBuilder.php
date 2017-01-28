@@ -124,7 +124,7 @@ class ClasslikeInfoBuilder
      *
      * @return array
      */
-    public function getClasslikeInfo($fqcn)
+    public function getClasslikeInfo(string $fqcn): array
     {
         $this->resolutionStack = [];
 
@@ -137,7 +137,7 @@ class ClasslikeInfoBuilder
      *
      * @return ArrayObject
      */
-    protected function getCheckedClasslikeInfo($fqcn, $originFqcn)
+    protected function getCheckedClasslikeInfo(string $fqcn, string $originFqcn): ArrayObject
     {
         if (in_array($fqcn, $this->resolutionStack)) {
             throw new CircularDependencyException(
@@ -161,7 +161,7 @@ class ClasslikeInfoBuilder
      *
      * @return ArrayObject
      */
-    protected function getUncheckedClasslikeInfo($fqcn)
+    protected function getUncheckedClasslikeInfo(string $fqcn): ArrayObject
     {
         $rawInfo = $this->storage->getClasslikeRawInfo($fqcn);
 
@@ -221,7 +221,7 @@ class ClasslikeInfoBuilder
         array $methods,
         array $traitAliases,
         array $traitPrecedences
-    ) {
+    ): ArrayObject {
         $classlike = new ArrayObject($this->classlikeConverter->convert($element) + [
             'parents'            => [],
             'interfaces'         => [],
@@ -261,8 +261,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $children
+     *
+     * @return void
      */
-    protected function buildDirectChildrenInfo(ArrayObject $classlike, array $children)
+    protected function buildDirectChildrenInfo(ArrayObject $classlike, array $children): void
     {
         foreach ($children as $child) {
             $classlike['directChildren'][] = $child['fqcn'];
@@ -272,8 +274,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $implementors
+     *
+     * @return void
      */
-    protected function buildDirectImplementorsInfo(ArrayObject $classlike, array $implementors)
+    protected function buildDirectImplementorsInfo(ArrayObject $classlike, array $implementors): void
     {
         foreach ($implementors as $implementor) {
             $classlike['directImplementors'][] = $implementor['fqcn'];
@@ -283,8 +287,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $traitUsers
+     *
+     * @return void
      */
-    protected function buildTraitUsersInfo(ArrayObject $classlike, array $traitUsers)
+    protected function buildTraitUsersInfo(ArrayObject $classlike, array $traitUsers): void
     {
         foreach ($traitUsers as $trait) {
             $classlike['directTraitUsers'][] = $trait['fqcn'];
@@ -294,8 +300,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $constants
+     *
+     * @return void
      */
-    protected function buildConstantsInfo(ArrayObject $classlike, array $constants)
+    protected function buildConstantsInfo(ArrayObject $classlike, array $constants): void
     {
         foreach ($constants as $rawConstantData) {
             $classlike['constants'][$rawConstantData['name']] = $this->classlikeConstantConverter->convertForClass(
@@ -308,8 +316,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $properties
+     *
+     * @return void
      */
-    protected function buildPropertiesInfo(ArrayObject $classlike, array $properties)
+    protected function buildPropertiesInfo(ArrayObject $classlike, array $properties): void
     {
         foreach ($properties as $rawPropertyData) {
             $classlike['properties'][$rawPropertyData['name']] = $this->propertyConverter->convertForClass(
@@ -322,8 +332,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $methods
+     *
+     * @return void
      */
-    protected function buildMethodsInfo(ArrayObject $classlike, array $methods)
+    protected function buildMethodsInfo(ArrayObject $classlike, array $methods): void
     {
         foreach ($methods as $rawMethodData) {
             $classlike['methods'][$rawMethodData['name']] = $this->methodConverter->convertForClass(
@@ -338,8 +350,10 @@ class ClasslikeInfoBuilder
      * @param array       $traits
      * @param array       $traitAliases
      * @param array       $traitPrecedences
+     *
+     * @return void
      */
-    protected function buildTraitsInfo(
+    protected function buildTraitsInfo(: void
         ArrayObject $classlike,
         array $traits,
         array $traitAliases,
@@ -358,8 +372,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $parents
+     *
+     * @return void
      */
-    protected function buildParentsInfo(ArrayObject $classlike, array $parents)
+    protected function buildParentsInfo(ArrayObject $classlike, array $parents): void
     {
         foreach ($parents as $parent) {
             $classlike['parents'][] = $parent['fqcn'];
@@ -374,8 +390,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $classlike
      * @param array       $interfaces
+     *
+     * @return void
      */
-    protected function buildInterfacesInfo(ArrayObject $classlike, array $interfaces)
+    protected function buildInterfacesInfo(ArrayObject $classlike, array $interfaces): void
     {
         foreach ($interfaces as $interface) {
             $classlike['interfaces'][] = $interface['fqcn'];
@@ -390,8 +408,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $result
      * @param string      $elementFqcn
+     *
+     * @return void
      */
-    protected function resolveSelfTypesTo(ArrayObject $result, $elementFqcn)
+    protected function resolveSelfTypesTo(ArrayObject $result, $elementFqcn): void
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
@@ -403,8 +423,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $result
      * @param string      $elementFqcn
+     *
+     * @return void
      */
-    protected function resolveStaticTypesTo(ArrayObject $result, $elementFqcn)
+    protected function resolveStaticTypesTo(ArrayObject $result, $elementFqcn): void
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
@@ -420,8 +442,10 @@ class ClasslikeInfoBuilder
 
     /**
      * @param ArrayObject $result
+     *
+     * @return void
      */
-    protected function resolveNormalTypes(ArrayObject $result)
+    protected function resolveNormalTypes(ArrayObject $result): void
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
@@ -437,8 +461,10 @@ class ClasslikeInfoBuilder
     /**
      * @param ArrayObject $result
      * @param callable    $callable
+     *
+     * @return void
      */
-    protected function walkTypes(ArrayObject $result, callable $callable)
+    protected function walkTypes(ArrayObject $result, callable $callable): void
     {
         foreach ($result['methods'] as $name => &$method) {
             foreach ($method['parameters'] as &$parameter) {

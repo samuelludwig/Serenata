@@ -34,7 +34,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInfo($fqcn)
+    public function getClasslikeRawInfo(string $fqcn): array
     {
         $cacheId = $this->getCacheId(__FUNCTION__, func_get_args());
 
@@ -48,7 +48,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawParents($id)
+    public function getClasslikeRawParents(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -56,7 +56,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawChildren($id)
+    public function getClasslikeRawChildren(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -64,7 +64,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawInterfaces($id)
+    public function getClasslikeRawInterfaces(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -72,7 +72,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawImplementors($id)
+    public function getClasslikeRawImplementors(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -80,7 +80,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraits($id)
+    public function getClasslikeRawTraits(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -88,7 +88,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawTraitUsers($id)
+    public function getClasslikeRawTraitUsers(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -96,7 +96,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawConstants($id)
+    public function getClasslikeRawConstants(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -104,7 +104,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawProperties($id)
+    public function getClasslikeRawProperties(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -112,7 +112,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeRawMethods($id)
+    public function getClasslikeRawMethods(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -120,7 +120,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitAliasesAssoc($id)
+    public function getClasslikeTraitAliasesAssoc(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -128,7 +128,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @inheritDoc
      */
-    public function getClasslikeTraitPrecedencesAssoc($id)
+    public function getClasslikeTraitPrecedencesAssoc(int $id): array
     {
         return $this->proxyCall(__FUNCTION__, func_get_args());
     }
@@ -139,7 +139,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
      *
      * @return mixed
      */
-    protected function proxyCall($method, array $arguments)
+    protected function proxyCall(string $method, array $arguments)
     {
         $cacheId = $this->getCacheId($method, $arguments);
 
@@ -157,8 +157,10 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @param string $method
      * @param array  $arguments
+     *
+     * @return string
      */
-    protected function getCacheId($method, array $arguments)
+    protected function getCacheId(string $method, array $arguments): string
     {
         return $method . '_' . serialize($arguments);
     }
@@ -166,8 +168,10 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @param string $fqcn
      * @param string $cacheId
+     *
+     * @return void
      */
-    protected function rememberCacheIdForFqcn($fqcn, $cacheId)
+    protected function rememberCacheIdForFqcn(string $fqcn, string $cacheId): void
     {
         $cacheMap = $this->getCacheMap();
         $cacheMap[$fqcn][$cacheId] = true;
@@ -177,8 +181,10 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
 
     /**
      * @param string $fqcn
+     *
+     * @return void
      */
-    public function clearCacheFor($fqcn)
+    public function clearCacheFor(string $fqcn): void
     {
         $cacheMap = $this->getCacheMap();
 
@@ -196,7 +202,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @return array
      */
-    protected function getCacheMap()
+    protected function getCacheMap(): array
     {
         $cacheIdsCacheId = $this->getCacheIdForFqcnListCacheId();
 
@@ -211,8 +217,10 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
 
     /**
      * @param array $cacheMap
+     *
+     * @return void
      */
-    protected function saveCacheMap(array $cacheMap)
+    protected function saveCacheMap(array $cacheMap): void
     {
         $cacheIdsCacheId = $this->getCacheIdForFqcnListCacheId();
 
@@ -223,7 +231,7 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @return string
      */
-    protected function getCacheIdForFqcnListCacheId()
+    protected function getCacheIdForFqcnListCacheId(): string
     {
         return __CLASS__ . '_fqcn';
     }

@@ -12,7 +12,7 @@ class ClasslikeConverter extends AbstractConverter
      *
      * @return array
      */
-    public function convert(array $rawInfo)
+    public function convert(array $rawInfo): array
     {
         return [
             'name'               => $rawInfo['fqcn'],

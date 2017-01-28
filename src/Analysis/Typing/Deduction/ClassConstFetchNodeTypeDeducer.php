@@ -38,7 +38,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\ClassConstFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -55,8 +55,12 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromClassConstFetchNode(Node\Expr\ClassConstFetch $node, $file, $code, $offset)
-    {
+    protected function deduceTypesFromClassConstFetchNode(
+        Node\Expr\ClassConstFetch $node,
+        ?string $file,
+        string $code,
+        int $offset
+    ): array {
         $typesOfVar = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $offset);
 
         $types = [];

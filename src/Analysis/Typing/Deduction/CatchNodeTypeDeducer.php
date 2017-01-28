@@ -27,7 +27,7 @@ class CatchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Stmt\Catch_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -44,7 +44,7 @@ class CatchNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromCatchNode(Node\Stmt\Catch_ $node, $file, $code, $offset)
+    protected function deduceTypesFromCatchNode(Node\Stmt\Catch_ $node, ?string $file, string $code, int $offset): array
     {
         $types = array_map(function (Node\Name $name) use ($file, $code, $offset) {
             return $this->nodeTypeDeducer->deduce($name, $file, $code, $offset);

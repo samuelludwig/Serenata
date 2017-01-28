@@ -37,7 +37,7 @@ class CacheClearingEventMediator
     public function __construct(
         ClearableCacheInterface $clearableCache,
         EventEmitterInterface $eventEmitter,
-        $eventName
+        string $eventName
     ) {
         $this->clearableCache = $clearableCache;
         $this->eventEmitter = $eventEmitter;
@@ -49,7 +49,7 @@ class CacheClearingEventMediator
     /**
      * @return void
      */
-    protected function setup()
+    protected function setup(): void
     {
         $this->eventEmitter->on($this->eventName, function () {
             $this->clearCache();
@@ -59,7 +59,7 @@ class CacheClearingEventMediator
     /**
      * @return void
      */
-    protected function clearCache()
+    protected function clearCache(): void
     {
         $this->clearableCache->clearCache();
     }

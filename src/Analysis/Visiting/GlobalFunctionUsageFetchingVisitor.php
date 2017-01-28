@@ -42,7 +42,7 @@ class GlobalFunctionUsageFetchingVisitor extends AbstractNameResolvingVisitor
     /**
      * @return array
      */
-    public function getGlobalFunctionCallList()
+    public function getGlobalFunctionCallList(): array
     {
         return $this->globalFunctionCallList;
     }

@@ -38,7 +38,7 @@ class LocalizeTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['type'])) {
             throw new InvalidArgumentsException('The type is required for this command.');
@@ -68,7 +68,7 @@ class LocalizeTypeCommand extends AbstractCommand
      *
      * @return string|null
      */
-    public function localizeType($type, $file, $line, $kind)
+    public function localizeType(string $type, string $file, int $line, string $kind): ?string
     {
         $fileId = $this->indexDatabase->getFileId($file);
 

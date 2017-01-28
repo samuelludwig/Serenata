@@ -23,7 +23,7 @@ class ClearableCacheCollection implements ClearableCacheInterface
     /**
      * @inheritDoc
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         foreach ($this->elements as $element) {
             $element->clearCache();

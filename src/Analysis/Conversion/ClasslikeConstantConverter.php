@@ -15,7 +15,7 @@ class ClasslikeConstantConverter extends ConstantConverter
      *
      * @return array
      */
-    public function convertForClass(array $rawInfo, ArrayAccess $class)
+    public function convertForClass(array $rawInfo, ArrayAccess $class): array
     {
         $data = parent::convert($rawInfo);
 

@@ -15,7 +15,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @var string
      */
-    const HEADER_DELIMITER = "\r\n";
+    protected const HEADER_DELIMITER = "\r\n";
 
     /**
      * @var array
@@ -47,7 +47,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @return void
      */
-    protected function setup()
+    protected function setup(): void
     {
         $this->resetRequestState();
 
@@ -59,7 +59,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @return void
      */
-    protected function resetRequestState()
+    protected function resetRequestState(): void
     {
         $this->request = [
             'length'           => null,
@@ -72,8 +72,10 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 
     /**
      * @param string $data
+     *
+     * @return void
      */
-    public function onDataReceived($data)
+    public function onDataReceived(string $data): void
     {
         try {
             $this->processData($data);
@@ -85,7 +87,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @return void
      */
-    public function onEnded()
+    public function onEnded(): void
     {
 
     }
@@ -93,23 +95,27 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @return void
      */
-    public function onClosed()
+    public function onClosed(): void
     {
 
     }
 
     /**
      * @param RequestParsingException $e
+     *
+     * @return void
      */
-    protected function handleRequestParsingException(RequestParsingException $e)
+    protected function handleRequestParsingException(RequestParsingException $e): void
     {
         $this->resetRequestState();
     }
 
     /**
      * @param string $data
+     *
+     * @return void
      */
-    protected function processData($data)
+    protected function processData(string $data): void
     {
         $bytesRead = 0;
 
@@ -170,7 +176,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      *
      * @return JsonRpcResponse
      */
-    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request)
+    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request): JsonRpcResponse
     {
         return $this->jsonRpcRequestHandler->handle($request, $this);
     }
@@ -178,7 +184,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @inheritDoc
      */
-    public function send(JsonRpcResponse $response, $force = false)
+    public function send(JsonRpcResponse $response, bool $force = false): void
     {
         $responseContent = $this->getEncodedResponse($response);
 
@@ -197,7 +203,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      *
      * @return string
      */
-    protected function getEncodedResponse(JsonRpcResponse $response)
+    protected function getEncodedResponse(JsonRpcResponse $response): string
     {
         $data = json_encode($response);
 
@@ -240,7 +246,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      *
      * @return JsonRpcRequest
      */
-    protected function getJsonRpcRequestFromRequestContent($content)
+    protected function getJsonRpcRequestFromRequestContent(string $content): JsonRpcRequest
     {
         return JsonRpcRequest::createFromJson($this->request['content']);
     }
@@ -252,7 +258,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      *
      * @return string
      */
-    protected function readRawHeader($data)
+    protected function readRawHeader(string $data): string
     {
         $end = strpos($data, self::HEADER_DELIMITER);
 
@@ -266,8 +272,10 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @param string $content
      * @param bool   $force
+     *
+     * @return void
      */
-    protected function writeRawResponse($content, $force = false)
+    protected function writeRawResponse(string $content, bool $force = false): void
     {
         $this->connection->write('Content-Length: ' . strlen($content) . self::HEADER_DELIMITER);
         $this->connection->write(self::HEADER_DELIMITER);
@@ -288,7 +296,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      *
      * @return int
      */
-    protected function getLengthFromContentLengthHeader($rawHeader)
+    protected function getLengthFromContentLengthHeader(string $rawHeader): int
     {
         $parts = explode(':', $rawHeader, 2);
 

@@ -94,7 +94,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
      *
      * @return array
      */
-    public function getNamespaces()
+    public function getNamespaces(): array
     {
         return $this->namespaces;
     }

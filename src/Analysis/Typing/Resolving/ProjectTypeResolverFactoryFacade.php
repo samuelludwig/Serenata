@@ -38,7 +38,7 @@ class ProjectTypeResolverFactoryFacade
      *
      * @return ProjectTypeResolver
      */
-    public function create($filePath)
+    public function create(string $filePath): ProjectTypeResolver
     {
         $fileTypeResolver = $this->fileTypeResolverFactory->create($filePath);
 

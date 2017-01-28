@@ -12,8 +12,10 @@ class InheritanceResolver extends AbstractResolver
     /**
      * @param ArrayObject $parent
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    public function resolveInheritanceOf(ArrayObject $parent, ArrayObject $class)
+    public function resolveInheritanceOf(ArrayObject $parent, ArrayObject $class): void
     {
         if (!$class['shortDescription']) {
             $class['shortDescription'] = $parent['shortDescription'];
@@ -47,8 +49,10 @@ class InheritanceResolver extends AbstractResolver
     /**
      * @param array       $parentConstantData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveInheritanceOfConstant(array $parentConstantData, ArrayObject $class)
+    protected function resolveInheritanceOfConstant(array $parentConstantData, ArrayObject $class): void
     {
         $class['constants'][$parentConstantData['name']] = $parentConstantData + [
             'declaringClass' => [
@@ -74,8 +78,10 @@ class InheritanceResolver extends AbstractResolver
     /**
      * @param array       $parentPropertyData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveInheritanceOfProperty(array $parentPropertyData, ArrayObject $class)
+    protected function resolveInheritanceOfProperty(array $parentPropertyData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childProperty = null;
@@ -129,8 +135,10 @@ class InheritanceResolver extends AbstractResolver
     /**
      * @param array       $parentMethodData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveInheritanceOfMethod(array $parentMethodData, ArrayObject $class)
+    protected function resolveInheritanceOfMethod(array $parentMethodData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childMethod = null;

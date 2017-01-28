@@ -17,8 +17,12 @@ class TraitUsageResolver extends AbstractResolver
      *
      * @return ArrayObject
      */
-    public function resolveUseOf(ArrayObject $trait, ArrayObject $class, array $traitAliases, array $traitPrecedences)
-    {
+    public function resolveUseOf(
+        ArrayObject $trait,
+        ArrayObject $class,
+        array $traitAliases,
+        array $traitPrecedences
+    ): ArrayObject {
         foreach ($trait['properties'] as $property) {
             $this->resolveTraitUseOfProperty($property, $class);
         }
@@ -51,8 +55,10 @@ class TraitUsageResolver extends AbstractResolver
     /**
      * @param array       $traitPropertyData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveTraitUseOfProperty(array $traitPropertyData, ArrayObject $class)
+    protected function resolveTraitUseOfProperty(array $traitPropertyData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childProperty = null;
@@ -106,8 +112,10 @@ class TraitUsageResolver extends AbstractResolver
     /**
      * @param array       $traitMethodData
      * @param ArrayObject $class
+     *
+     * @return void
      */
-    protected function resolveTraitUseOfMethod(array $traitMethodData, ArrayObject $class)
+    protected function resolveTraitUseOfMethod(array $traitMethodData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childMethod = null;

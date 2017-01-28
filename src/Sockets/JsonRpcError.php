@@ -31,7 +31,7 @@ class JsonRpcError implements JsonSerializable
      * @param string     $message
      * @param mixed|null $data
      */
-    public function __construct($code, $message, $data = null)
+    public function __construct(int $code, string $message, $data = null)
     {
         $this->code = $code;
         $this->message = $message;
@@ -41,7 +41,7 @@ class JsonRpcError implements JsonSerializable
     /**
      * @return int
      */
-    public function getCode()
+    public function getCode(): int
     {
         return $this->code;
     }
@@ -49,7 +49,7 @@ class JsonRpcError implements JsonSerializable
     /**
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -81,7 +81,7 @@ class JsonRpcError implements JsonSerializable
      *
      * @return static
      */
-    public static function createFromJson($json)
+    public static function createFromJson(string $json)
     {
         $data = json_decode($this->request['content'], true);
 

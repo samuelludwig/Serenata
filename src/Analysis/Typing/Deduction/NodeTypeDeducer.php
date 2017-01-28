@@ -201,7 +201,7 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, $file, $code, $offset)
+    public function deduce(Node $node, ?string $file, string $code, int $offset): array
     {
         $typeDeducer = null;
 
@@ -221,7 +221,7 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return NodeTypeDeducerInterface
      */
-    protected function getTypeDeducerForNode(Node $node)
+    protected function getTypeDeducerForNode(Node $node): NodeTypeDeducerInterface
     {
         return $this->getTypeDeducerForNodeClass(get_class($node));
     }
@@ -233,7 +233,7 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return NodeTypeDeducerInterface
      */
-    protected function getTypeDeducerForNodeClass($class)
+    protected function getTypeDeducerForNodeClass(string $class): NodeTypeDeducerInterface
     {
         $map = [
             Node\Expr\Variable::class            => $this->variableNodeTypeDeducer,

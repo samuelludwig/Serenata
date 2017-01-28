@@ -10,5 +10,5 @@ interface ClearableCacheInterface
     /**
      * @return void
      */
-    public function clearCache();
+    public function clearCache(): void;
 }

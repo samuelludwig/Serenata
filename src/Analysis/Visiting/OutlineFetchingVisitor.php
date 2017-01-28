@@ -54,7 +54,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      * @param TypeNormalizerInterface $typeNormalizer
      * @param string                  $code
      */
-    public function __construct(TypeNormalizerInterface $typeNormalizer, $code)
+    public function __construct(TypeNormalizerInterface $typeNormalizer, string $code)
     {
         parent::__construct();
 
@@ -104,8 +104,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\Class_ $node
+     *
+     * @return void
      */
-    protected function parseClassNode(Node\Stmt\Class_ $node)
+    protected function parseClassNode(Node\Stmt\Class_ $node): void
     {
         parent::enterNode($node);
 
@@ -141,8 +143,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\Interface_ $node
+     *
+     * @return void
      */
-    protected function parseInterfaceNode(Node\Stmt\Interface_ $node)
+    protected function parseInterfaceNode(Node\Stmt\Interface_ $node): void
     {
         parent::enterNode($node);
 
@@ -179,8 +183,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\Trait_ $node
+     *
+     * @return void
      */
-    protected function parseTraitNode(Node\Stmt\Trait_ $node)
+    protected function parseTraitNode(Node\Stmt\Trait_ $node): void
     {
         parent::enterNode($node);
 
@@ -209,8 +215,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\TraitUse $node
+     *
+     * @return void
      */
-    protected function parseTraitUseNode(Node\Stmt\TraitUse $node)
+    protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
         parent::enterNode($node);
 
@@ -243,8 +251,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\Property $node
+     *
+     * @return void
      */
-    protected function parseClassPropertyNode(Node\Stmt\Property $node)
+    protected function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
@@ -274,8 +284,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\Function_ $node
+     *
+     * @return void
      */
-    protected function parseFunctionNode(Node\Stmt\Function_ $node)
+    protected function parseFunctionNode(Node\Stmt\Function_ $node): void
     {
         $data = $this->extractFunctionLikeNodeData($node);
 
@@ -292,8 +304,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\ClassMethod $node
+     *
+     * @return void
      */
-    protected function parseClassMethodNode(Node\Stmt\ClassMethod $node)
+    protected function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
@@ -309,8 +323,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\FunctionLike $node
+     *
+     * @return void
      */
-    protected function extractFunctionLikeNodeData(Node\FunctionLike $node)
+    protected function extractFunctionLikeNodeData(Node\FunctionLike $node): void
     {
         $parameters = [];
 
@@ -396,8 +412,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\ClassConst $node
+     *
+     * @return void
      */
-    protected function parseClassConstantNode(Node\Stmt\ClassConst $node)
+    protected function parseClassConstantNode(Node\Stmt\ClassConst $node): void
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
@@ -421,8 +439,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Stmt\Const_ $node
+     *
+     * @return void
      */
-    protected function parseConstantNode(Node\Stmt\Const_ $node)
+    protected function parseConstantNode(Node\Stmt\Const_ $node): void
     {
         parent::enterNode($node);
 
@@ -451,8 +471,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
     /**
      * @param Node\Expr\FuncCall $node
+     *
+     * @return void
      */
-    protected function parseDefineNode(Node\Expr\FuncCall $node)
+    protected function parseDefineNode(Node\Expr\FuncCall $node): void
     {
         parent::enterNode($node);
 
@@ -504,7 +526,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      *
      * @return array
      */
-    public function getStructures()
+    public function getStructures(): array
     {
         return $this->structures;
     }
@@ -514,7 +536,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      *
      * @return array
      */
-    public function getGlobalFunctions()
+    public function getGlobalFunctions(): array
     {
         return $this->globalFunctions;
     }
@@ -524,7 +546,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      *
      * @return array
      */
-    public function getGlobalConstants()
+    public function getGlobalConstants(): array
     {
         return $this->globalConstants;
     }
@@ -534,7 +556,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      *
      * @return array
      */
-    public function getGlobalDefines()
+    public function getGlobalDefines(): array
     {
         return $this->globalDefines;
     }

@@ -37,7 +37,7 @@ class InvocationInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         if (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
@@ -70,7 +70,7 @@ class InvocationInfoCommand extends AbstractCommand
      *
      * @return array
      */
-    public function getInvocationInfoAt($code, $offset)
+    public function getInvocationInfoAt(string $code, int $offset): array
     {
         return $this->getInvocationInfo(substr($code, 0, $offset));
     }
@@ -80,7 +80,7 @@ class InvocationInfoCommand extends AbstractCommand
      *
      * @return array
      */
-    public function getInvocationInfo($code)
+    public function getInvocationInfo(string $code): array
     {
         return $this->partialParser->getInvocationInfoAt($code);
     }

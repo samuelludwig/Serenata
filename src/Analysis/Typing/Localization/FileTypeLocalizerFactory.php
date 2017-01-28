@@ -40,7 +40,7 @@ class FileTypeLocalizerFactory
      *
      * @return FileTypeLocalizer
      */
-    public function create($filePath)
+    public function create(string $filePath): FileTypeLocalizer
     {
         $namespaces = $this->namespaceImportProviderInterface->getNamespacesForFile($filePath);
 

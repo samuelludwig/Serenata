@@ -30,7 +30,7 @@ class FileClassListProviderCachingDecorator implements FileClassListProviderInte
     /**
      * @inheritDoc
      */
-    public function getClassListForFile($filePath)
+    public function getClassListForFile(string $filePath): array
     {
         if (!isset($this->cache[$filePath])) {
             $this->cache[$filePath] = $this->fileClassListProviderInterface->getClassListForFile($filePath);
@@ -42,7 +42,7 @@ class FileClassListProviderCachingDecorator implements FileClassListProviderInte
     /**
      * @inheritDoc
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->cache = [];
     }

@@ -28,7 +28,7 @@ class TestCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(ArrayAccess $arguments): string
     {
         $success = $this->test();
 
@@ -38,7 +38,7 @@ class TestCommand extends AbstractCommand
     /**
      * @return bool
      */
-    public function test()
+    public function test(): bool
     {
         try {
             $this->indexDatabase->checkDatabaseVersion();

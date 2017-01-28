@@ -25,7 +25,7 @@ class ClasslikeExistanceChecker implements ClasslikeExistanceCheckerInterface
     /**
      * @inheritDoc
      */
-    public function doesClassExist($fqcn)
+    public function doesClassExist(string $fqcn): bool
     {
         $classlikeFqcnMap = $this->getClasslikeFqcnMap();
 
@@ -35,7 +35,7 @@ class ClasslikeExistanceChecker implements ClasslikeExistanceCheckerInterface
     /**
      * @return array
      */
-    protected function getClasslikeFqcnMap()
+    protected function getClasslikeFqcnMap(): array
     {
         $classlikeFqcnMap = [];
 

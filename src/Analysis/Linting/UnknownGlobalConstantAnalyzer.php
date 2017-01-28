@@ -34,7 +34,7 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getVisitors()
+    public function getVisitors(): array
     {
         return [
             $this->globalConstantUsageFetchingVisitor
@@ -44,7 +44,7 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         $globalConstants = $this->globalConstantUsageFetchingVisitor->getGlobalConstantList();
 

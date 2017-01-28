@@ -36,7 +36,7 @@ class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
     /**
      * @inheritDoc
      */
-    public function create($filePath)
+    public function create(string $filePath): FileTypeResolver
     {
         $namespaces = $this->namespaceImportProviderInterface->getNamespacesForFile($filePath);
 

@@ -15,7 +15,7 @@ class DocblockAnalyzer
      *
      * @return bool
      */
-    public function isFullInheritDocSyntax($shortDescription)
+    public function isFullInheritDocSyntax(string $shortDescription): bool
     {
         $specialTags = [
             // Ticket #86 - Inherit the entire parent docblock if the docblock contains nothing but these tags.
