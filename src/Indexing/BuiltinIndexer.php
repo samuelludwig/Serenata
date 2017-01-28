@@ -350,10 +350,11 @@ class BuiltinIndexer
                 continue;
             }
 
-            $parameterData = array_merge(
-                $parameterData,
-                $this->getFunctionLikeParameterDataFromDocumentation($parameter)
-            );
+            $documentationData = $this->getFunctionLikeParameterDataFromDocumentation($parameter);
+
+            if ($documentationData !== null) {
+                $parameterData = array_merge($parameterData, $documentationData);
+            }
 
             $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameterData);
 
@@ -420,9 +421,9 @@ class BuiltinIndexer
     /**
      * @param ReflectionParameter $parameter
      *
-     * @return array
+     * @return ?array
      */
-    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter): array
+    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter): ?array
     {
         $function = $parameter->getDeclaringFunction();
 
@@ -435,7 +436,7 @@ class BuiltinIndexer
         $documentation = $this->getDocumentationEntry($documentationName);
 
         if (!isset($documentation['params'][0]['list'])) {
-            return [];
+            return null;
         }
 
         $extendedInfo = $documentation['params'][0]['list'];
@@ -473,7 +474,7 @@ class BuiltinIndexer
             }
         }
 
-        return [];
+        return null;
     }
 
     /**
