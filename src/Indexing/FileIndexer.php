@@ -913,9 +913,9 @@ class FileIndexer
      * @param array $rawData
      * @param bool  $returnNull
      *
-     * @return string
-     *
      * @throws UnexpectedValueException
+     *
+     * @return string
      */
     protected function parseAccessModifier(array $rawData, bool $returnNull = false): string
     {
