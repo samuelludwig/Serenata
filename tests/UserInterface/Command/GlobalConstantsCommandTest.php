@@ -65,6 +65,9 @@ class GlobalConstantsCommandTest extends IndexedTest
         $this->assertThat($output, $this->logicalNot($this->arrayHasKey('SHOULD_NOT_SHOW_UP')));
     }
 
+    /**
+     * @return void
+     */
     public function testBuiltinGlobalConstants(): void
     {
         $container = $this->createTestContainerForBuiltinStructuralElements();
