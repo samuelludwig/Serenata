@@ -63,7 +63,8 @@ class TypeAnalyzer implements TypeNormalizerInterface
             'self',
             'static',
             'parent',
-            '$this'
+            '$this',
+            'iterable'
         ]);
 
         return $isReservedKeyword || $this->isArraySyntaxTypeHint($type);
