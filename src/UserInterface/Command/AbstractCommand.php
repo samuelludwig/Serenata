@@ -10,15 +10,7 @@ use ArrayAccess;
 abstract class AbstractCommand implements CommandInterface
 {
     /**
-     * Executes the actual command and processes the specified arguments.
-     *
-     * Operates as a template method.
-     *
-     * @param ArrayAccess $arguments
-     *
-     * @throws InvalidArgumentsException
-     *
-     * @return string Output to pass back.
+     * @inheritDoc
      */
     abstract public function execute(ArrayAccess $arguments): string;
 }
