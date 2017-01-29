@@ -14,6 +14,16 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 class ClassInfoCommand extends AbstractCommand
 {
     /**
+     * @var TypeAnalyzer
+     */
+    protected $typeAnalyzer;
+
+    /**
+     * @var ClasslikeInfoBuilder
+     */
+    protected $classlikeInfoBuilder;
+
+    /**
      * @param TypeAnalyzer         $typeAnalyzer
      * @param ClasslikeInfoBuilder $classlikeInfoBuilder
      */
