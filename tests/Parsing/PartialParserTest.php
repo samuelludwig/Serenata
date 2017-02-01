@@ -524,6 +524,25 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithNowdoc()
+    {
+        $source = <<<'SOURCE'
+<?php
+
+<<<'EOF'
+TEST
+EOF
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\String_::class, $result);
+        $this->assertEquals('TEST', $result->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithHeredoc()
     {
         $source = <<<'SOURCE'
