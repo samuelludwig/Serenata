@@ -179,7 +179,7 @@ class BuiltinIndexer
 
         if (!empty($defaultValue)) {
             try {
-                $nodes = $this->parser->parse($defaultValue]);
+                $nodes = $this->parser->parse($defaultValue);
             } catch (\PhpParser\Error $e) {
                 throw new LogicException(
                     'Default value failed parsing, which should never happen. The value was: ' . $defaultValue
