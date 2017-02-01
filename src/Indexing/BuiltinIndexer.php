@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Indexing;
 
 use Exception;
+use LogicException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -177,7 +178,13 @@ class BuiltinIndexer
         $types = [];
 
         if (!empty($defaultValue)) {
-            $nodes = $this->parser->parse($defaultValue);
+            try {
+                $nodes = $this->parser->parse($defaultValue);
+            } catch (\PhpParser\Error $e) {
+                throw new LogicException(
+                    'Default value failed parsing, which should never happen. The value was: ' . $defaultValue
+                );
+            }
 
             $typeList = $this->nodeTypeDeducer->deduce(
                 $nodes[0],

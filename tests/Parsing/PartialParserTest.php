@@ -524,6 +524,25 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithNowdoc()
+    {
+        $source = <<<'SOURCE'
+<?php
+
+<<<'EOF'
+TEST
+EOF
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\String_::class, $result);
+        $this->assertEquals('TEST', $result->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithHeredoc()
     {
         $source = <<<'SOURCE'
@@ -538,6 +557,54 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Scalar\String_::class, $result);
         $this->assertEquals('TEST', $result->value);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetLastNodeAtCorrectlyDealsWithHeredocContainingInterpolatedValues()
+    {
+        $source = <<<'SOURCE'
+<?php
+
+<<<EOF
+EOF: {$foo[0]} some_text
+
+This is / some text.
+
+EOF
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
+        $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[0]);
+        $this->assertEquals('EOF: ', $result->parts[0]->value);
+        $this->assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->parts[1]);
+        $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[2]);
+        $this->assertEquals(" some_text\n\nThis is / some text.\n", $result->parts[2]->value);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetLastNodeAtCorrectlyDealsWithHeredocFollowedByThisAccess()
+    {
+        $source = <<<'SOURCE'
+<?php
+
+define('TEST', <<<TEST
+TEST
+);
+
+$this->one
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
     }
 
     /**

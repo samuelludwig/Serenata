@@ -72,8 +72,6 @@ class PartialParser implements Parser
 
         $token = null;
         $tokens = @token_get_all($code);
-        $currentTokenIndex = count($tokens);
-        $tokenStartOffset = strlen($code);
 
         $skippableTokens = $this->getSkippableTokens();
         $castBoundaryTokens = $this->getCastBoundaryTokens();
@@ -83,6 +81,59 @@ class PartialParser implements Parser
         $expressionBoundaryCharacters = [
             '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@'
         ];
+
+        $hereDocsOpened = 0;
+        $hereDocsClosed = 0;
+        $tokenStartOffset = strlen($code);
+        $currentTokenIndex = count($tokens);
+        $busyWithTermination = false;
+        $isWalkingHeredocStart = false;
+        $isWalkingHeredocEnd = false;
+
+        for ($i = strlen($code) - 1; $i >= 0; --$i) {
+            if ($i < $tokenStartOffset) {
+                $token = $tokens[--$currentTokenIndex];
+
+                $tokenString = is_array($token) ? $token[1] : $token;
+                $tokenStartOffset = ($i + 1) - strlen($tokenString);
+
+                $token = [
+                    'type' => is_array($token) ? $token[0] : null,
+                    'text' => $tokenString
+                ];
+            }
+
+            if ($busyWithTermination) {
+                if ($token['type'] !== T_START_HEREDOC) {
+                    return $i + 1;
+                }
+            } else if ($token['type'] === T_START_HEREDOC) {
+                if (!$isWalkingHeredocStart) {
+                    ++$hereDocsOpened;
+                    $isWalkingHeredocStart = true;
+
+                    if ($hereDocsOpened > $hereDocsClosed) {
+                        $busyWithTermination = true;
+                    }
+                }
+            } elseif ($token['type'] === T_END_HEREDOC) {
+                if (!$isWalkingHeredocEnd) {
+                    ++$hereDocsClosed;
+                    $isWalkingHeredocEnd = true;
+                }
+            }
+
+            if ($isWalkingHeredocStart && $token['type'] !== T_START_HEREDOC) {
+                $isWalkingHeredocStart = false;
+            }
+
+            if ($isWalkingHeredocEnd && $token['type'] !== T_END_HEREDOC) {
+                $isWalkingHeredocEnd = false;
+            }
+        }
+
+        $tokenStartOffset = strlen($code);
+        $currentTokenIndex = count($tokens);
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
@@ -221,9 +272,14 @@ class PartialParser implements Parser
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         if (empty($nodes)) {
-            throw new \PhpParser\Error('Could not parse the code, even after attempting corrections');
+            throw new \PhpParser\Error(
+                'Could not parse the code, even after attempting corrections. The following snippet failed: ' . $code
+            );
         } elseif (count($nodes) > 1) {
-            throw new \PhpParser\Error('Parsing succeeded, but more than one node was returned for a single expression');
+            throw new \PhpParser\Error(
+                'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
+                'snippet' . $code
+            );
         }
 
         return $nodes;
