@@ -72,8 +72,6 @@ class PartialParser implements Parser
 
         $token = null;
         $tokens = @token_get_all($code);
-        $currentTokenIndex = count($tokens);
-        $tokenStartOffset = strlen($code);
 
         $skippableTokens = $this->getSkippableTokens();
         $castBoundaryTokens = $this->getCastBoundaryTokens();
@@ -83,6 +81,43 @@ class PartialParser implements Parser
         $expressionBoundaryCharacters = [
             '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@'
         ];
+
+        $hereDocsOpened = 0;
+        $hereDocsClosed = 0;
+        $tokenStartOffset = strlen($code);
+        $currentTokenIndex = count($tokens);
+        $busyWithTermination = false;
+
+        for ($i = strlen($code) - 1; $i >= 0; --$i) {
+            if ($i < $tokenStartOffset) {
+                $token = $tokens[--$currentTokenIndex];
+
+                $tokenString = is_array($token) ? $token[1] : $token;
+                $tokenStartOffset = ($i + 1) - strlen($tokenString);
+
+                $token = [
+                    'type' => is_array($token) ? $token[0] : null,
+                    'text' => $tokenString
+                ];
+            }
+
+            if ($busyWithTermination) {
+                if ($token['type'] !== T_START_HEREDOC) {
+                    return $i + 1;
+                }
+            } else if ($token['type'] === T_START_HEREDOC) {
+                ++$hereDocsOpened;
+
+                if ($hereDocsClosed < $hereDocsOpened) {
+                    $busyWithTermination = true;
+                }
+            } elseif ($token['type'] === T_END_HEREDOC) {
+                ++$hereDocsClosed;
+            }
+        }
+
+        $tokenStartOffset = strlen($code);
+        $currentTokenIndex = count($tokens);
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
