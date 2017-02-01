@@ -87,6 +87,8 @@ class PartialParser implements Parser
         $tokenStartOffset = strlen($code);
         $currentTokenIndex = count($tokens);
         $busyWithTermination = false;
+        $isWalkingHeredocStart = false;
+        $isWalkingHeredocEnd = false;
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
@@ -106,13 +108,27 @@ class PartialParser implements Parser
                     return $i + 1;
                 }
             } else if ($token['type'] === T_START_HEREDOC) {
-                ++$hereDocsOpened;
+                if (!$isWalkingHeredocStart) {
+                    ++$hereDocsOpened;
+                    $isWalkingHeredocStart = true;
 
-                if ($hereDocsClosed < $hereDocsOpened) {
-                    $busyWithTermination = true;
+                    if ($hereDocsOpened > $hereDocsClosed) {
+                        $busyWithTermination = true;
+                    }
                 }
             } elseif ($token['type'] === T_END_HEREDOC) {
-                ++$hereDocsClosed;
+                if (!$isWalkingHeredocEnd) {
+                    ++$hereDocsClosed;
+                    $isWalkingHeredocEnd = true;
+                }
+            }
+
+            if ($isWalkingHeredocStart && $token['type'] !== T_START_HEREDOC) {
+                $isWalkingHeredocStart = false;
+            }
+
+            if ($isWalkingHeredocEnd && $token['type'] !== T_END_HEREDOC) {
+                $isWalkingHeredocEnd = false;
             }
         }
 

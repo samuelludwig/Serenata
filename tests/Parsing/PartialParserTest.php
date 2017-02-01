@@ -588,6 +588,28 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithHeredocFollowedByThisAccess()
+    {
+        $source = <<<'SOURCE'
+<?php
+
+define('TEST', <<<TEST
+TEST
+);
+
+$this->one
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertEquals('one', $result->name);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithSpecialClassConstantClassKeyword()
     {
         $source = <<<'SOURCE'
