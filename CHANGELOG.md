@@ -1,3 +1,7 @@
+## 2.1.3
+* Default value parsing failures will now throw `LogicException`s.
+  * This will cause them to crash the server, but that way they can be debugged as parsing valid PHP code should never fail.
+
 ## 2.1.2
 * Fix `@throws` tags without a description being ignored.
 * Fix symlinks not being followed in projects that have them.
