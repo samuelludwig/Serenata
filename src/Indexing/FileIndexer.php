@@ -4,6 +4,7 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
+use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
@@ -496,7 +497,14 @@ class FileIndexer
                 $fileTypeResolver
             );
         } elseif (!empty($rawData['defaultValue'])) {
-            $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+            try {
+                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+            } catch (\PhpParser\Error $e) {
+                throw new LogicException(
+                    'Default value failed parsing, which should never happen. The value was: ' .
+                    $rawData['defaultValue']
+                );
+            }
 
             $typeList = $this->nodeTypeDeducer->deduce(
                 $nodes[0],
@@ -580,7 +588,14 @@ class FileIndexer
                 ]
             ];
         } elseif ($rawData['defaultValue']) {
-            $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+            try {
+                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
+            } catch (\PhpParser\Error $e) {
+                throw new LogicException(
+                    'Default value failed parsing, which should never happen. The value was: ' .
+                    $rawData['defaultValue']
+                );
+            }
 
             $typeList = $this->nodeTypeDeducer->deduce(
                 $nodes[0],
