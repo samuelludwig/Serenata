@@ -256,11 +256,11 @@ class PartialParser implements Parser
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         if (empty($nodes)) {
-            throw new LogicException(
+            throw new \PhpParser\Error(
                 'Could not parse the code, even after attempting corrections. The following snippet failed: ' . $code
             );
         } elseif (count($nodes) > 1) {
-            throw new LogicException(
+            throw new \PhpParser\Error(
                 'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
                 'snippet' . $code
             );
