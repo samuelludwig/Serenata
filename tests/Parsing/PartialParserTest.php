@@ -543,6 +543,25 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithEncapsedStringWithIntepolatedPropertyFetch()
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            "{$test->foo}"
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->parts[0]);
+        $this->assertEquals('test', $result->parts[0]->var->name);
+        $this->assertEquals('foo', $result->parts[0]->name);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithNowdoc()
     {
         $source = <<<'SOURCE'
