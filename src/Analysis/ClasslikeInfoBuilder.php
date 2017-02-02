@@ -5,8 +5,6 @@ namespace PhpIntegrator\Analysis;
 use ArrayObject;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
 /**
  * Adapts and resolves data from the index as needed to receive an appropriate output data format.
  */
