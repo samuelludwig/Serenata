@@ -623,7 +623,7 @@ SOURCE;
 <?php
 
 <<<EOF
-EOF: {$foo[0]} some_text
+EOF: {$foo[2]->bar()} some_text
 
 This is / some text.
 
@@ -635,7 +635,11 @@ SOURCE;
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[0]);
         $this->assertEquals('EOF: ', $result->parts[0]->value);
-        $this->assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->parts[1]);
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->parts[1]);
+        $this->assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->parts[1]->var);
+        $this->assertEquals('foo', $result->parts[1]->var->var->name);
+        $this->assertEquals(2, $result->parts[1]->var->dim->value);
+        $this->assertEquals('bar', $result->parts[1]->name);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[2]);
         $this->assertEquals(" some_text\n\nThis is / some text.\n", $result->parts[2]->value);
     }
