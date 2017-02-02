@@ -562,6 +562,23 @@ SOURCE;
     /**
      * @return void
      */
+    public function testGetLastNodeAtCorrectlyDealsWithStringContainingIgnoredInterpolations()
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            '{$a->asd()[0]}'
+SOURCE;
+
+        $result = $this->createPartialParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Scalar\String_::class, $result);
+        $this->assertEquals('{$a->asd()[0]}', $result->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testGetLastNodeAtCorrectlyDealsWithNowdoc()
     {
         $source = <<<'SOURCE'
