@@ -41,7 +41,11 @@ class CachingParserProxy implements Parser
      */
     public function parse($code, ErrorHandler $errorHandler = null)
     {
-        $cacheKey = md5($code) . spl_object_hash($errorHandler);
+        $cacheKey = md5($code);
+
+        if ($errorHandler !== null) {
+            $cacheKey .= spl_object_hash($errorHandler);
+        }
 
         if ($cacheKey !== $this->lastCacheKey || $this->cache === null) {
             $this->cache = $this->proxiedObject->parse($code, $errorHandler);
