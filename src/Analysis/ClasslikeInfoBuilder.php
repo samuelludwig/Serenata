@@ -450,7 +450,7 @@ class ClasslikeInfoBuilder
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($typeAnalyzer) {
-            if ($typeAnalyzer->isClassType($type['fqcn'])) {
+            if ($type['fqcn'] !== null && $typeAnalyzer->isClassType($type['fqcn'])) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['fqcn']);
             } else {
                 $type['resolvedType'] = $type['fqcn'];
