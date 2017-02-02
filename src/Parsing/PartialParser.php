@@ -68,6 +68,7 @@ class PartialParser implements Parser
         $squiggleBracketsOpened = 0;
         $squiggleBracketsClosed = 0;
 
+        $isInDoubleQuotedString = false;
         $startedStaticClassName = false;
 
         $token = null;
@@ -150,68 +151,75 @@ class PartialParser implements Parser
 
             if (in_array($token['type'], $skippableTokens)) {
                 // Do nothing, we just keep parsing. (These can occur inside call stacks.)
-            } elseif ($code[$i] === '(') {
-                ++$parenthesesOpened;
-
-                // Ticket #164 - We're walking backwards, if we find an opening paranthesis that hasn't been closed
-                // anywhere, we know we must stop.
-                if ($parenthesesOpened > $parenthesesClosed) {
-                    return ++$i;
+            } elseif ($code[$i] === '"') {
+                if (!$isInDoubleQuotedString) {
+                    $isInDoubleQuotedString = true;
+                } else {
+                    $isInDoubleQuotedString = false;
+                    return $i;
                 }
-            } elseif ($code[$i] === ')') {
-                if (in_array($token['type'], $castBoundaryTokens)) {
-                    return ++$i;
-                }
+            } elseif (!$isInDoubleQuotedString) {
+                if ($code[$i] === '(') {
+                    ++$parenthesesOpened;
 
-                ++$parenthesesClosed;
-            }
-
-            elseif ($code[$i] === '[') {
-                ++$squareBracketsOpened;
-
-                // Same as above.
-                if ($squareBracketsOpened > $squareBracketsClosed) {
-                    return ++$i;
-                }
-            } elseif ($code[$i] === ']') {
-                ++$squareBracketsClosed;
-            } elseif ($code[$i] === '{') {
-                ++$squiggleBracketsOpened;
-
-                // Same as above.
-                if ($squiggleBracketsOpened > $squiggleBracketsClosed) {
-                    return ++$i;
-                }
-            } elseif ($code[$i] === '}') {
-                ++$squiggleBracketsClosed;
-
-                if ($parenthesesOpened === $parenthesesClosed && $squareBracketsOpened === $squareBracketsClosed) {
-                    $nextToken = $currentTokenIndex > 0 ? $tokens[$currentTokenIndex - 1] : null;
-                    $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
-
-                    // Subscopes can only exist when e.g. a closure is embedded as an argument to a function call,
-                    // in which case they will be inside parentheses or brackets. If we find a subscope outside these
-                    // simbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
-                    if ($nextTokenType !== T_VARIABLE) {
+                    // Ticket #164 - We're walking backwards, if we find an opening paranthesis that hasn't been closed
+                    // anywhere, we know we must stop.
+                    if ($parenthesesOpened > $parenthesesClosed) {
                         return ++$i;
                     }
-                }
-            } elseif (
-                $parenthesesOpened === $parenthesesClosed &&
-                $squareBracketsOpened === $squareBracketsClosed &&
-                $squiggleBracketsOpened === $squiggleBracketsClosed
-            ) {
-                // NOTE: We may have entered a closure.
-                if (
-                    in_array($token['type'], $expressionBoundaryTokens) ||
-                    (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) ||
-                    ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON)
+                } elseif ($code[$i] === ')') {
+                    if (in_array($token['type'], $castBoundaryTokens)) {
+                        return ++$i;
+                    }
+
+                    ++$parenthesesClosed;
+                } elseif ($code[$i] === '[') {
+                    ++$squareBracketsOpened;
+
+                    // Same as above.
+                    if ($squareBracketsOpened > $squareBracketsClosed) {
+                        return ++$i;
+                    }
+                } elseif ($code[$i] === ']') {
+                    ++$squareBracketsClosed;
+                } elseif ($code[$i] === '{') {
+                    ++$squiggleBracketsOpened;
+
+                    // Same as above.
+                    if ($squiggleBracketsOpened > $squiggleBracketsClosed) {
+                        return ++$i;
+                    }
+                } elseif ($code[$i] === '}') {
+                    ++$squiggleBracketsClosed;
+
+                    if ($parenthesesOpened === $parenthesesClosed && $squareBracketsOpened === $squareBracketsClosed) {
+                        $nextToken = $currentTokenIndex > 0 ? $tokens[$currentTokenIndex - 1] : null;
+                        $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
+
+                        // Subscopes can only exist when e.g. a closure is embedded as an argument to a function call,
+                        // in which case they will be inside parentheses or brackets. If we find a subscope outside these
+                        // simbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
+                        if ($nextTokenType !== T_VARIABLE) {
+                            return ++$i;
+                        }
+                    }
+                } elseif (
+                    $parenthesesOpened === $parenthesesClosed &&
+                    $squareBracketsOpened === $squareBracketsClosed &&
+                    $squiggleBracketsOpened === $squiggleBracketsClosed
                 ) {
-                    return ++$i;
-                } elseif ($token['type'] === T_DOUBLE_COLON) {
-                    // For static class names and things like the self and parent keywords, we won't know when to stop.
-                    // These always appear the start of the call stack, so we know we can stop if we find them.
-                    $startedStaticClassName = true;
+                    // NOTE: We may have entered a closure.
+                    if (
+                        in_array($token['type'], $expressionBoundaryTokens) ||
+                        (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) ||
+                        ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON)
+                    ) {
+                        return ++$i;
+                    } elseif ($token['type'] === T_DOUBLE_COLON) {
+                        // For static class names and things like the self and parent keywords, we won't know when to stop.
+                        // These always appear the start of the call stack, so we know we can stop if we find them.
+                        $startedStaticClassName = true;
+                    }
                 }
             }
 

@@ -1,3 +1,6 @@
+## 2.1.4
+* Fix corner case with strings containing more complex interpolated values, such as with method calls and property fetches, failing to parse, causing indexing to fail for files containing them (https://github.com/php-integrator/core/issues/83).
+
 ## 2.1.3
 * Fix corner case with HEREDOCs containing interpolated values failing to parse, causing indexing to fail for files containg them (https://github.com/php-integrator/core/issues/82).
 * Default value parsing failures will now throw `LogicException`s.
