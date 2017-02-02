@@ -416,7 +416,9 @@ class ClasslikeInfoBuilder
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
-            $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType($type['resolvedType'], $elementFqcn);
+            if ($type['resolvedType'] !== null) {
+                $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType($type['resolvedType'], $elementFqcn);
+            }
         });
     }
 
