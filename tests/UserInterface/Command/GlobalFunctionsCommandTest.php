@@ -20,8 +20,7 @@ class GlobalFunctionsCommandTest extends IndexedTest
         $this->indexTestFile($container, $path);
 
         $command = new GlobalFunctionsCommand(
-            $container->get('functionConverter'),
-            $container->get('indexDatabase')
+            $container->get('globalFunctionsProvider')
         );
 
         $output = $command->getGlobalFunctions();
@@ -43,8 +42,7 @@ class GlobalFunctionsCommandTest extends IndexedTest
         $container = $this->createTestContainerForBuiltinStructuralElements();
 
         $command = new GlobalFunctionsCommand(
-            $container->get('functionConverter'),
-            $container->get('indexDatabase')
+            $container->get('globalFunctionsProvider')
         );
 
         $output = $command->getGlobalFunctions();

@@ -7,6 +7,8 @@ use Doctrine\Common\Cache\ArrayCache;
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\GlobalConstantsProvider;
+use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
@@ -304,6 +306,14 @@ abstract class AbstractApplication
         $container
             ->register('globalConstantExistanceChecker', CachingGlobalConstantExistanceChecker::class)
             ->setArguments([new Reference('indexDatabase')]);
+
+        $container
+            ->register('globalFunctionsProvider', GlobalFunctionsProvider::class)
+            ->setArguments([new Reference('functionConverter'), new Reference('indexDatabase')]);
+
+        $container
+            ->register('globalConstantsProvider', GlobalConstantsProvider::class)
+            ->setArguments([new Reference('constantConverter'), new Reference('indexDatabase')]);
 
         $container
             ->register('cacheClearingEventMediator.clearableCache', ClearableCacheCollection::class)
@@ -624,11 +634,11 @@ abstract class AbstractApplication
 
         $container
             ->register('globalFunctionsCommand', Command\GlobalFunctionsCommand::class)
-            ->setArguments([new Reference('functionConverter'), new Reference('indexDatabase')]);
+            ->setArguments([new Reference('globalFunctionsProvider')]);
 
         $container
             ->register('globalConstantsCommand', Command\GlobalConstantsCommand::class)
-            ->setArguments([new Reference('constantConverter'), new Reference('indexDatabase')]);
+            ->setArguments([new Reference('globalConstantsProvider')]);
 
         $container
             ->register('resolveTypeCommand', Command\ResolveTypeCommand::class)

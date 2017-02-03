@@ -22,8 +22,7 @@ class GlobalConstantsCommandTest extends IndexedTest
         $this->indexTestFile($container, $path);
 
         $command = new GlobalConstantsCommand(
-            $container->get('constantConverter'),
-            $container->get('indexDatabase')
+            $container->get('globalConstantsProvider')
         );
 
         return $command->getGlobalConstants();
@@ -73,8 +72,7 @@ class GlobalConstantsCommandTest extends IndexedTest
         $container = $this->createTestContainerForBuiltinStructuralElements();
 
         $command = new GlobalConstantsCommand(
-            $container->get('constantConverter'),
-            $container->get('indexDatabase')
+            $container->get('globalConstantsProvider')
         );
 
         $output = $command->getGlobalConstants();

@@ -4,9 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Conversion\ConstantConverter;
-
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Analysis\GlobalConstantsProvider;
 
 /**
  * Command that shows a list of global constants.
@@ -14,23 +12,16 @@ use PhpIntegrator\Indexing\IndexDatabase;
 class GlobalConstantsCommand extends AbstractCommand
 {
     /**
-     * @var ConstantConverter
+     * @var GlobalConstantsProvider
      */
-    protected $constantConverter;
+    protected $globalConstantsProvider;
 
     /**
-     * @var IndexDatabase
+     * @param GlobalConstantsProvider $globalConstantsProvider
      */
-    protected $indexDatabase;
-
-    /**
-     * @param ConstantConverter $constantConverter
-     * @param IndexDatabase     $indexDatabase
-     */
-    public function __construct(ConstantConverter $constantConverter, IndexDatabase $indexDatabase)
+    public function __construct(GlobalConstantsProvider $globalConstantsProvider)
     {
-        $this->constantConverter = $constantConverter;
-        $this->indexDatabase = $indexDatabase;
+        $this->globalConstantsProvider = $globalConstantsProvider;
     }
 
     /**
@@ -38,9 +29,7 @@ class GlobalConstantsCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        $constants = $this->getGlobalConstants();
-
-        return $constants;
+        return $this->getGlobalConstants();
     }
 
     /**
@@ -48,12 +37,6 @@ class GlobalConstantsCommand extends AbstractCommand
      */
     public function getGlobalConstants(): array
     {
-        $constants = [];
-
-        foreach ($this->indexDatabase->getGlobalConstants() as $constant) {
-            $constants[$constant['fqcn']] = $this->constantConverter->convert($constant);
-        }
-
-        return $constants;
+        return $this->globalConstantsProvider->getAll();
     }
 }

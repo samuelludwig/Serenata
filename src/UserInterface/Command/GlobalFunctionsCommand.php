@@ -4,9 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Conversion\FunctionConverter;
-
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 
 /**
  * Command that shows a list of global functions.
@@ -14,23 +12,16 @@ use PhpIntegrator\Indexing\IndexDatabase;
 class GlobalFunctionsCommand extends AbstractCommand
 {
     /**
-     * @var FunctionConverter
+     * @var GlobalFunctionsProvider
      */
-    protected $functionConverter;
+    protected $globalFunctionsProvider;
 
     /**
-     * @var IndexDatabase
+     * @param GlobalFunctionsProvider $globalFunctionsProvider
      */
-    protected $indexDatabase;
-
-    /**
-     * @param FunctionConverter $functionConverter
-     * @param IndexDatabase     $indexDatabase
-     */
-    public function __construct(FunctionConverter $functionConverter, IndexDatabase $indexDatabase)
+    public function __construct(GlobalFunctionsProvider $globalFunctionsProvider)
     {
-        $this->functionConverter = $functionConverter;
-        $this->indexDatabase = $indexDatabase;
+        $this->globalFunctionsProvider = $globalFunctionsProvider;
     }
 
     /**
@@ -38,9 +29,7 @@ class GlobalFunctionsCommand extends AbstractCommand
      */
      public function execute(ArrayAccess $arguments)
      {
-         $result = $this->getGlobalFunctions();
-
-         return $result;
+         return $this->getGlobalFunctions();
      }
 
      /**
@@ -48,12 +37,6 @@ class GlobalFunctionsCommand extends AbstractCommand
       */
      public function getGlobalFunctions(): array
      {
-         $result = [];
-
-         foreach ($this->indexDatabase->getGlobalFunctions() as $function) {
-             $result[$function['fqcn']] = $this->functionConverter->convert($function);
-         }
-
-         return $result;
+         return $this->globalFunctionsProvider->getAll();
      }
 }
