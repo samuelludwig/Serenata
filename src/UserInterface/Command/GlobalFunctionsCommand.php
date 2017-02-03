@@ -9,7 +9,7 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 /**
  * Command that shows a list of global functions.
  */
-class GlobalFunctionsCommand extends AbstractCommand
+class GlobalFunctionsCommand
 {
     /**
      * @var GlobalFunctionsProvider
@@ -25,7 +25,7 @@ class GlobalFunctionsCommand extends AbstractCommand
     }
 
     /**
-     * @inheritDoc
+     * @return array
      */
      public function execute(ArrayAccess $arguments)
      {

@@ -13,13 +13,15 @@ use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
+use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
+
+use PhpIntegrator\Analysis\Autocompletion\AutocompletionProvider;
 
 use PhpIntegrator\Analysis\Conversion\MethodConverter;
-use PhpIntegrator\Analysis\Conversion\FunctionConverter;
-use PhpIntegrator\Analysis\Conversion\PropertyConverter;
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
+use PhpIntegrator\Analysis\Conversion\PropertyConverter;
+use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter;
 
@@ -33,27 +35,27 @@ use PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator;
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner;
 use PhpIntegrator\Analysis\Typing\Deduction\NewNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\SelfNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\NameNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\CatchNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\CloneNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\SelfNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ArrayNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\StringNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\StaticNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\ParentNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\CloneNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\CatchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\AssignNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\TernaryNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\LNumberNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\DNumberNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\ParentNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\StaticNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\StringNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ClosureNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\VariableNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\DNumberNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\LNumberNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\TernaryNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\VariableNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
-use PhpIntegrator\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ExpressionLocalTypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\PropertyFetchNodeTypeDeducer;
+use PhpIntegrator\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\ForeachNodeLoopValueTypeDeducer;
 use PhpIntegrator\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer;
@@ -72,14 +74,14 @@ use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryCachingDecora
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\FileIndexer;
 use PhpIntegrator\Indexing\IndexDatabase;
-use PhpIntegrator\Indexing\BuiltinIndexer;
 use PhpIntegrator\Indexing\ProjectIndexer;
+use PhpIntegrator\Indexing\BuiltinIndexer;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Mediating\CacheClearingEventMediator;
 
-use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\PrettyPrinter;
+use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Parsing\CachingParserProxy;
 
@@ -543,6 +545,12 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('autocompletionProvider', AutocompletionProvider::class)
+            ->setArguments([
+                new Reference('globalFunctionsProvider')
+            ]);
+
+        $container
             ->register('nodeTypeDeducer.instance', NodeTypeDeducer::class)
             ->setArguments([
                 new Reference('variableNodeTypeDeducer'),
@@ -687,6 +695,10 @@ abstract class AbstractApplication
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)
             ->setArguments([new Reference('indexDatabase')]);
+
+        $container
+            ->register('autocompleteCommand', Command\Autocomplete::class)
+            ->setArguments([new Reference('autocompletionProvider')]);
     }
 
     /**
