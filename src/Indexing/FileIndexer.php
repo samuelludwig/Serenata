@@ -930,9 +930,9 @@ class FileIndexer
      *
      * @throws UnexpectedValueException
      *
-     * @return string
+     * @return string|null
      */
-    protected function parseAccessModifier(array $rawData, bool $returnNull = false): string
+    protected function parseAccessModifier(array $rawData, bool $returnNull = false): ?string
     {
         if ($rawData['isPublic']) {
             return 'public';
