@@ -8,7 +8,7 @@ use PhpIntegrator\Parsing\PartialParser;
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 
-class PartialParserTest extends \PHPUnit_Framework_TestCase
+class PartialParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return ParserFactory

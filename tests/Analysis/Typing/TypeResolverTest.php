@@ -8,7 +8,7 @@ use PhpIntegrator\Analysis\Typing\Resolving\TypeResolver;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
-class TypeResolverTest extends \PHPUnit_Framework_TestCase
+class TypeResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return TypeAnalyzer

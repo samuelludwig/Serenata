@@ -8,7 +8,7 @@ use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 
-class ScopeLimitingVisitorTest extends \PHPUnit_Framework_TestCase
+class ScopeLimitingVisitorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

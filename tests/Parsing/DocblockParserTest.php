@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tests\Parsing;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
-class DocblockParserTest extends \PHPUnit_Framework_TestCase
+class DocblockParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void
