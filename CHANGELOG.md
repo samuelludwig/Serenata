@@ -1,3 +1,6 @@
+## 2.1.5
+* Indexing performance was slightly improved.
+
 ## 2.1.4
 * Fix corner case with strings containing more complex interpolated values, such as with method calls and property fetches, failing to parse, causing indexing to fail for files containing them (https://github.com/php-integrator/core/issues/83).
 
