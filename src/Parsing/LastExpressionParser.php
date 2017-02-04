@@ -143,7 +143,6 @@ class LastExpressionParser implements Parser
                     $isInDoubleQuotedString = true;
                 } else {
                     $isInDoubleQuotedString = false;
-                    return $i;
                 }
             } elseif (!$isInDoubleQuotedString) {
                 if ($code[$i] === '(') {
