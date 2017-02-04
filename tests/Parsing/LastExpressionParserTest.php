@@ -881,7 +881,7 @@ SOURCE;
         $source = <<<'SOURCE'
             <?php
 
-            5 < $this->one
+            5 > $this->one
 SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
