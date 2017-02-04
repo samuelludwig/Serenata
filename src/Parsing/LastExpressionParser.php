@@ -255,7 +255,9 @@ class LastExpressionParser implements Parser
         $expression = trim($expression);
 
         if ($expression === '') {
-            throw new \PhpParser\Error('Could not parse last expression for code, the last expression was <<<' . $expression . '>>>');
+            throw new \PhpParser\Error(
+                'Could not parse last expression for code, the last expression was <<<' . $expression . '>>>'
+            );
         }
 
         $nodes = $this->delegate->parse($expression, $errorHandler);
