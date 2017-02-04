@@ -69,7 +69,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithSingleLineInvocation()
+    public function testSingleLineInvocation()
     {
         $source = <<<'SOURCE'
             <?php
@@ -89,7 +89,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithMultiLineInvocation()
+    public function testMultiLineInvocation()
     {
         $source = <<<'SOURCE'
         <?php
@@ -112,7 +112,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithMoreComplexNestedArguments1()
+    public function testMoreComplexNestedArguments1()
     {
         $source = <<<'SOURCE'
         <?php
@@ -138,7 +138,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithMoreComplexNestedArguments2()
+    public function testMoreComplexNestedArguments2()
     {
         $source = <<<'SOURCE'
         <?php
@@ -161,7 +161,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithMoreComplexNestedArguments3()
+    public function testMoreComplexNestedArguments3()
     {
         $source = <<<'SOURCE'
         <?php
@@ -184,7 +184,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithTrailingCommas()
+    public function testTrailingCommas()
     {
         $source = <<<'SOURCE'
         <?php
@@ -203,7 +203,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithNestedParantheses()
+    public function testNestedParantheses()
     {
         $source = <<<'SOURCE'
         <?php
@@ -225,7 +225,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithSqlStringArguments()
+    public function testSqlStringArguments()
     {
         $source = <<<'SOURCE'
         <?php
@@ -241,7 +241,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithSqlStringArgumentsContainingParantheses()
+    public function testSqlStringArgumentsContainingParantheses()
     {
         $source = <<<'SOURCE'
         <?php
@@ -260,7 +260,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassName()
+    public function testConstructorCallsWithNormalClassName()
     {
         $source = <<<'SOURCE'
         <?php
@@ -283,7 +283,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
+    public function testConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
     {
         $source = <<<'SOURCE'
         <?php
@@ -306,7 +306,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
+    public function testConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
     {
         $source = <<<'SOURCE'
         <?php
@@ -329,7 +329,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithConstructorCalls2()
+    public function testConstructorCalls2()
     {
         $source = <<<'SOURCE'
         <?php
@@ -352,7 +352,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtWithConstructorCalls3()
+    public function testConstructorCalls3()
     {
         $source = <<<'SOURCE'
         <?php
@@ -375,7 +375,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation1()
+    public function testReturnsNullWhenNotInInvocation1()
     {
         $source = <<<'SOURCE'
         <?php
@@ -395,7 +395,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation2()
+    public function testReturnsNullWhenNotInInvocation2()
     {
         $source = <<<'SOURCE'
         <?php
@@ -411,7 +411,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation3()
+    public function testReturnsNullWhenNotInInvocation3()
     {
         $source = <<<'SOURCE'
         <?php
@@ -429,7 +429,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetInvocationInfoAtReturnsNullWhenNotInInvocation4()
+    public function testReturnsNullWhenNotInInvocation4()
     {
         $source = <<<'SOURCE'
         <?php
