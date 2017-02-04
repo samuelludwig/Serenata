@@ -58,7 +58,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithFunctionCalls()
+    public function testCorrectlyDealsWithFunctionCalls()
     {
         $source = <<<'SOURCE'
             <?php
@@ -75,7 +75,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithStaticClassNames()
+    public function testCorrectlyDealsWithStaticClassNames()
     {
         $source = <<<'SOURCE'
             <?php
@@ -97,7 +97,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithStaticClassNamesContainingANamespace()
+    public function testCorrectlyDealsWithStaticClassNamesContainingANamespace()
     {
         $source = <<<'SOURCE'
             <?php
@@ -119,7 +119,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithControlKeywords()
+    public function testCorrectlyDealsWithControlKeywords()
     {
         $source = <<<'SOURCE'
             <?php
@@ -141,7 +141,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBuiltinConstructs()
+    public function testCorrectlyDealsWithBuiltinConstructs()
     {
         $source = <<<'SOURCE'
             <?php
@@ -163,7 +163,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithKeywordsSuchAsSelfAndParent()
+    public function testCorrectlyDealsWithKeywordsSuchAsSelfAndParent()
     {
         $source = <<<'SOURCE'
             <?php
@@ -187,7 +187,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithTernaryOperatorsFirstOperand()
+    public function testCorrectlyDealsWithTernaryOperatorsFirstOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -205,7 +205,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithTernaryOperatorsLastOperand()
+    public function testCorrectlyDealsWithTernaryOperatorsLastOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -223,7 +223,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithConcatenationOperators()
+    public function testCorrectlyDealsWithConcatenationOperators()
     {
         $source = <<<'SOURCE'
             <?php
@@ -241,7 +241,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtReadsStringWithDotsAndColonsInIt()
+    public function testReadsStringWithDotsAndColonsInIt()
     {
         $source = <<<'SOURCE'
             <?php
@@ -258,7 +258,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
+    public function testStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
     {
         $source = <<<'SOURCE'
             <?php
@@ -284,7 +284,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithCasts()
+    public function testCorrectlyDealsWithCasts()
     {
         $source = <<<'SOURCE'
             <?php
@@ -302,7 +302,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
+    public function testStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
     {
         $source = <<<'SOURCE'
             <?php
@@ -323,7 +323,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithTheNewKeyword()
+    public function testCorrectlyDealsWithTheNewKeyword()
     {
         $source = <<<'SOURCE'
             <?php
@@ -341,7 +341,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
+    public function testStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
     {
         $source = <<<'SOURCE'
             <?php
@@ -364,7 +364,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
+    public function testStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
     {
         $source = <<<'SOURCE'
             <?php
@@ -384,7 +384,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
+    public function testStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
     {
         $source = <<<'SOURCE'
             <?php
@@ -404,7 +404,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
+    public function testStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
     {
         $source = <<<'SOURCE'
             <?php
@@ -423,7 +423,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtSanitizesComplexCallStack()
+    public function testSanitizesComplexCallStack()
     {
         $source = <<<'SOURCE'
             <?php
@@ -479,7 +479,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtSanitizesStaticCallWithStaticKeyword()
+    public function testSanitizesStaticCallWithStaticKeyword()
     {
         $source = <<<'SOURCE'
             <?php
@@ -497,7 +497,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithAssignmentSymbol()
+    public function testCorrectlyDealsWithAssignmentSymbol()
     {
         $source = <<<'SOURCE'
             <?php
@@ -515,7 +515,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithEncapsedString()
+    public function testCorrectlyDealsWithEncapsedString()
     {
         $source = <<<'SOURCE'
             <?php
@@ -545,7 +545,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithEncapsedStringWithIntepolatedMethodCall()
+    public function testCorrectlyDealsWithEncapsedStringWithIntepolatedMethodCall()
     {
         $source = <<<'SOURCE'
             <?php
@@ -564,7 +564,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithEncapsedStringWithIntepolatedPropertyFetch()
+    public function testCorrectlyDealsWithEncapsedStringWithIntepolatedPropertyFetch()
     {
         $source = <<<'SOURCE'
             <?php
@@ -583,7 +583,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithStringContainingIgnoredInterpolations()
+    public function testCorrectlyDealsWithStringContainingIgnoredInterpolations()
     {
         $source = <<<'SOURCE'
             <?php
@@ -600,7 +600,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithNowdoc()
+    public function testCorrectlyDealsWithNowdoc()
     {
         $source = <<<'SOURCE'
 <?php
@@ -619,7 +619,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithHeredoc()
+    public function testCorrectlyDealsWithHeredoc()
     {
         $source = <<<'SOURCE'
 <?php
@@ -638,7 +638,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithHeredocContainingInterpolatedValues()
+    public function testCorrectlyDealsWithHeredocContainingInterpolatedValues()
     {
         $source = <<<'SOURCE'
 <?php
@@ -668,7 +668,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithHeredocFollowedByThisAccess()
+    public function testCorrectlyDealsWithHeredocFollowedByThisAccess()
     {
         $source = <<<'SOURCE'
 <?php
@@ -690,7 +690,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithSpecialClassConstantClassKeyword()
+    public function testCorrectlyDealsWithSpecialClassConstantClassKeyword()
     {
         $source = <<<'SOURCE'
 <?php
@@ -708,7 +708,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithMultiplicationOperator()
+    public function testCorrectlyDealsWithMultiplicationOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -726,7 +726,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithDivisionOperator()
+    public function testCorrectlyDealsWithDivisionOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -744,7 +744,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithPlusOperator()
+    public function testCorrectlyDealsWithPlusOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -762,7 +762,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithModulusOperator()
+    public function testCorrectlyDealsWithModulusOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -780,7 +780,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithMinusOperator()
+    public function testCorrectlyDealsWithMinusOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -798,7 +798,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBitwisoOrOperator()
+    public function testCorrectlyDealsWithBitwisoOrOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -816,7 +816,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBitwiseAndOperator()
+    public function testCorrectlyDealsWithBitwiseAndOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -834,7 +834,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBitwiseXorOperator()
+    public function testCorrectlyDealsWithBitwiseXorOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -852,7 +852,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBitwiseNotOperator()
+    public function testCorrectlyDealsWithBitwiseNotOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -870,7 +870,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBooleanLessOperator()
+    public function testCorrectlyDealsWithBooleanLessOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -888,7 +888,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBooleanGreaterOperator()
+    public function testCorrectlyDealsWithBooleanGreaterOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -906,7 +906,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithShiftLeftOperator()
+    public function testCorrectlyDealsWithShiftLeftOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -924,7 +924,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithShiftRightOperator()
+    public function testCorrectlyDealsWithShiftRightOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -942,7 +942,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithShiftLeftExpressionWithAZeroAsRightOperand()
+    public function testCorrectlyDealsWithShiftLeftExpressionWithAZeroAsRightOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -959,7 +959,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithBooleanNotOperator()
+    public function testCorrectlyDealsWithBooleanNotOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -977,7 +977,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithSilencingOperator()
+    public function testCorrectlyDealsWithSilencingOperator()
     {
         $source = <<<'SOURCE'
             <?php
