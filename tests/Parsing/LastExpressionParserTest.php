@@ -15,7 +15,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createParserFactoryStub()
+    protected function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
     }
@@ -23,7 +23,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPrettyPrinterStub()
+    protected function createPrettyPrinterStub(): PrettyPrinter
     {
         return new PrettyPrinter();
     }
@@ -31,7 +31,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPartialParserStub()
+    protected function createPartialParserStub(): PartialParser
     {
         return new PartialParser($this->createParserFactoryStub());
     }
@@ -39,7 +39,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserTokenHelper
      */
-    protected function createParserTokenHelperStub()
+    protected function createParserTokenHelperStub(): ParserTokenHelper
     {
         return new ParserTokenHelper();
     }
@@ -47,7 +47,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return LastExpressionParser
      */
-    protected function createLastExpressionParser()
+    protected function createLastExpressionParser(): LastExpressionParser
     {
         return new LastExpressionParser(
             $this->createPartialParserStub(),
@@ -58,7 +58,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testStopsAtFunctionCalls()
+    public function testStopsAtFunctionCalls(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -75,7 +75,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtStaticClassNames()
+    public function testStopsAtStaticClassNames(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -97,7 +97,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtStaticClassNamesContainingANamespace()
+    public function testStopsAtStaticClassNamesContainingANamespace(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -119,7 +119,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtControlKeywords()
+    public function testStopsAtControlKeywords(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -141,7 +141,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBuiltinConstructs()
+    public function testStopsAtBuiltinConstructs(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -163,7 +163,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtSelfKeywords()
+    public function testStopsAtSelfKeywords(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -187,7 +187,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtParentKeyword()
+    public function testStopsAtParentKeyword(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -211,7 +211,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtStaticKeyword()
+    public function testStopsAtStaticKeyword(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -235,7 +235,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtTernaryOperatorFirstOperand()
+    public function testStopsAtTernaryOperatorFirstOperand(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -253,7 +253,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtTernaryOperatorLastOperand()
+    public function testStopsAtTernaryOperatorLastOperand(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -271,7 +271,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtConcatenationOperator()
+    public function testStopsAtConcatenationOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -289,7 +289,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtString()
+    public function testStopsAtString(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -306,7 +306,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMethodCallWIthDynamicMemberAccess()
+    public function testStopsAtMethodCallWIthDynamicMemberAccess(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -332,7 +332,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtCasts()
+    public function testStopsAtCasts(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -350,7 +350,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMemberCallInsideInterpolation()
+    public function testStopsAtMemberCallInsideInterpolation(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -371,7 +371,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtNewKeyword()
+    public function testStopsAtNewKeyword(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -389,7 +389,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMethodCallWithNewInstantiationInParantheses()
+    public function testStopsAtMethodCallWithNewInstantiationInParantheses(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -412,7 +412,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsArrayValue()
+    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsArrayValue(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -432,7 +432,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsArrayElement()
+    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsArrayElement(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -452,7 +452,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsSecondFunctionArgument()
+    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsSecondFunctionArgument(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -471,7 +471,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtComplexMethodCall()
+    public function testStopsAtComplexMethodCall(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -527,7 +527,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtPropertyFetchInAssignment()
+    public function testStopsAtPropertyFetchInAssignment(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -545,7 +545,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtEncapsedString()
+    public function testStopsAtEncapsedString(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -575,7 +575,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtEncapsedStringWithInterpolatedMethodCall()
+    public function testStopsAtEncapsedStringWithInterpolatedMethodCall(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -594,7 +594,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testGetLastNodeAtCorrectlyDealsWithEncapsedStringWithIntepolatedMethodCallAndParentheses()
+    public function testGetLastNodeAtCorrectlyDealsWithEncapsedStringWithIntepolatedMethodCallAndParentheses(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -613,7 +613,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtEncapsedStringWithInterpolatedPropertyFetch()
+    public function testStopsAtEncapsedStringWithInterpolatedPropertyFetch(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -632,7 +632,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtStringContainingIgnoredInterpolations()
+    public function testStopsAtStringContainingIgnoredInterpolations(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -649,7 +649,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtNowdoc()
+    public function testStopsAtNowdoc(): void
     {
         $source = <<<'SOURCE'
 <?php
@@ -668,7 +668,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtHeredoc()
+    public function testStopsAtHeredoc(): void
     {
         $source = <<<'SOURCE'
 <?php
@@ -687,7 +687,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtHeredocContainingInterpolatedValues()
+    public function testStopsAtHeredocContainingInterpolatedValues(): void
     {
         $source = <<<'SOURCE'
 <?php
@@ -717,7 +717,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtPropertyFetchAfterHeredoc()
+    public function testStopsAtPropertyFetchAfterHeredoc(): void
     {
         $source = <<<'SOURCE'
 <?php
@@ -739,7 +739,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtSpecialClassConstantClassKeyword()
+    public function testStopsAtSpecialClassConstantClassKeyword(): void
     {
         $source = <<<'SOURCE'
 <?php
@@ -757,7 +757,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMultiplicationOperator()
+    public function testStopsAtMultiplicationOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -775,7 +775,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtDivisionOperator()
+    public function testStopsAtDivisionOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -793,7 +793,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtPlusOperator()
+    public function testStopsAtPlusOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -811,7 +811,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtModulusOperator()
+    public function testStopsAtModulusOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -829,7 +829,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtMinusOperator()
+    public function testStopsAtMinusOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -847,7 +847,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBitwisoOrOperator()
+    public function testStopsAtBitwisoOrOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -865,7 +865,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBitwiseAndOperator()
+    public function testStopsAtBitwiseAndOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -883,7 +883,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBitwiseXorOperator()
+    public function testStopsAtBitwiseXorOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -901,7 +901,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBitwiseNotOperator()
+    public function testStopsAtBitwiseNotOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -919,7 +919,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBooleanLessOperator()
+    public function testStopsAtBooleanLessOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -937,7 +937,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBooleanGreaterOperator()
+    public function testStopsAtBooleanGreaterOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -955,7 +955,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtShiftLeftOperator()
+    public function testStopsAtShiftLeftOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -973,7 +973,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtShiftRightOperator()
+    public function testStopsAtShiftRightOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -991,7 +991,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtShiftLeftExpressionWithZeroAsRightOperand()
+    public function testStopsAtShiftLeftExpressionWithZeroAsRightOperand(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -1008,7 +1008,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtBooleanNotOperator()
+    public function testStopsAtBooleanNotOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -1026,7 +1026,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtSilencingOperator()
+    public function testStopsAtSilencingOperator(): void
     {
         $source = <<<'SOURCE'
             <?php
