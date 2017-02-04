@@ -490,7 +490,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testParsesConstFetchWithSpecialClassConstantClassKeyword()
+    public function testParsesConstFetchWithSpecialClassConstantClassKeyword(): void
     {
         $source = <<<'SOURCE'
 <?php
