@@ -16,7 +16,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createParserFactoryStub()
+    protected function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
     }
@@ -24,7 +24,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPrettyPrinterStub()
+    protected function createPrettyPrinterStub(): PrettyPrinter
     {
         return new PrettyPrinter();
     }
@@ -32,7 +32,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPartialParserStub()
+    protected function createPartialParserStub(): PartialParser
     {
         return new PartialParser($this->createParserFactoryStub());
     }
@@ -40,7 +40,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return ParserTokenHelper
      */
-    protected function createParserTokenHelperStub()
+    protected function createParserTokenHelperStub(): ParserTokenHelper
     {
         return new ParserTokenHelper();
     }
@@ -48,7 +48,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return LastExpressionParser
      */
-    protected function createLastExpressionParserStub()
+    protected function createLastExpressionParserStub(): LastExpressionParser
     {
         return new LastExpressionParser(
             $this->createPartialParserStub(),
@@ -56,7 +56,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function createInvocationInfoRetriever()
+    protected function createInvocationInfoRetriever(): InvocationInfoRetriever
     {
         return new InvocationInfoRetriever(
             $this->createLastExpressionParserStub(),
@@ -68,7 +68,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testSingleLineInvocation()
+    public function testSingleLineInvocation(): void
     {
         $source = <<<'SOURCE'
             <?php
@@ -88,7 +88,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testMultiLineInvocation()
+    public function testMultiLineInvocation(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -111,7 +111,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testMoreComplexNestedArguments1()
+    public function testMoreComplexNestedArguments1(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -137,7 +137,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testMoreComplexNestedArguments2()
+    public function testMoreComplexNestedArguments2(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -160,7 +160,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testMoreComplexNestedArguments3()
+    public function testMoreComplexNestedArguments3(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -183,7 +183,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testTrailingCommas()
+    public function testTrailingCommas(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -202,7 +202,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testNestedParantheses()
+    public function testNestedParantheses(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -224,7 +224,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testSqlStringArguments()
+    public function testSqlStringArguments(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -240,7 +240,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testSqlStringArgumentsContainingParantheses()
+    public function testSqlStringArgumentsContainingParantheses(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -259,7 +259,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testConstructorCallsWithNormalClassName()
+    public function testConstructorCallsWithNormalClassName(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -282,7 +282,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testConstructorCallsWithNormalClassNamePrecededByLeadingSlash()
+    public function testConstructorCallsWithNormalClassNamePrecededByLeadingSlash(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -305,7 +305,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts()
+    public function testConstructorCallsWithNormalClassNamePrecededByLeadingSlashAndMultipleParts(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -328,7 +328,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testConstructorCalls2()
+    public function testConstructorCalls2(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -351,7 +351,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testConstructorCalls3()
+    public function testConstructorCalls3(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -374,7 +374,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testReturnsNullWhenNotInInvocation1()
+    public function testReturnsNullWhenNotInInvocation1(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -394,7 +394,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testReturnsNullWhenNotInInvocation2()
+    public function testReturnsNullWhenNotInInvocation2(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -410,7 +410,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testReturnsNullWhenNotInInvocation3()
+    public function testReturnsNullWhenNotInInvocation3(): void
     {
         $source = <<<'SOURCE'
         <?php
@@ -428,7 +428,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testReturnsNullWhenNotInInvocation4()
+    public function testReturnsNullWhenNotInInvocation4(): void
     {
         $source = <<<'SOURCE'
         <?php
