@@ -7,6 +7,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\InvocationInfoRetriever;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
@@ -79,6 +80,7 @@ use PhpIntegrator\Mediating\CacheClearingEventMediator;
 use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\DocblockParser;
+use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
@@ -196,8 +198,22 @@ abstract class AbstractApplication
             ->setArguments([new Reference('parser.phpParserFactory')]);
 
         $container
+            ->register('parserTokenHelper', ParserTokenHelper::class);
+
+        $container
             ->register('lastExpressionParser', LastExpressionParser::class)
-            ->setArguments([new Reference('partialParser'), new Reference('prettyPrinter')]);
+            ->setArguments([
+                new Reference('partialParser'),
+                new Reference('parserTokenHelper')
+            ]);
+
+        $container
+            ->register('invocationInfoRetriever', InvocationInfoRetriever::class)
+            ->setArguments([
+                new Reference('lastExpressionParser'),
+                new Reference('parserTokenHelper'),
+                new Reference('prettyPrinter')
+            ]);
 
         $container
             ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)
@@ -671,7 +687,7 @@ abstract class AbstractApplication
 
         $container
             ->register('invocationInfoCommand', Command\InvocationInfoCommand::class)
-            ->setArguments([new Reference('lastExpressionParser'), new Reference('sourceCodeStreamReader')]);
+            ->setArguments([new Reference('invocationInfoRetriever'), new Reference('sourceCodeStreamReader')]);
 
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)

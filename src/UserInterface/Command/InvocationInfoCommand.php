@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Parsing\LastExpressionParser;
+use PhpIntegrator\Analysis\InvocationInfoRetriever;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -15,9 +15,9 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class InvocationInfoCommand extends AbstractCommand
 {
     /**
-     * @var LastExpressionParser
+     * @var InvocationInfoRetriever
      */
-    protected $lastExpressionParser;
+    protected $invocationInfoRetriever;
 
     /**
      * @var SourceCodeStreamReader
@@ -25,14 +25,14 @@ class InvocationInfoCommand extends AbstractCommand
     protected $sourceCodeStreamReader;
 
     /**
-     * @param LastExpressionParser   $lastExpressionParser
-     * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param InvocationInfoRetriever $invocationInfoRetriever
+     * @param SourceCodeStreamReader  $sourceCodeStreamReader
      */
     public function __construct(
-        LastExpressionParser $lastExpressionParser,
+        InvocationInfoRetriever $invocationInfoRetriever,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
-        $this->lastExpressionParser = $lastExpressionParser;
+        $this->invocationInfoRetriever = $invocationInfoRetriever;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
 
@@ -84,6 +84,6 @@ class InvocationInfoCommand extends AbstractCommand
      */
     public function getInvocationInfo($code)
     {
-        return $this->lastExpressionParser->getInvocationInfoAt($code);
+        return $this->invocationInfoRetriever->get($code);
     }
 }
