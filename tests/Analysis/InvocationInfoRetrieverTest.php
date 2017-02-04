@@ -9,7 +9,6 @@ use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
-use PhpParser\Node;
 use PhpParser\ParserFactory;
 
 class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
