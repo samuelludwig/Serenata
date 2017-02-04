@@ -56,6 +56,9 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return InvocationInfoRetriever
+     */
     protected function createInvocationInfoRetriever(): InvocationInfoRetriever
     {
         return new InvocationInfoRetriever(
