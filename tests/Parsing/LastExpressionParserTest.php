@@ -2,13 +2,14 @@
 
 namespace PhpIntegrator\Tests\Parsing;
 
-use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\PartialParser;
+use PhpIntegrator\Parsing\PrettyPrinter;
+use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpParser\Node;
 use PhpParser\ParserFactory;
 
-class PartialParserTest extends \PHPUnit_Framework_TestCase
+class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @return ParserFactory
@@ -27,11 +28,19 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PartialParser
+     * @return ParserFactory
      */
-    protected function createPartialParser()
+    protected function createPartialParserStub()
     {
-        return new PartialParser($this->createParserFactoryStub(), $this->createPrettyPrinterStub());
+        return new PartialParser($this->createParserFactoryStub());
+    }
+
+    /**
+     * @return LastExpressionParser
+     */
+    protected function createLastExpressionParser()
+    {
+        return new LastExpressionParser($this->createPartialParserStub(), $this->createPrettyPrinterStub());
     }
 
     /**
@@ -45,7 +54,7 @@ class PartialParserTest extends \PHPUnit_Framework_TestCase
             array_walk
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ConstFetch::class, $result);
         $this->assertEquals('array_walk', $result->name->toString());
@@ -66,7 +75,7 @@ SOURCE;
             Bar::testProperty
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
         $this->assertEquals('Bar', $result->class->toString());
@@ -88,7 +97,7 @@ SOURCE;
             NamespaceTest\Bar::staticmethod()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\StaticCall::class, $result);
         $this->assertEquals('NamespaceTest\Bar', $result->class->toString());
@@ -110,7 +119,7 @@ SOURCE;
             return $this->someProperty
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -132,7 +141,7 @@ SOURCE;
             echo $this->someProperty
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -154,7 +163,7 @@ SOURCE;
             self::$someProperty->test
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->var);
@@ -174,7 +183,7 @@ SOURCE;
             $a = $b ? $c->foo()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertEquals('c', $result->var->name);
@@ -192,7 +201,7 @@ SOURCE;
             $a = $b ? $c->foo() : $d->bar()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertEquals('d', $result->var->name);
@@ -210,7 +219,7 @@ SOURCE;
             $a = $b . $c->bar()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertEquals('c', $result->var->name);
@@ -228,7 +237,7 @@ SOURCE;
             $a = '.:'
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\String_::class, $result);
         $this->assertEquals('.:', $result->value);
@@ -249,7 +258,7 @@ SOURCE;
             $this->{$foo}()->test()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var);
@@ -271,7 +280,7 @@ SOURCE;
             $test = (int) $this->test
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -292,7 +301,7 @@ SOURCE;
                 FROM {$this->
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -310,7 +319,7 @@ SOURCE;
             $test = new $this->
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -332,7 +341,7 @@ SOURCE;
             (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -352,7 +361,7 @@ SOURCE;
                 'test' => (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -372,7 +381,7 @@ SOURCE;
                 (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -391,7 +400,7 @@ SOURCE;
             foo(firstArg($test), (new Foo\Bar())->doFoo()
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->var);
@@ -441,7 +450,7 @@ SOURCE;
 
         $expectedResult = ['$this', 'testChaining()', 'testChaining()', 'testChaining()', 'testChaining()', 'testChai'];
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->var);
@@ -466,7 +475,7 @@ SOURCE;
             static::doSome
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
         $this->assertEquals('static', $result->class);
@@ -484,7 +493,7 @@ SOURCE;
             $test = $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -502,7 +511,7 @@ SOURCE;
             "(($version{0} * 10000) + ($version{2} * 100) + $version{4}"
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[0]);
@@ -532,7 +541,7 @@ SOURCE;
             "{$test->foo()}"
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->parts[0]);
@@ -551,7 +560,7 @@ SOURCE;
             "{$test->foo}"
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->parts[0]);
@@ -570,7 +579,7 @@ SOURCE;
             '{$a->asd()[0]}'
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\String_::class, $result);
         $this->assertEquals('{$a->asd()[0]}', $result->value);
@@ -589,7 +598,7 @@ TEST
 EOF
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\String_::class, $result);
         $this->assertEquals('TEST', $result->value);
@@ -608,7 +617,7 @@ TEST
 EOF
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\String_::class, $result);
         $this->assertEquals('TEST', $result->value);
@@ -630,7 +639,7 @@ This is / some text.
 EOF
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->parts[0]);
@@ -659,7 +668,7 @@ TEST
 $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -677,7 +686,7 @@ SOURCE;
 Test::class
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
         $this->assertEquals('Test', $result->class->toString());
@@ -695,7 +704,7 @@ SOURCE;
             5 * $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -713,7 +722,7 @@ SOURCE;
             5 / $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -731,7 +740,7 @@ SOURCE;
             5 + $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -749,7 +758,7 @@ SOURCE;
             5 % $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -767,7 +776,7 @@ SOURCE;
             5 - $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -785,7 +794,7 @@ SOURCE;
             5 | $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -803,7 +812,7 @@ SOURCE;
             5 & $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -821,7 +830,7 @@ SOURCE;
             5 ^ $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -839,7 +848,7 @@ SOURCE;
             5 ~ $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -857,7 +866,7 @@ SOURCE;
             5 < $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -875,7 +884,7 @@ SOURCE;
             5 < $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -893,7 +902,7 @@ SOURCE;
             5 << $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -911,7 +920,7 @@ SOURCE;
             5 >> $this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -929,7 +938,7 @@ SOURCE;
             1 << 0
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result);
         $this->assertEquals(0, $result->value);
@@ -946,7 +955,7 @@ SOURCE;
             !$this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -964,7 +973,7 @@ SOURCE;
             @$this->one
 SOURCE;
 
-        $result = $this->createPartialParser()->getLastNodeAt($source);
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
         $this->assertEquals('this', $result->var->name);
@@ -982,7 +991,7 @@ SOURCE;
             $this->test(1, 2, 3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(42, $result['offset']);
         $this->assertEquals('test', $result['name']);
@@ -1005,7 +1014,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(34, $result['offset']);
         $this->assertEquals('test', $result['name']);
@@ -1031,7 +1040,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(35, $result['offset']);
         $this->assertEquals('builtin_func', $result['name']);
@@ -1054,7 +1063,7 @@ SOURCE;
             ['test'
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(35, $result['offset']);
         $this->assertEquals('builtin_func', $result['name']);
@@ -1077,7 +1086,7 @@ SOURCE;
             $array['ke
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(35, $result['offset']);
         $this->assertEquals('builtin_func', $result['name']);
@@ -1100,7 +1109,7 @@ SOURCE;
                 'Trailing comma',
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(1, $result['argumentIndex']);
     }
@@ -1118,7 +1127,7 @@ SOURCE;
             ($a + $b
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(35, $result['offset']);
         $this->assertEquals('builtin_func', $result['name']);
@@ -1138,7 +1147,7 @@ SOURCE;
         foo("SELECT a.one, a.two, a.three FROM test", second
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(1, $result['argumentIndex']);
     }
@@ -1154,7 +1163,7 @@ SOURCE;
         foo('IF(
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals('foo', $result['name']);
         $this->assertEquals('foo', $result['expression']);
@@ -1176,7 +1185,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(35, $result['offset']);
         $this->assertEquals('MyObject', $result['name']);
@@ -1199,7 +1208,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(36, $result['offset']);
         $this->assertEquals('\MyObject', $result['name']);
@@ -1222,7 +1231,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(48, $result['offset']);
         $this->assertEquals('\MyNamespace\MyObject', $result['name']);
@@ -1245,7 +1254,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(33, $result['offset']);
         $this->assertEquals('static', $result['name']);
@@ -1268,7 +1277,7 @@ SOURCE;
             3
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertEquals(31, $result['offset']);
         $this->assertEquals('self', $result['name']);
@@ -1292,7 +1301,7 @@ SOURCE;
         }
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertNull($result);
     }
@@ -1308,7 +1317,7 @@ SOURCE;
         $this->test();
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertNull($result);
     }
@@ -1326,7 +1335,7 @@ SOURCE;
 
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertNull($result);
     }
@@ -1344,7 +1353,7 @@ SOURCE;
         } elseif (
 SOURCE;
 
-        $result = $this->createPartialParser()->getInvocationInfoAt($source);
+        $result = $this->createLastExpressionParser()->getInvocationInfoAt($source);
 
         $this->assertNull($result);
     }

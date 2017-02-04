@@ -28,7 +28,7 @@ class DeduceTypesCommandTest extends IndexedTest
 
         $command = new DeduceTypesCommand(
             $container->get('nodeTypeDeducer'),
-            $container->get('partialParser'),
+            $container->get('lastExpressionParser'),
             $container->get('sourceCodeStreamReader')
         );
 
