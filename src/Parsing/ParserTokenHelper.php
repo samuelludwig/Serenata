@@ -12,7 +12,7 @@ class ParserTokenHelper
      *
      * @return int[]
      */
-    public function getExpressionBoundaryTokens()
+    public function getExpressionBoundaryTokens(): array
     {
         $expressionBoundaryTokens = [
             T_ABSTRACT, T_AND_EQUAL, T_AS, T_BOOLEAN_AND, T_BOOLEAN_OR, T_BREAK, T_CALLABLE, T_CASE, T_CATCH,
@@ -62,7 +62,7 @@ class ParserTokenHelper
      *
      * @return int[]
      */
-    public function getCastBoundaryTokens()
+    public function getCastBoundaryTokens(): array
     {
         $expressionBoundaryTokens = [
             T_INT_CAST, T_UNSET_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_ARRAY_CAST, T_DOUBLE_CAST, T_STRING_CAST
@@ -76,7 +76,7 @@ class ParserTokenHelper
      *
      * @return int[]
      */
-    public function getSkippableTokens()
+    public function getSkippableTokens(): array
     {
         $tokens = [
             T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING
