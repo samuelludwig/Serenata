@@ -58,7 +58,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithFunctionCalls()
+    public function testStopsAtFunctionCalls()
     {
         $source = <<<'SOURCE'
             <?php
@@ -75,7 +75,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithStaticClassNames()
+    public function testStopsAtStaticClassNames()
     {
         $source = <<<'SOURCE'
             <?php
@@ -97,7 +97,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithStaticClassNamesContainingANamespace()
+    public function testStopsAtStaticClassNamesContainingANamespace()
     {
         $source = <<<'SOURCE'
             <?php
@@ -119,7 +119,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithControlKeywords()
+    public function testStopsAtControlKeywords()
     {
         $source = <<<'SOURCE'
             <?php
@@ -141,7 +141,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBuiltinConstructs()
+    public function testStopsAtBuiltinConstructs()
     {
         $source = <<<'SOURCE'
             <?php
@@ -163,7 +163,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithKeywordsSuchAsSelfAndParent()
+    public function testStopsAtKeywordsSuchAsSelfAndParent()
     {
         $source = <<<'SOURCE'
             <?php
@@ -187,7 +187,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithTernaryOperatorsFirstOperand()
+    public function testStopsAtTernaryOperatorsFirstOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -205,7 +205,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithTernaryOperatorsLastOperand()
+    public function testStopsAtTernaryOperatorsLastOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -223,7 +223,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithConcatenationOperators()
+    public function testStopsAtConcatenationOperators()
     {
         $source = <<<'SOURCE'
             <?php
@@ -284,7 +284,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithCasts()
+    public function testStopsAtCasts()
     {
         $source = <<<'SOURCE'
             <?php
@@ -323,7 +323,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithTheNewKeyword()
+    public function testStopsAtTheNewKeyword()
     {
         $source = <<<'SOURCE'
             <?php
@@ -497,7 +497,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithAssignmentSymbol()
+    public function testStopsAtAssignmentSymbol()
     {
         $source = <<<'SOURCE'
             <?php
@@ -515,7 +515,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithEncapsedString()
+    public function testStopsAtEncapsedString()
     {
         $source = <<<'SOURCE'
             <?php
@@ -545,7 +545,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithEncapsedStringWithIntepolatedMethodCall()
+    public function testStopsAtEncapsedStringWithIntepolatedMethodCall()
     {
         $source = <<<'SOURCE'
             <?php
@@ -564,7 +564,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithEncapsedStringWithIntepolatedPropertyFetch()
+    public function testStopsAtEncapsedStringWithIntepolatedPropertyFetch()
     {
         $source = <<<'SOURCE'
             <?php
@@ -583,7 +583,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithStringContainingIgnoredInterpolations()
+    public function testStopsAtStringContainingIgnoredInterpolations()
     {
         $source = <<<'SOURCE'
             <?php
@@ -600,7 +600,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithNowdoc()
+    public function testStopsAtNowdoc()
     {
         $source = <<<'SOURCE'
 <?php
@@ -619,7 +619,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithHeredoc()
+    public function testStopsAtHeredoc()
     {
         $source = <<<'SOURCE'
 <?php
@@ -638,7 +638,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithHeredocContainingInterpolatedValues()
+    public function testStopsAtHeredocContainingInterpolatedValues()
     {
         $source = <<<'SOURCE'
 <?php
@@ -668,7 +668,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithHeredocFollowedByThisAccess()
+    public function testStopsAtHeredocFollowedByThisAccess()
     {
         $source = <<<'SOURCE'
 <?php
@@ -690,7 +690,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithSpecialClassConstantClassKeyword()
+    public function testStopsAtSpecialClassConstantClassKeyword()
     {
         $source = <<<'SOURCE'
 <?php
@@ -708,7 +708,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithMultiplicationOperator()
+    public function testStopsAtMultiplicationOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -726,7 +726,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithDivisionOperator()
+    public function testStopsAtDivisionOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -744,7 +744,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithPlusOperator()
+    public function testStopsAtPlusOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -762,7 +762,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithModulusOperator()
+    public function testStopsAtModulusOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -780,7 +780,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithMinusOperator()
+    public function testStopsAtMinusOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -798,7 +798,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBitwisoOrOperator()
+    public function testStopsAtBitwisoOrOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -816,7 +816,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBitwiseAndOperator()
+    public function testStopsAtBitwiseAndOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -834,7 +834,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBitwiseXorOperator()
+    public function testStopsAtBitwiseXorOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -852,7 +852,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBitwiseNotOperator()
+    public function testStopsAtBitwiseNotOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -870,7 +870,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBooleanLessOperator()
+    public function testStopsAtBooleanLessOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -888,7 +888,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBooleanGreaterOperator()
+    public function testStopsAtBooleanGreaterOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -906,7 +906,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithShiftLeftOperator()
+    public function testStopsAtShiftLeftOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -924,7 +924,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithShiftRightOperator()
+    public function testStopsAtShiftRightOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -942,7 +942,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithShiftLeftExpressionWithAZeroAsRightOperand()
+    public function testStopsAtShiftLeftExpressionWithAZeroAsRightOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -959,7 +959,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithBooleanNotOperator()
+    public function testStopsAtBooleanNotOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -977,7 +977,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testCorrectlyDealsWithSilencingOperator()
+    public function testStopsAtSilencingOperator()
     {
         $source = <<<'SOURCE'
             <?php
