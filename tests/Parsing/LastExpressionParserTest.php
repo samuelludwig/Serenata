@@ -163,7 +163,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtKeywordsSuchAsSelfAndParent()
+    public function testStopsAtSelfKeywords()
     {
         $source = <<<'SOURCE'
             <?php
@@ -187,7 +187,55 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtTernaryOperatorsFirstOperand()
+    public function testStopsAtParentKeyword()
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            if(true) {
+
+            }
+
+            parent::$someProperty->test
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->var);
+        $this->assertEquals('parent', $result->var->class);
+        $this->assertEquals('someProperty', $result->var->name);
+        $this->assertEquals('test', $result->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStopsAtStaticKeyword()
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            if(true) {
+
+            }
+
+            static::$someProperty->test
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result);
+        $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->var);
+        $this->assertEquals('static', $result->var->class);
+        $this->assertEquals('someProperty', $result->var->name);
+        $this->assertEquals('test', $result->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStopsAtTernaryOperatorFirstOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -205,7 +253,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtTernaryOperatorsLastOperand()
+    public function testStopsAtTernaryOperatorLastOperand()
     {
         $source = <<<'SOURCE'
             <?php
@@ -223,7 +271,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtConcatenationOperators()
+    public function testStopsAtConcatenationOperator()
     {
         $source = <<<'SOURCE'
             <?php
@@ -241,7 +289,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testReadsStringWithDotsAndColonsInIt()
+    public function testStopsAtString()
     {
         $source = <<<'SOURCE'
             <?php
@@ -258,7 +306,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsWhenTheBracketSyntaxIsUsedForDynamicAccessToMembers()
+    public function testStopsAtMethodCallWIthDynamicMemberAccess()
     {
         $source = <<<'SOURCE'
             <?php
@@ -302,7 +350,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsWhenTheBracketSyntaxIsUsedForVariablesInsideStrings()
+    public function testStopsAtMemberCallInsideInterpolation()
     {
         $source = <<<'SOURCE'
             <?php
@@ -323,7 +371,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtTheNewKeyword()
+    public function testStopsAtNewKeyword()
     {
         $source = <<<'SOURCE'
             <?php
@@ -341,7 +389,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsWhenTheFirstElementIsAnInstantiationWrappedInParantheses()
+    public function testStopsAtMethodCallWithNewInstantiationInParantheses()
     {
         $source = <<<'SOURCE'
             <?php
@@ -364,7 +412,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsWhenTheFirstElementIsAnInstantiationAsArrayValueInAKeyValuePair()
+    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsArrayValue()
     {
         $source = <<<'SOURCE'
             <?php
@@ -384,7 +432,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsWhenTheFirstElementIsAnInstantiationWrappedInParaenthesesAndItIsInsideAnArray()
+    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsArrayElement()
     {
         $source = <<<'SOURCE'
             <?php
@@ -404,7 +452,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsWhenTheFirstElementInAnInstantiationWrappedInParanthesesAndItIsInsideAFunctionCall()
+    public function testStopsAtMethodCallWithNewInstantiationInParanthesesAsSecondFunctionArgument()
     {
         $source = <<<'SOURCE'
             <?php
@@ -423,7 +471,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testSanitizesComplexCallStack()
+    public function testStopsAtComplexMethodCall()
     {
         $source = <<<'SOURCE'
             <?php
@@ -479,25 +527,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testSanitizesStaticCallWithStaticKeyword()
-    {
-        $source = <<<'SOURCE'
-            <?php
-
-            static::doSome
-SOURCE;
-
-        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
-
-        $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result);
-        $this->assertEquals('static', $result->class);
-        $this->assertEquals('doSome', $result->name);
-    }
-
-    /**
-     * @return void
-     */
-    public function testStopsAtAssignmentSymbol()
+    public function testStopsAtPropertyFetchInAssignment()
     {
         $source = <<<'SOURCE'
             <?php
@@ -545,7 +575,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtEncapsedStringWithIntepolatedMethodCall()
+    public function testStopsAtEncapsedStringWithInterpolatedMethodCall()
     {
         $source = <<<'SOURCE'
             <?php
@@ -564,7 +594,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtEncapsedStringWithIntepolatedPropertyFetch()
+    public function testStopsAtEncapsedStringWithInterpolatedPropertyFetch()
     {
         $source = <<<'SOURCE'
             <?php
@@ -668,7 +698,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtHeredocFollowedByThisAccess()
+    public function testStopsAtPropertyFetchAfterHeredoc()
     {
         $source = <<<'SOURCE'
 <?php
@@ -942,7 +972,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testStopsAtShiftLeftExpressionWithAZeroAsRightOperand()
+    public function testStopsAtShiftLeftExpressionWithZeroAsRightOperand()
     {
         $source = <<<'SOURCE'
             <?php
