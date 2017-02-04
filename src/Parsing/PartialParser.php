@@ -91,6 +91,8 @@ class PartialParser implements Parser
         $isWalkingHeredocStart = false;
         $isWalkingHeredocEnd = false;
 
+        // Heredocs don't always have a termination token, catch those early as heredocs can contain interpolated
+        // expressions, which must then be ignored.
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
                 $token = $tokens[--$currentTokenIndex];
