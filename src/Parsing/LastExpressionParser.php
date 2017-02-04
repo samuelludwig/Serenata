@@ -255,19 +255,19 @@ class LastExpressionParser implements Parser
         $expression = trim($expression);
 
         if ($expression === '') {
-            throw new \PhpParser\Error('Could not parse last expression for code, the last expression was "' . $expression . '"');
+            throw new \PhpParser\Error('Could not parse last expression for code, the last expression was <<<' . $expression . '>>>');
         }
 
         $nodes = $this->delegate->parse($expression, $errorHandler);
 
         if (empty($nodes)) {
             throw new \PhpParser\Error(
-                'Could not parse the code, even after attempting corrections. The following snippet failed: ' . $code
+                'Could not parse the code, even after attempting corrections. The following snippet failed: <<<' . $code . '>>>'
             );
         } elseif (count($nodes) > 1) {
             throw new \PhpParser\Error(
                 'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
-                'snippet' . $code
+                'snippet <<<' . $code . '>>>'
             );
         }
 
