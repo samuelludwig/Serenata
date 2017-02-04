@@ -40,7 +40,7 @@ class LastExpressionParser implements Parser
      *
      * @return int
      */
-    public function getStartOfExpression($code)
+    public function getStartOfExpression(string $code): int
     {
         if (empty($code)) {
             return 0;
@@ -227,7 +227,7 @@ class LastExpressionParser implements Parser
      *
      * @return Node|null
      */
-    public function getLastNodeAt($source, $offset = null)
+    public function getLastNodeAt(string $source, ?int $offset = null): ?Node
     {
         if ($offset !== null) {
             $source = substr($source, 0, $offset);
@@ -281,7 +281,7 @@ class LastExpressionParser implements Parser
      *
      * @return string
      */
-    protected function getNormalizedCode($code)
+    protected function getNormalizedCode(string $code): string
     {
         if (mb_substr(trim($code), 0, 5) !== '<?php') {
             return '<?php ' . $code;
