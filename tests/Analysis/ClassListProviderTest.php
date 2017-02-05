@@ -34,6 +34,30 @@ class ClassListProviderTest extends IndexedTest
     /**
      * @return void
      */
+    public function testRetrievesAllClasses(): void
+    {
+        $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+        $this->indexTestFile($container, $secondPath);
+
+        $provider = $this->createClassListProvider($container);
+
+        $output = $provider->getAll();
+
+        $this->assertEquals(4, count($output));
+        $this->assertArrayHasKey('\A\FirstClass', $output);
+        $this->assertArrayHasKey('\A\SecondClass', $output);
+        $this->assertArrayHasKey('\A\Foo', $output);
+        $this->assertArrayHasKey('\A\Bar', $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testShowsOnlyClassesForRequestedFile(): void
     {
         $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
