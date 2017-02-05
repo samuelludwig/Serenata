@@ -6,6 +6,7 @@ use Doctrine\Common\Cache\ArrayCache;
 
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
+use PhpIntegrator\Analysis\ClassListProvider;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\InvocationInfoRetriever;
@@ -248,7 +249,7 @@ abstract class AbstractApplication
             ->register('methodConverter', MethodConverter::class);
 
         $container
-            ->setAlias('fileClassListProvider.instance', 'classListCommand');
+            ->setAlias('fileClassListProvider.instance', 'classListProvider');
 
         $container
             ->register('fileClassListProvider.cachingDecorator', FileClassListProviderCachingDecorator::class)
@@ -335,6 +336,23 @@ abstract class AbstractApplication
         $container
             ->register('globalConstantsProvider', GlobalConstantsProvider::class)
             ->setArguments([new Reference('constantConverter'), new Reference('indexDatabase')]);
+
+        $container
+            ->register('classListProvider', ClassListProvider::class)
+            ->setArguments([
+                new Reference('constantConverter'),
+                new Reference('classlikeConstantConverter'),
+                new Reference('propertyConverter'),
+                new Reference('functionConverter'),
+                new Reference('methodConverter'),
+                new Reference('classlikeConverter'),
+                new Reference('inheritanceResolver'),
+                new Reference('interfaceImplementationResolver'),
+                new Reference('traitUsageResolver'),
+                new Reference('classlikeInfoBuilderProvider'),
+                new Reference('typeAnalyzer'),
+                new Reference('indexDatabase')
+            ]);
 
         $container
             ->register('cacheClearingEventMediator.clearableCache', ClearableCacheCollection::class)
@@ -634,20 +652,7 @@ abstract class AbstractApplication
 
         $container
             ->register('classListCommand', Command\ClassListCommand::class)
-            ->setArguments([
-                new Reference('constantConverter'),
-                new Reference('classlikeConstantConverter'),
-                new Reference('propertyConverter'),
-                new Reference('functionConverter'),
-                new Reference('methodConverter'),
-                new Reference('classlikeConverter'),
-                new Reference('inheritanceResolver'),
-                new Reference('interfaceImplementationResolver'),
-                new Reference('traitUsageResolver'),
-                new Reference('classlikeInfoBuilderProvider'),
-                new Reference('typeAnalyzer'),
-                new Reference('indexDatabase')
-            ]);
+            ->setArguments([new Reference('classListProvider')]);
 
         $container
             ->register('classInfoCommand', Command\ClassInfoCommand::class)

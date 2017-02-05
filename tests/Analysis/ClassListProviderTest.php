@@ -1,25 +1,25 @@
 <?php
 
-namespace PhpIntegrator\Tests\UserInterface\Command;
+namespace PhpIntegrator\Tests\Analysis;
 
-use PhpIntegrator\UserInterface\Command\ClassListCommand;
+use PhpIntegrator\Analysis\ClassListProvider;
 
 use PhpIntegrator\Tests\IndexedTest;
 
-class ClassListCommandTest extends IndexedTest
+class ClassListProviderTest extends IndexedTest
 {
     /**
      * @return void
      */
     public function testClassList(): void
     {
-        $path = __DIR__ . '/ClassListCommandTest/' . 'ClassList.phpt';
+        $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
 
         $container = $this->createTestContainer();
 
         $this->indexTestFile($container, $path);
 
-        $command = new ClassListCommand(
+        $provider = new ClassListProvider(
             $container->get('constantConverter'),
             $container->get('classlikeConstantConverter'),
             $container->get('propertyConverter'),
@@ -34,7 +34,7 @@ class ClassListCommandTest extends IndexedTest
             $container->get('indexDatabase')
         );
 
-        $output = $command->getClassList($path);
+        $output = $provider->getClassListForFile($path);
 
         $this->assertThat($output, $this->arrayHasKey('\A\FirstClass'));
         $this->assertThat($output, $this->arrayHasKey('\A\SecondClass'));
