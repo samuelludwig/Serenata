@@ -135,7 +135,7 @@ class ClassListProvider implements FileClassListProviderInterface
      */
     public function getAll(): array
     {
-        return $this->getAllForOptionalFile();
+        return $this->getAllForOptionalFile(null);
     }
 
     /**
