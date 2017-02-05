@@ -6,22 +6,16 @@ use PhpIntegrator\Analysis\ClassListProvider;
 
 use PhpIntegrator\Tests\IndexedTest;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 class ClassListProviderTest extends IndexedTest
 {
     /**
-     * @return void
+     * @return ClassListProvider
      */
-    public function testShowsOnlyClassesForRequestedFile(): void
+    protected function createClassListProvider(ContainerBuilder $container): ClassListProvider
     {
-        $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
-        $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-        $this->indexTestFile($container, $secondPath);
-
-        $provider = new ClassListProvider(
+        return new ClassListProvider(
             $container->get('constantConverter'),
             $container->get('classlikeConstantConverter'),
             $container->get('propertyConverter'),
@@ -35,6 +29,22 @@ class ClassListProviderTest extends IndexedTest
             $container->get('typeAnalyzer'),
             $container->get('indexDatabase')
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testShowsOnlyClassesForRequestedFile(): void
+    {
+        $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+        $this->indexTestFile($container, $secondPath);
+
+        $provider = $this->createClassListProvider($container);
 
         $output = $provider->getAllForFile($path);
 
