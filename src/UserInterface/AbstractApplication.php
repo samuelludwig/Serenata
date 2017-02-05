@@ -340,17 +340,7 @@ abstract class AbstractApplication
         $container
             ->register('classListProvider', ClassListProvider::class)
             ->setArguments([
-                new Reference('constantConverter'),
-                new Reference('classlikeConstantConverter'),
-                new Reference('propertyConverter'),
-                new Reference('functionConverter'),
-                new Reference('methodConverter'),
                 new Reference('classlikeConverter'),
-                new Reference('inheritanceResolver'),
-                new Reference('interfaceImplementationResolver'),
-                new Reference('traitUsageResolver'),
-                new Reference('classlikeInfoBuilderProvider'),
-                new Reference('typeAnalyzer'),
                 new Reference('indexDatabase')
             ]);
 

@@ -1,5 +1,8 @@
 ## 3.0.0
 * At least PHP 7.1 is now required.
+* The class list will now only provide fields directly relevant to the class.
+  * Most of the related data, such as methods and constants, were already being filtered out for performance reasons.
+  * In order to fetch more information about a class, such as its parents, you now have to manually fetch this using the class info command.
 
 ## 2.1.5
 * Indexing performance was slightly improved.
