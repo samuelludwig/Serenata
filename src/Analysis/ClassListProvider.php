@@ -117,17 +117,27 @@ class ClassListProvider implements FileClassListProviderInterface
         $result = [];
 
         foreach ($this->indexDatabase->getAllStructuresRawInfo($file) as $element) {
-            // Directly load in the raw information we already have, this avoids performing a database query for each
-            // record.
-            $this->storageProxy->setStructureRawInfo($element);
-
-            $info = $this->classlikeInfoBuilder->getClasslikeInfo($element['name']);
-
-            unset($info['constants'], $info['properties'], $info['methods']);
-
-            $result[$element['fqcn']] = $info;
+            $result[$element['fqcn']] = $this->getClassInfoFromRawData($element);
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $element
+     *
+     * @return array
+     */
+    protected function getClassInfoFromRawData(array $element): array
+    {
+        // Directly load in the raw information we already have, this avoids performing a database query for each
+        // record.
+        $this->storageProxy->setStructureRawInfo($element);
+
+        $info = $this->classlikeInfoBuilder->getClasslikeInfo($element['name']);
+
+        unset($info['constants'], $info['properties'], $info['methods']);
+
+        return $info;
     }
 }
