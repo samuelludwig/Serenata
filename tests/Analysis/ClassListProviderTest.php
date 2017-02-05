@@ -11,7 +11,7 @@ class ClassListProviderTest extends IndexedTest
     /**
      * @return void
      */
-    public function testClassList(): void
+    public function testShowsOnlyClassesForRequestedFile(): void
     {
         $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
 
