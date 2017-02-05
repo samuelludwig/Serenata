@@ -41,7 +41,7 @@ class ClassListProvider implements FileClassListProviderInterface
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $dataAdapter;
+    protected $classlikeInfoBuilder;
 
     /**
      * @param ConstantConverter                     $constantConverter
@@ -74,7 +74,7 @@ class ClassListProvider implements FileClassListProviderInterface
         $this->indexDatabase = $indexDatabase;
         $this->storageProxy = new ClasslikeInfoBuilderWhiteHolingProxyProvider($classlikeInfoBuilderProvider);
 
-        $this->dataAdapter = new ClasslikeInfoBuilder(
+        $this->classlikeInfoBuilder = new ClasslikeInfoBuilder(
             $constantConverter,
             $classlikeConstantConverter,
             $propertyConverter,
@@ -121,7 +121,7 @@ class ClassListProvider implements FileClassListProviderInterface
             // record.
             $this->storageProxy->setStructureRawInfo($element);
 
-            $info = $this->dataAdapter->getClasslikeInfo($element['name']);
+            $info = $this->classlikeInfoBuilder->getClasslikeInfo($element['name']);
 
             unset($info['constants'], $info['properties'], $info['methods']);
 
