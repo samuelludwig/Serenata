@@ -29,64 +29,19 @@ use PhpIntegrator\UserInterface\ClasslikeInfoBuilderWhiteHolingProxyProvider;
 class ClassListProvider implements FileClassListProviderInterface
 {
     /**
-     * @var ConstantConverter
-     */
-    protected $constantConverter;
-
-    /**
-     * @var ClasslikeConstantConverter
-     */
-    protected $classlikeConstantConverter;
-
-    /**
-     * @var PropertyConverter
-     */
-    protected $propertyConverter;
-
-    /**
-     * @var FunctionConverter
-     */
-    protected $functionConverter;
-
-    /**
-     * @var MethodConverter
-     */
-    protected $methodConverter;
-
-    /**
-     * @var ClasslikeConverter
-     */
-    protected $classlikeConverter;
-
-    /**
-     * @var InheritanceResolver
-     */
-    protected $inheritanceResolver;
-
-    /**
-     * @var InterfaceImplementationResolver
-     */
-    protected $interfaceImplementationResolver;
-
-    /**
-     * @var TraitUsageResolver
-     */
-    protected $traitUsageResolver;
-
-    /**
-     * @var ClasslikeInfoBuilderProviderInterface
-     */
-    protected $classlikeInfoBuilderProvider;
-
-    /**
-     * @var TypeAnalyzer
-     */
-    protected $typeAnalyzer;
-
-    /**
      * @var IndexDatabase
      */
     protected $indexDatabase;
+
+    /**
+     * @var ClasslikeInfoBuilderWhiteHolingProxyProvider
+     */
+    protected $storageProxy;
+
+    /**
+     * @var ClasslikeInfoBuilder
+     */
+    protected $dataAdapter;
 
     /**
      * @param ConstantConverter                     $constantConverter
@@ -116,18 +71,22 @@ class ClassListProvider implements FileClassListProviderInterface
         TypeAnalyzer $typeAnalyzer,
         IndexDatabase $indexDatabase
     ) {
-        $this->constantConverter = $constantConverter;
-        $this->classlikeConstantConverter = $classlikeConstantConverter;
-        $this->propertyConverter = $propertyConverter;
-        $this->functionConverter = $functionConverter;
-        $this->methodConverter = $methodConverter;
-        $this->classlikeConverter = $classlikeConverter;
-        $this->inheritanceResolver = $inheritanceResolver;
-        $this->interfaceImplementationResolver = $interfaceImplementationResolver;
-        $this->traitUsageResolver = $traitUsageResolver;
-        $this->classlikeInfoBuilderProvider = $classlikeInfoBuilderProvider;
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->indexDatabase = $indexDatabase;
+        $this->storageProxy = new ClasslikeInfoBuilderWhiteHolingProxyProvider($classlikeInfoBuilderProvider);
+
+        $this->dataAdapter = new ClasslikeInfoBuilder(
+            $constantConverter,
+            $classlikeConstantConverter,
+            $propertyConverter,
+            $functionConverter,
+            $methodConverter,
+            $classlikeConverter,
+            $inheritanceResolver,
+            $interfaceImplementationResolver,
+            $traitUsageResolver,
+            $this->storageProxy,
+            $typeAnalyzer
+        );
     }
 
     /**
@@ -157,28 +116,12 @@ class ClassListProvider implements FileClassListProviderInterface
     {
         $result = [];
 
-        $storageProxy = new ClasslikeInfoBuilderWhiteHolingProxyProvider($this->classlikeInfoBuilderProvider);
-
-        $dataAdapter = new ClasslikeInfoBuilder(
-            $this->constantConverter,
-            $this->classlikeConstantConverter,
-            $this->propertyConverter,
-            $this->functionConverter,
-            $this->methodConverter,
-            $this->classlikeConverter,
-            $this->inheritanceResolver,
-            $this->interfaceImplementationResolver,
-            $this->traitUsageResolver,
-            $storageProxy,
-            $this->typeAnalyzer
-        );
-
         foreach ($this->indexDatabase->getAllStructuresRawInfo($file) as $element) {
             // Directly load in the raw information we already have, this avoids performing a database query for each
             // record.
-            $storageProxy->setStructureRawInfo($element);
+            $this->storageProxy->setStructureRawInfo($element);
 
-            $info = $dataAdapter->getClasslikeInfo($element['name']);
+            $info = $this->dataAdapter->getClasslikeInfo($element['name']);
 
             unset($info['constants'], $info['properties'], $info['methods']);
 
