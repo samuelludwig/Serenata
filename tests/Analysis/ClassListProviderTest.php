@@ -38,6 +38,7 @@ class ClassListProviderTest extends IndexedTest
 
         $output = $provider->getAllForFile($path);
 
+        $this->assertEquals(2, count($output));
         $this->assertArrayHasKey('\A\FirstClass', $output);
         $this->assertArrayHasKey('\A\SecondClass', $output);
         $this->assertArrayNotHasKey('\A\Foo', $output);
