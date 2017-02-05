@@ -14,10 +14,12 @@ class ClassListProviderTest extends IndexedTest
     public function testShowsOnlyClassesForRequestedFile(): void
     {
         $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
 
         $container = $this->createTestContainer();
 
         $this->indexTestFile($container, $path);
+        $this->indexTestFile($container, $secondPath);
 
         $provider = new ClassListProvider(
             $container->get('constantConverter'),
@@ -36,7 +38,9 @@ class ClassListProviderTest extends IndexedTest
 
         $output = $provider->getAllForFile($path);
 
-        $this->assertThat($output, $this->arrayHasKey('\A\FirstClass'));
-        $this->assertThat($output, $this->arrayHasKey('\A\SecondClass'));
+        $this->assertArrayHasKey('\A\FirstClass', $output);
+        $this->assertArrayHasKey('\A\SecondClass', $output);
+        $this->assertArrayNotHasKey('\A\Foo', $output);
+        $this->assertArrayNotHasKey('\A\Bar', $output);
     }
 }
