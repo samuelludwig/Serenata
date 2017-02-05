@@ -16,17 +16,7 @@ class ClassListProviderTest extends IndexedTest
     protected function createClassListProvider(ContainerBuilder $container): ClassListProvider
     {
         return new ClassListProvider(
-            $container->get('constantConverter'),
-            $container->get('classlikeConstantConverter'),
-            $container->get('propertyConverter'),
-            $container->get('functionConverter'),
-            $container->get('methodConverter'),
             $container->get('classlikeConverter'),
-            $container->get('inheritanceResolver'),
-            $container->get('interfaceImplementationResolver'),
-            $container->get('traitUsageResolver'),
-            $container->get('classlikeInfoBuilderProvider'),
-            $container->get('typeAnalyzer'),
             $container->get('indexDatabase')
         );
     }
