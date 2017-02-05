@@ -34,7 +34,7 @@ class ClassListProviderTest extends IndexedTest
             $container->get('indexDatabase')
         );
 
-        $output = $provider->getClassListForFile($path);
+        $output = $provider->getAllForFile($path);
 
         $this->assertThat($output, $this->arrayHasKey('\A\FirstClass'));
         $this->assertThat($output, $this->arrayHasKey('\A\SecondClass'));

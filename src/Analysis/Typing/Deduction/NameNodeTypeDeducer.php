@@ -137,7 +137,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function findCurrentClassAtLine(string $file, string $source, int $line): ?string
     {
-        $classes = $this->fileClassListProvider->getClassListForFile($file);
+        $classes = $this->fileClassListProvider->getAllForFile($file);
 
         foreach ($classes as $fqcn => $class) {
             if ($line >= $class['startLine'] && $line <= $class['endLine']) {

@@ -32,7 +32,7 @@ class ClassListCommand extends AbstractCommand
         $file = isset($arguments['file']) ? $arguments['file'] : null;
 
         if ($file !== null) {
-            return $this->classListProvider->getClassListForFile($file);
+            return $this->classListProvider->getAllForFile($file);
         }
 
         return $this->classListProvider->getAll();

@@ -143,7 +143,7 @@ class ClassListProvider implements FileClassListProviderInterface
      *
      * @return array
      */
-    public function getClassListForFile(string $file): array
+    public function getAllForFile(string $file): array
     {
         return $this->getAllForOptionalFile($file);
     }
