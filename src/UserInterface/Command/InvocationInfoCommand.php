@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Parsing\PartialParser;
+use PhpIntegrator\Analysis\InvocationInfoRetriever;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -15,9 +15,9 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class InvocationInfoCommand extends AbstractCommand
 {
     /**
-     * @var PartialParser
+     * @var InvocationInfoRetriever
      */
-    protected $partialParser;
+    protected $invocationInfoRetriever;
 
     /**
      * @var SourceCodeStreamReader
@@ -25,12 +25,14 @@ class InvocationInfoCommand extends AbstractCommand
     protected $sourceCodeStreamReader;
 
     /**
-     * @param PartialParser          $partialParser
-     * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param InvocationInfoRetriever $invocationInfoRetriever
+     * @param SourceCodeStreamReader  $sourceCodeStreamReader
      */
-    public function __construct(PartialParser $partialParser, SourceCodeStreamReader $sourceCodeStreamReader)
-    {
-        $this->partialParser = $partialParser;
+    public function __construct(
+        InvocationInfoRetriever $invocationInfoRetriever,
+        SourceCodeStreamReader $sourceCodeStreamReader
+    ) {
+        $this->invocationInfoRetriever = $invocationInfoRetriever;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
 
@@ -82,6 +84,6 @@ class InvocationInfoCommand extends AbstractCommand
      */
     public function getInvocationInfo($code)
     {
-        return $this->partialParser->getInvocationInfoAt($code);
+        return $this->invocationInfoRetriever->get($code);
     }
 }

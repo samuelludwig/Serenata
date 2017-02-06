@@ -6,7 +6,7 @@ use ArrayAccess;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Parsing\PartialParser;
+use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -24,9 +24,9 @@ class DeduceTypesCommand extends AbstractCommand
     protected $nodeTypeDeducer;
 
     /**
-     * @var PartialParser
+     * @var LastExpressionParser
      */
-    protected $partialParser;
+    protected $lastExpressionParser;
 
     /**
      * @var SourceCodeStreamReader
@@ -35,16 +35,16 @@ class DeduceTypesCommand extends AbstractCommand
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param PartialParser            $partialParser
+     * @param LastExpressionParser     $lastExpressionParser
      * @param SourceCodeStreamReader   $sourceCodeStreamReader
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        PartialParser $partialParser,
+        LastExpressionParser $lastExpressionParser,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->partialParser = $partialParser;
+        $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
 
@@ -77,7 +77,7 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
-        $node = $this->partialParser->getLastNodeAt($codeWithExpression, $offset);
+        $node = $this->lastExpressionParser->getLastNodeAt($codeWithExpression, $offset);
 
         if ($node === null) {
             return [];
@@ -139,7 +139,7 @@ class DeduceTypesCommand extends AbstractCommand
      */
     protected function deduceTypesFromExpression($file, $code, $expression, $offset)
     {
-        $node = $this->partialParser->getLastNodeAt($expression, $offset);
+        $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
 
         return $this->deduceTypes($file, $code, $node, $offset);
     }

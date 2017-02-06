@@ -7,6 +7,7 @@ use Doctrine\Common\Cache\ArrayCache;
 use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\InvocationInfoRetriever;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
@@ -79,7 +80,9 @@ use PhpIntegrator\Mediating\CacheClearingEventMediator;
 use PhpIntegrator\Parsing\PartialParser;
 use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\DocblockParser;
+use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\CachingParserProxy;
+use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -192,7 +195,25 @@ abstract class AbstractApplication
 
         $container
             ->register('partialParser', PartialParser::class)
-            ->setArguments([new Reference('parser.phpParserFactory'), new Reference('prettyPrinter')]);
+            ->setArguments([new Reference('parser.phpParserFactory')]);
+
+        $container
+            ->register('parserTokenHelper', ParserTokenHelper::class);
+
+        $container
+            ->register('lastExpressionParser', LastExpressionParser::class)
+            ->setArguments([
+                new Reference('partialParser'),
+                new Reference('parserTokenHelper')
+            ]);
+
+        $container
+            ->register('invocationInfoRetriever', InvocationInfoRetriever::class)
+            ->setArguments([
+                new Reference('lastExpressionParser'),
+                new Reference('parserTokenHelper'),
+                new Reference('prettyPrinter')
+            ]);
 
         $container
             ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)
@@ -660,13 +681,13 @@ abstract class AbstractApplication
             ->register('deduceTypesCommand', Command\DeduceTypesCommand::class)
             ->setArguments([
                     new Reference('nodeTypeDeducer'),
-                    new Reference('partialParser'),
+                    new Reference('lastExpressionParser'),
                     new Reference('sourceCodeStreamReader')
                 ]);
 
         $container
             ->register('invocationInfoCommand', Command\InvocationInfoCommand::class)
-            ->setArguments([new Reference('partialParser'), new Reference('sourceCodeStreamReader')]);
+            ->setArguments([new Reference('invocationInfoRetriever'), new Reference('sourceCodeStreamReader')]);
 
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)
