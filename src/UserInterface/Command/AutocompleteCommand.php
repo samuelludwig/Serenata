@@ -11,7 +11,7 @@ use PhpIntegrator\Utility\SourceCodeHelpers;
 /**
  * Command that shows autocompletion suggestions at a specific location.
  */
-class Autocomplete extends AbstractCommand
+class AutocompleteCommand extends AbstractCommand
 {
     /**
      * @var AutocompletionProvider
