@@ -697,7 +697,7 @@ abstract class AbstractApplication
             ->setArguments([new Reference('indexDatabase')]);
 
         $container
-            ->register('autocompleteCommand', Command\Autocomplete::class)
+            ->register('autocompleteCommand', Command\AutocompleteCommand::class)
             ->setArguments([new Reference('autocompletionProvider')]);
     }
 

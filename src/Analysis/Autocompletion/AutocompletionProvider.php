@@ -107,50 +107,63 @@ class AutocompletionProvider
      */
     protected function getFunctionLabel(array $function): string
     {
-        /*
-        getFunctionParameterList: (info) ->
-            body = "("
+        $body = '(';
 
-            isInOptionalList = false
+        $isInOptionalList = false;
 
-            for param, index in info.parameters
-                description = ''
-                description += '['   if param.isOptional and not isInOptionalList
-                description += ', '  if index != 0
-                description += '...' if param.isVariadic
-                description += '&'   if param.isReference
-                description += '$' + param.name
-                description += ' = ' + param.defaultValue if param.defaultValue
-                description += ']'   if param.isOptional and index == (info.parameters.length - 1)
+        foreach ($function['parameters'] as $index => $param) {
+            $description = '';
 
-                isInOptionalList = param.isOptional
+            if ($param['isOptional'] && !$isInOptionalList) {
+                $description .= '[';
+            }
 
-                if not param.isOptional
-                    body += description
+            if ($index > 0) {
+                $description .= ', ';
+            }
 
-                else
-                    body += description
+            if ($param['isVariadic']) {
+                $description .= '...';
+            }
 
-            body += ")"
+            if ($param['isReference']) {
+                $description .= '&';
+            }
 
-            return body
-            */
+            $description .= '$' . $param['name'];
+
+            if ($param['defaultValue']) {
+                $description .= ' = ' . $param['defaultValue'];
+            }
+
+            if ($param['isOptional'] && $index === (count($function['parameters'] - 1))) {
+                $description .= ']';
+            }
+
+            $isInOptionalList = $param['isOptional'];
+
+            $body .= $description;
+        }
+
+        $body .= ')';
+
+        return $body;
     }
 
     /**
      * @param array $function
      *
-     * @return string
+     * @return string|null
      */
-    protected function getFunctionDocumentation(array $function): string
+    protected function getFunctionDocumentation(array $function): ?string
     {
-        // shortDescription = ''
-        //
-        // if func.shortDescription? and func.shortDescription.length > 0
-        //     shortDescription = func.shortDescription
-        //
-        // else if func.isBuiltin
-        //     shortDescription = 'Built-in PHP function.'
+        if ($function['shortDescription']) {
+            return $function['shortDescription'];
+        } elseif ($function['isBuiltin']) {
+            return 'Built-in PHP function.';
+        }
+
+        return null;
     }
 
     /**
@@ -160,16 +173,15 @@ class AutocompletionProvider
      */
     protected function getFunctionProtectionLevel(array $function): ?string
     {
-        /*
-        if member.isPublic
-            leftLabel += '<span class="icon icon-globe import">&nbsp;</span>'
+        if ($function['isPublic']) {
+            return 'public';
+        } elseif ($function['isProtected']) {
+            return 'protected';
+        } elseif ($function['isPrivate']) {
+            return 'private';
+        }
 
-        else if member.isProtected
-            leftLabel += '<span class="icon icon-shield">&nbsp;</span>'
-
-        else if member.isPrivate
-            leftLabel += '<span class="icon icon-lock selector">&nbsp;</span>'
-        */
+        return null;
     }
 
     /**
@@ -179,7 +191,11 @@ class AutocompletionProvider
      */
     protected function getFunctionUrl(array $function): ?string
     {
-        // if func.isBuiltin then @config.get('php_documentation_base_urls').functions + func.name else null
+        if ($function['isBuiltin']) {
+            return DocumentationBaseUrl::FUNCTIONS . $function['name'];
+        }
+
+        return null;
     }
 
     /**
@@ -189,30 +205,36 @@ class AutocompletionProvider
      */
     protected function getFunctionReturnTypes(array $function): array
     {
-        /*
-        ###*
-         * Retrieves the short name for the specified class name (i.e. the last segment, without the class namespace).
-         *
-         * @param {string} className
-         *
-         * @return {string}
-        ###
-        getClassShortName: (className) ->
-            return null if not className
+        $typeNames = $this->getShortFunctionReturnTypes($function);
 
-            parts = className.split('\\')
-            return parts.pop()
+        return implode('|', $typeNames);
+    }
 
-        ###*
-         * @param {Array} typeArray
-         *
-         * @return {String}
-        ###
-        getTypeSpecificationFromTypeArray: (typeArray) ->
-            typeNames = typeArray.map (type) =>
-                return @getClassShortName(type.type)
+    /**
+     * @param array $function
+     *
+     * @return string[]
+     */
+    protected function getShortFunctionReturnTypes(array $function): array
+    {
+        $shortTypes = [];
 
-            return typeNames.join('|')
-        */
+        foreach ($function['types'] as $type) {
+            $shortTypes[] = $this->getClassShortNameFromFqcn($type);
+        }
+
+        return $shortTypes;
+    }
+
+    /**
+     * @param string $fqcn
+     *
+     * @return string
+     */
+    protected function getClassShortNameFromFqcn(string $fqcn): string
+    {
+        $parts = explode('\\', $fqcn);
+
+        return array_pop($parts);
     }
 }
