@@ -386,11 +386,22 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         foreach ($node->getParams() as $i => $param) {
             $resolvedType = null;
 
-            // TODO: Support NullableType (PHP 7.1).
-            if ($param->type instanceof Node\Name) {
-                $resolvedType = NodeHelpers::fetchClassName($param->type->getAttribute('resolvedName'));
-            } elseif (is_string($param->type)) {
-                $resolvedType = (string) $param->type;
+            $typeNode = $param->type;
+
+            if ($typeNode instanceof Node\NullableType) {
+                $typeNode = $typeNode->type;
+            }
+
+            if ($typeNode instanceof Node\Name) {
+                // Apparantly the name resolver's private resolveSignature method doesn't properly walk nullable types,
+                // so do it ourselves.
+                if (!$typeNode->hasAttribute('resolvedName')) {
+                    parent::resolveClassName($typeNode);
+                }
+
+                $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
+            } elseif (is_string($typeNode)) {
+                $resolvedType = (string) $typeNode;
             }
 
             $parameters[$i]['fullType'] = $resolvedType;

@@ -2180,10 +2180,10 @@ class ClassInfoCommandTest extends IndexedTest
 
         $this->assertEquals([
             'name'         => 'param',
-            'typeHint'     => '\DateTime',
+            'typeHint'     => 'DateTime',
             'types'        => [
                 [
-                    'type'         => '\DateTime',
+                    'type'         => 'DateTime',
                     'fqcn'         => '\DateTime',
                     'resolvedType' => '\DateTime'
                 ],

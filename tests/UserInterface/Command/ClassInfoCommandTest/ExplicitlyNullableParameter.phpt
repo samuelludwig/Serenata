@@ -2,9 +2,11 @@
 
 namespace A;
 
+use DateTime;
+
 class TestClass
 {
-    public function foo(?\DateTime $param)
+    public function foo(?DateTime $param)
     {
 
     }
