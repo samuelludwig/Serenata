@@ -586,13 +586,6 @@ class FileIndexer
                 $rawData['startLine'],
                 $fileTypeResolver
             );
-        } elseif (isset($rawData['returnType'])) {
-            $types = [
-                [
-                    'type' => $rawData['returnType'],
-                    'fqcn' => isset($rawData['fullReturnType']) ? $rawData['fullReturnType'] : $rawData['returnType']
-                ]
-            ];
         } elseif ($rawData['defaultValue']) {
             try {
                 $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
