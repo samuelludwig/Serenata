@@ -371,7 +371,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $localType = null;
         $nodeType = $node->getReturnType();
 
-        // TODO: Support NullableType (PHP 7.1).
+        if ($nodeType instanceof Node\NullableType) {
+            $nodeType = $nodeType->type;
+        }
+
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
         } elseif (is_string($nodeType)) {
@@ -396,7 +399,10 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $resolvedType = null;
         $nodeType = $node->getReturnType();
 
-        // TODO: Support NullableType (PHP 7.1).
+        if ($nodeType instanceof Node\NullableType) {
+            $nodeType = $nodeType->type;
+        }
+
         if ($nodeType instanceof Node\Name) {
             $resolvedType = NodeHelpers::fetchClassName($nodeType);
         } elseif (is_string($nodeType)) {
@@ -404,15 +410,16 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         }
 
         return [
-            'name'           => $node->name,
-            'startLine'      => $node->getLine(),
-            'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
-            'returnType'     => $localType,
-            'fullReturnType' => $resolvedType,
-            'parameters'     => $parameters,
-            'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null
+            'name'                 => $node->name,
+            'startLine'            => $node->getLine(),
+            'endLine'              => $node->getAttribute('endLine'),
+            'startPosName'         => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
+            'endPosName'           => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
+            'returnType'           => $localType,
+            'fullReturnType'       => $resolvedType,
+            'isReturnTypeNullable' => ($node->getReturnType() instanceof Node\NullableType),
+            'parameters'           => $parameters,
+            'docComment'           => $node->getDocComment() ? $node->getDocComment()->getText() : null
         ];
     }
 

@@ -714,6 +714,10 @@ class FileIndexer
                     'fqcn' => isset($rawData['fullReturnType']) ? $rawData['fullReturnType'] : $rawData['returnType']
                 ]
             ];
+
+            if (isset($rawData['isReturnTypeNullable']) && $rawData['isReturnTypeNullable']) {
+                $returnTypes[] = ['type' => 'null', 'fqcn' => 'null'];
+            }
         }
 
         $shortDescription = $documentation['descriptions']['short'];

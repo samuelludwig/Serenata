@@ -2205,6 +2205,30 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testExplicitlyNullableReturnType(): void
+    {
+        $fileName = 'ExplicitlyNullableReturnType.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestClass');
+
+        $this->assertEquals([
+            [
+                'type'         => '\DateTime',
+                'fqcn'         => '\DateTime',
+                'resolvedType' => '\DateTime'
+            ],
+
+            [
+                'type'         => 'null',
+                'fqcn'         => 'null',
+                'resolvedType' => 'null'
+            ]
+        ], $output['methods']['foo']['returnTypes']);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesBuiltinItems(): void
     {
         $output = $this->getBuiltinClassInfo('\IteratorAggregate');
