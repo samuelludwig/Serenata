@@ -20,7 +20,8 @@ CREATE TABLE constants(
     types_serialized      text NOT NULL,
 
     -- Specific to member constants.
-    structure_id integer unsigned,
+    structure_id          integer unsigned,
+    access_modifier_id    integer unsigned,
 
     FOREIGN KEY(file_id) REFERENCES files(id)
         ON DELETE CASCADE
@@ -28,5 +29,9 @@ CREATE TABLE constants(
 
     FOREIGN KEY(structure_id) REFERENCES structures(id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE
+        ON UPDATE CASCADE,
+
+    FOREIGN KEY(access_modifier_id) REFERENCES access_modifiers(id)
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT
 );

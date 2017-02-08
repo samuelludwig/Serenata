@@ -23,9 +23,9 @@ class ConstantConverter extends AbstractConverter
             'defaultValue'      => $rawInfo['default_value'],
             'filename'          => $rawInfo['path'],
 
-            'isPublic'          => true,
-            'isProtected'       => false,
-            'isPrivate'         => false,
+            'isPublic'          => (isset($rawInfo['access_modifier']) ? $rawInfo['access_modifier'] === 'public' : true),
+            'isProtected'       => (isset($rawInfo['access_modifier']) ? $rawInfo['access_modifier'] === 'protected' : false),
+            'isPrivate'         => (isset($rawInfo['access_modifier']) ? $rawInfo['access_modifier'] === 'private' : false),
             'isStatic'          => true,
             'isDeprecated'      => !!$rawInfo['is_deprecated'],
             'hasDocblock'       => !!$rawInfo['has_docblock'],

@@ -2229,6 +2229,32 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testClassConstantVisibility(): void
+    {
+        $fileName = 'ClassConstantVisbility.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestClass');
+
+        $this->assertTrue($output['constants']['IMPLICITLY_PUBLIC_CONSTANT']['isPublic']);
+        $this->assertFalse($output['constants']['IMPLICITLY_PUBLIC_CONSTANT']['isProtected']);
+        $this->assertFalse($output['constants']['IMPLICITLY_PUBLIC_CONSTANT']['isPrivate']);
+
+        $this->assertTrue($output['constants']['PUBLIC_CONSTANT']['isPublic']);
+        $this->assertFalse($output['constants']['PUBLIC_CONSTANT']['isProtected']);
+        $this->assertFalse($output['constants']['PUBLIC_CONSTANT']['isPrivate']);
+
+        $this->assertFalse($output['constants']['PROTECTED_CONSTANT']['isPublic']);
+        $this->assertTrue($output['constants']['PROTECTED_CONSTANT']['isProtected']);
+        $this->assertFalse($output['constants']['PROTECTED_CONSTANT']['isPrivate']);
+
+        $this->assertFalse($output['constants']['PRIVATE_CONSTANT']['isPublic']);
+        $this->assertFalse($output['constants']['PRIVATE_CONSTANT']['isProtected']);
+        $this->assertTrue($output['constants']['PRIVATE_CONSTANT']['isPrivate']);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesBuiltinItems(): void
     {
         $output = $this->getBuiltinClassInfo('\IteratorAggregate');

@@ -23,7 +23,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      *
      * @var int
      */
-    public const SCHEMA_VERSION = 30;
+    public const SCHEMA_VERSION = 31;
 
     /**
      * @var Connection
@@ -440,9 +440,10 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     public function getClasslikeRawConstants(int $id): array
     {
         return $this->getConnection()->createQueryBuilder()
-            ->select('c.*', 'fi.path')
+            ->select('c.*', 'fi.path', 'am.name AS access_modifier')
             ->from(IndexStorageItemEnum::CONSTANTS, 'c')
             ->leftJoin('c', IndexStorageItemEnum::FILES, 'fi', 'fi.id = c.file_id')
+            ->leftJoin('c', IndexStorageItemEnum::ACCESS_MODIFIERS, 'am', 'am.id = c.access_modifier_id')
             ->where('structure_id = ?')
             ->setParameter(0, $id)
             ->execute()

@@ -451,6 +451,9 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
                 'startPosName'   => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
                 'endPosName'     => $const->getAttribute('startFilePos') ? ($const->getAttribute('startFilePos') + mb_strlen($const->name)) : null,
                 'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'isPublic'       => $node->isPublic(),
+                'isPrivate'      => $node->isPrivate(),
+                'isProtected'    => $node->isProtected(),
 
                 'defaultValue' => substr(
                     $this->code,

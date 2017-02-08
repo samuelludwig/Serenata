@@ -225,11 +225,11 @@ class FileIndexer
          }
 
          foreach ($outlineIndexingVisitor->getGlobalConstants() as $constant) {
-             $this->indexConstant($constant, $filePath, $fileId, null, $fileTypeResolver);
+             $this->indexConstant($constant, $filePath, $fileId, null, null, $fileTypeResolver);
          }
 
          foreach ($outlineIndexingVisitor->getGlobalDefines() as $define) {
-             $this->indexConstant($define, $filePath, $fileId, null, $fileTypeResolver);
+             $this->indexConstant($define, $filePath, $fileId, null, null, $fileTypeResolver);
          }
      }
 
@@ -365,11 +365,14 @@ class FileIndexer
         }
 
         foreach ($rawData['constants'] as $constant) {
+            $accessModifier = $this->parseAccessModifier($constant);
+
             $this->indexConstant(
                 $constant,
                 $filePath,
                 $fileId,
                 $seId,
+                $accessModifier ? $accessModifierMap[$accessModifier] : null,
                 $fileTypeResolver
             );
         }
@@ -459,6 +462,7 @@ class FileIndexer
      * @param string           $filePath
      * @param int              $fileId
      * @param int|null         $seId
+     * @param int|null         $amId
      * @param FileTypeResolver $fileTypeResolver
      *
      * @return void
@@ -468,6 +472,7 @@ class FileIndexer
         string $filePath,
         int $fileId,
         ?int $seId,
+        ?int $amId,
         FileTypeResolver $fileTypeResolver
     ): void {
         $documentation = $this->docblockParser->parse($rawData['docComment'], [
@@ -530,7 +535,8 @@ class FileIndexer
             'long_description'      => $documentation['descriptions']['long'],
             'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
             'types_serialized'      => serialize($types),
-            'structure_id'          => $seId
+            'structure_id'          => $seId,
+            'access_modifier_id'    => $amId
         ]);
     }
 
@@ -938,11 +944,11 @@ class FileIndexer
      */
     protected function parseAccessModifier(array $rawData, bool $returnNull = false): ?string
     {
-        if ($rawData['isPublic']) {
+        if (isset($rawData['isPublic']) && $rawData['isPublic']) {
             return 'public';
-        } elseif ($rawData['isProtected']) {
+        } elseif (isset($rawData['isProtected']) && $rawData['isProtected']) {
             return 'protected';
-        } elseif ($rawData['isPrivate']) {
+        } elseif (isset($rawData['isPrivate']) && $rawData['isPrivate']) {
             return 'private';
         } elseif ($returnNull) {
             return null;
