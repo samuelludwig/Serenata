@@ -333,11 +333,16 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         foreach ($node->getParams() as $i => $param) {
             $localType = null;
 
-            // TODO: Support NullableType (PHP 7.1).
-            if ($param->type instanceof Node\Name) {
-                $localType = NodeHelpers::fetchClassName($param->type);
-            } elseif (is_string($param->type)) {
-                $localType = (string) $param->type;
+            $typeNode = $param->type;
+
+            if ($typeNode instanceof Node\NullableType) {
+                $typeNode = $typeNode->type;
+            }
+
+            if ($typeNode instanceof Node\Name) {
+                $localType = NodeHelpers::fetchClassName($typeNode);
+            } elseif (is_string($typeNode)) {
+                $localType = (string) $typeNode;
             }
 
             $parameters[$i] = [
@@ -349,7 +354,8 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
                 'isOptional'   => $param->default ? true : false,
 
                 'isNullable'   => (
-                    $param->default instanceof Node\Expr\ConstFetch && $param->default->name->toString() === 'null'
+                    ($param->type instanceof Node\NullableType) ||
+                    ($param->default instanceof Node\Expr\ConstFetch && $param->default->name->toString() === 'null')
                 ),
 
                 'defaultValue' => $param->default ?

@@ -2172,6 +2172,39 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testExplicitlyNullableParameter(): void
+    {
+        $fileName = 'ExplicitlyNullableParameter.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestClass');
+
+        $this->assertEquals([
+            'name'         => 'param',
+            'typeHint'     => '\DateTime',
+            'types'        => [
+                [
+                    'type'         => '\DateTime',
+                    'fqcn'         => '\DateTime',
+                    'resolvedType' => '\DateTime'
+                ],
+                [
+                    'type'         => 'null',
+                    'fqcn'         => 'null',
+                    'resolvedType' => 'null'
+                ]
+            ],
+            'description'  => null,
+            'defaultValue' => null,
+            'isNullable'   => true,
+            'isReference'  => false,
+            'isVariadic'   => false,
+            'isOptional'   => false
+        ], $output['methods']['foo']['parameters'][0]);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesBuiltinItems(): void
     {
         $output = $this->getBuiltinClassInfo('\IteratorAggregate');
