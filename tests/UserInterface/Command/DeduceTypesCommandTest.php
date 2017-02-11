@@ -927,4 +927,20 @@ class DeduceTypesCommandTest extends IndexedTest
             '\Bar'
         ], $result);
     }
+
+    /**
+     * @return void
+     */
+    public function testVariableInCatchBlockWithMultipleExceptionTypeHintsHasMultipleTypes(): void
+    {
+        $result = $this->deduceTypesFromExpression(
+            'CatchMultipleExceptionTypes.phpt',
+            '$e'
+        );
+
+        $this->assertEquals([
+            '\Exception',
+            '\Throwable'
+        ], $result);
+    }
 }
