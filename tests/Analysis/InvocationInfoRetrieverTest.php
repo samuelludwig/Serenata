@@ -9,6 +9,7 @@ use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
+use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
 class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +35,7 @@ class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
      */
     protected function createPartialParserStub(): PartialParser
     {
-        return new PartialParser($this->createParserFactoryStub());
+        return new PartialParser($this->createParserFactoryStub(), new Lexer());
     }
 
     /**

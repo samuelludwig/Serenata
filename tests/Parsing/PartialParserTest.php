@@ -5,6 +5,7 @@ namespace PhpIntegrator\Tests\Parsing;
 use PhpIntegrator\Parsing\PartialParser;
 
 use PhpParser\Node;
+use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
 class PartialParserTest extends \PHPUnit\Framework\TestCase
@@ -22,7 +23,7 @@ class PartialParserTest extends \PHPUnit\Framework\TestCase
      */
     protected function createPartialParser(): PartialParser
     {
-        return new PartialParser($this->createParserFactoryStub());
+        return new PartialParser($this->createParserFactoryStub(), new Lexer());
     }
 
     /**

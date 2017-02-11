@@ -8,6 +8,7 @@ use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpParser\Node;
+use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
 class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
@@ -33,7 +34,7 @@ class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
      */
     protected function createPartialParserStub(): PartialParser
     {
-        return new PartialParser($this->createParserFactoryStub());
+        return new PartialParser($this->createParserFactoryStub(), new Lexer());
     }
 
     /**
