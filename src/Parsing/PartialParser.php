@@ -30,11 +30,18 @@ class PartialParser implements Parser
     protected $parserFactory;
 
     /**
-     * @param ParserFactory $parserFactory
+     * @var Lexer
      */
-    public function __construct(ParserFactory $parserFactory)
+    protected $lexer;
+
+    /**
+     * @param ParserFactory $parserFactory
+     * @param Lexer         $lexer
+     */
+    public function __construct(ParserFactory $parserFactory, Lexer $lexer)
     {
         $this->parserFactory = $parserFactory;
+        $this->lexer = $lexer;
     }
 
     /**
@@ -158,7 +165,7 @@ class PartialParser implements Parser
     protected function getStrictParser(): Parser
     {
         if (!$this->strictParser instanceof Parser) {
-            $this->strictParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, new Lexer());
+            $this->strictParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, $this->lexer);
         }
 
         return $this->strictParser;

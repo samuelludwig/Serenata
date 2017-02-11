@@ -200,7 +200,7 @@ abstract class AbstractApplication
 
         $container
             ->register('partialParser', PartialParser::class)
-            ->setArguments([new Reference('parser.phpParserFactory')]);
+            ->setArguments([new Reference('parser.phpParserFactory'), new Reference('lexer')]);
 
         $container
             ->register('parserTokenHelper', ParserTokenHelper::class);
