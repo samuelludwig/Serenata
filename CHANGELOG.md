@@ -1,5 +1,5 @@
 ## 3.0.0
-* At least PHP 7.1 is now required.
+* At least PHP 7.1 is now required to run.
 * PHP 7.1 is now supported (https://github.com/php-integrator/core/issues/82).
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
 * The class list will now only provide fields directly relevant to the class.
