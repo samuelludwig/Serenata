@@ -6,6 +6,8 @@ use PhpIntegrator\Analysis\GlobalConstantExistanceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 /**
  * Looks for unknown global constant names.
  */
@@ -50,35 +52,40 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
 
         $unknownGlobalConstants = [];
 
-        foreach ($globalConstants as $globalConstant) {
-            if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($globalConstant['name'])) {
+        foreach ($globalConstants as $node) {
+            $name = NodeHelpers::fetchClassName($node->name->getAttribute('resolvedName'));
+
+            $namespaceNode = $node->getAttribute('namespace');
+            $namespace = null;
+
+            if ($namespaceNode !== null) {
+                $namespace = NodeHelpers::fetchClassName($namespaceNode);
+            }
+
+            if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($name)) {
                 continue;
-            } elseif ($globalConstant['isUnqualified']) {
+            } elseif ($node->name->isUnqualified()) {
                 // Unqualified global constant calls, such as "PHP_EOL", could refer to "PHP_EOL" in the current
                 // namespace (e.g. "\A\PHP_EOL") or, if not present in the current namespace, the root namespace
                 // (e.g. "\PHP_EOL").
-                $fqcnForCurrentNamespace = '\\' . $globalConstant['namespace'] . '\\' . $globalConstant['name'];
+                $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $name;
 
                 if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqcnForCurrentNamespace)) {
                     continue;
                 }
 
-                $fqcnForRootNamespace = '\\' . $globalConstant['name'];
+                $fqcnForRootNamespace = '\\' . $name;
 
                 if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqcnForRootNamespace)) {
                     continue;
                 }
             }
 
-            unset(
-                $globalConstant['namespace'],
-                $globalConstant['isUnqualified'],
-                $globalConstant['isFullyQualified'],
-                $globalConstant['localName'],
-                $globalConstant['localNameFirstPart']
-            );
-
-            $unknownGlobalConstants[] = $globalConstant;
+            $unknownGlobalConstants[] = [
+                'name'  => $name,
+                'start' => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                'end'   => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+            ];;
         }
 
         return $unknownGlobalConstants;

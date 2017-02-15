@@ -151,15 +151,22 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
         $constantUsages = $this->globalConstantUsageFetchingVisitor->getGlobalConstantList();
 
-        foreach ($constantUsages as $constantUsage) {
-            $relevantAlias = $constantUsage['localNameFirstPart'];
+        foreach ($constantUsages as $node) {
+            $relevantAlias = $node->name->getFirst();
 
-            if (!$constantUsage['isFullyQualified'] &&
-                isset($namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]) &&
-                $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CONSTANT
+            $namespaceNode = $node->getAttribute('namespace');
+            $namespace = null;
+
+            if ($namespaceNode !== null) {
+                $namespace = NodeHelpers::fetchClassName($namespaceNode);
+            }
+
+            if (!$node->name->isFullyQualified() &&
+                isset($namespaces[$namespace]['useStatements'][$relevantAlias]) &&
+                $namespaces[$namespace]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CONSTANT
             ) {
                 // Mark the accompanying used statement, if any, as used.
-                $namespaces[$constantUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
+                $namespaces[$namespace]['useStatements'][$relevantAlias]['used'] = true;
             }
         }
 
