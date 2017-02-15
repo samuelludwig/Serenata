@@ -6,6 +6,7 @@
   * Most of the related data, such as methods and constants, were already being filtered out for performance reasons.
   * In order to fetch more information about a class, such as its parents, you now have to manually fetch this using the class info command.
 * Linting will now report the fully qualified name of a global function that wasn't found (instead of just the local name).
+* Linting will now report the fully qualified name of a global constant that wasn't found (instead of just the local name).
 
 ## 2.1.5
 * Indexing performance was slightly improved.

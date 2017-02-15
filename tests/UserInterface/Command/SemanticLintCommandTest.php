@@ -307,7 +307,7 @@ class SemanticLintCommandTest extends IndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'MISSING',
+                'name'  => '\MISSING',
                 'start' => 98,
                 'end'   => 105
             ],

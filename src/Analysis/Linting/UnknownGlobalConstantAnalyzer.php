@@ -2,11 +2,10 @@
 
 namespace PhpIntegrator\Analysis\Linting;
 
+use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalConstantExistanceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
-
-use PhpIntegrator\Utility\NodeHelpers;
 
 /**
  * Looks for unknown global constant names.
@@ -52,37 +51,18 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
 
         $unknownGlobalConstants = [];
 
+        // TODO: Inject this.
+        $determiner = new ConstFetchNodeFqsenDeterminer($this->globalConstantExistanceChecker);
+
         foreach ($globalConstants as $node) {
-            $name = NodeHelpers::fetchClassName($node->name->getAttribute('resolvedName'));
+            $fqsen = $determiner->determine($node);
 
-            $namespaceNode = $node->getAttribute('namespace');
-            $namespace = null;
-
-            if ($namespaceNode !== null) {
-                $namespace = NodeHelpers::fetchClassName($namespaceNode);
-            }
-
-            if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($name)) {
+            if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqsen)) {
                 continue;
-            } elseif ($node->name->isUnqualified()) {
-                // Unqualified global constant calls, such as "PHP_EOL", could refer to "PHP_EOL" in the current
-                // namespace (e.g. "\A\PHP_EOL") or, if not present in the current namespace, the root namespace
-                // (e.g. "\PHP_EOL").
-                $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $name;
-
-                if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqcnForCurrentNamespace)) {
-                    continue;
-                }
-
-                $fqcnForRootNamespace = '\\' . $name;
-
-                if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqcnForRootNamespace)) {
-                    continue;
-                }
             }
 
             $unknownGlobalConstants[] = [
-                'name'  => $name,
+                'name'  => $fqsen,
                 'start' => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
                 'end'   => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
             ];;
