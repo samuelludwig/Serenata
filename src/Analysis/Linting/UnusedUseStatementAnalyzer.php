@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Analysis\Linting;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
@@ -13,11 +14,18 @@ use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 /**
  * Looks for unused use statements.
  */
 class UnusedUseStatementAnalyzer implements AnalyzerInterface
 {
+    /**
+     * @var NamespaceAttachingVisitor
+     */
+    protected $namespaceAttachingVisitor;
+
     /**
      * @var ClassUsageFetchingVisitor
      */
@@ -51,6 +59,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
      */
     public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
     {
+        $this->namespaceAttachingVisitor = new NamespaceAttachingVisitor();
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
         $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
@@ -64,6 +73,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     public function getVisitors(): array
     {
         return [
+            $this->namespaceAttachingVisitor,
             $this->classUsageFetchingVisitor,
             $this->useStatementFetchingVisitor,
             $this->docblockClassUsageFetchingVisitor,
@@ -183,15 +193,21 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
         $functionUsages = $this->globalFunctionUsageFetchingVisitor->getGlobalFunctionCallList();
 
-        foreach ($functionUsages as $functionUsage) {
-            $relevantAlias = $functionUsage['localNameFirstPart'];
+        foreach ($functionUsages as $node) {
+            $relevantAlias = $node->name->getFirst();
+            $namespaceNode = $node->getAttribute('namespace');
+            $namespace = null;
 
-            if (!$functionUsage['isFullyQualified'] &&
-                isset($namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]) &&
-                $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_FUNCTION
+            if ($namespaceNode !== null) {
+                $namespace = NodeHelpers::fetchClassName($namespaceNode);
+            }
+
+            if (!$node->name->isFullyQualified() &&
+                isset($namespaces[$namespace]['useStatements'][$relevantAlias]) &&
+                $namespaces[$namespace]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_FUNCTION
             ) {
                 // Mark the accompanying used statement, if any, as used.
-                $namespaces[$functionUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
+                $namespaces[$namespace]['useStatements'][$relevantAlias]['used'] = true;
             }
         }
 

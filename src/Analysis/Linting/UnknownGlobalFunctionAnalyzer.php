@@ -4,13 +4,21 @@ namespace PhpIntegrator\Analysis\Linting;
 
 use PhpIntegrator\Analysis\GlobalFunctionExistanceCheckerInterface;
 
+use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
+
+use PhpIntegrator\Utility\NodeHelpers;
 
 /**
  * Looks for unknown global function names (i.e. used during calls).
  */
 class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
 {
+    /**
+     * @var NamespaceAttachingVisitor
+     */
+    protected $namespaceAttachingVisitor;
+
     /**
      * @var GlobalFunctionUsageFetchingVisitor
      */
@@ -28,6 +36,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     {
         $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
 
+        $this->namespaceAttachingVisitor = new NamespaceAttachingVisitor();
         $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
     }
 
@@ -37,6 +46,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     public function getVisitors(): array
     {
         return [
+            $this->namespaceAttachingVisitor,
             $this->globalFunctionUsageFetchingVisitor
         ];
     }
@@ -50,35 +60,40 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
 
         $unknownGlobalFunctions = [];
 
-        foreach ($globalFunctions as $globalFunction) {
-            if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($globalFunction['name'])) {
+        foreach ($globalFunctions as $node) {
+            $name = NodeHelpers::fetchClassName($node->name->getAttribute('resolvedName'));
+
+            $namespaceNode = $node->getAttribute('namespace');
+            $namespace = null;
+
+            if ($namespaceNode !== null) {
+                $namespace = NodeHelpers::fetchClassName($namespaceNode);
+            }
+
+            if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($name)) {
                 continue;
-            } elseif ($globalFunction['isUnqualified']) {
+            } elseif ($node->name->isUnqualified()) {
                 // Unqualified global function calls, such as "array_walk", could refer to "array_walk" in the current
                 // namespace (e.g. "\A\array_walk") or, if not present in the current namespace, the root namespace
                 // (e.g. "\array_walk").
-                $fqcnForCurrentNamespace = '\\' . $globalFunction['namespace'] . '\\' . $globalFunction['name'];
+                $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $name;
 
                 if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($fqcnForCurrentNamespace)) {
                     continue;
                 }
 
-                $fqcnForRootNamespace = '\\' . $globalFunction['name'];
+                $fqcnForRootNamespace = '\\' . $name;
 
                 if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($fqcnForRootNamespace)) {
                     continue;
                 }
             }
 
-            unset(
-                $globalFunction['namespace'],
-                $globalFunction['isUnqualified'],
-                $globalFunction['isFullyQualified'],
-                $globalFunction['localName'],
-                $globalFunction['localNameFirstPart']
-            );
-
-            $unknownGlobalFunctions[] = $globalFunction;
+            $unknownGlobalFunctions[] = [
+                'name'  => $name,
+                'start' => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                'end'   => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+            ];
         }
 
         return $unknownGlobalFunctions;

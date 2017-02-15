@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use PhpIntegrator\Utility\NodeHelpers;
-
 use PhpParser\Node;
 
 /**
@@ -12,7 +10,7 @@ use PhpParser\Node;
 class GlobalFunctionUsageFetchingVisitor extends AbstractNameResolvingVisitor
 {
     /**
-     * @var array
+     * @var Node\Expr\FuncCall[]
      */
     protected $globalFunctionCallList = [];
 
@@ -27,20 +25,11 @@ class GlobalFunctionUsageFetchingVisitor extends AbstractNameResolvingVisitor
             return;
         }
 
-        $this->globalFunctionCallList[] = [
-            'name'               => NodeHelpers::fetchClassName($node->name->getAttribute('resolvedName')),
-            'localName'          => NodeHelpers::fetchClassName($node->name),
-            'localNameFirstPart' => $node->name->getFirst(),
-            'isFullyQualified'   => $node->name->isFullyQualified(),
-            'namespace'          => $this->namespace ? NodeHelpers::fetchClassName($this->namespace) : null,
-            'isUnqualified'      => $node->name->isUnqualified(),
-            'start'              => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-            'end'                => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-        ];
+        $this->globalFunctionCallList[] = $node;
     }
 
     /**
-     * @return array
+     * @return Node\Expr\FuncCall[]
      */
     public function getGlobalFunctionCallList(): array
     {
