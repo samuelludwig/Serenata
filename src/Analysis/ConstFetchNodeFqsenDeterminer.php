@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis;
 
+use LogicException;
+
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
@@ -33,14 +35,18 @@ class ConstFetchNodeFqsenDeterminer
     {
         $resolvedName = $node->name->getAttribute('resolvedName');
 
-        assert($resolvedName !== false, "Resolved name must be attached to node in order to determine FQSEN");
+        if ($resolvedName === null) {
+            throw new LogicException('Resolved name must be attached to node in order to determine FQSEN');
+        }
 
         $name = NodeHelpers::fetchClassName($resolvedName);
 
         // False must be used rather than null as the namespace can actually be null.
         $namespaceNode = $node->getAttribute('namespace', false);
 
-        assert($namespaceNode !== false, "Namespace must be attached to node in order to determine FQSEN");
+        if ($namespaceNode === false) {
+            throw new LogicException('Namespace must be attached to node in order to determine FQSEN');
+        }
 
         $namespace = null;
 
