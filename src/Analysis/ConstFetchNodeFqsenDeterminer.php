@@ -39,8 +39,6 @@ class ConstFetchNodeFqsenDeterminer
             throw new LogicException('Resolved name must be attached to node in order to determine FQSEN');
         }
 
-        $name = NodeHelpers::fetchClassName($resolvedName);
-
         // False must be used rather than null as the namespace can actually be null.
         $namespaceNode = $node->getAttribute('namespace', false);
 
@@ -57,18 +55,18 @@ class ConstFetchNodeFqsenDeterminer
         if ($node->name->isFullyQualified()) {
             return NodeHelpers::fetchClassName($node->name);
         } elseif ($node->name->isQualified()) {
-            return '\\' . $namespace . '\\' . $name;
+            return '\\' . $namespace . '\\' . $node->name->toString();
         }
 
         // Unqualified global function calls, such as "array_walk", could refer to "array_walk" in the current
         // namespace (e.g. "\A\array_walk") or, if not present in the current namespace, the root namespace
         // (e.g. "\array_walk").
-        $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $name;
+        $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->name->toString();
 
         if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 
-        return '\\' . $name;
+        return '\\' . $node->name->toString();
     }
 }
