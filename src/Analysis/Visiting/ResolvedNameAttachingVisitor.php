@@ -15,7 +15,7 @@ use PhpParser\NodeVisitor\NameResolver;
  *
  * The resolved name is available as a 'resolvedName' attribute of the name subnode.
  */
-abstract class AbstractNameResolvingVisitor extends NameResolver
+abstract class ResolvedNameAttachingVisitor extends NameResolver
 {
     /**
      * @inheritDoc

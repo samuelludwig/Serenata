@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * Visitor that attaches the active namespace to each node it traverses.
  */
-class NamespaceAttachingVisitor extends AbstractNameResolvingVisitor
+class NamespaceAttachingVisitor extends ResolvedNameAttachingVisitor
 {
     /**
      * @var Node\Name

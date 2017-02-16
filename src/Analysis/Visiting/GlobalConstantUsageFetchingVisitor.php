@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * Node visitor that fetches usages of (global) constants.
  */
-class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
+class GlobalConstantUsageFetchingVisitor extends ResolvedNameAttachingVisitor
 {
     /**
      * @var Node\Expr\ConstFetch[]

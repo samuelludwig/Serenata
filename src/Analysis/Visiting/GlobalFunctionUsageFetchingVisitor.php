@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * Node visitor that fetches usages of (global) functions.
  */
-class GlobalFunctionUsageFetchingVisitor extends AbstractNameResolvingVisitor
+class GlobalFunctionUsageFetchingVisitor extends ResolvedNameAttachingVisitor
 {
     /**
      * @var Node\Expr\FuncCall[]
