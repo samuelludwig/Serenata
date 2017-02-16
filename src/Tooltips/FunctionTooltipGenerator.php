@@ -83,6 +83,10 @@ class FunctionTooltipGenerator
     {
         $parameterLines = [];
 
+        if (empty($functionInfo['parameters'])) {
+            return null;
+        }
+
         foreach ($functionInfo['parameters'] as $parameter) {
             $parameterColumns = [];
 
