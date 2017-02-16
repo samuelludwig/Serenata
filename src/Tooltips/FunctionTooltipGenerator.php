@@ -123,7 +123,11 @@ class FunctionTooltipGenerator
             $parameterLines[] = implode(' | ', $parameterColumns);
         }
 
-        $table = implode("\n", $parameterLines);
+        // The header symbols seem to be required for some markdown parser, such as npm's marked.
+        $table =
+            "   |   |   \n" .
+            "--- | --- | ---\n" .
+            implode("\n", $parameterLines);
 
         return "# Parameters\n" . $table;
     }
