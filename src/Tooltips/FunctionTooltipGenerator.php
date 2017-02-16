@@ -68,7 +68,7 @@ class FunctionTooltipGenerator
     protected function generateLongDescription(array $functionInfo): ?string
     {
         if (!empty($functionInfo['longDescription'])) {
-            return "#### Description\n" . $functionInfo['longDescription'];
+            return "# Description\n" . $functionInfo['longDescription'];
         }
 
         return null;
@@ -123,7 +123,7 @@ class FunctionTooltipGenerator
             $parameterLines[] = implode(' | ', $parameterColumns);
         }
 
-        return "#### Parameters\n" . implode("\n", $parameterLines);
+        return "# Parameters\n" . implode("\n", $parameterLines);
     }
 
     /**
@@ -145,7 +145,7 @@ class FunctionTooltipGenerator
             $returnDescription = '(Not known)';
         }
 
-        return "#### Returns\n{$returnDescription}";
+        return "# Returns\n{$returnDescription}";
     }
 
     /**
@@ -165,7 +165,7 @@ class FunctionTooltipGenerator
             return null;
         }
 
-        return "#### Throws\n" . implode("\n", $throwsLines);
+        return "# Throws\n" . implode("\n", $throwsLines);
     }
 
     /**
