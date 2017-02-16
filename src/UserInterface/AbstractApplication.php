@@ -14,6 +14,7 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
+use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
@@ -86,6 +87,10 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
+
+use PhpIntegrator\Tooltips\TooltipProvider;
+use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
+use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -424,6 +429,22 @@ abstract class AbstractApplication
                 new Reference('sourceCodeStreamReader')
             ]);
 
+        $container
+            ->register('functionCallNodeFqsenDeterminer', FunctionCallNodeFqsenDeterminer::class)
+            ->setArguments([new Reference('globalFunctionExistanceChecker')]);
+
+        $container
+            ->register('functionTooltipGenerator', FunctionTooltipGenerator::class)
+            ->setArguments([new Reference('globalFunctionsProvider')]);
+
+        $container
+            ->register('funcCallNodeTooltipGenerator', FuncCallNodeTooltipGenerator::class)
+            ->setArguments([new Reference('functionTooltipGenerator'), new Reference('functionCallNodeFqsenDeterminer')]);
+
+        $container
+            ->register('tooltipProvider', TooltipProvider::class)
+            ->setArguments([new Reference('parser'), new Reference('funcCallNodeTooltipGenerator')]);
+
         $this->registerTypeDeductionServices($container);
         $this->registerCommandServices($container);
     }
@@ -639,6 +660,10 @@ abstract class AbstractApplication
         $container
             ->register('testCommand', Command\TestCommand::class)
             ->setArguments([new Reference('indexDatabase')]);
+
+        $container
+            ->register('tooltipCommand', Command\TooltipCommand::class)
+            ->setArguments([new Reference('tooltipProvider'), new Reference('sourceCodeStreamReader')]);
 
         $container
             ->register('classListCommand', Command\ClassListCommand::class)
