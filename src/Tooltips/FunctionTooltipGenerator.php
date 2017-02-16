@@ -123,7 +123,9 @@ class FunctionTooltipGenerator
             $parameterLines[] = implode(' | ', $parameterColumns);
         }
 
-        return "# Parameters\n" . implode("\n", $parameterLines);
+        $table = implode("\n", $parameterLines);
+
+        return "# Parameters\n" . $table;
     }
 
     /**
