@@ -106,10 +106,10 @@ class FunctionTooltipGenerator
                 $name .= ']';
             }
 
-            $parameterColumns[] = $name;
+            $parameterColumns[] = '**' . $name . '**';
 
             if (!empty($parameter['types'])) {
-                $parameterColumns[] = $this->getTypeStringForTypeArray($parameter['types']);
+                $parameterColumns[] = '*' . $this->getTypeStringForTypeArray($parameter['types']) . '*';
             } else {
                 $parameterColumns[] = ' ';
             }
