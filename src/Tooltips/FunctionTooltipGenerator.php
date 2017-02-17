@@ -169,14 +169,30 @@ class FunctionTooltipGenerator
         $throwsLines = [];
 
         foreach ($functionInfo['throws'] as $exceptionType => $thrownWhen) {
-            $throwsLines[] = trim("• **{$exceptionType}** {$thrownWhen}");
+            $throwsColumns = [];
+
+            $throwsColumns[] = "• **{$exceptionType}**";
+
+            if ($thrownWhen) {
+                $throwsColumns[] = $thrownWhen;
+            } else {
+                $throwsColumns[] = ' ';
+            }
+
+            $throwsLines[] = implode(' | ', $throwsColumns);
         }
 
         if (empty($throwsLines)) {
             return null;
         }
 
-        return "# Throws\n" . implode("\n", $throwsLines);
+        // The header symbols seem to be required for some markdown parser, such as npm's marked.
+        $table =
+            "   |   |   \n" .
+            "--- | --- | ---\n" .
+            implode("\n", $throwsLines);
+
+        return "# Throws\n" . $table;
     }
 
     /**
