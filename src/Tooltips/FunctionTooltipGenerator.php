@@ -11,6 +11,8 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
  */
 class FunctionTooltipGenerator
 {
+    use TooltipGenerationTrait;
+
     /**
      * @var GlobalFunctionsProvider
      */
@@ -211,25 +213,5 @@ class FunctionTooltipGenerator
         }
 
         return $functions[$fullyQualifiedName];
-    }
-
-    /**
-     * @param array $typeArray
-     *
-     * @return string
-     */
-    protected function getTypeStringForTypeArray(array $typeArray): string
-    {
-        if (empty($typeArray)) {
-            return '(Not known)';
-        }
-
-        $typeList = [];
-
-        foreach ($typeArray as $type) {
-            $typeList[] = $type['type'];
-        }
-
-        return implode('|', $typeList);
     }
 }
