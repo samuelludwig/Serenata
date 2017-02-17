@@ -112,6 +112,38 @@ Hello!
     // /**
     //  * @return void
     //  */
+    // public function testConstFetchContainsAllSections(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testUnqualifiedConstFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testQualifiedConstFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testFullyQualifiedConstFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
     // public function testClassConstFetch(): void
     // {
     //     // TODO
@@ -209,38 +241,6 @@ Hello!
     //  * @return void
     //  */
     // public function testClassNameInClassConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testUnqualifiedConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testConstFetchContainsAllSections(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testQualifiedConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testFullyQualifiedConstFetch(): void
     // {
     //     // TODO
     // }
