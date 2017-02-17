@@ -59,9 +59,9 @@ class TooltipProviderTest extends IndexedTest
     /**
      * @return void
      */
-    public function testUnqualifiedFunctionCall(): void
+    public function testFuncCallContainsAllSections(): void
     {
-        $this->assertTooltipEquals('GlobalFunction.phpt', 436, 439, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->assertTooltipEquals('FuncCallAllSections.phpt', 436, 439, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -88,6 +88,14 @@ Hello!
     // /**
     //  * @return void
     //  */
+    // public function testUnqualifiedFunctionCall(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
     // public function testQualifiedFunctionCall(): void
     // {
     //     // TODO
@@ -105,6 +113,14 @@ Hello!
     //  * @return void
     //  */
     // public function testClassConstFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameContainsAllSections(): void
     // {
     //     // TODO
     // }
@@ -208,6 +224,14 @@ Hello!
     // /**
     //  * @return void
     //  */
+    // public function testConstFetchContainsAllSections(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
     // public function testQualifiedConstFetch(): void
     // {
     //     // TODO
@@ -241,6 +265,14 @@ Hello!
     //  * @return void
     //  */
     // public function testStaticMethodCall(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testPropertyFetchContainsAllSections(): void
     // {
     //     // TODO
     // }
