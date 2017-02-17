@@ -88,6 +88,22 @@ Hello!
     // /**
     //  * @return void
     //  */
+    // public function testQualifiedFunction(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testFullyQualifiedFunction(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
     // public function testClassConstant(): void
     // {
     //     // TODO
@@ -105,6 +121,22 @@ Hello!
     //  * @return void
     //  */
     // public function testConstant(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testQualifiedConstant(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testFullyQualifiedConstant(): void
     // {
     //     // TODO
     // }
