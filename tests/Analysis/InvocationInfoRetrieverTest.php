@@ -12,7 +12,7 @@ use PhpIntegrator\Parsing\LastExpressionParser;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
-class InvocationInfoRetrieverTest extends \PHPUnit_Framework_TestCase
+class InvocationInfoRetrieverTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return ParserFactory

@@ -11,7 +11,7 @@ use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
-class LastExpressionParserTest extends \PHPUnit_Framework_TestCase
+class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return ParserFactory
