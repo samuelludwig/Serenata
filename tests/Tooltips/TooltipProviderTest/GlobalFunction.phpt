@@ -13,6 +13,8 @@
  * @throws \Exception      When something happens
  * @throws \LogicException When something else happens.
  * @throws \RuntimeException
+ *
+ * @return string|bool
  */
 function test(string $first, int $second, \Exception $third)
 {

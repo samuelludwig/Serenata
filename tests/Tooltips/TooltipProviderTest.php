@@ -61,7 +61,7 @@ class TooltipProviderTest extends IndexedTest
      */
     public function testUnqualifiedFunctionCall(): void
     {
-        $this->assertTooltipEquals('GlobalFunction.phpt', 410, 413, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->assertTooltipEquals('GlobalFunction.phpt', 436, 439, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -75,7 +75,7 @@ Hello!
 **• $third** | *\Exception* | Test
 
 # Returns
-*void*
+*string|bool*
 
 # Throws
    |   |   ' . '
