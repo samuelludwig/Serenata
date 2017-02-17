@@ -59,7 +59,7 @@ class TooltipProviderTest extends IndexedTest
     /**
      * @return void
      */
-    public function testGlobalFunction(): void
+    public function testFunction(): void
     {
         $this->assertTooltipEquals('GlobalFunction.phpt', 410, 413, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
