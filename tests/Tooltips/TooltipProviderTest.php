@@ -98,17 +98,17 @@ Hello!
      */
     public function testQualifiedFunctionCall(): void
     {
+        $this->assertTooltipEquals('QualifiedFuncCall.phpt', 88, 93, "This is a summary.\n\n# Returns\n*void*");
+    }
+
+    /**
+     * @return void
+     */
+    public function testFullyQualifiedFunctionCall(): void
+    {
         $this->assertTooltipEquals('FullyQualifiedFuncCall.phpt', 88, 96, "This is a summary.\n\n# Returns\n*void*");
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testFullyQualifiedFunctionCall(): void
-    // {
-    //     // TODO
-    // }
-    //
     // /**
     //  * @return void
     //  */
