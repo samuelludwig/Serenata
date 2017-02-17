@@ -31,13 +31,23 @@ class TooltipProvider
     protected $funcCallNodeTooltipGenerator;
 
     /**
-     * @param Parser                       $parser
-     * @param FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator
+     * @var ConstFetchNodeTooltipGenerator
      */
-    public function __construct(Parser $parser, FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator)
-    {
+    protected $constFetchNodeTooltipGenerator;
+
+    /**
+     * @param Parser                         $parser
+     * @param FuncCallNodeTooltipGenerator   $funcCallNodeTooltipGenerator
+     * @param ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator
+     */
+    public function __construct(
+        Parser $parser,
+        FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator,
+        ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator
+    ) {
         $this->parser = $parser;
         $this->funcCallNodeTooltipGenerator = $funcCallNodeTooltipGenerator;
+        $this->constFetchNodeTooltipGenerator = $constFetchNodeTooltipGenerator;
     }
 
     /**
@@ -101,6 +111,8 @@ class TooltipProvider
     {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node);
+        } elseif ($node instanceof Node\Expr\ConstFetch) {
+            return $this->getTooltipForConstFetchNode($node);
         }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
@@ -122,6 +134,20 @@ class TooltipProvider
         $fullyQualifiedName = NodeHelpers::fetchClassName($node->name);
 
         return $this->funcCallNodeTooltipGenerator->generate($node);
+    }
+
+    /**
+     * @param Node\Expr\ConstFetch $node
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
+    {
+        $fullyQualifiedName = NodeHelpers::fetchClassName($node->name);
+
+        return $this->constFetchNodeTooltipGenerator->generate($node);
     }
 
     /**

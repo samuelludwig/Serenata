@@ -14,6 +14,7 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
+use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
@@ -89,8 +90,10 @@ use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Tooltips\TooltipProvider;
+use PhpIntegrator\Tooltips\ConstantTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
 use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
+use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -434,16 +437,32 @@ abstract class AbstractApplication
             ->setArguments([new Reference('globalFunctionExistanceChecker')]);
 
         $container
+            ->register('constFetchNodeFqsenDeterminer', ConstFetchNodeFqsenDeterminer::class)
+            ->setArguments([new Reference('globalConstantExistanceChecker')]);
+
+        $container
             ->register('functionTooltipGenerator', FunctionTooltipGenerator::class)
             ->setArguments([new Reference('globalFunctionsProvider')]);
+
+        $container
+            ->register('constantTooltipGenerator', ConstantTooltipGenerator::class)
+            ->setArguments([new Reference('globalConstantsProvider')]);
 
         $container
             ->register('funcCallNodeTooltipGenerator', FuncCallNodeTooltipGenerator::class)
             ->setArguments([new Reference('functionTooltipGenerator'), new Reference('functionCallNodeFqsenDeterminer')]);
 
         $container
+            ->register('constFetchNodeTooltipGenerator', ConstFetchNodeTooltipGenerator::class)
+            ->setArguments([new Reference('constantTooltipGenerator'), new Reference('constFetchNodeFqsenDeterminer')]);
+
+        $container
             ->register('tooltipProvider', TooltipProvider::class)
-            ->setArguments([new Reference('parser'), new Reference('funcCallNodeTooltipGenerator')]);
+            ->setArguments([
+                new Reference('parser'),
+                new Reference('funcCallNodeTooltipGenerator'),
+                new Reference('constFetchNodeTooltipGenerator')
+            ]);
 
         $this->registerTypeDeductionServices($container);
         $this->registerCommandServices($container);

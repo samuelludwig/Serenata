@@ -109,14 +109,21 @@ Hello!
         $this->assertTooltipEquals('FullyQualifiedFuncCall.phpt', 88, 96, "This is a summary.\n\n# Returns\n*void*");
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testConstFetchContainsAllSections(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testConstFetchContainsAllSections(): void
+    {
+        $this->assertTooltipEquals('ConstFetchAllSections.phpt', 135, 136, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+
+# Description
+## Header
+Hello!
+
+# Type
+*string|bool*');
+    }
+
     // /**
     //  * @return void
     //  */
