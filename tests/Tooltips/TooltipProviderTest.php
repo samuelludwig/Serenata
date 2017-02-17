@@ -84,4 +84,52 @@ Hello!
 • **\LogicException** | When something else happens.
 • **\RuntimeException** |  ');
     }
+
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassConstant(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClass(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testConstant(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testFunctionDefinition(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testMethod(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testProperty(): void
+    // {
+    //     // TODO
+    // }
 }
