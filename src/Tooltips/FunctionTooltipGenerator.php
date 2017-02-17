@@ -169,7 +169,7 @@ class FunctionTooltipGenerator
         $throwsLines = [];
 
         foreach ($functionInfo['throws'] as $exceptionType => $thrownWhen) {
-            $throwsLines[] = trim("* **{$exceptionType}** {$thrownWhen}");
+            $throwsLines[] = trim("• **{$exceptionType}** {$thrownWhen}");
         }
 
         if (empty($throwsLines)) {
