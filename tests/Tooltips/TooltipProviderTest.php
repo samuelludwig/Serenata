@@ -124,30 +124,30 @@ Hello!
 *string|bool*');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testUnqualifiedConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testQualifiedConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testFullyQualifiedConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testUnqualifiedConstFetch(): void
+    {
+        $this->assertTooltipEquals('UnqualifiedConstFetch.phpt', 60, 61, "This is a summary.\n\n# Type\n*int*");
+    }
+
+    /**
+     * @return void
+     */
+    public function testQualifiedConstFetch(): void
+    {
+        $this->assertTooltipEquals('QualifiedConstFetch.phpt', 90, 93, "This is a summary.\n\n# Type\n*int*");
+    }
+
+    /**
+     * @return void
+     */
+    public function testFullyQualifiedConstFetch(): void
+    {
+        $this->assertTooltipEquals('FullyQualifiedConstFetch.phpt', 90, 96, "This is a summary.\n\n# Type\n*int*");
+    }
+
     // /**
     //  * @return void
     //  */
