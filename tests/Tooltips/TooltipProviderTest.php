@@ -88,7 +88,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testQualifiedFunction(): void
+    // public function testQualifiedFunctionCall(): void
     // {
     //     // TODO
     // }
@@ -96,7 +96,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testFullyQualifiedFunction(): void
+    // public function testFullyQualifiedFunctionCall(): void
     // {
     //     // TODO
     // }
@@ -104,7 +104,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testClassConstant(): void
+    // public function testClassConstFetch(): void
     // {
     //     // TODO
     // }
@@ -112,7 +112,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testClass(): void
+    // public function testClassName(): void
     // {
     //     // TODO
     // }
@@ -120,7 +120,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testConstant(): void
+    // public function testUnqualifiedConstFetch(): void
     // {
     //     // TODO
     // }
@@ -128,7 +128,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testQualifiedConstant(): void
+    // public function testQualifiedConstFetch(): void
     // {
     //     // TODO
     // }
@@ -136,7 +136,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testFullyQualifiedConstant(): void
+    // public function testFullyQualifiedConstFetch(): void
     // {
     //     // TODO
     // }
@@ -152,7 +152,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testMethod(): void
+    // public function testMethodCall(): void
     // {
     //     // TODO
     // }
@@ -160,7 +160,7 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testProperty(): void
+    // public function testPropertyFetch(): void
     // {
     //     // TODO
     // }
