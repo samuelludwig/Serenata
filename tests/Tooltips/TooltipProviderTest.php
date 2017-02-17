@@ -45,9 +45,9 @@ class TooltipProviderTest extends IndexedTest
      */
     protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents)
     {
-        $result = $this->getTooltip($fileName, 410);
-
         while ($start <= $end) {
+            $result = $this->getTooltip($fileName, $start);
+
             $this->assertNotNull($result);
             $this->assertNull($result->getRange());
             $this->assertEquals($result->getContents(), $contents);
