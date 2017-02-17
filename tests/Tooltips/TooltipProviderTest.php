@@ -112,7 +112,87 @@ Hello!
     // /**
     //  * @return void
     //  */
-    // public function testClassName(): void
+    // public function testClassNameInClassConstFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInStaticMethodCall(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInStaticPropertyFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInUseStatemen(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInImplementsClause(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInExtendsClause(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInTraitUse(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInTraitAlias(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInTraitPrecedence(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameAfterNewKeyword(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testClassNameInClassConstFetch(): void
     // {
     //     // TODO
     // }
@@ -160,7 +240,23 @@ Hello!
     // /**
     //  * @return void
     //  */
+    // public function testStaticMethodCall(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
     // public function testPropertyFetch(): void
+    // {
+    //     // TODO
+    // }
+    //
+    // /**
+    //  * @return void
+    //  */
+    // public function testStaticPropertyFetch(): void
     // {
     //     // TODO
     // }
