@@ -30,13 +30,13 @@ class Position implements JsonSerializable
     protected $character;
 
     /**
-     * @param int $start
-     * @param int $end
+     * @param int $line
+     * @param int $character
      */
-    public function __construct(int $start, int $end)
+    public function __construct(int $line, int $character)
     {
-        $this->start = $start;
-        $this->end = $end;
+        $this->line = $line;
+        $this->character = $character;
     }
 
     /**
