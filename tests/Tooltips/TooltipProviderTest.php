@@ -85,14 +85,14 @@ Hello!
 • **\RuntimeException** |  ');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testUnqualifiedFunctionCall(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testUnqualifiedFunctionCall(): void
+    {
+        $this->assertTooltipEquals('UnqualifiedFuncCall.phpt', 58, 61, "This is a summary.\n\n# Returns\n*void*");
+    }
+
     // /**
     //  * @return void
     //  */
