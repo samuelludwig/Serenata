@@ -38,17 +38,30 @@ class TooltipProviderTest extends IndexedTest
     }
 
     /**
+     * @param string $fileName
+     * @param int    $start
+     * @param int    $end
+     * @param string $contents
+     */
+    protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents)
+    {
+        $result = $this->getTooltip($fileName, 410);
+
+        while ($start < $end) {
+            $this->assertNotNull($result);
+            $this->assertNull($result->getRange());
+            $this->assertEquals($result->getContents(), $contents);
+
+            ++$start;
+        }
+    }
+
+    /**
      * @return void
      */
     public function testGlobalFunction(): void
     {
-        $fileName = 'GlobalFunction.phpt';
-
-        $result = $this->getTooltip($fileName, 411);
-
-        $this->assertNotNull($result);
-        $this->assertNull($result->getRange());
-        $this->assertEquals($result->getContents(), 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->assertTooltipEquals('GlobalFunction.phpt', 410, 413, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
