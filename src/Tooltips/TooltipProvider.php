@@ -42,7 +42,7 @@ class TooltipProvider
 
     /**
      * @param string $code
-     * @param int    $position
+     * @param int    $position The position to analyze and show the tooltip for (byte offset).
      *
      * @return TooltipResult|null
      */
