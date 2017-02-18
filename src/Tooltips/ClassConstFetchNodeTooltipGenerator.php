@@ -101,22 +101,4 @@ class ClassConstFetchNodeTooltipGenerator
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         return $tooltips[0];
     }
-
-    /**
-     * @param string $fullyQualifiedName
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return array
-     */
-    protected function getConstantInfo(string $fullyQualifiedName): array
-    {
-        $functions = $this->globalConstantsProvider->getAll();
-
-        if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
-        }
-
-        return $functions[$fullyQualifiedName];
-    }
 }
