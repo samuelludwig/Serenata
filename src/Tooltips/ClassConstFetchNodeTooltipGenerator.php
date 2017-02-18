@@ -64,17 +64,7 @@ class ClassConstFetchNodeTooltipGenerator
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
 
-        $classTypes = [];
-
-        try {
-            $classTypes = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $node->getAttribute('startFilePos'));
-        } catch (UnexpectedValueException $e) {
-            throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
-        }
-
-        if (empty($classTypes)) {
-            throw new UnexpectedValueException('No types returned for class');
-        }
+        $classTypes = $this->getClassTypes($node, $file, $code);
 
         $tooltips = [];
 
@@ -100,5 +90,31 @@ class ClassConstFetchNodeTooltipGenerator
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         return $tooltips[0];
+    }
+
+    /**
+     * @param Node\Expr\ClassConstFetch $node
+     * @param string                    $file
+     * @param string                    $code
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return array
+     */
+    protected function getClassTypes(Node\Expr\ClassConstFetch $node, string $file, string $code): array
+    {
+        $classTypes = [];
+
+        try {
+            $classTypes = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $node->getAttribute('startFilePos'));
+        } catch (UnexpectedValueException $e) {
+            throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
+        }
+
+        if (empty($classTypes)) {
+            throw new UnexpectedValueException('No types returned for class');
+        }
+
+        return $classTypes;
     }
 }
