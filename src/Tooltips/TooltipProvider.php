@@ -141,7 +141,7 @@ class TooltipProvider
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
             return $this->getTooltipForClassConstFetchNode($node, $file, $code);
         } elseif ($node instanceof Node\Name) {
-            return $this->getTooltipForNameNode($node);
+            return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
         }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
@@ -193,34 +193,17 @@ class TooltipProvider
     }
 
     /**
-     * @param Node\Stmt\ClassLike $node
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return string
-     */
-    protected function getTooltipForClassLikeNode(Node\Stmt\ClassLike $node): string
-    {
-        if (!is_string($node->name)) {
-            throw new UnexpectedValueException('Determining tooltips for anonymous classes is not supported');
-        }
-
-        $nameNode = new Node\Name($node->name);
-        $nameNode->setAttribute('namespace', $node->getAttribute('namespace'));
-
-        return $this->getTooltipForNameNode($nameNode);
-    }
-
-    /**
      * @param Node\Name $node
+     * @param string    $file
+     * @param int       $line
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    protected function getTooltipForNameNode(Node\Name $node): string
+    protected function getTooltipForNameNode(Node\Name $node, string $file, int $line): string
     {
-        return $this->nameNodeTooltipGenerator->generate($node);
+        return $this->nameNodeTooltipGenerator->generate($node, $file, $line);
     }
 
     /**

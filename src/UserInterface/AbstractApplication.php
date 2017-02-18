@@ -446,7 +446,7 @@ abstract class AbstractApplication
 
         $container
             ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
-            ->setArguments([new Reference('classlikeExistanceChecker')]);
+            ->setArguments([new Reference('fileTypeResolverFactory')]);
 
         $container
             ->register('functionTooltipGenerator', FunctionTooltipGenerator::class);

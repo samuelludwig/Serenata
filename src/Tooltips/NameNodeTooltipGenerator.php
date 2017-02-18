@@ -46,14 +46,16 @@ class NameNodeTooltipGenerator
 
     /**
      * @param Node\Name $node
+     * @param string    $file
+     * @param int       $line
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
      * @return string
      */
-    public function generate(Node\Name $node): string
+    public function generate(Node\Name $node, string $file, int $line): string
     {
-        $fqsen = $this->nameNodeFqsenDeterminer->determine($node);
+        $fqsen = $this->nameNodeFqsenDeterminer->determine($node, $file, $line);
 
         $info = $this->getClassLikeInfo($fqsen);
 
