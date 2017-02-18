@@ -8,6 +8,7 @@ use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClassListProvider;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\NameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\InvocationInfoRetriever;
 use PhpIntegrator\Analysis\GlobalFunctionsProvider;
@@ -90,8 +91,10 @@ use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Tooltips\TooltipProvider;
+use PhpIntegrator\Tooltips\NameNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstantTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
+use PhpIntegrator\Tooltips\ClassLikeTooltipGenerator;
 use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator;
@@ -442,10 +445,17 @@ abstract class AbstractApplication
             ->setArguments([new Reference('globalConstantExistanceChecker')]);
 
         $container
+            ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
+            ->setArguments([new Reference('classlikeExistanceChecker')]);
+
+        $container
             ->register('functionTooltipGenerator', FunctionTooltipGenerator::class);
 
         $container
             ->register('constantTooltipGenerator', ConstantTooltipGenerator::class);
+
+        $container
+            ->register('classLikeTooltipGenerator', ClassLikeTooltipGenerator::class);
 
         $container
             ->register('funcCallNodeTooltipGenerator', FuncCallNodeTooltipGenerator::class)
@@ -472,12 +482,21 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('nameNodeTooltipGenerator', NameNodeTooltipGenerator::class)
+            ->setArguments([
+                new Reference('classLikeTooltipGenerator'),
+                new Reference('nameNodeFqsenDeterminer'),
+                new Reference('classlikeInfoBuilder')
+            ]);
+
+        $container
             ->register('tooltipProvider', TooltipProvider::class)
             ->setArguments([
                 new Reference('parser'),
                 new Reference('funcCallNodeTooltipGenerator'),
                 new Reference('constFetchNodeTooltipGenerator'),
-                new Reference('classConstFetchNodeTooltipGenerator')
+                new Reference('classConstFetchNodeTooltipGenerator'),
+                new Reference('nameNodeTooltipGenerator')
             ]);
 
         $this->registerTypeDeductionServices($container);

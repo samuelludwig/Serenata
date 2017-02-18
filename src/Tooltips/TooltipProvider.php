@@ -39,21 +39,29 @@ class TooltipProvider
     protected $classConstFetchNodeTooltipGenerator;
 
     /**
+     * @var NameNodeTooltipGenerator
+     */
+    protected $nameNodeTooltipGenerator;
+
+    /**
      * @param Parser                              $parser
      * @param FuncCallNodeTooltipGenerator        $funcCallNodeTooltipGenerator
      * @param ConstFetchNodeTooltipGenerator      $constFetchNodeTooltipGenerator
      * @param ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator
+     * @param NameNodeTooltipGenerator            $nameNodeTooltipGenerator
      */
     public function __construct(
         Parser $parser,
         FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator,
         ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator,
-        ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator
+        ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator,
+        NameNodeTooltipGenerator $nameNodeTooltipGenerator
     ) {
         $this->parser = $parser;
         $this->funcCallNodeTooltipGenerator = $funcCallNodeTooltipGenerator;
         $this->constFetchNodeTooltipGenerator = $constFetchNodeTooltipGenerator;
         $this->classConstFetchNodeTooltipGenerator = $classConstFetchNodeTooltipGenerator;
+        $this->nameNodeTooltipGenerator = $nameNodeTooltipGenerator;
     }
 
     /**
@@ -98,10 +106,18 @@ class TooltipProvider
 
         $traverser->traverse($nodes);
 
-        $node = $visitor->getNearestInterestingNode();
+        $node = $visitor->getNode();
+        $nearestInterestingNode = $visitor->getNearestInterestingNode();
 
         if (!$node) {
             throw new UnexpectedValueException('No node found at location ' . $position);
+        }
+
+        if ($nearestInterestingNode instanceof Node\Expr\FuncCall ||
+            $nearestInterestingNode instanceof Node\Expr\ConstFetch ||
+            $nearestInterestingNode instanceof Node\Expr\ClassConstFetch
+        ) {
+            return $nearestInterestingNode;
         }
 
         return $node;
@@ -124,6 +140,8 @@ class TooltipProvider
             return $this->getTooltipForConstFetchNode($node);
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
             return $this->getTooltipForClassConstFetchNode($node, $file, $code);
+        } elseif ($node instanceof Node\Name) {
+            return $this->getTooltipForNameNode($node);
         }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
@@ -172,6 +190,37 @@ class TooltipProvider
         string $code
     ): string {
         return $this->classConstFetchNodeTooltipGenerator->generate($node, $file, $code);
+    }
+
+    /**
+     * @param Node\Stmt\ClassLike $node
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForClassLikeNode(Node\Stmt\ClassLike $node): string
+    {
+        if (!is_string($node->name)) {
+            throw new UnexpectedValueException('Determining tooltips for anonymous classes is not supported');
+        }
+
+        $nameNode = new Node\Name($node->name);
+        $nameNode->setAttribute('namespace', $node->getAttribute('namespace'));
+
+        return $this->getTooltipForNameNode($nameNode);
+    }
+
+    /**
+     * @param Node\Name $node
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForNameNode(Node\Name $node): string
+    {
+        return $this->nameNodeTooltipGenerator->generate($node);
     }
 
     /**

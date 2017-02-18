@@ -156,14 +156,48 @@ Hello!
         $this->assertTooltipEquals('ClassConstFetch.phpt', 106, 114, "This is a summary.\n\n# Type\n*int*");
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameContainsAllSections(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameContainsAllSections(): void
+    {
+        $this->assertTooltipEquals('ClassNameAllSections.phpt', 317, 325, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+
+# Description
+## Header
+Hello!
+
+# Full Name
+*\A\SimpleClass*
+
+# Type
+Class');
+
+        $this->assertTooltipEquals('ClassNameAllSections.phpt', 341, 351, '(No documentation available)
+
+# Full Name
+*\A\AbstractClass*
+
+# Type
+Abstract class');
+
+        $this->assertTooltipEquals('ClassNameAllSections.phpt', 367, 375, '(No documentation available)
+
+# Full Name
+*\A\SimpleTrait*
+
+# Type
+Trait');
+
+        $this->assertTooltipEquals('ClassNameAllSections.phpt', 391, 403, '(No documentation available)
+
+# Full Name
+*\A\SimpleInterface*
+
+# Type
+Interface');
+    }
+
     // /**
     //  * @return void
     //  */
