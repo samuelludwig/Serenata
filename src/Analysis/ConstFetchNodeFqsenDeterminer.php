@@ -33,12 +33,6 @@ class ConstFetchNodeFqsenDeterminer
      */
     public function determine(Node\Expr\ConstFetch $node): string
     {
-        $resolvedName = $node->name->getAttribute('resolvedName');
-
-        if ($resolvedName === null) {
-            throw new LogicException('Resolved name must be attached to node in order to determine FQSEN');
-        }
-
         // False must be used rather than null as the namespace can actually be null.
         $namespaceNode = $node->getAttribute('namespace', false);
 
