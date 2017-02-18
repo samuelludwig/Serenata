@@ -37,12 +37,6 @@ class FunctionCallNodeFqsenDeterminer
             throw new LogicException('Determining the FQSEN of dynamic function calls is not supported');
         }
 
-        $resolvedName = $node->name->getAttribute('resolvedName');
-
-        if ($resolvedName === null) {
-            throw new LogicException('Resolved name must be attached to node in order to determine FQSEN');
-        }
-
         // False must be used rather than null as the namespace can actually be null.
         $namespaceNode = $node->getAttribute('namespace', false);
 
