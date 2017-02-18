@@ -69,19 +69,13 @@ class ClassConstFetchNodeTooltipGenerator
         $tooltips = [];
 
         foreach ($classTypes as $classType) {
-            $classInfo = null;
+            $constantInfo = $this->fetchClassConstantInfo($classType, $node->name);
 
-            try {
-                $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classType);
-            } catch (UnexpectedValueException $e) {
+            if ($constantInfo === null) {
                 continue;
             }
 
-            if (!isset($classInfo['constants'][$node->name])) {
-                continue;
-            }
-
-            $tooltips[] = $this->constantTooltipGenerator->generate($classInfo['constants'][$node->name]);
+            $tooltips[] = $this->constantTooltipGenerator->generate($constantInfo);
         }
 
         if (empty($tooltips)) {
@@ -116,5 +110,28 @@ class ClassConstFetchNodeTooltipGenerator
         }
 
         return $classTypes;
+    }
+
+    /**
+     * @param string $classType
+     * @param string $name
+     *
+     * @return array
+     */
+    protected function fetchClassConstantInfo(string $classType, string $name): ?array
+    {
+        $classInfo = null;
+
+        try {
+            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classType);
+        } catch (UnexpectedValueException $e) {
+            return null;
+        }
+
+        if (!isset($classInfo['constants'][$name])) {
+            return null;
+        }
+
+        return $classInfo['constants'][$name];
     }
 }
