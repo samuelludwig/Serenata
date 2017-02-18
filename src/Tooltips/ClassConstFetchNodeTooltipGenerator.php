@@ -5,8 +5,6 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\GlobalConstantsProvider;
-use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
