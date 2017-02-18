@@ -47,7 +47,7 @@ class ConstFetchNodeTooltipGenerator
     /**
      * @param Node\Expr\ConstFetch $node
      *
-     * @throws UnexpectedValueException when the function was not found.
+     * @throws UnexpectedValueException when the constant was not found.
      *
      * @return string
      */
