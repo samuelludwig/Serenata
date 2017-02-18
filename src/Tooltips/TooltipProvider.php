@@ -131,8 +131,6 @@ class TooltipProvider
             throw new UnexpectedValueException('Determining tooltips for dynamic function calls is not supported');
         }
 
-        $fullyQualifiedName = NodeHelpers::fetchClassName($node->name);
-
         return $this->funcCallNodeTooltipGenerator->generate($node);
     }
 
