@@ -8,8 +8,6 @@ use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\ResolvedNameAttachingVisitor;
 
-use PhpIntegrator\Utility\NodeHelpers;
-
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
