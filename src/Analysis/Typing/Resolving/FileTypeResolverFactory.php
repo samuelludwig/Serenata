@@ -42,7 +42,8 @@ class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
 
         if (empty($namespaces)) {
             throw new UnexpectedValueException(
-                'No namespace found, but there should always exist at least one namespace row in the database!'
+                'No namespace found for "' . $filePath .
+                '", but there should always exist at least one namespace row in the database!'
             );
         }
 
