@@ -4,6 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
 
 use PhpParser\Node;
@@ -24,15 +25,23 @@ class ConstFetchNodeTooltipGenerator
     protected $constFetchNodeFqsenDeterminer;
 
     /**
+     * @var GlobalConstantsProvider
+     */
+    protected $globalConstantsProvider;
+
+    /**
      * @param ConstantTooltipGenerator      $constantTooltipGenerator
      * @param ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer
+     * @param GlobalConstantsProvider       $globalConstantsProvider
      */
     public function __construct(
         ConstantTooltipGenerator $constantTooltipGenerator,
-        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer
+        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
+        GlobalConstantsProvider $globalConstantsProvider
     ) {
         $this->constantTooltipGenerator = $constantTooltipGenerator;
         $this->constFetchNodeFqsenDeterminer = $constFetchNodeFqsenDeterminer;
+        $this->globalConstantsProvider = $globalConstantsProvider;
     }
 
     /**
@@ -46,6 +55,26 @@ class ConstFetchNodeTooltipGenerator
     {
         $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node);
 
-        return $this->constantTooltipGenerator->generate($fqsen);
+        $info = $this->getConstantInfo($fqsen);
+
+        return $this->constantTooltipGenerator->generate($info);
+    }
+
+    /**
+     * @param string $fullyQualifiedName
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return array
+     */
+    protected function getConstantInfo(string $fullyQualifiedName): array
+    {
+        $functions = $this->globalConstantsProvider->getAll();
+
+        if (!isset($functions[$fullyQualifiedName])) {
+            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
+        }
+
+        return $functions[$fullyQualifiedName];
     }
 }

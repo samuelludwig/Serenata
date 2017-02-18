@@ -444,8 +444,7 @@ abstract class AbstractApplication
             ->register('functionTooltipGenerator', FunctionTooltipGenerator::class);
 
         $container
-            ->register('constantTooltipGenerator', ConstantTooltipGenerator::class)
-            ->setArguments([new Reference('globalConstantsProvider')]);
+            ->register('constantTooltipGenerator', ConstantTooltipGenerator::class);
 
         $container
             ->register('funcCallNodeTooltipGenerator', FuncCallNodeTooltipGenerator::class)
@@ -457,7 +456,11 @@ abstract class AbstractApplication
 
         $container
             ->register('constFetchNodeTooltipGenerator', ConstFetchNodeTooltipGenerator::class)
-            ->setArguments([new Reference('constantTooltipGenerator'), new Reference('constFetchNodeFqsenDeterminer')]);
+            ->setArguments([
+                new Reference('constantTooltipGenerator'),
+                new Reference('constFetchNodeFqsenDeterminer'),
+                new Reference('globalConstantsProvider')
+            ]);
 
         $container
             ->register('tooltipProvider', TooltipProvider::class)

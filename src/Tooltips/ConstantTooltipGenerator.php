@@ -4,8 +4,6 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalConstantsProvider;
-
 /**
  * Generates tooltips for constants.
  */
@@ -14,29 +12,14 @@ class ConstantTooltipGenerator
     use TooltipGenerationTrait;
 
     /**
-     * @var GlobalConstantsProvider
-     */
-    protected $globalConstantsProvider;
-
-    /**
-     * @param GlobalConstantsProvider $globalConstantsProvider
-     */
-    public function __construct(GlobalConstantsProvider $globalConstantsProvider)
-    {
-        $this->globalConstantsProvider = $globalConstantsProvider;
-    }
-
-    /**
-     * @param string $fullyQualifiedName
+     * @param array $info
      *
      * @throws UnexpectedValueException when the function was not found.
      *
      * @return string
      */
-    public function generate(string $fullyQualifiedName): string
+    public function generate(array $info): string
     {
-        $info = $this->getConstantInfo($fullyQualifiedName);
-
         $sections = [
             $this->generateSummary($info),
             $this->generateLongDescription($info),
@@ -94,23 +77,5 @@ class ConstantTooltipGenerator
         }
 
         return "# Type\n{$returnDescription}";
-    }
-
-    /**
-     * @param string $fullyQualifiedName
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return array
-     */
-    protected function getConstantInfo(string $fullyQualifiedName): array
-    {
-        $functions = $this->globalConstantsProvider->getAll();
-
-        if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
-        }
-
-        return $functions[$fullyQualifiedName];
     }
 }
