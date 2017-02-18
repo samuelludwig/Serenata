@@ -143,8 +143,6 @@ class TooltipProvider
      */
     protected function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
     {
-        $fullyQualifiedName = NodeHelpers::fetchClassName($node->name);
-
         return $this->constFetchNodeTooltipGenerator->generate($node);
     }
 
