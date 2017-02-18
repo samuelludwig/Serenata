@@ -441,8 +441,7 @@ abstract class AbstractApplication
             ->setArguments([new Reference('globalConstantExistanceChecker')]);
 
         $container
-            ->register('functionTooltipGenerator', FunctionTooltipGenerator::class)
-            ->setArguments([new Reference('globalFunctionsProvider')]);
+            ->register('functionTooltipGenerator', FunctionTooltipGenerator::class);
 
         $container
             ->register('constantTooltipGenerator', ConstantTooltipGenerator::class)
@@ -450,7 +449,11 @@ abstract class AbstractApplication
 
         $container
             ->register('funcCallNodeTooltipGenerator', FuncCallNodeTooltipGenerator::class)
-            ->setArguments([new Reference('functionTooltipGenerator'), new Reference('functionCallNodeFqsenDeterminer')]);
+            ->setArguments([
+                new Reference('functionTooltipGenerator'),
+                new Reference('functionCallNodeFqsenDeterminer'),
+                new Reference('globalFunctionsProvider')
+            ]);
 
         $container
             ->register('constFetchNodeTooltipGenerator', ConstFetchNodeTooltipGenerator::class)

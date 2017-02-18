@@ -4,6 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
 
 use PhpParser\Node;
@@ -24,15 +25,23 @@ class FuncCallNodeTooltipGenerator
     protected $functionCallNodeFqsenDeterminer;
 
     /**
+     * @var GlobalFunctionsProvider
+     */
+    protected $globalFunctionsProvider;
+
+    /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator
      * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+     * @param GlobalFunctionsProvider         $globalFunctionsProvider
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
-        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        GlobalFunctionsProvider $globalFunctionsProvider
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
         $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
+        $this->globalFunctionsProvider = $globalFunctionsProvider;
     }
 
     /**
@@ -46,6 +55,26 @@ class FuncCallNodeTooltipGenerator
     {
         $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node);
 
-        return $this->functionTooltipGenerator->generate($fqsen);
+        $info = $this->getFunctionInfo($fqsen);
+
+        return $this->functionTooltipGenerator->generate($info);
+    }
+
+    /**
+     * @param string $fullyQualifiedName
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return array
+     */
+    protected function getFunctionInfo(string $fullyQualifiedName): array
+    {
+        $functions = $this->globalFunctionsProvider->getAll();
+
+        if (!isset($functions[$fullyQualifiedName])) {
+            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
+        }
+
+        return $functions[$fullyQualifiedName];
     }
 }

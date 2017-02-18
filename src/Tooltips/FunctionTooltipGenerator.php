@@ -4,8 +4,6 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
-
 /**
  * Generates tooltips for functions.
  */
@@ -14,29 +12,14 @@ class FunctionTooltipGenerator
     use TooltipGenerationTrait;
 
     /**
-     * @var GlobalFunctionsProvider
-     */
-    protected $globalFunctionsProvider;
-
-    /**
-     * @param GlobalFunctionsProvider $globalFunctionsProvider
-     */
-    public function __construct(GlobalFunctionsProvider $globalFunctionsProvider)
-    {
-        $this->globalFunctionsProvider = $globalFunctionsProvider;
-    }
-
-    /**
-     * @param string $fullyQualifiedName
+     * @param array $functionInfo
      *
      * @throws UnexpectedValueException when the function was not found.
      *
      * @return string
      */
-    public function generate(string $fullyQualifiedName): string
+    public function generate(array $functionInfo): string
     {
-        $functionInfo = $this->getFunctionInfo($fullyQualifiedName);
-
         $sections = [
             $this->generateSummary($functionInfo),
             $this->generateLongDescription($functionInfo),
@@ -195,23 +178,5 @@ class FunctionTooltipGenerator
             implode("\n", $throwsLines);
 
         return "# Throws\n" . $table;
-    }
-
-    /**
-     * @param string $fullyQualifiedName
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return array
-     */
-    protected function getFunctionInfo(string $fullyQualifiedName): array
-    {
-        $functions = $this->globalFunctionsProvider->getAll();
-
-        if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
-        }
-
-        return $functions[$fullyQualifiedName];
     }
 }
