@@ -34,27 +34,36 @@ class TooltipProvider
     protected $constFetchNodeTooltipGenerator;
 
     /**
-     * @param Parser                         $parser
-     * @param FuncCallNodeTooltipGenerator   $funcCallNodeTooltipGenerator
-     * @param ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator
+     * @var ClassConstFetchNodeTooltipGenerator
+     */
+    protected $classConstFetchNodeTooltipGenerator;
+
+    /**
+     * @param Parser                              $parser
+     * @param FuncCallNodeTooltipGenerator        $funcCallNodeTooltipGenerator
+     * @param ConstFetchNodeTooltipGenerator      $constFetchNodeTooltipGenerator
+     * @param ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator
      */
     public function __construct(
         Parser $parser,
         FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator,
-        ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator
+        ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator,
+        ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator
     ) {
         $this->parser = $parser;
         $this->funcCallNodeTooltipGenerator = $funcCallNodeTooltipGenerator;
         $this->constFetchNodeTooltipGenerator = $constFetchNodeTooltipGenerator;
+        $this->classConstFetchNodeTooltipGenerator = $classConstFetchNodeTooltipGenerator;
     }
 
     /**
+     * @param string $file
      * @param string $code
      * @param int    $position The position to analyze and show the tooltip for (byte offset).
      *
      * @return TooltipResult|null
      */
-    public function get(string $code, int $position): ?TooltipResult
+    public function get(string $file, string $code, int $position): ?TooltipResult
     {
         $nodes = [];
 
@@ -62,7 +71,7 @@ class TooltipProvider
             $nodes = $this->getNodesFromCode($code);
             $node = $this->getNodeAt($nodes, $position);
 
-            $contents = $this->getTooltipForNode($node);
+            $contents = $this->getTooltipForNode($node, $file, $code);
 
             return new TooltipResult($contents);
         } catch (UnexpectedValueException $e) {
@@ -99,18 +108,22 @@ class TooltipProvider
     }
 
     /**
-     * @param Node $node
+     * @param Node   $node
+     * @param string $file
+     * @param string $code
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    protected function getTooltipForNode(Node $node): string
+    protected function getTooltipForNode(Node $node, string $file, string $code): string
     {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->getTooltipForConstFetchNode($node);
+        } elseif ($node instanceof Node\Expr\ClassConstFetch) {
+            return $this->getTooltipForClassConstFetchNode($node, $file, $code);
         }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
@@ -142,6 +155,23 @@ class TooltipProvider
     protected function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
     {
         return $this->constFetchNodeTooltipGenerator->generate($node);
+    }
+
+    /**
+     * @param Node\Expr\ClassConstFetch $node
+     * @param string                    $file
+     * @param string                    $code
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForClassConstFetchNode(
+        Node\Expr\ClassConstFetch $node,
+        string $file,
+        string $code
+    ): string {
+        return $this->classConstFetchNodeTooltipGenerator->generate($node, $file, $code);
     }
 
     /**

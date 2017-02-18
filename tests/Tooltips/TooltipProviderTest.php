@@ -24,7 +24,7 @@ class TooltipProviderTest extends IndexedTest
 
         $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
 
-        return $container->get('tooltipProvider')->get($code, $position);
+        return $container->get('tooltipProvider')->get($path, $code, $position);
     }
 
     /**
@@ -148,14 +148,14 @@ Hello!
         $this->assertTooltipEquals('FullyQualifiedConstFetch.phpt', 90, 96, "This is a summary.\n\n# Type\n*int*");
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassConstFetch(): void
+    {
+        $this->assertTooltipEquals('ClassConstFetch.phpt', 106, 114, "This is a summary.\n\n# Type\n*int*");
+    }
+
     // /**
     //  * @return void
     //  */

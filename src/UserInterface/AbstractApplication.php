@@ -94,6 +94,7 @@ use PhpIntegrator\Tooltips\ConstantTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
 use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
+use PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -463,11 +464,20 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('classConstFetchNodeTooltipGenerator', ClassConstFetchNodeTooltipGenerator::class)
+            ->setArguments([
+                new Reference('constantTooltipGenerator'),
+                new Reference('nodeTypeDeducer'),
+                new Reference('classlikeInfoBuilder')
+            ]);
+
+        $container
             ->register('tooltipProvider', TooltipProvider::class)
             ->setArguments([
                 new Reference('parser'),
                 new Reference('funcCallNodeTooltipGenerator'),
-                new Reference('constFetchNodeTooltipGenerator')
+                new Reference('constFetchNodeTooltipGenerator'),
+                new Reference('classConstFetchNodeTooltipGenerator')
             ]);
 
         $this->registerTypeDeductionServices($container);
