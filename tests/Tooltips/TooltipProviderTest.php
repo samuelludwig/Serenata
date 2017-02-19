@@ -198,14 +198,20 @@ Trait');
 Interface');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInClassConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInClassConstFetch(): void
+    {
+        $this->assertTooltipEquals('ClassNameClassConstFetch.phpt', 93, 93, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */

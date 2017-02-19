@@ -44,7 +44,7 @@ class NodeFetchingVisitor extends NodeVisitorAbstract
         $endFilePos = $node->getAttribute('endFilePos');
         $startFilePos = $node->getAttribute('startFilePos');
 
-        if ($startFilePos >= $this->position || $endFilePos <= $this->position) {
+        if ($startFilePos > $this->position || $endFilePos < $this->position) {
             return;
         }
 
