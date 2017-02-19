@@ -226,14 +226,20 @@ Class');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInStaticPropertyFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInStaticPropertyFetch(): void
+    {
+        $this->assertTooltipEquals('ClassNameStaticPropertyFetch.phpt', 86, 86, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */
