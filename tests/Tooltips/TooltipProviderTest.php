@@ -240,14 +240,20 @@ Class');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInUseStatemen(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInUseImport(): void
+    {
+        $this->assertTooltipEquals('ClassNameUseImport.phpt', 84, 84, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */

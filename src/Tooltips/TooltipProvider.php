@@ -8,6 +8,8 @@ use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\ResolvedNameAttachingVisitor;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -114,7 +116,8 @@ class TooltipProvider
         }
 
         if ($nearestInterestingNode instanceof Node\Expr\FuncCall ||
-            $nearestInterestingNode instanceof Node\Expr\ConstFetch
+            $nearestInterestingNode instanceof Node\Expr\ConstFetch ||
+            $nearestInterestingNode instanceof Node\Stmt\UseUse
         ) {
             return $nearestInterestingNode;
         }
@@ -147,6 +150,8 @@ class TooltipProvider
             return $this->getTooltipForConstFetchNode($node);
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
             return $this->getTooltipForClassConstFetchNode($node, $file, $code);
+        } elseif ($node instanceof Node\Stmt\UseUse) {
+            return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Name) {
             return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
         }
@@ -197,6 +202,23 @@ class TooltipProvider
         string $code
     ): string {
         return $this->classConstFetchNodeTooltipGenerator->generate($node, $file, $code);
+    }
+
+    /**
+     * @param Node\Stmt\UseUse $node
+     * @param string           $file
+     * @param int              $line
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, string $file, int $line): string
+    {
+        // Use statements are always fully qualified, they aren't resolved.
+        $nameNode = new Node\Name\FullyQualified($node->name->toString());
+
+        return $this->nameNodeTooltipGenerator->generate($nameNode, $file, $line);
     }
 
     /**
