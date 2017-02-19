@@ -114,18 +114,16 @@ class TooltipProvider
         }
 
         if ($nearestInterestingNode instanceof Node\Expr\FuncCall ||
-            $nearestInterestingNode instanceof Node\Expr\StaticCall ||
-            $nearestInterestingNode instanceof Node\Expr\ConstFetch ||
+            $nearestInterestingNode instanceof Node\Expr\ConstFetch
+        ) {
+            return $nearestInterestingNode;
+        }
+
+        if ($nearestInterestingNode instanceof Node\Expr\StaticCall ||
             $nearestInterestingNode instanceof Node\Expr\ClassConstFetch
         ) {
-            // We want different tooltips for the class name than for the actual constant.
-            if ($nearestInterestingNode instanceof Node\Expr\ClassConstFetch && $node instanceof Node\Name) {
-                return $node;
-            } elseif ($nearestInterestingNode instanceof Node\Expr\StaticCall && $node instanceof Node\Name) {
-                return $node;
-            }
-
-            return $nearestInterestingNode;
+            // We want different tooltips for the class name than for the actual member.
+            return ($node instanceof Node\Name) ? $node : $nearestInterestingNode;
         }
 
         return $node;
