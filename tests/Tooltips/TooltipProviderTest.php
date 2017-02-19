@@ -212,14 +212,20 @@ Interface');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInStaticMethodCall(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInStaticMethodCall(): void
+    {
+        $this->assertTooltipEquals('ClassNameStaticMethodCall.phpt', 106, 106, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */
