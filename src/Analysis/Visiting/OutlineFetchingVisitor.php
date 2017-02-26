@@ -67,6 +67,8 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     public function enterNode(Node $node)
     {
+        parent::enterNode($node);
+
         if ($node instanceof Node\Stmt\Property) {
             $this->parseClassPropertyNode($node);
         } elseif ($node instanceof Node\Stmt\ClassMethod) {
@@ -96,9 +98,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
             $node->name->toString() === 'define'
         ) {
             $this->parseDefineNode($node);
-        } else {
-            // Resolve the names for other nodes as the nodes we need depend on them being resolved.
-            parent::enterNode($node);
         }
     }
 
@@ -109,8 +108,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseClassNode(Node\Stmt\Class_ $node): void
     {
-        parent::enterNode($node);
-
         $this->currentStructure = $node;
 
         $interfaces = [];
@@ -148,8 +145,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseInterfaceNode(Node\Stmt\Interface_ $node): void
     {
-        parent::enterNode($node);
-
         if (!isset($node->namespacedName)) {
             return;
         }
@@ -188,8 +183,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseTraitNode(Node\Stmt\Trait_ $node): void
     {
-        parent::enterNode($node);
-
         if (!isset($node->namespacedName)) {
             return;
         }
@@ -220,8 +213,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
-        parent::enterNode($node);
-
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->traits as $traitName) {
@@ -326,8 +317,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function extractFunctionLikeNodeData(Node\FunctionLike $node): array
     {
-        parent::enterNode($node);
-
         $parameters = [];
 
         foreach ($node->getParams() as $i => $param) {
@@ -408,8 +397,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseClassConstantNode(Node\Stmt\ClassConst $node): void
     {
-        parent::enterNode($node);
-
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->consts as $const) {
@@ -440,8 +427,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseConstantNode(Node\Stmt\Const_ $node): void
     {
-        parent::enterNode($node);
-
         foreach ($node->consts as $const) {
             $fqcn = $this->typeNormalizer->getNormalizedFqcn(
                 isset($const->namespacedName) ? $const->namespacedName->toString() : $const->name
@@ -472,8 +457,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseDefineNode(Node\Expr\FuncCall $node): void
     {
-        parent::enterNode($node);
-
         if (count($node->args) < 2) {
             return;
         }
