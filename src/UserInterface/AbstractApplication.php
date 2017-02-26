@@ -402,6 +402,31 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('functionCallNodeFqsenDeterminer', FunctionNameNodeFqsenDeterminer::class)
+            ->setArguments([new Reference('globalFunctionExistenceChecker')]);
+
+        $container
+            ->register('constFetchNodeFqsenDeterminer', ConstNameNodeFqsenDeterminer::class)
+            ->setArguments([new Reference('globalConstantExistenceChecker')]);
+
+        $container
+            ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
+            ->setArguments([new Reference('fileTypeResolverFactory')]);
+
+        $this->registerIndexingServices($container);
+        $this->registerTooltipServices($container);
+        $this->registerTypeDeductionServices($container);
+        $this->registerCommandServices($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @return void
+     */
+    protected function registerIndexingServices(ContainerBuilder $container): void
+    {
+        $container
             ->register('builtinIndexer', BuiltinIndexer::class)
             ->setArguments([
                 new Reference('indexDatabase'),
@@ -436,22 +461,6 @@ abstract class AbstractApplication
                 new Reference('projectIndexer'),
                 new Reference('sourceCodeStreamReader')
             ]);
-
-        $container
-            ->register('functionCallNodeFqsenDeterminer', FunctionNameNodeFqsenDeterminer::class)
-            ->setArguments([new Reference('globalFunctionExistenceChecker')]);
-
-        $container
-            ->register('constFetchNodeFqsenDeterminer', ConstNameNodeFqsenDeterminer::class)
-            ->setArguments([new Reference('globalConstantExistenceChecker')]);
-
-        $container
-            ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
-            ->setArguments([new Reference('fileTypeResolverFactory')]);
-
-        $this->registerTooltipServices($container);
-        $this->registerTypeDeductionServices($container);
-        $this->registerCommandServices($container);
     }
 
     /**
