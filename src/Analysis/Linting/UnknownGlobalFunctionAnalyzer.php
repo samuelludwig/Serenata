@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Linting;
 
-use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\FuncCallNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
@@ -60,7 +60,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
         $unknownGlobalFunctions = [];
 
         // TODO: Inject this.
-        $determiner = new FunctionCallNodeFqsenDeterminer($this->globalFunctionExistenceChecker);
+        $determiner = new FuncCallNodeFqsenDeterminer($this->globalFunctionExistenceChecker);
 
         foreach ($globalFunctions as $node) {
             $fqsen = $determiner->determine($node);

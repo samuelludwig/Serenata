@@ -5,7 +5,7 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\GlobalFunctionsProvider;
-use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\FuncCallNodeFqsenDeterminer;
 
 use PhpParser\Node;
 
@@ -20,7 +20,7 @@ class FuncCallNodeTooltipGenerator
     protected $functionTooltipGenerator;
 
     /**
-     * @var FunctionCallNodeFqsenDeterminer
+     * @var FuncCallNodeFqsenDeterminer
      */
     protected $functionCallNodeFqsenDeterminer;
 
@@ -31,12 +31,12 @@ class FuncCallNodeTooltipGenerator
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator
-     * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+     * @param FuncCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      * @param GlobalFunctionsProvider         $globalFunctionsProvider
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
-        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        FuncCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
         GlobalFunctionsProvider $globalFunctionsProvider
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;

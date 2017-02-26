@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Determines the FQSEN of a function used in a function call node.
  */
-class FunctionCallNodeFqsenDeterminer
+class FuncCallNodeFqsenDeterminer
 {
     /**
      * @var GlobalFunctionExistenceCheckerInterface
