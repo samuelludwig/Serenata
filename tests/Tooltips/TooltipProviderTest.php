@@ -296,14 +296,20 @@ Class');
 Trait');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInTraitAlias(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInTraitAlias(): void
+    {
+        $this->assertTooltipEquals('ClassNameTraitAlias.phpt', 123, 123, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Trait');
+    }
+
     // /**
     //  * @return void
     //  */
