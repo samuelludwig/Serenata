@@ -4,6 +4,7 @@ namespace PhpIntegrator\UserInterface;
 
 use React;
 use ArrayObject;
+use RuntimeException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Indexing\Indexer;
@@ -20,8 +21,6 @@ use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\EventLoop\LoopInterface;
-
-use React\Socket\ConnectionException;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -60,7 +59,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         try {
             $this->setupRequestHandlingSocketServer($loop, $requestHandlingPort);
-        } catch (ConnectionException $e) {
+        } catch (RuntimeException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($this->stdinStream);
             return 2;
@@ -97,14 +96,15 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      * @param React\EventLoop\LoopInterface $loop
      * @param int                           $port
      *
+     * @throws RuntimeException
+     *
      * @return void
      */
     protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
-        $requestHandlingSocketServer = new SocketServer($loop, $connectionHandlerFactory);
-        $requestHandlingSocketServer->listen($port);
+        $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
     }
 
     /**
