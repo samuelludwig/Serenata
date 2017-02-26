@@ -122,7 +122,8 @@ class TooltipProvider
 
         if ($nearestInterestingNode instanceof Node\Expr\StaticCall ||
             $nearestInterestingNode instanceof Node\Expr\StaticPropertyFetch ||
-            $nearestInterestingNode instanceof Node\Expr\ClassConstFetch
+            $nearestInterestingNode instanceof Node\Expr\ClassConstFetch ||
+            $nearestInterestingNode instanceof Node\Stmt\Class_
         ) {
             // We want different tooltips for the class name than for the actual member.
             return ($node instanceof Node\Name) ? $node : $nearestInterestingNode;

@@ -254,14 +254,20 @@ Class');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInImplementsClause(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInImplementsClause(): void
+    {
+        $this->assertTooltipEquals('ClassNameImplements.phpt', 82, 82, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */
