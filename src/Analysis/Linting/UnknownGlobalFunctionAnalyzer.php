@@ -65,7 +65,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
         foreach ($globalFunctions as $node) {
             $fqsen = $determiner->determine($node);
 
-            if ($this->globalFunctionExistenceChecker->doesGlobalFunctionExist($fqsen)) {
+            if ($this->globalFunctionExistenceChecker->exists($fqsen)) {
                 continue;
             }
 

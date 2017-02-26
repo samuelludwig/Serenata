@@ -84,7 +84,7 @@ class ProjectTypeResolver implements FileTypeResolverInterface
                         return $namespacedName;
                     }
                 } elseif ($kind === UseStatementKind::TYPE_FUNCTION) {
-                    if ($this->globalFunctionExistenceChecker->doesGlobalFunctionExist($namespacedName)) {
+                    if ($this->globalFunctionExistenceChecker->exists($namespacedName)) {
                         return $namespacedName;
                     }
                 }

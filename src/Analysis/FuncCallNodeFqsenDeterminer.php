@@ -61,7 +61,7 @@ class FuncCallNodeFqsenDeterminer
         // (e.g. "\array_walk").
         $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->name->toString();
 
-        if ($this->globalFunctionExistenceChecker->doesGlobalFunctionExist($fqcnForCurrentNamespace)) {
+        if ($this->globalFunctionExistenceChecker->exists($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 

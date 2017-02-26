@@ -12,5 +12,5 @@ interface GlobalFunctionExistenceCheckerInterface
      *
      * @return bool
      */
-    public function doesGlobalFunctionExist(string $fqcn): bool;
+    public function exists(string $fqcn): bool;
 }
