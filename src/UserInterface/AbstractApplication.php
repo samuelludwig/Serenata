@@ -16,6 +16,7 @@ use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
 use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\MethodCallMethodInfoRetriever;
 use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
 use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistenceChecker;
@@ -375,6 +376,10 @@ abstract class AbstractApplication
             ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
             ->setArguments([new Reference('fileTypeResolverFactory')]);
 
+        $container
+            ->register('methodCallMethodInfoRetriever', MethodCallMethodInfoRetriever::class)
+            ->setArguments([new Reference('nodeTypeDeducer'), new Reference('classlikeInfoBuilder')]);
+
         $this->registerTypeResolvingServices($container);
         $this->registerIndexingServices($container);
         $this->registerTooltipServices($container);
@@ -655,7 +660,7 @@ abstract class AbstractApplication
 
         $container
             ->register('methodCallNodeTypeDeducer', MethodCallNodeTypeDeducer::class)
-            ->setArguments([new Reference('nodeTypeDeducer'), new Reference('classlikeInfoBuilder')]);
+            ->setArguments([new Reference('methodCallMethodInfoRetriever')]);
 
         $container
             ->register('propertyFetchNodeTypeDeducer', PropertyFetchNodeTypeDeducer::class)

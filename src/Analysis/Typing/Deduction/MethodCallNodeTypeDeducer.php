@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\MethodCallMethodInfoRetriever;
 
 use PhpParser\Node;
 
@@ -14,25 +14,16 @@ use PhpParser\Node;
 class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerInterface
+     * @var MethodCallMethodInfoRetriever
      */
-    protected $nodeTypeDeducer;
+    protected $methodCallMethodInfoRetriever;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @param MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever
      */
-    protected $classlikeInfoBuilder;
-
-    /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
-     */
-    public function __construct(
-        NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
-    ) {
-        $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+    public function __construct(MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever)
+    {
+        $this->methodCallMethodInfoRetriever = $methodCallMethodInfoRetriever;
     }
 
     /**
@@ -57,31 +48,19 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromMethodCallNode(Node\Expr $node, ?string $file, string $code, int $offset): array
     {
-        if ($node->name instanceof Node\Expr) {
-            return []; // Can't currently deduce type of an expression such as "$this->{$foo}()";
+        try {
+            $infoItems = $this->methodCallMethodInfoRetriever->retrieve($node, $file, $code, $offset);
+        } catch (UnexpectedValueException $e) {
+            return [];
         }
-
-        $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
-
-        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 
         $types = [];
 
-        foreach ($typesOfVar as $type) {
-            $info = null;
+        foreach ($infoItems as $info) {
+            $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['returnTypes']);
 
-            try {
-                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
-            } catch (UnexpectedValueException $e) {
-                continue;
-            }
-
-            if (isset($info['methods'][$node->name])) {
-                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['methods'][$node->name]['returnTypes']);
-
-                if (!empty($fetchedTypes)) {
-                    $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-                }
+            if (!empty($fetchedTypes)) {
+                $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
             }
         }
 
