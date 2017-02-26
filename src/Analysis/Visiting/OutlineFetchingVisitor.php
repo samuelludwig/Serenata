@@ -291,8 +291,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
     {
         $data = $this->extractFunctionLikeNodeData($node);
 
-        parent::enterNode($node);
-
         $fqcn = $this->typeNormalizer->getNormalizedFqcn(
             isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
         );
