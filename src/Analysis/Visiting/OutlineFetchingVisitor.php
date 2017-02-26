@@ -326,10 +326,13 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function extractFunctionLikeNodeData(Node\FunctionLike $node): array
     {
+        parent::enterNode($node);
+
         $parameters = [];
 
         foreach ($node->getParams() as $i => $param) {
             $localType = null;
+            $resolvedType = null;
 
             $typeNode = $param->type;
 
@@ -339,14 +342,23 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
 
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
+
+                // Apparantly the name resolver's private resolveSignature method doesn't properly walk nullable types,
+                // so do it ourselves.
+                if (!$typeNode->hasAttribute('resolvedName')) {
+                    parent::resolveClassName($typeNode);
+                }
+
+                $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
             } elseif (is_string($typeNode)) {
                 $localType = (string) $typeNode;
+                $resolvedType = (string) $typeNode;
             }
 
             $parameters[$i] = [
                 'name'         => $param->name,
                 'type'         => $localType,
-                'fullType'     => null, // Filled in below.
+                'fullType'     => $resolvedType,
                 'isReference'  => $param->byRef,
                 'isVariadic'   => $param->variadic,
                 'isOptional'   => $param->default ? true : false,
@@ -367,44 +379,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
         }
 
         $localType = null;
-        $nodeType = $node->getReturnType();
-
-        if ($nodeType instanceof Node\NullableType) {
-            $nodeType = $nodeType->type;
-        }
-
-        if ($nodeType instanceof Node\Name) {
-            $localType = NodeHelpers::fetchClassName($nodeType);
-        } elseif (is_string($nodeType)) {
-            $localType = (string) $nodeType;
-        }
-
-        parent::enterNode($node);
-
-        foreach ($node->getParams() as $i => $param) {
-            $resolvedType = null;
-
-            $typeNode = $param->type;
-
-            if ($typeNode instanceof Node\NullableType) {
-                $typeNode = $typeNode->type;
-            }
-
-            if ($typeNode instanceof Node\Name) {
-                // Apparantly the name resolver's private resolveSignature method doesn't properly walk nullable types,
-                // so do it ourselves.
-                if (!$typeNode->hasAttribute('resolvedName')) {
-                    parent::resolveClassName($typeNode);
-                }
-
-                $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
-            } elseif (is_string($typeNode)) {
-                $resolvedType = (string) $typeNode;
-            }
-
-            $parameters[$i]['fullType'] = $resolvedType;
-        }
-
         $resolvedType = null;
         $nodeType = $node->getReturnType();
 
@@ -413,8 +387,10 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
         }
 
         if ($nodeType instanceof Node\Name) {
+            $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
         } elseif (is_string($nodeType)) {
+            $localType = (string) $nodeType;
             $resolvedType = (string) $nodeType;
         }
 
