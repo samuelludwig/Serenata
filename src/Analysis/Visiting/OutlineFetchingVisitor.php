@@ -439,6 +439,8 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     protected function parseClassConstantNode(Node\Stmt\ClassConst $node): void
     {
+        parent::enterNode($node);
+
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->consts as $const) {
