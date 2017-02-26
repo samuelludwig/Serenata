@@ -341,14 +341,6 @@ Class');
     // /**
     //  * @return void
     //  */
-    // public function testClassNameInClassConstFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
     // public function testFunctionDefinition(): void
     // {
     //     // TODO
