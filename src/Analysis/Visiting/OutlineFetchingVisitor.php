@@ -342,13 +342,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
 
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
-
-                // Apparantly the name resolver's private resolveSignature method doesn't properly walk nullable types,
-                // so do it ourselves.
-                if (!$typeNode->hasAttribute('resolvedName')) {
-                    parent::resolveClassName($typeNode);
-                }
-
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
             } elseif (is_string($typeNode)) {
                 $localType = (string) $typeNode;
