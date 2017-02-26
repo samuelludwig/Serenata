@@ -34,6 +34,11 @@ class TooltipProvider
     protected $methodCallNodeTooltipGenerator;
 
     /**
+     * @var StaticMethodCallNodeTooltipGenerator
+     */
+    protected $staticMethodCallNodeTooltipGenerator;
+
+    /**
      * @var ConstFetchNodeTooltipGenerator
      */
     protected $constFetchNodeTooltipGenerator;
@@ -59,19 +64,21 @@ class TooltipProvider
     protected $nameNodeTooltipGenerator;
 
     /**
-     * @param Parser                              $parser
-     * @param FuncCallNodeTooltipGenerator        $funcCallNodeTooltipGenerator
-     * @param MethodCallNodeTooltipGenerator      $methodCallNodeTooltipGenerator
-     * @param ConstFetchNodeTooltipGenerator      $constFetchNodeTooltipGenerator
-     * @param ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator
-     * @param FunctionNodeTooltipGenerator        $functionNodeTooltipGenerator
-     * @param ClassMethodNodeTooltipGenerator     $classMethodNodeTooltipGenerator
-     * @param NameNodeTooltipGenerator            $nameNodeTooltipGenerator
+     * @param Parser                               $parser
+     * @param FuncCallNodeTooltipGenerator         $funcCallNodeTooltipGenerator
+     * @param MethodCallNodeTooltipGenerator       $methodCallNodeTooltipGenerator
+     * @param StaticMethodCallNodeTooltipGenerator $staticMethodCallNodeTooltipGenerator
+     * @param ConstFetchNodeTooltipGenerator       $constFetchNodeTooltipGenerator
+     * @param ClassConstFetchNodeTooltipGenerator  $classConstFetchNodeTooltipGenerator
+     * @param FunctionNodeTooltipGenerator         $functionNodeTooltipGenerator
+     * @param ClassMethodNodeTooltipGenerator      $classMethodNodeTooltipGenerator
+     * @param NameNodeTooltipGenerator             $nameNodeTooltipGenerator
      */
     public function __construct(
         Parser $parser,
         FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator,
         MethodCallNodeTooltipGenerator $methodCallNodeTooltipGenerator,
+        StaticMethodCallNodeTooltipGenerator $staticMethodCallNodeTooltipGenerator,
         ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator,
         ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator,
         FunctionNodeTooltipGenerator $functionNodeTooltipGenerator,
@@ -81,6 +88,7 @@ class TooltipProvider
         $this->parser = $parser;
         $this->funcCallNodeTooltipGenerator = $funcCallNodeTooltipGenerator;
         $this->methodCallNodeTooltipGenerator = $methodCallNodeTooltipGenerator;
+        $this->staticMethodCallNodeTooltipGenerator = $staticMethodCallNodeTooltipGenerator;
         $this->constFetchNodeTooltipGenerator = $constFetchNodeTooltipGenerator;
         $this->classConstFetchNodeTooltipGenerator = $classConstFetchNodeTooltipGenerator;
         $this->functionNodeTooltipGenerator = $functionNodeTooltipGenerator;
@@ -162,6 +170,8 @@ class TooltipProvider
             return $this->getTooltipForFuncCallNode($node);
         } elseif ($node instanceof Node\Expr\MethodCall) {
             return $this->getTooltipForMethodCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
+        } elseif ($node instanceof Node\Expr\StaticCall) {
+            return $this->getTooltipForStaticMethodCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->getTooltipForConstFetchNode($node);
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
@@ -208,6 +218,25 @@ class TooltipProvider
         int $offset
     ): string {
         return $this->methodCallNodeTooltipGenerator->generate($node, $file, $code, $offset);
+    }
+
+    /**
+     * @param Node\Expr\StaticCall $node
+     * @param string               $file
+     * @param string               $code
+     * @param int                  $offset
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForStaticMethodCallNode(
+        Node\Expr\StaticCall $node,
+        string $file,
+        string $code,
+        int $offset
+    ): string {
+        return $this->staticMethodCallNodeTooltipGenerator->generate($node, $file, $code, $offset);
     }
 
     /**

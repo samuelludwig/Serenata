@@ -371,14 +371,17 @@ Class');
 *void*');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testStaticMethodCall(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testStaticMethodCall(): void
+    {
+        $this->assertTooltipEquals('StaticMethodCall.phpt', 105, 108, 'This is a summary.
+
+# Returns
+*void*');
+    }
+
     // /**
     //  * @return void
     //  */
