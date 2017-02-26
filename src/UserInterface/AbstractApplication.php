@@ -195,20 +195,6 @@ abstract class AbstractApplication
             ->register('typeAnalyzer', TypeAnalyzer::class);
 
         $container
-            ->register('typeResolver.backend', TypeResolver::class)
-            ->setArguments([new Reference('typeAnalyzer')]);
-
-        $container
-            ->register('typeResolver.docblock', DocblockTypeResolver::class)
-            ->setArguments([new Reference('typeResolver.backend'), new Reference('typeAnalyzer')]);
-
-        $container->setAlias('typeResolver', 'typeResolver.docblock');
-
-        $container
-            ->register('typeLocalizer', TypeLocalizer::class)
-            ->setArguments([new Reference('typeAnalyzer')]);
-
-        $container
             ->register('prettyPrinter', PrettyPrinter::class);
 
         $container
@@ -270,36 +256,6 @@ abstract class AbstractApplication
 
         $container
             ->setAlias('fileClassListProvider', 'fileClassListProvider.cachingDecorator');
-
-        $container
-            ->register('fileTypeResolverFactory.instance', FileTypeResolverFactory::class)
-            ->setArguments([new Reference('typeResolver'), new Reference('indexDatabase')]);
-
-        $container
-            ->register('fileTypeResolverFactory.cachingDecorator', FileTypeResolverFactoryCachingDecorator::class)
-            ->setArguments([new Reference('fileTypeResolverFactory.instance')]);
-
-        $container
-            ->setAlias('fileTypeResolverFactory', 'fileTypeResolverFactory.cachingDecorator');
-
-        $container
-            ->register('projectTypeResolverFactory', ProjectTypeResolverFactory::class)
-            ->setArguments([
-                new Reference('globalConstantExistenceChecker'),
-                new Reference('globalFunctionExistenceChecker'),
-                new Reference('indexDatabase')
-            ]);
-
-        $container
-            ->register('projectTypeResolverFactoryFacade', ProjectTypeResolverFactoryFacade::class)
-            ->setArguments([
-                new Reference('projectTypeResolverFactory'),
-                new Reference('fileTypeResolverFactory')
-            ]);
-
-        $container
-            ->register('fileTypeLocalizerFactory', FileTypeLocalizerFactory::class)
-            ->setArguments([new Reference('typeLocalizer'), new Reference('indexDatabase')]);
 
         $container
             ->register('inheritanceResolver', InheritanceResolver::class)
@@ -413,10 +369,63 @@ abstract class AbstractApplication
             ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
             ->setArguments([new Reference('fileTypeResolverFactory')]);
 
+        $this->registerTypeResolvingServices($container);
         $this->registerIndexingServices($container);
         $this->registerTooltipServices($container);
         $this->registerTypeDeductionServices($container);
         $this->registerCommandServices($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @return void
+     */
+    protected function registerTypeResolvingServices(ContainerBuilder $container): void
+    {
+        $container
+            ->register('typeResolver.backend', TypeResolver::class)
+            ->setArguments([new Reference('typeAnalyzer')]);
+
+        $container
+            ->register('typeResolver.docblock', DocblockTypeResolver::class)
+            ->setArguments([new Reference('typeResolver.backend'), new Reference('typeAnalyzer')]);
+
+        $container->setAlias('typeResolver', 'typeResolver.docblock');
+
+        $container
+            ->register('typeLocalizer', TypeLocalizer::class)
+            ->setArguments([new Reference('typeAnalyzer')]);
+
+        $container
+            ->register('fileTypeResolverFactory.instance', FileTypeResolverFactory::class)
+            ->setArguments([new Reference('typeResolver'), new Reference('indexDatabase')]);
+
+        $container
+            ->register('fileTypeResolverFactory.cachingDecorator', FileTypeResolverFactoryCachingDecorator::class)
+            ->setArguments([new Reference('fileTypeResolverFactory.instance')]);
+
+        $container
+            ->setAlias('fileTypeResolverFactory', 'fileTypeResolverFactory.cachingDecorator');
+
+        $container
+            ->register('projectTypeResolverFactory', ProjectTypeResolverFactory::class)
+            ->setArguments([
+                new Reference('globalConstantExistenceChecker'),
+                new Reference('globalFunctionExistenceChecker'),
+                new Reference('indexDatabase')
+            ]);
+
+        $container
+            ->register('projectTypeResolverFactoryFacade', ProjectTypeResolverFactoryFacade::class)
+            ->setArguments([
+                new Reference('projectTypeResolverFactory'),
+                new Reference('fileTypeResolverFactory')
+            ]);
+
+        $container
+            ->register('fileTypeLocalizerFactory', FileTypeLocalizerFactory::class)
+            ->setArguments([new Reference('typeLocalizer'), new Reference('indexDatabase')]);
     }
 
     /**
