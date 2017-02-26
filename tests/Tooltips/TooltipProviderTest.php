@@ -338,14 +338,17 @@ Trait');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testFunctionDefinition(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testFunctionDefinition(): void
+    {
+        $this->assertTooltipEquals('FunctionDefinition.phpt', 46, 49, 'This is a summary.
+
+# Returns
+*void*');
+    }
+
     // /**
     //  * @return void
     //  */

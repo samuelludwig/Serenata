@@ -95,6 +95,7 @@ use PhpIntegrator\Tooltips\NameNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstantTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassLikeTooltipGenerator;
+use PhpIntegrator\Tooltips\FunctionNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator;
@@ -482,6 +483,14 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('functionNodeTooltipGenerator', FunctionNodeTooltipGenerator::class)
+            ->setArguments([
+                new Reference('functionTooltipGenerator'),
+                new Reference('functionCallNodeFqsenDeterminer'),
+                new Reference('globalFunctionsProvider')
+            ]);
+
+        $container
             ->register('nameNodeTooltipGenerator', NameNodeTooltipGenerator::class)
             ->setArguments([
                 new Reference('classLikeTooltipGenerator'),
@@ -496,6 +505,7 @@ abstract class AbstractApplication
                 new Reference('funcCallNodeTooltipGenerator'),
                 new Reference('constFetchNodeTooltipGenerator'),
                 new Reference('classConstFetchNodeTooltipGenerator'),
+                new Reference('functionNodeTooltipGenerator'),
                 new Reference('nameNodeTooltipGenerator')
             ]);
 
