@@ -15,7 +15,7 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
-use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistenceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker;
@@ -441,7 +441,7 @@ abstract class AbstractApplication
             ->setArguments([new Reference('globalFunctionExistenceChecker')]);
 
         $container
-            ->register('constFetchNodeFqsenDeterminer', ConstFetchNodeFqsenDeterminer::class)
+            ->register('constFetchNodeFqsenDeterminer', ConstNameNodeFqsenDeterminer::class)
             ->setArguments([new Reference('globalConstantExistenceChecker')]);
 
         $container

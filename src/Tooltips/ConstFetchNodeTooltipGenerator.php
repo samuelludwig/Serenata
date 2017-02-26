@@ -5,7 +5,7 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\GlobalConstantsProvider;
-use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 
@@ -20,7 +20,7 @@ class ConstFetchNodeTooltipGenerator
     protected $constantTooltipGenerator;
 
     /**
-     * @var ConstFetchNodeFqsenDeterminer
+     * @var ConstNameNodeFqsenDeterminer
      */
     protected $constFetchNodeFqsenDeterminer;
 
@@ -31,12 +31,12 @@ class ConstFetchNodeTooltipGenerator
 
     /**
      * @param ConstantTooltipGenerator      $constantTooltipGenerator
-     * @param ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer
+     * @param ConstNameNodeFqsenDeterminer $constFetchNodeFqsenDeterminer
      * @param GlobalConstantsProvider       $globalConstantsProvider
      */
     public function __construct(
         ConstantTooltipGenerator $constantTooltipGenerator,
-        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
+        ConstNameNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
         GlobalConstantsProvider $globalConstantsProvider
     ) {
         $this->constantTooltipGenerator = $constantTooltipGenerator;
@@ -53,7 +53,7 @@ class ConstFetchNodeTooltipGenerator
      */
     public function generate(Node\Expr\ConstFetch $node): string
     {
-        $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node);
+        $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node->name);
 
         $info = $this->getConstantInfo($fqsen);
 

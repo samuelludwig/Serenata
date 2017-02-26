@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Linting;
 
-use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
@@ -52,10 +52,10 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
         $unknownGlobalConstants = [];
 
         // TODO: Inject this.
-        $determiner = new ConstFetchNodeFqsenDeterminer($this->globalConstantExistenceChecker);
+        $determiner = new ConstNameNodeFqsenDeterminer($this->globalConstantExistenceChecker);
 
         foreach ($globalConstants as $node) {
-            $fqsen = $determiner->determine($node);
+            $fqsen = $determiner->determine($node->name);
 
             if ($this->globalConstantExistenceChecker->exists($fqsen)) {
                 continue;
