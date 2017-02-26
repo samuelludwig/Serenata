@@ -49,7 +49,7 @@ class ResolvedNameAttachingVisitor extends NameResolver
     {
         $value = parent::enterNode($node);
 
-        // NOTE: Workaround for nullable types not being resolved. See also
+        // NOTE: Workaround for nullable types being resolved too late. See also
         // https://github.com/nikic/PHP-Parser/issues/360
         if ($node instanceof Node\FunctionLike) {
             $this->resolveSignatureNullableTypes($node);
