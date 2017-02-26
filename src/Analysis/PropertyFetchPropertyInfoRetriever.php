@@ -58,7 +58,7 @@ class PropertyFetchPropertyInfoRetriever
 
         $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 
-        $typeMap = [];
+        $infoElements = [];
 
         foreach ($typesOfVar as $type) {
             $info = null;
