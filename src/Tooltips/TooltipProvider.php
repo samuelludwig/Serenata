@@ -44,6 +44,11 @@ class TooltipProvider
     protected $functionNodeTooltipGenerator;
 
     /**
+     * @var ClassMethodNodeTooltipGenerator
+     */
+    protected $classMethodNodeTooltipGenerator;
+
+    /**
      * @var NameNodeTooltipGenerator
      */
     protected $nameNodeTooltipGenerator;
@@ -54,6 +59,7 @@ class TooltipProvider
      * @param ConstFetchNodeTooltipGenerator      $constFetchNodeTooltipGenerator
      * @param ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator
      * @param FunctionNodeTooltipGenerator        $functionNodeTooltipGenerator
+     * @param ClassMethodNodeTooltipGenerator     $classMethodNodeTooltipGenerator
      * @param NameNodeTooltipGenerator            $nameNodeTooltipGenerator
      */
     public function __construct(
@@ -62,6 +68,7 @@ class TooltipProvider
         ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator,
         ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator,
         FunctionNodeTooltipGenerator $functionNodeTooltipGenerator,
+        ClassMethodNodeTooltipGenerator $classMethodNodeTooltipGenerator,
         NameNodeTooltipGenerator $nameNodeTooltipGenerator
     ) {
         $this->parser = $parser;
@@ -69,6 +76,7 @@ class TooltipProvider
         $this->constFetchNodeTooltipGenerator = $constFetchNodeTooltipGenerator;
         $this->classConstFetchNodeTooltipGenerator = $classConstFetchNodeTooltipGenerator;
         $this->functionNodeTooltipGenerator = $functionNodeTooltipGenerator;
+        $this->classMethodNodeTooltipGenerator = $classMethodNodeTooltipGenerator;
         $this->nameNodeTooltipGenerator = $nameNodeTooltipGenerator;
     }
 
@@ -152,6 +160,8 @@ class TooltipProvider
             return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Stmt\Function_) {
             return $this->getTooltipForFunctionNode($node);
+        } elseif ($node instanceof Node\Stmt\ClassMethod) {
+            return $this->getTooltipForClassMethodNode($node, $file);
         } elseif ($node instanceof Node\Name) {
             return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
         }
@@ -227,6 +237,19 @@ class TooltipProvider
     protected function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
     {
         return $this->functionNodeTooltipGenerator->generate($node);
+    }
+
+    /**
+     * @param Node\Stmt\ClassMethod $node
+     * @param string                $filePath
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, string $filePath): string
+    {
+        return $this->classMethodNodeTooltipGenerator->generate($node, $filePath);
     }
 
     /**

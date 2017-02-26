@@ -349,6 +349,17 @@ Class');
 *void*');
     }
 
+    /**
+     * @return void
+     */
+    public function testClassMethodDefinition(): void
+    {
+        $this->assertTooltipEquals('ClassMethodDefinition.phpt', 79, 82, 'This is a summary.
+
+# Returns
+*void*');
+    }
+
     // /**
     //  * @return void
     //  */

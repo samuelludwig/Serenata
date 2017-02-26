@@ -16,6 +16,7 @@ use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
 use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
 use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistenceChecker;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker;
@@ -98,6 +99,7 @@ use PhpIntegrator\Tooltips\ClassLikeTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
+use PhpIntegrator\Tooltips\ClassMethodNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -256,6 +258,10 @@ abstract class AbstractApplication
 
         $container
             ->setAlias('fileClassListProvider', 'fileClassListProvider.cachingDecorator');
+
+        $container
+            ->register('filePositionClasslikeDeterminer', FilePositionClasslikeDeterminer::class)
+            ->setArguments([new Reference('fileClassListProvider')]);
 
         $container
             ->register('inheritanceResolver', InheritanceResolver::class)
@@ -521,6 +527,14 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('classMethodNodeTooltipGenerator', ClassMethodNodeTooltipGenerator::class)
+            ->setArguments([
+                new Reference('functionTooltipGenerator'),
+                new Reference('filePositionClasslikeDeterminer'),
+                new Reference('classlikeInfoBuilder')
+            ]);
+
+        $container
             ->register('nameNodeTooltipGenerator', NameNodeTooltipGenerator::class)
             ->setArguments([
                 new Reference('classLikeTooltipGenerator'),
@@ -536,6 +550,7 @@ abstract class AbstractApplication
                 new Reference('constFetchNodeTooltipGenerator'),
                 new Reference('classConstFetchNodeTooltipGenerator'),
                 new Reference('functionNodeTooltipGenerator'),
+                new Reference('classMethodNodeTooltipGenerator'),
                 new Reference('nameNodeTooltipGenerator')
             ]);
     }
