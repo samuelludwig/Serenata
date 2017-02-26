@@ -324,14 +324,20 @@ Trait');
 Trait');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameAfterNewKeyword(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameAfterNewKeyword(): void
+    {
+        $this->assertTooltipEquals('ClassNameNewKeyword.phpt', 72, 72, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */
