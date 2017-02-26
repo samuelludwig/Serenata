@@ -268,14 +268,20 @@ Class');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInExtendsClause(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInExtendsClause(): void
+    {
+        $this->assertTooltipEquals('ClassNameExtends.phpt', 79, 79, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
     // /**
     //  * @return void
     //  */
