@@ -41,9 +41,7 @@ class MethodCallNodeTooltipGenerator
      * @param string               $code
      * @param int                  $offset
      *
-     * @throws UnexpectedValueException when the constant name is not a string (i.e. an error node).
-     * @throws UnexpectedValueException when the type of the class could not be determined.
-     * @throws UnexpectedValueException when no tooltips could be determined.
+     * @throws UnexpectedValueException
      *
      * @return string
      */
