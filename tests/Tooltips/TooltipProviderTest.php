@@ -393,14 +393,6 @@ Class');
     // /**
     //  * @return void
     //  */
-    // public function testPropertyFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
     // public function testStaticPropertyFetch(): void
     // {
     //     // TODO
