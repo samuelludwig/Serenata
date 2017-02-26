@@ -100,6 +100,7 @@ use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassLikeTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
+use PhpIntegrator\Tooltips\MethodCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassMethodNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator;
@@ -513,6 +514,13 @@ abstract class AbstractApplication
             ]);
 
         $container
+            ->register('methodCallNodeTooltipGenerator', MethodCallNodeTooltipGenerator::class)
+            ->setArguments([
+                new Reference('methodCallMethodInfoRetriever'),
+                new Reference('functionTooltipGenerator')
+            ]);
+
+        $container
             ->register('constFetchNodeTooltipGenerator', ConstFetchNodeTooltipGenerator::class)
             ->setArguments([
                 new Reference('constantTooltipGenerator'),
@@ -557,6 +565,7 @@ abstract class AbstractApplication
             ->setArguments([
                 new Reference('parser'),
                 new Reference('funcCallNodeTooltipGenerator'),
+                new Reference('methodCallNodeTooltipGenerator'),
                 new Reference('constFetchNodeTooltipGenerator'),
                 new Reference('classConstFetchNodeTooltipGenerator'),
                 new Reference('functionNodeTooltipGenerator'),

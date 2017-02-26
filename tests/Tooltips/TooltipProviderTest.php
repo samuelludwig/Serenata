@@ -360,14 +360,17 @@ Class');
 *void*');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testMethodCall(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testMethodCall(): void
+    {
+        $this->assertTooltipEquals('MethodCall.phpt', 113, 116, 'This is a summary.
+
+# Returns
+*void*');
+    }
+
     // /**
     //  * @return void
     //  */
