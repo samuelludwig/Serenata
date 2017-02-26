@@ -43,7 +43,7 @@ class MethodCallMethodInfoRetriever
      * @param int                                       $offset
      *
      * @throws UnexpectedValueException when a dynamic method call is passed.
-     * @throws UnexpectedValueException when the type method is called on could not be determined.
+     * @throws UnexpectedValueException when the type the method is called on could not be determined.
      *
      * @return array[]
      */
