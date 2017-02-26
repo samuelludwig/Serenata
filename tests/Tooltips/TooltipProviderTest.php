@@ -282,14 +282,20 @@ Class');
 Class');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInTraitUse(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInTraitUse(): void
+    {
+        $this->assertTooltipEquals('ClassNameTraitUse.phpt', 81, 81, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Trait');
+    }
+
     // /**
     //  * @return void
     //  */
