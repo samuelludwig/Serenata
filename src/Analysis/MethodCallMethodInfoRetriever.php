@@ -10,7 +10,7 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use PhpParser\Node;
 
 /**
- * Fetches method information from a {@see Node\Expr\MethodCall} node.
+ * Fetches method information from a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node.
  */
 class MethodCallMethodInfoRetriever
 {
