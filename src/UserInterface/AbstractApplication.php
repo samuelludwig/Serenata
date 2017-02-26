@@ -20,6 +20,7 @@ use PhpIntegrator\Analysis\MethodCallMethodInfoRetriever;
 use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
 use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistenceChecker;
+use PhpIntegrator\Analysis\PropertyFetchPropertyInfoRetriever;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker;
 use PhpIntegrator\Analysis\CachingGlobalFunctionExistenceChecker;
 
@@ -377,6 +378,10 @@ abstract class AbstractApplication
             ->setArguments([new Reference('fileTypeResolverFactory')]);
 
         $container
+            ->register('propertyFetchPropertyInfoRetriever', PropertyFetchPropertyInfoRetriever::class)
+            ->setArguments([new Reference('nodeTypeDeducer'), new Reference('classlikeInfoBuilder')]);
+
+        $container
             ->register('methodCallMethodInfoRetriever', MethodCallMethodInfoRetriever::class)
             ->setArguments([new Reference('nodeTypeDeducer'), new Reference('classlikeInfoBuilder')]);
 
@@ -665,10 +670,9 @@ abstract class AbstractApplication
         $container
             ->register('propertyFetchNodeTypeDeducer', PropertyFetchNodeTypeDeducer::class)
             ->setArguments([
+                new Reference('propertyFetchPropertyInfoRetriever'),
                 new Reference('localTypeScanner'),
-                new Reference('nodeTypeDeducer'),
-                new Reference('prettyPrinter'),
-                new Reference('classlikeInfoBuilder')
+                new Reference('prettyPrinter')
             ]);
 
         $container
