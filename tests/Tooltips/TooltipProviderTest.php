@@ -310,14 +310,20 @@ Trait');
 Trait');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassNameInTraitPrecedence(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassNameInTraitPrecedence(): void
+    {
+        $this->assertTooltipEquals('ClassNameTraitPrecedence.phpt', 165, 165, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Trait');
+    }
+
     // /**
     //  * @return void
     //  */
