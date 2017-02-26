@@ -48,6 +48,8 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromMethodCallNode(Node\Expr $node, ?string $file, string $code, int $offset): array
     {
+        $infoItems = null;
+
         try {
             $infoItems = $this->methodCallMethodInfoRetriever->retrieve($node, $file, $code, $offset);
         } catch (UnexpectedValueException $e) {
