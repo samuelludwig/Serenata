@@ -80,7 +80,7 @@ class ProjectTypeResolver implements FileTypeResolverInterface
                 $namespacedName = '\\' . $namespace . '\\' . $name;
 
                 if ($kind === UseStatementKind::TYPE_CONSTANT) {
-                    if ($this->globalConstantExistenceChecker->doesGlobalConstantExist($namespacedName)) {
+                    if ($this->globalConstantExistenceChecker->exists($namespacedName)) {
                         return $namespacedName;
                     }
                 } elseif ($kind === UseStatementKind::TYPE_FUNCTION) {

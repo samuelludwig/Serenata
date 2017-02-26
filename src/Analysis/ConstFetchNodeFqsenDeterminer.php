@@ -57,7 +57,7 @@ class ConstFetchNodeFqsenDeterminer
         // (e.g. "\array_walk").
         $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->name->toString();
 
-        if ($this->globalConstantExistenceChecker->doesGlobalConstantExist($fqcnForCurrentNamespace)) {
+        if ($this->globalConstantExistenceChecker->exists($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 

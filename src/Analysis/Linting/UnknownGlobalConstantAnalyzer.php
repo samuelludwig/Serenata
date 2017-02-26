@@ -57,7 +57,7 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
         foreach ($globalConstants as $node) {
             $fqsen = $determiner->determine($node);
 
-            if ($this->globalConstantExistenceChecker->doesGlobalConstantExist($fqsen)) {
+            if ($this->globalConstantExistenceChecker->exists($fqsen)) {
                 continue;
             }
 
