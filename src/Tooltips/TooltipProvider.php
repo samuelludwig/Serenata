@@ -158,10 +158,6 @@ class TooltipProvider
      */
     protected function getTooltipForFuncCallNode(Node\Expr\FuncCall $node): string
     {
-        if (!$node->name instanceof Node\Name) {
-            throw new UnexpectedValueException('Determining tooltips for dynamic function calls is not supported');
-        }
-
         return $this->funcCallNodeTooltipGenerator->generate($node);
     }
 
