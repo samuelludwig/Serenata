@@ -42,17 +42,17 @@ class Position implements JsonSerializable
     /**
      * @return int
      */
-    public function getStart(): int
+    public function getLine(): int
     {
-        return $this->start;
+        return $this->line;
     }
 
     /**
      * @return int
      */
-    public function getEnd(): int
+    public function getCharacter(): int
     {
-        return $this->end;
+        return $this->character;
     }
 
     /**
