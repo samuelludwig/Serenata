@@ -5,7 +5,7 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\GlobalFunctionsProvider;
-use PhpIntegrator\Analysis\FuncCallNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 
@@ -20,7 +20,7 @@ class FuncCallNodeTooltipGenerator
     protected $functionTooltipGenerator;
 
     /**
-     * @var FuncCallNodeFqsenDeterminer
+     * @var FunctionNameNodeFqsenDeterminer
      */
     protected $functionCallNodeFqsenDeterminer;
 
@@ -31,12 +31,12 @@ class FuncCallNodeTooltipGenerator
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator
-     * @param FuncCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+     * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      * @param GlobalFunctionsProvider         $globalFunctionsProvider
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
-        FuncCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
         GlobalFunctionsProvider $globalFunctionsProvider
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
@@ -48,12 +48,17 @@ class FuncCallNodeTooltipGenerator
      * @param Node\Expr\FuncCall $node
      *
      * @throws UnexpectedValueException when the function was not found.
+     * @throws UnexpectedValueException when a dynamic function call is passed.
      *
      * @return string
      */
     public function generate(Node\Expr\FuncCall $node): string
     {
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node);
+        if (!$node->name instanceof Node\Name) {
+            throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
+        }
+
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node->name);
 
         $info = $this->getFunctionInfo($fqsen);
 

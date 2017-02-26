@@ -9,9 +9,9 @@ use PhpIntegrator\Utility\NodeHelpers;
 use PhpParser\Node;
 
 /**
- * Determines the FQSEN of a function used in a function call node.
+ * Determines the FQSEN of a function name node.
  */
-class FuncCallNodeFqsenDeterminer
+class FunctionNameNodeFqsenDeterminer
 {
     /**
      * @var GlobalFunctionExistenceCheckerInterface
@@ -27,16 +27,12 @@ class FuncCallNodeFqsenDeterminer
     }
 
     /**
-     * @param Node\Expr\FuncCall $node
+     * @param Node\Name $node
      *
      * @return string
      */
-    public function determine(Node\Expr\FuncCall $node): string
+    public function determine(Node\Name $node): string
     {
-        if (!$node->name instanceof Node\Name) {
-            throw new LogicException('Determining the FQSEN of dynamic function calls is not supported');
-        }
-
         // False must be used rather than null as the namespace can actually be null.
         $namespaceNode = $node->getAttribute('namespace', false);
 
@@ -50,21 +46,21 @@ class FuncCallNodeFqsenDeterminer
             $namespace = NodeHelpers::fetchClassName($namespaceNode);
         }
 
-        if ($node->name->isFullyQualified()) {
-            return NodeHelpers::fetchClassName($node->name);
-        } elseif ($node->name->isQualified()) {
-            return '\\' . $namespace . '\\' . $node->name->toString();
+        if ($node->isFullyQualified()) {
+            return NodeHelpers::fetchClassName($node);
+        } elseif ($node->isQualified()) {
+            return '\\' . $namespace . '\\' . $node->toString();
         }
 
         // Unqualified global function calls, such as "array_walk", could refer to "array_walk" in the current
         // namespace (e.g. "\A\array_walk") or, if not present in the current namespace, the root namespace
         // (e.g. "\array_walk").
-        $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->name->toString();
+        $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->toString();
 
         if ($this->globalFunctionExistenceChecker->exists($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 
-        return '\\' . $node->name->toString();
+        return '\\' . $node->toString();
     }
 }
