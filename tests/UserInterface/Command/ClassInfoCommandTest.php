@@ -2229,6 +2229,24 @@ class ClassInfoCommandTest extends IndexedTest
     /**
      * @return void
      */
+    public function testUnresolvedReturnType(): void
+    {
+        $fileName = 'UnresolvedReturnType.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestClass');
+
+        $this->assertEquals([
+            [
+                'type'         => 'DateTime',
+                'fqcn'         => '\DateTime',
+                'resolvedType' => '\DateTime'
+            ]
+        ], $output['methods']['foo']['returnTypes']);
+    }
+
+    /**
+     * @return void
+     */
     public function testClassConstantVisibility(): void
     {
         $fileName = 'ClassConstantVisbility.phpt';

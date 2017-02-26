@@ -413,7 +413,7 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
         }
 
         if ($nodeType instanceof Node\Name) {
-            $resolvedType = NodeHelpers::fetchClassName($nodeType);
+            $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
         } elseif (is_string($nodeType)) {
             $resolvedType = (string) $nodeType;
         }
