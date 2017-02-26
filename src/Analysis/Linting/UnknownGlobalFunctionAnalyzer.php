@@ -3,7 +3,7 @@
 namespace PhpIntegrator\Analysis\Linting;
 
 use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
-use PhpIntegrator\Analysis\GlobalFunctionExistanceCheckerInterface;
+use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
@@ -24,16 +24,16 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     protected $globalFunctionUsageFetchingVisitor;
 
     /**
-     * @var GlobalFunctionExistanceCheckerInterface
+     * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistanceChecker;
+    protected $globalFunctionExistenceChecker;
 
     /**
-     * @param GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker
+     * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
      */
-    public function __construct(GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker)
+    public function __construct(GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker)
     {
-        $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
+        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
 
         $this->namespaceAttachingVisitor = new NamespaceAttachingVisitor();
         $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
@@ -60,12 +60,12 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
         $unknownGlobalFunctions = [];
 
         // TODO: Inject this.
-        $determiner = new FunctionCallNodeFqsenDeterminer($this->globalFunctionExistanceChecker);
+        $determiner = new FunctionCallNodeFqsenDeterminer($this->globalFunctionExistenceChecker);
 
         foreach ($globalFunctions as $node) {
             $fqsen = $determiner->determine($node);
 
-            if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($fqsen)) {
+            if ($this->globalFunctionExistenceChecker->doesGlobalFunctionExist($fqsen)) {
                 continue;
             }
 

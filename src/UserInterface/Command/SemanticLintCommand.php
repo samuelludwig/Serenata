@@ -7,9 +7,9 @@ use ArrayAccess;
 use PhpIntegrator\Analysis\Linting;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\ClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\GlobalConstantExistanceChecker;
-use PhpIntegrator\Analysis\GlobalFunctionExistanceChecker;
+use PhpIntegrator\Analysis\ClasslikeExistenceChecker;
+use PhpIntegrator\Analysis\GlobalConstantExistenceChecker;
+use PhpIntegrator\Analysis\GlobalFunctionExistenceChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
@@ -72,19 +72,19 @@ class SemanticLintCommand extends AbstractCommand
     protected $docblockAnalyzer;
 
     /**
-     * @var ClasslikeExistanceChecker
+     * @var ClasslikeExistenceChecker
      */
-    protected $classlikeExistanceChecker;
+    protected $classlikeExistenceChecker;
 
     /**
-     * @var GlobalConstantExistanceChecker
+     * @var GlobalConstantExistenceChecker
      */
-    protected $globalConstantExistanceChecker;
+    protected $globalConstantExistenceChecker;
 
     /**
-     * @var GlobalFunctionExistanceChecker
+     * @var GlobalFunctionExistenceChecker
      */
-    protected $globalFunctionExistanceChecker;
+    protected $globalFunctionExistenceChecker;
 
     /**
      * @param SourceCodeStreamReader           $sourceCodeStreamReader
@@ -95,9 +95,9 @@ class SemanticLintCommand extends AbstractCommand
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
      * @param DocblockAnalyzer                 $docblockAnalyzer
-     * @param ClasslikeExistanceChecker        $classlikeExistanceChecker
-     * @param GlobalConstantExistanceChecker   $globalConstantExistanceChecker
-     * @param GlobalFunctionExistanceChecker   $globalFunctionExistanceChecker
+     * @param ClasslikeExistenceChecker        $classlikeExistenceChecker
+     * @param GlobalConstantExistenceChecker   $globalConstantExistenceChecker
+     * @param GlobalFunctionExistenceChecker   $globalFunctionExistenceChecker
      */
     public function __construct(
         SourceCodeStreamReader $sourceCodeStreamReader,
@@ -108,9 +108,9 @@ class SemanticLintCommand extends AbstractCommand
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
         DocblockAnalyzer $docblockAnalyzer,
-        ClasslikeExistanceChecker $classlikeExistanceChecker,
-        GlobalConstantExistanceChecker $globalConstantExistanceChecker,
-        GlobalFunctionExistanceChecker $globalFunctionExistanceChecker
+        ClasslikeExistenceChecker $classlikeExistenceChecker,
+        GlobalConstantExistenceChecker $globalConstantExistenceChecker,
+        GlobalFunctionExistenceChecker $globalFunctionExistenceChecker
     ) {
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->parser = $parser;
@@ -120,9 +120,9 @@ class SemanticLintCommand extends AbstractCommand
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockAnalyzer = $docblockAnalyzer;
-        $this->classlikeExistanceChecker = $classlikeExistanceChecker;
-        $this->globalConstantExistanceChecker = $globalConstantExistanceChecker;
-        $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
+        $this->classlikeExistenceChecker = $classlikeExistenceChecker;
+        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
+        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
     }
 
     /**
@@ -213,7 +213,7 @@ class SemanticLintCommand extends AbstractCommand
                 $fileTypeResolver = $this->fileTypeResolverFactory->create($file);
 
                 $unknownClassAnalyzer = new Linting\UnknownClassAnalyzer(
-                    $this->classlikeExistanceChecker,
+                    $this->classlikeExistenceChecker,
                     $fileTypeResolver,
                     $this->typeAnalyzer,
                     $this->docblockParser
@@ -273,7 +273,7 @@ class SemanticLintCommand extends AbstractCommand
 
             if ($retrieveUnknownGlobalFunctions) {
                 $unknownGlobalConstantAnalyzer = new Linting\UnknownGlobalConstantAnalyzer(
-                    $this->globalConstantExistanceChecker
+                    $this->globalConstantExistenceChecker
                 );
 
                 foreach ($unknownGlobalConstantAnalyzer->getVisitors() as $visitor) {
@@ -285,7 +285,7 @@ class SemanticLintCommand extends AbstractCommand
 
             if ($retrieveUnknownGlobalFunctions) {
                 $unknownGlobalFunctionAnalyzer = new Linting\UnknownGlobalFunctionAnalyzer(
-                    $this->globalFunctionExistanceChecker
+                    $this->globalFunctionExistenceChecker
                 );
 
                 foreach ($unknownGlobalFunctionAnalyzer->getVisitors() as $visitor) {

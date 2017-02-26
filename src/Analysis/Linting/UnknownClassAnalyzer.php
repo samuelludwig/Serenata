@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeExistanceCheckerInterface;
+use PhpIntegrator\Analysis\ClasslikeExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -29,9 +29,9 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     protected $docblockClassUsageFetchingVisitor;
 
     /**
-     * @var ClasslikeExistanceCheckerInterface
+     * @var ClasslikeExistenceCheckerInterface
      */
-    protected $classlikeExistanceChecker;
+    protected $classlikeExistenceChecker;
 
     /**
      * @var TypeAnalyzer
@@ -46,20 +46,20 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     /**
      * Constructor.
      *
-     * @param ClasslikeExistanceCheckerInterface $classlikeExistanceChecker
+     * @param ClasslikeExistenceCheckerInterface $classlikeExistenceChecker
      * @param FileTypeResolverInterface          $fileTypeResolver
      * @param TypeAnalyzer                       $typeAnalyzer
      * @param DocblockParser                     $docblockParser
      */
     public function __construct(
-        ClasslikeExistanceCheckerInterface $classlikeExistanceChecker,
+        ClasslikeExistenceCheckerInterface $classlikeExistenceChecker,
         FileTypeResolverInterface $fileTypeResolver,
         TypeAnalyzer $typeAnalyzer,
         DocblockParser $docblockParser
     ) {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->fileTypeResolver = $fileTypeResolver;
-        $this->classlikeExistanceChecker = $classlikeExistanceChecker;
+        $this->classlikeExistenceChecker = $classlikeExistenceChecker;
 
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
         $this->docblockClassUsageFetchingVisitor = new DocblockClassUsageFetchingVisitor($typeAnalyzer, $docblockParser);
@@ -98,7 +98,7 @@ class UnknownClassAnalyzer implements AnalyzerInterface
 
             $fqcn = $this->typeAnalyzer->getNormalizedFqcn($fqcn);
 
-            if (!$this->classlikeExistanceChecker->doesClassExist($fqcn)) {
+            if (!$this->classlikeExistenceChecker->doesClassExist($fqcn)) {
                 unset($classUsage['line'], $classUsage['firstPart'], $classUsage['isFullyQualified']);
 
                 $unknownClasses[] = $classUsage;

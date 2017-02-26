@@ -31,9 +31,9 @@ class SemanticLintCommandTest extends IndexedTest
             $container->get('docblockParser'),
             $container->get('typeAnalyzer'),
             $container->get('docblockAnalyzer'),
-            $container->get('classlikeExistanceChecker'),
-            $container->get('globalConstantExistanceChecker'),
-            $container->get('globalFunctionExistanceChecker')
+            $container->get('classlikeExistenceChecker'),
+            $container->get('globalConstantExistenceChecker'),
+            $container->get('globalFunctionExistenceChecker')
         );
 
         return $command->semanticLint($path, file_get_contents($path));

@@ -4,8 +4,8 @@ namespace PhpIntegrator\Analysis\Typing\Resolving;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalConstantExistanceCheckerInterface;
-use PhpIntegrator\Analysis\GlobalFunctionExistanceCheckerInterface;
+use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
+use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
 
@@ -15,14 +15,14 @@ use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
 class ProjectTypeResolverFactory
 {
     /**
-     * @var GlobalConstantExistanceCheckerInterface
+     * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistanceChecker;
+    protected $globalConstantExistenceChecker;
 
     /**
-     * @var GlobalFunctionExistanceCheckerInterface
+     * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistanceChecker;
+    protected $globalFunctionExistenceChecker;
 
     /**
      * @var NamespaceImportProviderInterface
@@ -30,17 +30,17 @@ class ProjectTypeResolverFactory
     protected $namespaceImportProviderInterface;
 
     /**
-     * @param GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker
-     * @param GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker
+     * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
+     * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
      * @param NamespaceImportProviderInterface $namespaceImportProviderInterface
      */
     public function __construct(
-        GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker,
-        GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker,
+        GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker,
+        GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker,
         NamespaceImportProviderInterface $namespaceImportProviderInterface
     ) {
-        $this->globalConstantExistanceChecker = $globalConstantExistanceChecker;
-        $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
+        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
+        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
         $this->namespaceImportProviderInterface = $namespaceImportProviderInterface;
     }
 
@@ -64,8 +64,8 @@ class ProjectTypeResolverFactory
 
         return new ProjectTypeResolver(
             $typeResolver,
-            $this->globalConstantExistanceChecker,
-            $this->globalFunctionExistanceChecker,
+            $this->globalConstantExistenceChecker,
+            $this->globalFunctionExistenceChecker,
             $namespaces
         );
     }

@@ -3,7 +3,7 @@
 namespace PhpIntegrator\Analysis\Linting;
 
 use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
-use PhpIntegrator\Analysis\GlobalConstantExistanceCheckerInterface;
+use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
@@ -13,9 +13,9 @@ use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
 {
     /**
-     * @var GlobalConstantExistanceCheckerInterface
+     * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistanceChecker;
+    protected $globalConstantExistenceChecker;
 
     /**
      * @var GlobalConstantUsageFetchingVisitor
@@ -23,11 +23,11 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     protected $globalConstantUsageFetchingVisitor;
 
     /**
-     * @param GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker
+     * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
      */
-    public function __construct(GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker)
+    public function __construct(GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker)
     {
-        $this->globalConstantExistanceChecker = $globalConstantExistanceChecker;
+        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
 
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
     }
@@ -52,12 +52,12 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
         $unknownGlobalConstants = [];
 
         // TODO: Inject this.
-        $determiner = new ConstFetchNodeFqsenDeterminer($this->globalConstantExistanceChecker);
+        $determiner = new ConstFetchNodeFqsenDeterminer($this->globalConstantExistenceChecker);
 
         foreach ($globalConstants as $node) {
             $fqsen = $determiner->determine($node);
 
-            if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqsen)) {
+            if ($this->globalConstantExistenceChecker->doesGlobalConstantExist($fqsen)) {
                 continue;
             }
 

@@ -17,9 +17,9 @@ use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
 use PhpIntegrator\Analysis\ConstFetchNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\FunctionCallNodeFqsenDeterminer;
-use PhpIntegrator\Analysis\CachingClasslikeExistanceChecker;
-use PhpIntegrator\Analysis\CachingGlobalConstantExistanceChecker;
-use PhpIntegrator\Analysis\CachingGlobalFunctionExistanceChecker;
+use PhpIntegrator\Analysis\CachingClasslikeExistenceChecker;
+use PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker;
+use PhpIntegrator\Analysis\CachingGlobalFunctionExistenceChecker;
 
 use PhpIntegrator\Analysis\Conversion\MethodConverter;
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
@@ -284,8 +284,8 @@ abstract class AbstractApplication
         $container
             ->register('projectTypeResolverFactory', ProjectTypeResolverFactory::class)
             ->setArguments([
-                new Reference('globalConstantExistanceChecker'),
-                new Reference('globalFunctionExistanceChecker'),
+                new Reference('globalConstantExistenceChecker'),
+                new Reference('globalFunctionExistenceChecker'),
                 new Reference('indexDatabase')
             ]);
 
@@ -330,15 +330,15 @@ abstract class AbstractApplication
             ->setAlias('classlikeInfoBuilderProvider', 'classlikeInfoBuilderProvider.cachingProxy');
 
         $container
-            ->register('classlikeExistanceChecker', CachingClasslikeExistanceChecker::class)
+            ->register('classlikeExistenceChecker', CachingClasslikeExistenceChecker::class)
             ->setArguments([new Reference('indexDatabase')]);
 
         $container
-            ->register('globalFunctionExistanceChecker', CachingGlobalFunctionExistanceChecker::class)
+            ->register('globalFunctionExistenceChecker', CachingGlobalFunctionExistenceChecker::class)
             ->setArguments([new Reference('indexDatabase')]);
 
         $container
-            ->register('globalConstantExistanceChecker', CachingGlobalConstantExistanceChecker::class)
+            ->register('globalConstantExistenceChecker', CachingGlobalConstantExistenceChecker::class)
             ->setArguments([new Reference('indexDatabase')]);
 
         $container
@@ -359,9 +359,9 @@ abstract class AbstractApplication
         $container
             ->register('cacheClearingEventMediator.clearableCache', ClearableCacheCollection::class)
             ->setArguments([[
-                new Reference('classlikeExistanceChecker'),
-                new Reference('globalFunctionExistanceChecker'),
-                new Reference('globalConstantExistanceChecker'),
+                new Reference('classlikeExistenceChecker'),
+                new Reference('globalFunctionExistenceChecker'),
+                new Reference('globalConstantExistenceChecker'),
                 new Reference('fileTypeResolverFactory.cachingDecorator'),
                 new Reference('fileClassListProvider.cachingDecorator')
             ]]);
@@ -438,11 +438,11 @@ abstract class AbstractApplication
 
         $container
             ->register('functionCallNodeFqsenDeterminer', FunctionCallNodeFqsenDeterminer::class)
-            ->setArguments([new Reference('globalFunctionExistanceChecker')]);
+            ->setArguments([new Reference('globalFunctionExistenceChecker')]);
 
         $container
             ->register('constFetchNodeFqsenDeterminer', ConstFetchNodeFqsenDeterminer::class)
-            ->setArguments([new Reference('globalConstantExistanceChecker')]);
+            ->setArguments([new Reference('globalConstantExistenceChecker')]);
 
         $container
             ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
@@ -754,9 +754,9 @@ abstract class AbstractApplication
                 new Reference('docblockParser'),
                 new Reference('typeAnalyzer'),
                 new Reference('docblockAnalyzer'),
-                new Reference('classlikeExistanceChecker'),
-                new Reference('globalConstantExistanceChecker'),
-                new Reference('globalFunctionExistanceChecker')
+                new Reference('classlikeExistenceChecker'),
+                new Reference('globalConstantExistenceChecker'),
+                new Reference('globalFunctionExistenceChecker')
             ]);
 
         $container

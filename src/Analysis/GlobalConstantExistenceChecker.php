@@ -7,7 +7,7 @@ use PhpIntegrator\Indexing\IndexDatabase;
 /**
  * Checks if a global constant exists.
  */
-class GlobalConstantExistanceChecker implements GlobalConstantExistanceCheckerInterface
+class GlobalConstantExistenceChecker implements GlobalConstantExistenceCheckerInterface
 {
     /**
      * @var IndexDatabase

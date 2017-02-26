@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * Inerface for classes that can check if a classlike exists.
  */
-interface ClasslikeExistanceCheckerInterface
+interface ClasslikeExistenceCheckerInterface
 {
     /**
      * @param string $fqcn

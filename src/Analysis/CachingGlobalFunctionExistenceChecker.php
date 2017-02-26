@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * @inheritDoc
  */
-class CachingGlobalFunctionExistanceChecker extends GlobalFunctionExistanceChecker implements ClearableCacheInterface
+class CachingGlobalFunctionExistenceChecker extends GlobalFunctionExistenceChecker implements ClearableCacheInterface
 {
     /**
      * @var array

@@ -4,8 +4,8 @@ namespace PhpIntegrator\Analysis\Typing\Resolving;
 
 use LogicException;
 
-use PhpIntegrator\Analysis\GlobalFunctionExistanceCheckerInterface;
-use PhpIntegrator\Analysis\GlobalConstantExistanceCheckerInterface;
+use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
+use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
@@ -24,14 +24,14 @@ class ProjectTypeResolver implements FileTypeResolverInterface
     protected $typeResolver;
 
     /**
-     * @var GlobalConstantExistanceCheckerInterface
+     * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistanceChecker;
+    protected $globalConstantExistenceChecker;
 
     /**
-     * @var GlobalFunctionExistanceCheckerInterface
+     * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistanceChecker;
+    protected $globalFunctionExistenceChecker;
 
     /**
      * @var array
@@ -40,8 +40,8 @@ class ProjectTypeResolver implements FileTypeResolverInterface
 
     /**
      * @param FileTypeResolverInterface               $typeResolver
-     * @param GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker
-     * @param GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker
+     * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
+     * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
      * @param array {
      *     @var string   $name
      *     @var int      $startLine
@@ -50,13 +50,13 @@ class ProjectTypeResolver implements FileTypeResolverInterface
      */
     public function __construct(
         FileTypeResolverInterface $typeResolver,
-        GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker,
-        GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker,
+        GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker,
+        GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker,
         array $namespaces
     ) {
         $this->typeResolver = $typeResolver;
-        $this->globalConstantExistanceChecker = $globalConstantExistanceChecker;
-        $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
+        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
+        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
         $this->namespaces = $namespaces;
     }
 
@@ -80,11 +80,11 @@ class ProjectTypeResolver implements FileTypeResolverInterface
                 $namespacedName = '\\' . $namespace . '\\' . $name;
 
                 if ($kind === UseStatementKind::TYPE_CONSTANT) {
-                    if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($namespacedName)) {
+                    if ($this->globalConstantExistenceChecker->doesGlobalConstantExist($namespacedName)) {
                         return $namespacedName;
                     }
                 } elseif ($kind === UseStatementKind::TYPE_FUNCTION) {
-                    if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($namespacedName)) {
+                    if ($this->globalFunctionExistenceChecker->doesGlobalFunctionExist($namespacedName)) {
                         return $namespacedName;
                     }
                 }

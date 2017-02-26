@@ -7,7 +7,7 @@ use PhpIntegrator\Indexing\IndexDatabase;
 /**
  * Checks if a classlike exists.
  */
-class ClasslikeExistanceChecker implements ClasslikeExistanceCheckerInterface
+class ClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface
 {
     /**
      * @var IndexDatabase

@@ -7,7 +7,7 @@ use PhpIntegrator\Indexing\IndexDatabase;
 /**
  * Checks if a global function exists.
  */
-class GlobalFunctionExistanceChecker implements GlobalFunctionExistanceCheckerInterface
+class GlobalFunctionExistenceChecker implements GlobalFunctionExistenceCheckerInterface
 {
     /**
      * @var IndexDatabase

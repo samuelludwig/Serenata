@@ -14,16 +14,16 @@ use PhpParser\Node;
 class FunctionCallNodeFqsenDeterminer
 {
     /**
-     * @var GlobalFunctionExistanceCheckerInterface
+     * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistanceChecker;
+    protected $globalFunctionExistenceChecker;
 
     /**
-     * @param GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker
+     * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
      */
-    public function __construct(GlobalFunctionExistanceCheckerInterface $globalFunctionExistanceChecker)
+    public function __construct(GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker)
     {
-        $this->globalFunctionExistanceChecker = $globalFunctionExistanceChecker;
+        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
     }
 
     /**
@@ -61,7 +61,7 @@ class FunctionCallNodeFqsenDeterminer
         // (e.g. "\array_walk").
         $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->name->toString();
 
-        if ($this->globalFunctionExistanceChecker->doesGlobalFunctionExist($fqcnForCurrentNamespace)) {
+        if ($this->globalFunctionExistenceChecker->doesGlobalFunctionExist($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 

@@ -14,16 +14,16 @@ use PhpParser\Node;
 class ConstFetchNodeFqsenDeterminer
 {
     /**
-     * @var GlobalConstantExistanceCheckerInterface
+     * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistanceChecker;
+    protected $globalConstantExistenceChecker;
 
     /**
-     * @param GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker
+     * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
      */
-    public function __construct(GlobalConstantExistanceCheckerInterface $globalConstantExistanceChecker)
+    public function __construct(GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker)
     {
-        $this->globalConstantExistanceChecker = $globalConstantExistanceChecker;
+        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
     }
 
     /**
@@ -57,7 +57,7 @@ class ConstFetchNodeFqsenDeterminer
         // (e.g. "\array_walk").
         $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->name->toString();
 
-        if ($this->globalConstantExistanceChecker->doesGlobalConstantExist($fqcnForCurrentNamespace)) {
+        if ($this->globalConstantExistenceChecker->doesGlobalConstantExist($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 

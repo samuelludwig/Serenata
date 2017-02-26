@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * Inerface for classes that can check if a global constant exists.
  */
-interface GlobalConstantExistanceCheckerInterface
+interface GlobalConstantExistenceCheckerInterface
 {
     /**
      * @param string $fqcn
