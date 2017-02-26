@@ -449,6 +449,18 @@ abstract class AbstractApplication
             ->register('nameNodeFqsenDeterminer', NameNodeFqsenDeterminer::class)
             ->setArguments([new Reference('fileTypeResolverFactory')]);
 
+        $this->registerTooltipServices($container);
+        $this->registerTypeDeductionServices($container);
+        $this->registerCommandServices($container);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @return void
+     */
+    protected function registerTooltipServices(ContainerBuilder $container): void
+    {
         $container
             ->register('functionTooltipGenerator', FunctionTooltipGenerator::class);
 
@@ -508,9 +520,6 @@ abstract class AbstractApplication
                 new Reference('functionNodeTooltipGenerator'),
                 new Reference('nameNodeTooltipGenerator')
             ]);
-
-        $this->registerTypeDeductionServices($container);
-        $this->registerCommandServices($container);
     }
 
     /**
