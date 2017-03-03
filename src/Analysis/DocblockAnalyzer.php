@@ -3,7 +3,7 @@
 namespace PhpIntegrator\Analysis;
 
 /**
- * Provides functionality for analyzing docblocks.
+ * Analyzing docblocks.
  */
 class DocblockAnalyzer
 {
