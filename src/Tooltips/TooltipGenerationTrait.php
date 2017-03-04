@@ -24,6 +24,6 @@ trait TooltipGenerationTrait
             $typeList[] = $type['type'];
         }
 
-        return implode('|', $typeList);
+        return implode('&#124;', $typeList);
     }
 }

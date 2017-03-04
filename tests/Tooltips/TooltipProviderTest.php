@@ -90,7 +90,7 @@ Hello!
 **• $third** | *\Exception* | Test
 
 # Returns
-*string|bool*
+*string&#124;bool*
 
 # Throws
    |   |   ' . '
@@ -136,7 +136,7 @@ Hello!
 Hello!
 
 # Type
-*string|bool*');
+*string&#124;bool*');
     }
 
     /**
@@ -409,7 +409,7 @@ Class');
 Hello!
 
 # Type
-*string|bool*');
+*string&#124;bool*');
     }
 
     /**
