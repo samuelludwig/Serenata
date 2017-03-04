@@ -426,7 +426,7 @@ Hello!
     /**
      * @return void
      */
-    public function testFunctionDefinitionRangeIsConfinedToFirstStatement(): void
+    public function testFunctionDefinitionRangeIsConfinedToBeforeFirstStatement(): void
     {
         $this->assertTooltipEquals('FunctionDefinitionWithStatement.phpt', 37, 58, 'This is a summary.
 
@@ -437,7 +437,7 @@ Hello!
     /**
      * @return void
      */
-    public function testFunctionDefinitionRangeIsConfinedToFirstParameter(): void
+    public function testFunctionDefinitionRangeIsConfinedToBeforeFirstParameter(): void
     {
         $fileName = 'FunctionDefinitionWithParameter.phpt';
 
