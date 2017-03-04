@@ -52,14 +52,12 @@ class NodeFetchingVisitor extends NodeVisitorAbstract
 
         if (!$node instanceof Node\Name) {
             if ($node instanceof Node\FunctionLike) {
-                $statements = $node->getStmts();
-
                 // The range of function and method definitions extends over their entire body. We don't want to see
                 // these as nodes at that location. This isn't a great solution, but will at least confine the range to
                 // everything before the first statements. Will hopefully be solved with the following ticket:
                 //
                 //   https://github.com/nikic/PHP-Parser/issues/322 .
-                if (!empty($statements) && $statements[0]->getAttribute('startFilePos') < $this->position) {
+                if (!empty($node->getStmts()) && $node->getStmts()[0]->getAttribute('startFilePos') < $this->position) {
                     return;
                 }
             }
