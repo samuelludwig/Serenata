@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Tooltips;
 
 use LogicException;
-use UnexpectedValueException;
 
 /**
  * Generates tooltips for classlikes.
@@ -14,8 +13,6 @@ class ClassLikeTooltipGenerator
 
     /**
      * @param array $info
-     *
-     * @throws UnexpectedValueException when the function was not found.
      *
      * @return string
      */
