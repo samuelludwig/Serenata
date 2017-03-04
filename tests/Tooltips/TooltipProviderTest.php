@@ -397,11 +397,14 @@ Hello!
 *string|bool*');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testStaticPropertyFetch(): void
-    // {
-    //     // TODO
-    // }
+    /**
+     * @return void
+     */
+    public function testStaticPropertyFetch(): void
+    {
+        $this->assertTooltipEquals('StaticPropertyFetch.phpt', 88, 94, 'This is a summary.
+
+# Type
+(Not known)');
+    }
 }

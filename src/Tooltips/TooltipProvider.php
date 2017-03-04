@@ -44,6 +44,11 @@ class TooltipProvider
     protected $propertyFetchNodeTooltipGenerator;
 
     /**
+     * @var StaticPropertyFetchNodeTooltipGenerator
+     */
+    protected $staticPropertyFetchNodeTooltipGenerator;
+
+    /**
      * @var ConstFetchNodeTooltipGenerator
      */
     protected $constFetchNodeTooltipGenerator;
@@ -69,16 +74,17 @@ class TooltipProvider
     protected $nameNodeTooltipGenerator;
 
     /**
-     * @param Parser                               $parser
-     * @param FuncCallNodeTooltipGenerator         $funcCallNodeTooltipGenerator
-     * @param MethodCallNodeTooltipGenerator       $methodCallNodeTooltipGenerator
-     * @param StaticMethodCallNodeTooltipGenerator $staticMethodCallNodeTooltipGenerator
-     * @param PropertyFetchNodeTooltipGenerator    $propertyFetchNodeTooltipGenerator
-     * @param ConstFetchNodeTooltipGenerator       $constFetchNodeTooltipGenerator
-     * @param ClassConstFetchNodeTooltipGenerator  $classConstFetchNodeTooltipGenerator
-     * @param FunctionNodeTooltipGenerator         $functionNodeTooltipGenerator
-     * @param ClassMethodNodeTooltipGenerator      $classMethodNodeTooltipGenerator
-     * @param NameNodeTooltipGenerator             $nameNodeTooltipGenerator
+     * @param Parser                                  $parser
+     * @param FuncCallNodeTooltipGenerator            $funcCallNodeTooltipGenerator
+     * @param MethodCallNodeTooltipGenerator          $methodCallNodeTooltipGenerator
+     * @param StaticMethodCallNodeTooltipGenerator    $staticMethodCallNodeTooltipGenerator
+     * @param PropertyFetchNodeTooltipGenerator       $propertyFetchNodeTooltipGenerator
+     * @param StaticPropertyFetchNodeTooltipGenerator $staticPropertyFetchNodeTooltipGenerator
+     * @param ConstFetchNodeTooltipGenerator          $constFetchNodeTooltipGenerator
+     * @param ClassConstFetchNodeTooltipGenerator     $classConstFetchNodeTooltipGenerator
+     * @param FunctionNodeTooltipGenerator            $functionNodeTooltipGenerator
+     * @param ClassMethodNodeTooltipGenerator         $classMethodNodeTooltipGenerator
+     * @param NameNodeTooltipGenerator                $nameNodeTooltipGenerator
      */
     public function __construct(
         Parser $parser,
@@ -86,6 +92,7 @@ class TooltipProvider
         MethodCallNodeTooltipGenerator $methodCallNodeTooltipGenerator,
         StaticMethodCallNodeTooltipGenerator $staticMethodCallNodeTooltipGenerator,
         PropertyFetchNodeTooltipGenerator $propertyFetchNodeTooltipGenerator,
+        StaticPropertyFetchNodeTooltipGenerator $staticPropertyFetchNodeTooltipGenerator,
         ConstFetchNodeTooltipGenerator $constFetchNodeTooltipGenerator,
         ClassConstFetchNodeTooltipGenerator $classConstFetchNodeTooltipGenerator,
         FunctionNodeTooltipGenerator $functionNodeTooltipGenerator,
@@ -97,6 +104,7 @@ class TooltipProvider
         $this->methodCallNodeTooltipGenerator = $methodCallNodeTooltipGenerator;
         $this->staticMethodCallNodeTooltipGenerator = $staticMethodCallNodeTooltipGenerator;
         $this->propertyFetchNodeTooltipGenerator = $propertyFetchNodeTooltipGenerator;
+        $this->staticPropertyFetchNodeTooltipGenerator = $staticPropertyFetchNodeTooltipGenerator;
         $this->constFetchNodeTooltipGenerator = $constFetchNodeTooltipGenerator;
         $this->classConstFetchNodeTooltipGenerator = $classConstFetchNodeTooltipGenerator;
         $this->functionNodeTooltipGenerator = $functionNodeTooltipGenerator;
@@ -182,6 +190,8 @@ class TooltipProvider
             return $this->getTooltipForStaticMethodCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\PropertyFetch) {
             return $this->getTooltipForPropertyFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
+        } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
+            return $this->getTooltipForStaticPropertyFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->getTooltipForConstFetchNode($node);
         } elseif ($node instanceof Node\Expr\ClassConstFetch) {
@@ -266,6 +276,25 @@ class TooltipProvider
         int $offset
     ): string {
         return $this->propertyFetchNodeTooltipGenerator->generate($node, $file, $code, $offset);
+    }
+
+    /**
+     * @param Node\Expr\StaticPropertyFetch $node
+     * @param string                        $file
+     * @param string                        $code
+     * @param int                           $offset
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return string
+     */
+    protected function getTooltipForStaticPropertyFetchNode(
+        Node\Expr\StaticPropertyFetch $node,
+        string $file,
+        string $code,
+        int $offset
+    ): string {
+        return $this->staticPropertyFetchNodeTooltipGenerator->generate($node, $file, $code, $offset);
     }
 
     /**
