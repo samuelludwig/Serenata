@@ -191,7 +191,7 @@ Abstract class');
 # Type
 Trait');
 
-        $this->assertTooltipEquals('ClassNameAllSections.phpt', 390, 402, '(No documentation available)
+        $this->assertTooltipEquals('ClassNameAllSections.phpt', 390, 404, '(No documentation available)
 
 # Full Name
 *\A\SimpleInterface*
@@ -247,7 +247,7 @@ Class');
      */
     public function testClassNameInUseImport(): void
     {
-        $this->assertTooltipEquals('ClassNameUseImport.phpt', 84, 84, 'This is a summary.
+        $this->assertTooltipEquals('ClassNameUseImport.phpt', 83, 85, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -345,7 +345,7 @@ Class');
      */
     public function testFunctionDefinition(): void
     {
-        $this->assertTooltipEquals('FunctionDefinition.phpt', 46, 49, 'This is a summary.
+        $this->assertTooltipEquals('FunctionDefinition.phpt', 37, 56, 'This is a summary.
 
 # Returns
 *void*');
@@ -356,7 +356,7 @@ Class');
      */
     public function testClassMethodDefinition(): void
     {
-        $this->assertTooltipEquals('ClassMethodDefinition.phpt', 79, 82, 'This is a summary.
+        $this->assertTooltipEquals('ClassMethodDefinition.phpt', 63, 97, 'This is a summary.
 
 # Returns
 *void*');
@@ -367,7 +367,7 @@ Class');
      */
     public function testMethodCall(): void
     {
-        $this->assertTooltipEquals('MethodCall.phpt', 113, 116, 'This is a summary.
+        $this->assertTooltipEquals('MethodCall.phpt', 111, 118, 'This is a summary.
 
 # Returns
 *void*');
@@ -378,7 +378,7 @@ Class');
      */
     public function testStaticMethodCall(): void
     {
-        $this->assertTooltipEquals('StaticMethodCall.phpt', 105, 108, 'This is a summary.
+        $this->assertTooltipEquals('StaticMethodCall.phpt', 103, 110, 'This is a summary.
 
 # Returns
 *void*');
