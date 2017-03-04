@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tooltips;
 
-use UnexpectedValueException;
-
 /**
  * Generates tooltips for constants.
  */
@@ -13,8 +11,6 @@ class ConstantTooltipGenerator
 
     /**
      * @param array $info
-     *
-     * @throws UnexpectedValueException when the function was not found.
      *
      * @return string
      */
