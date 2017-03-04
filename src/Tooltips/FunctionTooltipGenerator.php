@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tooltips;
 
-use UnexpectedValueException;
-
 /**
  * Generates tooltips for functions.
  */
@@ -13,8 +11,6 @@ class FunctionTooltipGenerator
 
     /**
      * @param array $functionInfo
-     *
-     * @throws UnexpectedValueException when the function was not found.
      *
      * @return string
      */
