@@ -382,14 +382,21 @@ Class');
 *void*');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testPropertyFetchContainsAllSections(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testPropertyFetchContainsAllSections(): void
+    {
+        $this->assertTooltipEquals('PropertyFetchAllSections.phpt', 191, 196, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+
+# Description
+## Header
+Hello!
+
+# Type
+*string|bool*');
+    }
+
     // /**
     //  * @return void
     //  */

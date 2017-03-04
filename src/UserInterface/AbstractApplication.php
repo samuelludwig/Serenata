@@ -94,6 +94,7 @@ use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Tooltips\TooltipProvider;
+use PhpIntegrator\Tooltips\PropertyTooltipGenerator;
 use PhpIntegrator\Tooltips\NameNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstantTooltipGenerator;
 use PhpIntegrator\Tooltips\FunctionTooltipGenerator;
@@ -103,6 +104,7 @@ use PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\MethodCallNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassMethodNodeTooltipGenerator;
+use PhpIntegrator\Tooltips\PropertyFetchNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator;
 use PhpIntegrator\Tooltips\StaticMethodCallNodeTooltipGenerator;
 
@@ -501,6 +503,9 @@ abstract class AbstractApplication
             ->register('functionTooltipGenerator', FunctionTooltipGenerator::class);
 
         $container
+            ->register('propertyTooltipGenerator', PropertyTooltipGenerator::class);
+
+        $container
             ->register('constantTooltipGenerator', ConstantTooltipGenerator::class);
 
         $container
@@ -526,6 +531,13 @@ abstract class AbstractApplication
             ->setArguments([
                 new Reference('methodCallMethodInfoRetriever'),
                 new Reference('functionTooltipGenerator')
+            ]);
+
+        $container
+            ->register('propertyFetchNodeTooltipGenerator', PropertyFetchNodeTooltipGenerator::class)
+            ->setArguments([
+                new Reference('propertyFetchPropertyInfoRetriever'),
+                new Reference('propertyTooltipGenerator')
             ]);
 
         $container
@@ -575,6 +587,7 @@ abstract class AbstractApplication
                 new Reference('funcCallNodeTooltipGenerator'),
                 new Reference('methodCallNodeTooltipGenerator'),
                 new Reference('staticMethodCallNodeTooltipGenerator'),
+                new Reference('propertyFetchNodeTooltipGenerator'),
                 new Reference('constFetchNodeTooltipGenerator'),
                 new Reference('classConstFetchNodeTooltipGenerator'),
                 new Reference('functionNodeTooltipGenerator'),
