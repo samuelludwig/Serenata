@@ -45,14 +45,16 @@ class TooltipProviderTest extends IndexedTest
      */
     protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents)
     {
-        while ($start <= $end) {
-            $result = $this->getTooltip($fileName, $start);
+        $i = $start;
+
+        while ($i <= $end) {
+            $result = $this->getTooltip($fileName, $i);
 
             $this->assertNotNull($result);
             $this->assertNull($result->getRange());
             $this->assertEquals($result->getContents(), $contents);
 
-            ++$start;
+            ++$i;
         }
     }
 
