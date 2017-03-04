@@ -433,4 +433,25 @@ Hello!
 # Returns
 *void*');
     }
+
+    /**
+     * @return void
+     */
+    public function testFunctionDefinitionRangeIsConfinedToFirstParameter(): void
+    {
+        $fileName = 'FunctionDefinitionWithParameter.phpt';
+
+        $this->assertTooltipEquals($fileName, 37, 55, 'This is a summary.
+
+# Parameters
+   |   |   ' . '
+--- | --- | ---
+**• $param1** | *int* |  ' . '
+**• $param2** | *bool* |  ' . '
+
+# Returns
+*void*');
+
+        $this->assertNull($this->getTooltip($fileName, 69));
+    }
 }
