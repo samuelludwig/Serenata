@@ -59,10 +59,16 @@ class TooltipProviderTest extends IndexedTest
 
         // Assert that the range doesn't extend longer than it should.
         $resultBeforeRange = $this->getTooltip($fileName, $start - 1);
-        $this->assertTrue($resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents);
+        $this->assertTrue(
+            $resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents,
+            "Range does not start exactly at position {$start}, but seems to continue before it"
+        );
 
         $resultAfterRange = $this->getTooltip($fileName, $end + 1);
-        $this->assertTrue($resultAfterRange === null || $resultAfterRange->getContents() !== $contents);
+        $this->assertTrue(
+            $resultAfterRange === null || $resultAfterRange->getContents() !== $contents,
+            "Range does not end exactly at position {$end}, but seems to continue after it"
+        );
     }
 
     /**
