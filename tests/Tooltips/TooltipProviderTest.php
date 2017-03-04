@@ -454,4 +454,15 @@ Hello!
 
         $this->assertNull($this->getTooltip($fileName, 69));
     }
+
+    /**
+     * @return void
+     */
+    public function testFunctionDefinitionRangeIsConfinedToNonScalarReturnType(): void
+    {
+        $this->assertTooltipEquals('FunctionDefinitionWithReturnType.phpt', 37, 53, 'This is a summary.
+
+# Returns
+*void*');
+    }
 }

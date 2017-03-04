@@ -56,6 +56,12 @@ class NodeFetchingVisitor extends NodeVisitorAbstract
                 return;
             } elseif (!empty($node->getParams()) && $node->getParams()[0]->getAttribute('startFilePos') < $this->position) {
                 return;
+            } elseif (
+                !empty($node->getReturnType()) &&
+                $node->getReturnType() instanceof Node &&
+                $node->getReturnType()->getAttribute('startFilePos') < $this->position
+            ) {
+                return;
             }
         }
 
