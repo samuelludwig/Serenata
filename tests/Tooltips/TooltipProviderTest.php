@@ -422,4 +422,15 @@ Hello!
 # Type
 (Not known)');
     }
+
+    /**
+     * @return void
+     */
+    public function testFunctionDefinitionRangeIsConfinedToFirstStatement(): void
+    {
+        $this->assertTooltipEquals('FunctionDefinitionWithStatement.phpt', 37, 58, 'This is a summary.
+
+# Returns
+*void*');
+    }
 }
