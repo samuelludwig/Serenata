@@ -120,7 +120,7 @@ class GlobalConstantsCommandTest extends IndexedTest
     /**
      * @return void
      */
-    public function testCorrectlyFetchesDefaultValueOfDefineWithIncompleteConstFetch()
+    public function testCorrectlyFetchesDefaultValueOfDefineWithIncompleteConstFetch(): void
     {
         $output = $this->getGlobalConstants('DefineWithIncompleteConstFetch.phpt');
 
