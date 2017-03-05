@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use ArrayAccess;
 
 use PhpIntegrator\Linting\Linter;
+use PhpIntegrator\Linting\LintingSettings;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -51,16 +52,16 @@ class SemanticLintCommand extends AbstractCommand
             $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         }
 
-        $output = $this->linter->lint(
-            $arguments['file'],
-            $code,
-            !(isset($arguments['no-unknown-classes']) && $arguments['no-unknown-classes']),
-            !(isset($arguments['no-unknown-members']) && $arguments['no-unknown-members']),
-            !(isset($arguments['no-unknown-global-functions']) && $arguments['no-unknown-global-functions']),
-            !(isset($arguments['no-unknown-global-constants']) && $arguments['no-unknown-global-constants']),
-            !(isset($arguments['no-docblock-correctness']) && $arguments['no-docblock-correctness']),
-            !(isset($arguments['no-unused-use-statements']) && $arguments['no-unused-use-statements'])
+        $settings = new LintingSettings(
+            !isset($arguments['no-unknown-classes']) || !$arguments['no-unknown-classes'],
+            !isset($arguments['no-unknown-members']) || !$arguments['no-unknown-members'],
+            !isset($arguments['no-unknown-global-functions']) || !$arguments['no-unknown-global-functions'],
+            !isset($arguments['no-unknown-global-constants']) || !$arguments['no-unknown-global-constants'],
+            !isset($arguments['no-docblock-correctness']) || !$arguments['no-docblock-correctness'],
+            !isset($arguments['no-unused-use-statements']) || !$arguments['no-unused-use-statements']
         );
+
+        $output = $this->linter->lint($arguments['file'], $code, $settings);
 
         return $output;
     }

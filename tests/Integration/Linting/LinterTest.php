@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
+use PhpIntegrator\Linting\LintingSettings;
+
 use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class LinterTest extends AbstractIndexedTest
@@ -22,7 +24,16 @@ class LinterTest extends AbstractIndexedTest
 
         $linter = $container->get('linter');
 
-        return $linter->lint($path, file_get_contents($path));
+        $settings = new LintingSettings(
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        );
+
+        return $linter->lint($path, file_get_contents($path), $settings);
     }
 
     /**

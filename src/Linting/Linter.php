@@ -112,27 +112,14 @@ class Linter
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param bool   $retrieveUnknownClasses
-     * @param bool   $retrieveUnknownMembers
-     * @param bool   $retrieveUnknownGlobalFunctions
-     * @param bool   $retrieveUnknownGlobalConstants
-     * @param bool   $analyzeDocblockCorrectness
-     * @param bool   $retrieveUnusedUseStatements
+     * @param string          $file
+     * @param string          $code
+     * @param LintingSettings $settings
      *
      * @return array
      */
-    public function lint(
-        string $file,
-        string $code,
-        bool $retrieveUnknownClasses = true,
-        bool $retrieveUnknownMembers = true,
-        bool $retrieveUnknownGlobalFunctions = true,
-        bool $retrieveUnknownGlobalConstants = true,
-        bool $analyzeDocblockCorrectness = true,
-        bool $retrieveUnusedUseStatements = true
-    ): array {
+    public function lint(string $file, string $code, LintingSettings $settings): array
+    {
         // Parse the file to fetch the information we need.
         $nodes = [];
         $parser = $this->parser;
@@ -164,7 +151,7 @@ class Linter
 
             $unknownClassAnalyzer = null;
 
-            if ($retrieveUnknownClasses) {
+            if ($settings->getLintUnknownClasses()) {
                 $fileTypeResolver = $this->fileTypeResolverFactory->create($file);
 
                 $unknownClassAnalyzer = new UnknownClassAnalyzer(
@@ -181,7 +168,7 @@ class Linter
 
             $unknownMemberAnalyzer = null;
 
-            if ($retrieveUnknownMembers) {
+            if ($settings->getLintUnknownMembers()) {
                 $unknownMemberAnalyzer = new UnknownMemberAnalyzer(
                     $this->nodeTypeDeducer,
                     $this->classlikeInfoBuilder,
@@ -197,7 +184,7 @@ class Linter
 
             $unusedUseStatementAnalyzer = null;
 
-            if ($retrieveUnusedUseStatements) {
+            if ($settings->getLintUnusedUseStatements()) {
                 $unusedUseStatementAnalyzer = new UnusedUseStatementAnalyzer(
                     $this->typeAnalyzer,
                     $this->docblockParser
@@ -210,7 +197,7 @@ class Linter
 
             $docblockCorrectnessAnalyzer = null;
 
-            if ($analyzeDocblockCorrectness) {
+            if ($settings->getLintDocblockCorrectness()) {
                 $docblockCorrectnessAnalyzer = new DocblockCorrectnessAnalyzer(
                     $code,
                     $this->classlikeInfoBuilder,
@@ -226,7 +213,7 @@ class Linter
 
             $unknownGlobalConstantAnalyzer = null;
 
-            if ($retrieveUnknownGlobalFunctions) {
+            if ($settings->getLintUnknownGlobalConstants()) {
                 $unknownGlobalConstantAnalyzer = new UnknownGlobalConstantAnalyzer(
                     $this->globalConstantExistenceChecker
                 );
@@ -238,7 +225,7 @@ class Linter
 
             $unknownGlobalFunctionAnalyzer = null;
 
-            if ($retrieveUnknownGlobalFunctions) {
+            if ($settings->getLintUnknownGlobalFunctions()) {
                 $unknownGlobalFunctionAnalyzer = new UnknownGlobalFunctionAnalyzer(
                     $this->globalFunctionExistenceChecker
                 );

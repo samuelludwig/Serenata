@@ -9,6 +9,7 @@
 * Linting will now report the fully qualified name of a global constant that wasn't found (instead of just the local name).
 * Updated to react/socket 0.5.0.
 * Indexing performance has slightly improved.
+* Fix disabling unknown global constant linting having no effect.
 * Data related to `throws` is now returned as an array of arrays, each with a `type` and a `description` key instead of an associative array mapping the former to the latter.
   * This is recommended by [phpDocumentor](https://phpdoc.org/docs/latest/references/phpdoc/tags/throws.html).
   * This allows the same exception type to be referenced multiple times to describe it being thrown in different situations.
