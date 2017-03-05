@@ -1,5 +1,17 @@
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).
+* Fix this snippet of code causing php-parser to generate a fatal error:
+
+```php
+<?php
+
+function foo()
+{
+    return $this->arrangements->filter(function (LodgingArrangement $arrangement) {
+        return
+    })->first();
+}
+```
 
 ## 2.1.5
 * Indexing performance was slightly improved.
