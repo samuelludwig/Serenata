@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis;
+namespace PhpIntegrator\Tests\Integration\Analysis;
 
 use PhpIntegrator\Analysis\ClassListProvider;
 
