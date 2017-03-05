@@ -41,36 +41,4 @@ class ResolvedNameAttachingVisitor extends NameResolver
 
         return $name;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function enterNode(Node $node)
-    {
-        $value = parent::enterNode($node);
-
-        // NOTE: Workaround for nullable types being resolved too late. See also
-        // https://github.com/nikic/PHP-Parser/issues/360
-        if ($node instanceof Node\FunctionLike) {
-            $this->resolveSignatureNullableTypes($node);
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param Node\FunctionLike $node
-     */
-    protected function resolveSignatureNullableTypes(Node\FunctionLike $node)
-    {
-        foreach ($node->getParams() as $param) {
-            if ($param->type instanceof Node\NullableType && $param->type->type instanceof Name) {
-                $this->resolveClassName($param->type->type);
-            }
-        }
-
-        if ($node->getReturnType() instanceof Node\NullableType && $node->getReturnType()->type instanceof Name) {
-            $this->resolveClassName($node->getReturnType()->type);
-        }
-    }
 }
