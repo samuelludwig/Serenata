@@ -2,7 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use PhpParser\Node;
 use PhpParser\Node\Name;
 
 use PhpParser\NodeVisitor\NameResolver;
