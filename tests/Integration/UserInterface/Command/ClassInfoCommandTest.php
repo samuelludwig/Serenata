@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\ClassInfoCommand;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class ClassInfoCommandTest extends AbstractIndexedTest
 {

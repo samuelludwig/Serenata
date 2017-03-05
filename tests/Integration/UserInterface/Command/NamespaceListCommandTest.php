@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class NamespaceListCommandTest extends AbstractIndexedTest
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests;
+namespace PhpIntegrator\Tests\Integration;
 
 use ReflectionClass;
 

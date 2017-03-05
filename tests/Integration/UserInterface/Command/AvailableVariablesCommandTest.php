@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\AvailableVariablesCommand;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class AvailableVariablesCommandTest extends AbstractIndexedTest
 {

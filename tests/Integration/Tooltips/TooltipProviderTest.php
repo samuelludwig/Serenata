@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 use PhpIntegrator\Tooltips\TooltipResult;
 

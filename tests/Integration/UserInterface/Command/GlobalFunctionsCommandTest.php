@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class GlobalFunctionsCommandTest extends AbstractIndexedTest
 {

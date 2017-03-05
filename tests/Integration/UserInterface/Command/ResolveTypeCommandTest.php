@@ -6,7 +6,7 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 use PhpIntegrator\UserInterface\Command\ResolveTypeCommand;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class ResolveTypeCommandTest extends AbstractIndexedTest
 {

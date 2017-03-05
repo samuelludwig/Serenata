@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tests\Integration\Analysis;
 
 use PhpIntegrator\Analysis\ClassListProvider;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

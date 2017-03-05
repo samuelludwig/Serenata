@@ -6,7 +6,7 @@ use ReflectionClass;
 
 use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
-use PhpIntegrator\Tests\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
 class DeduceTypesCommandTest extends AbstractIndexedTest
 {
