@@ -69,44 +69,7 @@ class FunctionTooltipGenerator
         }
 
         foreach ($functionInfo['parameters'] as $parameter) {
-            $parameterColumns = [];
-
-            $name = '';
-            $name .= '• ';
-
-            if ($parameter['isOptional']) {
-                $name .= '[';
-            }
-
-            if ($parameter['isReference']) {
-                $name .= '&';
-            }
-
-            if ($parameter['isVariadic']) {
-                $name = '...';
-            }
-
-            $name .= '$' . $parameter['name'];
-
-            if ($parameter['isOptional']) {
-                $name .= ']';
-            }
-
-            $parameterColumns[] = '**' . $name . '**';
-
-            if (!empty($parameter['types'])) {
-                $parameterColumns[] = '*' . $this->getTypeStringForTypeArray($parameter['types']) . '*';
-            } else {
-                $parameterColumns[] = ' ';
-            }
-
-            if ($parameter['description']) {
-                $parameterColumns[] = $parameter['description'];
-            } else {
-                $parameterColumns[] = ' ';
-            }
-
-            $parameterLines[] = implode(' | ', $parameterColumns);
+            $parameterLines[] = $this->generateParameterLine($parameter);
         }
 
         // The header symbols seem to be required for some markdown parser, such as npm's marked.
@@ -116,6 +79,53 @@ class FunctionTooltipGenerator
             implode("\n", $parameterLines);
 
         return "# Parameters\n" . $table;
+    }
+
+    /**
+     * @param array $parameter
+     *
+     * @return string
+     */
+    protected function generateParameterLine(array $parameter): string
+    {
+        $parameterColumns = [];
+
+        $name = '';
+        $name .= '• ';
+
+        if ($parameter['isOptional']) {
+            $name .= '[';
+        }
+
+        if ($parameter['isReference']) {
+            $name .= '&';
+        }
+
+        if ($parameter['isVariadic']) {
+            $name = '...';
+        }
+
+        $name .= '$' . $parameter['name'];
+
+        if ($parameter['isOptional']) {
+            $name .= ']';
+        }
+
+        $parameterColumns[] = '**' . $name . '**';
+
+        if (!empty($parameter['types'])) {
+            $parameterColumns[] = '*' . $this->getTypeStringForTypeArray($parameter['types']) . '*';
+        } else {
+            $parameterColumns[] = ' ';
+        }
+
+        if ($parameter['description']) {
+            $parameterColumns[] = $parameter['description'];
+        } else {
+            $parameterColumns[] = ' ';
+        }
+
+        return implode(' | ', $parameterColumns);
     }
 
     /**
