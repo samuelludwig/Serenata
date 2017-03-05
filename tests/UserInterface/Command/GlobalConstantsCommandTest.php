@@ -116,4 +116,14 @@ class GlobalConstantsCommandTest extends IndexedTest
 
         $this->assertEquals('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
     }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyFetchesDefaultValueOfDefineWithIncompleteConstFetch()
+    {
+        $output = $this->getGlobalConstants('DefineWithIncompleteConstFetch.phpt');
+
+        $this->assertEquals('\Test::', $output['\TEST_CONSTANT']['defaultValue']);
+    }
 }
