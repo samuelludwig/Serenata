@@ -105,13 +105,13 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
                 return [$this->typeAnalyzer->getNormalizedFqcn($type)];
             }
-        } else {
-            $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
-            $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($nameString, $line);
-
-            return [$fqcn];
         }
+
+        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+        $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($nameString, $line);
+
+        return [$fqcn];
     }
 
     /**
