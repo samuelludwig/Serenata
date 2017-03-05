@@ -159,13 +159,13 @@ class FunctionTooltipGenerator
     {
         $throwsLines = [];
 
-        foreach ($functionInfo['throws'] as $exceptionType => $thrownWhen) {
+        foreach ($functionInfo['throws'] as $throwsItem) {
             $throwsColumns = [];
 
-            $throwsColumns[] = "• **{$exceptionType}**";
+            $throwsColumns[] = "• **{$throwsItem['type']}**";
 
-            if ($thrownWhen) {
-                $throwsColumns[] = $thrownWhen;
+            if ($throwsItem['description']) {
+                $throwsColumns[] = $throwsItem['description'];
             } else {
                 $throwsColumns[] = ' ';
             }

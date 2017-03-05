@@ -501,7 +501,10 @@ class DocblockParser
                 list($type, $description) = $this->filterParameterTag($tag, 2);
 
                 if ($type) {
-                    $throws[$type] = $description;
+                    $throws[] = [
+                        'type'        => $type,
+                        'description' => $description
+                    ];
                 }
             }
         }

@@ -400,8 +400,15 @@ class ClassInfoCommandTest extends IndexedTest
             ],
 
             'throws'             => [
-                '\UnexpectedValueException' => 'when something goes wrong.',
-                '\LogicException'           => 'when something is wrong.'
+                [
+                    'type'        => '\UnexpectedValueException',
+                    'description' => 'when something goes wrong.'
+                ],
+
+                [
+                    'type'        => '\LogicException',
+                    'description' => 'when something is wrong.'
+                ]
             ],
 
             'isDeprecated'       => false,

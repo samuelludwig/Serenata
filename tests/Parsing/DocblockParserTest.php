@@ -123,7 +123,10 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
         ', [DocblockParser::THROWS], '');
 
         $this->assertEquals([
-            '\UnexpectedValueException' => 'Some description'
+            [
+                'type'        => '\UnexpectedValueException',
+                'description' => 'Some description'
+            ]
         ], $result['throws']);
     }
 
@@ -140,7 +143,10 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
         ', [DocblockParser::THROWS], '');
 
         $this->assertEquals([
-            '\UnexpectedValueException' => null
+            [
+                'type'        => '\UnexpectedValueException',
+                'description' => null
+            ]
         ], $result['throws']);
     }
 }
