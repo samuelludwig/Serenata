@@ -91,7 +91,7 @@ class FunctionTooltipGenerator
         $parameterColumns = [];
 
         $name = '';
-        $name .= '• ';
+        $name .= '•&nbsp;';
 
         if ($parameter['isOptional']) {
             $name .= '[';

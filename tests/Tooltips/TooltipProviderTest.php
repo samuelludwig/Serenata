@@ -85,9 +85,9 @@ Hello!
 # Parameters
    |   |   ' . '
 --- | --- | ---
-**• $first** | *string* | Testdescription
-**• $second** | *int* | Test
-**• $third** | *\Exception* | Test
+**•&nbsp;$first** | *string* | Testdescription
+**•&nbsp;$second** | *int* | Test
+**•&nbsp;$third** | *\Exception* | Test
 
 # Returns
 *string&#124;bool*
@@ -446,8 +446,8 @@ Hello!
 # Parameters
    |   |   ' . '
 --- | --- | ---
-**• $param1** | *int* |  ' . '
-**• $param2** | *bool* |  ' . '
+**•&nbsp;$param1** | *int* |  ' . '
+**•&nbsp;$param2** | *bool* |  ' . '
 
 # Returns
 *void*');
