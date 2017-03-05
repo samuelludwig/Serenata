@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
-class SemanticLintCommandTest extends AbstractIndexedTest
+class LinterTest extends AbstractIndexedTest
 {
     /**
      * @param string $file
@@ -14,15 +14,15 @@ class SemanticLintCommandTest extends AbstractIndexedTest
      */
     protected function lintFile(string $file, bool $indexingMayFail = false): array
     {
-        $path = __DIR__ . '/SemanticLintCommandTest/' . $file;
+        $path = __DIR__ . '/LinterTest/' . $file;
 
         $container = $this->createTestContainer();
 
         $this->indexTestFile($container, $path, $indexingMayFail);
 
-        $command = $container->get('semanticLintCommand');
+        $linter = $container->get('linter');
 
-        return $command->semanticLint($path, file_get_contents($path));
+        return $linter->lint($path, file_get_contents($path));
     }
 
     /**

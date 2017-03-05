@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Linting;
+namespace PhpIntegrator\Linting;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 

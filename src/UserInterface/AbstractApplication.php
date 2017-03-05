@@ -84,6 +84,8 @@ use PhpIntegrator\Indexing\ProjectIndexer;
 use PhpIntegrator\Indexing\BuiltinIndexer;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
 
+use PhpIntegrator\Linting\Linter;
+
 use PhpIntegrator\Mediating\CacheClearingEventMediator;
 
 use PhpIntegrator\Parsing\PrettyPrinter;
@@ -447,6 +449,21 @@ abstract class AbstractApplication
         $container
             ->register('fileTypeLocalizerFactory', FileTypeLocalizerFactory::class)
             ->setArguments([new Reference('typeLocalizer'), new Reference('indexDatabase')]);
+
+        $container
+            ->register('linter', Linter::class)
+            ->setArguments([
+                new Reference('parser'),
+                new Reference('fileTypeResolverFactory'),
+                new Reference('nodeTypeDeducer'),
+                new Reference('classlikeInfoBuilder'),
+                new Reference('docblockParser'),
+                new Reference('typeAnalyzer'),
+                new Reference('docblockAnalyzer'),
+                new Reference('classlikeExistenceChecker'),
+                new Reference('globalConstantExistenceChecker'),
+                new Reference('globalFunctionExistenceChecker')
+            ]);
     }
 
     /**
@@ -848,16 +865,7 @@ abstract class AbstractApplication
             ->register('semanticLintCommand', Command\SemanticLintCommand::class)
             ->setArguments([
                 new Reference('sourceCodeStreamReader'),
-                new Reference('parser'),
-                new Reference('fileTypeResolverFactory'),
-                new Reference('nodeTypeDeducer'),
-                new Reference('classlikeInfoBuilder'),
-                new Reference('docblockParser'),
-                new Reference('typeAnalyzer'),
-                new Reference('docblockAnalyzer'),
-                new Reference('classlikeExistenceChecker'),
-                new Reference('globalConstantExistenceChecker'),
-                new Reference('globalFunctionExistenceChecker')
+                new Reference('linter')
             ]);
 
         $container
