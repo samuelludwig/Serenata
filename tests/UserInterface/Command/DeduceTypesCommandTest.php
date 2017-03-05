@@ -26,11 +26,7 @@ class DeduceTypesCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new DeduceTypesCommand(
-            $container->get('nodeTypeDeducer'),
-            $container->get('lastExpressionParser'),
-            $container->get('sourceCodeStreamReader')
-        );
+        $command = $container->get('deduceTypesCommand');
 
         $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
         $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');

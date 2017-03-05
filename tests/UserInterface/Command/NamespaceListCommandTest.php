@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\NamespaceListCommand;
-
 use PhpIntegrator\Tests\IndexedTest;
 
 class NamespaceListCommandTest extends IndexedTest
@@ -19,9 +17,7 @@ class NamespaceListCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new NamespaceListCommand(
-            $container->get('indexDatabase')
-        );
+        $command = $container->get('namespaceListCommand');
 
         $output = $command->getNamespaceList();
 

@@ -19,9 +19,7 @@ class GlobalFunctionsCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new GlobalFunctionsCommand(
-            $container->get('globalFunctionsProvider')
-        );
+        $command = $container->get('globalFunctionsCommand');
 
         $output = $command->getGlobalFunctions();
 

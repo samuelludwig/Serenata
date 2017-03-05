@@ -22,10 +22,7 @@ class ClassInfoCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ClassInfoCommand(
-            $container->get('typeAnalyzer'),
-            $container->get('classlikeInfoBuilder')
-        );
+        $command = $container->get('classInfoCommand');
 
         return $command->getClassInfo($fqcn);
     }

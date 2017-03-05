@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\SemanticLintCommand;
-
 use PhpIntegrator\Tests\IndexedTest;
 
 class SemanticLintCommandTest extends IndexedTest
@@ -22,19 +20,7 @@ class SemanticLintCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path, $indexingMayFail);
 
-        $command = new SemanticLintCommand(
-            $container->get('sourceCodeStreamReader'),
-            $container->get('parser'),
-            $container->get('fileTypeResolverFactory'),
-            $container->get('nodeTypeDeducer'),
-            $container->get('classlikeInfoBuilder'),
-            $container->get('docblockParser'),
-            $container->get('typeAnalyzer'),
-            $container->get('docblockAnalyzer'),
-            $container->get('classlikeExistenceChecker'),
-            $container->get('globalConstantExistenceChecker'),
-            $container->get('globalFunctionExistenceChecker')
-        );
+        $command = $container->get('semanticLintCommand');
 
         return $command->semanticLint($path, file_get_contents($path));
     }

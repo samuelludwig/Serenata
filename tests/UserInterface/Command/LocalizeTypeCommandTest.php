@@ -21,10 +21,7 @@ class LocalizeTypeCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new LocalizeTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('fileTypeLocalizerFactory')
-        );
+        $command = $container->get('localizeTypeCommand');
 
         $this->assertEquals('\C', $command->localizeType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\C', $command->localizeType('\C', $path, 5, UseStatementKind::TYPE_CLASSLIKE));

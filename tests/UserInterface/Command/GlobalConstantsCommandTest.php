@@ -21,9 +21,7 @@ class GlobalConstantsCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new GlobalConstantsCommand(
-            $container->get('globalConstantsProvider')
-        );
+        $command = $container->get('globalConstantsCommand');
 
         return $command->getGlobalConstants();
     }

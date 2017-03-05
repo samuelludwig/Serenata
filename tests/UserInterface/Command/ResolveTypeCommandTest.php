@@ -21,10 +21,7 @@ class ResolveTypeCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\C', $command->resolveType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\A\C', $command->resolveType('C', $path, 5, UseStatementKind::TYPE_CLASSLIKE));

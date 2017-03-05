@@ -22,13 +22,7 @@ class AvailableVariablesCommandTest extends IndexedTest
 
         $this->indexTestFile($container, $path, $mayFail);
 
-        $command = new AvailableVariablesCommand(
-            $container->get('variableScanner'),
-            $container->get('parser'),
-            $container->get('sourceCodeStreamReader')
-        );
-
-        return $command;
+        return $container->get('availableVariablesCommand');
     }
 
     /**
