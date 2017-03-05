@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Tooltips;
+namespace PhpIntegrator\Tests\Unit\Tooltips;
 
 use PhpIntegrator\Tests\IndexedTest;
 

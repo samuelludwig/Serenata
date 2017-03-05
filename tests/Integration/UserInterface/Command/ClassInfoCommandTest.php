@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\UserInterface\Command;
+namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\ClassInfoCommand;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Analysis\Visiting;
+namespace PhpIntegrator\Tests\Unit\Analysis\Visiting;
 
 use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
 

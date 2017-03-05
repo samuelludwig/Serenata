@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Parsing;
+namespace PhpIntegrator\Tests\Unit\Parsing;
 
 use PhpIntegrator\Parsing\PartialParser;
 
