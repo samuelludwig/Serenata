@@ -1,3 +1,6 @@
+## 2.1.6
+* Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given`.
+
 ## 2.1.5
 * Indexing performance was slightly improved.
 * Fix regression where complex strings with more complex interpolated values wrapped in parantheses were failing to parse, causing indexing to fail for files containing them (https://github.com/php-integrator/core/issues/83).
