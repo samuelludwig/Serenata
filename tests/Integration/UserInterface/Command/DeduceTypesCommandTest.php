@@ -6,9 +6,9 @@ use ReflectionClass;
 
 use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
-use PhpIntegrator\Tests\IndexedTest;
+use PhpIntegrator\Tests\AbstractIndexedTest;
 
-class DeduceTypesCommandTest extends IndexedTest
+class DeduceTypesCommandTest extends AbstractIndexedTest
 {
     /**
      * @param string $file

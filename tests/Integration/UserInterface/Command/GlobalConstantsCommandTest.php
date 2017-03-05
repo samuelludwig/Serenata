@@ -4,9 +4,9 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\GlobalConstantsCommand;
 
-use PhpIntegrator\Tests\IndexedTest;
+use PhpIntegrator\Tests\AbstractIndexedTest;
 
-class GlobalConstantsCommandTest extends IndexedTest
+class GlobalConstantsCommandTest extends AbstractIndexedTest
 {
     /**
      * @param string $file

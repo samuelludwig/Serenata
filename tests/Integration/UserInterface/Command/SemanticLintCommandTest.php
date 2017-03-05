@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Tests\IndexedTest;
+use PhpIntegrator\Tests\AbstractIndexedTest;
 
-class SemanticLintCommandTest extends IndexedTest
+class SemanticLintCommandTest extends AbstractIndexedTest
 {
     /**
      * @param string $file

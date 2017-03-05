@@ -4,11 +4,11 @@ namespace PhpIntegrator\Tests\Unit\Analysis;
 
 use PhpIntegrator\Analysis\ClassListProvider;
 
-use PhpIntegrator\Tests\IndexedTest;
+use PhpIntegrator\Tests\AbstractIndexedTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ClassListProviderTest extends IndexedTest
+class ClassListProviderTest extends AbstractIndexedTest
 {
     /**
      * @return ClassListProvider

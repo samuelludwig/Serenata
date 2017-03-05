@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Abstract base class for tests that need to test functionality that requires an indexing database to be set up with
  * the contents of a file or folder already indexed.
  */
-abstract class IndexedTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractIndexedTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ContainerBuilder

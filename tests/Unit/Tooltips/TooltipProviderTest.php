@@ -2,11 +2,11 @@
 
 namespace PhpIntegrator\Tests\Unit\Tooltips;
 
-use PhpIntegrator\Tests\IndexedTest;
+use PhpIntegrator\Tests\AbstractIndexedTest;
 
 use PhpIntegrator\Tooltips\TooltipResult;
 
-class TooltipProviderTest extends IndexedTest
+class TooltipProviderTest extends AbstractIndexedTest
 {
     /**
      * @param string $file
