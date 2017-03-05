@@ -100,11 +100,13 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($currentClassName);
 
-            if ($classInfo && !empty($classInfo['parents'])) {
-                $type = $classInfo['parents'][0];
-
-                return [$this->typeAnalyzer->getNormalizedFqcn($type)];
+            if ($classInfo || empty($classInfo['parents'])) {
+                return [];
             }
+
+            $type = $classInfo['parents'][0];
+
+            return [$this->typeAnalyzer->getNormalizedFqcn($type)];
         }
 
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
