@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Tooltips;
+namespace PhpIntegrator\Tests\Integration\Tooltips;
 
 use PhpIntegrator\Tests\AbstractIndexedTest;
 
