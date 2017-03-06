@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Linting;
 
-use UnexpectedValueException;
-
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
@@ -42,11 +40,6 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      * @var ClasslikeInfoBuilder
      */
     protected $classlikeInfoBuilder;
-
-    /**
-     * @var array
-     */
-    protected $classCache = [];
 
     /**
      * @param string               $code
@@ -205,7 +198,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             return $docblockIssues;
         }
 
-        $classInfo = $this->getClassInfo($structure['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
             $docblockIssues['missingDocumentation'][] = [
@@ -235,7 +228,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             'missingDocumentation' => []
         ];
 
-        $classInfo = $this->getClassInfo($structure['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
 
         if ($classInfo &&
             isset($classInfo['methods'][$method['name']]) &&
@@ -277,7 +270,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
                 ];
             }
         } else {
-            $classInfo = $this->getClassInfo($structure['fqcn']);
+            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
 
             if ($classInfo &&
                 isset($classInfo['properties'][$property['name']]) &&
@@ -516,23 +509,5 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
                 'end'        => $function['endPosName']
             ]
         ];
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return array|null
-     */
-    protected function getClassInfo(string $fqcn): ?array
-    {
-        if (!isset($classCache[$fqcn])) {
-            try {
-                $classCache[$fqcn] = $this->classlikeInfoBuilder->getClasslikeInfo($fqcn);
-            } catch (UnexpectedValueException $e) {
-                $classCache[$fqcn] = null;
-            }
-        }
-
-        return $classCache[$fqcn];
     }
 }
