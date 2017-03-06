@@ -583,12 +583,18 @@ class LinterTest extends AbstractIndexedTest
     /**
      * @return void
      */
-    public function testCorrectlyInterpretsVariadicParametersWhenCheckingForParameterTypeMismatches(): void
+    public function testHighlightsReferenceParameterWithDocblockParameterMismatch(): void
     {
-        $output = $this->lintFile('DocblockCorrectnessVariadicParam.phpt');
+        $output = $this->lintFile('DocblockCorrectnessReferenceParam.phpt');
 
         $this->assertEquals([
-
+            [
+                'name'      => 'some_function_parameter_incorrect_type',
+                'line'      => 8,
+                'start'     => 57,
+                'end'       => 58,
+                'parameter' => '$param1'
+            ]
         ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
     }
 
