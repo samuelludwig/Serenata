@@ -86,7 +86,12 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     public function getErrors(): array
     {
-        return [];
+        return [
+            'varTagMissing'         => $this->getVarTagMissingErrors(),
+            'parameterMissing'      => $this->getParameterMissingErrors(),
+            'parameterTypeMismatch' => $this->getParameterTypeMismatchErrors(),
+            'superfluousParameter'  => $this->getSuperfluousParameterErrors()
+        ];
     }
 
     /**
@@ -94,57 +99,26 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     public function getWarnings(): array
     {
-        $docblockIssues = [
-            'varTagMissing'           => [],
-            'missingDocumentation'    => [],
-            'parameterMissing'        => [],
-            'parameterTypeMismatch'   => [],
-            'superfluousParameter'    => [],
-            'deprecatedCategoryTag'   => [],
-            'deprecatedSubpackageTag' => [],
-            'deprecatedLinkTag'       => []
+        return [
+            'missingDocumentation'    => $this->getMissingDocumentationWarnings(),
+            'deprecatedCategoryTag'   => $this->getDeprecatedCategoryTagWarnings(),
+            'deprecatedSubpackageTag' => $this->getDeprecatedSubpackageTagWarnings(),
+            'deprecatedLinkTag'       => $this->getDeprecatedLinkTagWarnings()
         ];
+    }
 
-        $structures = $this->outlineIndexingVisitor->getStructures();
+    /**
+     * @return array
+     */
+    protected function getVarTagMissingErrors(): array
+    {
+        $errors = [];
 
-        foreach ($structures as $structure) {
-            $docblockIssues = array_merge_recursive(
-                $docblockIssues,
-                $this->analyzeStructureDocblock($structure)
-            );
-
-            foreach ($structure['methods'] as $method) {
-                $docblockIssues = array_merge_recursive(
-                    $docblockIssues,
-                    $this->analyzeMethodDocblock($structure, $method)
-                );
-            }
-
-            foreach ($structure['properties'] as $property) {
-                $docblockIssues = array_merge_recursive(
-                    $docblockIssues,
-                    $this->analyzePropertyDocblock($structure, $property)
-                );
-            }
-
-            foreach ($structure['constants'] as $constant) {
-                $docblockIssues = array_merge_recursive(
-                    $docblockIssues,
-                    $this->analyzeClassConstantDocblock($structure, $constant)
-                );
-            }
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $errors = array_merge($errors, $this->getVarTagMissingErrorsForStructure($structure));
         }
 
-        $globalFunctions = $this->outlineIndexingVisitor->getGlobalFunctions();
-
-        foreach ($globalFunctions as $function) {
-            $docblockIssues = array_merge_recursive(
-                $docblockIssues,
-                $this->analyzeFunctionDocblock($function)
-            );
-        }
-
-        return $docblockIssues;
+        return $errors;
     }
 
     /**
@@ -152,56 +126,436 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeStructureDocblock(array $structure): array
+    protected function getVarTagMissingErrorsForStructure(array $structure): array
     {
-        $docblockIssues = [
-            'missingDocumentation'    => [],
-            'deprecatedCategoryTag'   => [],
-            'deprecatedSubpackageTag' => [],
-            'deprecatedLinkTag'       => []
-        ];
+        $errors = [];
 
-        if ($structure['docComment']) {
-            $result = $this->docblockParser->parse($structure['docComment'], [
-                DocblockParser::CATEGORY,
-                DocblockParser::SUBPACKAGE,
-                DocblockParser::LINK
-            ], $structure['name']);
-
-            if ($result['category']) {
-                $docblockIssues['deprecatedCategoryTag'][] = [
-                    'name'  => $structure['name'],
-                    'line'  => $structure['startLine'],
-                    'start' => $structure['startPosName'],
-                    'end'   => $structure['endPosName']
-                ];
-            }
-
-            if ($result['subpackage']) {
-                $docblockIssues['deprecatedSubpackageTag'][] = [
-                    'name'  => $structure['name'],
-                    'line'  => $structure['startLine'],
-                    'start' => $structure['startPosName'],
-                    'end'   => $structure['endPosName']
-                ];
-            }
-
-            if ($result['link']) {
-                $docblockIssues['deprecatedLinkTag'][] = [
-                    'name'  => $structure['name'],
-                    'line'  => $structure['startLine'],
-                    'start' => $structure['startPosName'],
-                    'end'   => $structure['endPosName']
-                ];
-            }
-
-            return $docblockIssues;
+        foreach ($structure['properties'] as $property) {
+            $errors = array_merge($errors, $this->getVarTagMissingErrorsForProperty($structure, $property));
         }
+
+        foreach ($structure['constants'] as $constant) {
+            $errors = array_merge($errors, $this->getVarTagMissingErrorsForClassConstant($structure, $constant));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $property
+     *
+     * @return array
+     */
+    protected function getVarTagMissingErrorsForProperty(array $structure, array $property): array
+    {
+        if (!$property['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse($property['docComment'], [DocblockParser::VAR_TYPE], $property['name']);
+
+        if (isset($result['var']['$' . $property['name']]['type'])) {
+            return [];
+        }
+
+        return [
+            [
+                'name'  => $property['name'],
+                'line'  => $property['startLine'],
+                'start' => $property['startPosName'],
+                'end'   => $property['endPosName']
+            ]
+        ];
+    }
+
+    /**
+     * @param array $structure
+     * @param array $constant
+     *
+     * @return array
+     */
+    protected function getVarTagMissingErrorsForClassConstant(array $structure, array $constant): array
+    {
+        if (!$constant['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse($constant['docComment'], [DocblockParser::VAR_TYPE], $constant['name']);
+
+        if (isset($result['var']['$' . $constant['name']]['type'])) {
+            return [];
+        }
+
+        return [
+            [
+                'name'  => $constant['name'],
+                'line'  => $constant['startLine'],
+                'start' => $constant['startPosName'],
+                'end'   => $constant['endPosName'] + 1
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParameterMissingErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $errors = array_merge($errors, $this->getParameterMissingErrorsForStructure($structure));
+        }
+
+        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
+            $errors = array_merge($errors, $this->getParameterMissingErrorsForGlobalFunction($globalFunction));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     *
+     * @return array
+     */
+    protected function getParameterMissingErrorsForStructure(array $structure): array
+    {
+        $errors = [];
+
+        foreach ($structure['methods'] as $method) {
+            $errors = array_merge($errors, $this->getParameterMissingErrorsForMethod($structure, $method));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $method
+     *
+     * @return array
+     */
+    protected function getParameterMissingErrorsForMethod(array $structure, array $method): array
+    {
+        return $this->getParameterMissingErrorsForGlobalFunction($method);
+    }
+
+    /**
+     * @param array $globalFunction
+     *
+     * @return array
+     */
+    protected function getParameterMissingErrorsForGlobalFunction(array $globalFunction): array
+    {
+        if (!$globalFunction['docComment']) {
+           return [];
+       }
+
+       $result = $this->docblockParser->parse(
+           $globalFunction['docComment'],
+           [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+           $globalFunction['name']
+       );
+
+       if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+           return [];
+       }
+
+       $docblockParameters = $result['params'];
+
+       $issues = [];
+
+       foreach ($globalFunction['parameters'] as $parameter) {
+           $dollarName = '$' . $parameter['name'];
+
+           if (isset($docblockParameters[$dollarName])) {
+               continue;
+           }
+
+           $issues[] = [
+               'name'      => $globalFunction['name'],
+               'parameter' => $dollarName,
+               'line'      => $globalFunction['startLine'],
+               'start'     => $globalFunction['startPosName'],
+               'end'       => $globalFunction['endPosName']
+           ];
+       }
+
+       return $issues;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParameterTypeMismatchErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForStructure($structure));
+        }
+
+        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
+            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForGlobalFunction($globalFunction));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     *
+     * @return array
+     */
+    protected function getParameterTypeMismatchErrorsForStructure(array $structure): array
+    {
+        $errors = [];
+
+        foreach ($structure['methods'] as $method) {
+            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForMethod($structure, $method));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $method
+     *
+     * @return array
+     */
+    protected function getParameterTypeMismatchErrorsForMethod(array $structure, array $method): array
+    {
+        return $this->getParameterTypeMismatchErrorsForGlobalFunction($method);
+    }
+
+    /**
+     * @param array $globalFunction
+     *
+     * @return array
+     */
+    protected function getParameterTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
+    {
+        if (!$globalFunction['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse(
+            $globalFunction['docComment'],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+            $globalFunction['name']
+        );
+
+        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+            return [];
+        }
+
+        $docblockParameters = $result['params'];
+
+        $issues = [];
+
+        foreach ($globalFunction['parameters'] as $parameter) {
+            $dollarName = '$' . $parameter['name'];
+
+            if (!isset($docblockParameters[$dollarName]) || !$parameter['type']) {
+                continue;
+            }
+
+            $parameterType = $parameter['type'];
+
+            if ($parameter['isVariadic']) {
+                $parameterType .= '[]';
+            }
+
+            $docblockType = $docblockParameters[$dollarName]['type'];
+
+            if ($this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType) &&
+                $parameter['isReference'] === $docblockParameters[$dollarName]['isReference']
+            ) {
+                continue;
+            }
+
+            $issues[] = [
+                'name'      => $globalFunction['name'],
+                'parameter' => $dollarName,
+                'line'      => $globalFunction['startLine'],
+                'start'     => $globalFunction['startPosName'],
+                'end'       => $globalFunction['endPosName']
+            ];
+        }
+
+        return $issues;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSuperfluousParameterErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForStructure($structure));
+        }
+
+        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
+            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForGlobalFunction($globalFunction));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     *
+     * @return array
+     */
+    protected function getSuperfluousParameterErrorsForStructure(array $structure): array
+    {
+        $errors = [];
+
+        foreach ($structure['methods'] as $method) {
+            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForMethod($structure, $method));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $method
+     *
+     * @return array
+     */
+    protected function getSuperfluousParameterErrorsForMethod(array $structure, array $method): array
+    {
+        return $this->getSuperfluousParameterErrorsForGlobalFunction($method);
+    }
+
+    /**
+     * @param array $globalFunction
+     *
+     * @return array
+     */
+    protected function getSuperfluousParameterErrorsForGlobalFunction(array $globalFunction): array
+    {
+        if (!$globalFunction['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse(
+            $globalFunction['docComment'],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+            $globalFunction['name']
+        );
+
+        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+            return [];
+        }
+
+        $keysFound = [];
+        $docblockParameters = $result['params'];
+
+        foreach ($globalFunction['parameters'] as $parameter) {
+            $dollarName = '$' . $parameter['name'];
+
+            if (isset($docblockParameters[$dollarName])) {
+                $keysFound[] = $dollarName;
+            }
+        }
+
+        $superfluousParameterNames = array_values(array_diff(array_keys($docblockParameters), $keysFound));
+
+        if (empty($superfluousParameterNames)) {
+            return [];
+        }
+
+        return [
+            [
+                'name'       => $globalFunction['name'],
+                'parameters' => $superfluousParameterNames,
+                'line'       => $globalFunction['startLine'],
+                'start'      => $globalFunction['startPosName'],
+                'end'        => $globalFunction['endPosName']
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMissingDocumentationWarnings(): array
+    {
+        $warnings = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForStructure($structure));
+        }
+
+        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForGlobalFunction($globalFunction));
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDeprecatedCategoryTagWarnings(): array
+    {
+        $warnings = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $warnings = array_merge($warnings, $this->getDeprecatedCategoryTagWarningsForStructure($structure));
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDeprecatedSubpackageTagWarnings(): array
+    {
+        $warnings = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $warnings = array_merge($warnings, $this->getDeprecatedSubpackageTagWarningsForStructure($structure));
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDeprecatedLinkTagWarnings(): array
+    {
+        $warnings = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $warnings = array_merge($warnings, $this->getDeprecatedLinkTagWarningsForStructure($structure));
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * @param array $structure
+     *
+     * @return array
+     */
+    protected function getMissingDocumentationWarningsForStructure(array $structure): array
+    {
+        $warnings = [];
 
         $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
-            $docblockIssues['missingDocumentation'][] = [
+            $warnings[] = [
                 'name'  => $structure['name'],
                 'line'  => $structure['startLine'],
                 'start' => $structure['startPosName'],
@@ -209,21 +563,40 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             ];
         }
 
-        return $docblockIssues;
+        foreach ($structure['methods'] as $method) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForMethod($structure, $method));
+        }
+
+        foreach ($structure['properties'] as $property) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForProperty($structure, $property));
+        }
+
+        foreach ($structure['constants'] as $constant) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForClassConstant($structure, $constant));
+        }
+
+        return $warnings;
     }
 
     /**
-     * @param array $structure
-     * @param array $method
+     * @param array $globalFunction
      *
      * @return array
      */
-    protected function analyzeMethodDocblock(array $structure, array $method): array
+    protected function getMissingDocumentationWarningsForGlobalFunction(array $globalFunction): array
     {
-        $issues = $this->analyzeFunctionDocblock($method);
-        $issues['missingDocumentation'] = $this->analyzeMethodDocblockMissingDocumentation($structure, $method);
+        if ($globalFunction['docComment']) {
+            return [];
+        }
 
-        return $issues;
+        return [
+            [
+                'name'  => $globalFunction['name'],
+                'line'  => $globalFunction['startLine'],
+                'start' => $globalFunction['startPosName'],
+                'end'   => $globalFunction['endPosName']
+            ]
+        ];
     }
 
     /**
@@ -232,7 +605,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeMethodDocblockMissingDocumentation(array $structure, array $method): array
+    protected function getMissingDocumentationWarningsForMethod(array $structure, array $method): array
     {
         if ($method['docComment']) {
             return [];
@@ -263,49 +636,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzePropertyDocblock(array $structure, array $property): array
-    {
-        return [
-            'varTagMissing'        => $this->analyzePropertyDocblockVarTagMissing($structure, $property),
-            'missingDocumentation' => $this->analyzePropertyDocblockMissingDocumentation($structure, $property)
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $property
-     *
-     * @return array
-     */
-    protected function analyzePropertyDocblockVarTagMissing(array $structure, array $property): array
-    {
-        if (!$property['docComment']) {
-            return [];
-        }
-
-        $result = $this->docblockParser->parse($property['docComment'], [DocblockParser::VAR_TYPE], $property['name']);
-
-        if (isset($result['var']['$' . $property['name']]['type'])) {
-            return [];
-        }
-
-        return [
-            [
-                'name'  => $property['name'],
-                'line'  => $property['startLine'],
-                'start' => $property['startPosName'],
-                'end'   => $property['endPosName']
-            ]
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $property
-     *
-     * @return array
-     */
-    protected function analyzePropertyDocblockMissingDocumentation(array $structure, array $property): array
+    protected function getMissingDocumentationWarningsForProperty(array $structure, array $property): array
     {
         if ($property['docComment']) {
             return [];
@@ -336,49 +667,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function analyzeClassConstantDocblock(array $structure, array $constant): array
-    {
-        return [
-            'varTagMissing'        => $this->analyzeClassConstantDocblockVarTagMissing($structure, $constant),
-            'missingDocumentation' => $this->analyzeClassConstantDocblockMissingDocumentation($structure, $constant)
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $constant
-     *
-     * @return array
-     */
-    protected function analyzeClassConstantDocblockVarTagMissing(array $structure, array $constant): array
-    {
-        if (!$constant['docComment']) {
-            return [];
-        }
-
-        $result = $this->docblockParser->parse($constant['docComment'], [DocblockParser::VAR_TYPE], $constant['name']);
-
-        if (isset($result['var']['$' . $constant['name']]['type'])) {
-            return [];
-        }
-
-        return [
-            [
-                'name'  => $constant['name'],
-                'line'  => $constant['startLine'],
-                'start' => $constant['startPosName'],
-                'end'   => $constant['endPosName'] + 1
-            ]
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $constant
-     *
-     * @return array
-     */
-    protected function analyzeClassConstantDocblockMissingDocumentation(array $structure, array $constant): array
+    protected function getMissingDocumentationWarningsForClassConstant(array $structure, array $constant): array
     {
         if ($constant['docComment']) {
             return [];
@@ -395,188 +684,76 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $function
+     * @param array $structure
      *
      * @return array
      */
-    protected function analyzeFunctionDocblock(array $function): array
+    protected function getDeprecatedCategoryTagWarningsForStructure(array $structure): array
     {
-        return [
-            'missingDocumentation'  => $this->analyzeFunctionDocblockMissingDocumentation($function),
-            'parameterMissing'      => $this->analyzeFunctionDocblockParameterMissing($function),
-            'parameterTypeMismatch' => $this->analyzeFunctionDocblockParameterTypeMismatches($function),
-            'superfluousParameter'  => $this->analyzeFunctionDocblockSuperfluousParameters($function)
-        ];
-    }
+        $result = $this->docblockParser->parse($structure['docComment'], [
+            DocblockParser::CATEGORY
+        ], $structure['name']);
 
-    /**
-     * @param array $function
-     *
-     * @return array
-     */
-    protected function analyzeFunctionDocblockMissingDocumentation(array $function): array
-    {
-        if ($function['docComment']) {
+        if (!$result['category']) {
             return [];
         }
 
         return [
             [
-                'name'  => $function['name'],
-                'line'  => $function['startLine'],
-                'start' => $function['startPosName'],
-                'end'   => $function['endPosName']
+                'name'  => $structure['name'],
+                'line'  => $structure['startLine'],
+                'start' => $structure['startPosName'],
+                'end'   => $structure['endPosName']
             ]
         ];
     }
 
     /**
-     * @param array $function
+     * @param array $structure
      *
      * @return array
      */
-    protected function analyzeFunctionDocblockParameterMissing(array $function): array
+    protected function getDeprecatedSubpackageTagWarningsForStructure(array $structure): array
     {
-        if (!$function['docComment']) {
-            return [];
-        }
+        $result = $this->docblockParser->parse($structure['docComment'], [
+            DocblockParser::SUBPACKAGE
+        ], $structure['name']);
 
-        $result = $this->docblockParser->parse(
-            $function['docComment'],
-            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
-            $function['name']
-        );
-
-        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
-            return [];
-        }
-
-        $docblockParameters = $result['params'];
-
-        $issues = [];
-
-        foreach ($function['parameters'] as $parameter) {
-            $dollarName = '$' . $parameter['name'];
-
-            if (isset($docblockParameters[$dollarName])) {
-                continue;
-            }
-
-            $issues[] = [
-                'name'      => $function['name'],
-                'parameter' => $dollarName,
-                'line'      => $function['startLine'],
-                'start'     => $function['startPosName'],
-                'end'       => $function['endPosName']
-            ];
-        }
-
-        return $issues;
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return array
-     */
-    protected function analyzeFunctionDocblockParameterTypeMismatches(array $function): array
-    {
-        if (!$function['docComment']) {
-            return [];
-        }
-
-        $result = $this->docblockParser->parse(
-            $function['docComment'],
-            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
-            $function['name']
-        );
-
-        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
-            return [];
-        }
-
-        $docblockParameters = $result['params'];
-
-        $issues = [];
-
-        foreach ($function['parameters'] as $parameter) {
-            $dollarName = '$' . $parameter['name'];
-
-            if (!isset($docblockParameters[$dollarName]) || !$parameter['type']) {
-                continue;
-            }
-
-            $parameterType = $parameter['type'];
-
-            if ($parameter['isVariadic']) {
-                $parameterType .= '[]';
-            }
-
-            $docblockType = $docblockParameters[$dollarName]['type'];
-
-            if ($this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType) &&
-                $parameter['isReference'] === $docblockParameters[$dollarName]['isReference']
-            ) {
-                continue;
-            }
-
-            $issues[] = [
-                'name'      => $function['name'],
-                'parameter' => $dollarName,
-                'line'      => $function['startLine'],
-                'start'     => $function['startPosName'],
-                'end'       => $function['endPosName']
-            ];
-        }
-
-        return $issues;
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return array
-     */
-    protected function analyzeFunctionDocblockSuperfluousParameters(array $function): array
-    {
-        if (!$function['docComment']) {
-            return [];
-        }
-
-        $result = $this->docblockParser->parse(
-            $function['docComment'],
-            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
-            $function['name']
-        );
-
-        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
-            return [];
-        }
-
-        $keysFound = [];
-        $docblockParameters = $result['params'];
-
-        foreach ($function['parameters'] as $parameter) {
-            $dollarName = '$' . $parameter['name'];
-
-            if (isset($docblockParameters[$dollarName])) {
-                $keysFound[] = $dollarName;
-            }
-        }
-
-        $superfluousParameterNames = array_values(array_diff(array_keys($docblockParameters), $keysFound));
-
-        if (empty($superfluousParameterNames)) {
+        if (!$result['subpackage']) {
             return [];
         }
 
         return [
             [
-                'name'       => $function['name'],
-                'parameters' => $superfluousParameterNames,
-                'line'       => $function['startLine'],
-                'start'      => $function['startPosName'],
-                'end'        => $function['endPosName']
+                'name'  => $structure['name'],
+                'line'  => $structure['startLine'],
+                'start' => $structure['startPosName'],
+                'end'   => $structure['endPosName']
+            ]
+        ];
+    }
+
+    /**
+     * @param array $structure
+     *
+     * @return array
+     */
+    protected function getDeprecatedLinkTagWarningsForStructure(array $structure): array
+    {
+        $result = $this->docblockParser->parse($structure['docComment'], [
+            DocblockParser::LINK
+        ], $structure['name']);
+
+        if (!$result['link']) {
+            return [];
+        }
+
+        return [
+            [
+                'name'  => $structure['name'],
+                'line'  => $structure['startLine'],
+                'start' => $structure['startPosName'],
+                'end'   => $structure['endPosName']
             ]
         ];
     }

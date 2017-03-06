@@ -523,7 +523,7 @@ class LinterTest extends AbstractIndexedTest
                 'end'       => 187,
                 'parameter' => '$param2'
             ]
-        ], $output['warnings']['docblockIssues']['parameterMissing']);
+        ], $output['errors']['docblockIssues']['parameterMissing']);
     }
 
     /**
@@ -535,7 +535,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['warnings']['docblockIssues']['parameterMissing']);
+        ], $output['errors']['docblockIssues']['parameterMissing']);
     }
 
     /**
@@ -547,7 +547,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['warnings']['docblockIssues']['parameterMissing']);
+        ], $output['errors']['docblockIssues']['parameterMissing']);
     }
 
     /**
@@ -559,7 +559,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['warnings']['docblockIssues']['parameterMissing']);
+        ], $output['errors']['docblockIssues']['parameterMissing']);
     }
 
     /**
@@ -577,7 +577,7 @@ class LinterTest extends AbstractIndexedTest
                 'end'       => 342,
                 'parameter' => '$param1'
             ],
-        ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
+        ], $output['errors']['docblockIssues']['parameterTypeMismatch']);
     }
 
     /**
@@ -595,7 +595,7 @@ class LinterTest extends AbstractIndexedTest
                 'end'       => 58,
                 'parameter' => '$param1'
             ]
-        ], $output['warnings']['docblockIssues']['parameterTypeMismatch']);
+        ], $output['errors']['docblockIssues']['parameterTypeMismatch']);
     }
 
     /**
@@ -613,7 +613,7 @@ class LinterTest extends AbstractIndexedTest
                 'end'        => 271,
                 'parameters' => ['$extra1', '$extra2']
             ]
-        ], $output['warnings']['docblockIssues']['superfluousParameter']);
+        ], $output['errors']['docblockIssues']['superfluousParameter']);
     }
 
     /**
@@ -637,7 +637,7 @@ class LinterTest extends AbstractIndexedTest
                 'start'      => 64,
                 'end'        => 73
             ]
-        ], $output['warnings']['docblockIssues']['varTagMissing']);
+        ], $output['errors']['docblockIssues']['varTagMissing']);
     }
 
     /**
