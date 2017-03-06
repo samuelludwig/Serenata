@@ -253,30 +253,27 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzePropertyDocblock(array $structure, array $property): array
     {
-        $docblockIssues = [
-            'varTagMissing'        => [],
-            'missingDocumentation' => []
+        return [
+            'varTagMissing'        => $this->analyzePropertyDocblockVarTagMissing($structure, $property),
+            'missingDocumentation' => $this->analyzePropertyDocblockMissingDocumentation($structure, $property)
         ];
+    }
+
+    /**
+     * @param array $structure
+     * @param array $property
+     *
+     * @return array
+     */
+    protected function analyzePropertyDocblockVarTagMissing(array $structure, array $property): array
+    {
+        $issues = [];
 
         if ($property['docComment']) {
             $result = $this->docblockParser->parse($property['docComment'], [DocblockParser::VAR_TYPE], $property['name']);
 
             if (!isset($result['var']['$' . $property['name']]['type'])) {
-                $docblockIssues['varTagMissing'][] = [
-                    'name'  => $property['name'],
-                    'line'  => $property['startLine'],
-                    'start' => $property['startPosName'],
-                    'end'   => $property['endPosName']
-                ];
-            }
-        } else {
-            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
-
-            if ($classInfo &&
-                isset($classInfo['properties'][$property['name']]) &&
-                !$classInfo['properties'][$property['name']]['hasDocumentation']
-            ) {
-                $docblockIssues['missingDocumentation'][] = [
+                $issues[] = [
                     'name'  => $property['name'],
                     'line'  => $property['startLine'],
                     'start' => $property['startPosName'],
@@ -285,7 +282,36 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             }
         }
 
-        return $docblockIssues;
+        return $issues;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $property
+     *
+     * @return array
+     */
+    protected function analyzePropertyDocblockMissingDocumentation(array $structure, array $property): array
+    {
+        $issues = [];
+
+        if (!$property['docComment']) {
+            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
+
+            if ($classInfo &&
+                isset($classInfo['properties'][$property['name']]) &&
+                !$classInfo['properties'][$property['name']]['hasDocumentation']
+            ) {
+                $issues[] = [
+                    'name'  => $property['name'],
+                    'line'  => $property['startLine'],
+                    'start' => $property['startPosName'],
+                    'end'   => $property['endPosName']
+                ];
+            }
+        }
+
+        return $issues;
     }
 
     /**
