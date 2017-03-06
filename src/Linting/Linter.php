@@ -111,33 +111,7 @@ class Linter
 
         if ($nodes !== null) {
             $traverser = new NodeTraverser();
-
-            /** @var AnalyzerInterface[] $analyzers */
-            $analyzers = [];
-
-            if ($settings->getLintUnknownClasses()) {
-                $analyzers[] = $this->unknownClassAnalyzerFactory->create($file);
-            }
-
-            if ($settings->getLintUnknownMembers()) {
-                $analyzers[] = $this->unknownMemberAnalyzerFactory->create($file, $code);
-            }
-
-            if ($settings->getLintUnusedUseStatements()) {
-                $analyzers[] = $this->unusedUseStatementAnalyzerFactory->create();
-            }
-
-            if ($settings->getLintDocblockCorrectness()) {
-                $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($code);
-            }
-
-            if ($settings->getLintUnknownGlobalConstants()) {
-                $analyzers[] = $this->unknownGlobalConstantAnalyzerFactory->create();
-            }
-
-            if ($settings->getLintUnknownGlobalFunctions()) {
-                $analyzers[] = $this->unknownGlobalFunctionAnalyzerFactory->create();
-            }
+            $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
 
             foreach ($analyzers as $analyzer) {
                 foreach ($analyzer->getVisitors() as $visitor) {
@@ -168,5 +142,44 @@ class Linter
         }
 
         return $output;
+    }
+
+    /**
+     * @param string          $file
+     * @param string          $code
+     * @param LintingSettings $settings
+     *
+     * @return AnalyzerInterface[]
+     */
+    protected function getAnalyzersForRequest(string $file, string $code, LintingSettings $settings): array
+    {
+        /** @var AnalyzerInterface[] $analyzers */
+        $analyzers = [];
+
+        if ($settings->getLintUnknownClasses()) {
+            $analyzers[] = $this->unknownClassAnalyzerFactory->create($file);
+        }
+
+        if ($settings->getLintUnknownMembers()) {
+            $analyzers[] = $this->unknownMemberAnalyzerFactory->create($file, $code);
+        }
+
+        if ($settings->getLintUnusedUseStatements()) {
+            $analyzers[] = $this->unusedUseStatementAnalyzerFactory->create();
+        }
+
+        if ($settings->getLintDocblockCorrectness()) {
+            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($code);
+        }
+
+        if ($settings->getLintUnknownGlobalConstants()) {
+            $analyzers[] = $this->unknownGlobalConstantAnalyzerFactory->create();
+        }
+
+        if ($settings->getLintUnknownGlobalFunctions()) {
+            $analyzers[] = $this->unknownGlobalFunctionAnalyzerFactory->create();
+        }
+
+        return $analyzers;
     }
 }
