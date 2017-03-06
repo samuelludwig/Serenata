@@ -220,29 +220,41 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzeMethodDocblock(array $structure, array $method): array
     {
-        if ($method['docComment']) {
-            return $this->analyzeFunctionDocblock($method);
-        }
+        $issues = $this->analyzeFunctionDocblock($method);
+        $issues['missingDocumentation'] = $this->analyzeMethodDocblockMissingDocumentation($structure, $method);
 
-        $docblockIssues = [
-            'missingDocumentation' => []
-        ];
+        return $issues;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $method
+     *
+     * @return array
+     */
+    protected function analyzeMethodDocblockMissingDocumentation(array $structure, array $method): array
+    {
+        if ($method['docComment']) {
+            return [];
+        }
 
         $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
 
-        if ($classInfo &&
-            isset($classInfo['methods'][$method['name']]) &&
-            !$classInfo['methods'][$method['name']]['hasDocumentation']
+        if (!$classInfo ||
+            !isset($classInfo['methods'][$method['name']]) ||
+            $classInfo['methods'][$method['name']]['hasDocumentation']
         ) {
-            $docblockIssues['missingDocumentation'][] = [
+            return [];
+        }
+
+        return [
+            [
                 'name'  => $method['name'],
                 'line'  => $method['startLine'],
                 'start' => $method['startPosName'],
                 'end'   => $method['endPosName']
-            ];
-        }
-
-        return $docblockIssues;
+            ]
+        ];
     }
 
     /**
