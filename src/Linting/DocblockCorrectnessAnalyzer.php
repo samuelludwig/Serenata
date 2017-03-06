@@ -296,24 +296,50 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzeClassConstantDocblock(array $structure, array $constant): array
     {
-        $docblockIssues = [
-            'varTagMissing'        => [],
-            'missingDocumentation' => []
+        return [
+            'varTagMissing'        => $this->analyzeClassConstantDocblockVarTagMissing($structure, $constant),
+            'missingDocumentation' => $this->analyzeClassConstantDocblockMissingDocumentation($structure, $constant)
         ];
+    }
+
+    /**
+     * @param array $structure
+     * @param array $constant
+     *
+     * @return array
+     */
+    protected function analyzeClassConstantDocblockVarTagMissing(array $structure, array $constant): array
+    {
+        $issues = [];
 
         if ($constant['docComment']) {
             $result = $this->docblockParser->parse($constant['docComment'], [DocblockParser::VAR_TYPE], $constant['name']);
 
             if (!isset($result['var']['$' . $constant['name']]['type'])) {
-                $docblockIssues['varTagMissing'][] = [
+                $issues[] = [
                     'name'  => $constant['name'],
                     'line'  => $constant['startLine'],
                     'start' => $constant['startPosName'],
                     'end'   => $constant['endPosName'] + 1
                 ];
             }
-        } else {
-            $docblockIssues['missingDocumentation'][] = [
+        }
+
+        return $issues;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $constant
+     *
+     * @return array
+     */
+    protected function analyzeClassConstantDocblockMissingDocumentation(array $structure, array $constant): array
+    {
+        $issues = [];
+
+        if (!$constant['docComment']) {
+            $issues[] = [
                 'name'  => $constant['name'],
                 'line'  => $constant['startLine'],
                 'start' => $constant['startPosName'],
@@ -321,7 +347,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             ];
         }
 
-        return $docblockIssues;
+        return $issues;
     }
 
     /**
