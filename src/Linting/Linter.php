@@ -109,36 +109,38 @@ class Linter
             ];
         }
 
-        if ($nodes !== null) {
-            $traverser = new NodeTraverser();
-            $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
+        if ($nodes === null) {
+            return $output;
+        }
 
-            foreach ($analyzers as $analyzer) {
-                foreach ($analyzer->getVisitors() as $visitor) {
-                    $traverser->addVisitor($visitor);
-                }
+        $traverser = new NodeTraverser();
+        $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
+
+        foreach ($analyzers as $analyzer) {
+            foreach ($analyzer->getVisitors() as $visitor) {
+                $traverser->addVisitor($visitor);
             }
+        }
 
-            try {
-                $traverser->traverse($nodes);
-            } catch (Error $e) {
-                $output['errors']['syntaxErrors'][] = [
-                    'startLine'   => 0,
-                    'endLine'     => 0,
-                    'startColumn' => 0,
-                    'endColumn'   => 0,
-                    'message'     => "Something is semantically wrong. Is there perhaps a duplicate use statement?"
-                ];
+        try {
+            $traverser->traverse($nodes);
+        } catch (Error $e) {
+            $output['errors']['syntaxErrors'][] = [
+                'startLine'   => 0,
+                'endLine'     => 0,
+                'startColumn' => 0,
+                'endColumn'   => 0,
+                'message'     => "Something is semantically wrong. Is there perhaps a duplicate use statement?"
+            ];
 
-                return $output;
-            }
+            return $output;
+        }
 
-            foreach ($analyzers as $analyzer) {
-                $key = $analyzer->getName();
+        foreach ($analyzers as $analyzer) {
+            $key = $analyzer->getName();
 
-                $output['errors'][$key] = $analyzer->getErrors();
-                $output['warnings'][$key] = $analyzer->getWarnings();
-            }
+            $output['errors'][$key] = $analyzer->getErrors();
+            $output['warnings'][$key] = $analyzer->getWarnings();
         }
 
         return $output;
