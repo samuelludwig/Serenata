@@ -2,19 +2,6 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\ClasslikeExistenceChecker;
-use PhpIntegrator\Analysis\GlobalConstantExistenceChecker;
-use PhpIntegrator\Analysis\GlobalFunctionExistenceChecker;
-
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
-
-use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
-
-use PhpIntegrator\Parsing\DocblockParser;
-
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -31,84 +18,60 @@ class Linter
     protected $parser;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var DocblockCorrectnessAnalyzerFactory
      */
-    protected $fileTypeResolverFactory;
+    protected $docblockCorrectnessAnalyzerFactory;
 
     /**
-     * @var NodeTypeDeducerInterface
+     * @var UnknownClassAnalyzerFactory
      */
-    protected $nodeTypeDeducer;
+    protected $unknownClassAnalyzerFactory;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var UnknownGlobalConstantAnalyzerFactory
      */
-    protected $classlikeInfoBuilder;
+    protected $unknownGlobalConstantAnalyzerFactory;
 
     /**
-     * @var DocblockParser
+     * @var UnknownGlobalFunctionAnalyzerFactory
      */
-    protected $docblockParser;
+    protected $unknownGlobalFunctionAnalyzerFactory;
 
     /**
-     * @var TypeAnalyzer
+     * @var UnknownMemberAnalyzerFactory
      */
-    protected $typeAnalyzer;
+    protected $unknownMemberAnalyzerFactory;
 
     /**
-     * @var DocblockAnalyzer
+     * @var UnusedUseStatementAnalyzerFactory
      */
-    protected $docblockAnalyzer;
+    protected $unusedUseStatementAnalyzerFactory;
 
     /**
-     * @var ClasslikeExistenceChecker
-     */
-    protected $classlikeExistenceChecker;
-
-    /**
-     * @var GlobalConstantExistenceChecker
-     */
-    protected $globalConstantExistenceChecker;
-
-    /**
-     * @var GlobalFunctionExistenceChecker
-     */
-    protected $globalFunctionExistenceChecker;
-
-    /**
-     * @param Parser                           $parser
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
-     * @param DocblockParser                   $docblockParser
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param DocblockAnalyzer                 $docblockAnalyzer
-     * @param ClasslikeExistenceChecker        $classlikeExistenceChecker
-     * @param GlobalConstantExistenceChecker   $globalConstantExistenceChecker
-     * @param GlobalFunctionExistenceChecker   $globalFunctionExistenceChecker
+     * @param Parser                               $parser
+     * @param DocblockCorrectnessAnalyzerFactory   $docblockCorrectnessAnalyzerFactory
+     * @param UnknownClassAnalyzerFactory          $unknownClassAnalyzerFactory
+     * @param UnknownGlobalConstantAnalyzerFactory $unknownGlobalConstantAnalyzerFactory
+     * @param UnknownGlobalFunctionAnalyzerFactory $unknownGlobalFunctionAnalyzerFactory
+     * @param UnknownMemberAnalyzerFactory         $unknownMemberAnalyzerFactory
+     * @param UnusedUseStatementAnalyzerFactory    $unusedUseStatementAnalyzerFactory
      */
     public function __construct(
         Parser $parser,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
-        DocblockParser $docblockParser,
-        TypeAnalyzer $typeAnalyzer,
-        DocblockAnalyzer $docblockAnalyzer,
-        ClasslikeExistenceChecker $classlikeExistenceChecker,
-        GlobalConstantExistenceChecker $globalConstantExistenceChecker,
-        GlobalFunctionExistenceChecker $globalFunctionExistenceChecker
+        DocblockCorrectnessAnalyzerFactory $docblockCorrectnessAnalyzerFactory,
+        UnknownClassAnalyzerFactory $unknownClassAnalyzerFactory,
+        UnknownGlobalConstantAnalyzerFactory $unknownGlobalConstantAnalyzerFactory,
+        UnknownGlobalFunctionAnalyzerFactory $unknownGlobalFunctionAnalyzerFactory,
+        UnknownMemberAnalyzerFactory $unknownMemberAnalyzerFactory,
+        UnusedUseStatementAnalyzerFactory $unusedUseStatementAnalyzerFactory
     ) {
         $this->parser = $parser;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-        $this->docblockParser = $docblockParser;
-        $this->typeAnalyzer = $typeAnalyzer;
-        $this->docblockAnalyzer = $docblockAnalyzer;
-        $this->classlikeExistenceChecker = $classlikeExistenceChecker;
-        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
-        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
+        $this->docblockCorrectnessAnalyzerFactory = $docblockCorrectnessAnalyzerFactory;
+        $this->unknownClassAnalyzerFactory = $unknownClassAnalyzerFactory;
+        $this->unknownGlobalConstantAnalyzerFactory = $unknownGlobalConstantAnalyzerFactory;
+        $this->unknownGlobalFunctionAnalyzerFactory = $unknownGlobalFunctionAnalyzerFactory;
+        $this->unknownMemberAnalyzerFactory = $unknownMemberAnalyzerFactory;
+        $this->unusedUseStatementAnalyzerFactory = $unusedUseStatementAnalyzerFactory;
     }
 
     /**
@@ -152,14 +115,7 @@ class Linter
             $unknownClassAnalyzer = null;
 
             if ($settings->getLintUnknownClasses()) {
-                $fileTypeResolver = $this->fileTypeResolverFactory->create($file);
-
-                $unknownClassAnalyzer = new UnknownClassAnalyzer(
-                    $this->classlikeExistenceChecker,
-                    $fileTypeResolver,
-                    $this->typeAnalyzer,
-                    $this->docblockParser
-                );
+                $unknownClassAnalyzer = $this->unknownClassAnalyzerFactory->create($file);
 
                 foreach ($unknownClassAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
@@ -169,13 +125,7 @@ class Linter
             $unknownMemberAnalyzer = null;
 
             if ($settings->getLintUnknownMembers()) {
-                $unknownMemberAnalyzer = new UnknownMemberAnalyzer(
-                    $this->nodeTypeDeducer,
-                    $this->classlikeInfoBuilder,
-                    $this->typeAnalyzer,
-                    $file,
-                    $code
-                );
+                $unknownMemberAnalyzer = $this->unknownMemberAnalyzerFactory->create($file, $code);
 
                 foreach ($unknownMemberAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
@@ -185,10 +135,7 @@ class Linter
             $unusedUseStatementAnalyzer = null;
 
             if ($settings->getLintUnusedUseStatements()) {
-                $unusedUseStatementAnalyzer = new UnusedUseStatementAnalyzer(
-                    $this->typeAnalyzer,
-                    $this->docblockParser
-                );
+                $unusedUseStatementAnalyzer = $this->unusedUseStatementAnalyzerFactory->create();
 
                 foreach ($unusedUseStatementAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
@@ -198,13 +145,7 @@ class Linter
             $docblockCorrectnessAnalyzer = null;
 
             if ($settings->getLintDocblockCorrectness()) {
-                $docblockCorrectnessAnalyzer = new DocblockCorrectnessAnalyzer(
-                    $code,
-                    $this->classlikeInfoBuilder,
-                    $this->docblockParser,
-                    $this->typeAnalyzer,
-                    $this->docblockAnalyzer
-                );
+                $docblockCorrectnessAnalyzer = $this->docblockCorrectnessAnalyzerFactory->create($code);
 
                 foreach ($docblockCorrectnessAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
@@ -214,9 +155,7 @@ class Linter
             $unknownGlobalConstantAnalyzer = null;
 
             if ($settings->getLintUnknownGlobalConstants()) {
-                $unknownGlobalConstantAnalyzer = new UnknownGlobalConstantAnalyzer(
-                    $this->globalConstantExistenceChecker
-                );
+                $unknownGlobalConstantAnalyzer = $this->unknownGlobalConstantAnalyzerFactory->create();
 
                 foreach ($unknownGlobalConstantAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
@@ -226,9 +165,7 @@ class Linter
             $unknownGlobalFunctionAnalyzer = null;
 
             if ($settings->getLintUnknownGlobalFunctions()) {
-                $unknownGlobalFunctionAnalyzer = new UnknownGlobalFunctionAnalyzer(
-                    $this->globalFunctionExistenceChecker
-                );
+                $unknownGlobalFunctionAnalyzer = $this->unknownGlobalFunctionAnalyzerFactory->create();
 
                 foreach ($unknownGlobalFunctionAnalyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);

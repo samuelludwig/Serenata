@@ -85,6 +85,12 @@ use PhpIntegrator\Indexing\BuiltinIndexer;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Linting\Linter;
+use PhpIntegrator\Linting\UnknownClassAnalyzerFactory;
+use PhpIntegrator\Linting\UnknownMemberAnalyzerFactory;
+use PhpIntegrator\Linting\UnusedUseStatementAnalyzerFactory;
+use PhpIntegrator\Linting\DocblockCorrectnessAnalyzerFactory;
+use PhpIntegrator\Linting\UnknownGlobalFunctionAnalyzerFactory;
+use PhpIntegrator\Linting\UnknownGlobalConstantAnalyzerFactory;
 
 use PhpIntegrator\Mediating\CacheClearingEventMediator;
 
@@ -395,6 +401,7 @@ abstract class AbstractApplication
         $this->registerTypeResolvingServices($container);
         $this->registerIndexingServices($container);
         $this->registerTooltipServices($container);
+        $this->registerLintingServices($container);
         $this->registerTypeDeductionServices($container);
         $this->registerCommandServices($container);
     }
@@ -449,21 +456,6 @@ abstract class AbstractApplication
         $container
             ->register('fileTypeLocalizerFactory', FileTypeLocalizerFactory::class)
             ->setArguments([new Reference('typeLocalizer'), new Reference('indexDatabase')]);
-
-        $container
-            ->register('linter', Linter::class)
-            ->setArguments([
-                new Reference('parser'),
-                new Reference('fileTypeResolverFactory'),
-                new Reference('nodeTypeDeducer'),
-                new Reference('classlikeInfoBuilder'),
-                new Reference('docblockParser'),
-                new Reference('typeAnalyzer'),
-                new Reference('docblockAnalyzer'),
-                new Reference('classlikeExistenceChecker'),
-                new Reference('globalConstantExistenceChecker'),
-                new Reference('globalFunctionExistenceChecker')
-            ]);
     }
 
     /**
@@ -619,6 +611,71 @@ abstract class AbstractApplication
                 new Reference('functionNodeTooltipGenerator'),
                 new Reference('classMethodNodeTooltipGenerator'),
                 new Reference('nameNodeTooltipGenerator')
+            ]);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     *
+     * @return void
+     */
+    protected function registerLintingServices(ContainerBuilder $container): void
+    {
+        $container
+            ->register('docblockCorrectnessAnalyzerFactory', DocblockCorrectnessAnalyzerFactory::class)
+            ->setArguments([
+                new Reference('classlikeInfoBuilder'),
+                new Reference('docblockParser'),
+                new Reference('typeAnalyzer'),
+                new Reference('docblockAnalyzer')
+            ]);
+
+        $container
+            ->register('unknownClassAnalyzerFactory', UnknownClassAnalyzerFactory::class)
+            ->setArguments([
+                new Reference('classlikeExistenceChecker'),
+                new Reference('fileTypeResolverFactory'),
+                new Reference('typeAnalyzer'),
+                new Reference('docblockParser')
+            ]);
+
+        $container
+            ->register('unknownGlobalConstantAnalyzerFactory', UnknownGlobalConstantAnalyzerFactory::class)
+            ->setArguments([
+                new Reference('globalConstantExistenceChecker')
+            ]);
+
+        $container
+            ->register('unknownGlobalFunctionAnalyzerFactory', UnknownGlobalFunctionAnalyzerFactory::class)
+            ->setArguments([
+                new Reference('globalFunctionExistenceChecker')
+            ]);
+
+        $container
+            ->register('unknownMemberAnalyzerFactory', UnknownMemberAnalyzerFactory::class)
+            ->setArguments([
+                new Reference('nodeTypeDeducer'),
+                new Reference('classlikeInfoBuilder'),
+                new Reference('typeAnalyzer')
+            ]);
+
+        $container
+            ->register('unusedUseStatementAnalyzerFactory', UnusedUseStatementAnalyzerFactory::class)
+            ->setArguments([
+                new Reference('typeAnalyzer'),
+                new Reference('docblockParser')
+            ]);
+
+        $container
+            ->register('linter', Linter::class)
+            ->setArguments([
+                new Reference('parser'),
+                new Reference('docblockCorrectnessAnalyzerFactory'),
+                new Reference('unknownClassAnalyzerFactory'),
+                new Reference('unknownGlobalConstantAnalyzerFactory'),
+                new Reference('unknownGlobalFunctionAnalyzerFactory'),
+                new Reference('unknownMemberAnalyzerFactory'),
+                new Reference('unusedUseStatementAnalyzerFactory')
             ]);
     }
 
