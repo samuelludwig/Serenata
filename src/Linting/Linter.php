@@ -112,14 +112,15 @@ class Linter
         if ($nodes !== null) {
             $traverser = new NodeTraverser();
 
+            /** @var AnalyzerInterface[] $analyzers */
+            $analyzers = [];
+
             $unknownClassAnalyzer = null;
 
             if ($settings->getLintUnknownClasses()) {
                 $unknownClassAnalyzer = $this->unknownClassAnalyzerFactory->create($file);
 
-                foreach ($unknownClassAnalyzer->getVisitors() as $visitor) {
-                    $traverser->addVisitor($visitor);
-                }
+                $analyzers[] = $unknownClassAnalyzer;
             }
 
             $unknownMemberAnalyzer = null;
@@ -127,9 +128,7 @@ class Linter
             if ($settings->getLintUnknownMembers()) {
                 $unknownMemberAnalyzer = $this->unknownMemberAnalyzerFactory->create($file, $code);
 
-                foreach ($unknownMemberAnalyzer->getVisitors() as $visitor) {
-                    $traverser->addVisitor($visitor);
-                }
+                $analyzers[] = $unknownMemberAnalyzer;
             }
 
             $unusedUseStatementAnalyzer = null;
@@ -137,9 +136,7 @@ class Linter
             if ($settings->getLintUnusedUseStatements()) {
                 $unusedUseStatementAnalyzer = $this->unusedUseStatementAnalyzerFactory->create();
 
-                foreach ($unusedUseStatementAnalyzer->getVisitors() as $visitor) {
-                    $traverser->addVisitor($visitor);
-                }
+                $analyzers[] = $unusedUseStatementAnalyzer;
             }
 
             $docblockCorrectnessAnalyzer = null;
@@ -147,9 +144,7 @@ class Linter
             if ($settings->getLintDocblockCorrectness()) {
                 $docblockCorrectnessAnalyzer = $this->docblockCorrectnessAnalyzerFactory->create($code);
 
-                foreach ($docblockCorrectnessAnalyzer->getVisitors() as $visitor) {
-                    $traverser->addVisitor($visitor);
-                }
+                $analyzers[] = $docblockCorrectnessAnalyzer;
             }
 
             $unknownGlobalConstantAnalyzer = null;
@@ -157,9 +152,7 @@ class Linter
             if ($settings->getLintUnknownGlobalConstants()) {
                 $unknownGlobalConstantAnalyzer = $this->unknownGlobalConstantAnalyzerFactory->create();
 
-                foreach ($unknownGlobalConstantAnalyzer->getVisitors() as $visitor) {
-                    $traverser->addVisitor($visitor);
-                }
+                $analyzers[] = $unknownGlobalConstantAnalyzer;
             }
 
             $unknownGlobalFunctionAnalyzer = null;
@@ -167,7 +160,11 @@ class Linter
             if ($settings->getLintUnknownGlobalFunctions()) {
                 $unknownGlobalFunctionAnalyzer = $this->unknownGlobalFunctionAnalyzerFactory->create();
 
-                foreach ($unknownGlobalFunctionAnalyzer->getVisitors() as $visitor) {
+                $analyzers[] = $unknownGlobalFunctionAnalyzer;
+            }
+
+            foreach ($analyzers as $analyzer) {
+                foreach ($analyzer->getVisitors() as $visitor) {
                     $traverser->addVisitor($visitor);
                 }
             }
