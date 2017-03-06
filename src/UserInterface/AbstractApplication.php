@@ -624,6 +624,7 @@ abstract class AbstractApplication
         $container
             ->register('docblockCorrectnessAnalyzerFactory', DocblockCorrectnessAnalyzerFactory::class)
             ->setArguments([
+                new Reference('fileTypeResolverFactory'),
                 new Reference('classlikeInfoBuilder'),
                 new Reference('docblockParser'),
                 new Reference('typeAnalyzer'),

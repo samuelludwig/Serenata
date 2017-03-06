@@ -601,6 +601,18 @@ class LinterTest extends AbstractIndexedTest
     /**
      * @return void
      */
+    public function testCorrectlyRecognizesDifferentQualificationsOfSameClassName(): void
+    {
+        $output = $this->lintFile('DocblockCorrectnessParamTypeDifferentQualifications.phpt');
+
+        $this->assertEquals([
+
+        ], $output['errors']['docblockIssues']['parameterTypeMismatch']);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyIdentifiesDocblockSuperfluousParameters(): void
     {
         $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');

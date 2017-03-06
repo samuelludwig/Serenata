@@ -7,6 +7,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+
 use PhpIntegrator\Parsing\DocblockParser;
 
 /**
@@ -14,6 +16,11 @@ use PhpIntegrator\Parsing\DocblockParser;
  */
 class DocblockCorrectnessAnalyzerFactory
 {
+    /**
+     * @var FileTypeResolverFactoryInterface
+     */
+    protected $fileTypeResolverFactory;
+
     /**
      * @var ClasslikeInfoBuilder
      */
@@ -35,17 +42,20 @@ class DocblockCorrectnessAnalyzerFactory
     protected $docblockAnalyzer;
 
     /**
-     * @param ClasslikeInfoBuilder $classlikeInfoBuilder
-     * @param DocblockParser       $docblockParser
-     * @param TypeAnalyzer         $typeAnalyzer
-     * @param DocblockAnalyzer     $docblockAnalyzer
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
+     * @param DocblockParser                   $docblockParser
+     * @param TypeAnalyzer                     $typeAnalyzer
+     * @param DocblockAnalyzer                 $docblockAnalyzer
      */
     public function __construct(
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
         DocblockAnalyzer $docblockAnalyzer
     ) {
+        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -53,14 +63,16 @@ class DocblockCorrectnessAnalyzerFactory
     }
 
     /**
+     * @param string $file
      * @param string $code
      *
      * @return DocblockCorrectnessAnalyzer
      */
-    public function create(string $code): DocblockCorrectnessAnalyzer
+    public function create(string $file, string $code): DocblockCorrectnessAnalyzer
     {
         return new DocblockCorrectnessAnalyzer(
             $code,
+            $this->fileTypeResolverFactory->create($file),
             $this->classlikeInfoBuilder,
             $this->docblockParser,
             $this->typeAnalyzer,

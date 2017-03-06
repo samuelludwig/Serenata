@@ -171,7 +171,7 @@ class Linter
         }
 
         if ($settings->getLintDocblockCorrectness()) {
-            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($code);
+            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file, $code);
         }
 
         if ($settings->getLintUnknownGlobalConstants()) {

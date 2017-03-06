@@ -7,6 +7,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
+
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
@@ -16,6 +18,11 @@ use PhpIntegrator\Parsing\DocblockParser;
  */
 class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 {
+    /**
+     * @var FileTypeResolverInterface
+     */
+    protected $fileTypeResolver;
+
     /**
      * @var OutlineFetchingVisitor
      */
@@ -42,19 +49,22 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     protected $classlikeInfoBuilder;
 
     /**
-     * @param string               $code
-     * @param ClasslikeInfoBuilder $classlikeInfoBuilder
-     * @param DocblockParser       $docblockParser
-     * @param TypeAnalyzer         $typeAnalyzer
-     * @param DocblockAnalyzer     $docblockAnalyzer
+     * @param string                    $code
+     * @param FileTypeResolverInterface $fileTypeResolver
+     * @param ClasslikeInfoBuilder      $classlikeInfoBuilder
+     * @param DocblockParser            $docblockParser
+     * @param TypeAnalyzer              $typeAnalyzer
+     * @param DocblockAnalyzer          $docblockAnalyzer
      */
     public function __construct(
         string $code,
+        FileTypeResolverInterface $fileTypeResolver,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
         DocblockAnalyzer $docblockAnalyzer
     ) {
+        $this->fileTypeResolver = $fileTypeResolver;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -363,13 +373,18 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
                 continue;
             }
 
+            // FIXME: This resolving won't work properly for array docblock types (e.g. "Foo[]") nor for special cases
+            // such as compound types (e.g. "A|B").
             $parameterType = $parameter['type'];
+            $parameterType = $this->fileTypeResolver->resolve($parameterType, $globalFunction['startLine']);
 
             if ($parameter['isVariadic']) {
                 $parameterType .= '[]';
             }
 
             $docblockType = $docblockParameters[$dollarName]['type'];
+            $docblockType = $this->fileTypeResolver->resolve($docblockType, $globalFunction['startLine']);
+
             $isTypeConformant = $this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType);
 
             if ($isTypeConformant && $parameter['isReference'] === $docblockParameters[$dollarName]['isReference']) {
