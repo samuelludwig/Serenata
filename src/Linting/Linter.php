@@ -110,7 +110,7 @@ class Linter
         }
 
         if ($nodes !== null) {
-            $traverser = new NodeTraverser(false);
+            $traverser = new NodeTraverser();
 
             $unknownClassAnalyzer = null;
 
