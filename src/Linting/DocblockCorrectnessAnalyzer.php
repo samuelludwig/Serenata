@@ -310,22 +310,24 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzeClassConstantDocblockVarTagMissing(array $structure, array $constant): array
     {
-        $issues = [];
-
-        if ($constant['docComment']) {
-            $result = $this->docblockParser->parse($constant['docComment'], [DocblockParser::VAR_TYPE], $constant['name']);
-
-            if (!isset($result['var']['$' . $constant['name']]['type'])) {
-                $issues[] = [
-                    'name'  => $constant['name'],
-                    'line'  => $constant['startLine'],
-                    'start' => $constant['startPosName'],
-                    'end'   => $constant['endPosName'] + 1
-                ];
-            }
+        if (!$constant['docComment']) {
+            return [];
         }
 
-        return $issues;
+        $result = $this->docblockParser->parse($constant['docComment'], [DocblockParser::VAR_TYPE], $constant['name']);
+
+        if (isset($result['var']['$' . $constant['name']]['type'])) {
+            return [];
+        }
+
+        return [
+            [
+                'name'  => $constant['name'],
+                'line'  => $constant['startLine'],
+                'start' => $constant['startPosName'],
+                'end'   => $constant['endPosName'] + 1
+            ]
+        ];
     }
 
     /**
@@ -336,18 +338,18 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzeClassConstantDocblockMissingDocumentation(array $structure, array $constant): array
     {
-        $issues = [];
+        if ($constant['docComment']) {
+            return [];
+        }
 
-        if (!$constant['docComment']) {
-            $issues[] = [
+        return [
+            [
                 'name'  => $constant['name'],
                 'line'  => $constant['startLine'],
                 'start' => $constant['startPosName'],
                 'end'   => $constant['endPosName']
-            ];
-        }
-
-        return $issues;
+            ]
+        ];
     }
 
     /**
