@@ -338,22 +338,44 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzeFunctionDocblock(array $function): array
     {
-        $docblockIssues = [
-            'missingDocumentation'  => [],
-            'parameterMissing'      => [],
-            'parameterTypeMismatch' => [],
-            'superfluousParameter'  => []
+        return [
+            'missingDocumentation'  => $this->analyzeFunctionDocblockMissingDocumentation($function),
+            'parameterMissing'      => $this->analyzeFunctionDocblockParameterMissing($function),
+            'parameterTypeMismatch' => $this->analyzeFunctionDocblockParameterTypeMismatches($function),
+            'superfluousParameter'  => $this->analyzeFunctionDocblockSuperfluousParameters($function)
         ];
+    }
 
-        if (!$function['docComment']) {
-            $docblockIssues['missingDocumentation'][] = [
+    /**
+     * @param array $function
+     *
+     * @return array
+     */
+    protected function analyzeFunctionDocblockMissingDocumentation(array $function): array
+    {
+        if ($function['docComment']) {
+            return [];
+        }
+
+        return [
+            [
                 'name'  => $function['name'],
                 'line'  => $function['startLine'],
                 'start' => $function['startPosName'],
                 'end'   => $function['endPosName']
-            ];
+            ]
+        ];
+    }
 
-            return $docblockIssues;
+    /**
+     * @param array $function
+     *
+     * @return array
+     */
+    protected function analyzeFunctionDocblockParameterMissing(array $function): array
+    {
+        if (!$function['docComment']) {
+            return [];
         }
 
         $result = $this->docblockParser->parse(
@@ -363,7 +385,107 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         );
 
         if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
-            return $docblockIssues;
+            return [];
+        }
+
+        $docblockParameters = $result['params'];
+
+        $issues = [];
+
+        foreach ($function['parameters'] as $parameter) {
+            $dollarName = '$' . $parameter['name'];
+
+            if (isset($docblockParameters[$dollarName])) {
+                continue;
+            }
+
+            $issues[] = [
+                'name'      => $function['name'],
+                'parameter' => $dollarName,
+                'line'      => $function['startLine'],
+                'start'     => $function['startPosName'],
+                'end'       => $function['endPosName']
+            ];
+        }
+
+        return $issues;
+    }
+
+    /**
+     * @param array $function
+     *
+     * @return array
+     */
+    protected function analyzeFunctionDocblockParameterTypeMismatches(array $function): array
+    {
+        if (!$function['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse(
+            $function['docComment'],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+            $function['name']
+        );
+
+        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+            return [];
+        }
+
+        $docblockParameters = $result['params'];
+
+        $issues = [];
+
+        foreach ($function['parameters'] as $parameter) {
+            $dollarName = '$' . $parameter['name'];
+
+            if (!isset($docblockParameters[$dollarName]) || !$parameter['type']) {
+                continue;
+            }
+
+            $parameterType = $parameter['type'];
+
+            if ($parameter['isVariadic']) {
+                $parameterType .= '[]';
+            }
+
+            $docblockType = $docblockParameters[$dollarName]['type'];
+
+            if ($this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType)) {
+                continue;
+            }
+
+            $issues[] = [
+                'name'      => $function['name'],
+                'parameter' => $dollarName,
+                'line'      => $function['startLine'],
+                'start'     => $function['startPosName'],
+                'end'       => $function['endPosName']
+            ];
+        }
+
+        return $issues;
+    }
+
+    /**
+     * @param array $function
+     *
+     * @return array
+     */
+    protected function analyzeFunctionDocblockSuperfluousParameters(array $function): array
+    {
+        if (!$function['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse(
+            $function['docComment'],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+            $function['name']
+        );
+
+        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+            return [];
         }
 
         $keysFound = [];
@@ -375,49 +497,23 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             if (isset($docblockParameters[$dollarName])) {
                 $keysFound[] = $dollarName;
             }
-
-            if (!isset($docblockParameters[$dollarName])) {
-                $docblockIssues['parameterMissing'][] = [
-                    'name'      => $function['name'],
-                    'parameter' => $dollarName,
-                    'line'      => $function['startLine'],
-                    'start'     => $function['startPosName'],
-                    'end'       => $function['endPosName']
-                ];
-            } elseif ($parameter['type']) {
-                $docblockType = $docblockParameters[$dollarName]['type'];
-
-                $parameterType = $parameter['type'];
-
-                if ($parameter['isVariadic']) {
-                    $parameterType .= '[]';
-                }
-
-                if (!$this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType)) {
-                    $docblockIssues['parameterTypeMismatch'][] = [
-                        'name'      => $function['name'],
-                        'parameter' => $dollarName,
-                        'line'      => $function['startLine'],
-                        'start'     => $function['startPosName'],
-                        'end'       => $function['endPosName']
-                    ];
-                }
-            }
         }
 
         $superfluousParameterNames = array_values(array_diff(array_keys($docblockParameters), $keysFound));
 
-        if (!empty($superfluousParameterNames)) {
-            $docblockIssues['superfluousParameter'][] = [
+        if (empty($superfluousParameterNames)) {
+            return [];
+        }
+
+        return [
+            [
                 'name'       => $function['name'],
                 'parameters' => $superfluousParameterNames,
                 'line'       => $function['startLine'],
                 'start'      => $function['startPosName'],
                 'end'        => $function['endPosName']
-            ];
-        }
-
-        return $docblockIssues;
+            ]
+        ];
     }
 
     /**
