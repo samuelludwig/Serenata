@@ -370,10 +370,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             }
 
             $docblockType = $docblockParameters[$dollarName]['type'];
+            $isTypeConformant = $this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType);
 
-            if ($this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType) &&
-                $parameter['isReference'] === $docblockParameters[$dollarName]['isReference']
-            ) {
+            if ($isTypeConformant && $parameter['isReference'] === $docblockParameters[$dollarName]['isReference']) {
                 continue;
             }
 
