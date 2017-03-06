@@ -267,22 +267,24 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzePropertyDocblockVarTagMissing(array $structure, array $property): array
     {
-        $issues = [];
-
-        if ($property['docComment']) {
-            $result = $this->docblockParser->parse($property['docComment'], [DocblockParser::VAR_TYPE], $property['name']);
-
-            if (!isset($result['var']['$' . $property['name']]['type'])) {
-                $issues[] = [
-                    'name'  => $property['name'],
-                    'line'  => $property['startLine'],
-                    'start' => $property['startPosName'],
-                    'end'   => $property['endPosName']
-                ];
-            }
+        if (!$property['docComment']) {
+            return [];
         }
 
-        return $issues;
+        $result = $this->docblockParser->parse($property['docComment'], [DocblockParser::VAR_TYPE], $property['name']);
+
+        if (isset($result['var']['$' . $property['name']]['type'])) {
+            return [];
+        }
+
+        return [
+            [
+                'name'  => $property['name'],
+                'line'  => $property['startLine'],
+                'start' => $property['startPosName'],
+                'end'   => $property['endPosName']
+            ]
+        ];
     }
 
     /**
@@ -293,25 +295,27 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     protected function analyzePropertyDocblockMissingDocumentation(array $structure, array $property): array
     {
-        $issues = [];
-
-        if (!$property['docComment']) {
-            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
-
-            if ($classInfo &&
-                isset($classInfo['properties'][$property['name']]) &&
-                !$classInfo['properties'][$property['name']]['hasDocumentation']
-            ) {
-                $issues[] = [
-                    'name'  => $property['name'],
-                    'line'  => $property['startLine'],
-                    'start' => $property['startPosName'],
-                    'end'   => $property['endPosName']
-                ];
-            }
+        if ($property['docComment']) {
+            return [];
         }
 
-        return $issues;
+        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
+
+        if (!$classInfo ||
+            !isset($classInfo['properties'][$property['name']]) ||
+            $classInfo['properties'][$property['name']]['hasDocumentation']
+        ) {
+            return [];
+        }
+
+        return [
+            [
+                'name'  => $property['name'],
+                'line'  => $property['startLine'],
+                'start' => $property['startPosName'],
+                'end'   => $property['endPosName']
+            ]
+        ];
     }
 
     /**
