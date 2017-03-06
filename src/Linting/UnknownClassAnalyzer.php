@@ -68,6 +68,14 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
+    public function getName(): string
+    {
+        return 'unknownClasses';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getVisitors(): array
     {
         return [
@@ -79,7 +87,7 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput(): array
+    public function getErrors(): array
     {
         // Cross-reference the found class names against the class map.
         $unknownClasses = [];
@@ -106,5 +114,13 @@ class UnknownClassAnalyzer implements AnalyzerInterface
         }
 
         return $unknownClasses;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWarnings(): array
+    {
+        return [];
     }
 }

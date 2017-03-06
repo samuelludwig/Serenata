@@ -8,6 +8,15 @@ namespace PhpIntegrator\Linting;
 interface AnalyzerInterface
 {
     /**
+     * Retrieves a name for the analyzer.
+     *
+     * Should be lower camel case, will be used as key.
+     *
+     * @return string
+     */
+    public function getName(): string;
+
+    /**
      * Retrieves a list of visitors to attach.
      *
      * @return \PhpParser\NodeVisitor[]
@@ -15,10 +24,20 @@ interface AnalyzerInterface
     public function getVisitors(): array;
 
     /**
-     * Retrieves a list of problems found during traversal. When this method is called, the visitors have already
-     * traversed the code.
+     * Retrieves a list of errors found during traversal.
+     *
+     * This method will only produce the correct output after visiting has occurred.
      *
      * @return array
      */
-    public function getOutput(): array;
+    public function getErrors(): array;
+
+    /**
+     * Retrieves a list of warnings found during traversal.
+     *
+     * This method will only produce the correct output after visiting has occurred.
+     *
+     * @return array
+     */
+    public function getWarnings(): array;
 }

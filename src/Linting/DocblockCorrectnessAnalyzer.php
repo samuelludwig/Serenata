@@ -73,6 +73,14 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
+    public function getName(): string
+    {
+        return 'docblockIssues';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getVisitors(): array
     {
         return [
@@ -83,7 +91,15 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput(): array
+    public function getErrors(): array
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWarnings(): array
     {
         $docblockIssues = [
             'varTagMissing'           => [],

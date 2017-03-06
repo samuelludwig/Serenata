@@ -70,6 +70,14 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
+    public function getName(): string
+    {
+        return 'unusedUseStatements';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getVisitors(): array
     {
         return [
@@ -85,12 +93,20 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput(): array
+    public function getErrors(): array
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWarnings(): array
     {
         $unusedUseStatements = array_merge(
-            $this->getOutputForClasses(),
-            $this->getOutputForConstants(),
-            $this->getOutputForFunctions()
+            $this->getWarningsForClasses(),
+            $this->getWarningsForConstants(),
+            $this->getWarningsForFunctions()
         );
 
         return $unusedUseStatements;
@@ -99,7 +115,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getOutputForClasses(): array
+    protected function getWarningsForClasses(): array
     {
         // Cross-reference the found class names against the class map.
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -144,7 +160,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getOutputForConstants(): array
+    protected function getWarningsForConstants(): array
     {
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -193,7 +209,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getOutputForFunctions(): array
+    protected function getWarningsForFunctions(): array
     {
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();

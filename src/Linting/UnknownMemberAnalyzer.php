@@ -46,6 +46,14 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
+    public function getName(): string
+    {
+        return 'unknownMembers';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getVisitors(): array
     {
         return [
@@ -56,18 +64,12 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput(): array
+    public function getErrors(): array
     {
         $output = [
-            'errors' => [
-                'expressionHasNoType'              => [],
-                'expressionIsNotClasslike'         => [],
-                'expressionHasNoSuchMember'        => [],
-            ],
-
-            'warnings' => [
-                'expressionNewMemberWillBeCreated' => []
-            ]
+            'expressionHasNoType'       => [],
+            'expressionIsNotClasslike'  => [],
+            'expressionHasNoSuchMember' => []
         ];
 
         $memberCallList = $this->methodUsageFetchingVisitor->getMemberCallList();
@@ -78,13 +80,35 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
             unset ($memberCall['type']);
 
             if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_TYPE) {
-                $output['errors']['expressionHasNoType'][] = $memberCall;
+                $output['expressionHasNoType'][] = $memberCall;
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_IS_NOT_CLASSLIKE) {
-                $output['errors']['expressionIsNotClasslike'][] = $memberCall;
+                $output['expressionIsNotClasslike'][] = $memberCall;
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER) {
-                $output['errors']['expressionHasNoSuchMember'][] = $memberCall;
-            } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED) {
-                $output['warnings']['expressionNewMemberWillBeCreated'][] = $memberCall;
+                $output['expressionHasNoSuchMember'][] = $memberCall;
+            }
+        }
+
+        return $output;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWarnings(): array
+    {
+        $output = [
+            'expressionNewMemberWillBeCreated' => []
+        ];
+
+        $memberCallList = $this->methodUsageFetchingVisitor->getMemberCallList();
+
+        foreach ($memberCallList as $memberCall) {
+            $type = $memberCall['type'];
+
+            unset ($memberCall['type']);
+
+            if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED) {
+                $output['expressionNewMemberWillBeCreated'][] = $memberCall;
             }
         }
 

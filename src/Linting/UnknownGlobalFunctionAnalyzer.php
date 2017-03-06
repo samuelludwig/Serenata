@@ -42,6 +42,14 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
+    public function getName(): string
+    {
+        return 'unknownGlobalFunctions';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getVisitors(): array
     {
         return [
@@ -53,7 +61,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getOutput(): array
+    public function getErrors(): array
     {
         $globalFunctions = $this->globalFunctionUsageFetchingVisitor->getGlobalFunctionCallList();
 
@@ -77,5 +85,13 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
         }
 
         return $unknownGlobalFunctions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getWarnings(): array
+    {
+        return [];
     }
 }

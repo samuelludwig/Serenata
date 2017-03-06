@@ -115,52 +115,28 @@ class Linter
             /** @var AnalyzerInterface[] $analyzers */
             $analyzers = [];
 
-            $unknownClassAnalyzer = null;
-
             if ($settings->getLintUnknownClasses()) {
-                $unknownClassAnalyzer = $this->unknownClassAnalyzerFactory->create($file);
-
-                $analyzers[] = $unknownClassAnalyzer;
+                $analyzers[] = $this->unknownClassAnalyzerFactory->create($file);
             }
-
-            $unknownMemberAnalyzer = null;
 
             if ($settings->getLintUnknownMembers()) {
-                $unknownMemberAnalyzer = $this->unknownMemberAnalyzerFactory->create($file, $code);
-
-                $analyzers[] = $unknownMemberAnalyzer;
+                $analyzers[] = $this->unknownMemberAnalyzerFactory->create($file, $code);
             }
-
-            $unusedUseStatementAnalyzer = null;
 
             if ($settings->getLintUnusedUseStatements()) {
-                $unusedUseStatementAnalyzer = $this->unusedUseStatementAnalyzerFactory->create();
-
-                $analyzers[] = $unusedUseStatementAnalyzer;
+                $analyzers[] = $this->unusedUseStatementAnalyzerFactory->create();
             }
-
-            $docblockCorrectnessAnalyzer = null;
 
             if ($settings->getLintDocblockCorrectness()) {
-                $docblockCorrectnessAnalyzer = $this->docblockCorrectnessAnalyzerFactory->create($code);
-
-                $analyzers[] = $docblockCorrectnessAnalyzer;
+                $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($code);
             }
-
-            $unknownGlobalConstantAnalyzer = null;
 
             if ($settings->getLintUnknownGlobalConstants()) {
-                $unknownGlobalConstantAnalyzer = $this->unknownGlobalConstantAnalyzerFactory->create();
-
-                $analyzers[] = $unknownGlobalConstantAnalyzer;
+                $analyzers[] = $this->unknownGlobalConstantAnalyzerFactory->create();
             }
 
-            $unknownGlobalFunctionAnalyzer = null;
-
             if ($settings->getLintUnknownGlobalFunctions()) {
-                $unknownGlobalFunctionAnalyzer = $this->unknownGlobalFunctionAnalyzerFactory->create();
-
-                $analyzers[] = $unknownGlobalFunctionAnalyzer;
+                $analyzers[] = $this->unknownGlobalFunctionAnalyzerFactory->create();
             }
 
             foreach ($analyzers as $analyzer) {
@@ -183,31 +159,11 @@ class Linter
                 return $output;
             }
 
-            if ($unknownClassAnalyzer) {
-                $output['errors']['unknownClasses'] = $unknownClassAnalyzer->getOutput();
-            }
+            foreach ($analyzers as $analyzer) {
+                $key = $analyzer->getName();
 
-            if ($unknownMemberAnalyzer) {
-                $analyzerOutput = $unknownMemberAnalyzer->getOutput();
-
-                $output['errors']['unknownMembers']   = $analyzerOutput['errors'];
-                $output['warnings']['unknownMembers'] = $analyzerOutput['warnings'];
-            }
-
-            if ($unknownGlobalFunctionAnalyzer) {
-                $output['errors']['unknownGlobalFunctions'] = $unknownGlobalFunctionAnalyzer->getOutput();
-            }
-
-            if ($unknownGlobalConstantAnalyzer) {
-                $output['errors']['unknownGlobalConstants'] = $unknownGlobalConstantAnalyzer->getOutput();
-            }
-
-            if ($docblockCorrectnessAnalyzer) {
-                $output['warnings']['docblockIssues'] = $docblockCorrectnessAnalyzer->getOutput();
-            }
-
-            if ($unusedUseStatementAnalyzer) {
-                $output['warnings']['unusedUseStatements'] = $unusedUseStatementAnalyzer->getOutput();
+                $output['errors'][$key] = $analyzer->getErrors();
+                $output['warnings'][$key] = $analyzer->getWarnings();
             }
         }
 
