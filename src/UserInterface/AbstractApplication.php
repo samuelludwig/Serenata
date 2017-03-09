@@ -920,7 +920,7 @@ abstract class AbstractApplication
             ->setArguments([new Reference('indexDatabase'), new Reference('fileTypeLocalizerFactory')]);
 
         $container
-            ->register('semanticLintCommand', Command\SemanticLintCommand::class)
+            ->register('lintCommand', Command\LintCommand::class)
             ->setArguments([
                 new Reference('sourceCodeStreamReader'),
                 new Reference('linter')

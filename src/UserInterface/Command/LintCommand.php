@@ -10,10 +10,9 @@ use PhpIntegrator\Linting\LintingSettings;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 /**
- * Command that lints a file's semantics (i.e. it does not deal with syntax errors, as this is already handled by the
- * indexer).
+ * Command that lints a file for various problems.
  */
-class SemanticLintCommand extends AbstractCommand
+class LintCommand extends AbstractCommand
 {
     /**
      * @var SourceCodeStreamReader
