@@ -33,6 +33,41 @@ class SourceCodeHelpers
     }
 
     /**
+     * Calculates the 0-indexed offset for the specified 0-indexed line and character/
+     *
+     * @param string $source
+     * @param int    $line
+     * @param int    $byteCharacter
+     *
+     * @throws OutOfBoundsException
+     *
+     * @return int
+     */
+    public static function calculateOffsetByLineCharacter(string $source, int $line, int $byteCharacter): int
+    {
+        $i = 0;
+        $currentLine = 0;
+        $offsetOnLine = 0;
+        $length = strlen($source);
+
+        while ($i < $length) {
+            if ($source[$i] === "\n") {
+                ++$currentLine;
+                $offsetOnLine = 0;
+            }
+
+            if ($currentLine === $line && $offsetOnLine === $byteCharacter) {
+                return $i;
+            }
+
+            ++$i;
+            ++$offsetOnLine;
+        }
+
+        throw new OutOfBoundsException("Line {$line} and line byte offset {$byteCharacter} are not in range of string");
+    }
+
+    /**
      * Retrieves the character offset from the specified byte offset in the specified string. The result will always be
      * smaller than or equal to the passed in value, depending on the amount of multi-byte characters encountered.
      *

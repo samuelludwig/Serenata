@@ -43,7 +43,7 @@ class LinterTest extends AbstractIndexedTest
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
 
-        $this->assertEquals(2, count($output['errors']['syntaxErrors']));
+        $this->assertEquals(2, count($output['errors']));
     }
 
     /**
@@ -55,12 +55,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'A\B',
-                'namespace' => null,
-                'start'     => 32,
-                'end'       => 35
+                'message' => 'Classlike **A\B** is not defined or imported anywhere.',
+                'start'   => 32,
+                'end'     => 35
             ]
-        ], $output['errors']['unknownClasses']);
+        ], $output['errors']);
     }
 
     /**
@@ -72,18 +71,21 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'DateTime',
-                'namespace' => 'A',
-                'start'     => 64,
-                'end'       => 72
+                'message' => 'Classlike **DateTime** is not defined or imported anywhere.',
+                'start'   => 83,
+                'end'     => 91
             ],
             [
-                'name'      => 'DateTimeZone',
-                'namespace' => 'A',
-                'start'     => 85,
-                'end'       => 97
+                'message' => 'Classlike **DateTimeZone** is not defined or imported anywhere.',
+                'start'   => 104,
+                'end'     => 116
+            ],
+            [
+                'message' => 'Member **#AFRICA** does not exist for type **\A\DateTimeZone**.',
+                'start'   => 104,
+                'end'     => 124
             ]
-        ], $output['errors']['unknownClasses']);
+        ], $output['errors']);
     }
 
     /**
@@ -95,19 +97,17 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'DateTime',
-                'namespace' => 'A',
-                'start'     => 97,
-                'end'       => 105
+                'message' => 'Classlike **DateTime** is not defined or imported anywhere.',
+                'start'   => 97,
+                'end'     => 105
             ],
 
             [
-                'name'      => 'SplFileInfo',
-                'namespace' => 'B',
-                'start'     => 153,
-                'end'       => 164
+                'message' => 'Classlike **SplFileInfo** is not defined or imported anywhere.',
+                'start'   => 153,
+                'end'     => 164
             ]
-        ], $output['errors']['unknownClasses']);
+        ], $output['errors']);
     }
 
     /**
@@ -119,40 +119,35 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'A\B',
-                'namespace' => 'A',
-                'start'     => 75,
-                'end'       => 95
+                'message' => 'Classlike **A\B** is not defined or imported anywhere.',
+                'start'   => 75,
+                'end'     => 95
             ],
 
             [
-                'name'      => 'A\C',
-                'namespace' => 'A',
-                'start'     => 75,
-                'end'       => 95
+                'message' => 'Classlike **A\C** is not defined or imported anywhere.',
+                'start'   => 75,
+                'end'     => 95
             ],
 
             [
-                'name'      => 'MissingAnnotationClass',
-                'namespace' => 'A',
-                'start'     => 175,
-                'end'       => 197
+                'message' => 'Classlike **MissingAnnotationClass** is not defined or imported anywhere.',
+                'start'   => 175,
+                'end'     => 197
             ],
 
             [
-                'name'      => 'A\MissingAnnotationClass',
-                'namespace' => 'A',
-                'start'     => 202,
-                'end'       => 226
+                'message' => 'Classlike **A\MissingAnnotationClass** is not defined or imported anywhere.',
+                'start'   => 202,
+                'end'     => 226
             ],
 
             [
-                'name'      => 'B\MissingAnnotationClass',
-                'namespace' => 'A',
-                'start'     => 231,
-                'end'       => 256
+                'message' => 'Classlike **B\MissingAnnotationClass** is not defined or imported anywhere.',
+                'start'   => 231,
+                'end'     => 256
             ]
-        ], $output['errors']['unknownClasses']);
+        ], $output['errors']);
     }
 
     /**
@@ -162,7 +157,7 @@ class LinterTest extends AbstractIndexedTest
     {
         $output = $this->lintFile('GroupedUseStatements.phpt');
 
-        $this->assertEquals([], $output['errors']['unknownClasses']);
+        $this->assertEquals([], $output['errors']);
     }
 
     /**
@@ -174,11 +169,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'memberName' => 'foo',
-                'start'      => 21,
-                'end'        => 32
+                'message' => 'Member **#foo** could not be found because expression has no type.',
+                'start'   => 21,
+                'end'     => 32
             ]
-        ], $output['errors']['unknownMembers']['expressionHasNoType']);
+        ], $output['errors']);
     }
 
     /**
@@ -190,19 +185,17 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'memberName'     => 'foo',
-                'expressionType' => 'int',
-                'start'          => 57,
-                'end'            => 68
+                'message' => 'Cannot invoke **#foo** on non-object type **int**.',
+                'start'   => 57,
+                'end'     => 68
             ],
 
             [
-                'memberName'     => 'foo',
-                'expressionType' => 'bool',
-                'start'          => 57,
-                'end'            => 68
+                'message' => 'Cannot invoke **#foo** on non-object type **bool**.',
+                'start'   => 57,
+                'end'     => 68
             ]
-        ], $output['errors']['unknownMembers']['expressionIsNotClasslike']);
+        ], $output['errors']);
     }
 
     /**
@@ -214,26 +207,29 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'memberName'     => 'foo',
-                'expressionType' => '\A\Foo',
-                'start'          => 124,
-                'end'            => 135
+                'message' => 'Classlike **stdClass** is not defined or imported anywhere.',
+                'start'   => 248,
+                'end'     => 257
             ],
 
             [
-                'memberName'     => 'bar',
-                'expressionType' => '\A\Foo',
-                'start'          => 137,
-                'end'            => 147
+                'message' => 'Member **#foo** does not exist for type **\A\Foo**.',
+                'start'   => 158,
+                'end'     => 169
             ],
 
             [
-                'memberName'     => 'CONSTANT',
-                'expressionType' => '\A\Foo',
-                'start'          => 187,
-                'end'            => 200
+                'message' => 'Member **#bar** does not exist for type **\A\Foo**.',
+                'start'   => 171,
+                'end'     => 181
+            ],
+
+            [
+                'message' => 'Member **#CONSTANT** does not exist for type **\A\Foo**.',
+                'start'   => 221,
+                'end'     => 234
             ]
-        ], $output['errors']['unknownMembers']['expressionHasNoSuchMember']);
+        ], $output['errors']);
     }
 
     /**
@@ -245,26 +241,23 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'memberName'     => 'test',
-                'expressionType' => '\A\Foo',
-                'start'          => 80,
-                'end'            => 91
+                'message' => 'Member **#test** was not explicitly defined in **\A\Foo**. It will be created at runtime.',
+                'start'   => 114,
+                'end'     => 125
             ],
 
             [
-                'memberName'     => 'fooProp',
-                'expressionType' => '\A\Foo',
-                'start'          => 149,
-                'end'            => 162
+                'message' => 'Member **#fooProp** was not explicitly defined in **\A\Foo**. It will be created at runtime.',
+                'start'   => 183,
+                'end'     => 196
             ],
 
             [
-                'memberName'     => 'barProp',
-                'expressionType' => '\A\Foo',
-                'start'          => 168,
-                'end'            => 181
+                'message' => 'Member **#barProp** was not explicitly defined in **\A\Foo**. It will be created at runtime.',
+                'start'   => 202,
+                'end'     => 215
             ]
-        ], $output['warnings']['unknownMembers']['expressionNewMemberWillBeCreated']);
+        ], $output['warnings']);
     }
 
     /**
@@ -276,23 +269,23 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => '\foo',
-                'start' => 151,
-                'end'   => 156
+                'message' => 'Function **\foo** is not defined or imported anywhere.',
+                'start'   => 151,
+                'end'     => 156
             ],
 
             [
-                'name'  => '\foo',
-                'start' => 162,
-                'end'   => 168
+                'message' => 'Function **\foo** is not defined or imported anywhere.',
+                'start'   => 162,
+                'end'     => 168
             ],
 
             [
-                'name'  => '\A\foo',
-                'start' => 174,
-                'end'   => 182
+                'message' => 'Function **\A\foo** is not defined or imported anywhere.',
+                'start'   => 174,
+                'end'     => 182
             ]
-        ], $output['errors']['unknownGlobalFunctions']);
+        ], $output['errors']);
     }
 
     /**
@@ -304,23 +297,23 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => '\MISSING',
-                'start' => 98,
-                'end'   => 105
+                'message' => 'Constant **\MISSING** is not defined or imported anywhere.',
+                'start'   => 98,
+                'end'     => 105
             ],
 
             [
-                'name'  => '\MISSING',
-                'start' => 111,
-                'end'   => 119
+                'message' => 'Constant **\MISSING** is not defined or imported anywhere.',
+                'start'   => 111,
+                'end'     => 119
             ],
 
             [
-                'name'  => '\A\MISSING',
-                'start' => 125,
-                'end'   => 135
+                'message' => 'Constant **\A\MISSING** is not defined or imported anywhere.',
+                'start'   => 125,
+                'end'     => 135
             ]
-        ], $output['errors']['unknownGlobalConstants']);
+        ], $output['errors']);
     }
 
     /**
@@ -332,12 +325,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'Traversable',
-                'alias' => 'Traversable',
-                'start' => 39,
-                'end'   => 50
+                'message' => 'Classlike **Traversable** is imported, but not used anywhere.',
+                'start'   => 39,
+                'end'     => 50
             ]
-        ], $output['warnings']['unusedUseStatements']);
+        ], $output['warnings']);
     }
 
     /**
@@ -349,19 +341,17 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'SplFileInfo',
-                'alias' => 'SplFileInfo',
-                'start' => 47,
-                'end'   => 58
+                'message' => 'Classlike **SplFileInfo** is imported, but not used anywhere.',
+                'start'   => 47,
+                'end'     => 58
             ],
 
             [
-                'name'  => 'DateTime',
-                'alias' => 'DateTime',
-                'start' => 111,
-                'end'   => 119
+                'message' => 'Classlike **DateTime** is imported, but not used anywhere.',
+                'start'   => 111,
+                'end'     => 119
             ]
-        ], $output['warnings']['unusedUseStatements']);
+        ], $output['warnings']);
     }
 
     /**
@@ -373,26 +363,23 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'B\Foo',
-                'alias' => 'Foo',
-                'start' => 106,
-                'end'   => 109
+                'message' => 'Classlike **B\Foo** is imported, but not used anywhere.',
+                'start'   => 152,
+                'end'     => 155
             ],
 
             [
-                'name'  => 'B\Bar',
-                'alias' => 'Bar',
-                'start' => 119,
-                'end'   => 122
+                'message' => 'Classlike **B\Bar** is imported, but not used anywhere.',
+                'start'   => 165,
+                'end'     => 168
             ],
 
             [
-                'name'  => 'B\Missing',
-                'alias' => 'Missing',
-                'start' => 132,
-                'end'   => 139
+                'message' => 'Classlike **B\Missing** is imported, but not used anywhere.',
+                'start'   => 178,
+                'end'     => 185
             ]
-        ], $output['warnings']['unusedUseStatements']);
+        ], $output['warnings']);
     }
 
     /**
@@ -404,12 +391,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'Some\CONSTANT_UNUSED',
-                'alias' => 'CONSTANT_UNUSED',
-                'start' => 56,
-                'end'   => 76
+                'message' => 'Constant **Some\CONSTANT_UNUSED** is imported, but not used anywhere.',
+                'start'   => 56,
+                'end'     => 76
             ]
-        ], $output['warnings']['unusedUseStatements']);
+        ], $output['warnings']);
     }
 
     /**
@@ -421,12 +407,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'Some\funcUnused',
-                'alias' => 'funcUnused',
-                'start' => 58,
-                'end'   => 73
+                'message' => 'Function **Some\funcUnused** is imported, but not used anywhere.',
+                'start'   => 58,
+                'end'     => 73
             ]
-        ], $output['warnings']['unusedUseStatements']);
+        ], $output['warnings']);
     }
 
     /**
@@ -438,19 +423,17 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'SplMinHeap',
-                'alias' => 'SplMinHeap',
-                'start' => 53,
-                'end'   => 63
+                'message' => 'Classlike **SplMinHeap** is imported, but not used anywhere.',
+                'start'   => 53,
+                'end'     => 63
             ],
 
             [
-                'name'  => 'SplFileInfo',
-                'alias' => 'SplFileInfo',
-                'start' => 69,
-                'end'   => 80
+                'message' => 'Classlike **SplFileInfo** is imported, but not used anywhere.',
+                'start'   => 69,
+                'end'     => 80
             ]
-        ], $output['warnings']['unusedUseStatements']);
+        ], $output['warnings']);
     }
 
     /**
@@ -460,7 +443,7 @@ class LinterTest extends AbstractIndexedTest
     {
         $output = $this->lintFile('UnusedUseStatementsAnonymousClass.phpt');
 
-        $this->assertEquals([], $output['warnings']['unusedUseStatements']);
+        $this->assertEquals([], $output['warnings']);
     }
 
     /**
@@ -472,40 +455,35 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'  => 'someMethod',
-                'line'  => 41,
-                'start' => 448,
-                'end'   => 449
+                'message' => 'Documentation for method **someMethod** is missing.',
+                'start'   => 448,
+                'end'     => 449
             ],
 
             [
-                'name'  => 'someProperty',
-                'line'  => 33,
-                'start' => 331,
-                'end'   => 344
+                'message' => 'Documentation for property **someProperty** is missing.',
+                'start'   => 331,
+                'end'     => 344
             ],
 
             [
-                'name'  => 'SOME_CONST',
-                'line'  => 31,
-                'start' => 300,
-                'end'   => 310
+                'message' => 'Documentation for constant **SOME_CONST** is missing.',
+                'start'   => 300,
+                'end'     => 310
             ],
 
             [
-                'name'  => 'MissingDocumentation',
-                'line'  => 47,
-                'start' => 496,
-                'end'   => 497
+                'message' => 'Documentation for classlike **\A\MissingDocumentation** is missing.',
+                'start'   => 496,
+                'end'     => 497
             ],
 
             [
-                'name'  => 'some_function',
-                'line'  => 5,
-                'start' => 21,
-                'end'   => 22
+                'message' => 'Documentation for function **some_function** is missing.',
+                'start'   => 21,
+                'end'     => 22
             ]
-        ], $output['warnings']['docblockIssues']['missingDocumentation']);
+        ], $output['warnings']);
     }
 
     /**
@@ -517,13 +495,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'some_function_missing_parameter',
-                'line'      => 17,
-                'start'     => 186,
-                'end'       => 187,
-                'parameter' => '$param2'
+                'message' => 'Docblock for function **some_function_missing_parameter** is missing @param tag for **$param2**.',
+                'start'   => 182,
+                'end'     => 183
             ]
-        ], $output['errors']['docblockIssues']['parameterMissing']);
+        ], $output['errors']);
     }
 
     /**
@@ -535,7 +511,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['errors']['docblockIssues']['parameterMissing']);
+        ], $output['errors']);
     }
 
     /**
@@ -547,7 +523,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['errors']['docblockIssues']['parameterMissing']);
+        ], $output['errors']);
     }
 
     /**
@@ -559,7 +535,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['errors']['docblockIssues']['parameterMissing']);
+        ], $output['errors']);
     }
 
     /**
@@ -571,13 +547,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'some_function_parameter_incorrect_type',
-                'line'      => 21,
-                'start'     => 341,
-                'end'       => 342,
-                'parameter' => '$param1'
+                'message' => 'Docblock for function **some_function_parameter_incorrect_type** has incorrect @param type for **$param1**.',
+                'start'   => 334,
+                'end'     => 335
             ],
-        ], $output['errors']['docblockIssues']['parameterTypeMismatch']);
+        ], $output['errors']);
     }
 
     /**
@@ -589,13 +563,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'      => 'some_function_parameter_incorrect_type',
-                'line'      => 8,
-                'start'     => 57,
-                'end'       => 58,
-                'parameter' => '$param1'
+                'message' => 'Docblock for function **some_function_parameter_incorrect_type** has incorrect @param type for **$param1**.',
+                'start'   => 65,
+                'end'     => 66
             ]
-        ], $output['errors']['docblockIssues']['parameterTypeMismatch']);
+        ], $output['errors']);
     }
 
     /**
@@ -607,7 +579,7 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
 
-        ], $output['errors']['docblockIssues']['parameterTypeMismatch']);
+        ], $output['errors']);
     }
 
     /**
@@ -619,13 +591,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'       => 'some_function_extra_parameter',
-                'line'       => 20,
-                'start'      => 270,
-                'end'        => 271,
-                'parameters' => ['$extra1', '$extra2']
+                'message' => 'Docblock for function **some_function_extra_parameter** contains superfluous @param tags for: **$extra1, $extra2**.',
+                'start'   => 256,
+                'end'     => 257
             ]
-        ], $output['errors']['docblockIssues']['superfluousParameter']);
+        ], $output['errors']);
     }
 
     /**
@@ -637,19 +607,17 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'       => 'property',
-                'line'       => 15,
-                'start'      => 116,
-                'end'        => 125
+                'message' => 'Docblock for property **property** is missing @var tag.',
+                'start'   => 116,
+                'end'     => 125
             ],
 
             [
-                'name'       => 'CONSTANT',
-                'line'       => 10,
-                'start'      => 64,
-                'end'        => 73
+                'message' => 'Docblock for constant **CONSTANT** is missing @var tag.',
+                'start'   => 64,
+                'end'     => 73
             ]
-        ], $output['errors']['docblockIssues']['varTagMissing']);
+        ], $output['errors']);
     }
 
     /**
@@ -661,12 +629,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'       => 'C',
-                'line'       => 8,
-                'start'      => 47,
-                'end'        => 48
+                'message' => 'Docblock for classlike **C** contains deprecated @category tag.',
+                'start'   => 47,
+                'end'     => 48
             ]
-        ], $output['warnings']['docblockIssues']['deprecatedCategoryTag']);
+        ], $output['warnings']);
     }
 
     /**
@@ -678,12 +645,11 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'       => 'C',
-                'line'       => 8,
-                'start'      => 49,
-                'end'        => 50
+                'message' => 'Docblock for classlike **C** contains deprecated @subpackage tag.',
+                'start'   => 49,
+                'end'     => 50
             ]
-        ], $output['warnings']['docblockIssues']['deprecatedSubpackageTag']);
+        ], $output['warnings']);
     }
 
     /**
@@ -695,11 +661,10 @@ class LinterTest extends AbstractIndexedTest
 
         $this->assertEquals([
             [
-                'name'       => 'C',
-                'line'       => 8,
-                'start'      => 63,
-                'end'        => 64
+                'message' =>  'Docblock for classlike **C** contains deprecated @link tag. See also [https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated}.',
+                'start'   => 63,
+                'end'     => 64
             ]
-        ], $output['warnings']['docblockIssues']['deprecatedLinkTag']);
+        ], $output['warnings']);
     }
 }

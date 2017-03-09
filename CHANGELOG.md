@@ -13,6 +13,8 @@
 * Fix the linter complaining about type mismatches in docblocks when the qualifications of the types are different (https://gitlab.com/php-integrator/core/issues/89).
 * Some docblock linter warnings have been promoted to errors (https://gitlab.com/php-integrator/core/issues/33).
 * Fix the linter not complaining about missing ampersand signs for reference parameters in docblocks (https://gitlab.com/php-integrator/core/issues/32).
+* Linting will no longer return an associative array of all kinds of problems. Instead, it will return a list of error and warning messages, returned by the requested analyzers.
+  * The list will include the message and the range (offsets) it applies in. Other data, including the line number, is no longer included.
 * Data related to `throws` is now returned as an array of arrays, each with a `type` and a `description` key instead of an associative array mapping the former to the latter.
   * This is recommended by [phpDocumentor](https://phpdoc.org/docs/latest/references/phpdoc/tags/throws.html).
   * This allows the same exception type to be referenced multiple times to describe it being thrown in different situations.

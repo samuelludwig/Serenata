@@ -70,14 +70,6 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
-    {
-        return 'unusedUseStatements';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getVisitors(): array
     {
         return [
@@ -147,9 +139,11 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                     (!array_key_exists('used', $data) || !$data['used']) &&
                     $data['kind'] === UseStatementKind::TYPE_CLASSLIKE
                 ) {
-                    unset($data['line'], $data['kind']);
-
-                    $unusedUseStatements[] = $data;
+                    $unusedUseStatements[] = [
+                        'message' => "Classlike **{$data['name']}** is imported, but not used anywhere.",
+                        'start'   => $data['start'],
+                        'end'     => $data['end']
+                    ];
                 }
             }
         }
@@ -196,9 +190,11 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                     (!array_key_exists('used', $data) || !$data['used']) &&
                     $data['kind'] === UseStatementKind::TYPE_CONSTANT
                 ) {
-                    unset($data['line'], $data['kind']);
-
-                    $unusedUseStatements[] = $data;
+                    $unusedUseStatements[] = [
+                        'message' => "Constant **{$data['name']}** is imported, but not used anywhere.",
+                        'start'   => $data['start'],
+                        'end'     => $data['end']
+                    ];
                 }
             }
         }
@@ -244,9 +240,11 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                     (!array_key_exists('used', $data) || !$data['used']) &&
                     $data['kind'] === UseStatementKind::TYPE_FUNCTION
                 ) {
-                    unset($data['line'], $data['kind']);
-
-                    $unusedUseStatements[] = $data;
+                    $unusedUseStatements[] = [
+                        'message' => "Function **{$data['name']}** is imported, but not used anywhere.",
+                        'start'   => $data['start'],
+                        'end'     => $data['end']
+                    ];
                 }
             }
         }

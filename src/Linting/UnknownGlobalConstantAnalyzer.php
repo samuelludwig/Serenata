@@ -35,14 +35,6 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
-    {
-        return 'unknownGlobalConstants';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getVisitors(): array
     {
         return [
@@ -70,10 +62,10 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
             }
 
             $unknownGlobalConstants[] = [
-                'name'  => $fqsen,
-                'start' => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                'end'   => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-            ];;
+                'message' => "Constant **{$fqsen}** is not defined or imported anywhere.",
+                'start'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                'end'     => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+            ];
         }
 
         return $unknownGlobalConstants;

@@ -68,14 +68,6 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
-    {
-        return 'unknownClasses';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getVisitors(): array
     {
         return [
@@ -107,9 +99,11 @@ class UnknownClassAnalyzer implements AnalyzerInterface
             $fqcn = $this->typeAnalyzer->getNormalizedFqcn($fqcn);
 
             if (!$this->classlikeExistenceChecker->doesClassExist($fqcn)) {
-                unset($classUsage['line'], $classUsage['firstPart'], $classUsage['isFullyQualified']);
-
-                $unknownClasses[] = $classUsage;
+                $unknownClasses[] = [
+                    'message' => "Classlike **{$classUsage['name']}** is not defined or imported anywhere.",
+                    'start'   => $classUsage['start'],
+                    'end'     => $classUsage['end']
+                ];
             }
         }
 

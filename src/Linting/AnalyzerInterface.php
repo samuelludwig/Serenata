@@ -8,15 +8,6 @@ namespace PhpIntegrator\Linting;
 interface AnalyzerInterface
 {
     /**
-     * Retrieves a name for the analyzer.
-     *
-     * Should be lower camel case, will be used as key.
-     *
-     * @return string
-     */
-    public function getName(): string;
-
-    /**
      * Retrieves a list of visitors to attach.
      *
      * @return \PhpParser\NodeVisitor[]

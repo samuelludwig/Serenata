@@ -1,10 +1,16 @@
 <?php
 
 namespace B {
+    /**
+     *
+     */
     class Foo {
 
     }
 
+    /**
+     *
+     */
     class Bar {
 
     }

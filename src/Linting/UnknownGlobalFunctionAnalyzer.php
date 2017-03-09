@@ -42,14 +42,6 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
-    {
-        return 'unknownGlobalFunctions';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getVisitors(): array
     {
         return [
@@ -78,9 +70,9 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
             }
 
             $unknownGlobalFunctions[] = [
-                'name'  => $fqsen,
-                'start' => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                'end'   => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                'message' => "Function **{$fqsen}** is not defined or imported anywhere.",
+                'start'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                'end'     => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
             ];
         }
 

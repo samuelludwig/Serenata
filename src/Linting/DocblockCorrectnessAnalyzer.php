@@ -76,14 +76,6 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
-    {
-        return 'docblockIssues';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getVisitors(): array
     {
         return [
@@ -96,12 +88,12 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     public function getErrors(): array
     {
-        return [
-            'varTagMissing'         => $this->getVarTagMissingErrors(),
-            'parameterMissing'      => $this->getParameterMissingErrors(),
-            'parameterTypeMismatch' => $this->getParameterTypeMismatchErrors(),
-            'superfluousParameter'  => $this->getSuperfluousParameterErrors()
-        ];
+        return array_merge(
+            $this->getVarTagMissingErrors(),
+            $this->getParameterMissingErrors(),
+            $this->getParameterTypeMismatchErrors(),
+            $this->getSuperfluousParameterErrors()
+        );
     }
 
     /**
@@ -109,12 +101,12 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      */
     public function getWarnings(): array
     {
-        return [
-            'missingDocumentation'    => $this->getMissingDocumentationWarnings(),
-            'deprecatedCategoryTag'   => $this->getDeprecatedCategoryTagWarnings(),
-            'deprecatedSubpackageTag' => $this->getDeprecatedSubpackageTagWarnings(),
-            'deprecatedLinkTag'       => $this->getDeprecatedLinkTagWarnings()
-        ];
+        return array_merge(
+            $this->getMissingDocumentationWarnings(),
+            $this->getDeprecatedCategoryTagWarnings(),
+            $this->getDeprecatedSubpackageTagWarnings(),
+            $this->getDeprecatedLinkTagWarnings()
+        );
     }
 
     /**
@@ -171,10 +163,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $property['name'],
-                'line'  => $property['startLine'],
-                'start' => $property['startPosName'],
-                'end'   => $property['endPosName']
+                'message' => "Docblock for property **{$property['name']}** is missing @var tag.",
+                'start'   => $property['startPosName'],
+                'end'     => $property['endPosName']
             ]
         ];
     }
@@ -199,10 +190,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $constant['name'],
-                'line'  => $constant['startLine'],
-                'start' => $constant['startPosName'],
-                'end'   => $constant['endPosName'] + 1
+                'message' => "Docblock for constant **{$constant['name']}** is missing @var tag.",
+                'start'   => $constant['startPosName'],
+                'end'     => $constant['endPosName'] + 1
             ]
         ];
     }
@@ -285,11 +275,10 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
            }
 
            $issues[] = [
-               'name'      => $globalFunction['name'],
-               'parameter' => $dollarName,
-               'line'      => $globalFunction['startLine'],
-               'start'     => $globalFunction['startPosName'],
-               'end'       => $globalFunction['endPosName']
+               'message' => "Docblock for function **{$globalFunction['name']}** is missing @param tag for **{$dollarName}**.",
+
+               'start'   => $globalFunction['startPosName'],
+               'end'     => $globalFunction['endPosName']
            ];
        }
 
@@ -392,11 +381,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             }
 
             $issues[] = [
-                'name'      => $globalFunction['name'],
-                'parameter' => $dollarName,
-                'line'      => $globalFunction['startLine'],
-                'start'     => $globalFunction['startPosName'],
-                'end'       => $globalFunction['endPosName']
+                'message' => "Docblock for function **{$globalFunction['name']}** has incorrect @param type for **{$dollarName}**.",
+                'start'   => $globalFunction['startPosName'],
+                'end'     => $globalFunction['endPosName']
             ];
         }
 
@@ -486,13 +473,13 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             return [];
         }
 
+        $superfluousParameterNameString = implode(', ', $superfluousParameterNames);
+
         return [
             [
-                'name'       => $globalFunction['name'],
-                'parameters' => $superfluousParameterNames,
-                'line'       => $globalFunction['startLine'],
-                'start'      => $globalFunction['startPosName'],
-                'end'        => $globalFunction['endPosName']
+                'message' => "Docblock for function **{$globalFunction['name']}** contains superfluous @param tags for: **{$superfluousParameterNameString}**.",
+                'start'   => $globalFunction['startPosName'],
+                'end'     => $globalFunction['endPosName']
             ]
         ];
     }
@@ -570,10 +557,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
             $warnings[] = [
-                'name'  => $structure['name'],
-                'line'  => $structure['startLine'],
-                'start' => $structure['startPosName'],
-                'end'   => $structure['endPosName']
+                'message' => "Documentation for classlike **{$classInfo['name']}** is missing.",
+                'start'   => $structure['startPosName'],
+                'end'     => $structure['endPosName']
             ];
         }
 
@@ -605,10 +591,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $globalFunction['name'],
-                'line'  => $globalFunction['startLine'],
-                'start' => $globalFunction['startPosName'],
-                'end'   => $globalFunction['endPosName']
+                'message' => "Documentation for function **{$globalFunction['name']}** is missing.",
+                'start'   => $globalFunction['startPosName'],
+                'end'     => $globalFunction['endPosName']
             ]
         ];
     }
@@ -636,10 +621,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $method['name'],
-                'line'  => $method['startLine'],
-                'start' => $method['startPosName'],
-                'end'   => $method['endPosName']
+                'message' => "Documentation for method **{$method['name']}** is missing.",
+                'start'   => $method['startPosName'],
+                'end'     => $method['endPosName']
             ]
         ];
     }
@@ -667,10 +651,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $property['name'],
-                'line'  => $property['startLine'],
-                'start' => $property['startPosName'],
-                'end'   => $property['endPosName']
+                'message' => "Documentation for property **{$property['name']}** is missing.",
+                'start'   => $property['startPosName'],
+                'end'     => $property['endPosName']
             ]
         ];
     }
@@ -689,10 +672,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $constant['name'],
-                'line'  => $constant['startLine'],
-                'start' => $constant['startPosName'],
-                'end'   => $constant['endPosName']
+                'message' => "Documentation for constant **{$constant['name']}** is missing.",
+                'start'   => $constant['startPosName'],
+                'end'     => $constant['endPosName']
             ]
         ];
     }
@@ -714,10 +696,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $structure['name'],
-                'line'  => $structure['startLine'],
-                'start' => $structure['startPosName'],
-                'end'   => $structure['endPosName']
+                'message' => "Docblock for classlike **{$structure['name']}** contains deprecated @category tag.",
+                'start'   => $structure['startPosName'],
+                'end'     => $structure['endPosName']
             ]
         ];
     }
@@ -739,10 +720,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'name'  => $structure['name'],
-                'line'  => $structure['startLine'],
-                'start' => $structure['startPosName'],
-                'end'   => $structure['endPosName']
+                'message' => "Docblock for classlike **{$structure['name']}** contains deprecated @subpackage tag.",
+                'start'   => $structure['startPosName'],
+                'end'     => $structure['endPosName']
             ]
         ];
     }
@@ -762,12 +742,13 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             return [];
         }
 
+        $link = 'https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated';
+
         return [
             [
-                'name'  => $structure['name'],
-                'line'  => $structure['startLine'],
-                'start' => $structure['startPosName'],
-                'end'   => $structure['endPosName']
+                'message' => "Docblock for classlike **{$structure['name']}** contains deprecated @link tag. See also [{$link}]($link}.",
+                'start'   => $structure['startPosName'],
+                'end'     => $structure['endPosName']
             ]
         ];
     }

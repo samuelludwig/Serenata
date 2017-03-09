@@ -2,6 +2,8 @@
 
 namespace A;
 
+class B {}
+
 /**
  * @param \A\B $param1
  */

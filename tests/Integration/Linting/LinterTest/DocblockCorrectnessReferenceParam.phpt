@@ -2,10 +2,12 @@
 
 namespace A;
 
+class Foo {}
+
 /**
- * @param \stdClass $param1
+ * @param Foo $param1
  */
-function some_function_parameter_incorrect_type(\stdClass &$param1)
+function some_function_parameter_incorrect_type(Foo &$param1)
 {
 
 }

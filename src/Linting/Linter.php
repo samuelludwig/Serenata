@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Linting;
 
+use PhpIntegrator\Utility\SourceCodeHelpers;
+
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -92,20 +94,21 @@ class Linter
         $nodes = $parser->parse($code, $handler);
 
         $output = [
-            'errors'   => [
-                'syntaxErrors' => []
-            ],
-
+            'errors'   => [],
             'warnings' => []
         ];
 
         foreach ($handler->getErrors() as $e) {
-            $output['errors']['syntaxErrors'][] = [
-                'startLine'   => $e->getStartLine() >= 0 ? $e->getStartLine() : null,
-                'endLine'     => $e->getEndLine() >= 0 ? $e->getEndLine() : null,
-                'startColumn' => $e->hasColumnInfo() ? $e->getStartColumn($code) : null,
-                'endColumn'   => $e->hasColumnInfo() ? $e->getEndColumn($code) : null,
-                'message'     => $e->getMessage()
+            $startLine = $e->getStartLine() >= 0 ? ($e->getStartLine() - 1) : 0;
+            $endLine   = $e->getEndLine() >= 0 ? ($e->getEndLine() - 1) : 0;
+
+            $startColumn = $e->hasColumnInfo() ? ($e->getStartColumn($code) - 1) : 0;
+            $endColumn   = $e->hasColumnInfo() ? ($e->getEndColumn($code) - 1) : 0;
+
+            $output['errors'][] = [
+                'message'     => $e->getMessage(),
+                'start'       => SourceCodeHelpers::calculateOffsetByLineCharacter($code, $startLine, $startColumn),
+                'end'         => SourceCodeHelpers::calculateOffsetByLineCharacter($code, $endLine, $endColumn)
             ];
         }
 
@@ -125,22 +128,18 @@ class Linter
         try {
             $traverser->traverse($nodes);
         } catch (Error $e) {
-            $output['errors']['syntaxErrors'][] = [
-                'startLine'   => 0,
-                'endLine'     => 0,
-                'startColumn' => 0,
-                'endColumn'   => 0,
-                'message'     => "Something is semantically wrong. Is there perhaps a duplicate use statement?"
+            $output['errors'][] = [
+                'message' => "Something is semantically wrong. Is there perhaps a duplicate use statement?",
+                'start'   => 0,
+                'end'     => 0
             ];
 
             return $output;
         }
 
         foreach ($analyzers as $analyzer) {
-            $key = $analyzer->getName();
-
-            $output['errors'][$key] = $analyzer->getErrors();
-            $output['warnings'][$key] = $analyzer->getWarnings();
+            $output['errors']   = array_merge($output['errors'], $analyzer->getErrors());
+            $output['warnings'] = array_merge($output['warnings'], $analyzer->getWarnings());
         }
 
         return $output;

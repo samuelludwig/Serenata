@@ -2,8 +2,14 @@
 
 namespace A;
 
+/**
+ *
+ */
 class Foo
 {
+    /**
+     *
+     */
     public function someMethod()
     {
         self::$test = 3;

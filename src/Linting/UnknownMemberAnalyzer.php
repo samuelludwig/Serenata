@@ -46,14 +46,6 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
     /**
      * @inheritDoc
      */
-    public function getName(): string
-    {
-        return 'unknownMembers';
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getVisitors(): array
     {
         return [
@@ -66,26 +58,29 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
      */
     public function getErrors(): array
     {
-        $output = [
-            'expressionHasNoType'       => [],
-            'expressionIsNotClasslike'  => [],
-            'expressionHasNoSuchMember' => []
-        ];
+        $output = [];
 
         $memberCallList = $this->methodUsageFetchingVisitor->getMemberCallList();
 
         foreach ($memberCallList as $memberCall) {
+            $message = null;
             $type = $memberCall['type'];
 
-            unset ($memberCall['type']);
-
             if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_TYPE) {
-                $output['expressionHasNoType'][] = $memberCall;
+                $message = "Member **#{$memberCall['memberName']}** could not be found because expression has no type.";
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_IS_NOT_CLASSLIKE) {
-                $output['expressionIsNotClasslike'][] = $memberCall;
+                $message = "Cannot invoke **#{$memberCall['memberName']}** on non-object type **{$memberCall['expressionType']}**.";
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER) {
-                $output['expressionHasNoSuchMember'][] = $memberCall;
+                $message = "Member **#{$memberCall['memberName']}** does not exist for type **{$memberCall['expressionType']}**.";
+            } else {
+                continue;
             }
+
+            $output[] = [
+                'message' => $message,
+                'start'   => $memberCall['start'],
+                'end'     => $memberCall['end']
+            ];
         }
 
         return $output;
@@ -96,9 +91,7 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
      */
     public function getWarnings(): array
     {
-        $output = [
-            'expressionNewMemberWillBeCreated' => []
-        ];
+        $output = [];
 
         $memberCallList = $this->methodUsageFetchingVisitor->getMemberCallList();
 
@@ -108,7 +101,11 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
             unset ($memberCall['type']);
 
             if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED) {
-                $output['expressionNewMemberWillBeCreated'][] = $memberCall;
+                $output[] = [
+                    'message' => "Member **#{$memberCall['memberName']}** was not explicitly defined in **{$memberCall['expressionType']}**. It will be created at runtime.",
+                    'start'   => $memberCall['start'],
+                    'end'     => $memberCall['end']
+                ];
             }
         }
 
