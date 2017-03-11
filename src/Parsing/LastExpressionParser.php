@@ -225,6 +225,8 @@ class LastExpressionParser implements Parser
      * @param string   $source
      * @param int|null $offset
      *
+     * @throws \PhpParser\Error
+     *
      * @return Node|null
      */
     public function getLastNodeAt(string $source, ?int $offset = null): ?Node
