@@ -6,9 +6,7 @@ use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
-use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 
 use PhpIntegrator\Utility\Position;
 
