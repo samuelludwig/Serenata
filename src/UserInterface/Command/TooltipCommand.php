@@ -57,8 +57,6 @@ class TooltipCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        $result = $this->tooltipProvider->get($arguments['file'], $code, $offset);
-
-        return $result;
+        return $this->tooltipProvider->get($arguments['file'], $code, $offset);
     }
 }
