@@ -8,19 +8,14 @@ use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClassListProvider;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\NameNodeFqsenDeterminer;
-use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\InvocationInfoRetriever;
+use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\GlobalConstantsProvider;
 use PhpIntegrator\Analysis\ClearableCacheCollection;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider;
-use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
-use PhpIntegrator\Analysis\MethodCallMethodInfoRetriever;
 use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
-use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\CachingClasslikeExistenceChecker;
-use PhpIntegrator\Analysis\PropertyFetchPropertyInfoRetriever;
 use PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker;
 use PhpIntegrator\Analysis\CachingGlobalFunctionExistenceChecker;
 
@@ -30,6 +25,12 @@ use PhpIntegrator\Analysis\Conversion\PropertyConverter;
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter;
+
+use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
+use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
 use PhpIntegrator\Analysis\Relations\TraitUsageResolver;
 use PhpIntegrator\Analysis\Relations\InheritanceResolver;

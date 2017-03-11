@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace PhpIntegrator\Analysis\Node;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 

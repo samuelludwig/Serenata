@@ -2,8 +2,9 @@
 
 namespace PhpIntegrator\Tests\Unit\Analysis;
 
-use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
+
+use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 

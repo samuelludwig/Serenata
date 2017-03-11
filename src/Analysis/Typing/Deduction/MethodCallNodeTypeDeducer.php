@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\MethodCallMethodInfoRetriever;
+use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
 
 use PhpParser\Node;
 

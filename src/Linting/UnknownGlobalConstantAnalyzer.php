@@ -2,8 +2,9 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ConstNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
+
+use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 

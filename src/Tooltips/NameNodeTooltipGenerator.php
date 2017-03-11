@@ -5,7 +5,8 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\NameNodeFqsenDeterminer;
+
+use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 

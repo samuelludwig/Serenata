@@ -2,8 +2,9 @@
 
 namespace PhpIntegrator\Tests\Unit\Analysis;
 
-use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
+
+use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 

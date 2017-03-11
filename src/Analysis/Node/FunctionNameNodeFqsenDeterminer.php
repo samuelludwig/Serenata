@@ -1,8 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace PhpIntegrator\Analysis\Node;
 
 use LogicException;
+
+use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 

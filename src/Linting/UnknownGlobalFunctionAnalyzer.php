@@ -2,8 +2,9 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
+
+use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;

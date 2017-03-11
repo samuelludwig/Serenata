@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\PropertyFetchPropertyInfoRetriever;
+use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
 use PhpParser\Node;
 

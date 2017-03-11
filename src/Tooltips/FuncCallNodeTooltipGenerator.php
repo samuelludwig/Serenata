@@ -5,7 +5,8 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\GlobalFunctionsProvider;
-use PhpIntegrator\Analysis\FunctionNameNodeFqsenDeterminer;
+
+use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 

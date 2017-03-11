@@ -1,9 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace PhpIntegrator\Analysis\Node;
 
 use LogicException;
 use UnexpectedValueException;
+
+use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
