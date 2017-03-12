@@ -59,6 +59,7 @@ class PartialParser implements Parser
         $nodes = $nodes ?: $this->tryParseWithKeywordCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithFunctionTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         return $nodes;
@@ -114,6 +115,16 @@ class PartialParser implements Parser
     protected function tryParseWithHeredocTerminationCorrection(string $code): ?array
     {
         return $this->tryParse($code . ";\n"); // Heredocs need to be suffixed by a semicolon and a newline.
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return array|null
+     */
+    protected function tryParseWithFunctionTerminationCorrection(string $code): ?array
+    {
+        return $this->tryParse($code . ");");
     }
 
     /**
