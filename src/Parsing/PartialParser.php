@@ -145,7 +145,7 @@ class PartialParser implements Parser
 
         $node = $nodes[count($nodes) - 1];
 
-        if ($node instanceof Node\Expr\MethodCall) {
+        if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\FuncCall) {
             foreach ($node->args as $i => $arg) {
                 if ($arg->value instanceof Node\Expr\ConstFetch && $arg->value->name->toString() === $dummyName) {
                     array_splice($node->args, $i, $i+1);
