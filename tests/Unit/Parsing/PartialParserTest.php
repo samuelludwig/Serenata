@@ -664,6 +664,33 @@ SOURCE;
     /**
      * @return void
      */
+    public function testParsesMethodCallWithMissingArgument(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+$this->call(1,
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        $this->assertEquals(1, count($result));
+
+        $result = array_shift($result);
+
+        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
+        $this->assertEquals('call', $result->name);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->var);
+        $this->assertEquals('this', $result->var->name);
+        $this->assertCount(1, $result->args);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
+        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
+        $this->assertEquals(1, $result->args[0]->value->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testParsesStaticMethodCall(): void
     {
         $source = <<<'SOURCE'
@@ -689,32 +716,5 @@ SOURCE;
         $this->assertInstanceOf(Node\Arg::class, $result->args[1]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
         $this->assertEquals(2, $result->args[1]->value->value);
-    }
-
-    /**
-     * @return void
-     */
-    public function testParsesMethodCallWithMissingArgument(): void
-    {
-        $source = <<<'SOURCE'
-<?php
-
-$this->call(1,
-SOURCE;
-
-        $result = $this->createPartialParser()->parse($source);
-
-        $this->assertEquals(1, count($result));
-
-        $result = array_shift($result);
-
-        $this->assertInstanceOf(Node\Expr\MethodCall::class, $result);
-        $this->assertEquals('call', $result->name);
-        $this->assertInstanceOf(Node\Expr\Variable::class, $result->var);
-        $this->assertEquals('this', $result->var->name);
-        $this->assertCount(1, $result->args);
-        $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
-        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
-        $this->assertEquals(1, $result->args[0]->value->value);
     }
 }
