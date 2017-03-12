@@ -717,4 +717,31 @@ SOURCE;
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
         $this->assertEquals(2, $result->args[1]->value->value);
     }
+
+    /**
+     * @return void
+     */
+    public function testParsesStaticMethodCallWithMissingArgument(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+self::call(1,
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        $this->assertEquals(1, count($result));
+
+        $result = array_shift($result);
+
+        $this->assertInstanceOf(Node\Expr\StaticCall::class, $result);
+        $this->assertEquals('call', $result->name);
+        $this->assertInstanceOf(Node\Name::class, $result->class);
+        $this->assertEquals('self', $result->class->toString());
+        $this->assertCount(1, $result->args);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
+        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
+        $this->assertEquals(1, $result->args[0]->value->value);
+    }
 }
