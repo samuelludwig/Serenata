@@ -601,6 +601,7 @@ SOURCE;
         $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
         $this->assertEquals(1, $result->args[0]->value->value);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[1]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
         $this->assertEquals(2, $result->args[1]->value->value);
     }
@@ -655,6 +656,7 @@ SOURCE;
         $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
         $this->assertEquals(1, $result->args[0]->value->value);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[1]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
         $this->assertEquals(2, $result->args[1]->value->value);
     }
@@ -684,6 +686,7 @@ SOURCE;
         $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
         $this->assertEquals(1, $result->args[0]->value->value);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[1]);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
         $this->assertEquals(2, $result->args[1]->value->value);
     }
