@@ -147,7 +147,8 @@ class PartialParser implements Parser
 
         if ($node instanceof Node\Expr\MethodCall ||
             $node instanceof Node\Expr\FuncCall ||
-            $node instanceof Node\Expr\StaticCall
+            $node instanceof Node\Expr\StaticCall ||
+            $node instanceof Node\Expr\New_
         ) {
             foreach ($node->args as $i => $arg) {
                 if ($arg->value instanceof Node\Expr\ConstFetch && $arg->value->name->toString() === $dummyName) {

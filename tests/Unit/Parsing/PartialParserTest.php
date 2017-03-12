@@ -773,4 +773,30 @@ SOURCE;
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
         $this->assertEquals(2, $result->args[1]->value->value);
     }
+
+    /**
+     * @return void
+     */
+    public function testParsesConstructorCallWithMissingArgument(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+new Foo(1,
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        $this->assertEquals(1, count($result));
+
+        $result = array_shift($result);
+
+        $this->assertInstanceOf(Node\Expr\New_::class, $result);
+        $this->assertInstanceOf(Node\Name::class, $result->class);
+        $this->assertEquals('Foo', $result->class->toString());
+        $this->assertCount(1, $result->args);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
+        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
+        $this->assertEquals(1, $result->args[0]->value->value);
+    }
 }
