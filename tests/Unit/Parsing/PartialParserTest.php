@@ -581,6 +581,33 @@ SOURCE;
     /**
      * @return void
      */
+    public function testParsesFunctionCall(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+call(1, 2
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        $this->assertEquals(1, count($result));
+
+        $result = array_shift($result);
+
+        $this->assertInstanceOf(Node\Expr\FuncCall::class, $result);
+        $this->assertEquals('call', $result->name);
+        $this->assertCount(2, $result->args);
+        $this->assertInstanceOf(Node\Arg::class, $result->args[0]);
+        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[0]->value);
+        $this->assertEquals(1, $result->args[0]->value->value);
+        $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->args[1]->value);
+        $this->assertEquals(2, $result->args[1]->value->value);
+    }
+
+    /**
+     * @return void
+     */
     public function testParsesMethodCall(): void
     {
         $source = <<<'SOURCE'
