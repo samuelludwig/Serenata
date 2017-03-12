@@ -60,6 +60,7 @@ class PartialParser implements Parser
         $nodes = $nodes ?: $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithFunctionTerminationCorrection($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithFunctionMissingArgumentCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         return $nodes;
@@ -125,6 +126,35 @@ class PartialParser implements Parser
     protected function tryParseWithFunctionTerminationCorrection(string $code): ?array
     {
         return $this->tryParse($code . ");");
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return array|null
+     */
+    protected function tryParseWithFunctionMissingArgumentCorrection(string $code): ?array
+    {
+        $dummyName = '____DUMMY____';
+
+        $nodes = $this->tryParse($code . " {$dummyName});");
+
+        if (empty($nodes)) {
+            return $nodes;
+        }
+
+        $node = $nodes[count($nodes) - 1];
+
+        if ($node instanceof Node\Expr\MethodCall) {
+            foreach ($node->args as $i => $arg) {
+                if ($arg->value instanceof Node\Expr\ConstFetch && $arg->value->name->toString() === $dummyName) {
+                    array_splice($node->args, $i, $i+1);
+                    break;
+                }
+            }
+        }
+
+        return $nodes;
     }
 
     /**
