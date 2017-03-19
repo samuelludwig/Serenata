@@ -29,7 +29,7 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\MethodCall && !$node instanceof Node\Expr\StaticCall) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -40,13 +40,13 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\MethodCall|Node\Expr\StaticCall $node
-     * @param string|null                               $file
+     * @param string                                    $file
      * @param string                                    $code
      * @param int                                       $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromMethodCallNode(Node\Expr $node, ?string $file, string $code, int $offset): array
+    protected function deduceTypesFromMethodCallNode(Node\Expr $node, string $file, string $code, int $offset): array
     {
         $infoItems = null;
 

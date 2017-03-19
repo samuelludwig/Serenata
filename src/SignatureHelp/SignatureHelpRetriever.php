@@ -65,9 +65,9 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param string|null $file
-     * @param string      $code
-     * @param int         $position
+     * @param string $file
+     * @param string $code
+     * @param int    $position
      *
      * @throws UnexpectedValueException when there is no signature help to be retrieved for the location.
      * @throws UnexpectedValueException when a node type is encountered that this method doesn't know how to handle.
@@ -75,7 +75,7 @@ class SignatureHelpRetriever
      * @return SignatureHelp
      */
     public function get(
-        ?string $file,
+        string $file,
         string $code,
         int $position
     ): SignatureHelp {
@@ -121,16 +121,16 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node        $node
-     * @param string|null $file
-     * @param string      $code
-     * @param int         $position
+     * @param Node   $node
+     * @param string $file
+     * @param string $code
+     * @param int    $position
      *
      * @throws UnexpectedValueException
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelpForNode(Node $node, ?string $file, string $code, int $position): SignatureHelp
+    protected function getSignatureHelpForNode(Node $node, string $file, string $code, int $position): SignatureHelp
     {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
@@ -170,18 +170,18 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node        $node
-     * @param int         $activeParameter
-     * @param string|null $file
-     * @param string      $code
-     * @param int         $offset
+     * @param Node   $node
+     * @param int    $activeParameter
+     * @param string $file
+     * @param string $code
+     * @param int    $offset
      *
      * @return SignatureHelp
      */
     protected function generateResponseFor(
         Node $node,
         int $activeParameter,
-        ?string $file,
+        string $file,
         string $code,
         int $offset
     ): SignatureHelp {

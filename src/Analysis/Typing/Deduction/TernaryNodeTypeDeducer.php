@@ -27,7 +27,7 @@ class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\Ternary) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -38,7 +38,7 @@ class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\Ternary $node
-     * @param string|null      $file
+     * @param string           $file
      * @param string           $code
      * @param int              $offset
      *
@@ -46,7 +46,7 @@ class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromTernaryNode(
         Node\Expr\Ternary $node,
-        ?string $file,
+        string $file,
         string $code,
         int $offset
     ): array {
