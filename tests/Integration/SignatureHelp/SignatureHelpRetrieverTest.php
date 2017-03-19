@@ -166,7 +166,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
-    public function testFunctionCallBeforeFirstAndOnlyArgumentInWhitespace(): void
+    public function testFunctionCallWhitespaceBeforeFirstAndOnlyArgument(): void
     {
         $expectedSignaturesResult = [
             new SignatureInformation('test', 'Some summary.', [
@@ -174,7 +174,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
             ])
         ];
 
-        $fileName = 'FunctionCallBeforeFirstAndOnlyArgumentInWhitespace.phpt';
+        $fileName = 'FunctionCallWhitespaceBeforeFirstAndOnlyArgument.phpt';
 
         $this->assertSignatureHelpSignaturesEquals($fileName, 108, 110, $expectedSignaturesResult);
         $this->assertSignatureHelpActiveParameterEquals($fileName, 108, 110, 0);
