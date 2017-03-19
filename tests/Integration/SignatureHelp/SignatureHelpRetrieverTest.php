@@ -139,6 +139,24 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     }
 
     /**
+     * @return void
+     */
+    public function testArgumentIndexIsCorrectWithVariadicParameters(): void
+    {
+        $result = $this->getSignatureHelp('VariadicParameter.phpt', 217);
+
+        $this->assertCount(1, $result->getSignatures());
+        $this->assertCount(2, $result->getSignatures()[0]->getParameters());
+        $this->assertEquals(1, $result->getActiveParameter());
+
+        $result = $this->getSignatureHelp('VariadicParameter.phpt', 220);
+
+        $this->assertCount(1, $result->getSignatures());
+        $this->assertCount(2, $result->getSignatures()[0]->getParameters());
+        $this->assertEquals(1, $result->getActiveParameter());
+    }
+
+    /**
      * @expectedException \UnexpectedValueException
      *
      * @return void

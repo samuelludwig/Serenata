@@ -252,6 +252,19 @@ class SignatureHelpRetriever
         $documentation = $functionInfo['shortDescription'];
         $parameters = $this->getResponseParametersForFunctionParameters($functionInfo['parameters']);
 
+        $parameterCount = count($functionInfo['parameters']);
+
+        if ($activeParameter >= $parameterCount) {
+            if ($parameterCount > 0 && $functionInfo['parameters'][$parameterCount - 1]['isVariadic']) {
+                $activeParameter = $parameterCount - 1;
+            } else {
+                throw new UnexpectedValueException(
+                    'Parameter index ' . $activeParameter . ' is out of bounds for function ' .
+                    $functionInfo['name']
+                );
+            }
+        }
+
         $signature = new SignatureInformation($name, $documentation, $parameters);
 
         return new SignatureHelp(
