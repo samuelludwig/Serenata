@@ -149,34 +149,23 @@ class SignatureHelpRetriever
             Node\Arg::class
         );
 
-        /** @var Node\Expr\FuncCall|Node\Expr\StaticCall|Node\Expr\MethodCall|Node\Expr\New_ $invocationNode */
-        $argumentIndex = null;
+        $argumentIndex = $this->getArgumentIndex($invocationNode, $code, $position);
 
-        if (!empty($invocationNode->args)) {
-            // No argument node may be found if the user is in between argument nodes. In that case, we can see where
-            // we are at by locating the last argument before the requested position.
-            foreach ($invocationNode->args as $i => $arg) {
-                if ($position >= $arg->getAttribute('endFilePos')) {
-                    $argumentIndex = $i;
-                }
-            }
+        return $this->generateResponseFor($invocationNode, $argumentIndex, $file, $code, $position);
+    }
 
-            if ($argumentIndex === null) {
-                for ($i = $position+1; $i > $invocationNode->getAttribute('startFilePos'); --$i) {
-                    if ($code[$i] === '(' && $position > $i) {
-                        $argumentIndex = 0;
-                        break;
-                    }
-                }
+    /**
+     * @param Node\Expr\FuncCall|Node\Expr\StaticCall|Node\Expr\MethodCall|Node\Expr\New_ $invocationNode
+     * @param string                                                                      $code
+     * @param int                                                                         $position
+     *
+     * @return int
+     */
+    protected function getArgumentIndex(Node $invocationNode, string $code, int $position): int
+    {
+        $arguments = $invocationNode->args;
 
-                if ($argumentIndex === null) {
-                    throw new UnexpectedValueException(
-                        'Found node supporting signature help at location ' . $position . ', but it\'s outside the ' .
-                        'range of the argument list'
-                    );
-                }
-            }
-        } else {
+        if (empty($arguments)) {
             for ($i = $position; $i < $invocationNode->getAttribute('endFilePos'); ++$i) {
                 if ($code[$i] === '(') {
                     throw new UnexpectedValueException(
@@ -186,10 +175,66 @@ class SignatureHelpRetriever
                 }
             }
 
-            $argumentIndex = 0;
+            return 0;
         }
 
-        return $this->generateResponseFor($invocationNode, $argumentIndex, $file, $code, $position);
+        $startOfArgumentList = null;
+
+        for ($i = $arguments[0]->getAttribute('startFilePos') - 1; $i >= 0; --$i) {
+            if ($code[$i] === '(') {
+                $startOfArgumentList = $i;
+                break;
+            }
+        }
+
+        $endOfArgumentList = null;
+
+        for ($i = $arguments[count($arguments) - 1]->getAttribute('endFilePos'); $i < mb_strlen($code); ++$i) {
+            if ($code[$i] === ')') {
+                $endOfArgumentList = $i;
+                break;
+            }
+        }
+
+        if ($position <= $startOfArgumentList || $position > $endOfArgumentList) {
+            throw new UnexpectedValueException(
+                'Found node supporting signature help at location ' . $position . ', but it\'s outside the ' .
+                'range of the argument list'
+            );
+        }
+
+        $argumentNodeAfter = null;
+        $argumentNodeBefore = null;
+
+        foreach ($arguments as $argument) {
+            // NOTE: Node end positions are inclusive rather than exclusive.
+            if ($position >= ($argument->getAttribute('endFilePos')+1)) {
+                $argumentNodeBefore = $argument;
+            }
+
+            if (!$argumentNodeAfter && $position <= $argument->getAttribute('startFilePos')) {
+                $argumentNodeAfter = $argument;
+            }
+        }
+
+        if (!$argumentNodeBefore) {
+            return 0;
+        } elseif (!$argumentNodeAfter) {
+            return count($arguments) - 1;
+        }
+
+        $isBeforeComma = true;
+
+        for ($i = $argumentNodeBefore->getAttribute('endFilePos') + 1; $i < $position; ++$i) {
+            if ($code[$i] === ',') {
+                $isBeforeComma = false;
+                break;
+            }
+        }
+
+        $node = $isBeforeComma ? $argumentNodeBefore : $argumentNodeAfter;
+
+        return array_search($node, $arguments, true);
     }
 
     /**
