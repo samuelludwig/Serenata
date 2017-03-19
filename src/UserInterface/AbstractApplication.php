@@ -8,7 +8,6 @@ use PhpIntegrator\Analysis\VariableScanner;
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClassListProvider;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
-use PhpIntegrator\Analysis\InvocationInfoRetriever;
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 use PhpIntegrator\Analysis\GlobalConstantsProvider;
@@ -28,6 +27,7 @@ use PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter;
 
 use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
 use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
 use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
@@ -101,6 +101,8 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
+
+use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
 
 use PhpIntegrator\Tooltips\TooltipProvider;
 use PhpIntegrator\Tooltips\PropertyTooltipGenerator;
@@ -223,18 +225,19 @@ abstract class AbstractApplication
             ->register('parserTokenHelper', ParserTokenHelper::class);
 
         $container
-            ->register('lastExpressionParser', LastExpressionParser::class)
+                ->register('lastExpressionParser', LastExpressionParser::class)
             ->setArguments([
                 new Reference('partialParser'),
                 new Reference('parserTokenHelper')
             ]);
 
         $container
-            ->register('invocationInfoRetriever', InvocationInfoRetriever::class)
+            ->register('signatureHelpRetriever', SignatureHelpRetriever::class)
             ->setArguments([
-                new Reference('lastExpressionParser'),
+                new Reference('parser'),
                 new Reference('parserTokenHelper'),
-                new Reference('prettyPrinter')
+                new Reference('functionFunctionInfoRetriever'),
+                new Reference('methodCallMethodInfoRetriever')
             ]);
 
         $container
@@ -394,6 +397,10 @@ abstract class AbstractApplication
         $container
             ->register('propertyFetchPropertyInfoRetriever', PropertyFetchPropertyInfoRetriever::class)
             ->setArguments([new Reference('nodeTypeDeducer'), new Reference('classlikeInfoBuilder')]);
+
+        $container
+            ->register('functionFunctionInfoRetriever', FunctionFunctionInfoRetriever::class)
+            ->setArguments([new Reference('functionCallNodeFqsenDeterminer'), new Reference('globalFunctionsProvider')]);
 
         $container
             ->register('methodCallMethodInfoRetriever', MethodCallMethodInfoRetriever::class)
@@ -578,8 +585,7 @@ abstract class AbstractApplication
             ->register('functionNodeTooltipGenerator', FunctionNodeTooltipGenerator::class)
             ->setArguments([
                 new Reference('functionTooltipGenerator'),
-                new Reference('functionCallNodeFqsenDeterminer'),
-                new Reference('globalFunctionsProvider')
+                new Reference('functionFunctionInfoRetriever')
             ]);
 
         $container
@@ -944,8 +950,8 @@ abstract class AbstractApplication
                 ]);
 
         $container
-            ->register('invocationInfoCommand', Command\InvocationInfoCommand::class)
-            ->setArguments([new Reference('invocationInfoRetriever'), new Reference('sourceCodeStreamReader')]);
+            ->register('signatureHelpCommand', Command\SignatureHelpCommand::class)
+            ->setArguments([new Reference('signatureHelpRetriever'), new Reference('sourceCodeStreamReader')]);
 
         $container
             ->register('namespaceListCommand', Command\NamespaceListCommand::class)

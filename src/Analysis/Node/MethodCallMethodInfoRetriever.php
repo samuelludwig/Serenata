@@ -12,7 +12,8 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use PhpParser\Node;
 
 /**
- * Fetches method information from a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node.
+ * Fetches method information from a {@see Node\Expr\MethodCall}, {@see Node\Expr\StaticCall} or a {@see Node\Expr\New_}
+ * node.
  */
 class MethodCallMethodInfoRetriever
 {
@@ -39,10 +40,10 @@ class MethodCallMethodInfoRetriever
     }
 
     /**
-     * @param Node\Expr\MethodCall|Node\Expr\StaticCall $node
-     * @param string|null                               $file
-     * @param string                                    $code
-     * @param int                                       $offset
+     * @param Node\Expr\MethodCall|Node\Expr\StaticCall||Node\Expr\New_ $node
+     * @param string|null                                               $file
+     * @param string                                                    $code
+     * @param int                                                       $offset
      *
      * @throws UnexpectedValueException when a dynamic method call is passed.
      * @throws UnexpectedValueException when the type the method is called on could not be determined.
@@ -51,14 +52,26 @@ class MethodCallMethodInfoRetriever
      */
     public function retrieve(Node\Expr $node, ?string $file, string $code, int $offset): array
     {
-        if ($node->name instanceof Node\Expr) {
+        if (
+            !$node instanceof Node\Expr\MethodCall &&
+            !$node instanceof Node\Expr\StaticCall &&
+            !$node instanceof Node\Expr\New_
+        ) {
+            throw new LogicException('Expected method call node, got ' . get_class($node) . ' instead');
+        } elseif ($node instanceof Node\Expr\New_) {
+            if ($node->class instanceof Node\Expr) {
+                // Can't currently deduce type of an expression such as "$this->{$foo}()";
+                throw new UnexpectedValueException('Can\'t determine information of dynamic method call');
+            } elseif ($node->class instanceof Node\Stmt\Class_) {
+                throw new UnexpectedValueException('Can\'t determine information of anonymous class constructor call');
+            }
+        } elseif ($node->name instanceof Node\Expr) {
             // Can't currently deduce type of an expression such as "$this->{$foo}()";
             throw new UnexpectedValueException('Can\'t determine information of dynamic method call');
-        } elseif (!$node instanceof Node\Expr\MethodCall && !$node instanceof Node\Expr\StaticCall) {
-            throw new LogicException('Expected method call node, got ' . get_class($node) . ' instead');
         }
 
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
+        $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name;
 
         $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 
@@ -73,11 +86,11 @@ class MethodCallMethodInfoRetriever
                 continue;
             }
 
-            if (!isset($info['methods'][$node->name])) {
+            if (!isset($info['methods'][$methodName])) {
                 continue;
             }
 
-            $infoElements[] = $info['methods'][$node->name];
+            $infoElements[] = $info['methods'][$methodName];
         }
 
         return $infoElements;

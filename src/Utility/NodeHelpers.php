@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Utility;
 
+use LogicException;
+
 use PhpParser\Node;
 
 /**
@@ -25,5 +27,56 @@ class NodeHelpers
         }
 
         return $newName;
+    }
+
+    /**
+     * Finds the first ancestor node that has any of the specified types.
+     *
+     * @param Node     $node
+     * @param string[] ...$types
+     *
+     * @return Node|null
+     */
+    public static function findAncestorOfAnyType(Node $node, string ...$types): ?Node
+    {
+        $parent = $node->getAttribute('parent', false);
+
+        if ($parent === false) {
+            throw new LogicException("Can't find ancestor without node parent data being attached");
+        }
+
+        while ($parent) {
+            foreach ($types as $type) {
+                if (is_a($parent, $type, false)) {
+                    return $parent;
+                }
+            }
+
+            $parent = $parent->getAttribute('parent');
+        }
+
+        return null;
+    }
+
+    /**
+     * Moves from the specified node upwards through the hierarchy, looking for a node with any of the specified types.
+     * Includes the node itself in the search.
+     *
+     * Same as {@see findAncestorOfType}, but includes the passed node in the saerch.
+     *
+     * @param Node     $node
+     * @param string[] ...$types
+     *
+     * @return Node|null
+     */
+    public static function findNodeOfAnyTypeInNodePath(Node $node, string ...$types): ?Node
+    {
+        foreach ($types as $type) {
+            if (is_a($node, $type, false)) {
+                return $node;
+            }
+        }
+
+        return static::findAncestorOfAnyType($node, ...$types);
     }
 }

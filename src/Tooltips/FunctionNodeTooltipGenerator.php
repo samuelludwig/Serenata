@@ -4,9 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
-
-use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
 
 use PhpParser\Node;
 
@@ -21,28 +19,20 @@ class FunctionNodeTooltipGenerator
     protected $functionTooltipGenerator;
 
     /**
-     * @var FunctionNameNodeFqsenDeterminer
+     * @var FunctionFunctionInfoRetriever
      */
-    protected $functionCallNodeFqsenDeterminer;
+    protected $functionCallFunctionInfoRetriever;
 
     /**
-     * @var GlobalFunctionsProvider
-     */
-    protected $globalFunctionsProvider;
-
-    /**
-     * @param FunctionTooltipGenerator        $functionTooltipGenerator
-     * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
-     * @param GlobalFunctionsProvider         $globalFunctionsProvider
+     * @param FunctionTooltipGenerator      $functionTooltipGenerator
+     * @param FunctionFunctionInfoRetriever $functionCallFunctionInfoRetriever
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
-        FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
-        GlobalFunctionsProvider $globalFunctionsProvider
+        FunctionFunctionInfoRetriever $functionCallFunctionInfoRetriever
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
-        $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
-        $this->globalFunctionsProvider = $globalFunctionsProvider;
+        $this->functionCallFunctionInfoRetriever = $functionCallFunctionInfoRetriever;
     }
 
     /**
@@ -54,31 +44,8 @@ class FunctionNodeTooltipGenerator
      */
     public function generate(Node\Stmt\Function_ $node): string
     {
-        $nameNode = new Node\Name\Relative($node->name);
-        $nameNode->setAttribute('namespace', $node->getAttribute('namespace'));
-
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($nameNode);
-
-        $info = $this->getFunctionInfo($fqsen);
+        $info = $this->functionCallFunctionInfoRetriever->retrieve($node);
 
         return $this->functionTooltipGenerator->generate($info);
-    }
-
-    /**
-     * @param string $fullyQualifiedName
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return array
-     */
-    protected function getFunctionInfo(string $fullyQualifiedName): array
-    {
-        $functions = $this->globalFunctionsProvider->getAll();
-
-        if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
-        }
-
-        return $functions[$fullyQualifiedName];
     }
 }
