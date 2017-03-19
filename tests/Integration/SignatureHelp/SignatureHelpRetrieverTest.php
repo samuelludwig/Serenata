@@ -181,6 +181,16 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
      *
      * @return void
      */
+    public function testFunctionCallFailsWhenArgumentIsOutOfBounds(): void
+    {
+        $result = $this->getSignatureHelp('FunctionCallTooManyArguments.phpt', 113);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
     public function testNoInvocation(): void
     {
         $result = $this->getSignatureHelp('NoInvocation.phpt', 233);
