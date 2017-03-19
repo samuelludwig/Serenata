@@ -3,6 +3,8 @@
 namespace PhpIntegrator\Tests\Unit\SignatureHelp;
 
 use PhpIntegrator\SignatureHelp\SignatureHelp;
+use PhpIntegrator\SignatureHelp\ParameterInformation;
+use PhpIntegrator\SignatureHelp\SignatureInformation;
 
 use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
 
@@ -44,16 +46,15 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     {
         $result = $this->getSignatureHelp('FunctionCall.phpt', 185);
 
-        $this->assertCount(1, $result->getSignatures());
-        $this->assertEquals('test', $result->getSignatures()[0]->getLabel());
-        $this->assertEquals('Some summary.', $result->getSignatures()[0]->getDocumentation());
-        $this->assertCount(3, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals('int $a', $result->getSignatures()[0]->getParameters()[0]->getLabel());
-        $this->assertEquals('Parameter A.', $result->getSignatures()[0]->getParameters()[0]->getDocumentation());
-        $this->assertEquals('bool $b = true', $result->getSignatures()[0]->getParameters()[1]->getLabel());
-        $this->assertNull($result->getSignatures()[0]->getParameters()[1]->getDocumentation());
-        $this->assertEquals('string $c', $result->getSignatures()[0]->getParameters()[2]->getLabel());
-        $this->assertEquals('Parameter C.', $result->getSignatures()[0]->getParameters()[2]->getDocumentation());
+        $expectedSignaturesResult = [
+            new SignatureInformation('test', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.'),
+                new ParameterInformation('bool $b = true', null),
+                new ParameterInformation('string $c', 'Parameter C.')
+            ])
+        ];
+
+        $this->assertEquals($expectedSignaturesResult, $result->getSignatures());
         $this->assertEquals(0, $result->getActiveSignature());
         $this->assertEquals(2, $result->getActiveParameter());
     }
@@ -65,12 +66,14 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     {
         $result = $this->getSignatureHelp('FunctionCallBeforeFirstAndOnlyArgumentInWhitespace.phpt', 108);
 
-        $this->assertCount(1, $result->getSignatures());
-        $this->assertEquals('test', $result->getSignatures()[0]->getLabel());
-        $this->assertEquals('Some summary.', $result->getSignatures()[0]->getDocumentation());
-        $this->assertCount(1, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals('int $a', $result->getSignatures()[0]->getParameters()[0]->getLabel());
-        $this->assertEquals('Parameter A.', $result->getSignatures()[0]->getParameters()[0]->getDocumentation());
+        $expectedSignaturesResult = [
+            new SignatureInformation('test', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.')
+            ])
+        ];
+
+        $this->assertEquals($expectedSignaturesResult, $result->getSignatures());
+
         $this->assertEquals(0, $result->getActiveSignature());
         $this->assertEquals(0, $result->getActiveParameter());
     }
@@ -82,16 +85,15 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     {
         $result = $this->getSignatureHelp('MethodCall.phpt', 251);
 
-        $this->assertCount(1, $result->getSignatures());
-        $this->assertEquals('test', $result->getSignatures()[0]->getLabel());
-        $this->assertEquals('Some summary.', $result->getSignatures()[0]->getDocumentation());
-        $this->assertCount(3, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals('int $a', $result->getSignatures()[0]->getParameters()[0]->getLabel());
-        $this->assertEquals('Parameter A.', $result->getSignatures()[0]->getParameters()[0]->getDocumentation());
-        $this->assertEquals('bool $b = true', $result->getSignatures()[0]->getParameters()[1]->getLabel());
-        $this->assertNull($result->getSignatures()[0]->getParameters()[1]->getDocumentation());
-        $this->assertEquals('string $c', $result->getSignatures()[0]->getParameters()[2]->getLabel());
-        $this->assertEquals('Parameter C.', $result->getSignatures()[0]->getParameters()[2]->getDocumentation());
+        $expectedSignaturesResult = [
+            new SignatureInformation('test', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.'),
+                new ParameterInformation('bool $b = true', null),
+                new ParameterInformation('string $c', 'Parameter C.')
+            ])
+        ];
+
+        $this->assertEquals($expectedSignaturesResult, $result->getSignatures());
         $this->assertEquals(0, $result->getActiveSignature());
         $this->assertEquals(2, $result->getActiveParameter());
     }
@@ -103,16 +105,15 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     {
         $result = $this->getSignatureHelp('StaticMethodCall.phpt', 259);
 
-        $this->assertCount(1, $result->getSignatures());
-        $this->assertEquals('test', $result->getSignatures()[0]->getLabel());
-        $this->assertEquals('Some summary.', $result->getSignatures()[0]->getDocumentation());
-        $this->assertCount(3, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals('int $a', $result->getSignatures()[0]->getParameters()[0]->getLabel());
-        $this->assertEquals('Parameter A.', $result->getSignatures()[0]->getParameters()[0]->getDocumentation());
-        $this->assertEquals('bool $b = true', $result->getSignatures()[0]->getParameters()[1]->getLabel());
-        $this->assertNull($result->getSignatures()[0]->getParameters()[1]->getDocumentation());
-        $this->assertEquals('string $c', $result->getSignatures()[0]->getParameters()[2]->getLabel());
-        $this->assertEquals('Parameter C.', $result->getSignatures()[0]->getParameters()[2]->getDocumentation());
+        $expectedSignaturesResult = [
+            new SignatureInformation('test', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.'),
+                new ParameterInformation('bool $b = true', null),
+                new ParameterInformation('string $c', 'Parameter C.')
+            ])
+        ];
+
+        $this->assertEquals($expectedSignaturesResult, $result->getSignatures());
         $this->assertEquals(0, $result->getActiveSignature());
         $this->assertEquals(2, $result->getActiveParameter());
     }
@@ -124,16 +125,15 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     {
         $result = $this->getSignatureHelp('Constructor.phpt', 300);
 
-        $this->assertCount(1, $result->getSignatures());
-        $this->assertEquals('__construct', $result->getSignatures()[0]->getLabel());
-        $this->assertEquals('Some summary.', $result->getSignatures()[0]->getDocumentation());
-        $this->assertCount(3, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals('int $a', $result->getSignatures()[0]->getParameters()[0]->getLabel());
-        $this->assertEquals('Parameter A.', $result->getSignatures()[0]->getParameters()[0]->getDocumentation());
-        $this->assertEquals('bool $b = true', $result->getSignatures()[0]->getParameters()[1]->getLabel());
-        $this->assertNull($result->getSignatures()[0]->getParameters()[1]->getDocumentation());
-        $this->assertEquals('string $c', $result->getSignatures()[0]->getParameters()[2]->getLabel());
-        $this->assertEquals('Parameter C.', $result->getSignatures()[0]->getParameters()[2]->getDocumentation());
+        $expectedSignaturesResult = [
+            new SignatureInformation('__construct', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.'),
+                new ParameterInformation('bool $b = true', null),
+                new ParameterInformation('string $c', 'Parameter C.')
+            ])
+        ];
+
+        $this->assertEquals($expectedSignaturesResult, $result->getSignatures());
         $this->assertEquals(0, $result->getActiveSignature());
         $this->assertEquals(2, $result->getActiveParameter());
     }
