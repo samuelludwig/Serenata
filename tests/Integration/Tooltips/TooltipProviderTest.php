@@ -42,8 +42,10 @@ class TooltipProviderTest extends AbstractIndexedTest
      * @param int    $start
      * @param int    $end
      * @param string $contents
+     *
+     * @return void
      */
-    protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents)
+    protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents): void
     {
         $i = $start;
 
