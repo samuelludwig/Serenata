@@ -59,6 +59,6 @@ class SignatureHelpCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->signatureHelpRetriever->get($file, $code, $offset);
+        return $this->signatureHelpRetriever->get($arguments['file'], $code, $offset);
     }
 }
