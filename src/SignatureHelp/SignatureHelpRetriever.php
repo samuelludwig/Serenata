@@ -149,6 +149,14 @@ class SignatureHelpRetriever
             Node\Arg::class
         );
 
+        if ($argumentNode) {
+            // Usually the invocationNode will be the parent, but in case we're on the name of a nested function call,
+            // we may have received the wrong node instead. We also can't fetch the argument beforehand, as we may be
+            // at a location in between arguments where $argumentNode will be null (as its range only spans the actual
+            // argument, without whitespace and optional comma).
+            $invocationNode = $argumentNode->getAttribute('parent');
+        }
+
         $argumentIndex = $this->getArgumentIndex($invocationNode, $code, $position);
 
         return $this->generateResponseFor($invocationNode, $argumentIndex, $file, $code, $position);

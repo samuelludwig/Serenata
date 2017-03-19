@@ -221,6 +221,24 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
+    public function testNameOfNestedFunctionCallResolvesToOuterFunctionCall(): void
+    {
+        $expectedSignaturesResult = [
+            new SignatureInformation('foo', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.')
+            ])
+        ];
+
+        $fileName = 'NameOfNestedFunctionCallResolvesToOuterFunctionCall.phpt';
+
+        $this->assertSignatureHelpSignaturesEquals($fileName, 127, 130, $expectedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 132, 132, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 127, 132, 0);
+    }
+
+    /**
+     * @return void
+     */
     public function testMethodCall(): void
     {
         $expectedSignaturesResult = [
