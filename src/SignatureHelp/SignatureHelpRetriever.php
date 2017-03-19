@@ -152,9 +152,7 @@ class SignatureHelpRetriever
         /** @var Node\Expr\FuncCall|Node\Expr\StaticCall|Node\Expr\MethodCall|Node\Expr\New_ $invocationNode */
         $argumentIndex = null;
 
-        if ($argumentNode) {
-            $argumentIndex = array_search($argumentNode, $invocationNode->args, true);
-        } elseif (!empty($invocationNode->args)) {
+        if (!empty($invocationNode->args)) {
             // No argument node may be found if the user is in between argument nodes. In that case, we can see where
             // we are at by locating the last argument before the requested position.
             foreach ($invocationNode->args as $i => $arg) {
