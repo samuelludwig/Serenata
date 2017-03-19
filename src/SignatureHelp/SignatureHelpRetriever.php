@@ -219,8 +219,6 @@ class SignatureHelpRetriever
 
         if (!$argumentNodeBefore) {
             return 0;
-        } elseif (!$argumentNodeAfter) {
-            return count($arguments) - 1;
         }
 
         $isBeforeComma = true;
@@ -232,9 +230,11 @@ class SignatureHelpRetriever
             }
         }
 
-        $node = $isBeforeComma ? $argumentNodeBefore : $argumentNodeAfter;
+        $argumentIndex = array_search($argumentNodeBefore, $arguments, true);
 
-        return array_search($node, $arguments, true);
+        // By offsetting from the argument before, we catch the case where there is a syntax error, which causes no
+        // last node to exist.
+        return $argumentIndex + ($isBeforeComma ? 0 : 1);
     }
 
     /**
