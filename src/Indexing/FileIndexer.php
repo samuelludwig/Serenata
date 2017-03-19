@@ -719,8 +719,6 @@ class FileIndexer
             }
         }
 
-        $shortDescription = $documentation['descriptions']['short'];
-
         $throws = [];
 
         foreach ($documentation['throws'] as $type => $description) {
@@ -798,7 +796,7 @@ class FileIndexer
             'is_abstract'             => (isset($rawData['isAbstract']) && $rawData['isAbstract']) ? 1 : 0,
             'is_final'                => (isset($rawData['isFinal']) && $rawData['isFinal']) ? 1 : 0,
             'is_deprecated'           => $documentation['deprecated'] ? 1 : 0,
-            'short_description'       => $shortDescription,
+            'short_description'       => $documentation['descriptions']['short'],
             'long_description'        => $documentation['descriptions']['long'],
             'return_description'      => $documentation['return']['description'],
             'return_type_hint'        => $rawData['returnType'],
