@@ -61,6 +61,23 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
+    public function testFunctionCallBeforeFirstAndOnlyArgumentInWhitespace(): void
+    {
+        $result = $this->getSignatureHelp('FunctionCallBeforeFirstAndOnlyArgumentInWhitespace.phpt', 108);
+
+        $this->assertCount(1, $result->getSignatures());
+        $this->assertEquals('test', $result->getSignatures()[0]->getLabel());
+        $this->assertEquals('Some summary.', $result->getSignatures()[0]->getDocumentation());
+        $this->assertCount(1, $result->getSignatures()[0]->getParameters());
+        $this->assertEquals('int $a', $result->getSignatures()[0]->getParameters()[0]->getLabel());
+        $this->assertEquals('Parameter A.', $result->getSignatures()[0]->getParameters()[0]->getDocumentation());
+        $this->assertEquals(0, $result->getActiveSignature());
+        $this->assertEquals(0, $result->getActiveParameter());
+    }
+
+    /**
+     * @return void
+     */
     public function testMethodCall(): void
     {
         $result = $this->getSignatureHelp('MethodCall.phpt', 251);
