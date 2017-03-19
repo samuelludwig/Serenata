@@ -126,7 +126,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
      *
      * @return void
      */
-    public function testFunctionCallFunctionNameDoesNotWork(): void
+    public function testFunctionCallFunctionNameDoesNotWorkWhenFunctionDoesNotHaveArguments(): void
     {
         $result = $this->getSignatureHelp('FunctionCallFunctionName.phpt', 47);
     }
