@@ -13,7 +13,8 @@
 * Fix the linter complaining about type mismatches in docblocks when the qualifications of the types are different (https://gitlab.com/php-integrator/core/issues/89).
 * Some docblock linter warnings have been promoted to errors (https://gitlab.com/php-integrator/core/issues/33).
 * A new command to provide tooltips has been added.
-* A new command to provide signature help (call tips) has been added.
+* The invocation info command has been reworked into the signature help command (call tips).
+  * This command operates similarly, but provides full information over the available signatures instead of just information about the invocation, leaving the caller to handle further type determination and handling.
 * Fix the linter not complaining about missing ampersand signs for reference parameters in docblocks (https://gitlab.com/php-integrator/core/issues/32).
 * `SemanticLint` has been renamed to just `Lint`, as it also lints syntax errors.
 * Linting will no longer return an associative array of all kinds of problems. Instead, it will return a list of error and warning messages, returned by the requested analyzers.
