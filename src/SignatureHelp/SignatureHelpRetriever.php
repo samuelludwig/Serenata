@@ -280,8 +280,7 @@ class SignatureHelpRetriever
                 return $parameterCount - 1;
             } else {
                 throw new UnexpectedValueException(
-                    'Parameter index ' . $argumentIndex . ' is out of bounds for function ' .
-                    $functionInfo['name']
+                    'Parameter index ' . $argumentIndex . ' is out of bounds for function ' . $functionInfo['name']
                 );
             }
         }
