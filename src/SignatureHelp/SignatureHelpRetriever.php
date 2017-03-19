@@ -196,7 +196,7 @@ class SignatureHelpRetriever
 
     /**
      * @param Node   $node
-     * @param int    $activeParameter
+     * @param int    $argumentIndex
      * @param string $file
      * @param string $code
      * @param int    $offset
@@ -205,7 +205,7 @@ class SignatureHelpRetriever
      */
     protected function generateResponseFor(
         Node $node,
-        int $activeParameter,
+        int $argumentIndex,
         string $file,
         string $code,
         int $offset
@@ -228,11 +228,11 @@ class SignatureHelpRetriever
             // FIXME: There could be multiple matches, return multiple signatures in that case.
             $methodInfo = array_shift($methodInfoElements);
 
-            return $this->generateResponseFromFunctionInfo($methodInfo, $activeParameter);
+            return $this->generateResponseFromFunctionInfo($methodInfo, $argumentIndex);
         } elseif ($node instanceof Node\Expr\FuncCall) {
             $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node);
 
-            return $this->generateResponseFromFunctionInfo($functionInfo, $activeParameter);
+            return $this->generateResponseFromFunctionInfo($functionInfo, $argumentIndex);
         }
 
         throw new UnexpectedValueException(
@@ -242,11 +242,11 @@ class SignatureHelpRetriever
 
     /**
      * @param array $functionInfo
-     * @param int   $activeParameter
+     * @param int   $argumentIndex
      *
      * @return SignatureHelp
      */
-    protected function generateResponseFromFunctionInfo(array $functionInfo, int $activeParameter): SignatureHelp
+    protected function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
     {
         $name = $functionInfo['name'];
         $documentation = $functionInfo['shortDescription'];
@@ -254,12 +254,12 @@ class SignatureHelpRetriever
 
         $parameterCount = count($functionInfo['parameters']);
 
-        if ($activeParameter >= $parameterCount) {
+        if ($argumentIndex >= $parameterCount) {
             if ($parameterCount > 0 && $functionInfo['parameters'][$parameterCount - 1]['isVariadic']) {
-                $activeParameter = $parameterCount - 1;
+                $argumentIndex = $parameterCount - 1;
             } else {
                 throw new UnexpectedValueException(
-                    'Parameter index ' . $activeParameter . ' is out of bounds for function ' .
+                    'Parameter index ' . $argumentIndex . ' is out of bounds for function ' .
                     $functionInfo['name']
                 );
             }
@@ -270,7 +270,7 @@ class SignatureHelpRetriever
         return new SignatureHelp(
             [$signature],
             0,
-            $activeParameter
+            $argumentIndex
         );
     }
 
