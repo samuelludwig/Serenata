@@ -228,20 +228,29 @@ class SignatureHelpRetriever
             // FIXME: There could be multiple matches, return multiple signatures in that case.
             $methodInfo = array_shift($methodInfoElements);
 
-            $name = $methodInfo['name'];
-            $documentation = $methodInfo['shortDescription'];
-            $parameters = $this->getResponseParametersForFunctionParameters($methodInfo['parameters']);
+            return $this->generateResponseFromFunctionInfo($methodInfo, $activeParameter);
         } elseif ($node instanceof Node\Expr\FuncCall) {
             $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node);
 
-            $name = $functionInfo['name'];
-            $documentation = $functionInfo['shortDescription'];
-            $parameters = $this->getResponseParametersForFunctionParameters($functionInfo['parameters']);
-        } else {
-            throw new UnexpectedValueException(
-                'Could not determine signature help for node of type ' . get_class($node)
-            );
+            return $this->generateResponseFromFunctionInfo($functionInfo, $activeParameter);
         }
+
+        throw new UnexpectedValueException(
+            'Could not determine signature help for node of type ' . get_class($node)
+        );
+    }
+
+    /**
+     * @param array $functionInfo
+     * @param int   $activeParameter
+     *
+     * @return SignatureHelp
+     */
+    protected function generateResponseFromFunctionInfo(array $functionInfo, int $activeParameter): SignatureHelp
+    {
+        $name = $functionInfo['name'];
+        $documentation = $functionInfo['shortDescription'];
+        $parameters = $this->getResponseParametersForFunctionParameters($functionInfo['parameters']);
 
         $signature = new SignatureInformation($name, $documentation, $parameters);
 
