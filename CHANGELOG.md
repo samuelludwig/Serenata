@@ -12,6 +12,7 @@
 * Fix disabling unknown global constant linting having no effect.
 * Fix the linter complaining about type mismatches in docblocks when the qualifications of the types are different (https://gitlab.com/php-integrator/core/issues/89).
 * Some docblock linter warnings have been promoted to errors (https://gitlab.com/php-integrator/core/issues/33).
+* A new command to provide tooltips has been added.
 * A new command to provide signature help (call tips) has been added.
 * Fix the linter not complaining about missing ampersand signs for reference parameters in docblocks (https://gitlab.com/php-integrator/core/issues/32).
 * `SemanticLint` has been renamed to just `Lint`, as it also lints syntax errors.
