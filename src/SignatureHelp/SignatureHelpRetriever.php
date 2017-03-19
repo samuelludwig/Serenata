@@ -201,6 +201,8 @@ class SignatureHelpRetriever
      * @param string $code
      * @param int    $offset
      *
+     * @throws UnexpectedValueException
+     *
      * @return SignatureHelp
      */
     protected function generateResponseFor(
@@ -243,6 +245,8 @@ class SignatureHelpRetriever
     /**
      * @param array $functionInfo
      * @param int   $argumentIndex
+     *
+     * @throws UnexpectedValueException
      *
      * @return SignatureHelp
      */
