@@ -154,7 +154,7 @@ class SignatureHelpRetriever
 
         if ($argumentNode) {
             $argumentIndex = array_search($argumentNode, $invocationNode->args, true);
-        } else {
+        } elseif (!empty($invocationNode->args)) {
             // No argument node may be found if the user is in between argument nodes. In that case, we can see where
             // we are at by locating the last argument before the requested position.
             foreach ($invocationNode->args as $i => $arg) {
@@ -162,6 +162,8 @@ class SignatureHelpRetriever
                     $argumentIndex = $i;
                 }
             }
+        } else {
+            $argumentIndex = 0;
         }
 
         return $this->generateResponseFor($invocationNode, $argumentIndex, $file, $code, $position);
