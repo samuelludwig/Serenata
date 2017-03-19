@@ -158,7 +158,7 @@ class SignatureHelpRetriever
             // No argument node may be found if the user is in between argument nodes. In that case, we can see where
             // we are at by locating the last argument before the requested position.
             foreach ($invocationNode->args as $i => $arg) {
-                if ($arg->getAttribute('endFilePos') < $position) {
+                if ($position >= $arg->getAttribute('endFilePos')) {
                     $argumentIndex = $i;
                 }
             }
