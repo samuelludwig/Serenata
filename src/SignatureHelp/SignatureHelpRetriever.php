@@ -162,6 +162,13 @@ class SignatureHelpRetriever
                     $argumentIndex = $i;
                 }
             }
+
+            if ($argumentIndex === null) {
+                throw new UnexpectedValueException(
+                    'Found node supporting signature help at location ' . $position . ', but it\'s outside the ' .
+                    'range of the argument list'
+                );
+            }
         } else {
             for ($i = $position; $i < $invocationNode->getAttribute('endFilePos'); ++$i) {
                 if ($code[$i] === '(') {
