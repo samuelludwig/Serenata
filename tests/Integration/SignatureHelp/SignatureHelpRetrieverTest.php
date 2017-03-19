@@ -74,7 +74,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
         }
 
         $this->assertTrue(
-            $gotException,
+            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() !== $signatures),
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
 
@@ -87,7 +87,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
         }
 
         $this->assertTrue(
-            $gotException,
+            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() !== $signatures),
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );
     }
