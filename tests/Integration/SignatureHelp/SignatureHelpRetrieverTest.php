@@ -126,7 +126,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
      *
      * @return void
      */
-    public function testReturnsNullWhenNotInInvocation1(): void
+    public function testNoInvocation(): void
     {
         $result = $this->getSignatureHelp('NoInvocation.phpt', 233);
     }
