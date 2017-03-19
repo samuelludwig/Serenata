@@ -252,11 +252,28 @@ class SignatureHelpRetriever
         $documentation = $functionInfo['shortDescription'];
         $parameters = $this->getResponseParametersForFunctionParameters($functionInfo['parameters']);
 
+        $argumentIndex = $this->getNormalizedFunctionArgumentIndex($functionInfo, $argumentIndex);
+
+        $signature = new SignatureInformation($name, $documentation, $parameters);
+
+        return new SignatureHelp([$signature], 0,$argumentIndex);
+    }
+
+    /**
+     * @param array $functionInfo
+     * @param int   $argumentIndex
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return int
+     */
+    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): int
+    {
         $parameterCount = count($functionInfo['parameters']);
 
         if ($argumentIndex >= $parameterCount) {
             if ($parameterCount > 0 && $functionInfo['parameters'][$parameterCount - 1]['isVariadic']) {
-                $argumentIndex = $parameterCount - 1;
+                return $parameterCount - 1;
             } else {
                 throw new UnexpectedValueException(
                     'Parameter index ' . $argumentIndex . ' is out of bounds for function ' .
@@ -265,9 +282,7 @@ class SignatureHelpRetriever
             }
         }
 
-        $signature = new SignatureInformation($name, $documentation, $parameters);
-
-        return new SignatureHelp([$signature], 0,$argumentIndex);
+        return $argumentIndex;
     }
 
     /**
