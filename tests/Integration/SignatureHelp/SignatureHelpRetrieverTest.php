@@ -183,6 +183,25 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
+    public function testFunctionCallWhitespaceBetweenArguments(): void
+    {
+        $expectedSignaturesResult = [
+            new SignatureInformation('test', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.'),
+                new ParameterInformation('int $b', 'Parameter B.')
+            ])
+        ];
+
+        $fileName = 'FunctionCallWhitespaceBetweenArguments.phpt';
+
+        $this->assertSignatureHelpSignaturesEquals($fileName, 142, 147, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 142, 144, 0);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 145, 147, 1);
+    }
+
+    /**
+     * @return void
+     */
     public function testMethodCall(): void
     {
         $expectedSignaturesResult = [
