@@ -149,12 +149,16 @@ class SignatureHelpRetriever
             Node\Arg::class
         );
 
-        if ($argumentNode) {
+        if ($argumentNode && $argumentNode->getAttribute('parent') !== $invocationNode) {
             // Usually the invocationNode will be the parent, but in case we're on the name of a nested function call,
             // we may have received the wrong node instead. We also can't fetch the argument beforehand, as we may be
             // at a location in between arguments where $argumentNode will be null (as its range only spans the actual
             // argument, without whitespace and optional comma).
-            $invocationNode = $argumentNode->getAttribute('parent');
+            $endFilePos = $invocationNode->name->getAttribute('endFilePos') + 1;
+
+            if ($position <= $endFilePos) {
+                $invocationNode = $argumentNode->getAttribute('parent');
+            }
         }
 
         $argumentIndex = $this->getArgumentIndex($invocationNode, $code, $position);
@@ -297,8 +301,6 @@ class SignatureHelpRetriever
      * @param array $functionInfo
      * @param int   $argumentIndex
      *
-     * @throws UnexpectedValueException
-     *
      * @return SignatureHelp
      */
     protected function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
@@ -318,22 +320,17 @@ class SignatureHelpRetriever
      * @param array $functionInfo
      * @param int   $argumentIndex
      *
-     * @throws UnexpectedValueException
-     *
      * @return int
      */
     protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): int
     {
         $parameterCount = count($functionInfo['parameters']);
 
-        if ($argumentIndex >= $parameterCount) {
-            if ($parameterCount > 0 && $functionInfo['parameters'][$parameterCount - 1]['isVariadic']) {
-                return $parameterCount - 1;
-            } else {
-                throw new UnexpectedValueException(
-                    'Parameter index ' . $argumentIndex . ' is out of bounds for function ' . $functionInfo['name']
-                );
-            }
+        if ($argumentIndex >= $parameterCount &&
+            $parameterCount > 0 &&
+            $functionInfo['parameters'][$parameterCount - 1]['isVariadic']
+        ) {
+            return $parameterCount - 1;
         }
 
         return $argumentIndex;

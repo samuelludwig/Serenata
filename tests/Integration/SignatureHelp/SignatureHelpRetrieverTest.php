@@ -221,7 +221,7 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
-    public function testNameOfNestedFunctionCallResolvesToOuterFunctionCall(): void
+    public function testNestedFunctionCall(): void
     {
         $expectedSignaturesResult = [
             new SignatureInformation('foo', 'Some summary.', [
@@ -229,9 +229,14 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
             ])
         ];
 
-        $fileName = 'NameOfNestedFunctionCallResolvesToOuterFunctionCall.phpt';
+        $expectedNestedSignaturesResult = [
+            new SignatureInformation('bar', null, [])
+        ];
+
+        $fileName = 'NestedFunctionCall.phpt';
 
         $this->assertSignatureHelpSignaturesEquals($fileName, 127, 130, $expectedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 131, 131, $expectedNestedSignaturesResult);
         $this->assertSignatureHelpSignaturesEquals($fileName, 132, 132, $expectedSignaturesResult);
         $this->assertSignatureHelpActiveParameterEquals($fileName, 127, 132, 0);
     }
