@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\SignatureHelp;
 
+use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
@@ -154,9 +155,24 @@ class SignatureHelpRetriever
             // we may have received the wrong node instead. We also can't fetch the argument beforehand, as we may be
             // at a location in between arguments where $argumentNode will be null (as its range only spans the actual
             // argument, without whitespace and optional comma).
-            $endFilePos = $invocationNode->name->getAttribute('endFilePos') + 1;
+            $nodeNameEndFilePosition = null;
 
-            if ($position <= $endFilePos) {
+            if ($invocationNode instanceof Node\Expr\FuncCall) {
+                $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
+            } elseif (is_string($invocationNode->name)) {
+                // FIXME: This is a best effort fix, it may result in problems when the argument contain leading or
+                // trailing spaces and the cursor is on them. As long as php-parser doesn't have name nodes instead of
+                // strings, this can't be fixed (hopefully that'll land in 4.0).
+                if ($position === $invocationNode->getAttribute('endFilePos')) {
+                    $nodeNameEndFilePosition = $position - 1;
+                } else {
+                    $nodeNameEndFilePosition = $position;
+                }
+            } else {
+                throw new LogicException('Unexpected invocation node type encountered');
+            }
+
+            if ($position <= $nodeNameEndFilePosition) {
                 $invocationNode = $argumentNode->getAttribute('parent');
             }
         }
