@@ -18,7 +18,7 @@ class FunctionNameNodeFqsenDeterminer
     /**
      * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistenceChecker;
+    private $globalFunctionExistenceChecker;
 
     /**
      * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker

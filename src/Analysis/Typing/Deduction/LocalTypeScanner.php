@@ -28,37 +28,37 @@ class LocalTypeScanner
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var ForeachNodeLoopValueTypeDeducer
      */
-    protected $foreachNodeLoopValueTypeDeducer;
+    private $foreachNodeLoopValueTypeDeducer;
 
     /**
      * @var FunctionLikeParameterTypeDeducer
      */
-    protected $functionLikeParameterTypeDeducer;
+    private $functionLikeParameterTypeDeducer;
 
     /**
      * @var ExpressionLocalTypeAnalyzer
      */
-    protected $expressionLocalTypeAnalyzer;
+    private $expressionLocalTypeAnalyzer;
 
     /**
      * @param DocblockParser                   $docblockParser

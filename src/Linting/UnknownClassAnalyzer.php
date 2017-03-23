@@ -21,27 +21,27 @@ class UnknownClassAnalyzer implements AnalyzerInterface
     /**
      * @var ClassUsageFetchingVisitor
      */
-    protected $classUsageFetchingVisitor;
+    private $classUsageFetchingVisitor;
 
     /**
      * @var DocblockClassUsageFetchingVisitor
      */
-    protected $docblockClassUsageFetchingVisitor;
+    private $docblockClassUsageFetchingVisitor;
 
     /**
      * @var ClasslikeExistenceCheckerInterface
      */
-    protected $classlikeExistenceChecker;
+    private $classlikeExistenceChecker;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var FileTypeResolverInterface
      */
-    protected $fileTypeResolver;
+    private $fileTypeResolver;
 
     /**
      * Constructor.

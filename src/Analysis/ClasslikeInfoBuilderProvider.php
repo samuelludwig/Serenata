@@ -13,7 +13,7 @@ class ClasslikeInfoBuilderProvider implements ClasslikeInfoBuilderProviderInterf
     /**
      * @var ClasslikeInfoBuilderProviderInterface
      */
-    protected $backend;
+    private $backend;
 
     /**
      * @param ClasslikeInfoBuilderProviderInterface $backend

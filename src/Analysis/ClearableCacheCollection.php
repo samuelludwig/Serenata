@@ -10,7 +10,7 @@ class ClearableCacheCollection implements ClearableCacheInterface
     /**
      * @var ClearableCacheInterface[]
      */
-    protected $elements;
+    private $elements;
 
     /**
      * @param ClearableCacheInterface[] $elements

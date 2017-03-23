@@ -12,7 +12,7 @@ class ClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @param IndexDatabase $indexDatabase

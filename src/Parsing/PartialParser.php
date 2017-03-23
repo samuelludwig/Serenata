@@ -22,17 +22,17 @@ class PartialParser implements Parser
     /**
      * @var Parser
      */
-    protected $strictParser;
+    private $strictParser;
 
     /**
      * @var ParserFactory
      */
-    protected $parserFactory;
+    private $parserFactory;
 
     /**
      * @var Lexer
      */
-    protected $lexer;
+    private $lexer;
 
     /**
      * @param ParserFactory $parserFactory

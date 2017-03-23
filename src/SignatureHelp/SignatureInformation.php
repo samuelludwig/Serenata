@@ -16,17 +16,17 @@ class SignatureInformation implements JsonSerializable
     /**
      * @var string
      */
-    protected $label;
+    private $label;
 
     /**
      * @var string|null
      */
-    protected $documentation;
+    private $documentation;
 
     /**
      * @var ParameterInformation[]|null
      */
-    protected $parameters;
+    private $parameters;
 
     /**
      * @param string                      $label

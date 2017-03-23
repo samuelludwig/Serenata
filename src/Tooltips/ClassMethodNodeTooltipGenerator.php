@@ -20,17 +20,17 @@ class ClassMethodNodeTooltipGenerator
     /**
      * @var FunctionTooltipGenerator
      */
-    protected $functionTooltipGenerator;
+    private $functionTooltipGenerator;
 
     /**
      * @var FilePositionClasslikeDeterminer
      */
-    protected $filePositionClasslikeDeterminer;
+    private $filePositionClasslikeDeterminer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator

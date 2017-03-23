@@ -18,12 +18,12 @@ class LocalizeTypeCommand extends AbstractCommand
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @var FileTypeLocalizerFactory
      */
-    protected $fileTypeLocalizerFactory;
+    private $fileTypeLocalizerFactory;
 
     /**
      * @param IndexDatabase            $indexDatabase

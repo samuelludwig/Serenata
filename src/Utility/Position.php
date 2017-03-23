@@ -18,7 +18,7 @@ class Position implements JsonSerializable
      *
      * @var int
      */
-    protected $line;
+    private $line;
 
     /**
      * The character index on the line, starting from zero.
@@ -27,7 +27,7 @@ class Position implements JsonSerializable
      *
      * @var int
      */
-    protected $character;
+    private $character;
 
     /**
      * @param int $line

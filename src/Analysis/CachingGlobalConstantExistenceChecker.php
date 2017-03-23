@@ -10,7 +10,7 @@ class CachingGlobalConstantExistenceChecker extends GlobalConstantExistenceCheck
     /**
      * @var array
      */
-    protected $globalConstantFqcnMap;
+    private $globalConstantFqcnMap;
 
     /**
      * @inheritDoc

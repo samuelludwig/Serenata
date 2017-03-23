@@ -17,17 +17,17 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     /**
      * @var NamespaceAttachingVisitor
      */
-    protected $namespaceAttachingVisitor;
+    private $namespaceAttachingVisitor;
 
     /**
      * @var GlobalFunctionUsageFetchingVisitor
      */
-    protected $globalFunctionUsageFetchingVisitor;
+    private $globalFunctionUsageFetchingVisitor;
 
     /**
      * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistenceChecker;
+    private $globalFunctionExistenceChecker;
 
     /**
      * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker

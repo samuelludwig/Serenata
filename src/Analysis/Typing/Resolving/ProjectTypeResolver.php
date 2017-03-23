@@ -21,22 +21,22 @@ class ProjectTypeResolver implements FileTypeResolverInterface
     /**
      * @var FileTypeResolverInterface
      */
-    protected $typeResolver;
+    private $typeResolver;
 
     /**
      * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistenceChecker;
+    private $globalConstantExistenceChecker;
 
     /**
      * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistenceChecker;
+    private $globalFunctionExistenceChecker;
 
     /**
      * @var array
      */
-    protected $namespaces;
+    private $namespaces;
 
     /**
      * @param FileTypeResolverInterface               $typeResolver

@@ -22,14 +22,14 @@ class TooltipResult implements JsonSerializable
      *
      * @var string
      */
-    protected $contents;
+    private $contents;
 
     /**
      * The range that the tooltip applies to, if any.
      *
      * @var Range|null
      */
-    protected $range;
+    private $range;
 
     /**
      * @param string     $contents

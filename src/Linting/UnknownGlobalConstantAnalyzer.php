@@ -16,12 +16,12 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     /**
      * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistenceChecker;
+    private $globalConstantExistenceChecker;
 
     /**
      * @var GlobalConstantUsageFetchingVisitor
      */
-    protected $globalConstantUsageFetchingVisitor;
+    private $globalConstantUsageFetchingVisitor;
 
     /**
      * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker

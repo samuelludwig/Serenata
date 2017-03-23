@@ -20,12 +20,12 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @var FunctionConverter
      */
-    protected $functionConverter;
+    private $functionConverter;
 
     /**
      * @param IndexDatabase     $indexDatabase

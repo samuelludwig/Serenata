@@ -18,17 +18,17 @@ class SignatureHelp implements JsonSerializable
     /**
      * @var SignatureInformation[]
      */
-    protected $signatures;
+    private $signatures;
 
     /**
      * @var int|null
      */
-    protected $activeSignature;
+    private $activeSignature;
 
     /**
      * @var int|null
      */
-    protected $activeParameter;
+    private $activeParameter;
 
     /**
      * @param SignatureInformation[] $signatures

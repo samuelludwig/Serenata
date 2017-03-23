@@ -139,14 +139,14 @@ abstract class AbstractApplication
     /**
      * @var ContainerBuilder
      */
-    protected $container;
+    private $container;
 
     /**
      * The path to the database to use.
      *
      * @var string
      */
-    protected $databaseFile;
+    private $databaseFile;
 
     /**
      * @return ContainerBuilder

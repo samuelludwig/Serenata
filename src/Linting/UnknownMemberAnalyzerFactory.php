@@ -16,17 +16,17 @@ class UnknownMemberAnalyzerFactory
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

@@ -23,17 +23,17 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @var ConstantConverter
      */
-    protected $constantConverter;
+    private $constantConverter;
 
     /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory

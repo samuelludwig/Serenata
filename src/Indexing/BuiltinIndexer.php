@@ -27,42 +27,42 @@ class BuiltinIndexer
      *
      * @var StorageInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var array
      */
-    protected $accessModifierMap;
+    private $accessModifierMap;
 
     /**
      * @var array
      */
-    protected $structureTypeMap;
+    private $structureTypeMap;
 
     /**
      * @var resource|null
      */
-    protected $loggingStream;
+    private $loggingStream;
 
     /**
      * @var array
      */
-    protected $documentationData;
+    private $documentationData;
 
     /**
      * @param StorageInterface         $storage

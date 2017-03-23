@@ -16,12 +16,12 @@ class LastExpressionParser implements Parser
     /**
      * @var Parser
      */
-    protected $delegate;
+    private $delegate;
 
     /**
      * @var ParserTokenHelper
      */
-    protected $parserTokenHelper;
+    private $parserTokenHelper;
 
     /**
      * @param Parser                $delegate

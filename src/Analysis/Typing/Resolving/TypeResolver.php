@@ -14,7 +14,7 @@ class TypeResolver implements TypeResolverInterface
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * Constructor.

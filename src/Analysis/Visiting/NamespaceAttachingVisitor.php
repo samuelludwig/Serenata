@@ -12,7 +12,7 @@ class NamespaceAttachingVisitor extends ResolvedNameAttachingVisitor
     /**
      * @var Node\Name
      */
-    protected $lastNamespaceNode;
+    private $lastNamespaceNode;
 
     /**
      * @inheritDoc

@@ -14,12 +14,12 @@ class GlobalFunctionsProvider
     /**
      * @var FunctionConverter
      */
-    protected $functionConverter;
+    private $functionConverter;
 
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @param FunctionConverter $functionConverter

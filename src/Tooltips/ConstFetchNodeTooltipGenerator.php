@@ -18,17 +18,17 @@ class ConstFetchNodeTooltipGenerator
     /**
      * @var ConstantTooltipGenerator
      */
-    protected $constantTooltipGenerator;
+    private $constantTooltipGenerator;
 
     /**
      * @var ConstNameNodeFqsenDeterminer
      */
-    protected $constFetchNodeFqsenDeterminer;
+    private $constFetchNodeFqsenDeterminer;
 
     /**
      * @var GlobalConstantsProvider
      */
-    protected $globalConstantsProvider;
+    private $globalConstantsProvider;
 
     /**
      * @param ConstantTooltipGenerator      $constantTooltipGenerator

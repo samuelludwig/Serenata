@@ -14,12 +14,12 @@ class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
     /**
      * @var TypeResolverInterface
      */
-    protected $typeResolver;
+    private $typeResolver;
 
     /**
      * @var NamespaceImportProviderInterface
      */
-    protected $namespaceImportProviderInterface;
+    private $namespaceImportProviderInterface;
 
     /**
      * @param TypeResolverInterface            $typeResolver

@@ -16,12 +16,12 @@ class MethodCallNodeTooltipGenerator
     /**
      * @var MethodCallMethodInfoRetriever
      */
-    protected $methodCallMethodInfoRetriever;
+    private $methodCallMethodInfoRetriever;
 
     /**
      * @var FunctionTooltipGenerator
      */
-    protected $functionTooltipGenerator;
+    private $functionTooltipGenerator;
 
     /**
      * @param MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever

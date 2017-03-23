@@ -18,7 +18,7 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
     /**
      * @var MemberUsageFetchingVisitor
      */
-    protected $methodUsageFetchingVisitor;
+    private $methodUsageFetchingVisitor;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

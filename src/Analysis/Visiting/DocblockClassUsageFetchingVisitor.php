@@ -18,22 +18,22 @@ class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var array
      */
-    protected $classUsageList = [];
+    private $classUsageList = [];
 
     /**
      * @var string|null
      */
-    protected $lastNamespace = null;
+    private $lastNamespace = null;
 
     /**
      * @param TypeAnalyzer $typeAnalyzer

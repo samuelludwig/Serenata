@@ -12,7 +12,7 @@ class JsonRpcConnectionHandlerFactory implements ConnectionHandlerFactoryInterfa
     /**
      * @var JsonRpcRequestHandlerInterface
      */
-    protected $jsonRpcRequestHandler;
+    private $jsonRpcRequestHandler;
 
     /**
      * @param JsonRpcRequestHandlerInterface $jsonRpcRequestHandler

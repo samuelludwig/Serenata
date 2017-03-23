@@ -39,7 +39,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      *
      * @var resource|null
      */
-    protected $stdinStream;
+    private $stdinStream;
 
     /**
      * @inheritDoc

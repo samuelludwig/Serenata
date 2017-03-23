@@ -14,12 +14,12 @@ class UnusedUseStatementAnalyzerFactory
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @param TypeAnalyzer   $typeAnalyzer

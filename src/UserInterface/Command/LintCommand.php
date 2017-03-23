@@ -17,12 +17,12 @@ class LintCommand extends AbstractCommand
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @var Linter
      */
-    protected $linter;
+    private $linter;
 
     /**
      * @param SourceCodeStreamReader $sourceCodeStreamReader

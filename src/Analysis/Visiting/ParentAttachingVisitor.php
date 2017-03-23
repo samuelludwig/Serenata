@@ -15,7 +15,7 @@ class ParentAttachingVisitor extends NodeVisitorAbstract
     /**
      * @var SplStack
      */
-    protected $stack;
+    private $stack;
 
     /**
      *

@@ -19,22 +19,22 @@ class InitializeCommand extends AbstractCommand
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @var BuiltinIndexer
      */
-    protected $builtinIndexer;
+    private $builtinIndexer;
 
     /**
      * @var ProjectIndexer
      */
-    protected $projectIndexer;
+    private $projectIndexer;
 
     /**
      * @var Cache
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @param IndexDatabase  $indexDatabase

@@ -21,17 +21,17 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var LastExpressionParser
      */
-    protected $lastExpressionParser;
+    private $lastExpressionParser;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

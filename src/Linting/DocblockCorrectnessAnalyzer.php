@@ -21,32 +21,32 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @var FileTypeResolverInterface
      */
-    protected $fileTypeResolver;
+    private $fileTypeResolver;
 
     /**
      * @var OutlineFetchingVisitor
      */
-    protected $outlineIndexingVisitor;
+    private $outlineIndexingVisitor;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockAnalyzer
      */
-    protected $docblockAnalyzer;
+    private $docblockAnalyzer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param string                    $code

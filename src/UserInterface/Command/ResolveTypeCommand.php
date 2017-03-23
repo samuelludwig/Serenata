@@ -18,12 +18,12 @@ class ResolveTypeCommand extends AbstractCommand
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @var ProjectTypeResolverFactoryFacade
      */
-    protected $projectTypeResolverFactoryFacade;
+    private $projectTypeResolverFactoryFacade;
 
     /**
      * @param IndexDatabase                    $indexDatabase

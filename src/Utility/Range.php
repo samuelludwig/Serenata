@@ -18,14 +18,14 @@ class Range implements JsonSerializable
      *
      * @var Position
      */
-    protected $start;
+    private $start;
 
     /**
     * The (exclusive, starting from zero) end position.
     *
      * @var Position
      */
-    protected $end;
+    private $end;
 
     /**
      * @param Position $start

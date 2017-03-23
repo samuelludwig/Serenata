@@ -17,17 +17,17 @@ class ProjectTypeResolverFactory
     /**
      * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistenceChecker;
+    private $globalConstantExistenceChecker;
 
     /**
      * @var GlobalFunctionExistenceCheckerInterface
      */
-    protected $globalFunctionExistenceChecker;
+    private $globalFunctionExistenceChecker;
 
     /**
      * @var NamespaceImportProviderInterface
      */
-    protected $namespaceImportProviderInterface;
+    private $namespaceImportProviderInterface;
 
     /**
      * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker

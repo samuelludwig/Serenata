@@ -12,7 +12,7 @@ class GlobalFunctionUsageFetchingVisitor extends ResolvedNameAttachingVisitor
     /**
      * @var Node\Expr\FuncCall[]
      */
-    protected $globalFunctionCallList = [];
+    private $globalFunctionCallList = [];
 
     /**
      * @inheritDoc

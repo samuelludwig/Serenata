@@ -14,12 +14,12 @@ class GlobalConstantsProvider
     /**
      * @var ConstantConverter
      */
-    protected $constantConverter;
+    private $constantConverter;
 
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @param ConstantConverter $constantConverter

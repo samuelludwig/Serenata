@@ -14,7 +14,7 @@ class GlobalFunctionsCommand extends AbstractCommand
     /**
      * @var GlobalFunctionsProvider
      */
-    protected $globalFunctionsProvider;
+    private $globalFunctionsProvider;
 
     /**
      * @param GlobalFunctionsProvider $globalFunctionsProvider

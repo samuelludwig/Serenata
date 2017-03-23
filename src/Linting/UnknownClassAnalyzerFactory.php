@@ -18,22 +18,22 @@ class UnknownClassAnalyzerFactory
     /**
      * @var ClasslikeExistenceChecker
      */
-    protected $classlikeExistenceChecker;
+    private $classlikeExistenceChecker;
 
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @param ClasslikeExistenceChecker        $classlikeExistenceChecker

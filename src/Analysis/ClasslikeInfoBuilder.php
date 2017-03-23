@@ -13,64 +13,64 @@ class ClasslikeInfoBuilder
     /**
      * @var Conversion\ConstantConverter
      */
-    protected $constantConverter;
+    private $constantConverter;
 
     /**
      * @var Conversion\ClasslikeConstantConverter
      */
-    protected $classlikeConstantConverter;
+    private $classlikeConstantConverter;
 
     /**
      * @var Conversion\PropertyConverter
      */
-    protected $propertyConverter;
+    private $propertyConverter;
 
     /**
      * @var Conversion\FunctionConverter
      */
-    protected $functionConverter;
+    private $functionConverter;
 
     /**
      * @var Conversion\MethodConverter
      */
-    protected $methodConverter;
+    private $methodConverter;
 
     /**
      * @var Conversion\ClasslikeConverter
      */
-    protected $classlikeConverter;
+    private $classlikeConverter;
 
     /**
      * @var Relations\InheritanceResolver
      */
-    protected $inheritanceResolver;
+    private $inheritanceResolver;
 
     /**
      * @var Relations\InterfaceImplementationResolver
      */
-    protected $interfaceImplementationResolver;
+    private $interfaceImplementationResolver;
 
     /**
      * @var Relations\TraitUsageResolver
      */
-    protected $traitUsageResolver;
+    private $traitUsageResolver;
 
     /**
      * The storage to use for accessing index data.
      *
      * @var ClasslikeInfoBuilderProviderInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var Typing\TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var string[]
      */
-    protected $resolutionStack = [];
+    private $resolutionStack = [];
 
     /**
      * @param Conversion\ConstantConverter              $constantConverter

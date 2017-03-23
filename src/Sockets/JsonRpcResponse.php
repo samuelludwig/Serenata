@@ -14,22 +14,22 @@ class JsonRpcResponse implements JsonSerializable
     /**
      * @var string
      */
-    protected $jsonrpc;
+    private $jsonrpc;
 
     /**
      * @var string|int|null
      */
-    protected $id;
+    private $id;
 
     /**
      * @var mixed|null
      */
-    protected $result;
+    private $result;
 
     /**
      * @var object|null
      */
-    protected $error;
+    private $error;
 
     /**
      * @param string|int|null $id

@@ -18,7 +18,7 @@ class NameNodeFqsenDeterminer
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory

@@ -17,12 +17,12 @@ class SignatureHelpCommand extends AbstractCommand
     /**
      * @var SignatureHelpRetriever
      */
-    protected $signatureHelpRetriever;
+    private $signatureHelpRetriever;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @param SignatureHelpRetriever $signatureHelpRetriever

@@ -16,17 +16,17 @@ class FileTypeResolver implements FileTypeResolverInterface
     /**
      * @var array
      */
-    protected $namespaces;
+    private $namespaces;
 
     /**
      * @var array
      */
-    protected $imports;
+    private $imports;
 
     /**
      * @var TypeResolverInterface
      */
-    protected $typeResolver;
+    private $typeResolver;
 
     /**
      * @param TypeResolverInterface $typeResolver

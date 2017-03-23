@@ -12,7 +12,7 @@ class GlobalFunctionExistenceChecker implements GlobalFunctionExistenceCheckerIn
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @param IndexDatabase $indexDatabase

@@ -15,12 +15,12 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var array
      */
-    protected $namespaces = [];
+    private $namespaces = [];
 
     /**
      * @var string|null
      */
-    protected $lastNamespace = null;
+    private $lastNamespace = null;
 
     /**
      * Constructor.

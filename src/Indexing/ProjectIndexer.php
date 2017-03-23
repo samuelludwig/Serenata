@@ -14,27 +14,27 @@ class ProjectIndexer
     /**
      * @var StorageInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var FileIndexer
      */
-    protected $fileIndexer;
+    private $fileIndexer;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @var resource|null
      */
-    protected $loggingStream;
+    private $loggingStream;
 
     /**
      * @var callable|null
      */
-    protected $progressStreamingCallback;
+    private $progressStreamingCallback;
 
     /**
      * @param StorageInterface       $storage

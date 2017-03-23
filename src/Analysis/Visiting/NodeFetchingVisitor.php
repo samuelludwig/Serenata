@@ -14,17 +14,17 @@ class NodeFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var Node
      */
-    protected $matchingNode;
+    private $matchingNode;
 
     /**
      * @var Node
      */
-    protected $mostInterestingNode;
+    private $mostInterestingNode;
 
     /**
      * Constructor.

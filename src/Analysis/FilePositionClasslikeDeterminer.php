@@ -14,7 +14,7 @@ class FilePositionClasslikeDeterminer
     /**
      * @var FileClassListProviderInterface
      */
-    protected $fileClassListProvider;
+    private $fileClassListProvider;
 
     /**
      * @param FileClassListProviderInterface $fileClassListProvider

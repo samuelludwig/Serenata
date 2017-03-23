@@ -13,7 +13,7 @@ class ModificationTimeFilterIterator extends FilterIterator
     /**
      * @var array
      */
-    protected $fileModifiedMap;
+    private $fileModifiedMap;
 
     /**
      * @param Iterator $iterator

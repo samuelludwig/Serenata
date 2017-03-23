@@ -18,7 +18,7 @@ class ConstNameNodeFqsenDeterminer
     /**
      * @var GlobalConstantExistenceCheckerInterface
      */
-    protected $globalConstantExistenceChecker;
+    private $globalConstantExistenceChecker;
 
     /**
      * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker

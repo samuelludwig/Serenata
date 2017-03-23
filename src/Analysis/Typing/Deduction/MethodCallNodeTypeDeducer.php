@@ -16,7 +16,7 @@ class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var MethodCallMethodInfoRetriever
      */
-    protected $methodCallMethodInfoRetriever;
+    private $methodCallMethodInfoRetriever;
 
     /**
      * @param MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever

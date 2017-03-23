@@ -16,22 +16,22 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var array
      */
-    protected $classUsageList = [];
+    private $classUsageList = [];
 
     /**
      * @var Node|null
      */
-    protected $lastNode;
+    private $lastNode;
 
     /**
      * @var TypeAnalyzer|null
      */
-    protected $typeAnalyzer = null;
+    private $typeAnalyzer = null;
 
     /**
      * @var string|null
      */
-    protected $lastNamespace = null;
+    private $lastNamespace = null;
 
     /**
      * @param TypeAnalyzer $typeAnalyzer

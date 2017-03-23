@@ -14,12 +14,12 @@ class FileTypeLocalizerFactory
     /**
      * @var TypeLocalizer
      */
-    protected $typeLocalizer;
+    private $typeLocalizer;
 
     /**
      * @var NamespaceImportProviderInterface
      */
-    protected $namespaceImportProviderInterface;
+    private $namespaceImportProviderInterface;
 
     /**
      * @param TypeLocalizer                    $typeLocalizer

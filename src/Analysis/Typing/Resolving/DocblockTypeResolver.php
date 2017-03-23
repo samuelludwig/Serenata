@@ -17,12 +17,12 @@ class DocblockTypeResolver implements TypeResolverInterface
     /**
      * @var TypeResolverInterface
      */
-    protected $delegate;
+    private $delegate;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @param TypeResolverInterface $delegate

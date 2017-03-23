@@ -16,17 +16,17 @@ class CachingParserProxy implements Parser
     /**
      * @var Parser
      */
-    protected $proxiedObject;
+    private $proxiedObject;
 
     /**
      * @var array|null
      */
-    protected $cache = null;
+    private $cache = null;
 
     /**
      * @var string|null
      */
-    protected $lastCacheKey = null;
+    private $lastCacheKey = null;
 
     /**
      * @param Parser $proxiedObject

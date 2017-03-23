@@ -16,12 +16,12 @@ class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

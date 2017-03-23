@@ -11,12 +11,12 @@ class CallbackStorageProxy implements StorageInterface
     /**
      * @var StorageInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var callable
      */
-    protected $insertStructureCallback;
+    private $insertStructureCallback;
 
     /**
      * @param StorageInterface $storage

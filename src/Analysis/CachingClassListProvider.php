@@ -10,7 +10,7 @@ class CachingClassListProvider extends ClassListProvider
     /**
      * @var array
      */
-    protected $globalConstantFqcnMap;
+    private $globalConstantFqcnMap;
 
     /**
      * @inheritDoc

@@ -14,17 +14,17 @@ class VariableScanningVisitor extends NodeVisitorAbstract
     /**
      * @var string[]
      */
-    protected $variables = [];
+    private $variables = [];
 
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var bool
      */
-    protected $hasThisContext;
+    private $hasThisContext;
 
     /**
      * Constructor.

@@ -14,7 +14,7 @@ class TypeLocalizer
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * Constructor.

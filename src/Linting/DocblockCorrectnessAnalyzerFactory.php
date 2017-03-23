@@ -19,27 +19,27 @@ class DocblockCorrectnessAnalyzerFactory
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockAnalyzer
      */
-    protected $docblockAnalyzer;
+    private $docblockAnalyzer;
 
     /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory

@@ -16,7 +16,7 @@ class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

@@ -14,7 +14,7 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var LocalTypeScanner
      */
-    protected $localTypeScanner;
+    private $localTypeScanner;
 
     /**
      * @param LocalTypeScanner $localTypeScanner

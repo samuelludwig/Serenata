@@ -17,17 +17,17 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var PropertyFetchPropertyInfoRetriever
      */
-    protected $propertyFetchPropertyInfoRetriever;
+    private $propertyFetchPropertyInfoRetriever;
 
     /**
      * @var LocalTypeScanner
      */
-    protected $localTypeScanner;
+    private $localTypeScanner;
 
     /**
      * @var PrettyPrinterAbstract
      */
-    protected $prettyPrinter;
+    private $prettyPrinter;
 
     /**
      * @param PropertyFetchPropertyInfoRetriever $propertyFetchPropertyInfoRetriever

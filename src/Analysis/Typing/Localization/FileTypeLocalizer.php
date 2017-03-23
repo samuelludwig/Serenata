@@ -16,17 +16,17 @@ class FileTypeLocalizer
     /**
      * @var array
      */
-    protected $namespaces;
+    private $namespaces;
 
     /**
      * @var array
      */
-    protected $imports;
+    private $imports;
 
     /**
      * @var TypeLocalizer
      */
-    protected $typeLocalizer;
+    private $typeLocalizer;
 
     /**
      * @param TypeLocalizer $typeLocalizer

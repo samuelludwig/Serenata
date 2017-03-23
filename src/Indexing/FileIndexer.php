@@ -42,47 +42,47 @@ class FileIndexer
      *
      * @var StorageInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var TypeResolverInterface
      */
-    protected $typeResolver;
+    private $typeResolver;
 
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var Parser
      */
-    protected $defaultValueParser;
+    private $defaultValueParser;
 
     /**
      * @var array
      */
-    protected $accessModifierMap;
+    private $accessModifierMap;
 
     /**
      * @var array
      */
-    protected $structureTypeMap;
+    private $structureTypeMap;
 
     /**
      * @param StorageInterface         $storage

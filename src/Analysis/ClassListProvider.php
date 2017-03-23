@@ -15,12 +15,12 @@ class ClassListProvider implements FileClassListProviderInterface
     /**
      * @var ClasslikeConverter
      */
-    protected $classlikeConverter;
+    private $classlikeConverter;
 
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @param ClasslikeConverter $classlikeConverter

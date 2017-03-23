@@ -10,7 +10,7 @@ class CachingGlobalFunctionExistenceChecker extends GlobalFunctionExistenceCheck
     /**
      * @var array
      */
-    protected $globalFunctionsFqcnMap;
+    private $globalFunctionsFqcnMap;
 
     /**
      * @inheritDoc

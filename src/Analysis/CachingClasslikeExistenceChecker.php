@@ -10,7 +10,7 @@ class CachingClasslikeExistenceChecker extends ClasslikeExistenceChecker impleme
     /**
      * @var array
      */
-    protected $classlikeFqcnMap;
+    private $classlikeFqcnMap;
 
     /**
      * @inheritDoc

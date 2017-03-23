@@ -28,12 +28,12 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     /**
      * @var Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var string
      */
-    protected $databasePath;
+    private $databasePath;
 
     /**
      * Retrieves hte index database.

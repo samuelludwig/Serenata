@@ -21,57 +21,57 @@ class TooltipProvider
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var FuncCallNodeTooltipGenerator
      */
-    protected $funcCallNodeTooltipGenerator;
+    private $funcCallNodeTooltipGenerator;
 
     /**
      * @var MethodCallNodeTooltipGenerator
      */
-    protected $methodCallNodeTooltipGenerator;
+    private $methodCallNodeTooltipGenerator;
 
     /**
      * @var StaticMethodCallNodeTooltipGenerator
      */
-    protected $staticMethodCallNodeTooltipGenerator;
+    private $staticMethodCallNodeTooltipGenerator;
 
     /**
      * @var PropertyFetchNodeTooltipGenerator
      */
-    protected $propertyFetchNodeTooltipGenerator;
+    private $propertyFetchNodeTooltipGenerator;
 
     /**
      * @var StaticPropertyFetchNodeTooltipGenerator
      */
-    protected $staticPropertyFetchNodeTooltipGenerator;
+    private $staticPropertyFetchNodeTooltipGenerator;
 
     /**
      * @var ConstFetchNodeTooltipGenerator
      */
-    protected $constFetchNodeTooltipGenerator;
+    private $constFetchNodeTooltipGenerator;
 
     /**
      * @var ClassConstFetchNodeTooltipGenerator
      */
-    protected $classConstFetchNodeTooltipGenerator;
+    private $classConstFetchNodeTooltipGenerator;
 
     /**
      * @var FunctionNodeTooltipGenerator
      */
-    protected $functionNodeTooltipGenerator;
+    private $functionNodeTooltipGenerator;
 
     /**
      * @var ClassMethodNodeTooltipGenerator
      */
-    protected $classMethodNodeTooltipGenerator;
+    private $classMethodNodeTooltipGenerator;
 
     /**
      * @var NameNodeTooltipGenerator
      */
-    protected $nameNodeTooltipGenerator;
+    private $nameNodeTooltipGenerator;
 
     /**
      * @param Parser                                  $parser

@@ -12,32 +12,32 @@ class LintingSettings
     /**
      * @var bool
      */
-    protected $lintUnknownClasses;
+    private $lintUnknownClasses;
 
     /**
      * @var bool
      */
-    protected $lintUnknownMembers;
+    private $lintUnknownMembers;
 
     /**
      * @var bool
      */
-    protected $lintUnknownGlobalFunctions;
+    private $lintUnknownGlobalFunctions;
 
     /**
      * @var bool
      */
-    protected $lintUnknownGlobalConstants;
+    private $lintUnknownGlobalConstants;
 
     /**
      * @var bool
      */
-    protected $lintDocblockCorrectness;
+    private $lintDocblockCorrectness;
 
     /**
      * @var bool
      */
-    protected $lintUnusedUseStatements;
+    private $lintUnusedUseStatements;
 
     /**
      * @param bool $lintUnknownClasses

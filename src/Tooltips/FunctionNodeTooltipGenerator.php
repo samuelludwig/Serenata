@@ -16,12 +16,12 @@ class FunctionNodeTooltipGenerator
     /**
      * @var FunctionTooltipGenerator
      */
-    protected $functionTooltipGenerator;
+    private $functionTooltipGenerator;
 
     /**
      * @var FunctionFunctionInfoRetriever
      */
-    protected $functionCallFunctionInfoRetriever;
+    private $functionCallFunctionInfoRetriever;
 
     /**
      * @param FunctionTooltipGenerator      $functionTooltipGenerator

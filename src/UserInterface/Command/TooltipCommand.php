@@ -17,12 +17,12 @@ class TooltipCommand extends AbstractCommand
     /**
      * @var TooltipProvider
      */
-    protected $tooltipProvider;
+    private $tooltipProvider;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @param TooltipProvider        $tooltipProvider

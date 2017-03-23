@@ -13,12 +13,12 @@ class FileTypeResolverFactoryCachingDecorator implements FileTypeResolverFactory
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @var array
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory

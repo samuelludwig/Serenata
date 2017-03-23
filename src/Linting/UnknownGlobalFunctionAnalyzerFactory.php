@@ -12,7 +12,7 @@ class UnknownGlobalFunctionAnalyzerFactory
     /**
      * @var GlobalFunctionExistenceChecker
      */
-    protected $globalFunctionExistenceChecker;
+    private $globalFunctionExistenceChecker;
 
     /**
      * @param GlobalFunctionExistenceChecker $globalFunctionExistenceChecker

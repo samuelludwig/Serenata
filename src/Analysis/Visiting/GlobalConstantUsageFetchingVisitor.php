@@ -12,7 +12,7 @@ class GlobalConstantUsageFetchingVisitor extends ResolvedNameAttachingVisitor
     /**
      * @var Node\Expr\ConstFetch[]
      */
-    protected $globalConstantList = [];
+    private $globalConstantList = [];
 
     /**
      * @inheritDoc

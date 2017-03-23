@@ -12,12 +12,12 @@ class FileClassListProviderCachingDecorator implements FileClassListProviderInte
     /**
      * @var FileClassListProviderInterface
      */
-    protected $fileClassListProviderInterface;
+    private $fileClassListProviderInterface;
 
     /**
      * @var array
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @param FileClassListProviderInterface $fileClassListProviderInterface

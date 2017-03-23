@@ -14,12 +14,12 @@ class ClasslikeInfoBuilderProviderCachingProxy implements ClasslikeInfoBuilderPr
     /**
      * @var ClasslikeInfoBuilderProviderInterface
      */
-    protected $provider;
+    private $provider;
 
     /**
      * @var Cache
      */
-    protected $cache;
+    private $cache;
 
     /**
      * @param ClasslikeInfoBuilderProviderInterface $provider

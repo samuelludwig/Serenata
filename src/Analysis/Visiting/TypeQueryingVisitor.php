@@ -23,22 +23,22 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var ExpressionTypeInfoMap
      */
-    protected $expressionTypeInfoMap;
+    private $expressionTypeInfoMap;
 
     /**
      * @var PrettyPrinterAbstract
      */
-    protected $prettyPrinter;
+    private $prettyPrinter;
 
     /**
      * Constructor.

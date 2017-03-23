@@ -26,17 +26,17 @@ class ExpressionLocalTypeAnalyzer
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var PrettyPrinterAbstract
      */
-    protected $prettyPrinter;
+    private $prettyPrinter;
 
     /**
      * @param Parser                $parser

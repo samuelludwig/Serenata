@@ -24,32 +24,32 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @var NamespaceAttachingVisitor
      */
-    protected $namespaceAttachingVisitor;
+    private $namespaceAttachingVisitor;
 
     /**
      * @var ClassUsageFetchingVisitor
      */
-    protected $classUsageFetchingVisitor;
+    private $classUsageFetchingVisitor;
 
     /**
      * @var UseStatementFetchingVisitor
      */
-    protected $useStatementFetchingVisitor;
+    private $useStatementFetchingVisitor;
 
     /**
      * @var GlobalConstantUsageFetchingVisitor
      */
-    protected $globalConstantUsageFetchingVisitor;
+    private $globalConstantUsageFetchingVisitor;
 
     /**
      * @var GlobalFunctionUsageFetchingVisitor
      */
-    protected $globalFunctionUsageFetchingVisitor;
+    private $globalFunctionUsageFetchingVisitor;
 
     /**
      * @var DocblockClassUsageFetchingVisitor
      */
-    protected $docblockClassUsageFetchingVisitor;
+    private $docblockClassUsageFetchingVisitor;
 
     /**
      * Constructor.

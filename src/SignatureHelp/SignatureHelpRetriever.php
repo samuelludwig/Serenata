@@ -32,27 +32,27 @@ class SignatureHelpRetriever
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var ParserTokenHelper
      */
-    protected $parserTokenHelper;
+    private $parserTokenHelper;
 
     /**
      * @var FunctionFunctionInfoRetriever
      */
-    protected $functionFunctionInfoRetriever;
+    private $functionFunctionInfoRetriever;
 
     /**
      * @var MethodCallMethodInfoRetriever
      */
-    protected $methodCallMethodInfoRetriever;
+    private $methodCallMethodInfoRetriever;
 
     /**
      * @var FunctionParameterPrettyPrinter
      */
-    protected $functionParameterPrettyPrinter;
+    private $functionParameterPrettyPrinter;
 
     /**
      * @param Parser                         $parser

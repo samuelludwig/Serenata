@@ -24,22 +24,22 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @var FileClassListProviderInterface
      */
-    protected $fileClassListProvider;
+    private $fileClassListProvider;
 
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @param TypeAnalyzer                     $typeAnalyzer

@@ -18,37 +18,37 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
     /**
      * @var array
      */
-    protected $structures = [];
+    private $structures = [];
 
     /**
      * @var array
      */
-    protected $globalFunctions = [];
+    private $globalFunctions = [];
 
     /**
      * @var array
      */
-    protected $globalConstants = [];
+    private $globalConstants = [];
 
     /**
      * @var array
      */
-    protected $globalDefines = [];
+    private $globalDefines = [];
 
     /**
      * @var Node\Stmt\Class_|null
      */
-    protected $currentStructure;
+    private $currentStructure;
 
     /**
      * @var TypeNormalizerInterface
      */
-    protected $typeNormalizer;
+    private $typeNormalizer;
 
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * @param TypeNormalizerInterface $typeNormalizer

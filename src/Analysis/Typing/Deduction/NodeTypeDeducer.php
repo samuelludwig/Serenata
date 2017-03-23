@@ -19,112 +19,112 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var VariableNodeTypeDeducer
      */
-    protected $variableNodeTypeDeducer;
+    private $variableNodeTypeDeducer;
 
     /**
      * @var LNumberNodeTypeDeducer
      */
-    protected $lNumberNodeTypeDeducer;
+    private $lNumberNodeTypeDeducer;
 
     /**
      * @var DNumberNodeTypeDeducer
      */
-    protected $dNumberNodeTypeDeducer;
+    private $dNumberNodeTypeDeducer;
 
     /**
      * @var StringNodeTypeDeducer
      */
-    protected $stringNodeTypeDeducer;
+    private $stringNodeTypeDeducer;
 
     /**
      * @var ConstFetchNodeTypeDeducer
      */
-    protected $constFetchNodeTypeDeducer;
+    private $constFetchNodeTypeDeducer;
 
     /**
      * @var ArrayDimFetchNodeTypeDeducer
      */
-    protected $arrayDimFetchNodeTypeDeducer;
+    private $arrayDimFetchNodeTypeDeducer;
 
     /**
      * @var ClosureNodeTypeDeducer
      */
-    protected $closureNodeTypeDeducer;
+    private $closureNodeTypeDeducer;
 
     /**
      * @var NewNodeTypeDeducer
      */
-    protected $newNodeTypeDeducer;
+    private $newNodeTypeDeducer;
 
     /**
      * @var CloneNodeTypeDeducer
      */
-    protected $cloneNodeTypeDeducer;
+    private $cloneNodeTypeDeducer;
 
     /**
      * @var ArrayNodeTypeDeducer
      */
-    protected $arrayNodeTypeDeducer;
+    private $arrayNodeTypeDeducer;
 
     /**
      * @var SelfNodeTypeDeducer
      */
-    protected $selfNodeTypeDeducer;
+    private $selfNodeTypeDeducer;
 
     /**
      * @var StaticNodeTypeDeducer
      */
-    protected $staticNodeTypeDeducer;
+    private $staticNodeTypeDeducer;
 
     /**
      * @var ParentNodeTypeDeducer
      */
-    protected $parentNodeTypeDeducer;
+    private $parentNodeTypeDeducer;
 
     /**
      * @var NameNodeTypeDeducer
      */
-    protected $nameNodeTypeDeducer;
+    private $nameNodeTypeDeducer;
 
     /**
      * @var FuncCallNodeTypeDeducer
      */
-    protected $funcCallNodeTypeDeducer;
+    private $funcCallNodeTypeDeducer;
 
     /**
      * @var MethodCallNodeTypeDeducer
      */
-    protected $methodCallNodeTypeDeducer;
+    private $methodCallNodeTypeDeducer;
 
     /**
      * @var PropertyFetchNodeTypeDeducer
      */
-    protected $propertyFetchNodeTypeDeducer;
+    private $propertyFetchNodeTypeDeducer;
 
     /**
      * @var ClassConstFetchNodeTypeDeducer
      */
-    protected $classConstFetchNodeTypeDeducer;
+    private $classConstFetchNodeTypeDeducer;
 
     /**
      * @var AssignNodeTypeDeducer
      */
-    protected $assignNodeTypeDeducer;
+    private $assignNodeTypeDeducer;
 
     /**
      * @var TernaryNodeTypeDeducer
      */
-    protected $ternaryNodeTypeDeducer;
+    private $ternaryNodeTypeDeducer;
 
     /**
      * @var ClassLikeNodeTypeDeducer
      */
-    protected $classLikeNodeTypeDeducer;
+    private $classLikeNodeTypeDeducer;
 
     /**
      * @var CatchNodeTypeDeducer
      */
-    protected $catchNodeTypeDeducer;
+    private $catchNodeTypeDeducer;
 
     /**
      * @param VariableNodeTypeDeducer        $variableNodeTypeDeducer

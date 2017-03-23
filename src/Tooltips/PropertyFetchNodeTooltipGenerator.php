@@ -16,12 +16,12 @@ class PropertyFetchNodeTooltipGenerator
     /**
      * @var PropertyFetchPropertyInfoRetriever
      */
-    protected $propertyFetchPropertyInfoRetriever;
+    private $propertyFetchPropertyInfoRetriever;
 
     /**
      * @var PropertyTooltipGenerator
      */
-    protected $propertyTooltipGenerator;
+    private $propertyTooltipGenerator;
 
     /**
      * @param PropertyFetchPropertyInfoRetriever $propertyFetchPropertyInfoRetriever

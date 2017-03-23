@@ -14,7 +14,7 @@ class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface|null
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @param NodeTypeDeducerInterface|null $nodeTypeDeducer

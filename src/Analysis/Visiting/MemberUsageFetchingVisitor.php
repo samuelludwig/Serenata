@@ -41,37 +41,37 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var array
      */
-    protected $memberCallList = [];
+    private $memberCallList = [];
 
     /**
      * @var Node|null
      */
-    protected $lastNode = null;
+    private $lastNode = null;
 
     /**
      * @var string
      */
-    protected $file;
+    private $file;
 
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

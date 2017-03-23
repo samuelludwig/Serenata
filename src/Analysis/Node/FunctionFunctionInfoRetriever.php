@@ -17,12 +17,12 @@ class FunctionFunctionInfoRetriever
     /**
      * @var FunctionNameNodeFqsenDeterminer
      */
-    protected $functionCallNodeFqsenDeterminer;
+    private $functionCallNodeFqsenDeterminer;
 
     /**
      * @var GlobalFunctionsProvider
      */
-    protected $globalFunctionsProvider;
+    private $globalFunctionsProvider;
 
     /**
      * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer

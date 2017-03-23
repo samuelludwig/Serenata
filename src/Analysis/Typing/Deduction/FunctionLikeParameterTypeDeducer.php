@@ -20,22 +20,22 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var string|null
      */
-    protected $functionDocblock;
+    private $functionDocblock;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

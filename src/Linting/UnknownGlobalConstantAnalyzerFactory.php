@@ -12,7 +12,7 @@ class UnknownGlobalConstantAnalyzerFactory
     /**
      * @var GlobalConstantExistenceChecker
      */
-    protected $globalConstantExistenceChecker;
+    private $globalConstantExistenceChecker;
 
     /**
      * @param GlobalConstantExistenceChecker $globalConstantExistenceChecker

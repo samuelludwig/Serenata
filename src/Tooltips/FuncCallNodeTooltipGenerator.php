@@ -18,17 +18,17 @@ class FuncCallNodeTooltipGenerator
     /**
      * @var FunctionTooltipGenerator
      */
-    protected $functionTooltipGenerator;
+    private $functionTooltipGenerator;
 
     /**
      * @var FunctionNameNodeFqsenDeterminer
      */
-    protected $functionCallNodeFqsenDeterminer;
+    private $functionCallNodeFqsenDeterminer;
 
     /**
      * @var GlobalFunctionsProvider
      */
-    protected $globalFunctionsProvider;
+    private $globalFunctionsProvider;
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator

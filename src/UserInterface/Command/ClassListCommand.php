@@ -14,7 +14,7 @@ class ClassListCommand extends AbstractCommand
     /**
      * @var ClassListProvider
      */
-    protected $classListProvider;
+    private $classListProvider;
 
     /**
      * @param ClassListProvider $classListProvider

@@ -20,12 +20,12 @@ class MethodCallMethodInfoRetriever
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer

@@ -12,12 +12,12 @@ class SourceCodeStreamReader
     /**
      * @var resource|null
      */
-    protected $stdinStream;
+    private $stdinStream;
 
     /**
      * @var bool
      */
-    protected $autoConvertToUtf8;
+    private $autoConvertToUtf8;
 
     /**
      * @param resource|null $stdinStream

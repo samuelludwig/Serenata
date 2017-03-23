@@ -15,22 +15,22 @@ class JsonRpcRequest implements JsonSerializable
     /**
      * @var string
      */
-    protected $jsonrpc;
+    private $jsonrpc;
 
     /**
      * @var string|int|null
      */
-    protected $id;
+    private $id;
 
     /**
      * @var string
      */
-    protected $method;
+    private $method;
 
     /**
      * @var array|null
      */
-    protected $params;
+    private $params;
 
     /**
      * @param string|int|null $id

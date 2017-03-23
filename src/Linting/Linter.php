@@ -17,37 +17,37 @@ class Linter
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var DocblockCorrectnessAnalyzerFactory
      */
-    protected $docblockCorrectnessAnalyzerFactory;
+    private $docblockCorrectnessAnalyzerFactory;
 
     /**
      * @var UnknownClassAnalyzerFactory
      */
-    protected $unknownClassAnalyzerFactory;
+    private $unknownClassAnalyzerFactory;
 
     /**
      * @var UnknownGlobalConstantAnalyzerFactory
      */
-    protected $unknownGlobalConstantAnalyzerFactory;
+    private $unknownGlobalConstantAnalyzerFactory;
 
     /**
      * @var UnknownGlobalFunctionAnalyzerFactory
      */
-    protected $unknownGlobalFunctionAnalyzerFactory;
+    private $unknownGlobalFunctionAnalyzerFactory;
 
     /**
      * @var UnknownMemberAnalyzerFactory
      */
-    protected $unknownMemberAnalyzerFactory;
+    private $unknownMemberAnalyzerFactory;
 
     /**
      * @var UnusedUseStatementAnalyzerFactory
      */
-    protected $unusedUseStatementAnalyzerFactory;
+    private $unusedUseStatementAnalyzerFactory;
 
     /**
      * @param Parser                               $parser

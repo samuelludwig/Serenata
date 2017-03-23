@@ -14,7 +14,7 @@ class GlobalConstantsCommand extends AbstractCommand
     /**
      * @var GlobalConstantsProvider
      */
-    protected $globalConstantsProvider;
+    private $globalConstantsProvider;
 
     /**
      * @param GlobalConstantsProvider $globalConstantsProvider

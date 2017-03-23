@@ -18,17 +18,17 @@ class NameNodeTooltipGenerator
     /**
      * @var ClassLikeTooltipGenerator
      */
-    protected $classLikeTooltipGenerator;
+    private $classLikeTooltipGenerator;
 
     /**
      * @var NameNodeFqsenDeterminer
      */
-    protected $nameNodeFqsenDeterminer;
+    private $nameNodeFqsenDeterminer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classLikeInfoBuilder;
+    private $classLikeInfoBuilder;
 
     /**
      * @param ClassLikeTooltipGenerator $classLikeTooltipGenerator

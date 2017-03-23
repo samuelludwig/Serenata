@@ -101,7 +101,7 @@ class DocblockParser
     /**
      * @var DocblockAnalyzer
      */
-    protected $docblockAnalyzer;
+    private $docblockAnalyzer;
 
     /**
      * Parse the comment string to get its elements.

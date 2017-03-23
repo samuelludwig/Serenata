@@ -16,12 +16,12 @@ class ParameterInformation implements JsonSerializable
     /**
      * @var string
      */
-    protected $label;
+    private $label;
 
     /**
      * @var string|null
      */
-    protected $documentation;
+    private $documentation;
 
     /**
      * @param string      $label

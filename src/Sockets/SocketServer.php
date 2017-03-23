@@ -21,17 +21,17 @@ class SocketServer
     /**
      * @var Server
      */
-    protected $server;
+    private $server;
 
     /**
      * @var SplObjectStorage
      */
-    protected $connectionMap;
+    private $connectionMap;
 
     /**
      * @var ConnectionHandlerFactoryInterface
      */
-    protected $connectionHandlerFactory;
+    private $connectionHandlerFactory;
 
     /**
      * @param int                               $port

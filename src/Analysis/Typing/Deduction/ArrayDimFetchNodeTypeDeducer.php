@@ -16,12 +16,12 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @param TypeAnalyzer             $typeAnalyzer

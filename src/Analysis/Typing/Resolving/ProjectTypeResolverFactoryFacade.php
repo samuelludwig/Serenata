@@ -12,12 +12,12 @@ class ProjectTypeResolverFactoryFacade
     /**
      * @var ProjectTypeResolverFactory
      */
-    protected $projectTypeResolverFactory;
+    private $projectTypeResolverFactory;
 
     /**
      * @var FileTypeResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $fileTypeResolverFactory;
 
     /**
      * @param ProjectTypeResolverFactory       $projectTypeResolverFactory

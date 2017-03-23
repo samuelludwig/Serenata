@@ -18,17 +18,17 @@ class ClassConstFetchNodeTooltipGenerator
     /**
      * @var ConstantTooltipGenerator
      */
-    protected $constantTooltipGenerator;
+    private $constantTooltipGenerator;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param ConstantTooltipGenerator $constantTooltipGenerator

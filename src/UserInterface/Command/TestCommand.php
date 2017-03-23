@@ -15,7 +15,7 @@ class TestCommand extends AbstractCommand
     /**
      * @var IndexDatabase
      */
-    protected $indexDatabase;
+    private $indexDatabase;
 
     /**
      * @param IndexDatabase  $indexDatabase
