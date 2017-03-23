@@ -102,6 +102,8 @@ use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\CachingParserProxy;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
+use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
+
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
 
 use PhpIntegrator\Tooltips\TooltipProvider;
@@ -237,7 +239,8 @@ abstract class AbstractApplication
                 new Reference('parser'),
                 new Reference('parserTokenHelper'),
                 new Reference('functionFunctionInfoRetriever'),
-                new Reference('methodCallMethodInfoRetriever')
+                new Reference('methodCallMethodInfoRetriever'),
+                new Reference('functionParameterPrettyPrinter')
             ]);
 
         $container
@@ -267,6 +270,9 @@ abstract class AbstractApplication
 
         $container
             ->register('methodConverter', MethodConverter::class);
+
+        $container
+            ->register('functionParameterPrettyPrinter', FunctionParameterPrettyPrinter::class);
 
         $container
             ->setAlias('fileClassListProvider.instance', 'classListProvider');

@@ -15,6 +15,8 @@ use PhpIntegrator\Analysis\Visiting\ResolvedNameAttachingVisitor;
 
 use PhpIntegrator\Parsing\ParserTokenHelper;
 
+use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
+
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
@@ -48,21 +50,29 @@ class SignatureHelpRetriever
     protected $methodCallMethodInfoRetriever;
 
     /**
-     * @param Parser                        $parser
-     * @param ParserTokenHelper             $parserTokenHelper
-     * @param FunctionFunctionInfoRetriever $functionFunctionInfoRetriever
-     * @param MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever
+     * @var FunctionParameterPrettyPrinter
+     */
+    protected $functionParameterPrettyPrinter;
+
+    /**
+     * @param Parser                         $parser
+     * @param ParserTokenHelper              $parserTokenHelper
+     * @param FunctionFunctionInfoRetriever  $functionFunctionInfoRetriever
+     * @param MethodCallMethodInfoRetriever  $methodCallMethodInfoRetriever
+     * @param FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
      */
     public function __construct(
         Parser $parser,
         ParserTokenHelper $parserTokenHelper,
         FunctionFunctionInfoRetriever $functionFunctionInfoRetriever,
-        MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever
+        MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever,
+        FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
     ) {
         $this->parser = $parser;
         $this->parserTokenHelper = $parserTokenHelper;
         $this->functionFunctionInfoRetriever = $functionFunctionInfoRetriever;
         $this->methodCallMethodInfoRetriever = $methodCallMethodInfoRetriever;
+        $this->functionParameterPrettyPrinter = $functionParameterPrettyPrinter;
     }
 
     /**
@@ -375,29 +385,7 @@ class SignatureHelpRetriever
      */
     protected function getResponseParametersForFunctionParameter(array $parameter): ParameterInformation
     {
-        $label = '';
-
-        if (!empty($parameter['types'])) {
-            $label .= implode('|', array_map(function (array $type) {
-                return $type['type'];
-            }, $parameter['types']));
-
-            $label .= ' ';
-        }
-
-        if ($parameter['isVariadic']) {
-            $label .= '...';
-        }
-
-        if ($parameter['isReference']) {
-            $label .= '&';
-        }
-
-        $label .= '$' . $parameter['name'];
-
-        if ($parameter['defaultValue']) {
-            $label .= ' = ' . $parameter['defaultValue'];
-        }
+        $label = $this->functionParameterPrettyPrinter->print($parameter);
 
         return new ParameterInformation($label, $parameter['description']);
     }
