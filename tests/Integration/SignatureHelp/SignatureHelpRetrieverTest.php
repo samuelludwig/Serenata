@@ -244,6 +244,27 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
+    public function testMethodCall(): void
+    {
+        $expectedSignaturesResult = [
+            new SignatureInformation('test', 'Some summary.', [
+                new ParameterInformation('int $a', 'Parameter A.'),
+                new ParameterInformation('bool $b = true', null),
+                new ParameterInformation('string $c', 'Parameter C.')
+            ])
+        ];
+
+        $fileName = 'MethodCall.phpt';
+
+        $this->assertSignatureHelpSignaturesEquals($fileName, 245, 252, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 245, 246, 0);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 247, 249, 1);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 250, 252, 2);
+    }
+
+    /**
+     * @return void
+     */
     public function testNestedMethodCall(): void
     {
         $expectedSignaturesResult = [
@@ -262,27 +283,6 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
         $this->assertSignatureHelpSignaturesEquals($fileName, 232, 232, $expectedNestedSignaturesResult);
         $this->assertSignatureHelpSignaturesEquals($fileName, 233, 233, $expectedSignaturesResult);
         $this->assertSignatureHelpActiveParameterEquals($fileName, 221, 233, 0);
-    }
-
-    /**
-     * @return void
-     */
-    public function testMethodCall(): void
-    {
-        $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
-                new ParameterInformation('int $a', 'Parameter A.'),
-                new ParameterInformation('bool $b = true', null),
-                new ParameterInformation('string $c', 'Parameter C.')
-            ])
-        ];
-
-        $fileName = 'MethodCall.phpt';
-
-        $this->assertSignatureHelpSignaturesEquals($fileName, 245, 252, $expectedSignaturesResult);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 245, 246, 0);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 247, 249, 1);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 250, 252, 2);
     }
 
     /**
