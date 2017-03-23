@@ -123,4 +123,20 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('$test = null', $result);
     }
+
+    /**
+     * @return void
+     */
+    public function testDefaultValueOfIntegerZero(): void
+    {
+        $result = $this->getFunctionParameterPrettyPrinterStub()->print([
+            'name'         => 'test',
+            'isVariadic'   => false,
+            'isReference'  => false,
+            'defaultValue' => 0,
+            'types'        => []
+        ]);
+
+        $this->assertEquals('$test = 0', $result);
+    }
 }
