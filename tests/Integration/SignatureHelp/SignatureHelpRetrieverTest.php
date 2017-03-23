@@ -330,6 +330,31 @@ class SignatureHelpRetrieverTest extends AbstractIndexedTest
     /**
      * @return void
      */
+    public function testNestedConstructor(): void
+    {
+        $expectedSignaturesResult = [
+            new SignatureInformation('__construct', null, [
+                new ParameterInformation('int $a', null)
+            ])
+        ];
+
+        $expectedNestedSignaturesResult = [
+            new SignatureInformation('__construct', null, [
+                new ParameterInformation('int $b', null)
+            ])
+        ];
+
+        $fileName = 'NestedConstructor.phpt';
+
+        $this->assertSignatureHelpSignaturesEquals($fileName, 219, 239, $expectedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 240, 241, $expectedNestedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 242, 251, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 219, 251, 0);
+    }
+
+    /**
+     * @return void
+     */
     public function testArgumentIndexIsCorrectWithVariadicParameters(): void
     {
         $result = $this->getSignatureHelp('VariadicParameter.phpt', 217);
