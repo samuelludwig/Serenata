@@ -227,7 +227,7 @@ class SignatureHelpRetriever
 
         $endOfArgumentList = null;
 
-        for ($i = $arguments[count($arguments) - 1]->getAttribute('endFilePos'); $i < mb_strlen($code); ++$i) {
+        for ($i = $arguments[count($arguments) - 1]->getAttribute('endFilePos') + 1; $i < mb_strlen($code); ++$i) {
             if ($code[$i] === ')') {
                 $endOfArgumentList = $i+1;
                 break;
