@@ -1,0 +1,9 @@
+parameters:
+
+
+services:
+    nodePrettyPrinter:
+        class: PhpIntegrator\PrettyPrinting\NodePrettyPrinter
+
+    functionParameterPrettyPrinter:
+        class: PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter

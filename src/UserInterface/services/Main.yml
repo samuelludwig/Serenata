@@ -2,6 +2,7 @@ imports:
     - { resource: Indexing.yml }
     - { resource: Tooltips.yml }
     - { resource: Linting.yml }
+    - { resource: PrettyPrinting.yml }
     - { resource: Analysis/Typing/Deduction.yml }
     - { resource: Analysis/Typing/Localization.yml }
     - { resource: Analysis/Typing/Resolving.yml }
@@ -50,9 +51,6 @@ services:
     typeAnalyzer:
         class: PhpIntegrator\Analysis\Typing\TypeAnalyzer
 
-    nodePrettyPrinter:
-        class: PhpIntegrator\PrettyPrinting\NodePrettyPrinter
-
     partialParser:
         class: PhpIntegrator\Parsing\PartialParser
         arguments:
@@ -100,9 +98,6 @@ services:
 
     methodConverter:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
-
-    functionParameterPrettyPrinter:
-        class: PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter
 
     fileClassListProvider.instance:
         alias: classListProvider
