@@ -10,17 +10,17 @@ class FunctionParameterPrettyPrinter
     /**
      * @var ParameterDefaultValuePrettyPrinter
      */
-    protected $parameterDefaultValuePrettyPrinter;
+    private $parameterDefaultValuePrettyPrinter;
 
     /**
      * @var TypeListPrettyPrinter
      */
-    protected $typeListPrettyPrinter;
+    private $typeListPrettyPrinter;
 
     /**
      * @var ParameterNamePrettyPrinter
      */
-    protected $parameterNamePrettyPrinter;
+    private $parameterNamePrettyPrinter;
 
     /**
      * @param ParameterDefaultValuePrettyPrinter $parameterDefaultValuePrettyPrinter

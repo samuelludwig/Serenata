@@ -10,7 +10,7 @@ class TypeListPrettyPrinter
     /**
      * @var TypePrettyPrinter
      */
-    protected $typePrettyPrinter;
+    private $typePrettyPrinter;
 
     /**
      * @param TypePrettyPrinter $typePrettyPrinter
