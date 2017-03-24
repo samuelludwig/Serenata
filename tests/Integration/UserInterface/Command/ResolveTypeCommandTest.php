@@ -49,7 +49,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 2, UseStatementKind::TYPE_CONSTANT));
@@ -68,7 +68,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\SOME_ROOT_CONSTANT', $command->resolveType('SOME_ROOT_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
@@ -87,7 +87,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
@@ -106,7 +106,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 2, UseStatementKind::TYPE_FUNCTION));
@@ -125,7 +125,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\some_root_function', $command->resolveType('some_root_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
@@ -144,7 +144,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
@@ -163,7 +163,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
@@ -181,7 +181,7 @@ class ResolveTypeCommandTest extends AbstractIndexedTest
 
         $command = new ResolveTypeCommand(
             $container->get('indexDatabase'),
-            $container->get('ProjectTypeResolverFactoryFacade')
+            $container->get('projectTypeResolverFactoryFacade')
         );
 
         $command->resolveType('\C', 'MissingFile.php', 1, UseStatementKind::TYPE_CLASSLIKE);

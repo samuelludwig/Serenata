@@ -56,7 +56,7 @@ services:
         class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
         arguments:
             - '@indexDatabase'
-            - '@ProjectTypeResolverFactoryFacade'
+            - '@projectTypeResolverFactoryFacade'
 
     localizeTypeCommand:
         class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
