@@ -7,7 +7,7 @@ services:
         arguments:
             - '@parser'
             - '@docblockParser'
-            - '@prettyPrinter'
+            - '@nodePrettyPrinter'
 
     localTypeScanner:
         class: PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner
@@ -102,7 +102,7 @@ services:
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
             - '@localTypeScanner'
-            - '@prettyPrinter'
+            - '@nodePrettyPrinter'
 
     classConstFetchNodeTypeDeducer:
         class: PhpIntegrator\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer

@@ -1,11 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Parsing;
+namespace PhpIntegrator\PrettyPrinting;
+
+use PhpParser\PrettyPrinter;
 
 /**
  * Pretty printer extensions that can handle our custom nodes.
  */
-class PrettyPrinter extends \PhpParser\PrettyPrinter\Standard
+class NodePrettyPrinter extends PrettyPrinter\Standard
 {
     public function parsing_Node_Keyword_Static()
     {

@@ -50,8 +50,8 @@ services:
     typeAnalyzer:
         class: PhpIntegrator\Analysis\Typing\TypeAnalyzer
 
-    prettyPrinter:
-        class: PhpIntegrator\Parsing\PrettyPrinter
+    nodePrettyPrinter:
+        class: PhpIntegrator\PrettyPrinting\NodePrettyPrinter
 
     partialParser:
         class: PhpIntegrator\Parsing\PartialParser
