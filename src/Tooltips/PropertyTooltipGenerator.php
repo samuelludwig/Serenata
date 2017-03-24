@@ -7,7 +7,18 @@ namespace PhpIntegrator\Tooltips;
  */
 class PropertyTooltipGenerator
 {
-    use TooltipGenerationTrait;
+    /**
+     * @var TooltipTypeListPrettyPrinter
+     */
+    private $tooltipTypeListPrettyPrinter;
+
+    /**
+     * @param TooltipTypeListPrettyPrinter $tooltipTypeListPrettyPrinter
+     */
+    public function __construct(TooltipTypeListPrettyPrinter $tooltipTypeListPrettyPrinter)
+    {
+        $this->tooltipTypeListPrettyPrinter = $tooltipTypeListPrettyPrinter;
+    }
 
     /**
      * @param array $info
@@ -63,7 +74,11 @@ class PropertyTooltipGenerator
         $returnDescription = null;
 
         if (!empty($info['types'])) {
-            $returnDescription = '*' . $this->getTypeStringForTypeArray($info['types']) . '*';
+            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
+                return $type['type'];
+            }, $info['types']));
+
+            $returnDescription = '*' . $value . '*';
 
             if ($info['typeDescription']) {
                 $returnDescription .= ' &mdash; ' . $info['typeDescription'];

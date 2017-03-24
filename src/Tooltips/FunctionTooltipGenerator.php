@@ -9,19 +9,26 @@ use PhpIntegrator\PrettyPrinting\ParameterNamePrettyPrinter;
  */
 class FunctionTooltipGenerator
 {
-    use TooltipGenerationTrait;
-
     /**
      * @var ParameterNamePrettyPrinter
      */
-    protected $parameterNamePrettyPrinter;
+    private $parameterNamePrettyPrinter;
 
     /**
-     * @param ParameterNamePrettyPrinter $parameterNamePrettyPrinter
+     * @var TooltipTypeListPrettyPrinter
      */
-    public function __construct(ParameterNamePrettyPrinter $parameterNamePrettyPrinter)
-    {
+    private $tooltipTypeListPrettyPrinter;
+
+    /**
+     * @param ParameterNamePrettyPrinter   $parameterNamePrettyPrinter
+     * @param TooltipTypeListPrettyPrinter $tooltipTypeListPrettyPrinter
+     */
+    public function __construct(
+        ParameterNamePrettyPrinter $parameterNamePrettyPrinter,
+        TooltipTypeListPrettyPrinter $tooltipTypeListPrettyPrinter
+    ) {
         $this->parameterNamePrettyPrinter = $parameterNamePrettyPrinter;
+        $this->tooltipTypeListPrettyPrinter = $tooltipTypeListPrettyPrinter;
     }
 
     /**
@@ -121,7 +128,11 @@ class FunctionTooltipGenerator
         $parameterColumns[] = '**' . $name . '**';
 
         if (!empty($parameter['types'])) {
-            $parameterColumns[] = '*' . $this->getTypeStringForTypeArray($parameter['types']) . '*';
+            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
+                return $type['type'];
+            }, $parameter['types']));
+
+            $parameterColumns[] = '*' . $value . '*';
         } else {
             $parameterColumns[] = ' ';
         }
@@ -145,7 +156,11 @@ class FunctionTooltipGenerator
         $returnDescription = null;
 
         if (!empty($functionInfo['returnTypes'])) {
-            $returnDescription = '*' . $this->getTypeStringForTypeArray($functionInfo['returnTypes']) . '*';
+            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
+                return $type['type'];
+            }, $functionInfo['returnTypes']));
+
+            $returnDescription = '*' . $value . '*';
 
             if ($functionInfo['returnDescription']) {
                 $returnDescription .= ' &mdash; ' . $functionInfo['returnDescription'];

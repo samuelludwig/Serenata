@@ -2,25 +2,29 @@ parameters:
 
 
 services:
+    tooltipTypeListPrettyPrinter:
+        class: PhpIntegrator\Tooltips\TooltipTypeListPrettyPrinter
+        arguments:
+            - '@typeListPrettyPrinter'
+
     functionTooltipGenerator:
         class: PhpIntegrator\Tooltips\FunctionTooltipGenerator
         arguments:
-            - '@ParameterNamePrettyPrinter'
+            - '@parameterNamePrettyPrinter'
+            - '@tooltipTypeListPrettyPrinter'
 
     propertyTooltipGenerator:
         class: PhpIntegrator\Tooltips\PropertyTooltipGenerator
         arguments:
-            - '@indexDatabase'
+            - '@tooltipTypeListPrettyPrinter'
 
     constantTooltipGenerator:
         class: PhpIntegrator\Tooltips\ConstantTooltipGenerator
         arguments:
-            - '@indexDatabase'
+            - '@tooltipTypeListPrettyPrinter'
 
     classLikeTooltipGenerator:
         class: PhpIntegrator\Tooltips\ClassLikeTooltipGenerator
-        arguments:
-            - '@indexDatabase'
 
     funcCallNodeTooltipGenerator:
         class: PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator

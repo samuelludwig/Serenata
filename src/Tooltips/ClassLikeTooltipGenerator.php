@@ -9,8 +9,6 @@ use LogicException;
  */
 class ClassLikeTooltipGenerator
 {
-    use TooltipGenerationTrait;
-
     /**
      * @param array $info
      *
