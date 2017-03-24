@@ -1,0 +1,96 @@
+parameters:
+
+
+services:
+    initializeCommand:
+        class: PhpIntegrator\UserInterface\Command\InitializeCommand
+        arguments:
+            - '@indexDatabase'
+            - '@builtinIndexer'
+            - '@projectIndexer'
+            - '@cache'
+
+    reindexCommand:
+        class: PhpIntegrator\UserInterface\Command\ReindexCommand
+        arguments:
+            - '@indexer'
+
+    vacuumCommand:
+        class: PhpIntegrator\UserInterface\Command\VacuumCommand
+        arguments:
+            - '@projectIndexer'
+
+    testCommand:
+        class: PhpIntegrator\UserInterface\Command\TestCommand
+        arguments:
+            - '@indexDatabase'
+
+    tooltipCommand:
+        class: PhpIntegrator\UserInterface\Command\TooltipCommand
+        arguments:
+            - '@tooltipProvider'
+            - '@sourceCodeStreamReader'
+
+    classListCommand:
+        class: PhpIntegrator\UserInterface\Command\ClassListCommand
+        arguments:
+            - '@classListProvider'
+
+    classInfoCommand:
+        class: PhpIntegrator\UserInterface\Command\ClassInfoCommand
+        arguments:
+            - '@typeAnalyzer'
+            - '@classlikeInfoBuilder'
+
+    globalFunctionsCommand:
+        class: PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand
+        arguments:
+            - '@globalFunctionsProvider'
+
+    globalConstantsCommand:
+        class: PhpIntegrator\UserInterface\Command\GlobalConstantsCommand
+        arguments:
+            - '@globalConstantsProvider'
+
+    resolveTypeCommand:
+        class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
+        arguments:
+            - '@indexDatabase'
+            - '@ProjectTypeResolverFactoryFacade'
+
+    localizeTypeCommand:
+        class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
+        arguments:
+            - '@indexDatabase'
+            - '@fileTypeLocalizerFactory'
+
+    lintCommand:
+        class: PhpIntegrator\UserInterface\Command\LintCommand
+        arguments:
+            - '@sourceCodeStreamReader'
+            - '@linter'
+
+    availableVariablesCommand:
+        class: PhpIntegrator\UserInterface\Command\AvailableVariablesCommand
+        arguments:
+            - '@variableScanner'
+            - '@parser'
+            - '@sourceCodeStreamReader'
+
+    deduceTypesCommand:
+        class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
+        arguments:
+            - '@nodeTypeDeducer'
+            - '@lastExpressionParser'
+            - '@sourceCodeStreamReader'
+
+    signatureHelpCommand:
+        class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
+        arguments:
+            - '@signatureHelpRetriever'
+            - '@sourceCodeStreamReader'
+
+    namespaceListCommand:
+        class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
+        arguments:
+            - '@indexDatabase'

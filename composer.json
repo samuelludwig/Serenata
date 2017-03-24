@@ -13,6 +13,8 @@
         "evenement/evenement": "2.0.*",
         "nikic/php-parser": ">=3.0.5 <3.1.0",
         "react/socket": "0.5.*",
+        "symfony/yaml": "3.2.*",
+        "symfony/config": "3.2.*",
         "symfony/dependency-injection": "3.2.*"
     },
     "require-dev": {

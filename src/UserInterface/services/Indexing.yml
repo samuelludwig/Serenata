@@ -1,0 +1,35 @@
+parameters:
+
+
+services:
+    builtinIndexer:
+        class: PhpIntegrator\Indexing\BuiltinIndexer
+        arguments:
+            - '@indexDatabase'
+            - '@typeAnalyzer'
+            - '@partialParser'
+            - '@nodeTypeDeducer'
+
+    fileIndexer:
+        class: PhpIntegrator\Indexing\FileIndexer
+        arguments:
+            - '@storageForIndexers'
+            - '@typeAnalyzer'
+            - '@typeResolver'
+            - '@docblockParser'
+            - '@partialParser'
+            - '@nodeTypeDeducer'
+            - '@parser'
+
+    projectIndexer:
+        class: PhpIntegrator\Indexing\ProjectIndexer
+        arguments:
+            - '@storageForIndexers'
+            - '@fileIndexer'
+            - '@sourceCodeStreamReader'
+
+    indexer:
+        class: PhpIntegrator\Indexing\Indexer
+        arguments:
+            - '@projectIndexer'
+            - '@sourceCodeStreamReader'

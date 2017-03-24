@@ -1,0 +1,44 @@
+parameters:
+
+
+services:
+    typeResolver.backend:
+        class: PhpIntegrator\Analysis\Typing\Resolving\TypeResolver
+        arguments:
+            - '@typeAnalyzer'
+
+    typeResolver.docblock:
+        class: PhpIntegrator\Analysis\Typing\Resolving\DocblockTypeResolver
+        arguments:
+            - '@typeResolver.backend'
+            - '@typeAnalyzer'
+
+    typeResolver:
+        alias: 'typeResolver.docblock'
+
+    fileTypeResolverFactory.instance:
+        class: PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory
+        arguments:
+            - '@typeResolver'
+            - '@indexDatabase'
+
+    fileTypeResolverFactory.cachingDecorator:
+        class: PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryCachingDecorator
+        arguments:
+            - '@fileTypeResolverFactory.instance'
+
+    fileTypeResolverFactory:
+        alias: fileTypeResolverFactory.cachingDecorator
+
+    projectTypeResolverFactory:
+        class: PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactory
+        arguments:
+            - '@globalConstantExistenceChecker'
+            - '@globalFunctionExistenceChecker'
+            - '@indexDatabase'
+
+    projectTypeResolverFactoryFacade:
+        class: PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade
+        arguments:
+            - '@projectTypeResolverFactory'
+            - '@fileTypeResolverFactory'

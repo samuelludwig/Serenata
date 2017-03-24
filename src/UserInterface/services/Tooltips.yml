@@ -1,0 +1,103 @@
+parameters:
+
+
+services:
+    functionTooltipGenerator:
+        class: PhpIntegrator\Tooltips\FunctionTooltipGenerator
+        arguments:
+            - '@indexDatabase'
+
+    propertyTooltipGenerator:
+        class: PhpIntegrator\Tooltips\PropertyTooltipGenerator
+        arguments:
+            - '@indexDatabase'
+
+    constantTooltipGenerator:
+        class: PhpIntegrator\Tooltips\ConstantTooltipGenerator
+        arguments:
+            - '@indexDatabase'
+
+    classLikeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\ClassLikeTooltipGenerator
+        arguments:
+            - '@indexDatabase'
+
+    funcCallNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator
+        arguments:
+            - '@functionTooltipGenerator'
+            - '@functionCallNodeFqsenDeterminer'
+            - '@globalFunctionsProvider'
+
+    methodCallNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\MethodCallNodeTooltipGenerator
+        arguments:
+            - '@methodCallMethodInfoRetriever'
+            - '@functionTooltipGenerator'
+
+    staticMethodCallNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\StaticMethodCallNodeTooltipGenerator
+        arguments:
+            - '@methodCallMethodInfoRetriever'
+            - '@functionTooltipGenerator'
+
+    propertyFetchNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\PropertyFetchNodeTooltipGenerator
+        arguments:
+            - '@propertyFetchPropertyInfoRetriever'
+            - '@propertyTooltipGenerator'
+
+    staticPropertyFetchNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\StaticPropertyFetchNodeTooltipGenerator
+        arguments:
+            - '@propertyFetchPropertyInfoRetriever'
+            - '@propertyTooltipGenerator'
+
+    constFetchNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator
+        arguments:
+            - '@constantTooltipGenerator'
+            - '@constFetchNodeFqsenDeterminer'
+            - '@globalConstantsProvider'
+
+    classConstFetchNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator
+        arguments:
+            - '@constantTooltipGenerator'
+            - '@nodeTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    functionNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\FunctionNodeTooltipGenerator
+        arguments:
+            - '@functionTooltipGenerator'
+            - '@functionFunctionInfoRetriever'
+
+    classMethodNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\ClassMethodNodeTooltipGenerator
+        arguments:
+            - '@functionTooltipGenerator'
+            - '@filePositionClasslikeDeterminer'
+            - '@classlikeInfoBuilder'
+
+    nameNodeTooltipGenerator:
+        class: PhpIntegrator\Tooltips\NameNodeTooltipGenerator
+        arguments:
+            - '@classLikeTooltipGenerator'
+            - '@nameNodeFqsenDeterminer'
+            - '@classlikeInfoBuilder'
+
+    tooltipProvider:
+        class: PhpIntegrator\Tooltips\TooltipProvider
+        arguments:
+            - '@parser'
+            - '@funcCallNodeTooltipGenerator'
+            - '@methodCallNodeTooltipGenerator'
+            - '@staticMethodCallNodeTooltipGenerator'
+            - '@propertyFetchNodeTooltipGenerator'
+            - '@staticPropertyFetchNodeTooltipGenerator'
+            - '@constFetchNodeTooltipGenerator'
+            - '@classConstFetchNodeTooltipGenerator'
+            - '@functionNodeTooltipGenerator'
+            - '@classMethodNodeTooltipGenerator'
+            - '@nameNodeTooltipGenerator'
