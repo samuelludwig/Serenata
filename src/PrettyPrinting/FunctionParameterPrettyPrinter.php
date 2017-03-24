@@ -54,7 +54,7 @@ class FunctionParameterPrettyPrinter
             $label .= ' ';
         }
 
-        $label .= $this->parameterNamePrettyPrinter->print($parameter);;
+        $label .= $this->parameterNamePrettyPrinter->print($parameter);
 
         if ($parameter['defaultValue'] !== null) {
             $label .= ' = ' . $this->parameterDefaultValuePrettyPrinter->print($parameter['defaultValue']);

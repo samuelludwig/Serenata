@@ -5,7 +5,7 @@ services:
     functionTooltipGenerator:
         class: PhpIntegrator\Tooltips\FunctionTooltipGenerator
         arguments:
-            - '@indexDatabase'
+            - '@ParameterNamePrettyPrinter'
 
     propertyTooltipGenerator:
         class: PhpIntegrator\Tooltips\PropertyTooltipGenerator

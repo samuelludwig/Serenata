@@ -2,12 +2,27 @@
 
 namespace PhpIntegrator\Tooltips;
 
+use PhpIntegrator\PrettyPrinting\ParameterNamePrettyPrinter;
+
 /**
  * Generates tooltips for functions.
  */
 class FunctionTooltipGenerator
 {
     use TooltipGenerationTrait;
+
+    /**
+     * @var ParameterNamePrettyPrinter
+     */
+    protected $parameterNamePrettyPrinter;
+
+    /**
+     * @param ParameterNamePrettyPrinter $parameterNamePrettyPrinter
+     */
+    public function __construct(ParameterNamePrettyPrinter $parameterNamePrettyPrinter)
+    {
+        $this->parameterNamePrettyPrinter = $parameterNamePrettyPrinter;
+    }
 
     /**
      * @param array $functionInfo
@@ -97,15 +112,7 @@ class FunctionTooltipGenerator
             $name .= '[';
         }
 
-        if ($parameter['isReference']) {
-            $name .= '&';
-        }
-
-        if ($parameter['isVariadic']) {
-            $name = '...';
-        }
-
-        $name .= '$' . $parameter['name'];
+        $name .= $this->parameterNamePrettyPrinter->print($parameter);
 
         if ($parameter['isOptional']) {
             $name .= ']';
