@@ -8,6 +8,28 @@ namespace PhpIntegrator\PrettyPrinting;
 class FunctionParameterPrettyPrinter
 {
     /**
+     * @var ParameterDefaultValuePrettyPrinter
+     */
+    protected $parameterDefaultValuePrettyPrinter;
+
+    /**
+     * @var TypeListPrettyPrinter
+     */
+    protected $typeListPrettyPrinter;
+
+    /**
+     * @param ParameterDefaultValuePrettyPrinter $parameterDefaultValuePrettyPrinter
+     * @param TypeListPrettyPrinter              $typeListPrettyPrinter
+     */
+    public function __construct(
+        ParameterDefaultValuePrettyPrinter $parameterDefaultValuePrettyPrinter,
+        TypeListPrettyPrinter $typeListPrettyPrinter
+    ) {
+        $this->parameterDefaultValuePrettyPrinter = $parameterDefaultValuePrettyPrinter;
+        $this->typeListPrettyPrinter = $typeListPrettyPrinter;
+    }
+
+    /**
      * @param array $parameter
      *
      * @return string
@@ -17,7 +39,10 @@ class FunctionParameterPrettyPrinter
         $label = '';
 
         if (!empty($parameter['types'])) {
-            $label .= $this->prettyPrintTypes($parameter['types']);
+            $label .= $this->typeListPrettyPrinter->print(array_map(function (array $type) {
+                return $type['type'];
+            }, $parameter['types']));
+
             $label .= ' ';
         }
 
@@ -32,21 +57,9 @@ class FunctionParameterPrettyPrinter
         $label .= '$' . $parameter['name'];
 
         if ($parameter['defaultValue'] !== null) {
-            $label .= ' = ' . $parameter['defaultValue'];
+            $label .= ' = ' . $this->parameterDefaultValuePrettyPrinter->print($parameter['defaultValue']);
         }
 
         return $label;
-    }
-
-    /**
-     * @param array $types
-     *
-     * @return string
-     */
-    protected function prettyPrintTypes(array $types): string
-    {
-        return implode('|', array_map(function (array $type) {
-            return $type['type'];
-        }, $types));
     }
 }

@@ -2,7 +2,10 @@
 
 namespace PhpIntegrator\Tests\Unit\PrettyPrinting;
 
+use PhpIntegrator\PrettyPrinting\TypePrettyPrinter;
+use PhpIntegrator\PrettyPrinting\TypeListPrettyPrinter;
 use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
+use PhpIntegrator\PrettyPrinting\ParameterDefaultValuePrettyPrinter;
 
 class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
 {
@@ -11,7 +14,12 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
      */
     protected function getFunctionParameterPrettyPrinterStub(): FunctionParameterPrettyPrinter
     {
-        return new FunctionParameterPrettyPrinter();
+        return new FunctionParameterPrettyPrinter(
+            new ParameterDefaultValuePrettyPrinter(),
+            new TypeListPrettyPrinter(
+                new TypePrettyPrinter()
+            )
+        );
     }
 
     /**
