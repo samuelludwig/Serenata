@@ -18,15 +18,23 @@ class FunctionParameterPrettyPrinter
     protected $typeListPrettyPrinter;
 
     /**
+     * @var ParameterNamePrettyPrinter
+     */
+    protected $parameterNamePrettyPrinter;
+
+    /**
      * @param ParameterDefaultValuePrettyPrinter $parameterDefaultValuePrettyPrinter
      * @param TypeListPrettyPrinter              $typeListPrettyPrinter
+     * @param ParameterNamePrettyPrinter         $parameterNamePrettyPrinter
      */
     public function __construct(
         ParameterDefaultValuePrettyPrinter $parameterDefaultValuePrettyPrinter,
-        TypeListPrettyPrinter $typeListPrettyPrinter
+        TypeListPrettyPrinter $typeListPrettyPrinter,
+        ParameterNamePrettyPrinter $parameterNamePrettyPrinter
     ) {
         $this->parameterDefaultValuePrettyPrinter = $parameterDefaultValuePrettyPrinter;
         $this->typeListPrettyPrinter = $typeListPrettyPrinter;
+        $this->parameterNamePrettyPrinter = $parameterNamePrettyPrinter;
     }
 
     /**
@@ -46,15 +54,7 @@ class FunctionParameterPrettyPrinter
             $label .= ' ';
         }
 
-        if ($parameter['isVariadic']) {
-            $label .= '...';
-        }
-
-        if ($parameter['isReference']) {
-            $label .= '&';
-        }
-
-        $label .= '$' . $parameter['name'];
+        $label .= $this->parameterNamePrettyPrinter->print($parameter);;
 
         if ($parameter['defaultValue'] !== null) {
             $label .= ' = ' . $this->parameterDefaultValuePrettyPrinter->print($parameter['defaultValue']);

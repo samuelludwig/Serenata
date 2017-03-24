@@ -4,6 +4,7 @@ namespace PhpIntegrator\Tests\Unit\PrettyPrinting;
 
 use PhpIntegrator\PrettyPrinting\TypePrettyPrinter;
 use PhpIntegrator\PrettyPrinting\TypeListPrettyPrinter;
+use PhpIntegrator\PrettyPrinting\ParameterNamePrettyPrinter;
 use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
 use PhpIntegrator\PrettyPrinting\ParameterDefaultValuePrettyPrinter;
 
@@ -18,7 +19,8 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             new ParameterDefaultValuePrettyPrinter(),
             new TypeListPrettyPrinter(
                 new TypePrettyPrinter()
-            )
+            ),
+            new ParameterNamePrettyPrinter()
         );
     }
 

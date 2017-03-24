@@ -16,8 +16,12 @@ services:
     parameterDefaultValuePrettyPrinter:
         class: PhpIntegrator\PrettyPrinting\ParameterDefaultValuePrettyPrinter
 
+    parameterNamePrettyPrinter:
+        class: PhpIntegrator\PrettyPrinting\ParameterNamePrettyPrinter
+
     functionParameterPrettyPrinter:
         class: PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter
         arguments:
             - '@parameterDefaultValuePrettyPrinter'
             - '@typeListPrettyPrinter'
+            - '@parameterNamePrettyPrinter'
