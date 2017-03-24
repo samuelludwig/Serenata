@@ -9,8 +9,9 @@ use PhpIntegrator\UserInterface\JsonRpcApplication;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Abstract base class for tests that need to test functionality that requires an indexing database to be set up with
- * the contents of a file or folder already indexed.
+ * Abstract base class for integration tests.
+ *
+ * Provides functionality using an indexing database and access to the application service container.
  */
 abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 {
