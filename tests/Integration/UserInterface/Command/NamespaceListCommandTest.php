@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class NamespaceListCommandTest extends AbstractIndexedTest
+class NamespaceListCommandTest extends AbstractIntegrationTest
 {
     /**
      * @return void

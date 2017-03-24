@@ -6,9 +6,9 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 use PhpIntegrator\UserInterface\Command\LocalizeTypeCommand;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class LocalizeTypeCommandTest extends AbstractIndexedTest
+class LocalizeTypeCommandTest extends AbstractIntegrationTest
 {
     /**
      * @return void

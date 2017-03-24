@@ -4,9 +4,9 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\AvailableVariablesCommand;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class AvailableVariablesCommandTest extends AbstractIndexedTest
+class AvailableVariablesCommandTest extends AbstractIntegrationTest
 {
     /**
      * @param string $file

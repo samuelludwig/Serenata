@@ -4,9 +4,9 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\ClassInfoCommand;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class ClassInfoCommandTest extends AbstractIndexedTest
+class ClassInfoCommandTest extends AbstractIntegrationTest
 {
     /**
      * @param string $file

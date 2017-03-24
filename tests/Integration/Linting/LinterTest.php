@@ -4,9 +4,9 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\Linting\LintingSettings;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class LinterTest extends AbstractIndexedTest
+class LinterTest extends AbstractIntegrationTest
 {
     /**
      * @param string $file

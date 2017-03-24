@@ -8,9 +8,9 @@ use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\ParameterInformation;
 use PhpIntegrator\SignatureHelp\SignatureInformation;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class SignatureHelpRetrieverTest extends AbstractIndexedTest
+class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 {
     /**
      * @param string $file

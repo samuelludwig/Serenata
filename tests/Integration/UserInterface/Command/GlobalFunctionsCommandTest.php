@@ -4,9 +4,9 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand;
 
-use PhpIntegrator\Tests\Integration\AbstractIndexedTest;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class GlobalFunctionsCommandTest extends AbstractIndexedTest
+class GlobalFunctionsCommandTest extends AbstractIntegrationTest
 {
         /**
          * @return void
