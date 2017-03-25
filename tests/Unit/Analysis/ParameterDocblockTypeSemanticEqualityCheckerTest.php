@@ -14,7 +14,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     /**
      * @return void
      */
-    public function testSeesScalarTypesAsEqual(): void
+    public function testSingleType(): void
     {
         $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
             ->disableOriginalConstructor()
