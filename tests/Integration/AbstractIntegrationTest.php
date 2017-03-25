@@ -18,6 +18,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ContainerBuilder
      */
+    static $testContainer;
+
+    /**
+     * @var ContainerBuilder
+     */
     static $testContainerBuiltinStructuralElements;
 
     /**
@@ -49,6 +54,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $container->setAlias('parser', 'parser.phpParser');
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
         $container->get('indexDatabase')->setDatabasePath(':memory:');
+        $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
         $success = $container->get('initializeCommand')->initialize($indexBuiltinItems);
 
@@ -60,11 +66,16 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected function createTestContainer(): ContainerBuilder
     {
-        $container = $this->createApplicationContainer();
+        if (!self::$testContainer) {
+            // Loading the container from the YAML file is expensive and a large slowdown to testing. As we're testing
+            // integration anyway, we can share this container. We only need to ensure state is not maintained between
+            // creations, which is handled by prepareContainer.
+            self::$testContainer = $this->createApplicationContainer();
+        }
 
-        $this->prepareContainer($container, false);
+        $this->prepareContainer(self::$testContainer, false);
 
-        return $container;
+        return self::$testContainer;
     }
 
     /**
