@@ -5,7 +5,7 @@ services:
     docblockCorrectnessAnalyzerFactory:
         class: PhpIntegrator\Linting\DocblockCorrectnessAnalyzerFactory
         arguments:
-            - '@fileTypeResolverFactory'
+            - '@parameterDocblockTypeSemanticEqualityChecker'
             - '@classlikeInfoBuilder'
             - '@docblockParser'
             - '@typeAnalyzer'

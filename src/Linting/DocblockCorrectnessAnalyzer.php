@@ -4,10 +4,9 @@ namespace PhpIntegrator\Linting;
 
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ParameterDocblockTypeSemanticEqualityChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 
@@ -19,9 +18,14 @@ use PhpIntegrator\Parsing\DocblockParser;
 class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 {
     /**
-     * @var FileTypeResolverInterface
+     * @var string
      */
-    private $fileTypeResolver;
+    private $file;
+
+    /**
+     * @var ParameterDocblockTypeSemanticEqualityChecker
+     */
+    private $parameterDocblockTypeSemanticEqualityChecker;
 
     /**
      * @var OutlineFetchingVisitor
@@ -49,22 +53,25 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     private $classlikeInfoBuilder;
 
     /**
-     * @param string                    $code
-     * @param FileTypeResolverInterface $fileTypeResolver
-     * @param ClasslikeInfoBuilder      $classlikeInfoBuilder
-     * @param DocblockParser            $docblockParser
-     * @param TypeAnalyzer              $typeAnalyzer
-     * @param DocblockAnalyzer          $docblockAnalyzer
+    * @param string                                        $file
+     * @param string                                       $code
+     * @param ParameterDocblockTypeSemanticEqualityChecker $parameterDocblockTypeSemanticEqualityChecker
+     * @param ClasslikeInfoBuilder                         $classlikeInfoBuilder
+     * @param DocblockParser                               $docblockParser
+     * @param TypeAnalyzer                                 $typeAnalyzer
+     * @param DocblockAnalyzer                             $docblockAnalyzer
      */
     public function __construct(
+        string $file,
         string $code,
-        FileTypeResolverInterface $fileTypeResolver,
+        ParameterDocblockTypeSemanticEqualityChecker $parameterDocblockTypeSemanticEqualityChecker,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
         DocblockAnalyzer $docblockAnalyzer
     ) {
-        $this->fileTypeResolver = $fileTypeResolver;
+        $this->file = $file;
+        $this->parameterDocblockTypeSemanticEqualityChecker = $parameterDocblockTypeSemanticEqualityChecker;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -362,21 +369,14 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
                 continue;
             }
 
-            // FIXME: This resolving won't work properly for array docblock types (e.g. "Foo[]") nor for special cases
-            // such as compound types (e.g. "A|B").
-            $parameterType = $parameter['type'];
-            $parameterType = $this->fileTypeResolver->resolve($parameterType, $globalFunction['startLine']);
+            $isTypeConformant = $this->parameterDocblockTypeSemanticEqualityChecker->isEqual(
+                $parameter,
+                $docblockParameters[$dollarName],
+                $this->file,
+                $globalFunction['startLine']
+            );
 
-            if ($parameter['isVariadic']) {
-                $parameterType .= '[]';
-            }
-
-            $docblockType = $docblockParameters[$dollarName]['type'];
-            $docblockType = $this->fileTypeResolver->resolve($docblockType, $globalFunction['startLine']);
-
-            $isTypeConformant = $this->typeAnalyzer->isTypeConformantWithDocblockType($parameterType, $docblockType);
-
-            if ($isTypeConformant && $parameter['isReference'] === $docblockParameters[$dollarName]['isReference']) {
+            if ($isTypeConformant) {
                 continue;
             }
 

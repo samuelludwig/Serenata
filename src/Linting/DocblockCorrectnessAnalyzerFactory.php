@@ -4,10 +4,9 @@ namespace PhpIntegrator\Linting;
 
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ParameterDocblockTypeSemanticEqualityChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -17,9 +16,9 @@ use PhpIntegrator\Parsing\DocblockParser;
 class DocblockCorrectnessAnalyzerFactory
 {
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var ParameterDocblockTypeSemanticEqualityChecker
      */
-    private $fileTypeResolverFactory;
+    private $parameterDocblockTypeSemanticEqualityChecker;
 
     /**
      * @var ClasslikeInfoBuilder
@@ -42,20 +41,20 @@ class DocblockCorrectnessAnalyzerFactory
     private $docblockAnalyzer;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
-     * @param DocblockParser                   $docblockParser
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param DocblockAnalyzer                 $docblockAnalyzer
+     * @param ParameterDocblockTypeSemanticEqualityChecker $parameterDocblockTypeSemanticEqualityChecker
+     * @param ClasslikeInfoBuilder                         $classlikeInfoBuilder
+     * @param DocblockParser                               $docblockParser
+     * @param TypeAnalyzer                                 $typeAnalyzer
+     * @param DocblockAnalyzer                             $docblockAnalyzer
      */
     public function __construct(
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        ParameterDocblockTypeSemanticEqualityChecker $parameterDocblockTypeSemanticEqualityChecker,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
         DocblockAnalyzer $docblockAnalyzer
     ) {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->parameterDocblockTypeSemanticEqualityChecker = $parameterDocblockTypeSemanticEqualityChecker;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -71,8 +70,9 @@ class DocblockCorrectnessAnalyzerFactory
     public function create(string $file, string $code): DocblockCorrectnessAnalyzer
     {
         return new DocblockCorrectnessAnalyzer(
+            $file,
             $code,
-            $this->fileTypeResolverFactory->create($file),
+            $this->parameterDocblockTypeSemanticEqualityChecker,
             $this->classlikeInfoBuilder,
             $this->docblockParser,
             $this->typeAnalyzer,

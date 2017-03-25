@@ -178,3 +178,9 @@ services:
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
+
+    ParameterDocblockTypeSemanticEqualityChecker:
+        class: PhpIntegrator\Analysis\ParameterDocblockTypeSemanticEqualityChecker
+        arguments:
+            - '@fileTypeResolverFactory'
+            - '@typeAnalyzer'

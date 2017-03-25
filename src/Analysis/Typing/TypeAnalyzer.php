@@ -107,44 +107,6 @@ class TypeAnalyzer implements TypeNormalizerInterface
     }
 
     /**
-     * Returns a boolean indicating if the specified type (i.e. from a type hint) is valid according to the passed
-     * docblock type identifier.
-     *
-     * @param string $type
-     * @param string $typeSpecification
-     *
-     * @return bool
-     */
-    public function isTypeConformantWithDocblockType(string $type, string $typeSpecification): bool
-    {
-        $docblockTypes = $this->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->isTypeConformantWithDocblockTypes($type, $docblockTypes);
-    }
-
-    /**
-     * @param string   $type
-     * @param string[] $docblockTypes
-     *
-     * @return bool
-     */
-    protected function isTypeConformantWithDocblockTypes(string $type, array $docblockTypes): bool
-    {
-        $isPresent = in_array($type, $docblockTypes);
-
-        if (!$isPresent && $type === 'array') {
-            foreach ($docblockTypes as $docblockType) {
-                // The 'type[]' syntax is also valid for the 'array' type hint.
-                if ($this->isArraySyntaxTypeHint($docblockType)) {
-                    return true;
-                }
-            }
-        }
-
-        return $isPresent;
-    }
-
-    /**
      * @param string $type
      *
      * @return bool
