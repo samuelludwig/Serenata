@@ -3,6 +3,7 @@ imports:
     - { resource: Indexing.yml }
     - { resource: Tooltips.yml }
     - { resource: Linting.yml }
+    - { resource: Parsing.yml }
     - { resource: PrettyPrinting.yml }
     - { resource: UserInterface/Command.yml }
 
@@ -10,53 +11,8 @@ parameters:
 
 
 services:
-    lexer:
-        class: PhpParser\Lexer
-        arguments:
-            - usedAttributes:
-                - comments
-                - startLine
-                - endLine
-                - startFilePos
-                - endFilePos
-
-    parser.phpParserFactory:
-        class: PhpParser\ParserFactory
-
-    parser.phpParser:
-        class: PhpParser\Parser
-        factory:
-            - '@parser.phpParserFactory'
-            - 'create'
-        arguments:
-            - !php/const:PhpParser\ParserFactory::PREFER_PHP7
-            - '@lexer'
-
-    parser.cachingParserProxy:
-        class: PhpIntegrator\Parsing\CachingParserProxy
-        arguments:
-            - '@parser.phpParser'
-
-    parser:
-        alias: parser.cachingParserProxy
-
     cache:
         class: Doctrine\Common\Cache\ArrayCache
-
-    partialParser:
-        class: PhpIntegrator\Parsing\PartialParser
-        arguments:
-            - '@parser.phpParserFactory'
-            - '@lexer'
-
-    parserTokenHelper:
-        class: PhpIntegrator\Parsing\ParserTokenHelper
-
-    lastExpressionParser:
-        class: PhpIntegrator\Parsing\LastExpressionParser
-        arguments:
-            - '@partialParser'
-            - '@parserTokenHelper'
 
     signatureHelpRetriever:
         class: PhpIntegrator\SignatureHelp\SignatureHelpRetriever
@@ -66,9 +22,6 @@ services:
             - '@functionFunctionInfoRetriever'
             - '@methodCallMethodInfoRetriever'
             - '@functionParameterPrettyPrinter'
-
-    docblockParser:
-        class: PhpIntegrator\Parsing\DocblockParser
 
     indexDatabase:
         class: PhpIntegrator\Indexing\IndexDatabase
