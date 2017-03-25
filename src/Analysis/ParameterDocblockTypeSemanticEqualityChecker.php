@@ -43,8 +43,6 @@ class ParameterDocblockTypeSemanticEqualityChecker
     {
         $fileTypeResolver = $this->fileTypeResolverFactory->create($filePath);
 
-        // FIXME: This resolving won't work properly for array docblock types (e.g. "Foo[]") nor for special cases
-        // such as compound types (e.g. "A|B").
         $parameterType = $parameter['type'];
         $parameterType = $fileTypeResolver->resolve($parameterType, $line);
 
@@ -53,6 +51,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
         }
 
         $docblockType = $docblockParameter['type'];
+
+        // FIXME: This resolving won't work properly for array docblock types (e.g. "Foo[]") nor for special cases
+        // such as compound types (e.g. "A|B").
         $docblockType = $fileTypeResolver->resolve($docblockType, $line);
 
         $isTypeConformant = $this->isTypeConformantWithDocblockType($parameterType, $docblockType);
