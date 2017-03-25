@@ -283,7 +283,6 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
            $issues[] = [
                'message' => "Docblock for function **{$globalFunction['name']}** is missing @param tag for **{$dollarName}**.",
-
                'start'   => $globalFunction['startPosName'],
                'end'     => $globalFunction['endPosName']
            ];
