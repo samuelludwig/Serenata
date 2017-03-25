@@ -4,6 +4,7 @@ namespace PhpIntegrator\Analysis;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 /**
@@ -43,63 +44,108 @@ class ParameterDocblockTypeSemanticEqualityChecker
     {
         $fileTypeResolver = $this->fileTypeResolverFactory->create($filePath);
 
-        $parameterType = $parameter['type'];
-        $parameterType = $fileTypeResolver->resolve($parameterType, $line);
+        $parameterTypeList = $this->calculateParameterTypeList($parameter, $line, $fileTypeResolver);
+        $docblockTypeList = $this->calculateDocblockParameterTypeList($docblockParameter, $line, $fileTypeResolver);
+
+        if (!$this->doesParameterTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList)) {
+            return false;
+        } elseif ($parameter['isReference'] !== $docblockParameter['isReference']) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array                     $parameter
+     * @param int                       $line
+     * @param FileTypeResolverInterface $fileTypeResolver
+     *
+     * @return array
+     */
+    protected function calculateParameterTypeList(
+        array $parameter,
+        int $line,
+        FileTypeResolverInterface $fileTypeResolver
+    ): array {
+        $baseType = $fileTypeResolver->resolve($parameter['type'], $line);
 
         if ($parameter['isVariadic']) {
-            $parameterType .= '[]';
+            $baseType .= '[]';
         }
 
-        $docblockType = $docblockParameter['type'];
+        $typeList = [$baseType];
 
-        // FIXME: This resolving won't work properly for array docblock types (e.g. "Foo[]") nor for special cases
-        // such as compound types (e.g. "A|B").
-        $docblockType = $fileTypeResolver->resolve($docblockType, $line);
+        if ($parameter['isNullable']) {
+            $typeList[] = 'null';
+        }
 
-        $isTypeConformant = $this->isTypeConformantWithDocblockType($parameterType, $docblockType);
+        return $typeList;
+    }
 
-        if ($isTypeConformant && $parameter['isReference'] === $docblockParameter['isReference']) {
+    /**
+     * @param array                     $docblockParameter
+     * @param int                       $line
+     * @param FileTypeResolverInterface $fileTypeResolver
+     *
+     * @return array
+     */
+    protected function calculateDocblockParameterTypeList(
+        array $docblockParameter,
+        int $line,
+        FileTypeResolverInterface $fileTypeResolver
+    ): array {
+        $typeList = [];
+
+        foreach ($this->typeAnalyzer->getTypesForTypeSpecification($docblockParameter['type']) as $docblockType) {
+            if ($this->typeAnalyzer->isArraySyntaxTypeHint($docblockType)) {
+                $valueType = $this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($docblockType);
+            } else {
+                $valueType = $docblockType;
+            }
+
+            $resolvedValueType = $fileTypeResolver->resolve($valueType, $line);
+
+            if ($this->typeAnalyzer->isArraySyntaxTypeHint($docblockType)) {
+                $resolvedValueType .= '[]';
+            }
+
+            $typeList[] = $resolvedValueType;
+        }
+
+        return $typeList;
+    }
+
+    /**
+     * @param string[] $parameterTypeList
+     * @param string[] $docblockTypeList
+     *
+     * @return bool
+     */
+    protected function doesParameterTypeListMatchDocblockTypeList(
+        array $parameterTypeList,
+        array $docblockTypeList
+    ): bool {
+        if (count(array_intersect($docblockTypeList, $parameterTypeList)) === count($parameterTypeList)) {
             return true;
+        } elseif (!in_array('array', $parameterTypeList, true)) {
+            return false;
         }
 
-        return false;
-    }
+        $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList, function ($docblockType) {
+            return !$this->typeAnalyzer->isArraySyntaxTypeHint($docblockType);
+        });
 
-    /**
-     * Returns a boolean indicating if the specified type (i.e. from a type hint) is valid according to the passed
-     * docblock type identifier.
-     *
-     * @param string $type
-     * @param string $typeSpecification
-     *
-     * @return bool
-     */
-    protected function isTypeConformantWithDocblockType(string $type, string $typeSpecification): bool
-    {
-        $docblockTypes = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
+        $docblockTypesThatAreNotArrayTypes = array_values($docblockTypesThatAreNotArrayTypes);
 
-        return $this->isTypeConformantWithDocblockTypes($type, $docblockTypes);
-    }
-
-    /**
-     * @param string   $type
-     * @param string[] $docblockTypes
-     *
-     * @return bool
-     */
-    protected function isTypeConformantWithDocblockTypes(string $type, array $docblockTypes): bool
-    {
-        $isPresent = in_array($type, $docblockTypes);
-
-        if (!$isPresent && $type === 'array') {
-            foreach ($docblockTypes as $docblockType) {
-                // The 'type[]' syntax is also valid for the 'array' type hint.
-                if ($this->typeAnalyzer->isArraySyntaxTypeHint($docblockType)) {
-                    return true;
+        if (!empty($docblockTypesThatAreNotArrayTypes) && $docblockTypesThatAreNotArrayTypes) {
+            foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypesThatIsNotArrayType) {
+                if ($docblockTypesThatIsNotArrayType !== 'null') {
+                    return false;
                 }
             }
         }
 
-        return $isPresent;
+        return true;
     }
 }
