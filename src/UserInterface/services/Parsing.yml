@@ -1,11 +1,3 @@
-imports:
-    - { resource: Analysis.yml }
-    - { resource: Indexing.yml }
-    - { resource: Tooltips.yml }
-    - { resource: Linting.yml }
-    - { resource: PrettyPrinting.yml }
-    - { resource: UserInterface/Command.yml }
-
 parameters:
 
 
