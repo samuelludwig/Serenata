@@ -18,12 +18,12 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     /**
      * @var ContainerBuilder
      */
-    static $testContainer;
+    private static $testContainer;
 
     /**
      * @var ContainerBuilder
      */
-    static $testContainerBuiltinStructuralElements;
+    private static $testContainerBuiltinStructuralElements;
 
     /**
      * @return ContainerBuilder
