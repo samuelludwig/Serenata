@@ -1,0 +1,10 @@
+parameters:
+
+
+services:
+    cacheClearingEventMediator:
+        class: PhpIntegrator\Mediating\CacheClearingEventMediator
+        arguments:
+            - '@cacheClearingEventMediator.clearableCache'
+            - '@indexer'
+            - !php/const:PhpIntegrator\Indexing\Indexer::INDEXING_SUCCEEDED_EVENT

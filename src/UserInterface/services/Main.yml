@@ -1,11 +1,13 @@
 imports:
     - { resource: Analysis.yml }
     - { resource: Indexing.yml }
-    - { resource: Tooltips.yml }
     - { resource: Linting.yml }
+    - { resource: Mediating.yml }
     - { resource: Parsing.yml }
     - { resource: PrettyPrinting.yml }
-    - { resource: UserInterface/Command.yml }
+    - { resource: SignatureHelp.yml }
+    - { resource: Tooltips.yml }
+    - { resource: UserInterface.yml }
 
 parameters:
 
@@ -14,27 +16,5 @@ services:
     cache:
         class: Doctrine\Common\Cache\ArrayCache
 
-    signatureHelpRetriever:
-        class: PhpIntegrator\SignatureHelp\SignatureHelpRetriever
-        arguments:
-            - '@parser'
-            - '@parserTokenHelper'
-            - '@functionFunctionInfoRetriever'
-            - '@methodCallMethodInfoRetriever'
-            - '@functionParameterPrettyPrinter'
-
-    classlikeInfoBuilderProvider.cachingProxy:
-        class: PhpIntegrator\UserInterface\ClasslikeInfoBuilderProviderCachingProxy
-        arguments:
-            - '@classlikeInfoBuilderProvider.instance'
-            - '@cache'
-
     classlikeInfoBuilderProvider:
         alias: classlikeInfoBuilderProvider.cachingProxy
-
-    cacheClearingEventMediator:
-        class: PhpIntegrator\Mediating\CacheClearingEventMediator
-        arguments:
-            - '@cacheClearingEventMediator.clearableCache'
-            - '@indexer'
-            - !php/const:PhpIntegrator\Indexing\Indexer::INDEXING_SUCCEEDED_EVENT
