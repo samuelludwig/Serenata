@@ -21,11 +21,9 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     static $testContainerBuiltinStructuralElements;
 
     /**
-     * @param bool $indexBuiltinItems
-     *
      * @return ContainerBuilder
      */
-    protected function createTestContainer(bool $indexBuiltinItems = false): ContainerBuilder
+    protected function createApplicationContainer(): ContainerBuilder
     {
         $app = new JsonRpcApplication();
 
@@ -36,6 +34,17 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $container = $refMethod->invoke($app);
 
+        return $container;
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param bool             $indexBuiltinItems
+     *
+     * @return void
+     */
+    protected function prepareContainer(ContainerBuilder $container, bool $indexBuiltinItems): void
+    {
         // Replace some container items for testing purposes.
         $container->setAlias('parser', 'parser.phpParser');
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
@@ -44,8 +53,33 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $success = $container->get('initializeCommand')->initialize($indexBuiltinItems);
 
         $this->assertTrue($success);
+    }
+
+    /**
+     * @return ContainerBuilder
+     */
+    protected function createTestContainer(): ContainerBuilder
+    {
+        $container = $this->createApplicationContainer();
+
+        $this->prepareContainer($container, false);
 
         return $container;
+    }
+
+    /**
+     * @return ContainerBuilder
+     */
+    protected function createTestContainerForBuiltinStructuralElements(): ContainerBuilder
+    {
+        // Indexing builtin items is a fairy large performance hit to run every test, so keep the property static.
+        if (!self::$testContainerBuiltinStructuralElements) {
+            self::$testContainerBuiltinStructuralElements = $this->createApplicationContainer();
+
+            $this->prepareContainer(self::$testContainerBuiltinStructuralElements, true);
+        }
+
+        return self::$testContainerBuiltinStructuralElements;
     }
 
     /**
@@ -69,18 +103,5 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         if (!$mayFail) {
             $this->assertTrue($success);
         }
-    }
-
-    /**
-     * @return ContainerBuilder
-     */
-    protected function createTestContainerForBuiltinStructuralElements(): ContainerBuilder
-    {
-        // Indexing builtin items is a fairy large performance hit to run every test, so keep the property static.
-        if (!self::$testContainerBuiltinStructuralElements) {
-            self::$testContainerBuiltinStructuralElements = $this->createTestContainer(true);
-        }
-
-        return self::$testContainerBuiltinStructuralElements;
     }
 }
