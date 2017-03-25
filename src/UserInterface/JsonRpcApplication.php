@@ -67,6 +67,8 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         echo "Starting socket server on port {$requestHandlingPort}...\n";
 
+        $this->instantiateRequiredServices($this->getContainer());
+
         $loop->run();
 
         fclose($this->stdinStream);
@@ -211,18 +213,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         /** @var Indexer $indexer */
         $indexer = $this->getContainer()->get('indexer');
         $indexer->setProgressStreamingCallback($progressStreamingCallback);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function createContainer(): ContainerBuilder
-    {
-        $value = parent::createContainer();
-
-        $this->instantiateRequiredServices($value);
-
-        return $value;
     }
 
     /**
