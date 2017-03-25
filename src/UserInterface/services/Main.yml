@@ -23,12 +23,6 @@ services:
             - '@methodCallMethodInfoRetriever'
             - '@functionParameterPrettyPrinter'
 
-    indexDatabase:
-        class: PhpIntegrator\Indexing\IndexDatabase
-
-    classlikeInfoBuilderProvider.backend:
-        alias: indexDatabase
-
     classlikeInfoBuilderProvider.cachingProxy:
         class: PhpIntegrator\UserInterface\ClasslikeInfoBuilderProviderCachingProxy
         arguments:

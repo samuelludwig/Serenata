@@ -2,6 +2,12 @@ parameters:
 
 
 services:
+    indexDatabase:
+        class: PhpIntegrator\Indexing\IndexDatabase
+
+    classlikeInfoBuilderProvider.backend:
+        alias: indexDatabase
+
     builtinIndexer:
         class: PhpIntegrator\Indexing\BuiltinIndexer
         arguments:
