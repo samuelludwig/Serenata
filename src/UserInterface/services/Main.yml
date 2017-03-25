@@ -1,11 +1,9 @@
 imports:
+    - { resource: Analysis.yml }
     - { resource: Indexing.yml }
     - { resource: Tooltips.yml }
     - { resource: Linting.yml }
     - { resource: PrettyPrinting.yml }
-    - { resource: Analysis/Typing/Deduction.yml }
-    - { resource: Analysis/Typing/Localization.yml }
-    - { resource: Analysis/Typing/Resolving.yml }
     - { resource: UserInterface/Command.yml }
 
 parameters:
@@ -45,12 +43,6 @@ services:
     cache:
         class: Doctrine\Common\Cache\ArrayCache
 
-    variableScanner:
-        class: PhpIntegrator\Analysis\VariableScanner
-
-    typeAnalyzer:
-        class: PhpIntegrator\Analysis\Typing\TypeAnalyzer
-
     partialParser:
         class: PhpIntegrator\Parsing\PartialParser
         arguments:
@@ -78,71 +70,11 @@ services:
     docblockParser:
         class: PhpIntegrator\Parsing\DocblockParser
 
-    docblockAnalyzer:
-        class: PhpIntegrator\Analysis\DocblockAnalyzer
-
-    constantConverter:
-        class: PhpIntegrator\Analysis\Conversion\ConstantConverter
-
-    classlikeConstantConverter:
-        class: PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter
-
-    propertyConverter:
-        class: PhpIntegrator\Analysis\Conversion\PropertyConverter
-
-    classlikeConverter:
-        class: PhpIntegrator\Analysis\Conversion\ClasslikeConverter
-
-    functionConverter:
-        class: PhpIntegrator\Analysis\Conversion\FunctionConverter
-
-    methodConverter:
-        class: PhpIntegrator\Analysis\Conversion\MethodConverter
-
-    fileClassListProvider.instance:
-        alias: classListProvider
-
-    fileClassListProvider.cachingDecorator:
-        class: PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator
-        arguments:
-            - '@fileClassListProvider.instance'
-
-    fileClassListProvider:
-        alias: fileClassListProvider.cachingDecorator
-
-    filePositionClasslikeDeterminer:
-        class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
-        arguments:
-            - '@fileClassListProvider'
-
-    inheritanceResolver:
-        class: PhpIntegrator\Analysis\Relations\InheritanceResolver
-        arguments:
-            - '@docblockAnalyzer'
-            - '@typeAnalyzer'
-
-    interfaceImplementationResolver:
-        class: PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver
-        arguments:
-            - '@docblockAnalyzer'
-            - '@typeAnalyzer'
-
-    traitUsageResolver:
-        class: PhpIntegrator\Analysis\Relations\TraitUsageResolver
-        arguments:
-            - '@docblockAnalyzer'
-            - '@typeAnalyzer'
-
     indexDatabase:
         class: PhpIntegrator\Indexing\IndexDatabase
 
     classlikeInfoBuilderProvider.backend:
         alias: indexDatabase
-
-    classlikeInfoBuilderProvider.instance:
-        class: PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider
-        arguments:
-            - '@classlikeInfoBuilderProvider.backend'
 
     classlikeInfoBuilderProvider.cachingProxy:
         class: PhpIntegrator\UserInterface\ClasslikeInfoBuilderProviderCachingProxy
@@ -153,100 +85,9 @@ services:
     classlikeInfoBuilderProvider:
         alias: classlikeInfoBuilderProvider.cachingProxy
 
-    classlikeExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingClasslikeExistenceChecker
-        arguments:
-            - '@indexDatabase'
-
-    globalFunctionExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingGlobalFunctionExistenceChecker
-        arguments:
-            - '@indexDatabase'
-
-    globalConstantExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker
-        arguments:
-            - '@indexDatabase'
-
-    globalFunctionsProvider:
-        class: PhpIntegrator\Analysis\GlobalFunctionsProvider
-        arguments:
-            - '@functionConverter'
-            - '@indexDatabase'
-
-    globalConstantsProvider:
-        class: PhpIntegrator\Analysis\GlobalConstantsProvider
-        arguments:
-            - '@constantConverter'
-            - '@indexDatabase'
-
-    classListProvider:
-        class: PhpIntegrator\Analysis\ClassListProvider
-        arguments:
-            - '@classlikeConverter'
-            - '@indexDatabase'
-
-    cacheClearingEventMediator.clearableCache:
-        class: PhpIntegrator\Analysis\ClearableCacheCollection
-        arguments:
-            -
-                - '@classlikeExistenceChecker'
-                - '@globalFunctionExistenceChecker'
-                - '@globalConstantExistenceChecker'
-                - '@fileTypeResolverFactory.cachingDecorator'
-                - '@fileClassListProvider.cachingDecorator'
-
     cacheClearingEventMediator:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
         arguments:
             - '@cacheClearingEventMediator.clearableCache'
             - '@indexer'
             - !php/const:PhpIntegrator\Indexing\Indexer::INDEXING_SUCCEEDED_EVENT
-
-    classlikeInfoBuilder:
-        class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
-        arguments:
-            - '@constantConverter'
-            - '@classlikeConstantConverter'
-            - '@propertyConverter'
-            - '@functionConverter'
-            - '@methodConverter'
-            - '@classlikeConverter'
-            - '@inheritanceResolver'
-            - '@interfaceImplementationResolver'
-            - '@traitUsageResolver'
-            - '@classlikeInfoBuilderProvider'
-            - '@typeAnalyzer'
-
-    functionCallNodeFqsenDeterminer:
-        class: PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer
-        arguments:
-            - '@globalFunctionExistenceChecker'
-
-    constFetchNodeFqsenDeterminer:
-        class: PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer
-        arguments:
-            - '@globalConstantExistenceChecker'
-
-    nameNodeFqsenDeterminer:
-        class: PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer
-        arguments:
-            - '@fileTypeResolverFactory'
-
-    propertyFetchPropertyInfoRetriever:
-        class: PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever
-        arguments:
-            - '@nodeTypeDeducer'
-            - '@classlikeInfoBuilder'
-
-    functionFunctionInfoRetriever:
-        class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
-        arguments:
-            - '@functionCallNodeFqsenDeterminer'
-            - '@globalFunctionsProvider'
-
-    methodCallMethodInfoRetriever:
-        class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever
-        arguments:
-            - '@nodeTypeDeducer'
-            - '@classlikeInfoBuilder'
