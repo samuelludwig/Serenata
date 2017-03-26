@@ -104,7 +104,11 @@ class ParameterDocblockTypeSemanticEqualityChecker
                 $valueType = $docblockType;
             }
 
-            $resolvedValueType = $fileTypeResolver->resolve($valueType, $line);
+            if ($this->typeAnalyzer->isClassType($valueType)) {
+                $resolvedValueType = $fileTypeResolver->resolve($valueType, $line);
+            } else {
+                $resolvedValueType = $valueType;
+            }
 
             if ($this->typeAnalyzer->isArraySyntaxTypeHint($docblockType)) {
                 $resolvedValueType .= '[]';
@@ -126,7 +130,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
         array $parameterTypeList,
         array $docblockTypeList
     ): bool {
-        if (count(array_intersect($docblockTypeList, $parameterTypeList)) === count($parameterTypeList)) {
+        if (empty(array_diff($docblockTypeList, $parameterTypeList)) &&
+            empty(array_diff($parameterTypeList, $docblockTypeList))
+        ) {
             return true;
         } elseif (!in_array('array', $parameterTypeList, true)) {
             return false;
@@ -140,10 +146,18 @@ class ParameterDocblockTypeSemanticEqualityChecker
 
         if (!empty($docblockTypesThatAreNotArrayTypes) && $docblockTypesThatAreNotArrayTypes) {
             foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypesThatIsNotArrayType) {
-                if ($docblockTypesThatIsNotArrayType !== 'null') {
+                if ($docblockTypesThatIsNotArrayType === 'null') {
+                    if (!in_array('null', $parameterTypeList, true)) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
             }
+        }
+
+        if (in_array('null', $parameterTypeList, true) && !in_array('null', $docblockTypeList, true)) {
+            return false;
         }
 
         return true;

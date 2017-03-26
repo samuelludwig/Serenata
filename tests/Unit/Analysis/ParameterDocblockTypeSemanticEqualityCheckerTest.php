@@ -410,7 +410,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     /**
      * @return void
      */
-    public function testNullableArrayType(): void
+    public function testNullableArrayTypeWithMatchingNullabilityPasses(): void
     {
         $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
             ->disableOriginalConstructor()
@@ -438,6 +438,72 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
 
         $fileTypeResolver->method('resolve')->willReturn('array', 'array', 'null');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
+     * @return void
+     */
+    public function testNullableArrayTypeWithMismatchingNullabilityFails(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getTypeAnalyzerMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => true,
+            'type'        => 'array'
+        ];
+
+        $docblockParameter = [
+            'type'        => 'array',
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('array', 'array');
+        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
+     * @return void
+     */
+    public function testArrayTypeWithMismatchingNullabilityFails(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getTypeAnalyzerMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => false,
+            'type'        => 'array'
+        ];
+
+        $docblockParameter = [
+            'type'        => 'array|null',
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('array', 'array');
+        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -542,7 +608,40 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     /**
      * @return void
      */
-    public function testNullableArrayTypeWithMultipleSpecializations(): void
+    public function testArrayTypeAllowsMultipleSpecializationsButFailsWhenAnotherTypeIsPresentAndThatTypeIsNull(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getTypeAnalyzerMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => false,
+            'type'        => 'array'
+        ];
+
+        $docblockParameter = [
+            'type'        => 'int[]|float[]|null',
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float', 'null');
+        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
+     * @return void
+     */
+    public function testNullableArrayTypeAllowsMultipleSpecializations(): void
     {
         $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
             ->disableOriginalConstructor()
@@ -570,6 +669,39 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
 
         $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float', 'null');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
+     * @return void
+     */
+    public function testNullableArrayTypeAllowsMultipleSpecializationsButFailsWhenNullIsMissing(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getTypeAnalyzerMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => true,
+            'type'        => 'array'
+        ];
+
+        $docblockParameter = [
+            'type'        => 'int[]|float[]',
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float');
+        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
