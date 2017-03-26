@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Utility\SpecialDocblockType;
+use PhpIntegrator\Utility\DocblockTyping\SpecialDocblockTypeString;
 
 /**
  * Provides functionality for analyzing type names.
@@ -34,24 +34,24 @@ class TypeAnalyzer implements TypeNormalizerInterface
     public function isSpecialType(string $type): bool
     {
         $isReservedKeyword = in_array($type, [
-            SpecialDocblockType::STRING_,
-            SpecialDocblockType::INT_,
-            SpecialDocblockType::BOOL_,
-            SpecialDocblockType::FLOAT_,
-            SpecialDocblockType::OBJECT_,
-            SpecialDocblockType::MIXED_,
-            SpecialDocblockType::ARRAY_,
-            SpecialDocblockType::RESOURCE_,
-            SpecialDocblockType::VOID_,
-            SpecialDocblockType::NULL_,
-            SpecialDocblockType::CALLABLE_,
-            SpecialDocblockType::FALSE_,
-            SpecialDocblockType::TRUE_,
-            SpecialDocblockType::SELF_,
-            SpecialDocblockType::STATIC_,
-            SpecialDocblockType::PARENT_,
-            SpecialDocblockType::THIS_,
-            SpecialDocblockType::ITERABLE_
+            SpecialDocblockTypeString::STRING_,
+            SpecialDocblockTypeString::INT_,
+            SpecialDocblockTypeString::BOOL_,
+            SpecialDocblockTypeString::FLOAT_,
+            SpecialDocblockTypeString::OBJECT_,
+            SpecialDocblockTypeString::MIXED_,
+            SpecialDocblockTypeString::ARRAY_,
+            SpecialDocblockTypeString::RESOURCE_,
+            SpecialDocblockTypeString::VOID_,
+            SpecialDocblockTypeString::NULL_,
+            SpecialDocblockTypeString::CALLABLE_,
+            SpecialDocblockTypeString::FALSE_,
+            SpecialDocblockTypeString::TRUE_,
+            SpecialDocblockTypeString::SELF_,
+            SpecialDocblockTypeString::STATIC_,
+            SpecialDocblockTypeString::PARENT_,
+            SpecialDocblockTypeString::THIS_,
+            SpecialDocblockTypeString::ITERABLE_
         ]);
 
         return $isReservedKeyword || $this->isArraySyntaxTypeHint($type);
@@ -132,7 +132,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeSelfWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, SpecialDocblockType::SELF_, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeString::SELF_, $newType);
     }
 
     /**
@@ -148,7 +148,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeStaticWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, SpecialDocblockType::STATIC_, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeString::STATIC_, $newType);
     }
 
     /**
@@ -164,7 +164,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeThisWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, SpecialDocblockType::THIS_, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeString::THIS_, $newType);
     }
 
     /**

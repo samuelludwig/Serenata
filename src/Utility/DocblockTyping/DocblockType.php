@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Utility\DocblockTyping;
 
-use PhpIntegrator\Utility\SpecialDocblockType;
-
 /**
  * Represents a docblock type.
  *
@@ -52,7 +50,7 @@ class DocblockType
      */
     public static function createFromString(string $type)
     {
-        if ($type === SpecialDocblockType::ARRAY_ || (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type) === 1)) {
+        if ($type === SpecialDocblockTypeString::ARRAY_ || (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type) === 1)) {
             return new ArrayDocblockType($type);
         }
 

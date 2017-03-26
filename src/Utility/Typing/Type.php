@@ -45,6 +45,17 @@ class Type
      */
     public static function createFromString(string $type)
     {
-        return new static($type);
+        $isReservedKeyword = in_array($type, [
+            SpecialTypeString::STRING_,
+            SpecialTypeString::INT_,
+            SpecialTypeString::BOOL_,
+            SpecialTypeString::FLOAT_,
+            SpecialTypeString::ARRAY_,
+            SpecialTypeString::VOID_,
+            SpecialTypeString::CALLABLE_,
+            SpecialTypeString::ITERABLE_
+        ], true);
+
+        return $isReservedKeyword ? new SpecialType($type) : new ClassType($type);
     }
 }
