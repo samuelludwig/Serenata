@@ -135,11 +135,21 @@ class ParameterDocblockTypeSemanticEqualityChecker
             empty(array_diff($parameterTypeList, $docblockTypeList))
         ) {
             return true;
-        } elseif (in_array(SpecialDocblockType::ARRAY_, $parameterTypeList, true)) {
+        } elseif ($this->doesTypeListHaveArrayType($parameterTypeList)) {
             return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         }
 
         return false;
+    }
+
+    /**
+     * @param array $typeList
+     *
+     * @return bool
+     */
+    protected function doesTypeListHaveArrayType(array $typeList): bool
+    {
+        return in_array(SpecialDocblockType::ARRAY_, $typeList, true);
     }
 
     /**
