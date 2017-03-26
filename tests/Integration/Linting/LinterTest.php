@@ -550,7 +550,7 @@ class LinterTest extends AbstractIntegrationTest
                 'message' => 'Docblock for function **some_function_parameter_incorrect_type** has incorrect @param type for **$param1**.',
                 'start'   => 334,
                 'end'     => 335
-            ],
+            ]
         ], $output['errors']);
     }
 
