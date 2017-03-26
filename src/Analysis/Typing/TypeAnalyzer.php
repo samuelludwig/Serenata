@@ -47,24 +47,24 @@ class TypeAnalyzer implements TypeNormalizerInterface
     public function isSpecialType(string $type): bool
     {
         $isReservedKeyword = in_array($type, [
-            'string',
-            'int',
-            'bool',
-            'float',
-            'object',
-            'mixed',
-            'array',
-            'resource',
-            'void',
-            'null',
-            'callable',
-            'false',
-            'true',
-            'self',
-            'static',
-            'parent',
-            '$this',
-            'iterable'
+            SpecialDocblockType::STRING_,
+            SpecialDocblockType::INT_,
+            SpecialDocblockType::BOOL_,
+            SpecialDocblockType::FLOAT_,
+            SpecialDocblockType::OBJECT_,
+            SpecialDocblockType::MIXED_,
+            SpecialDocblockType::ARRAY_,
+            SpecialDocblockType::RESOURCE_,
+            SpecialDocblockType::VOID_,
+            SpecialDocblockType::NULL_,
+            SpecialDocblockType::CALLABLE_,
+            SpecialDocblockType::FALSE_,
+            SpecialDocblockType::TRUE_,
+            SpecialDocblockType::SELF_,
+            SpecialDocblockType::STATIC_,
+            SpecialDocblockType::PARENT_,
+            SpecialDocblockType::THIS_,
+            SpecialDocblockType::ITERABLE_
         ]);
 
         return $isReservedKeyword || $this->isArraySyntaxTypeHint($type);
