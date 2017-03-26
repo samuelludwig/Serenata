@@ -10,7 +10,7 @@ class Baz {}
  * à couple of Unicode chàràcters
  *
  * @param mixed    $param1
- * @param Foo|null $param2
+ * @param Foo      $param2
  * @param Bar      $param3
  * @param int[]    $param4
  */
