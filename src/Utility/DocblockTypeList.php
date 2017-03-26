@@ -6,6 +6,8 @@ use PhpIntegrator\Utility\ImmutableSet;
 
 /**
  * Represents a list of docblock types.
+ *
+ * This is a value object and immutable.
  */
 final class DocblockTypeList extends ImmutableSet
 {
