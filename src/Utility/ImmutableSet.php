@@ -2,6 +2,9 @@
 
 namespace PhpIntegrator\Utility;
 
+/**
+ * Represents an immutable set of values.
+ */
 class ImmutableSet
 {
     /**
