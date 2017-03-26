@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
@@ -28,18 +26,11 @@ class ParameterDocblockTypeSemanticEqualityChecker
     private $fileTypeResolverFactory;
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeAnalyzer                     $typeAnalyzer
      */
-    public function __construct(FileTypeResolverFactoryInterface $fileTypeResolverFactory, TypeAnalyzer $typeAnalyzer)
+    public function __construct(FileTypeResolverFactoryInterface $fileTypeResolverFactory)
     {
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**

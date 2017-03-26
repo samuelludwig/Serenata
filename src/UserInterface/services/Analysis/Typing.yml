@@ -11,4 +11,3 @@ services:
         class: PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker
         arguments:
             - '@fileTypeResolverFactory'
-            - '@typeAnalyzer'
