@@ -12,7 +12,6 @@ use PhpIntegrator\Utility\DocblockTyping\ArrayDocblockType;
 use PhpIntegrator\Utility\DocblockTyping\SpecialDocblockTypeString;
 
 use PhpIntegrator\Utility\Typing\TypeList;
-use PhpIntegrator\Utility\Typing\ClassType;
 use PhpIntegrator\Utility\Typing\SpecialTypeString;
 
 /**
