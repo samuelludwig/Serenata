@@ -9,6 +9,7 @@ use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Utility\DocblockTyping\DocblockType;
 use PhpIntegrator\Utility\DocblockTyping\DocblockTypeList;
+use PhpIntegrator\Utility\DocblockTyping\ClassDocblockType;
 use PhpIntegrator\Utility\DocblockTyping\ArrayDocblockType;
 use PhpIntegrator\Utility\DocblockTyping\SpecialDocblockTypeString;
 
@@ -116,7 +117,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
                 $valueType = $docblockType;
             }
 
-            if ($this->typeAnalyzer->isClassType($valueType)) {
+            if ($valueType instanceof ClassDocblockType) {
                 $resolvedValueType = $fileTypeResolver->resolve($valueType, $line);
             } else {
                 $resolvedValueType = $valueType;

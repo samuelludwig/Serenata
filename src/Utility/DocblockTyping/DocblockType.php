@@ -54,6 +54,27 @@ class DocblockType
             return new ArrayDocblockType($type);
         }
 
-        return new static($type);
+        $specialTypes = [
+            SpecialDocblockTypeString::STRING_,
+            SpecialDocblockTypeString::INT_,
+            SpecialDocblockTypeString::BOOL_,
+            SpecialDocblockTypeString::FLOAT_,
+            SpecialDocblockTypeString::OBJECT_,
+            SpecialDocblockTypeString::MIXED_,
+            SpecialDocblockTypeString::ARRAY_,
+            SpecialDocblockTypeString::RESOURCE_,
+            SpecialDocblockTypeString::VOID_,
+            SpecialDocblockTypeString::NULL_,
+            SpecialDocblockTypeString::CALLABLE_,
+            SpecialDocblockTypeString::FALSE_,
+            SpecialDocblockTypeString::TRUE_,
+            SpecialDocblockTypeString::SELF_,
+            SpecialDocblockTypeString::STATIC_,
+            SpecialDocblockTypeString::PARENT_,
+            SpecialDocblockTypeString::THIS_,
+            SpecialDocblockTypeString::ITERABLE_
+        ];
+
+        return in_array($type, $specialTypes, true) ? new SpecialDocblockType($type) : new ClassDocblockType($type);
     }
 }

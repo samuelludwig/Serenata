@@ -7,7 +7,7 @@ namespace PhpIntegrator\Utility\DocblockTyping;
  *
  * {@inheritDoc}
  */
-class ArrayDocblockType extends DocblockType
+class ArrayDocblockType extends SpecialDocblockType
 {
     /**
      * @return DocblockType
