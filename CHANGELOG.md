@@ -26,6 +26,29 @@
 * When linting docblock parameters, the linting of more complex types such as compound types containing multiple array specializations and null has substantially improved and should no longer complain about valid combinations of these.
 * The docblock parser will now strip invalid leading and trailing bars for compound types (e.g. `@param string| $test` becomes `@param string $test`).
   * No one should actually be writing these, but it ensures other parts of the code base can assume that compound types actually contain multiple non-empty types.
+* When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35):
+
+```php
+// For interfaces
+interface I {}
+class A implements I {}
+class B implements I {}
+
+/**
+ * @param A|B $i <-- Ok, A and B both implement I and pass the type hint.
+ */
+function foo(I $i) {}
+
+// For classes
+class C {}
+class A extends C {}
+class B extends C {}
+
+/**
+ * @param A|B $c <-- Ok, A and B both extend C and pass the type hint.
+ */
+function foo(C $c) {}
+```
 
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).

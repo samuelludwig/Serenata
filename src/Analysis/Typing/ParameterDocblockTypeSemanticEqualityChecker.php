@@ -2,6 +2,10 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
+use UnexpectedValueException;
+
+use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
@@ -11,7 +15,9 @@ use PhpIntegrator\Utility\DocblockTyping\ClassDocblockType;
 use PhpIntegrator\Utility\DocblockTyping\ArrayDocblockType;
 use PhpIntegrator\Utility\DocblockTyping\SpecialDocblockTypeString;
 
+use PhpIntegrator\Utility\Typing\Type;
 use PhpIntegrator\Utility\Typing\TypeList;
+use PhpIntegrator\Utility\Typing\ClassType;
 use PhpIntegrator\Utility\Typing\SpecialTypeString;
 
 /**
@@ -25,11 +31,20 @@ class ParameterDocblockTypeSemanticEqualityChecker
     private $fileTypeResolverFactory;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @var ClasslikeInfoBuilder
      */
-    public function __construct(FileTypeResolverFactoryInterface $fileTypeResolverFactory)
-    {
+    private $classlikeInfoBuilder;
+
+    /**
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
+     */
+    public function __construct(
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        ClasslikeInfoBuilder $classlikeInfoBuilder
+    ) {
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
     /**
@@ -139,9 +154,23 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         } elseif ($parameterTypeList->hasStringType(SpecialTypeString::ARRAY_)) {
             return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
+        } elseif ($this->doesParameterTypeListContainClassType($parameterTypeList)) {
+            return $this->doesParameterClassTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         }
 
         return false;
+    }
+
+    /**
+     * @param TypeList $typeList
+     *
+     * @return bool
+     */
+    protected function doesParameterTypeListContainClassType(TypeList $typeList): bool
+    {
+        return !empty(array_filter($typeList->toArray(), function (Type $type) {
+            return $type instanceof ClassType;
+        }));
     }
 
     /**
@@ -179,5 +208,93 @@ class ParameterDocblockTypeSemanticEqualityChecker
         }
 
         return true;
+    }
+
+    /**
+     * @param TypeList         $parameterTypeList
+     * @param DocblockTypeList $docblockTypeList
+     *
+     * @return bool
+     */
+    protected function doesParameterClassTypeListMatchDocblockTypeList(
+        TypeList $parameterTypeList,
+        DocblockTypeList $docblockTypeList
+    ): bool {
+        $docblockTypesThatAreNotClassTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+            return !$docblockType instanceof ClassDocblockType;
+        });
+
+        $docblockTypesThatAreNotClassTypes = array_values($docblockTypesThatAreNotClassTypes);
+
+        if (!empty($docblockTypesThatAreNotClassTypes)) {
+            foreach ($docblockTypesThatAreNotClassTypes as $docblockTypeThatIsNotClassType) {
+                if ($docblockTypeThatIsNotClassType->toString() === SpecialDocblockTypeString::NULL_) {
+                    if (!$parameterTypeList->hasStringType(SpecialTypeString::NULL_)) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) &&
+            !$docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
+        ) {
+            return false;
+        }
+
+        $docblockTypesThatAreClassTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+            return $docblockType instanceof ClassDocblockType;
+        });
+
+        $parameterClassTypes = array_filter($parameterTypeList->toArray(), function (Type $type) {
+            return $type instanceof ClassType;
+        });
+
+        $parameterClassType = array_shift($parameterClassTypes);
+
+        foreach ($docblockTypesThatAreClassTypes as $docblockTypeThatIsClassType) {
+            if (!$this->doesDocblockClassSatisfyTypeParameterClassType($docblockTypeThatIsClassType, $parameterClassType)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Indicates if the docblock satisfies the parameter type (hint).
+     *
+     * Satisfaction is achieved if either the parameter type matches the docblock type or if the docblock type
+     * specializes the parameter type (i.e. it is a subclass of it or implements it as interface).
+     *
+     * @param ClassDocblockType $docblockType
+     * @param ClassType         $type
+     *
+     * @return bool
+     */
+    protected function doesDocblockClassSatisfyTypeParameterClassType(
+        ClassDocblockType $docblockType,
+        ClassType $type
+    ): bool {
+        if ($docblockType->toString() === $type->toString()) {
+            return true;
+        }
+
+        try {
+            $typeClassInfo = $this->classlikeInfoBuilder->getClasslikeInfo($type->toString());
+            $docblockTypeClassInfo = $this->classlikeInfoBuilder->getClasslikeInfo($docblockType->toString());
+        } catch (UnexpectedValueException $e) {
+            return false;
+        }
+
+        if (in_array($typeClassInfo['name'], $docblockTypeClassInfo['parents'], true)) {
+            return true;
+        } elseif (in_array($typeClassInfo['name'], $docblockTypeClassInfo['interfaces'], true)) {
+            return true;
+        }
+
+        return false;
     }
 }
