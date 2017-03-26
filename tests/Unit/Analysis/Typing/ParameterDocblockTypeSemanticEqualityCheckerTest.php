@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis;
+namespace PhpIntegrator\Tests\Unit\Analysis\Typing;
 
-use PhpIntegrator\Analysis\ParameterDocblockTypeSemanticEqualityChecker;
+use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 

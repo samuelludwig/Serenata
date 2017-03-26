@@ -1,7 +1,5 @@
 imports:
-    - { resource: Analysis/Typing/Deduction.yml }
-    - { resource: Analysis/Typing/Localization.yml }
-    - { resource: Analysis/Typing/Resolving.yml }
+    - { resource: Analysis/Typing.yml }
 
 parameters:
 
@@ -178,9 +176,3 @@ services:
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
-
-    ParameterDocblockTypeSemanticEqualityChecker:
-        class: PhpIntegrator\Analysis\ParameterDocblockTypeSemanticEqualityChecker
-        arguments:
-            - '@fileTypeResolverFactory'
-            - '@typeAnalyzer'
