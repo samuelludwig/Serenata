@@ -8,8 +8,11 @@ use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Utility\TypeList;
-use PhpIntegrator\Utility\DocblockTypeList;
 use PhpIntegrator\Utility\SpecialDocblockType;
+
+use PhpIntegrator\Utility\DocblockTyping\DocblockType;
+use PhpIntegrator\Utility\DocblockTyping\DocblockTypeList;
+use PhpIntegrator\Utility\DocblockTyping\ArrayDocblockType;
 
 /**
  * Checks if a specified (normal parameter) type is semantically equal to a docblock type specification.
@@ -84,7 +87,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
             $typeList[] = SpecialDocblockType::NULL_;
         }
 
-        return new TypeList(...$typeList);
+        return TypeList::createFromStringTypeList(...$typeList);
     }
 
     /**
@@ -101,9 +104,12 @@ class ParameterDocblockTypeSemanticEqualityChecker
     ): DocblockTypeList {
         $typeList = [];
 
-        foreach ($this->typeAnalyzer->getTypesForTypeSpecification($docblockParameter['type']) as $docblockType) {
-            if ($this->typeAnalyzer->isArraySyntaxTypeHint($docblockType)) {
-                $valueType = $this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($docblockType);
+        $docblockTypeList = DocblockTypeList::createFromDocblockTypeSpecification($docblockParameter['type']);
+
+        /** @var DocblockType $docblockType */
+        foreach ($docblockTypeList as $docblockType) {
+            if ($docblockType instanceof ArrayDocblockType) {
+                $valueType = $docblockType->getValueTypeFromArrayType();
             } else {
                 $valueType = $docblockType;
             }
@@ -114,14 +120,14 @@ class ParameterDocblockTypeSemanticEqualityChecker
                 $resolvedValueType = $valueType;
             }
 
-            if ($this->typeAnalyzer->isArraySyntaxTypeHint($docblockType)) {
+            if ($docblockType instanceof ArrayDocblockType) {
                 $resolvedValueType .= '[]';
             }
 
             $typeList[] = $resolvedValueType;
         }
 
-        return new DocblockTypeList(...$typeList);
+        return DocblockTypeList::createFromStringTypeList(...$typeList);
     }
 
     /**
@@ -134,9 +140,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
         TypeList $parameterTypeList,
         DocblockTypeList $docblockTypeList
     ): bool {
-        if ($docblockTypeList->equals($parameterTypeList)) {
+        if ($docblockTypeList->equals(DocblockTypeList::createFromTypeList($parameterTypeList))) {
             return true;
-        } elseif ($parameterTypeList->has(SpecialDocblockType::ARRAY_)) {
+        } elseif ($parameterTypeList->hasStringType(SpecialDocblockType::ARRAY_)) {
             return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         }
 
@@ -153,16 +159,16 @@ class ParameterDocblockTypeSemanticEqualityChecker
         TypeList $parameterTypeList,
         DocblockTypeList $docblockTypeList
     ): bool {
-        $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList->toArray(), function ($docblockType) {
-            return !$this->typeAnalyzer->isArraySyntaxTypeHint($docblockType);
+        $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+            return !$docblockType instanceof ArrayDocblockType;
         });
 
         $docblockTypesThatAreNotArrayTypes = array_values($docblockTypesThatAreNotArrayTypes);
 
-        if (!empty($docblockTypesThatAreNotArrayTypes) && $docblockTypesThatAreNotArrayTypes) {
+        if (!empty($docblockTypesThatAreNotArrayTypes)) {
             foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypesThatIsNotArrayType) {
-                if ($docblockTypesThatIsNotArrayType === SpecialDocblockType::NULL_) {
-                    if (!$parameterTypeList->has(SpecialDocblockType::NULL_)) {
+                if ($docblockTypesThatIsNotArrayType->toString() === SpecialDocblockType::NULL_) {
+                    if (!$parameterTypeList->hasStringType(SpecialDocblockType::NULL_)) {
                         return false;
                     }
                 } else {
@@ -171,7 +177,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
             }
         }
 
-        if ($parameterTypeList->has(SpecialDocblockType::NULL_) && !$docblockTypeList->has(SpecialDocblockType::NULL_)) {
+        if ($parameterTypeList->hasStringType(SpecialDocblockType::NULL_) &&
+            !$docblockTypeList->hasStringType(SpecialDocblockType::NULL_)
+        ) {
             return false;
         }
 

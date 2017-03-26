@@ -2,10 +2,13 @@
 
 namespace PhpIntegrator\Utility;
 
+use ArrayIterator;
+use IteratorAggregate;
+
 /**
  * Represents an immutable set of values.
  */
-class ImmutableSet
+class ImmutableSet implements IteratorAggregate
 {
     /**
      * @var mixed[]
@@ -35,7 +38,7 @@ class ImmutableSet
      */
     public function has($element): bool
     {
-        return in_array($element, $this->elements, true);
+        return in_array($element, $this->elements, $this->isStrict());
     }
 
     /**
@@ -48,5 +51,23 @@ class ImmutableSet
         return
             empty(array_diff($this->toArray(), $other->toArray())) &&
             empty(array_diff($other->toArray(), $this->toArray()));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->elements);
+    }
+
+    /**
+     * @return bool
+     *
+     * @api
+     */
+    protected function isStrict(): bool
+    {
+        return true;
     }
 }
