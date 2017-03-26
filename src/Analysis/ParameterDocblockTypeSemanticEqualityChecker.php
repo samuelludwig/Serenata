@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Analysis;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use PhpIntegrator\Analysis\Typing\SpecialDocblockType;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
@@ -77,7 +78,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
         $typeList = [$baseType];
 
         if ($parameter['isNullable']) {
-            $typeList[] = 'null';
+            $typeList[] = SpecialDocblockType::NULL_;
         }
 
         return $typeList;
@@ -134,7 +135,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
             empty(array_diff($parameterTypeList, $docblockTypeList))
         ) {
             return true;
-        } elseif (in_array('array', $parameterTypeList, true)) {
+        } elseif (in_array(SpecialDocblockType::ARRAY_, $parameterTypeList, true)) {
             return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         }
 
@@ -159,8 +160,8 @@ class ParameterDocblockTypeSemanticEqualityChecker
 
         if (!empty($docblockTypesThatAreNotArrayTypes) && $docblockTypesThatAreNotArrayTypes) {
             foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypesThatIsNotArrayType) {
-                if ($docblockTypesThatIsNotArrayType === 'null') {
-                    if (!in_array('null', $parameterTypeList, true)) {
+                if ($docblockTypesThatIsNotArrayType === SpecialDocblockType::NULL_) {
+                    if (!in_array(SpecialDocblockType::NULL_, $parameterTypeList, true)) {
                         return false;
                     }
                 } else {
@@ -169,7 +170,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
             }
         }
 
-        if (in_array('null', $parameterTypeList, true) && !in_array('null', $docblockTypeList, true)) {
+        if (in_array(SpecialDocblockType::NULL_, $parameterTypeList, true) &&
+            !in_array(SpecialDocblockType::NULL_, $docblockTypeList, true)
+        ) {
             return false;
         }
 
