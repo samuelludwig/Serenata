@@ -161,8 +161,8 @@ class ParameterDocblockTypeSemanticEqualityChecker
         $docblockTypesThatAreNotArrayTypes = array_values($docblockTypesThatAreNotArrayTypes);
 
         if (!empty($docblockTypesThatAreNotArrayTypes)) {
-            foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypesThatIsNotArrayType) {
-                if ($docblockTypesThatIsNotArrayType->toString() === SpecialDocblockTypeString::NULL_) {
+            foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypeThatIsNotArrayType) {
+                if ($docblockTypeThatIsNotArrayType->toString() === SpecialDocblockTypeString::NULL_) {
                     if (!$parameterTypeList->hasStringType(SpecialTypeString::NULL_)) {
                         return false;
                     }
