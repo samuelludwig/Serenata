@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace PhpIntegrator\Utility;
 
 use PhpIntegrator\Utility\ImmutableSet;
 

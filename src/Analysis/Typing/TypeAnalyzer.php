@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Utility\SpecialDocblockType;
+
 /**
  * Provides functionality for analyzing type names.
  */

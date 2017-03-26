@@ -3,10 +3,13 @@
 namespace PhpIntegrator\Analysis\Typing;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\SpecialDocblockType;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+
+use PhpIntegrator\Utility\TypeList;
+use PhpIntegrator\Utility\DocblockTypeList;
+use PhpIntegrator\Utility\SpecialDocblockType;
 
 /**
  * Checks if a specified (normal parameter) type is semantically equal to a docblock type specification.

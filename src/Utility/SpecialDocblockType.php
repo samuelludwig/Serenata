@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace PhpIntegrator\Utility;
 
 /**
  * Enumeration of special docblock types.
