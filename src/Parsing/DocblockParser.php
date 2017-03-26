@@ -407,7 +407,7 @@ class DocblockParser
                 }
 
                 $params[$variableName] = [
-                    'type'        => $type,
+                    'type'        => trim($type, '|'),
                     'description' => $description,
                     'isVariadic'  => $isVariadic,
                     'isReference' => $isReference

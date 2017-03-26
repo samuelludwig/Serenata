@@ -149,4 +149,26 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
             ]
         ], $result['throws']);
     }
+
+    /**
+     * @return void
+     */
+    public function testParamTagWithMissingElementInCompoundTypeIsIgnored(): void
+    {
+        $parser = new DocblockParser();
+        $result = $parser->parse('
+            /**
+             * @param string| $test
+             */
+        ', [DocblockParser::PARAM_TYPE], '');
+
+        $this->assertEquals([
+            '$test' => [
+                'type'        => 'string',
+                'description' => null,
+                'isVariadic'  => false,
+                'isReference' => false
+            ]
+        ], $result['params']);
+    }
 }
