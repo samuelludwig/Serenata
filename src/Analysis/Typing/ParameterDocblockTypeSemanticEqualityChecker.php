@@ -191,18 +191,14 @@ class ParameterDocblockTypeSemanticEqualityChecker
 
         if (!empty($docblockTypesThatAreNotArrayTypes)) {
             foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypeThatIsNotArrayType) {
-                if ($docblockTypeThatIsNotArrayType->toString() === SpecialDocblockTypeString::NULL_) {
-                    if (!$parameterTypeList->hasStringType(SpecialTypeString::NULL_)) {
-                        return false;
-                    }
-                } else {
+                if ($docblockTypeThatIsNotArrayType->toString() !== SpecialDocblockTypeString::NULL_) {
                     return false;
                 }
             }
         }
 
-        if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) &&
-            !$docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
+        if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) !==
+            $docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
         ) {
             return false;
         }
@@ -228,18 +224,14 @@ class ParameterDocblockTypeSemanticEqualityChecker
 
         if (!empty($docblockTypesThatAreNotClassTypes)) {
             foreach ($docblockTypesThatAreNotClassTypes as $docblockTypeThatIsNotClassType) {
-                if ($docblockTypeThatIsNotClassType->toString() === SpecialDocblockTypeString::NULL_) {
-                    if (!$parameterTypeList->hasStringType(SpecialTypeString::NULL_)) {
-                        return false;
-                    }
-                } else {
+                if ($docblockTypeThatIsNotClassType->toString() !== SpecialDocblockTypeString::NULL_) {
                     return false;
                 }
             }
         }
 
-        if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) &&
-            !$docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
+        if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) !==
+            $docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
         ) {
             return false;
         }
