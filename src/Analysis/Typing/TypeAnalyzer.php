@@ -20,21 +20,6 @@ class TypeAnalyzer implements TypeNormalizerInterface
     protected const ARRAY_TYPE_HINT_REGEX = '/^(.+)\[\]$/';
 
     /**
-     * @var string
-     */
-    protected const TYPE_SELF = 'self';
-
-    /**
-     * @var string
-     */
-    protected const TYPE_STATIC = 'static';
-
-    /**
-     * @var string
-     */
-    protected const TYPE_THIS = '$this';
-
-    /**
      * Indicates if a type is "special", i.e. it is not an actual class type, but rather a basic type (e.g. "int",
      * "bool", ...) or another special type (e.g. "$this", "false", ...).
      *
@@ -145,7 +130,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeSelfWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, self::TYPE_SELF, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockType::SELF_, $newType);
     }
 
     /**
@@ -161,7 +146,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeStaticWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, self::TYPE_STATIC, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockType::STATIC_, $newType);
     }
 
     /**
@@ -177,7 +162,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeThisWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, self::TYPE_THIS, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockType::THIS_, $newType);
     }
 
     /**
