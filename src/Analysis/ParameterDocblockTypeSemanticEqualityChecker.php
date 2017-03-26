@@ -134,10 +134,23 @@ class ParameterDocblockTypeSemanticEqualityChecker
             empty(array_diff($parameterTypeList, $docblockTypeList))
         ) {
             return true;
-        } elseif (!in_array('array', $parameterTypeList, true)) {
-            return false;
+        } elseif (in_array('array', $parameterTypeList, true)) {
+            return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         }
 
+        return false;
+    }
+
+    /**
+     * @param string[] $parameterTypeList
+     * @param string[] $docblockTypeList
+     *
+     * @return bool
+     */
+    protected function doesParameterArrayTypeListMatchDocblockTypeList(
+        array $parameterTypeList,
+        array $docblockTypeList
+    ): bool {
         $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList, function ($docblockType) {
             return !$this->typeAnalyzer->isArraySyntaxTypeHint($docblockType);
         });
