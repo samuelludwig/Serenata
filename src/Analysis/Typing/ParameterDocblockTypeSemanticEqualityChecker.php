@@ -183,27 +183,17 @@ class ParameterDocblockTypeSemanticEqualityChecker
         TypeList $parameterTypeList,
         DocblockTypeList $docblockTypeList
     ): bool {
-        $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
-            return !$docblockType instanceof ArrayDocblockType;
-        });
-
-        $docblockTypesThatAreNotArrayTypes = array_values($docblockTypesThatAreNotArrayTypes);
-
-        if (!empty($docblockTypesThatAreNotArrayTypes)) {
-            foreach ($docblockTypesThatAreNotArrayTypes as $docblockTypeThatIsNotArrayType) {
-                if ($docblockTypeThatIsNotArrayType->toString() !== SpecialDocblockTypeString::NULL_) {
-                    return false;
-                }
-            }
-        }
-
         if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) !==
             $docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
         ) {
             return false;
         }
 
-        return true;
+        $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+            return (!$docblockType instanceof ArrayDocblockType && $docblockType->toString() !== SpecialDocblockTypeString::NULL_);
+        });
+
+        return empty($docblockTypesThatAreNotArrayTypes);
     }
 
     /**
@@ -216,23 +206,17 @@ class ParameterDocblockTypeSemanticEqualityChecker
         TypeList $parameterTypeList,
         DocblockTypeList $docblockTypeList
     ): bool {
-        $docblockTypesThatAreNotClassTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
-            return !$docblockType instanceof ClassDocblockType;
-        });
-
-        $docblockTypesThatAreNotClassTypes = array_values($docblockTypesThatAreNotClassTypes);
-
-        if (!empty($docblockTypesThatAreNotClassTypes)) {
-            foreach ($docblockTypesThatAreNotClassTypes as $docblockTypeThatIsNotClassType) {
-                if ($docblockTypeThatIsNotClassType->toString() !== SpecialDocblockTypeString::NULL_) {
-                    return false;
-                }
-            }
-        }
-
         if ($parameterTypeList->hasStringType(SpecialTypeString::NULL_) !==
             $docblockTypeList->hasStringType(SpecialDocblockTypeString::NULL_)
         ) {
+            return false;
+        }
+
+        $docblockTypesThatAreNotClassTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+            return (!$docblockType instanceof ClassDocblockType && $docblockType->toString() !== SpecialDocblockTypeString::NULL_);
+        });
+
+        if (!empty($docblockTypesThatAreNotClassTypes)) {
             return false;
         }
 
