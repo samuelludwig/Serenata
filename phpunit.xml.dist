@@ -16,8 +16,11 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="PHP Integrator Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+        <testsuite name="PHP Integrator Unit Test Suite">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="PHP Integrator Integration Test Suite">
+            <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>
