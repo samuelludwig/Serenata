@@ -26,7 +26,7 @@ final class TypeList extends ImmutableSet
      */
     public function hasStringType(string $type): bool
     {
-        return $this->has(new Type($type));
+        return $this->has(Type::createFromString($type));
     }
 
     /**
@@ -37,7 +37,7 @@ final class TypeList extends ImmutableSet
     public static function createFromStringTypeList(string ...$types): self
     {
         return new self(...array_map(function (string $type) {
-            return new Type($type);
+            return Type::createFromString($type);
         }, $types));
     }
 

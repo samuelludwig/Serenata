@@ -17,7 +17,7 @@ class Type
     /**
      * @param string $type
      */
-    public function __construct(string $type)
+    protected function __construct(string $type)
     {
         $this->type = $type;
     }
@@ -36,5 +36,15 @@ class Type
     public function __toString()
     {
         return $this->toString();
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return static
+     */
+    public static function createFromString(string $type)
+    {
+        return new static($type);
     }
 }
