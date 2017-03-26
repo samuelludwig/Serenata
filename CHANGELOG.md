@@ -22,7 +22,7 @@
 * Data related to `throws` is now returned as an array of arrays, each with a `type` and a `description` key instead of an associative array mapping the former to the latter.
   * This is recommended by [phpDocumentor](https://phpdoc.org/docs/latest/references/phpdoc/tags/throws.html).
   * This allows the same exception type to be referenced multiple times to describe it being thrown in different situations.
-* When linting docblock parameters, compound types will now be resolved properly as well (previously, only a single type was resolved).
+* When linting docblock parameters, compound types containing class types will now be resolved properly as well (previously, only a single type was resolved).
 
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).
