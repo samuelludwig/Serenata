@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Utility;
 
+use Closure;
 use ArrayIterator;
 use IteratorAggregate;
 
@@ -42,6 +43,14 @@ class ImmutableSet implements IteratorAggregate
     }
 
     /**
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->toArray());
+    }
+
+    /**
      * @param ImmutableSet $other
      *
      * @return bool
@@ -51,6 +60,16 @@ class ImmutableSet implements IteratorAggregate
         return
             empty(array_diff($this->toArray(), $other->toArray())) &&
             empty(array_diff($other->toArray(), $this->toArray()));
+    }
+
+    /**
+     * @param Closure $closure
+     *
+     * @return static
+     */
+    public function filter(Closure $closure): ImmutableSet
+    {
+        return new static(...array_filter($this->toArray(), $closure, true));
     }
 
     /**

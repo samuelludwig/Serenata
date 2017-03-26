@@ -168,9 +168,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
      */
     protected function doesParameterTypeListContainClassType(TypeList $typeList): bool
     {
-        return !empty(array_filter($typeList->toArray(), function (Type $type) {
+        return !$typeList->filter(function (Type $type) {
             return $type instanceof ClassType;
-        }));
+        })->isEmpty();
     }
 
     /**
@@ -189,11 +189,11 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return false;
         }
 
-        $docblockTypesThatAreNotArrayTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+        $docblockTypesThatAreNotArrayTypes = $docblockTypeList->filter(function (DocblockType $docblockType) {
             return (!$docblockType instanceof ArrayDocblockType && $docblockType->toString() !== SpecialDocblockTypeString::NULL_);
         });
 
-        return empty($docblockTypesThatAreNotArrayTypes);
+        return $docblockTypesThatAreNotArrayTypes->isEmpty();
     }
 
     /**
@@ -212,23 +212,23 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return false;
         }
 
-        $docblockTypesThatAreNotClassTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+        $docblockTypesThatAreNotClassTypes = $docblockTypeList->filter(function (DocblockType $docblockType) {
             return (!$docblockType instanceof ClassDocblockType && $docblockType->toString() !== SpecialDocblockTypeString::NULL_);
         });
 
-        if (!empty($docblockTypesThatAreNotClassTypes)) {
+        if (!$docblockTypesThatAreNotClassTypes->isEmpty()) {
             return false;
         }
 
-        $docblockTypesThatAreClassTypes = array_filter($docblockTypeList->toArray(), function (DocblockType $docblockType) {
+        $docblockTypesThatAreClassTypes = $docblockTypeList->filter(function (DocblockType $docblockType) {
             return $docblockType instanceof ClassDocblockType;
         });
 
-        $parameterClassTypes = array_filter($parameterTypeList->toArray(), function (Type $type) {
+        $parameterClassTypes = $parameterTypeList->filter(function (Type $type) {
             return $type instanceof ClassType;
         });
 
-        $parameterClassType = array_shift($parameterClassTypes);
+        $parameterClassType = $parameterClassTypes->toArray()[0];
 
         foreach ($docblockTypesThatAreClassTypes as $docblockTypeThatIsClassType) {
             if (!$this->doesDocblockClassSatisfyTypeParameterClassType($docblockTypeThatIsClassType, $parameterClassType)) {
