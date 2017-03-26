@@ -1,6 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Utility;
+namespace PhpIntegrator\Utility\Typing;
+
+use PhpIntegrator\Utility\ImmutableSet;
 
 /**
  * Represents a list of (parameter, property, constant) types.

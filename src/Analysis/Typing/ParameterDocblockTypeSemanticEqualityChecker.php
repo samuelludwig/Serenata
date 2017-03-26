@@ -7,12 +7,13 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
-use PhpIntegrator\Utility\TypeList;
 use PhpIntegrator\Utility\SpecialDocblockType;
 
 use PhpIntegrator\Utility\DocblockTyping\DocblockType;
 use PhpIntegrator\Utility\DocblockTyping\DocblockTypeList;
 use PhpIntegrator\Utility\DocblockTyping\ArrayDocblockType;
+
+use PhpIntegrator\Utility\Typing\TypeList;
 
 /**
  * Checks if a specified (normal parameter) type is semantically equal to a docblock type specification.

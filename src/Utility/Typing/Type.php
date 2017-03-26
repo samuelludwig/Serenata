@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Utility;
+namespace PhpIntegrator\Utility\Typing;
 
 /**
  * Represents a (parameter, property, constant) type.

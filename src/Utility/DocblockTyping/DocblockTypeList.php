@@ -2,9 +2,10 @@
 
 namespace PhpIntegrator\Utility\DocblockTyping;
 
-use PhpIntegrator\Utility\Type;
-use PhpIntegrator\Utility\TypeList;
 use PhpIntegrator\Utility\ImmutableSet;
+
+use PhpIntegrator\Utility\Typing\Type;
+use PhpIntegrator\Utility\Typing\TypeList;
 
 /**
  * Represents a list of docblock types.
