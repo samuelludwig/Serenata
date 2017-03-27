@@ -47,6 +47,10 @@ class FunctionFunctionInfoRetriever
     {
         if (!$node instanceof Node\Expr\FuncCall && !$node instanceof Node\Stmt\Function_) {
             throw new LogicException('Expected function node, got ' . get_class($node) . ' instead');
+        } elseif ($node->name instanceof Node\Expr) {
+            throw new UnexpectedValueException(
+                'Determining the info for dynamic function calls is currently not supported'
+            );
         }
 
         $nameNode = new Node\Name\Relative($node->name);
