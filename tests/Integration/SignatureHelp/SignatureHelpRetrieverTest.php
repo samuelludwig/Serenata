@@ -405,6 +405,36 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      *
      * @return void
      */
+    public function testDynamicFunctionNameFails(): void
+    {
+        $result = $this->getSignatureHelp('FunctionCallDynamic.phpt', 49);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
+    public function testDynamicMethodNameFails(): void
+    {
+        $result = $this->getSignatureHelp('MethodCallDynamic.phpt', 85);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
+    public function testDynamicConstructorCallFails(): void
+    {
+        $result = $this->getSignatureHelp('ConstructorDynamic.phpt', 111);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
     public function testNoInvocationFails(): void
     {
         $result = $this->getSignatureHelp('NoInvocation.phpt', 233);
