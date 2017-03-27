@@ -405,7 +405,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      *
      * @return void
      */
-    public function testNoInvocation(): void
+    public function testNoInvocationFails(): void
     {
         $result = $this->getSignatureHelp('NoInvocation.phpt', 233);
     }
