@@ -184,7 +184,7 @@ class FunctionTooltipGenerator
         foreach ($functionInfo['throws'] as $throwsItem) {
             $throwsColumns = [];
 
-            $throwsColumns[] = "• **{$throwsItem['type']}**";
+            $throwsColumns[] = "•&nbsp;**{$throwsItem['type']}**";
 
             if ($throwsItem['description']) {
                 $throwsColumns[] = $throwsItem['description'];

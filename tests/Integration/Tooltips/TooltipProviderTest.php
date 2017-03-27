@@ -97,9 +97,9 @@ Hello!
 # Throws
    |   |   ' . '
 --- | --- | ---
-• **\Exception** | When something happens
-• **\LogicException** | When something else happens.
-• **\RuntimeException** |  ');
+•&nbsp;**\Exception** | When something happens
+•&nbsp;**\LogicException** | When something else happens.
+•&nbsp;**\RuntimeException** |  ');
     }
 
     /**
