@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Linting;
 
 use PhpIntegrator\Analysis\DocblockAnalyzer;
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
@@ -48,15 +47,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     private $docblockAnalyzer;
 
     /**
-     * @var ClasslikeInfoBuilder
-     */
-    private $classlikeInfoBuilder;
-
-    /**
     * @param string                                        $file
      * @param string                                       $code
      * @param ParameterDocblockTypeSemanticEqualityChecker $parameterDocblockTypeSemanticEqualityChecker
-     * @param ClasslikeInfoBuilder                         $classlikeInfoBuilder
      * @param DocblockParser                               $docblockParser
      * @param TypeAnalyzer                                 $typeAnalyzer
      * @param DocblockAnalyzer                             $docblockAnalyzer
@@ -65,14 +58,12 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         string $file,
         string $code,
         ParameterDocblockTypeSemanticEqualityChecker $parameterDocblockTypeSemanticEqualityChecker,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
         DocblockAnalyzer $docblockAnalyzer
     ) {
         $this->file = $file;
         $this->parameterDocblockTypeSemanticEqualityChecker = $parameterDocblockTypeSemanticEqualityChecker;
-        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockAnalyzer = $docblockAnalyzer;
@@ -109,7 +100,6 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     public function getWarnings(): array
     {
         return array_merge(
-            $this->getMissingDocumentationWarnings(),
             $this->getDeprecatedCategoryTagWarnings(),
             $this->getDeprecatedSubpackageTagWarnings(),
             $this->getDeprecatedLinkTagWarnings()
@@ -486,24 +476,6 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getMissingDocumentationWarnings(): array
-    {
-        $warnings = [];
-
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForStructure($structure));
-        }
-
-        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForGlobalFunction($globalFunction));
-        }
-
-        return $warnings;
-    }
-
-    /**
-     * @return array
-     */
     protected function getDeprecatedCategoryTagWarnings(): array
     {
         $warnings = [];
@@ -541,141 +513,6 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         }
 
         return $warnings;
-    }
-
-    /**
-     * @param array $structure
-     *
-     * @return array
-     */
-    protected function getMissingDocumentationWarningsForStructure(array $structure): array
-    {
-        $warnings = [];
-
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
-
-        if ($classInfo && !$classInfo['hasDocumentation']) {
-            $warnings[] = [
-                'message' => "Documentation for classlike **{$classInfo['name']}** is missing.",
-                'start'   => $structure['startPosName'],
-                'end'     => $structure['endPosName']
-            ];
-        }
-
-        foreach ($structure['methods'] as $method) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForMethod($structure, $method));
-        }
-
-        foreach ($structure['properties'] as $property) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForProperty($structure, $property));
-        }
-
-        foreach ($structure['constants'] as $constant) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForClassConstant($structure, $constant));
-        }
-
-        return $warnings;
-    }
-
-    /**
-     * @param array $globalFunction
-     *
-     * @return array
-     */
-    protected function getMissingDocumentationWarningsForGlobalFunction(array $globalFunction): array
-    {
-        if ($globalFunction['docComment']) {
-            return [];
-        }
-
-        return [
-            [
-                'message' => "Documentation for function **{$globalFunction['name']}** is missing.",
-                'start'   => $globalFunction['startPosName'],
-                'end'     => $globalFunction['endPosName']
-            ]
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $method
-     *
-     * @return array
-     */
-    protected function getMissingDocumentationWarningsForMethod(array $structure, array $method): array
-    {
-        if ($method['docComment']) {
-            return [];
-        }
-
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
-
-        if (!$classInfo ||
-            !isset($classInfo['methods'][$method['name']]) ||
-            $classInfo['methods'][$method['name']]['hasDocumentation']
-        ) {
-            return [];
-        }
-
-        return [
-            [
-                'message' => "Documentation for method **{$method['name']}** is missing.",
-                'start'   => $method['startPosName'],
-                'end'     => $method['endPosName']
-            ]
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $property
-     *
-     * @return array
-     */
-    protected function getMissingDocumentationWarningsForProperty(array $structure, array $property): array
-    {
-        if ($property['docComment']) {
-            return [];
-        }
-
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
-
-        if (!$classInfo ||
-            !isset($classInfo['properties'][$property['name']]) ||
-            $classInfo['properties'][$property['name']]['hasDocumentation']
-        ) {
-            return [];
-        }
-
-        return [
-            [
-                'message' => "Documentation for property **{$property['name']}** is missing.",
-                'start'   => $property['startPosName'],
-                'end'     => $property['endPosName']
-            ]
-        ];
-    }
-
-    /**
-     * @param array $structure
-     * @param array $constant
-     *
-     * @return array
-     */
-    protected function getMissingDocumentationWarningsForClassConstant(array $structure, array $constant): array
-    {
-        if ($constant['docComment']) {
-            return [];
-        }
-
-        return [
-            [
-                'message' => "Documentation for constant **{$constant['name']}** is missing.",
-                'start'   => $constant['startPosName'],
-                'end'     => $constant['endPosName']
-            ]
-        ];
     }
 
     /**

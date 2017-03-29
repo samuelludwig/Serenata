@@ -50,6 +50,11 @@ class Linter
     private $unusedUseStatementAnalyzerFactory;
 
     /**
+     * @var DocblockMissingAnalyzerFactory
+     */
+    private $docblockMissingAnalyzerFactory;
+
+    /**
      * @param Parser                               $parser
      * @param DocblockCorrectnessAnalyzerFactory   $docblockCorrectnessAnalyzerFactory
      * @param UnknownClassAnalyzerFactory          $unknownClassAnalyzerFactory
@@ -57,6 +62,7 @@ class Linter
      * @param UnknownGlobalFunctionAnalyzerFactory $unknownGlobalFunctionAnalyzerFactory
      * @param UnknownMemberAnalyzerFactory         $unknownMemberAnalyzerFactory
      * @param UnusedUseStatementAnalyzerFactory    $unusedUseStatementAnalyzerFactory
+     * @param DocblockMissingAnalyzerFactory       $docblockMissingAnalyzerFactory
      */
     public function __construct(
         Parser $parser,
@@ -65,7 +71,8 @@ class Linter
         UnknownGlobalConstantAnalyzerFactory $unknownGlobalConstantAnalyzerFactory,
         UnknownGlobalFunctionAnalyzerFactory $unknownGlobalFunctionAnalyzerFactory,
         UnknownMemberAnalyzerFactory $unknownMemberAnalyzerFactory,
-        UnusedUseStatementAnalyzerFactory $unusedUseStatementAnalyzerFactory
+        UnusedUseStatementAnalyzerFactory $unusedUseStatementAnalyzerFactory,
+        DocblockMissingAnalyzerFactory $docblockMissingAnalyzerFactory
     ) {
         $this->parser = $parser;
         $this->docblockCorrectnessAnalyzerFactory = $docblockCorrectnessAnalyzerFactory;
@@ -74,6 +81,7 @@ class Linter
         $this->unknownGlobalFunctionAnalyzerFactory = $unknownGlobalFunctionAnalyzerFactory;
         $this->unknownMemberAnalyzerFactory = $unknownMemberAnalyzerFactory;
         $this->unusedUseStatementAnalyzerFactory = $unusedUseStatementAnalyzerFactory;
+        $this->docblockMissingAnalyzerFactory = $docblockMissingAnalyzerFactory;
     }
 
     /**
@@ -171,6 +179,7 @@ class Linter
 
         if ($settings->getLintDocblockCorrectness()) {
             $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file, $code);
+            $analyzers[] = $this->docblockMissingAnalyzerFactory->create($code);
         }
 
         if ($settings->getLintUnknownGlobalConstants()) {

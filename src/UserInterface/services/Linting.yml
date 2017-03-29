@@ -6,7 +6,6 @@ services:
         class: PhpIntegrator\Linting\DocblockCorrectnessAnalyzerFactory
         arguments:
             - '@parameterDocblockTypeSemanticEqualityChecker'
-            - '@classlikeInfoBuilder'
             - '@docblockParser'
             - '@typeAnalyzer'
             - '@docblockAnalyzer'
@@ -42,6 +41,12 @@ services:
             - '@typeAnalyzer'
             - '@docblockParser'
 
+    docblockMissingAnalyzerFactory:
+        class: PhpIntegrator\Linting\DocblockMissingAnalyzerFactory
+        arguments:
+            - '@typeAnalyzer'
+            - '@classlikeInfoBuilder'
+
     linter:
         class: PhpIntegrator\Linting\Linter
         arguments:
@@ -52,3 +57,4 @@ services:
             - '@unknownGlobalFunctionAnalyzerFactory'
             - '@unknownMemberAnalyzerFactory'
             - '@unusedUseStatementAnalyzerFactory'
+            - '@docblockMissingAnalyzerFactory'
