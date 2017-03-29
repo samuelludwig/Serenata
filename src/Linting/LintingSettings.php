@@ -40,12 +40,18 @@ class LintingSettings
     private $lintUnusedUseStatements;
 
     /**
+     * @var bool
+     */
+    private $lintMissingDocumentation;
+
+    /**
      * @param bool $lintUnknownClasses
      * @param bool $lintUnknownMembers
      * @param bool $lintUnknownGlobalFunctions
      * @param bool $lintUnknownGlobalConstants
      * @param bool $lintDocblockCorrectness
      * @param bool $lintUnusedUseStatements
+     * @param bool $lintMissingDocumentation
      */
     public function __construct(
         bool $lintUnknownClasses,
@@ -53,7 +59,8 @@ class LintingSettings
         bool $lintUnknownGlobalFunctions,
         bool $lintUnknownGlobalConstants,
         bool $lintDocblockCorrectness,
-        bool $lintUnusedUseStatements
+        bool $lintUnusedUseStatements,
+        bool $lintMissingDocumentation
     ) {
         $this->lintUnknownClasses = $lintUnknownClasses;
         $this->lintUnknownMembers = $lintUnknownMembers;
@@ -61,6 +68,7 @@ class LintingSettings
         $this->lintUnknownGlobalConstants = $lintUnknownGlobalConstants;
         $this->lintDocblockCorrectness = $lintDocblockCorrectness;
         $this->lintUnusedUseStatements = $lintUnusedUseStatements;
+        $this->lintMissingDocumentation = $lintMissingDocumentation;
     }
 
     /**
@@ -109,5 +117,13 @@ class LintingSettings
     public function getLintUnusedUseStatements(): bool
     {
         return $this->lintUnusedUseStatements;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getLintMissingDocumentation(): bool
+    {
+        return $this->lintMissingDocumentation;
     }
 }

@@ -179,7 +179,6 @@ class Linter
 
         if ($settings->getLintDocblockCorrectness()) {
             $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file, $code);
-            $analyzers[] = $this->docblockMissingAnalyzerFactory->create($code);
         }
 
         if ($settings->getLintUnknownGlobalConstants()) {
@@ -188,6 +187,10 @@ class Linter
 
         if ($settings->getLintUnknownGlobalFunctions()) {
             $analyzers[] = $this->unknownGlobalFunctionAnalyzerFactory->create();
+        }
+
+        if ($settings->getLintMissingDocumentation()) {
+            $analyzers[] = $this->docblockMissingAnalyzerFactory->create($code);
         }
 
         return $analyzers;

@@ -7,6 +7,7 @@
   * In order to fetch more information about a class, such as its parents, you now have to manually fetch this using the class info command.
 * Linting will now report the fully qualified name of a global function that wasn't found (instead of just the local name).
 * Linting will now report the fully qualified name of a global constant that wasn't found (instead of just the local name).
+* It is now possible to disable linting missing documentation separately from linting docblock correctness.
 * Updated to react/socket 0.5.0.
 * Indexing performance has slightly improved.
 * Fix disabling unknown global constant linting having no effect.

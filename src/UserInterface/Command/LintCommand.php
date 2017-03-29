@@ -57,7 +57,8 @@ class LintCommand extends AbstractCommand
             !isset($arguments['no-unknown-global-functions']) || !$arguments['no-unknown-global-functions'],
             !isset($arguments['no-unknown-global-constants']) || !$arguments['no-unknown-global-constants'],
             !isset($arguments['no-docblock-correctness']) || !$arguments['no-docblock-correctness'],
-            !isset($arguments['no-unused-use-statements']) || !$arguments['no-unused-use-statements']
+            !isset($arguments['no-unused-use-statements']) || !$arguments['no-unused-use-statements'],
+            !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
         );
 
         $output = $this->linter->lint($arguments['file'], $code, $settings);

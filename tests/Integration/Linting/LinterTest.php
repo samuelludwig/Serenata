@@ -30,6 +30,7 @@ class LinterTest extends AbstractIntegrationTest
             true,
             true,
             true,
+            true,
             true
         );
 
