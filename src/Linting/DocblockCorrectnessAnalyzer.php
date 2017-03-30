@@ -160,7 +160,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Docblock for property **{$property['name']}** is missing @var tag.",
+                'message' => "Docblock for property ‘{$property['name']}’ is missing @var tag.",
                 'start'   => $property['startPosName'],
                 'end'     => $property['endPosName']
             ]
@@ -187,7 +187,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Docblock for constant **{$constant['name']}** is missing @var tag.",
+                'message' => "Docblock for constant ‘{$constant['name']}’ is missing @var tag.",
                 'start'   => $constant['startPosName'],
                 'end'     => $constant['endPosName'] + 1
             ]
@@ -272,7 +272,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
            }
 
            $issues[] = [
-               'message' => "Docblock for function **{$globalFunction['name']}** is missing @param tag for **{$dollarName}**.",
+               'message' => "Docblock for function ‘{$globalFunction['name']}’ is missing @param tag for ‘{$dollarName}’.",
                'start'   => $globalFunction['startPosName'],
                'end'     => $globalFunction['endPosName']
            ];
@@ -370,7 +370,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             }
 
             $issues[] = [
-                'message' => "Docblock for function **{$globalFunction['name']}** has incorrect @param type for **{$dollarName}**.",
+                'message' => "Docblock for function ‘{$globalFunction['name']}’ has incorrect @param type for ‘{$dollarName}’.",
                 'start'   => $globalFunction['startPosName'],
                 'end'     => $globalFunction['endPosName']
             ];
@@ -466,7 +466,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Docblock for function **{$globalFunction['name']}** contains superfluous @param tags for: **{$superfluousParameterNameString}**.",
+                'message' => "Docblock for function ‘{$globalFunction['name']}’ contains superfluous @param tags for: ‘{$superfluousParameterNameString}’.",
                 'start'   => $globalFunction['startPosName'],
                 'end'     => $globalFunction['endPosName']
             ]
@@ -532,7 +532,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Docblock for classlike **{$structure['name']}** contains deprecated @category tag.",
+                'message' => "Docblock for classlike ‘{$structure['name']}’ contains deprecated @category tag.",
                 'start'   => $structure['startPosName'],
                 'end'     => $structure['endPosName']
             ]
@@ -556,7 +556,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Docblock for classlike **{$structure['name']}** contains deprecated @subpackage tag.",
+                'message' => "Docblock for classlike ‘{$structure['name']}’ contains deprecated @subpackage tag.",
                 'start'   => $structure['startPosName'],
                 'end'     => $structure['endPosName']
             ]
@@ -582,7 +582,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Docblock for classlike **{$structure['name']}** contains deprecated @link tag. See also [{$link}]($link}.",
+                'message' => "Docblock for classlike ‘{$structure['name']}’ contains deprecated @link tag. See also [{$link}]($link}.",
                 'start'   => $structure['startPosName'],
                 'end'     => $structure['endPosName']
             ]

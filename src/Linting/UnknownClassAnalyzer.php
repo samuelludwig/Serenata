@@ -100,7 +100,7 @@ class UnknownClassAnalyzer implements AnalyzerInterface
 
             if (!$this->classlikeExistenceChecker->doesClassExist($fqcn)) {
                 $unknownClasses[] = [
-                    'message' => "Classlike **{$classUsage['name']}** is not defined or imported anywhere.",
+                    'message' => "Classlike ‘{$classUsage['name']}’ is not defined or imported anywhere.",
                     'start'   => $classUsage['start'],
                     'end'     => $classUsage['end']
                 ];

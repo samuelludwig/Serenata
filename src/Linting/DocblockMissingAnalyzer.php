@@ -97,7 +97,7 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
             $warnings[] = [
-                'message' => "Documentation for classlike **{$classInfo['name']}** is missing.",
+                'message' => "Documentation for classlike ‘{$classInfo['name']}’ is missing.",
                 'start'   => $structure['startPosName'],
                 'end'     => $structure['endPosName']
             ];
@@ -131,7 +131,7 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Documentation for function **{$globalFunction['name']}** is missing.",
+                'message' => "Documentation for function ‘{$globalFunction['name']}’ is missing.",
                 'start'   => $globalFunction['startPosName'],
                 'end'     => $globalFunction['endPosName']
             ]
@@ -161,7 +161,7 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Documentation for method **{$method['name']}** is missing.",
+                'message' => "Documentation for method ‘{$method['name']}’ is missing.",
                 'start'   => $method['startPosName'],
                 'end'     => $method['endPosName']
             ]
@@ -191,7 +191,7 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Documentation for property **{$property['name']}** is missing.",
+                'message' => "Documentation for property ‘{$property['name']}’ is missing.",
                 'start'   => $property['startPosName'],
                 'end'     => $property['endPosName']
             ]
@@ -212,7 +212,7 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
 
         return [
             [
-                'message' => "Documentation for constant **{$constant['name']}** is missing.",
+                'message' => "Documentation for constant ‘{$constant['name']}’ is missing.",
                 'start'   => $constant['startPosName'],
                 'end'     => $constant['endPosName']
             ]

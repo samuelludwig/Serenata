@@ -71,7 +71,7 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
             }
 
             $unknownGlobalFunctions[] = [
-                'message' => "Function **{$fqsen}** is not defined or imported anywhere.",
+                'message' => "Function ‘{$fqsen}’ is not defined or imported anywhere.",
                 'start'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
                 'end'     => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
             ];

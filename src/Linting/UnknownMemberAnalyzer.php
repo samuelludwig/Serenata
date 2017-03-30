@@ -67,11 +67,11 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
             $type = $memberCall['type'];
 
             if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_TYPE) {
-                $message = "Member **#{$memberCall['memberName']}** could not be found because expression has no type.";
+                $message = "Member ‘{$memberCall['memberName']}’ could not be found because expression has no type.";
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_IS_NOT_CLASSLIKE) {
-                $message = "Cannot invoke **#{$memberCall['memberName']}** on non-object type **{$memberCall['expressionType']}**.";
+                $message = "Cannot invoke ‘{$memberCall['memberName']}’ on non-object type ‘{$memberCall['expressionType']}’.";
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER) {
-                $message = "Member **#{$memberCall['memberName']}** does not exist for type **{$memberCall['expressionType']}**.";
+                $message = "Member ‘{$memberCall['memberName']}’ does not exist for type ‘{$memberCall['expressionType']}’.";
             } else {
                 continue;
             }
@@ -102,7 +102,7 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
 
             if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED) {
                 $output[] = [
-                    'message' => "Member **#{$memberCall['memberName']}** was not explicitly defined in **{$memberCall['expressionType']}**. It will be created at runtime.",
+                    'message' => "Member ‘{$memberCall['memberName']}’ was not explicitly defined in ‘{$memberCall['expressionType']}’. It will be created at runtime.",
                     'start'   => $memberCall['start'],
                     'end'     => $memberCall['end']
                 ];

@@ -63,7 +63,7 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
             }
 
             $unknownGlobalConstants[] = [
-                'message' => "Constant **{$fqsen}** is not defined or imported anywhere.",
+                'message' => "Constant ‘{$fqsen}’ is not defined or imported anywhere.",
                 'start'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
                 'end'     => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
             ];
