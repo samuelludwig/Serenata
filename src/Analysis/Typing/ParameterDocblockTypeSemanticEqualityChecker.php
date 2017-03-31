@@ -152,8 +152,6 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return true;
         } elseif ($parameterTypeList->hasStringType(SpecialTypeString::ARRAY_)) {
             return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
-        } elseif ($parameterTypeList->hasStringType(SpecialTypeString::ARRAY_)) {
-            return $this->doesParameterArrayTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         } elseif ($this->doesParameterTypeListContainClassType($parameterTypeList)) {
             return $this->doesParameterClassTypeListMatchDocblockTypeList($parameterTypeList, $docblockTypeList);
         }
