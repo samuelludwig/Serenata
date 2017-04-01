@@ -821,7 +821,7 @@ class DocblockParser
         foreach ($lines as $i => $line) {
             $matches = null;
 
-            if (preg_match(self::TAG_START_REGEX, $line, $matches) === 1 && !$this->getDocblockAnalyzer()->isFullInheritDocSyntax(trim($matches[1]))) {
+            if (preg_match(self::TAG_START_REGEX, $line, $matches) === 1 && !$this->docblockAnalyzer->isFullInheritDocSyntax(trim($matches[1]))) {
                 break; // Found the start of a tag, the summary and description are finished.
             }
 
