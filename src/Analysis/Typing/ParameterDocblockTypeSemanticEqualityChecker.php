@@ -158,23 +158,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return $type->toString();
         }, $parameterTypeList->toArray()));
 
-
-
-        // if ($docblockType instanceof DocblockTypes\CompoundDocblockType) {
-        //     // return $docblockType-
-        // }
-
         if ($docblockType->toString() === $parameterTypeListAsCompoundTypeString) {
             return true;
         }
-
-        //
-
-
-
-        // if ($docblockTypeList->equals(DocblockTypeList::createFromTypeList($parameterTypeList))) {
-        //     return true;
-        // }
 
         return false;
     }
