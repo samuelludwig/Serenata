@@ -48,6 +48,7 @@ class Type
         $isReservedKeyword = in_array($type, [
             SpecialTypeString::STRING_,
             SpecialTypeString::INT_,
+            SpecialTypeString::NULL_,
             SpecialTypeString::BOOL_,
             SpecialTypeString::FLOAT_,
             SpecialTypeString::ARRAY_,
