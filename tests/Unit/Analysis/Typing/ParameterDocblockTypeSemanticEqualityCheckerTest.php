@@ -1005,6 +1005,85 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     }
 
     /**
+     * @return void
+     */
+    public function testArrayTypeWithParanthesizedSpecialization(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getClasslikeInfoBuilderMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => false,
+            'type'        => 'array'
+        ];
+
+        $docblockParameter = [
+            'type'        => new DocblockTypes\SpecializedArrayDocblockType(
+                new DocblockTypes\CompoundDocblockType(
+                    new DocblockTypes\IntDocblockType(),
+                    new DocblockTypes\FloatDocblockType()
+                )
+            ),
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('array');
+        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
+     * @return void
+     */
+    public function testNullableArrayTypeWithParanthesizedSpecialization(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getClasslikeInfoBuilderMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => true,
+            'type'        => 'array'
+        ];
+
+        $docblockParameter = [
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\CompoundDocblockType(
+                        new DocblockTypes\IntDocblockType(),
+                        new DocblockTypes\FloatDocblockType()
+                    )
+                ),
+                new DocblockTypes\NullDocblockType()
+            ),
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('array');
+        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
      * @param FileTypeResolver $fileTypeResolverMock
      *
      * @return FileTypeResolverFactory

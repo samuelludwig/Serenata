@@ -51,6 +51,8 @@ class B extends C {}
 function foo(C $c) {}
 ```
 
+* Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else.
+
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).
 * Fix this snippet of code causing php-parser to generate a fatal error:
