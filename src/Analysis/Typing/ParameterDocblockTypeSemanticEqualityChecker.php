@@ -11,11 +11,6 @@ use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockTypes;
 
-use PhpIntegrator\Utility\DocblockTyping\DocblockType;
-use PhpIntegrator\Utility\DocblockTyping\ClassDocblockType;
-use PhpIntegrator\Utility\DocblockTyping\ArrayDocblockType;
-use PhpIntegrator\Utility\DocblockTyping\SpecialDocblockTypeString;
-
 use PhpIntegrator\Utility\Typing\Type;
 use PhpIntegrator\Utility\Typing\TypeList;
 use PhpIntegrator\Utility\Typing\ClassType;
