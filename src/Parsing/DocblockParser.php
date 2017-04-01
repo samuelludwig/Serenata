@@ -104,6 +104,14 @@ class DocblockParser
     private $docblockAnalyzer;
 
     /**
+     * @param DocblockAnalyzer $docblockAnalyzer
+     */
+    public function __construct(DocblockAnalyzer $docblockAnalyzer)
+    {
+        $this->docblockAnalyzer = $docblockAnalyzer;
+    }
+
+    /**
      * Parse the comment string to get its elements.
      *
      * @param string|false|null $docblock The docblock to parse. If null, the return array will be filled up with the
@@ -875,19 +883,5 @@ class DocblockParser
     protected function normalizeNewlines(string $string): string
     {
         return $this->replaceNewlines($string, "\n");
-    }
-
-    /**
-     * Retrieves an instance of DocblockAnalyzer. The object will only be created once if needed.
-     *
-     * @return DocblockAnalyzer
-     */
-    protected function getDocblockAnalyzer(): DocblockAnalyzer
-    {
-        if (!$this->docblockAnalyzer instanceof DocblockAnalyzer) {
-            $this->docblockAnalyzer = new DocblockAnalyzer();
-        }
-
-        return $this->docblockAnalyzer;
     }
 }
