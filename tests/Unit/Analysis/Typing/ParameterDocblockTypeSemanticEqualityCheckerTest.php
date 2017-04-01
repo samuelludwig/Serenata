@@ -42,7 +42,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int', 'int');
+        $fileTypeResolver->method('resolve')->willReturn('int');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -75,7 +75,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('bool', 'int');
+        $fileTypeResolver->method('resolve')->willReturn('bool');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -111,7 +111,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int', 'int', 'null');
+        $fileTypeResolver->method('resolve')->willReturn('int');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -144,7 +144,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int', 'int', 'null');
+        $fileTypeResolver->method('resolve')->willReturn('int');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -554,7 +554,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -587,7 +587,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -623,7 +623,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'array', 'null');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -656,7 +656,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'array');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -692,7 +692,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'array');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -730,7 +730,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'null');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -770,7 +770,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -811,7 +811,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float', 'bool');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -852,7 +852,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float', 'null');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -893,7 +893,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float', 'null');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -934,7 +934,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array', 'int', 'float');
+        $fileTypeResolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -967,7 +967,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => true
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int', 'int');
+        $fileTypeResolver->method('resolve')->willReturn('int');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -1000,7 +1000,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int', 'int');
+        $fileTypeResolver->method('resolve')->willReturn('int');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
