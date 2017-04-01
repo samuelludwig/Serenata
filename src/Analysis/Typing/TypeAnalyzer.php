@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Utility\DocblockTyping\SpecialDocblockTypeString;
+use PhpIntegrator\Parsing\DocblockTypes\SpecialDocblockTypeString;
 
 /**
  * Provides functionality for analyzing type names.
@@ -49,7 +49,6 @@ class TypeAnalyzer implements TypeNormalizerInterface
             SpecialDocblockTypeString::TRUE_,
             SpecialDocblockTypeString::SELF_,
             SpecialDocblockTypeString::STATIC_,
-            SpecialDocblockTypeString::PARENT_,
             SpecialDocblockTypeString::THIS_,
             SpecialDocblockTypeString::ITERABLE_
         ]);

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Utility\DocblockTyping;
+namespace PhpIntegrator\Parsing\DocblockTypes;
 
 /**
  * Enumeration of string values of special docblock types.
@@ -81,11 +81,6 @@ class SpecialDocblockTypeString
      * @var string
      */
     public const STATIC_   = 'static';
-
-    /**
-     * @var string
-     */
-    public const PARENT_   = 'parent';
 
     /**
      * @var string

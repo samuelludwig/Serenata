@@ -6,10 +6,10 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory;
+
+use PhpIntegrator\Parsing\DocblockTypes;
 
 class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,7 +36,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int',
+            'type'        => new DocblockTypes\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -69,7 +69,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int',
+            'type'        => new DocblockTypes\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -102,7 +102,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int|null',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\IntDocblockType(),
+                new DocblockTypes\NullDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -135,7 +138,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int',
+            'type'        => new DocblockTypes\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -168,7 +171,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'A',
+            'type'        => new DocblockTypes\ClassDocblockType('A'),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -201,7 +204,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => '\B\A',
+            'type'        => new DocblockTypes\ClassDocblockType('\A\B'),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -243,7 +246,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'B',
+            'type'        => new DocblockTypes\ClassDocblockType('B'),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -285,7 +288,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'B',
+            'type'        => new DocblockTypes\ClassDocblockType('B'),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -327,7 +330,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'B',
+            'type'        => new DocblockTypes\ClassDocblockType('B'),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -377,7 +380,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'B|C',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\ClassDocblockType('B'),
+                new DocblockTypes\ClassDocblockType('C')
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -419,7 +425,9 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'A[]',
+            'type'        => new DocblockTypes\SpecializedArrayDocblockType(
+                new DocblockTypes\ClassDocblockType('A')
+            ),
             'description' => null,
             'isVariadic'  => true,
             'isReference' => false
@@ -461,7 +469,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'A',
+            'type'        => new DocblockTypes\ClassDocblockType('A'),
             'description' => null,
             'isVariadic'  => true,
             'isReference' => false
@@ -503,7 +511,9 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => '\B\A[]',
+            'type'        => new DocblockTypes\SpecializedArrayDocblockType(
+                new DocblockTypes\ClassDocblockType('\B\A')
+            ),
             'description' => null,
             'isVariadic'  => true,
             'isReference' => false
@@ -536,7 +546,9 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int[]',
+            'type'        => new DocblockTypes\SpecializedArrayDocblockType(
+                new DocblockTypes\IntDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -569,7 +581,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int',
+            'type'        => new DocblockTypes\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -602,7 +614,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'array|null',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\ArrayDocblockType(),
+                new DocblockTypes\NullDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -635,7 +650,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'array',
+            'type'        => new DocblockTypes\ArrayDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -668,7 +683,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'array|null',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\ArrayDocblockType(),
+                new DocblockTypes\NullDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -701,7 +719,12 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int[]|null',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\IntDocblockType()
+                ),
+                new DocblockTypes\NullDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -734,7 +757,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int[]|float[]',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\IntDocblockType()
+                ),
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\FloatDocblockType()
+                )
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -767,7 +797,15 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int[]|float[]|bool',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\IntDocblockType()
+                ),
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\FloatDocblockType()
+                ),
+                new DocblockTypes\BoolDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -800,7 +838,15 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int[]|float[]|null',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\IntDocblockType()
+                ),
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\FloatDocblockType()
+                ),
+                new DocblockTypes\NullDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -833,7 +879,15 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int[]|float[]|null',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\IntDocblockType()
+                ),
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\FloatDocblockType()
+                ),
+                new DocblockTypes\NullDocblockType()
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -867,6 +921,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
 
         $docblockParameter = [
             'type'        => 'int[]|float[]',
+            'type'        => new DocblockTypes\CompoundDocblockType(
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\IntDocblockType()
+                ),
+                new DocblockTypes\SpecializedArrayDocblockType(
+                    new DocblockTypes\FloatDocblockType()
+                )
+            ),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false
@@ -899,7 +961,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int',
+            'type'        => new DocblockTypes\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => true
@@ -932,7 +994,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $docblockParameter = [
-            'type'        => 'int',
+            'type'        => new DocblockTypes\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
             'isReference' => false

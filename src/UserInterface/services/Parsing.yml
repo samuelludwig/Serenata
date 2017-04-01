@@ -51,3 +51,7 @@ services:
         class: PhpIntegrator\Parsing\DocblockParser
         arguments:
             - '@docblockAnalyzer'
+            - '@docblockTypeParser'
+
+    docblockTypeParser:
+        class: PhpIntegrator\Parsing\DocblockTypes\DocblockTypeParser

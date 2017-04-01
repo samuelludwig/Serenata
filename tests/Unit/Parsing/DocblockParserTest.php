@@ -2,7 +2,11 @@
 
 namespace PhpIntegrator\Tests\Unit\Parsing;
 
+use PhpIntegrator\Analysis\DocblockAnalyzer;
+
 use PhpIntegrator\Parsing\DocblockParser;
+
+use PhpIntegrator\Parsing\DocblockTypes\DocblockTypeParser;
 
 class DocblockParserTest extends \PHPUnit\Framework\TestCase
 {
@@ -11,7 +15,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testParamTagAtEndIsInterpretedCorrectly(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /**
              * @param string $foo Test description.
@@ -33,7 +37,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testParamTagWithAtSymbolIsInterpretedCorrectly(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /**
              * @param string $foo Test description with @ sign.
@@ -55,7 +59,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testCorrectlyProcessesRussianUnicodeSequences(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('/**
      * @param string|null $someString Имя файла пат
      */', [DocblockParser::PARAM_TYPE], '');
@@ -75,7 +79,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testVarTagDescriptionStopsAtNextTag(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /**
              * @var int
@@ -97,7 +101,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testVarTagInSingleLineCommentIsCorrectlyIdentified(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /** @var int Some description */
         ', [DocblockParser::VAR_TYPE], 'someProperty');
@@ -115,7 +119,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testThrowsTagWithDescription(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /**
              * @throws \UnexpectedValueException Some description
@@ -135,7 +139,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     public function testThrowsTagWithoutDescription(): void
     {
-        $parser = new DocblockParser();
+        $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /**
              * @throws \UnexpectedValueException
@@ -151,24 +155,29 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return void
+     * @return DocblockParser
      */
-    public function testParamTagWithMissingElementInCompoundTypeIsIgnored(): void
+    protected function getDocblockParser(): DocblockParser
     {
-        $parser = new DocblockParser();
-        $result = $parser->parse('
-            /**
-             * @param string| $test
-             */
-        ', [DocblockParser::PARAM_TYPE], '');
+        return new DocblockParser(
+            $this->getDocblockAnalyzer(),
+            $this->getDocblockTypeParser()
+        );
+    }
 
-        $this->assertEquals([
-            '$test' => [
-                'type'        => 'string',
-                'description' => null,
-                'isVariadic'  => false,
-                'isReference' => false
-            ]
-        ], $result['params']);
+    /**
+     * @return DocblockAnalyzer
+     */
+    protected function getDocblockAnalyzer(): DocblockAnalyzer
+    {
+        return new DocblockAnalyzer();
+    }
+
+    /**
+     * @return DocblockTypeParser
+     */
+    protected function getDocblockTypeParser(): DocblockTypeParser
+    {
+        return new DocblockTypeParser();
     }
 }

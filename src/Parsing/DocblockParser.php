@@ -4,6 +4,8 @@ namespace PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 
+use PhpIntegrator\Parsing\DocblockTypes\DocblockTypeParser;
+
 /**
  * Parser for PHP docblocks.
  */
@@ -104,11 +106,18 @@ class DocblockParser
     private $docblockAnalyzer;
 
     /**
-     * @param DocblockAnalyzer $docblockAnalyzer
+     * @var DocblockTypeParser
      */
-    public function __construct(DocblockAnalyzer $docblockAnalyzer)
+    private $docblockTypeParser;
+
+    /**
+     * @param DocblockAnalyzer   $docblockAnalyzer
+     * @param DocblockTypeParser $docblockTypeParser
+     */
+    public function __construct(DocblockAnalyzer $docblockAnalyzer, DocblockTypeParser $docblockTypeParser)
     {
         $this->docblockAnalyzer = $docblockAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
     }
 
     /**
@@ -415,7 +424,7 @@ class DocblockParser
                 }
 
                 $params[$variableName] = [
-                    'type'        => trim($type, '|'),
+                    'type'        => $this->docblockTypeParser->parse($type),
                     'description' => $description,
                     'isVariadic'  => $isVariadic,
                     'isReference' => $isReference
