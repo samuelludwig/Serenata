@@ -81,4 +81,9 @@ class IndexStorageItemEnum
      * @var string
      */
     public const CONSTANTS                     = 'constants';
+
+    /**
+     * @var string
+     */
+    public const META_STATIC_METHOD_TYPES      = 'meta_static_method_types';
 }

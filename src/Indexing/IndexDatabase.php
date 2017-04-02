@@ -669,6 +669,25 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
     }
 
     /**
+     * @param string $fqcn
+     * @param string $method
+     *
+     * @return array
+     */
+    public function getMetaStaticMethodTypesFor(string $fqcn, string $method): array
+    {
+        return $this->getConnection()->createQueryBuilder()
+            ->select('msmt.argument_index', 'msmt.value', 'msmt.value_node_type', 'msmt.return_type')
+            ->from(IndexStorageItemEnum::META_STATIC_METHOD_TYPES, 'msmt')
+            ->andWhere('msmt.fqcn = ?')
+            ->andWhere('msmt.name = ?')
+            ->setParameter(0, $fqcn)
+            ->setParameter(1, $method)
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
      * @inheritDoc
      */
     public function beginTransaction(): void

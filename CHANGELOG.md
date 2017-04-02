@@ -52,6 +52,44 @@ class B extends C {}
 function foo(C $c) {}
 ```
 
+* Meta files are now supported in a very rudimentary way, they currently carry some restrictions (which may be lifted in the future):
+  * Only the `STATIC_METHOD_TYPES` setting is supported.
+  * Only [the first version of the format](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata#PhpStormAdvancedMetadata-Deprecated:Legacymetadataformat(2016.1andearlier) is supported, as this is likely the most widely used variant.
+  * They must be named `.phpstorm.meta.php`. They can be located anywhere in your project structure, but will influence the entire project (i.e. they don't only apply to files in the same folder and lower).
+  * The "templated" argument must always be the first one.
+  * The class name must directly refer to the class, i.e. meta information for parent classes or interfaces will not automatically cascade down to children and implementors.
+
+```php
+// ----- Meta file
+<?php
+
+namespace PHPSTORM_META {
+    use App;
+
+    $STATIC_METHOD_TYPES = [
+        App\ServiceLocator::get('') => [
+            'someService' instanceof App\SomeService
+        ]
+    ];
+}
+
+// ----- src/App/ServiceLocator.php
+<?php
+
+namespace App;
+
+class ServiceLocator
+{
+    public function get(string $name)
+    {
+        // ...
+    }
+}
+
+// ----- src/app/Main.php
+$serviceLocator = new ServiceLocator();
+$serviceLocator->get('someService')-> // Autocompletion for App\SomeService
+```
 
 
 ## 2.1.6

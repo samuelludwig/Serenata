@@ -4,6 +4,8 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use ReflectionClass;
 
+use PhpIntegrator\Indexing\MetaFileIndexer;
+
 use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
@@ -23,6 +25,42 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
         $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = $container->get('deduceTypesCommand');
+
+        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
+        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
+        $reflectionMethod->setAccessible(true);
+
+        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset);
+    }
+
+    /**
+     * @param string $file
+     * @param string $metaFile
+     * @param string $expression
+     *
+     * @return array
+     */
+    public function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
+    {
+        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
+        $metaFilePath = __DIR__ . '/DeduceTypesCommandTest/' . $metaFile;
+
+        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
+
+        $container = $this->createTestContainer();
+
+        $metaFileIndexer = new MetaFileIndexer(
+            $container->get('indexDatabase'),
+            $container->get('parser')
+        );
+
+        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($metaFilePath);
+
+        $metaFileIndexer->index($metaFilePath, $code);
 
         $this->indexTestFile($container, $path);
 
@@ -938,5 +976,19 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
             '\Exception',
             '\Throwable'
         ], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMetaStaticMethodTypesWithMatchingFqcn(): void
+    {
+        $result = $this->deduceTypesFromExpressionWithMeta(
+            'MetaStaticMethodTypesMatchingFqcn.phpt',
+            'MetaStaticMethodTypesMetaFile.phpt',
+            '$var'
+        );
+
+        $this->assertEquals(['\B\Bar'], $result);
     }
 }

@@ -92,10 +92,20 @@ services:
             - '@indexDatabase'
             - '@functionConverter'
 
-    methodCallNodeTypeDeducer:
+    methodCallNodeTypeDeducer.delegate:
         class: PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer
         arguments:
             - '@methodCallMethodInfoRetriever'
+
+    methodCallNodeMetaTypeDeducer:
+        class: PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeMetaTypeDeducer
+        arguments:
+            - '@methodCallNodeTypeDeducer.delegate'
+            - '@nodeTypeDeducer'
+            - '@indexDatabase'
+
+    methodCallNodeTypeDeducer:
+        alias: methodCallNodeMetaTypeDeducer
 
     propertyFetchNodeTypeDeducer:
         class: PhpIntegrator\Analysis\Typing\Deduction\PropertyFetchNodeTypeDeducer
