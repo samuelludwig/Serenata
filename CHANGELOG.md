@@ -74,7 +74,8 @@ namespace PHPSTORM_META {
         ]
     ];
 }
-
+```
+```php
 // ----- src/App/ServiceLocator.php
 <?php
 
@@ -87,12 +88,14 @@ class ServiceLocator
         // ...
     }
 }
-
+```
+```php
 // ----- src/app/Main.php
+<?php
+
 $serviceLocator = new ServiceLocator();
 $serviceLocator->get('someService')-> // Autocompletion for App\SomeService
 ```
-
 
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).
