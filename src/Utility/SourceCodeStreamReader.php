@@ -131,6 +131,10 @@ class SourceCodeStreamReader
     {
         $encoding = mb_detect_encoding($code, null, true);
 
+        if (!$encoding) {
+            $encoding = 'ASCII';
+        }
+
         if (!in_array($encoding, ['UTF-8', 'ASCII'], true)) {
             $code = mb_convert_encoding($code, 'UTF-8', $encoding);
         }
