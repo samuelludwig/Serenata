@@ -62,7 +62,7 @@ function foo(C $c) {}
   * The class name must directly refer to the class, i.e. meta information for parent classes or interfaces will not automatically cascade down to children and implementors.
 
 ```php
-// ----- Meta file
+// ----- .phpstorm.meta.php
 <?php
 
 namespace PHPSTORM_META {
