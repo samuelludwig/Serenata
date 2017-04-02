@@ -12,4 +12,4 @@ to provide various functionalities, such as autocompletion, code navigation and 
 Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
 [the list of projects](https://github.com/php-integrator).
 
-![GPLv3 Logo](http://gplv3.fsf.org/gplv3-127x51.png)
+![GPLv3 Logo](/uploads/85ac80ab31bedd5e4622bc5d5484bc02/gplv3-127x51.png)
