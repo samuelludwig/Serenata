@@ -31,6 +31,8 @@
 * When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35):
 
 ```php
+<?php
+
 // For interfaces
 interface I {}
 class A implements I {}
