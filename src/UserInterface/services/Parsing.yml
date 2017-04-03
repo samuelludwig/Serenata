@@ -54,4 +54,4 @@ services:
             - '@docblockTypeParser'
 
     docblockTypeParser:
-        class: PhpIntegrator\Parsing\DocblockTypes\DocblockTypeParser
+        class: PhpIntegrator\DocblockTypeParser\DocblockTypeParser

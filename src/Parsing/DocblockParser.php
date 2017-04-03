@@ -4,7 +4,7 @@ namespace PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 
-use PhpIntegrator\Parsing\DocblockTypes\DocblockTypeParser;
+use PhpIntegrator\DocblockTypeParser\DocblockTypeParser;
 
 /**
  * Parser for PHP docblocks.

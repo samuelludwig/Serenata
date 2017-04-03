@@ -6,7 +6,7 @@ use PhpIntegrator\Analysis\DocblockAnalyzer;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
-use PhpIntegrator\Parsing\DocblockTypes\DocblockTypeParser;
+use PhpIntegrator\DocblockTypeParser\DocblockTypeParser;
 
 class DocblockParserTest extends \PHPUnit\Framework\TestCase
 {
