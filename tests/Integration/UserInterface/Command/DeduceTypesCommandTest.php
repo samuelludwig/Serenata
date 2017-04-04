@@ -147,7 +147,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterDocblock.phpt', '$b');
 
-        $this->assertEquals(['\B'], $output);
+        $this->assertEquals(['\A\B'], $output);
     }
 
     /**

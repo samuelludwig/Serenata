@@ -3,7 +3,7 @@
 namespace A;
 
 /**
- * @param \B $b
+ * @param B $b
  */
 function foo($b)
 {
