@@ -662,7 +662,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' =>  'Classlike docblock contains deprecated @link tag. See also [https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated}.',
+                'message' =>  'Classlike docblock contains deprecated @link tag. Use @see instead.',
                 'start'   => 63,
                 'end'     => 64
             ]

@@ -567,6 +567,8 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      * @param array $structure
      *
      * @return array
+     *
+     * @see https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated
      */
     protected function getDeprecatedLinkTagWarningsForStructure(array $structure): array
     {
@@ -578,11 +580,9 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             return [];
         }
 
-        $link = 'https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated';
-
         return [
             [
-                'message' => "Classlike docblock contains deprecated @link tag. See also [{$link}]($link}.",
+                'message' => "Classlike docblock contains deprecated @link tag. Use @see instead.",
                 'start'   => $structure['startPosName'],
                 'end'     => $structure['endPosName']
             ]
