@@ -85,15 +85,24 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
             }
         }
 
-        // TODO: Support NullableType (PHP 7.1).
-        if ($node->type instanceof Node\Name) {
-            $typeHintType = NodeHelpers::fetchClassName($node->type);
+        $isNullable = false;
+        $typeNode = $node->type;
+
+        if ($typeNode instanceof Node\NullableType) {
+            $typeNode = $typeNode->type;
+            $isNullable = true;
+        } elseif ($node->default instanceof Node\Expr\ConstFetch && $node->default->name->toString() === 'null') {
+            $isNullable = true;
+        }
+
+        if ($typeNode instanceof Node\Name) {
+            $typeHintType = NodeHelpers::fetchClassName($typeNode);
 
             if ($node->variadic) {
                 $typeHintType .= '[]';
             }
 
-            return [$typeHintType];
+            return $isNullable ? [$typeHintType, 'null'] : [$typeHintType];
         } elseif (is_string($node->type)) {
             return [$node->type];
         }

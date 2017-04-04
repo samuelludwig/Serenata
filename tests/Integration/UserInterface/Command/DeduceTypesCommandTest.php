@@ -143,6 +143,25 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesNullableFunctionTypeHintsViaDefaultValue(): void
+    {
+        $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintDefaultValue.phpt', '$b');
+
+        $this->assertEquals(['\A\B', 'null'], $output);
+    }
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesNullableFunctionTypeHintsViaNullableSyntax(): void
+    {
+        $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintNullableSyntax.phpt', '$b');
+
+        $this->assertEquals(['\A\B', 'null'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesFunctionDocblocks(): void
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterDocblock.phpt', '$b');
