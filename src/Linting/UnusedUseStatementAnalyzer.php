@@ -140,7 +140,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                     $data['kind'] === UseStatementKind::TYPE_CLASSLIKE
                 ) {
                     $unusedUseStatements[] = [
-                        'message' => "Classlike ‘{$data['name']}’ is imported, but not used anywhere.",
+                        'message' => "Classlike is imported, but not used anywhere.",
                         'start'   => $data['start'],
                         'end'     => $data['end']
                     ];
@@ -191,7 +191,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                     $data['kind'] === UseStatementKind::TYPE_CONSTANT
                 ) {
                     $unusedUseStatements[] = [
-                        'message' => "Constant ‘{$data['name']}’ is imported, but not used anywhere.",
+                        'message' => "Constant is imported, but not used anywhere.",
                         'start'   => $data['start'],
                         'end'     => $data['end']
                     ];
@@ -241,7 +241,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
                     $data['kind'] === UseStatementKind::TYPE_FUNCTION
                 ) {
                     $unusedUseStatements[] = [
-                        'message' => "Function ‘{$data['name']}’ is imported, but not used anywhere.",
+                        'message' => "Function is imported, but not used anywhere.",
                         'start'   => $data['start'],
                         'end'     => $data['end']
                     ];

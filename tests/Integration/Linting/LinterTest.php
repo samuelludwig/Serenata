@@ -56,7 +56,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘A\B’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 32,
                 'end'     => 35
             ]
@@ -72,12 +72,12 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘DateTime’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 83,
                 'end'     => 91
             ],
             [
-                'message' => 'Classlike ‘DateTimeZone’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 104,
                 'end'     => 116
             ],
@@ -98,13 +98,13 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘DateTime’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 97,
                 'end'     => 105
             ],
 
             [
-                'message' => 'Classlike ‘SplFileInfo’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 153,
                 'end'     => 164
             ]
@@ -120,31 +120,31 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘A\B’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 75,
                 'end'     => 95
             ],
 
             [
-                'message' => 'Classlike ‘A\C’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 75,
                 'end'     => 95
             ],
 
             [
-                'message' => 'Classlike ‘MissingAnnotationClass’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 175,
                 'end'     => 197
             ],
 
             [
-                'message' => 'Classlike ‘A\MissingAnnotationClass’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 202,
                 'end'     => 226
             ],
 
             [
-                'message' => 'Classlike ‘B\MissingAnnotationClass’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 231,
                 'end'     => 256
             ]
@@ -208,7 +208,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘stdClass’ is not defined or imported anywhere.',
+                'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 248,
                 'end'     => 257
             ],
@@ -270,19 +270,19 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Function ‘\foo’ is not defined or imported anywhere.',
+                'message' => 'Function is not defined or imported anywhere.',
                 'start'   => 151,
                 'end'     => 156
             ],
 
             [
-                'message' => 'Function ‘\foo’ is not defined or imported anywhere.',
+                'message' => 'Function is not defined or imported anywhere.',
                 'start'   => 162,
                 'end'     => 168
             ],
 
             [
-                'message' => 'Function ‘\A\foo’ is not defined or imported anywhere.',
+                'message' => 'Function is not defined or imported anywhere.',
                 'start'   => 174,
                 'end'     => 182
             ]
@@ -298,19 +298,19 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Constant ‘\MISSING’ is not defined or imported anywhere.',
+                'message' => 'Constant is not defined or imported anywhere.',
                 'start'   => 98,
                 'end'     => 105
             ],
 
             [
-                'message' => 'Constant ‘\MISSING’ is not defined or imported anywhere.',
+                'message' => 'Constant is not defined or imported anywhere.',
                 'start'   => 111,
                 'end'     => 119
             ],
 
             [
-                'message' => 'Constant ‘\A\MISSING’ is not defined or imported anywhere.',
+                'message' => 'Constant is not defined or imported anywhere.',
                 'start'   => 125,
                 'end'     => 135
             ]
@@ -326,7 +326,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘Traversable’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 39,
                 'end'     => 50
             ]
@@ -342,13 +342,13 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘SplFileInfo’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 47,
                 'end'     => 58
             ],
 
             [
-                'message' => 'Classlike ‘DateTime’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 111,
                 'end'     => 119
             ]
@@ -364,19 +364,19 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘B\Foo’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 152,
                 'end'     => 155
             ],
 
             [
-                'message' => 'Classlike ‘B\Bar’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 165,
                 'end'     => 168
             ],
 
             [
-                'message' => 'Classlike ‘B\Missing’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 178,
                 'end'     => 185
             ]
@@ -392,7 +392,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Constant ‘Some\CONSTANT_UNUSED’ is imported, but not used anywhere.',
+                'message' => 'Constant is imported, but not used anywhere.',
                 'start'   => 56,
                 'end'     => 76
             ]
@@ -408,7 +408,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Function ‘Some\funcUnused’ is imported, but not used anywhere.',
+                'message' => 'Function is imported, but not used anywhere.',
                 'start'   => 58,
                 'end'     => 73
             ]
@@ -424,13 +424,13 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Classlike ‘SplMinHeap’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 53,
                 'end'     => 63
             ],
 
             [
-                'message' => 'Classlike ‘SplFileInfo’ is imported, but not used anywhere.',
+                'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 69,
                 'end'     => 80
             ]
@@ -456,31 +456,31 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Documentation for method ‘someMethod’ is missing.',
+                'message' => 'Documentation for method is missing.',
                 'start'   => 448,
                 'end'     => 449
             ],
 
             [
-                'message' => 'Documentation for property ‘someProperty’ is missing.',
+                'message' => 'Documentation for property is missing.',
                 'start'   => 331,
                 'end'     => 344
             ],
 
             [
-                'message' => 'Documentation for constant ‘SOME_CONST’ is missing.',
+                'message' => 'Documentation for constant is missing.',
                 'start'   => 300,
                 'end'     => 310
             ],
 
             [
-                'message' => 'Documentation for classlike ‘\A\MissingDocumentation’ is missing.',
+                'message' => 'Documentation for classlike is missing.',
                 'start'   => 496,
                 'end'     => 497
             ],
 
             [
-                'message' => 'Documentation for function ‘some_function’ is missing.',
+                'message' => 'Documentation for function is missing.',
                 'start'   => 21,
                 'end'     => 22
             ]
@@ -496,7 +496,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for function ‘some_function_missing_parameter’ is missing @param tag for ‘$param2’.',
+                'message' => 'Function docblock is missing @param tag for ‘$param2’.',
                 'start'   => 182,
                 'end'     => 183
             ]
@@ -548,7 +548,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for function ‘some_function_parameter_incorrect_type’ has incorrect @param type for ‘$param1’.',
+                'message' => 'Function docblock has incorrect @param type for ‘$param1’.',
                 'start'   => 334,
                 'end'     => 335
             ]
@@ -564,7 +564,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for function ‘some_function_parameter_incorrect_type’ has incorrect @param type for ‘$param1’.',
+                'message' => 'Function docblock has incorrect @param type for ‘$param1’.',
                 'start'   => 65,
                 'end'     => 66
             ]
@@ -592,7 +592,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for function ‘some_function_extra_parameter’ contains superfluous @param tags for: ‘$extra1, $extra2’.',
+                'message' => 'Function docblock contains superfluous @param tags for: ‘$extra1, $extra2’.',
                 'start'   => 256,
                 'end'     => 257
             ]
@@ -608,13 +608,13 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for property ‘property’ is missing @var tag.',
+                'message' => 'Property docblock is missing @var tag.',
                 'start'   => 116,
                 'end'     => 125
             ],
 
             [
-                'message' => 'Docblock for constant ‘CONSTANT’ is missing @var tag.',
+                'message' => 'Constant docblock is missing @var tag.',
                 'start'   => 64,
                 'end'     => 73
             ]
@@ -630,7 +630,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for classlike ‘C’ contains deprecated @category tag.',
+                'message' => 'Classlike docblock contains deprecated @category tag.',
                 'start'   => 47,
                 'end'     => 48
             ]
@@ -646,7 +646,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Docblock for classlike ‘C’ contains deprecated @subpackage tag.',
+                'message' => 'Classlike docblock contains deprecated @subpackage tag.',
                 'start'   => 49,
                 'end'     => 50
             ]
@@ -662,7 +662,7 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' =>  'Docblock for classlike ‘C’ contains deprecated @link tag. See also [https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated}.',
+                'message' =>  'Classlike docblock contains deprecated @link tag. See also [https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated}.',
                 'start'   => 63,
                 'end'     => 64
             ]

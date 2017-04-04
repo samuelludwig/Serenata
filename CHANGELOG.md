@@ -7,6 +7,10 @@
   * In order to fetch more information about a class, such as its parents, you now have to manually fetch this using the class info command.
 * Linting will now report the fully qualified name of a global function that wasn't found (instead of just the local name).
 * Linting will now report the fully qualified name of a global constant that wasn't found (instead of just the local name).
+* Linting messages have become more concise, verbal baggage has been removed.
+  * Instead of `Docblock for constant FOO is missing @var tag`, the message will now read `Constant docblock is missing @var tag`.
+  * This also increases readability, as markdown is no longer used (since it is not allowed by the language server protocol nor supported by Atom's linter v2 anymore).
+  * Mentioning the name was redundant as the location of the linter message provides the necessary context.
 * It is now possible to disable linting missing documentation separately from linting docblock correctness.
 * Updated to react/socket 0.5.0.
 * Indexing performance has slightly improved.
