@@ -144,7 +144,7 @@ services:
             - '@classlikeInfoBuilderProvider'
             - '@typeAnalyzer'
 
-    functionCallNodeFqsenDeterminer:
+    functionNameNodeFqsenDeterminer:
         class: PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer
         arguments:
             - '@globalFunctionExistenceChecker'
@@ -168,7 +168,7 @@ services:
     functionFunctionInfoRetriever:
         class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
-            - '@functionCallNodeFqsenDeterminer'
+            - '@functionNameNodeFqsenDeterminer'
             - '@globalFunctionsProvider'
 
     methodCallMethodInfoRetriever:

@@ -30,7 +30,7 @@ services:
         class: PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator
         arguments:
             - '@functionTooltipGenerator'
-            - '@functionCallNodeFqsenDeterminer'
+            - '@functionNameNodeFqsenDeterminer'
             - '@globalFunctionsProvider'
 
     methodCallNodeTooltipGenerator:
