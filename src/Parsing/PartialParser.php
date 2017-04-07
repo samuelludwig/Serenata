@@ -4,6 +4,8 @@ namespace PhpIntegrator\Parsing;
 
 use LogicException;
 
+use PhpIntegrator\Parsing\Node\Expr;
+
 use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\Parser;
@@ -61,6 +63,7 @@ class PartialParser implements Parser
         $nodes = $nodes ?: $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithFunctionTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithFunctionMissingArgumentCorrection($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithTernaryOperatorTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
 
         return $nodes;
@@ -156,6 +159,30 @@ class PartialParser implements Parser
                     break;
                 }
             }
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
+    protected function tryParseWithTernaryOperatorTerminationCorrection(string $code): ?array
+    {
+        $dummyName = '____DUMMY____';
+
+        $nodes = $this->tryParse($code . ": {$dummyName};");
+
+        if (empty($nodes)) {
+            return $nodes;
+        }
+
+        $node = $nodes[count($nodes) - 1];
+
+        if ($node instanceof Node\Expr\Ternary) {
+            $node->else = new Expr\Dummy();
         }
 
         return $nodes;

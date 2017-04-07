@@ -4,6 +4,8 @@ namespace PhpIntegrator\Tests\Unit\Parsing;
 
 use PhpIntegrator\Parsing\PartialParser;
 
+use PhpIntegrator\Parsing\Node\Expr;
+
 use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
@@ -576,6 +578,31 @@ SOURCE;
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
         $this->assertEquals('this', $result->expr->var->name);
         $this->assertEquals('one', $result->expr->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testParsesExpressionWithTernaryOperatorWithMissingColon(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+$test ? $a
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        $this->assertEquals(1, count($result));
+
+        $result = array_shift($result);
+
+        $this->assertInstanceOf(Node\Expr\Ternary::class, $result);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->cond);
+        $this->assertEquals('test', $result->cond->name);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->if);
+        $this->assertEquals('a', $result->if->name);
+        $this->assertInstanceOf(Expr\Dummy::class, $result->else);
     }
 
     /**
