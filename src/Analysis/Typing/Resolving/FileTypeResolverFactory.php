@@ -22,15 +22,23 @@ class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
     private $namespaceImportProviderInterface;
 
     /**
-     * @param TypeResolverInterface            $typeResolver
-     * @param NamespaceImportProviderInterface $namespaceImportProviderInterface
+     * @var FileLineNamespaceDeterminerFactory
+     */
+    private $fileLineNamespaceDeterminerFactory;
+
+    /**
+     * @param TypeResolverInterface              $typeResolver
+     * @param NamespaceImportProviderInterface   $namespaceImportProviderInterface
+     * @param FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
      */
     public function __construct(
         TypeResolverInterface $typeResolver,
-        NamespaceImportProviderInterface $namespaceImportProviderInterface
+        NamespaceImportProviderInterface $namespaceImportProviderInterface,
+        FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
     ) {
         $this->typeResolver = $typeResolver;
         $this->namespaceImportProviderInterface = $namespaceImportProviderInterface;
+        $this->fileLineNamespaceDeterminerFactory = $fileLineNamespaceDeterminerFactory;
     }
 
     /**
@@ -38,17 +46,10 @@ class FileTypeResolverFactory implements FileTypeResolverFactoryInterface
      */
     public function create(string $filePath): FileTypeResolver
     {
-        $namespaces = $this->namespaceImportProviderInterface->getNamespacesForFile($filePath);
-
-        if (empty($namespaces)) {
-            throw new UnexpectedValueException(
-                'No namespace found for "' . $filePath .
-                '", but there should always exist at least one namespace row in the database!'
-            );
-        }
-
-        $useStatements = $this->namespaceImportProviderInterface->getUseStatementsForFile($filePath);
-
-        return new FileTypeResolver($this->typeResolver, $namespaces, $useStatements);
+        return new FileTypeResolver(
+            $this->typeResolver,
+            $this->fileLineNamespaceDeterminerFactory->create($filePath),
+            $this->namespaceImportProviderInterface->getUseStatementsForFile($filePath)
+        );
     }
 }

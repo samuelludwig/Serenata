@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing\Localization;
 
+use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminer;
+
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 /**
@@ -14,9 +16,9 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 class FileTypeLocalizer
 {
     /**
-     * @var array
+     * @var FileLineNamespaceDeterminer
      */
-    private $namespaces;
+    private $fileLineNamespaceDeterminer;
 
     /**
      * @var array
@@ -30,11 +32,7 @@ class FileTypeLocalizer
 
     /**
      * @param TypeLocalizer $typeLocalizer
-     * @param array {
-     *     @var string   $fqcn
-     *     @var int      $startLine
-     *     @var int|null $endLine
-     * } $namespaces
+     * @param FileLineNamespaceDeterminer $fileLineNamespaceDeterminer
      * @param array {
      *     @var string $fqcn
      *     @var string $alias
@@ -42,10 +40,13 @@ class FileTypeLocalizer
      *     @var int    $line
      * } $imports
      */
-    public function __construct(TypeLocalizer $typeLocalizer, array $namespaces, array $imports)
-    {
+    public function __construct(
+        TypeLocalizer $typeLocalizer,
+        FileLineNamespaceDeterminer $fileLineNamespaceDeterminer,
+        array $imports
+    ) {
         $this->typeLocalizer = $typeLocalizer;
-        $this->namespaces = $namespaces;
+        $this->fileLineNamespaceDeterminer = $fileLineNamespaceDeterminer;
         $this->imports = $imports;
     }
 
@@ -60,37 +61,31 @@ class FileTypeLocalizer
      */
     public function resolve(string $name, int $line, string $kind = UseStatementKind::TYPE_CLASSLIKE): ?string
     {
-        $namespaceFqcn = null;
-        $relevantImports = [];
-
-        foreach ($this->namespaces as $namespace) {
-            if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
-                $namespaceFqcn = $namespace['name'];
-
-                foreach ($this->imports as $import) {
-                    if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
-                        $relevantImports[] = $import;
-                    }
-                }
-
-                break;
-            }
-        }
-
-        return $this->typeLocalizer->localize($name, $namespaceFqcn, $relevantImports, $kind);
+        return $this->typeLocalizer->localize(
+            $name,
+            $this->fileLineNamespaceDeterminer->determine($line)->getName(),
+            $this->getRelevantUseStatementsForLine($line),
+            $kind
+        );
     }
 
     /**
-     * @param int   $line
-     * @param array $namespace
+     * @param int $line
      *
-     * @return bool
+     * @return array
      */
-    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
+    protected function getRelevantUseStatementsForLine(int $line): array
     {
-        return (
-            $line >= $namespace['startLine'] &&
-            ($line <= $namespace['endLine'] || $namespace['endLine'] === null)
-        );
+        $namespace = $this->fileLineNamespaceDeterminer->determine($line);
+
+        $relevantImports = [];
+
+        foreach ($this->imports as $import) {
+            if ($import['line'] <= $line && $namespace->containsLine($import['line'])) {
+                $relevantImports[] = $import;
+            }
+        }
+
+        return $relevantImports;
     }
 }

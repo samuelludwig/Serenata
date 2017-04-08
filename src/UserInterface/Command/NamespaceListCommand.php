@@ -6,6 +6,8 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 
+use PhpIntegrator\Utility\NamespaceData;
+
 /**
  * Command that shows a list of available namespace.
  */
@@ -44,7 +46,15 @@ class NamespaceListCommand extends AbstractCommand
     public function getNamespaceList(?string $file = null): array
     {
         if ($file !== null) {
-            return $this->indexDatabase->getNamespacesForFile($file);
+            $namespaces = $this->indexDatabase->getNamespacesForFile($file);
+
+            return array_map(function (NamespaceData $namespaceData) {
+                return [
+                    'name'      => $namespaceData->getName(),
+                    'startLine' => $namespaceData->getStartLine(),
+                    'endLine'   => $namespaceData->getEndLine()
+                ];
+            }, $namespaces);
         }
 
         return $this->indexDatabase->getNamespaces($file);

@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\Analysis\Typing\Localization;
 
-use LogicException;
-
 use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
+
+use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminerFactory;
 
 /**
  * Factory that creates instances of {@see FileTypeLocalizer}.
@@ -22,36 +22,36 @@ class FileTypeLocalizerFactory
     private $namespaceImportProviderInterface;
 
     /**
-     * @param TypeLocalizer                    $typeLocalizer
-     * @param NamespaceImportProviderInterface $namespaceImportProviderInterface
+     * @var FileLineNamespaceDeterminerFactory
+     */
+    private $fileLineNamespaceDeterminerFactory;
+
+    /**
+     * @param TypeLocalizer                      $typeLocalizer
+     * @param NamespaceImportProviderInterface   $namespaceImportProviderInterface
+     * @param FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
      */
     public function __construct(
         TypeLocalizer $typeLocalizer,
-        NamespaceImportProviderInterface $namespaceImportProviderInterface
+        NamespaceImportProviderInterface $namespaceImportProviderInterface,
+        FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
     ) {
         $this->typeLocalizer = $typeLocalizer;
         $this->namespaceImportProviderInterface = $namespaceImportProviderInterface;
+        $this->fileLineNamespaceDeterminerFactory = $fileLineNamespaceDeterminerFactory;
     }
 
     /**
      * @param string $filePath
      *
-     * @throws LogicException if no namespaces exist for a file.
-     *
      * @return FileTypeLocalizer
      */
     public function create(string $filePath): FileTypeLocalizer
     {
-        $namespaces = $this->namespaceImportProviderInterface->getNamespacesForFile($filePath);
-
-        if (empty($namespaces)) {
-            throw new LogicException(
-                'No namespace found, but there should always exist at least one namespace row in the database!'
-            );
-        }
-
-        $useStatements = $this->namespaceImportProviderInterface->getUseStatementsForFile($filePath);
-
-        return new FileTypeLocalizer($this->typeLocalizer, $namespaces, $useStatements);
+        return new FileTypeLocalizer(
+            $this->typeLocalizer,
+            $this->fileLineNamespaceDeterminerFactory->create($filePath),
+            $this->namespaceImportProviderInterface->getUseStatementsForFile($filePath)
+        );
     }
 }

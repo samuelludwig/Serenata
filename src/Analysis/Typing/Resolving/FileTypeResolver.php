@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing\Resolving;
 
-use LogicException;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 /**
@@ -16,9 +14,9 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 class FileTypeResolver implements FileTypeResolverInterface
 {
     /**
-     * @var array
+     * @var FileLineNamespaceDeterminer
      */
-    private $namespaces;
+    private $fileLineNamespaceDeterminer;
 
     /**
      * @var array
@@ -31,12 +29,8 @@ class FileTypeResolver implements FileTypeResolverInterface
     private $typeResolver;
 
     /**
-     * @param TypeResolverInterface $typeResolver
-     * @param array {
-     *     @var string   $name
-     *     @var int      $startLine
-     *     @var int|null $endLine
-     * } $namespaces
+     * @param TypeResolverInterface       $typeResolver
+     * @param FileLineNamespaceDeterminer $fileLineNamespaceDeterminer
      * @param array {
      *     @var string $name
      *     @var string $alias
@@ -44,10 +38,13 @@ class FileTypeResolver implements FileTypeResolverInterface
      *     @var int    $line
      * } $imports
      */
-    public function __construct(TypeResolverInterface $typeResolver, array $namespaces, array $imports)
-    {
+    public function __construct(
+        TypeResolverInterface $typeResolver,
+        FileLineNamespaceDeterminer $fileLineNamespaceDeterminer,
+        array $imports
+    ) {
         $this->typeResolver = $typeResolver;
-        $this->namespaces = $namespaces;
+        $this->fileLineNamespaceDeterminer = $fileLineNamespaceDeterminer;
         $this->imports = $imports;
     }
 
@@ -56,34 +53,12 @@ class FileTypeResolver implements FileTypeResolverInterface
      */
     public function resolve(string $name, int $line, string $kind = UseStatementKind::TYPE_CLASSLIKE): ?string
     {
-        $namespaceFqcn = null;
-        $relevantImports = [];
-
-        $namespace = $this->getRelevantNamespaceArrayForLine($line);
-
-        if ($namespace !== null) {
-            $namespaceFqcn = $namespace['name'];
-        }
-
-        $relevantImports = $this->getRelevantUseStatementsForLine($line);
-
-        return $this->typeResolver->resolve($name, $namespaceFqcn, $relevantImports, $kind);
-    }
-
-    /**
-     * @param int $line
-     *
-     * @return array
-     */
-    protected function getRelevantNamespaceArrayForLine(int $line): array
-    {
-        foreach ($this->namespaces as $namespace) {
-            if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
-                return $namespace;
-            }
-        }
-
-        throw new LogicException('Sanity check failed: should always have at least one namespace structure');
+        return $this->typeResolver->resolve(
+            $name,
+            $this->fileLineNamespaceDeterminer->determine($line)->getName(),
+            $this->getRelevantUseStatementsForLine($line),
+            $kind
+        );
     }
 
     /**
@@ -93,30 +68,16 @@ class FileTypeResolver implements FileTypeResolverInterface
      */
     protected function getRelevantUseStatementsForLine(int $line): array
     {
-        $namespace = $this->getRelevantNamespaceArrayForLine($line);
+        $namespace = $this->fileLineNamespaceDeterminer->determine($line);
 
         $relevantImports = [];
 
         foreach ($this->imports as $import) {
-            if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
+            if ($import['line'] <= $line && $namespace->containsLine($import['line'])) {
                 $relevantImports[] = $import;
             }
         }
 
         return $relevantImports;
-    }
-
-    /**
-     * @param int   $line
-     * @param array $namespace
-     *
-     * @return bool
-     */
-    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
-    {
-        return (
-            $line >= $namespace['startLine'] &&
-            ($line <= $namespace['endLine'] || $namespace['endLine'] === null)
-        );
     }
 }

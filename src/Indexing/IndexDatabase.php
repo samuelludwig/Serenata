@@ -12,6 +12,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilderProviderInterface;
 
 use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
 
+use PhpIntegrator\Utility\NamespaceData;
+
 /**
  * Represents that database that is used for indexing.
  */
@@ -627,7 +629,7 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
      */
     public function getNamespacesForFile(string $filePath): array
     {
-        return $this->getConnection()->createQueryBuilder()
+        $results = $this->getConnection()->createQueryBuilder()
             ->select('fn.namespace AS name', 'fn.start_line AS startLine', 'fn.end_line AS endLine')
             ->from(IndexStorageItemEnum::FILES_NAMESPACES, 'fn')
             ->join('fn', IndexStorageItemEnum::FILES, 'fi', 'fi.id = fn.file_id')
@@ -635,6 +637,10 @@ class IndexDatabase implements StorageInterface, ClasslikeInfoBuilderProviderInt
             ->setParameter(0, $filePath)
             ->execute()
             ->fetchAll();
+
+        return array_map(function (array $result) {
+            return new NamespaceData($result['name'], $result['startLine'], $result['endLine']);
+        }, $results);
     }
 
     /**

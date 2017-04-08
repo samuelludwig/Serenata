@@ -34,30 +34,26 @@ class ProjectTypeResolver implements FileTypeResolverInterface
     private $globalFunctionExistenceChecker;
 
     /**
-     * @var array
+     * @var FileLineNamespaceDeterminer
      */
-    private $namespaces;
+    private $fileLineNamespaceDeterminer;
 
     /**
      * @param FileTypeResolverInterface               $typeResolver
      * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
      * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
-     * @param array {
-     *     @var string   $name
-     *     @var int      $startLine
-     *     @var int|null $endLine
-     * } $namespaces
+     * @param FileLineNamespaceDeterminer             $fileLineNamespaceDeterminer
      */
     public function __construct(
         FileTypeResolverInterface $typeResolver,
         GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker,
         GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker,
-        array $namespaces
+        FileLineNamespaceDeterminer $fileLineNamespaceDeterminer
     ) {
         $this->typeResolver = $typeResolver;
         $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
         $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
-        $this->namespaces = $namespaces;
+        $this->fileLineNamespaceDeterminer = $fileLineNamespaceDeterminer;
     }
 
     /**
@@ -74,19 +70,21 @@ class ProjectTypeResolver implements FileTypeResolverInterface
         try {
             return $this->typeResolver->resolve($name, $line, $kind);
         } catch (TypeResolutionImpossibleException $e) {
-            $namespace = $this->getRelevantNamespaceForLine($line);
+            $namespacedName = '\\' . $name;
 
-            if ($namespace) {
-                $namespacedName = '\\' . $namespace . '\\' . $name;
+            $namespace = $this->fileLineNamespaceDeterminer->determine($line);
 
-                if ($kind === UseStatementKind::TYPE_CONSTANT) {
-                    if ($this->globalConstantExistenceChecker->exists($namespacedName)) {
-                        return $namespacedName;
-                    }
-                } elseif ($kind === UseStatementKind::TYPE_FUNCTION) {
-                    if ($this->globalFunctionExistenceChecker->exists($namespacedName)) {
-                        return $namespacedName;
-                    }
+            if ($namespace->getName() !== null) {
+                $namespacedName = '\\' . $namespace->getName() . $namespacedName;
+            }
+
+            if ($kind === UseStatementKind::TYPE_CONSTANT) {
+                if ($this->globalConstantExistenceChecker->exists($namespacedName)) {
+                    return $namespacedName;
+                }
+            } elseif ($kind === UseStatementKind::TYPE_FUNCTION) {
+                if ($this->globalFunctionExistenceChecker->exists($namespacedName)) {
+                    return $namespacedName;
                 }
             }
 
@@ -96,35 +94,5 @@ class ProjectTypeResolver implements FileTypeResolverInterface
         }
 
         throw new LogicException('Should never be reached');
-    }
-
-    /**
-     * @param int $line
-     *
-     * @return string|null
-     */
-    protected function getRelevantNamespaceForLine(int $line): ?string
-    {
-        foreach ($this->namespaces as $namespace) {
-            if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
-                return $namespace['name'];
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param int   $line
-     * @param array $namespace
-     *
-     * @return bool
-     */
-    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
-    {
-        return (
-            $line >= $namespace['startLine'] &&
-            ($line <= $namespace['endLine'] || $namespace['endLine'] === null)
-        );
     }
 }

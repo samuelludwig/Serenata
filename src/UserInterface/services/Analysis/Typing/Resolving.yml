@@ -16,11 +16,17 @@ services:
     typeResolver:
         alias: 'typeResolver.docblock'
 
+    fileLineNamespaceDeterminerFactory:
+        class: PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminerFactory
+        arguments:
+            - '@namespaceImportProvider'
+
     fileTypeResolverFactory:
         class: PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory
         arguments:
             - '@typeResolver'
             - '@namespaceImportProvider'
+            - '@fileLineNamespaceDeterminerFactory'
 
     projectTypeResolverFactory:
         class: PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactory
@@ -28,6 +34,7 @@ services:
             - '@globalConstantExistenceChecker'
             - '@globalFunctionExistenceChecker'
             - '@namespaceImportProvider'
+            - '@fileLineNamespaceDeterminerFactory'
 
     projectTypeResolverFactoryFacade:
         class: PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade

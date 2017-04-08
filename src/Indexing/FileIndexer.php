@@ -13,11 +13,14 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
 use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
+use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminer;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
+
+use PhpIntegrator\Utility\NamespaceData;
 
 use PhpParser\Error;
 use PhpParser\Parser;
@@ -177,6 +180,7 @@ class FileIndexer implements FileIndexerInterface
         UseStatementFetchingVisitor $useStatementFetchingVisitor
     ): void {
         $imports = [];
+        $namespaceObjects = [];
         $namespaces = $useStatementFetchingVisitor->getNamespaces();
 
         foreach ($namespaces as $namespace) {
@@ -198,9 +202,13 @@ class FileIndexer implements FileIndexerInterface
                     'files_namespace_id' => $namespaceId
                 ]);
             }
+
+            $namespaceObjects[] = new NamespaceData($namespace['name'], $namespace['startLine'], $namespace['endLine']);
         }
 
-        $fileTypeResolver = new FileTypeResolver($this->typeResolver, $namespaces, $imports);
+        $fileLineNamespaceDeterminer = new FileLineNamespaceDeterminer($namespaceObjects);
+
+        $fileTypeResolver = new FileTypeResolver($this->typeResolver, $fileLineNamespaceDeterminer, $imports);
 
         foreach ($outlineIndexingVisitor->getStructures() as $fqcn => $structure) {
              $this->indexStructure(
