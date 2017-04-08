@@ -10,7 +10,9 @@ use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
+use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Parses partial (incomplete) PHP code.
@@ -181,9 +183,26 @@ class PartialParser implements Parser
 
         $node = $nodes[count($nodes) - 1];
 
-        if ($node instanceof Node\Expr\Ternary) {
-            $node->else = new Expr\Dummy();
-        }
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new class($dummyName) extends NodeVisitorAbstract {
+            private $dummyName;
+
+            public function __construct(string $dummyName)
+            {
+                $this->dummyName = $dummyName;
+            }
+
+            public function enterNode(Node $node)
+            {
+                if ($node instanceof Node\Expr\Ternary) {
+                    if ($node->else instanceof Node\Expr\ConstFetch && $node->else->name->toString() === $this->dummyName) {
+                        $node->else = new Expr\Dummy();
+                    }
+                }
+            }
+        });
+
+        $traverser->traverse($nodes);
 
         return $nodes;
     }

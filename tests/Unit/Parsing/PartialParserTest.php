@@ -608,6 +608,33 @@ SOURCE;
     /**
      * @return void
      */
+    public function testParsesExpressionWithTernaryOperatorWithMissingColonInAssignment(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+$b = $test ? $a
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        $this->assertEquals(1, count($result));
+
+        $result = array_shift($result);
+
+        $this->assertInstanceOf(Node\Expr\Assign::class, $result);
+        $this->assertEquals('b', $result->var->name);
+        $this->assertInstanceOf(Node\Expr\Ternary::class, $result->expr);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->cond);
+        $this->assertEquals('test', $result->expr->cond->name);
+        $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->if);
+        $this->assertEquals('a', $result->expr->if->name);
+        $this->assertInstanceOf(Expr\Dummy::class, $result->expr->else);
+    }
+
+    /**
+     * @return void
+     */
     public function testParsesFunctionCall(): void
     {
         $source = <<<'SOURCE'
