@@ -97,8 +97,6 @@ class FileTypeResolver implements FileTypeResolverInterface
 
         $relevantImports = [];
 
-        $namespaceFqcn = $namespace['name'];
-
         foreach ($this->imports as $import) {
             if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
                 $relevantImports[] = $import;
