@@ -131,7 +131,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
         $unusedUseStatements = [];
 
-        foreach ($namespaces as $namespace => $namespaceData) {
+        foreach ($namespaces as $namespaceData) {
             $useStatementMap = $namespaceData['useStatements'];
 
             foreach ($useStatementMap as $alias => $data) {
@@ -182,7 +182,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
         $unusedUseStatements = [];
 
-        foreach ($namespaces as $namespace => $namespaceData) {
+        foreach ($namespaces as $namespaceData) {
             $useStatementMap = $namespaceData['useStatements'];
 
             foreach ($useStatementMap as $alias => $data) {
@@ -232,7 +232,7 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
         $unusedUseStatements = [];
 
-        foreach ($namespaces as $namespace => $namespaceData) {
+        foreach ($namespaces as $namespaceData) {
             $useStatementMap = $namespaceData['useStatements'];
 
             foreach ($useStatementMap as $alias => $data) {
