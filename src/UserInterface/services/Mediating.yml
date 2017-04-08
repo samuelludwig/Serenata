@@ -11,6 +11,7 @@ services:
                 - '@globalConstantExistenceChecker'
                 - '@fileTypeResolverFactory.cachingDecorator'
                 - '@fileClassListProvider.cachingDecorator'
+                - '@namespaceImportProvider.cachingDecorator'
 
     cacheClearingEventMediator:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
