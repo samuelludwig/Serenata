@@ -119,16 +119,6 @@ services:
             - '@classlikeConverter'
             - '@indexDatabase'
 
-    cacheClearingEventMediator.clearableCache:
-        class: PhpIntegrator\Analysis\ClearableCacheCollection
-        arguments:
-            -
-                - '@classlikeExistenceChecker'
-                - '@globalFunctionExistenceChecker'
-                - '@globalConstantExistenceChecker'
-                - '@fileTypeResolverFactory.cachingDecorator'
-                - '@fileClassListProvider.cachingDecorator'
-
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
         arguments:

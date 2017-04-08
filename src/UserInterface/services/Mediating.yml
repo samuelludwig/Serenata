@@ -2,6 +2,16 @@ parameters:
 
 
 services:
+    cacheClearingEventMediator.clearableCache:
+        class: PhpIntegrator\Analysis\ClearableCacheCollection
+        arguments:
+            -
+                - '@classlikeExistenceChecker'
+                - '@globalFunctionExistenceChecker'
+                - '@globalConstantExistenceChecker'
+                - '@fileTypeResolverFactory.cachingDecorator'
+                - '@fileClassListProvider.cachingDecorator'
+
     cacheClearingEventMediator:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
         arguments:
