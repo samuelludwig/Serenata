@@ -9,7 +9,6 @@ services:
                 - '@classlikeExistenceChecker'
                 - '@globalFunctionExistenceChecker'
                 - '@globalConstantExistenceChecker'
-                - '@fileTypeResolverFactory.cachingDecorator'
                 - '@fileClassListProvider.cachingDecorator'
                 - '@namespaceImportProvider.cachingDecorator'
 
