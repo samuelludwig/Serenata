@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Linting;
 
+use LogicException;
+
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
@@ -120,12 +122,14 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         foreach ($classUsages as $classUsage) {
             $relevantAlias = $classUsage['firstPart'];
 
+            $index = $this->getRelevantNamespaceIndexForLine($namespaces, $classUsage['line']);
+
             if (!$classUsage['isFullyQualified'] &&
-                isset($namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]) &&
-                $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CLASSLIKE
+                isset($namespaces[$index]['useStatements'][$relevantAlias]) &&
+                $namespaces[$index]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CLASSLIKE
             ) {
                 // Mark the accompanying used statement, if any, as used.
-                $namespaces[$classUsage['namespace']]['useStatements'][$relevantAlias]['used'] = true;
+                $namespaces[$index]['useStatements'][$relevantAlias]['used'] = true;
             }
         }
 
@@ -164,19 +168,14 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         foreach ($constantUsages as $node) {
             $relevantAlias = $node->name->getFirst();
 
-            $namespaceNode = $node->getAttribute('namespace');
-            $namespace = null;
-
-            if ($namespaceNode !== null) {
-                $namespace = NodeHelpers::fetchClassName($namespaceNode);
-            }
+            $index = $this->getRelevantNamespaceIndexForLine($namespaces, $node->getAttribute('startLine'));
 
             if (!$node->name->isFullyQualified() &&
-                isset($namespaces[$namespace]['useStatements'][$relevantAlias]) &&
-                $namespaces[$namespace]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CONSTANT
+                isset($namespaces[$index]['useStatements'][$relevantAlias]) &&
+                $namespaces[$index]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_CONSTANT
             ) {
                 // Mark the accompanying used statement, if any, as used.
-                $namespaces[$namespace]['useStatements'][$relevantAlias]['used'] = true;
+                $namespaces[$index]['useStatements'][$relevantAlias]['used'] = true;
             }
         }
 
@@ -214,19 +213,15 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
 
         foreach ($functionUsages as $node) {
             $relevantAlias = $node->name->getFirst();
-            $namespaceNode = $node->getAttribute('namespace');
-            $namespace = null;
 
-            if ($namespaceNode !== null) {
-                $namespace = NodeHelpers::fetchClassName($namespaceNode);
-            }
+            $index = $this->getRelevantNamespaceIndexForLine($namespaces, $node->getAttribute('startLine'));
 
             if (!$node->name->isFullyQualified() &&
-                isset($namespaces[$namespace]['useStatements'][$relevantAlias]) &&
-                $namespaces[$namespace]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_FUNCTION
+                isset($namespaces[$index]['useStatements'][$relevantAlias]) &&
+                $namespaces[$index]['useStatements'][$relevantAlias]['kind'] === UseStatementKind::TYPE_FUNCTION
             ) {
                 // Mark the accompanying used statement, if any, as used.
-                $namespaces[$namespace]['useStatements'][$relevantAlias]['used'] = true;
+                $namespaces[$index]['useStatements'][$relevantAlias]['used'] = true;
             }
         }
 
@@ -250,5 +245,36 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
         }
 
         return $unusedUseStatements;
+    }
+
+    /**
+     * @param array $namespaces
+     * @param int   $line
+     *
+     * @return int
+     */
+    protected function getRelevantNamespaceIndexForLine(array $namespaces, int $line): int
+    {
+        foreach ($namespaces as $index => $namespace) {
+            if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
+                return $index;
+            }
+        }
+
+        throw new LogicException('Sanity check failed: should always have at least one namespace structure');
+    }
+
+    /**
+     * @param int   $line
+     * @param array $namespace
+     *
+     * @return bool
+     */
+    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
+    {
+        return (
+            $line >= $namespace['startLine'] &&
+            ($line <= $namespace['endLine'] || $namespace['endLine'] === null)
+        );
     }
 }

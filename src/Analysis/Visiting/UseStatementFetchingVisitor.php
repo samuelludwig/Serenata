@@ -18,23 +18,23 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
     private $namespaces = [];
 
     /**
-     * @var string|null
+     * @var int
      */
-    private $lastNamespace = null;
+    private $lastNamespaceIndex = 0;
 
     /**
      * Constructor.
      */
     public function __construct()
     {
-        $this->namespaces[null] = [
+        $this->namespaces[0] = [
             'name'          => null,
             'startLine'     => 0,
             'endLine'       => null,
             'useStatements' => []
         ];
 
-        $this->lastNamespace = null;
+        $this->lastNamespaceIndex = 0;
     }
 
     /**
@@ -43,19 +43,15 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Namespace_) {
-            $namespace = $node->name ? (string) $node->name : '';
-
-            $this->namespaces[$namespace] = [
-                'name'          => $namespace,
+            // There is no way to fetch the end of a namespace, so determine it manually (a value of null signifies the
+            // end of the file).
+            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $node->getLine() - 1;
+            $this->namespaces[++$this->lastNamespaceIndex] = [
+                'name'          => $node->name ? (string) $node->name : '',
                 'startLine'     => $node->getLine(),
                 'endLine'       => null,
                 'useStatements' => []
             ];
-
-            // There is no way to fetch the end of a namespace, so determine it manually (a value of null signifies the
-            // end of the file).
-            $this->namespaces[$this->lastNamespace]['endLine'] = $node->getLine() - 1;
-            $this->lastNamespace = $namespace;
         } elseif ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\GroupUse) {
             $prefix = '';
 
@@ -77,7 +73,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 ];
 
                 // NOTE: The namespace may be null here (intended behavior).
-                $this->namespaces[$this->lastNamespace]['useStatements'][(string) $use->alias] = [
+                $this->namespaces[$this->lastNamespaceIndex]['useStatements'][(string) $use->alias] = [
                     'name'  => $prefix . ((string) $use->name),
                     'alias' => $use->alias,
                     'kind'  => $kindMap[$type],
