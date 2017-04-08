@@ -32,7 +32,7 @@
 * The docblock parser will now strip invalid leading and trailing bars for compound types (e.g. `@param string| $test` becomes `@param string $test`).
   * No one should actually be writing these, but it ensures other parts of the code base can assume that compound types actually contain multiple non-empty types.
 * Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else.
-* When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35):
+* When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35).
 * Fix not being able to use the same namespace multiple times in a file.
 * Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
