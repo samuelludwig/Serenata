@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Typing\Resolving;
 
+use LogicException;
+
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 /**
@@ -57,7 +59,7 @@ class FileTypeResolver implements FileTypeResolverInterface
         $namespaceFqcn = null;
         $relevantImports = [];
 
-        $namespace = $this->getRelevantNamespaceForLine($line);
+        $namespace = $this->getRelevantNamespaceArrayForLine($line);
 
         if ($namespace !== null) {
             $namespaceFqcn = $namespace['name'];
@@ -71,9 +73,9 @@ class FileTypeResolver implements FileTypeResolverInterface
     /**
      * @param int $line
      *
-     * @return array|null
+     * @return array
      */
-    protected function getRelevantNamespaceForLine(int $line): ?array
+    protected function getRelevantNamespaceArrayForLine(int $line): array
     {
         foreach ($this->namespaces as $namespace) {
             if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
@@ -81,7 +83,7 @@ class FileTypeResolver implements FileTypeResolverInterface
             }
         }
 
-        return null;
+        throw new LogicException('Sanity check failed: should always have at least one namespace structure');
     }
 
     /**
@@ -91,17 +93,15 @@ class FileTypeResolver implements FileTypeResolverInterface
      */
     protected function getRelevantUseStatementsForLine(int $line): array
     {
-        $namespace = $this->getRelevantNamespaceForLine($line);
+        $namespace = $this->getRelevantNamespaceArrayForLine($line);
 
         $relevantImports = [];
 
-        if ($namespace !== null) {
-            $namespaceFqcn = $namespace['name'];
+        $namespaceFqcn = $namespace['name'];
 
-            foreach ($this->imports as $import) {
-                if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
-                    $relevantImports[] = $import;
-                }
+        foreach ($this->imports as $import) {
+            if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
+                $relevantImports[] = $import;
             }
         }
 
