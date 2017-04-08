@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing\Resolving;
 
-use LogicException;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 /**
@@ -59,7 +57,7 @@ class FileTypeResolver implements FileTypeResolverInterface
         $namespaceFqcn = null;
         $relevantImports = [];
 
-        $namespace = $this->getRelevantNamespaceArrayForLine($line);
+        $namespace = $this->getRelevantNamespaceForLine($line);
 
         if ($namespace !== null) {
             $namespaceFqcn = $namespace['name'];
@@ -73,9 +71,9 @@ class FileTypeResolver implements FileTypeResolverInterface
     /**
      * @param int $line
      *
-     * @return array
+     * @return array|null
      */
-    protected function getRelevantNamespaceArrayForLine(int $line): array
+    protected function getRelevantNamespaceForLine(int $line): ?array
     {
         foreach ($this->namespaces as $namespace) {
             if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
@@ -83,7 +81,7 @@ class FileTypeResolver implements FileTypeResolverInterface
             }
         }
 
-        throw new LogicException('Sanity check failed: should always have at least one namespace structure');
+        return null;
     }
 
     /**
@@ -93,15 +91,17 @@ class FileTypeResolver implements FileTypeResolverInterface
      */
     protected function getRelevantUseStatementsForLine(int $line): array
     {
-        $namespace = $this->getRelevantNamespaceArrayForLine($line);
+        $namespace = $this->getRelevantNamespaceForLine($line);
 
         $relevantImports = [];
 
-        $namespaceFqcn = $namespace['name'];
+        if ($namespace !== null) {
+            $namespaceFqcn = $namespace['name'];
 
-        foreach ($this->imports as $import) {
-            if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
-                $relevantImports[] = $import;
+            foreach ($this->imports as $import) {
+                if ($import['line'] <= $line && $this->lineLiesWithinNamespaceRange($import['line'], $namespace)) {
+                    $relevantImports[] = $import;
+                }
             }
         }
 
