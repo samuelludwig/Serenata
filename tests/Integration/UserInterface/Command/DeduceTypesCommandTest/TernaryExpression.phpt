@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @return C|null
+ * @var C|null
  */
-function bar() {}
+const BAR = 1;
 
 /**
  * @param C|null $c
@@ -20,7 +20,7 @@ function foo(C $c = null)
 
     $b = $b1 ?: $b2;
 
-    $c = $c ?: bar();
+    $c = $c ?: BAR;
 
     $d = true ? $a : $c;
 
