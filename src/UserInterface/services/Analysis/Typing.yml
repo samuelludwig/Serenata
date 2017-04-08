@@ -12,3 +12,6 @@ services:
         arguments:
             - '@fileTypeResolverFactory'
             - '@classlikeInfoBuilder'
+
+    namespaceImportProvider:
+        alias: indexDatabase

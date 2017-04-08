@@ -11,4 +11,4 @@ services:
         class: PhpIntegrator\Analysis\Typing\Localization\FileTypeLocalizerFactory
         arguments:
             - '@typeLocalizer'
-            - '@indexDatabase'
+            - '@namespaceImportProvider'

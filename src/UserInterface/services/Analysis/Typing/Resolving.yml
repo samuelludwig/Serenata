@@ -20,7 +20,7 @@ services:
         class: PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory
         arguments:
             - '@typeResolver'
-            - '@indexDatabase'
+            - '@namespaceImportProvider'
 
     fileTypeResolverFactory.cachingDecorator:
         class: PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryCachingDecorator
@@ -35,7 +35,7 @@ services:
         arguments:
             - '@globalConstantExistenceChecker'
             - '@globalFunctionExistenceChecker'
-            - '@indexDatabase'
+            - '@namespaceImportProvider'
 
     projectTypeResolverFactoryFacade:
         class: PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade
