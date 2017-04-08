@@ -91,6 +91,7 @@ services:
         arguments:
             - '@indexDatabase'
             - '@functionConverter'
+            - '@functionNameNodeFqsenDeterminer'
 
     methodCallNodeTypeDeducer.delegate:
         class: PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer

@@ -83,6 +83,7 @@ services:
             - '@nodeTypeDeducer'
             - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
+            - '@fileLineNamespaceDeterminerFactory'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand

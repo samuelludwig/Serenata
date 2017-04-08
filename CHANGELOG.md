@@ -35,6 +35,7 @@
 * When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35):
 * Fix not being able to use the same namespace multiple times in a file.
 * Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present.
+* Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php
 <?php

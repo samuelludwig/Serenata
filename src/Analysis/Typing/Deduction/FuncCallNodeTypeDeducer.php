@@ -6,9 +6,9 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use PhpIntegrator\Indexing\IndexDatabase;
 
 use PhpParser\Node;
 
@@ -28,13 +28,23 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $functionConverter;
 
     /**
-     * @param IndexDatabase     $indexDatabase
-     * @param FunctionConverter $functionConverter
+     * @var FunctionNameNodeFqsenDeterminer
      */
-    public function __construct(IndexDatabase $indexDatabase, FunctionConverter $functionConverter)
-    {
+    private $functionNameNodeFqsenDeterminer;
+
+    /**
+     * @param IndexDatabase                   $indexDatabase
+     * @param FunctionConverter               $functionConverter
+     * @param FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
+     */
+    public function __construct(
+        IndexDatabase $indexDatabase,
+        FunctionConverter $functionConverter,
+        FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
+    ) {
         $this->indexDatabase = $indexDatabase;
         $this->functionConverter = $functionConverter;
+        $this->functionNameNodeFqsenDeterminer = $functionNameNodeFqsenDeterminer;
     }
 
     /**
@@ -60,9 +70,9 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
             return []; // Can't currently deduce type of an expression such as "{$foo}()";
         }
 
-        $name = NodeHelpers::fetchClassName($node->name);
+        $fqsen = $this->functionNameNodeFqsenDeterminer->determine($node->name);
 
-        $globalFunction = $this->indexDatabase->getGlobalFunctionByFqcn($name);
+        $globalFunction = $this->indexDatabase->getGlobalFunctionByFqcn($fqsen);
 
         if (!$globalFunction) {
             return [];

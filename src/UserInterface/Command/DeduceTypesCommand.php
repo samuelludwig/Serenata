@@ -6,12 +6,16 @@ use ArrayAccess;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminerFactory;
+
 use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
@@ -34,18 +38,26 @@ class DeduceTypesCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param LastExpressionParser     $lastExpressionParser
-     * @param SourceCodeStreamReader   $sourceCodeStreamReader
+     * @var FileLineNamespaceDeterminerFactory
+     */
+    private $fileLineNamespaceDeterminerFactory;
+
+    /**
+     * @param NodeTypeDeducerInterface           $nodeTypeDeducer
+     * @param LastExpressionParser               $lastExpressionParser
+     * @param SourceCodeStreamReader             $sourceCodeStreamReader
+     * @param FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
         LastExpressionParser $lastExpressionParser,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileLineNamespaceDeterminerFactory = $fileLineNamespaceDeterminerFactory;
     }
 
     /**
@@ -126,6 +138,12 @@ class DeduceTypesCommand extends AbstractCommand
      */
     protected function deduceTypes(string $file, string $code, Node $node, int $offset): array
     {
+        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+        // We're dealing with partial code, its context may be lost because of it being invalid, so we can't rely on
+        // the namespace attaching visitor here.
+        $this->attachRelevantNamespaceToNode($node, $file, $line);
+
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
 
@@ -142,5 +160,38 @@ class DeduceTypesCommand extends AbstractCommand
         $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
 
         return $this->deduceTypes($file, $code, $node, $offset);
+    }
+
+    /**
+     * @param Node   $node
+     * @param string $filePath
+     * @param int    $line
+     *
+     * @return void
+     */
+    protected function attachRelevantNamespaceToNode(Node $node, string $filePath, int $line): void
+    {
+        $namespace = null;
+
+        $fileLineNamespaceDeterminer = $this->fileLineNamespaceDeterminerFactory->create($filePath);
+
+        $namespace = $fileLineNamespaceDeterminer->determine($line);
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new class($namespace->getName()) extends NodeVisitorAbstract {
+            private $namespaceName;
+
+            public function __construct(?string $namespaceName)
+            {
+                $this->namespaceName = $namespaceName;
+            }
+
+            public function enterNode(Node $node)
+            {
+                $node->setAttribute('namespace', $this->namespaceName);
+            }
+        });
+
+        $traverser->traverse([$node]);
     }
 }

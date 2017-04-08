@@ -745,6 +745,19 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesUnqualifiedGlobalFunctions(): void
+    {
+        $result = $this->deduceTypesFromExpression(
+            'GlobalFunction.phpt',
+            'global_function()'
+        );
+
+        $this->assertEquals(['\B', 'null'], $result);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesGlobalConstants(): void
     {
         $result = $this->deduceTypesFromExpression(
