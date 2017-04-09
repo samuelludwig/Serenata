@@ -196,13 +196,13 @@ class LinterTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             [
-                'message' => 'Cannot invoke ‘foo’ on non-object type ‘int’.',
+                'message' => 'Member ‘foo’ does not exist for type ‘int’.',
                 'start'   => 57,
                 'end'     => 68
             ],
 
             [
-                'message' => 'Cannot invoke ‘foo’ on non-object type ‘bool’.',
+                'message' => 'Member ‘foo’ does not exist for type ‘bool’.',
                 'start'   => 57,
                 'end'     => 68
             ]

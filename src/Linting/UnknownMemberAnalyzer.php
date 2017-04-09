@@ -68,8 +68,6 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
 
             if ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_TYPE) {
                 $message = "Member ‘{$memberCall['memberName']}’ could not be found because expression has no type.";
-            } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_IS_NOT_CLASSLIKE) {
-                $message = "Cannot invoke ‘{$memberCall['memberName']}’ on non-object type ‘{$memberCall['expressionType']}’.";
             } elseif ($type === MemberUsageFetchingVisitor::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER) {
                 $message = "Member ‘{$memberCall['memberName']}’ does not exist for type ‘{$memberCall['expressionType']}’.";
             } else {

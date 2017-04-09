@@ -26,17 +26,12 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    public const TYPE_EXPRESSION_IS_NOT_CLASSLIKE = 2;
+    public const TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER = 2;
 
     /**
      * @var int
      */
-    public const TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER = 4;
-
-    /**
-     * @var int
-     */
-    public const TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED = 8;
+    public const TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED = 4;
 
     /**
      * @var array
@@ -143,15 +138,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
         }
 
         foreach ($objectTypes as $objectType) {
-            if (!$this->typeAnalyzer->isClassType($objectType)) {
-                $this->memberCallList[] = [
-                    'type'           => self::TYPE_EXPRESSION_IS_NOT_CLASSLIKE,
-                    'memberName'     => is_string($node->name) ? $node->name : null,
-                    'expressionType' => $objectType,
-                    'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                    'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-                ];
-            } elseif (is_string($node->name)) {
+            if (is_string($node->name)) {
                 $classInfo = null;
 
                 try {
