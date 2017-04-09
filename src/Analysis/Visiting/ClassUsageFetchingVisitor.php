@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -107,6 +109,10 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      */
      protected function isValidNameNode(Node\Name $node): bool
      {
+         if (NodeHelpers::isReservedNameNode($node)) {
+             return false;
+         }
+
          return $this->typeAnalyzer->isClassType((string) $node);
      }
 

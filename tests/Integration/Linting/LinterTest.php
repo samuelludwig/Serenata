@@ -164,6 +164,16 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testDoesNotComplainAboutParentKeywordAsUnknownClass(): void
+    {
+        $output = $this->lintFile('ParentKeyword.phpt');
+
+        $this->assertEquals([], $output['errors']);
+    }
+
+    /**
+     * @return void
+     */
     public function testReportsInvalidMemberCallsOnAnExpressionWithoutAType(): void
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoType.phpt');

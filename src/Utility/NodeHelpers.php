@@ -30,6 +30,27 @@ class NodeHelpers
     }
 
     /**
+     * Indicates if the specified name node is using a name that is reserved.
+     *
+     * php-parser identifies some some reserved keywords as name nodes in specific situations. For example, the code
+     * "parent::foo()" will consist of a StaticCall node that has a Name node containing the name "parent".
+     *
+     * @param Node\Name $name
+     *
+     * @return bool
+     */
+    public static function isReservedNameNode(Node\Name $name): bool
+    {
+        $reservedNames = [
+            'parent',
+            'self',
+            'static'
+        ];
+
+        return in_array($name->toString(), $reservedNames, true);
+    }
+
+    /**
      * Finds the first ancestor node that has any of the specified types.
      *
      * @param Node     $node
