@@ -40,7 +40,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesSyntaxErrors(): void
+    public function testIdentifiesSyntaxErrors(): void
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
 
@@ -450,7 +450,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesMissingDocumentation(): void
+    public function testIdentifiesMissingDocumentation(): void
     {
         $output = $this->lintFile('DocblockCorrectnessMissingDocumentation.phpt');
 
@@ -490,7 +490,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDocblockMissingParameter(): void
+    public function testIdentifiesDocblockMissingParameter(): void
     {
         $output = $this->lintFile('DocblockCorrectnessMissingParameter.phpt');
 
@@ -542,7 +542,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDocblockParameterTypeMismatch(): void
+    public function testIdentifiesDocblockParameterTypeMismatch(): void
     {
         $output = $this->lintFile('DocblockCorrectnessParameterTypeMismatch.phpt');
 
@@ -574,7 +574,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyRecognizesDifferentQualificationsOfSameClassName(): void
+    public function testRecognizesDifferentQualificationsOfSameClassName(): void
     {
         $output = $this->lintFile('DocblockCorrectnessParamTypeDifferentQualifications.phpt');
 
@@ -586,7 +586,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDocblockSuperfluousParameters(): void
+    public function testIdentifiesDocblockSuperfluousParameters(): void
     {
         $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');
 
@@ -602,7 +602,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDocblockMissingVarTag(): void
+    public function testIdentifiesDocblockMissingVarTag(): void
     {
         $output = $this->lintFile('DocblockCorrectnessMissingVarTag.phpt');
 
@@ -624,7 +624,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDeprecatedCategoryTag(): void
+    public function testIdentifiesDeprecatedCategoryTag(): void
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedCategoryTag.phpt');
 
@@ -640,7 +640,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDeprecatedSubpackageTag(): void
+    public function testIdentifiesDeprecatedSubpackageTag(): void
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedSubpackageTag.phpt');
 
@@ -656,7 +656,7 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyIdentifiesDeprecatedLinkTag(): void
+    public function testIdentifiesDeprecatedLinkTag(): void
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedLinkTag.phpt');
 
