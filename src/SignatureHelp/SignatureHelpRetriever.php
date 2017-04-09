@@ -181,7 +181,9 @@ class SignatureHelpRetriever
                     $nodeNameEndFilePosition = $position;
                 }
             } else {
-                throw new LogicException('Unexpected invocation node type encountered');
+                throw new LogicException(
+                    'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
+                );
             }
 
             if ($position <= $nodeNameEndFilePosition) {
