@@ -45,7 +45,7 @@ class FunctionNameNodeFqsenDeterminer
         $namespace = null;
 
         if ($namespaceNode !== null) {
-            $namespace = NodeHelpers::fetchClassName($namespaceNode);
+            $namespace = $namespaceNode->toString();
         }
 
         if ($node->isFullyQualified()) {
