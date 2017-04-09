@@ -175,20 +175,25 @@ class DeduceTypesCommand extends AbstractCommand
 
         $fileLineNamespaceDeterminer = $this->fileLineNamespaceDeterminerFactory->create($filePath);
 
+        $namespaceNode = null;
         $namespace = $fileLineNamespaceDeterminer->determine($line);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new class($namespace->getName()) extends NodeVisitorAbstract {
-            private $namespaceName;
+        if ($namespace->getName() !== null) {
+            $namespaceNode = new Node\Name\FullyQualified($namespace->getName());
+        }
 
-            public function __construct(?string $namespaceName)
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new class($namespaceNode) extends NodeVisitorAbstract {
+            private $namespaceNode;
+
+            public function __construct(?Node\Name $namespaceNode)
             {
-                $this->namespaceName = $namespaceName;
+                $this->namespaceNode = $namespaceNode;
             }
 
             public function enterNode(Node $node)
             {
-                $node->setAttribute('namespace', $this->namespaceName);
+                $node->setAttribute('namespace', $this->namespaceNode);
             }
         });
 
