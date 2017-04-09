@@ -80,22 +80,24 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      */
     protected function processName(Node\Name $node): void
     {
-        if (!$this->lastNode instanceof Node\Expr\FuncCall &&
-            !$this->lastNode instanceof Node\Expr\ConstFetch &&
-            !$this->lastNode instanceof Node\Stmt\Namespace_
+        if ($this->lastNode instanceof Node\Expr\FuncCall ||
+            $this->lastNode instanceof Node\Expr\ConstFetch ||
+            $this->lastNode instanceof Node\Stmt\Namespace_
         ) {
-            if ($this->isValidNameNode($node)) {
-                $this->classUsageList[] = [
-                    'name'             => (string) $node,
-                    'firstPart'        => $node->getFirst(),
-                    'isFullyQualified' => $node->isFullyQualified(),
-                    'namespace'        => $this->lastNamespace,
-                    'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
-                    'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                    'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-                ];
-            }
+            return;
+        } elseif (!$this->isValidNameNode($node)) {
+            return;
         }
+
+        $this->classUsageList[] = [
+            'name'             => (string) $node,
+            'firstPart'        => $node->getFirst(),
+            'isFullyQualified' => $node->isFullyQualified(),
+            'namespace'        => $this->lastNamespace,
+            'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
+            'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+            'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+        ];
     }
 
     /**
