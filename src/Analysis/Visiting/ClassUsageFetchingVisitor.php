@@ -84,11 +84,9 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
             !$this->lastNode instanceof Node\Expr\ConstFetch &&
             !$this->lastNode instanceof Node\Stmt\Namespace_
         ) {
-            $name = (string) $node;
-
-            if ($this->isValidType($name)) {
+            if ($this->isValidNameNode($node)) {
                 $this->classUsageList[] = [
-                    'name'             => $name,
+                    'name'             => (string) $node,
                     'firstPart'        => $node->getFirst(),
                     'isFullyQualified' => $node->isFullyQualified(),
                     'namespace'        => $this->lastNamespace,
@@ -101,13 +99,13 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param string $type
+     * @param Node\Name $node
      *
      * @return bool
      */
-     protected function isValidType(string $type): bool
+     protected function isValidNameNode(Node\Name $node): bool
      {
-         return $this->typeAnalyzer->isClassType($type);
+         return $this->typeAnalyzer->isClassType((string) $node);
      }
 
     /**
