@@ -138,47 +138,49 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
         }
 
         foreach ($objectTypes as $objectType) {
-            if (is_string($node->name)) {
-                $classInfo = null;
+            if (!is_string($node->name)) {
+                continue;
+            }
 
-                try {
-                    $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($objectType);
-                } catch (UnexpectedValueException $e) {
-                    // Ignore exception, no class information means we return an error anyhow.
-                }
+            $classInfo = null;
 
-                $key = null;
+            try {
+                $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($objectType);
+            } catch (UnexpectedValueException $e) {
+                // Ignore exception, no class information means we return an error anyhow.
+            }
 
-                if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\StaticCall) {
-                    $key = 'methods';
-                } elseif ($node instanceof Node\Expr\PropertyFetch || $node instanceof Node\Expr\StaticPropertyFetch) {
-                    $key = 'properties';
-                } elseif ($node instanceof Node\Expr\ClassConstFetch) {
-                    $key = 'constants';
-                }
+            $key = null;
 
-                if (!$classInfo || !isset($classInfo[$key][$node->name])) {
-                    if (!$this->isClassExcluded($objectType)) {
-                        if ($previousNode instanceof Node\Expr\Assign ||
-                            $previousNode instanceof Node\Expr\AssignOp ||
-                            $previousNode instanceof Node\Expr\AssignRef
-                        ) {
-                            $this->memberCallList[] = [
-                                'type'           => self::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED,
-                                'memberName'     => is_string($node->name) ? $node->name : null,
-                                'expressionType' => $objectType,
-                                'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                                'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-                            ];
-                        } else {
-                            $this->memberCallList[] = [
-                                'type'           => self::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER,
-                                'memberName'     => is_string($node->name) ? $node->name : null,
-                                'expressionType' => $objectType,
-                                'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                                'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-                            ];
-                        }
+            if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\StaticCall) {
+                $key = 'methods';
+            } elseif ($node instanceof Node\Expr\PropertyFetch || $node instanceof Node\Expr\StaticPropertyFetch) {
+                $key = 'properties';
+            } elseif ($node instanceof Node\Expr\ClassConstFetch) {
+                $key = 'constants';
+            }
+
+            if (!$classInfo || !isset($classInfo[$key][$node->name])) {
+                if (!$this->isClassExcluded($objectType)) {
+                    if ($previousNode instanceof Node\Expr\Assign ||
+                        $previousNode instanceof Node\Expr\AssignOp ||
+                        $previousNode instanceof Node\Expr\AssignRef
+                    ) {
+                        $this->memberCallList[] = [
+                            'type'           => self::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED,
+                            'memberName'     => is_string($node->name) ? $node->name : null,
+                            'expressionType' => $objectType,
+                            'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                            'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                        ];
+                    } else {
+                        $this->memberCallList[] = [
+                            'type'           => self::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER,
+                            'memberName'     => is_string($node->name) ? $node->name : null,
+                            'expressionType' => $objectType,
+                            'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+                            'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                        ];
                     }
                 }
             }
