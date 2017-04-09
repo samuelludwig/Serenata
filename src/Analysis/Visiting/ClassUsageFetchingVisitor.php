@@ -109,11 +109,7 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      */
      protected function isValidNameNode(Node\Name $node): bool
      {
-         if (NodeHelpers::isReservedNameNode($node)) {
-             return false;
-         }
-
-         return $this->typeAnalyzer->isClassType((string) $node);
+         return !NodeHelpers::isReservedNameNode($node);
      }
 
     /**
