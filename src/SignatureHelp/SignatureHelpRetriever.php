@@ -171,7 +171,7 @@ class SignatureHelpRetriever
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } elseif ($invocationNode instanceof Node\Expr\New_) {
                 $nodeNameEndFilePosition = $invocationNode->class->getAttribute('endFilePos') + 1;
-            } elseif (isset($invocationNode->name) && is_string($invocationNode->name)) {
+            } elseif ($invocationNode instanceof Node\Expr\MethodCall || $invocationNode instanceof Node\Expr\StaticCall) {
                 // FIXME: This is a best effort fix, it may result in problems when the argument contain leading or
                 // trailing spaces and the cursor is on them. As long as php-parser doesn't have name nodes instead of
                 // strings, this can't be fixed (hopefully that'll land in 4.0).

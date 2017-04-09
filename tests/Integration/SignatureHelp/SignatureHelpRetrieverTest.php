@@ -439,4 +439,14 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $result = $this->getSignatureHelp('NoInvocation.phpt', 233);
     }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
+    public function testNoInvocationWithMissingMemberNameFails(): void
+    {
+        $result = $this->getSignatureHelp('NoInvocationMissingMember.phpt', 17);
+    }
 }
