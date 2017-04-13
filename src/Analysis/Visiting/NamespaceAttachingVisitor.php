@@ -10,11 +10,6 @@ use PhpParser\Node;
 class NamespaceAttachingVisitor extends ResolvedNameAttachingVisitor
 {
     /**
-     * @var Node\Name
-     */
-    private $lastNamespaceNode;
-
-    /**
      * @inheritDoc
      */
     public function enterNode(Node $node)
