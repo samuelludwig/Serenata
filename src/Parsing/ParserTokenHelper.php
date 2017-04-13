@@ -14,7 +14,7 @@ class ParserTokenHelper
      */
     public function getExpressionBoundaryTokens(): array
     {
-        $expressionBoundaryTokens = [
+        return [
             T_ABSTRACT, T_AND_EQUAL, T_AS, T_BOOLEAN_AND, T_BOOLEAN_OR, T_BREAK, T_CALLABLE, T_CASE, T_CATCH,
             T_CLONE, T_CLOSE_TAG, T_CONCAT_EQUAL, T_CONST, T_CONTINUE, T_DEC, T_DECLARE, T_DEFAULT, T_DIV_EQUAL, T_DO,
             T_DOUBLE_ARROW, T_ECHO, T_ELSE, T_ELSEIF, T_ENDDECLARE, T_ENDFOR, T_ENDFOREACH, T_ENDIF, T_ENDSWITCH,
@@ -26,8 +26,6 @@ class ParserTokenHelper
             T_REQUIRE, T_REQUIRE_ONCE, T_RETURN, T_SL, T_SL_EQUAL, T_SR, T_SR_EQUAL, T_SWITCH, T_THROW, T_TRAIT, T_TRY,
             T_USE, T_VAR, T_WHILE, T_XOR_EQUAL, T_FINALLY, T_YIELD, T_ELLIPSIS, T_POW, T_POW_EQUAL, T_SPACESHIP
         ];
-
-        return $expressionBoundaryTokens;
     }
 
     /**
@@ -37,11 +35,9 @@ class ParserTokenHelper
      */
     public function getCastBoundaryTokens(): array
     {
-        $expressionBoundaryTokens = [
+        return [
             T_INT_CAST, T_UNSET_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_ARRAY_CAST, T_DOUBLE_CAST, T_STRING_CAST
         ];
-
-        return $expressionBoundaryTokens;
     }
 
     /**
@@ -51,10 +47,8 @@ class ParserTokenHelper
      */
     public function getSkippableTokens(): array
     {
-        $tokens = [
+        return [
             T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING
         ];
-
-        return $tokens;
     }
 }
