@@ -122,7 +122,7 @@ class FileIndexer implements FileIndexerInterface
         $handler = new ErrorHandler\Collecting();
 
         try {
-            $nodes = $this->getParser()->parse($code, $handler);
+            $nodes = $this->parser->parse($code, $handler);
 
             if ($nodes === null) {
                 throw new Error('Unknown syntax error encountered');
@@ -971,13 +971,5 @@ class FileIndexer implements FileIndexerInterface
         }
 
         return $this->structureTypeMap;
-    }
-
-    /**
-     * @return Parser
-     */
-    protected function getParser(): Parser
-    {
-        return $this->parser;
     }
 }
