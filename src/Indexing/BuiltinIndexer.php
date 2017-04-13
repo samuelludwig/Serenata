@@ -172,7 +172,7 @@ class BuiltinIndexer
      */
     protected function indexConstant(string $name, $value): int
     {
-        $defaultValue = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
+        $defaultValue = $this->getNormalizedDefaultValue($value);
 
         $types = [];
 
@@ -210,6 +210,16 @@ class BuiltinIndexer
             'type_description'   => null,
             'types_serialized'   => serialize($types)
         ]);
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return string
+     */
+    protected function getNormalizedDefaultValue($value): string
+    {
+        return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
     }
 
     /**
