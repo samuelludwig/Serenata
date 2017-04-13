@@ -131,7 +131,7 @@ class FileIndexer implements FileIndexerInterface
             $outlineIndexingVisitor = new OutlineFetchingVisitor($this->typeAnalyzer, $code);
             $useStatementFetchingVisitor = new UseStatementFetchingVisitor();
 
-            $traverser = new NodeTraverser(false);
+            $traverser = new NodeTraverser();
             $traverser->addVisitor($outlineIndexingVisitor);
             $traverser->addVisitor($useStatementFetchingVisitor);
             $traverser->traverse($nodes);
