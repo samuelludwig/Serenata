@@ -20,7 +20,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "6.1.*",
-        "symfony/var-dumper": "3.2.*"
+        "symfony/var-dumper": "3.2.*",
+        "martinsik/php-doc-parser": "2.0.*"
     },
     "autoload": {
         "psr-4": {
