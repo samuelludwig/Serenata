@@ -251,16 +251,17 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
 
         foreach ($node->props as $property) {
             $this->structures[$fqcn]['properties'][$property->name] = [
-                'name'            => $property->name,
-                'startLine'       => $property->getLine(),
-                'endLine'         => $property->getAttribute('endLine'),
-                'startPosName'    => $property->getAttribute('startFilePos') ? $property->getAttribute('startFilePos') : null,
-                'endPosName'      => $property->getAttribute('startFilePos') ? ($property->getAttribute('startFilePos') + mb_strlen($property->name) + 1) : null,
-                'isPublic'        => $node->isPublic(),
-                'isPrivate'       => $node->isPrivate(),
-                'isStatic'        => $node->isStatic(),
-                'isProtected'     => $node->isProtected(),
-                'docComment'      => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'name'             => $property->name,
+                'startLine'        => $property->getLine(),
+                'endLine'          => $property->getAttribute('endLine'),
+                'startPosName'     => $property->getAttribute('startFilePos') ? $property->getAttribute('startFilePos') : null,
+                'endPosName'       => $property->getAttribute('startFilePos') ? ($property->getAttribute('startFilePos') + mb_strlen($property->name) + 1) : null,
+                'isPublic'         => $node->isPublic(),
+                'isPrivate'        => $node->isPrivate(),
+                'isStatic'         => $node->isStatic(),
+                'isProtected'      => $node->isProtected(),
+                'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'defaultValueNode' => $property->default,
 
                 'defaultValue' => $property->default ?
                     substr(
@@ -338,12 +339,13 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
             }
 
             $parameters[$i] = [
-                'name'         => $param->name,
-                'type'         => $localType,
-                'fullType'     => $resolvedType,
-                'isReference'  => $param->byRef,
-                'isVariadic'   => $param->variadic,
-                'isOptional'   => $param->default ? true : false,
+                'name'             => $param->name,
+                'type'             => $localType,
+                'fullType'         => $resolvedType,
+                'isReference'      => $param->byRef,
+                'isVariadic'       => $param->variadic,
+                'isOptional'       => $param->default ? true : false,
+                'defaultValueNode' => $param->default,
 
                 'isNullable'   => (
                     ($param->type instanceof Node\NullableType) ||
@@ -401,15 +403,16 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
 
         foreach ($node->consts as $const) {
             $this->structures[$fqcn]['constants'][$const->name] = [
-                'name'           => $const->name,
-                'startLine'      => $const->getLine(),
-                'endLine'        => $const->getAttribute('endLine'),
-                'startPosName'   => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
-                'endPosName'     => $const->getAttribute('startFilePos') ? ($const->getAttribute('startFilePos') + mb_strlen($const->name)) : null,
-                'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
-                'isPublic'       => $node->isPublic(),
-                'isPrivate'      => $node->isPrivate(),
-                'isProtected'    => $node->isProtected(),
+                'name'             => $const->name,
+                'startLine'        => $const->getLine(),
+                'endLine'          => $const->getAttribute('endLine'),
+                'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
+                'endPosName'       => $const->getAttribute('startFilePos') ? ($const->getAttribute('startFilePos') + mb_strlen($const->name)) : null,
+                'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'isPublic'         => $node->isPublic(),
+                'isPrivate'        => $node->isPrivate(),
+                'isProtected'      => $node->isProtected(),
+                'defaultValueNode' => $const->value,
 
                 'defaultValue' => substr(
                     $this->code,
@@ -433,13 +436,14 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
             );
 
             $this->globalConstants[$fqcn] = [
-                'name'           => $const->name,
-                'fqcn'           => $fqcn,
-                'startLine'      => $const->getLine(),
-                'endLine'        => $const->getAttribute('endLine'),
-                'startPosName'   => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
-                'endPosName'     => $const->getAttribute('endFilePos') ? $const->getAttribute('endFilePos') : null,
-                'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'name'             => $const->name,
+                'fqcn'             => $fqcn,
+                'startLine'        => $const->getLine(),
+                'endLine'          => $const->getAttribute('endLine'),
+                'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
+                'endPosName'       => $const->getAttribute('endFilePos') ? $const->getAttribute('endFilePos') : null,
+                'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'defaultValueNode' => $const->value,
 
                 'defaultValue' => substr(
                     $this->code,
@@ -474,13 +478,14 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($name->toString());
 
         $this->globalDefines[$fqcn] = [
-            'name'           => $name->getLast(),
-            'fqcn'           => $fqcn,
-            'startLine'      => $node->getLine(),
-            'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('endFilePos') ? $node->getAttribute('endFilePos') : null,
-            'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+            'name'             => $name->getLast(),
+            'fqcn'             => $fqcn,
+            'startLine'        => $node->getLine(),
+            'endLine'          => $node->getAttribute('endLine'),
+            'startPosName'     => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
+            'endPosName'       => $node->getAttribute('endFilePos') ? $node->getAttribute('endFilePos') : null,
+            'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+            'defaultValueNode' => $node->args[1],
 
             'defaultValue' => substr(
                 $this->code,

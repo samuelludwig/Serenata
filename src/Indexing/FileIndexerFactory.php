@@ -48,18 +48,12 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
     private $nodeTypeDeducer;
 
     /**
-     * @var Parser
-     */
-    private $defaultValueParser;
-
-    /**
      * @param StorageInterface         $storage
      * @param DocblockParser           $docblockParser
      * @param TypeAnalyzer             $typeAnalyzer
      * @param TypeResolverInterface    $typeResolver
      * @param Parser                   $parser
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param Parser                   $defaultValueParser
      */
     public function __construct(
         StorageInterface $storage,
@@ -67,8 +61,7 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
         TypeAnalyzer $typeAnalyzer,
         TypeResolverInterface $typeResolver,
         Parser $parser,
-        NodeTypeDeducerInterface $nodeTypeDeducer,
-        Parser $defaultValueParser
+        NodeTypeDeducerInterface $nodeTypeDeducer
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
@@ -76,7 +69,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
         $this->typeResolver = $typeResolver;
         $this->parser = $parser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->defaultValueParser = $defaultValueParser;
     }
 
     /**
@@ -95,7 +87,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
             $this->typeAnalyzer,
             $this->typeResolver,
             $this->docblockParser,
-            $this->defaultValueParser,
             $this->nodeTypeDeducer,
             $this->parser
         );

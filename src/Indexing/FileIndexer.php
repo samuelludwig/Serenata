@@ -4,7 +4,6 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
-use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
@@ -73,11 +72,6 @@ class FileIndexer implements FileIndexerInterface
     private $nodeTypeDeducer;
 
     /**
-     * @var Parser
-     */
-    private $defaultValueParser;
-
-    /**
      * @var array
      */
     private $accessModifierMap;
@@ -92,7 +86,6 @@ class FileIndexer implements FileIndexerInterface
      * @param TypeAnalyzer             $typeAnalyzer
      * @param TypeResolverInterface    $typeResolver
      * @param DocblockParser           $docblockParser
-     * @param Parser                   $defaultValueParser
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
      * @param Parser                   $parser
      */
@@ -101,7 +94,6 @@ class FileIndexer implements FileIndexerInterface
         TypeAnalyzer $typeAnalyzer,
         TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
-        Parser $defaultValueParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Parser $parser
     ) {
@@ -109,7 +101,6 @@ class FileIndexer implements FileIndexerInterface
         $this->typeAnalyzer = $typeAnalyzer;
         $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
-        $this->defaultValueParser = $defaultValueParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
     }
@@ -502,18 +493,9 @@ class FileIndexer implements FileIndexerInterface
                 $rawData['startLine'],
                 $fileTypeResolver
             );
-        } elseif (!empty($rawData['defaultValue'])) {
-            try {
-                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
-            } catch (\PhpParser\Error $e) {
-                throw new LogicException(
-                    'Default value failed parsing, which should never happen. The value was: ' .
-                    $rawData['defaultValue']
-                );
-            }
-
+        } elseif ($rawData['defaultValueNode']) {
             $typeList = $this->nodeTypeDeducer->deduce(
-                $nodes[0],
+                $rawData['defaultValueNode'],
                 $filePath,
                 $rawData['defaultValue'],
                 0
@@ -587,18 +569,9 @@ class FileIndexer implements FileIndexerInterface
                 $rawData['startLine'],
                 $fileTypeResolver
             );
-        } elseif ($rawData['defaultValue']) {
-            try {
-                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
-            } catch (\PhpParser\Error $e) {
-                throw new LogicException(
-                    'Default value failed parsing, which should never happen. The value was: ' .
-                    $rawData['defaultValue']
-                );
-            }
-
+        } elseif ($rawData['defaultValueNode']) {
             $typeList = $this->nodeTypeDeducer->deduce(
-                $nodes[0],
+                $rawData['defaultValueNode'],
                 $filePath,
                 $rawData['defaultValue'],
                 0

@@ -25,7 +25,6 @@ services:
             - '@typeResolver'
             - '@parser'
             - '@nodeTypeDeducer'
-            - '@partialParser'
 
     cachingFileIndexerFactory.cache:
         class: Doctrine\Common\Cache\ArrayCache
