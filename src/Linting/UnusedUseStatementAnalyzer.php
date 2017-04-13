@@ -16,8 +16,6 @@ use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Utility\NodeHelpers;
-
 /**
  * Looks for unused use statements.
  */
