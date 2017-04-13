@@ -1,7 +1,7 @@
 {
     "name": "php-integrator/core",
     "description": "PHP code analysis and utilities",
-    "keywords": ["static", "analysis", "indexing", "indexer", "integrator", "autocompletion", "refactoring"],
+    "keywords": ["static", "analysis", "indexing", "indexer", "integrator", "autocompletion", "refactoring", "tooltips", "signature-help"],
     "homepage": "https://php-integrator.github.io",
     "license": "GPL-3.0",
     "require": {
