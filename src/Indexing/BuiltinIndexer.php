@@ -172,14 +172,7 @@ class BuiltinIndexer
      */
     protected function indexConstant(string $name, $value): int
     {
-        $encodingOptions = JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
-
-        // Requires PHP >= 5.6.
-        if (defined('JSON_PRESERVE_ZERO_FRACTION')) {
-            $encodingOptions |= JSON_PRESERVE_ZERO_FRACTION;
-        }
-
-        $defaultValue = json_encode($value, $encodingOptions);
+        $defaultValue = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
 
         $types = [];
 
@@ -304,13 +297,6 @@ class BuiltinIndexer
 
         /** @var ReflectionParameter $parameter */
         foreach ($function->getParameters() as $parameter) {
-            $isVariadic = false;
-
-            // Requires PHP >= 5.6.
-            if (method_exists($parameter, 'isVariadic')) {
-                $isVariadic = $parameter->isVariadic();
-            }
-
             $types = [];
             $isNullable = false;
 
@@ -335,7 +321,7 @@ class BuiltinIndexer
                 'is_nullable'      => $isNullable ? 1 : 0,
                 'is_reference'     => $parameter->isPassedByReference() ? 1 : 0,
                 'is_optional'      => $parameter->isOptional() ? 1 : 0,
-                'is_variadic'      => $isVariadic ? 1 : 0
+                'is_variadic'      => $parameter->isVariadic() ? 1 : 0
             ];
 
             if (!isset($parameterData['name'])) {
@@ -442,11 +428,8 @@ class BuiltinIndexer
 
         $documentationParameterName = '$' . $parameter->name;
 
-        // Requires PHP >= 5.6.
-        if (method_exists($parameter, 'isVariadic')) {
-            if ($parameter->isVariadic()) {
-                $documentationParameterName = '$...';
-            }
+        if ($parameter->isVariadic()) {
+            $documentationParameterName = '$...';
         }
 
         foreach ($extendedInfo as $parameterInfo) {
