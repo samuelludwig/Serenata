@@ -353,7 +353,7 @@ class BuiltinIndexer
                 continue;
             }
 
-            $documentationData = $this->getFunctionLikeParameterDataFromDocumentation($parameter);
+            $documentationData = $this->getFunctionLikeParameterDataFromDocumentation($parameter, $function);
 
             if ($documentationData !== null) {
                 $parameterData = array_merge($parameterData, $documentationData);
@@ -422,12 +422,15 @@ class BuiltinIndexer
     }
 
     /**
-     * @param ReflectionParameter $parameter
+     * @param ReflectionParameter        $parameter
+     * @param ReflectionFunctionAbstract $function
      *
      * @return ?array
      */
-    protected function getFunctionLikeParameterDataFromDocumentation(ReflectionParameter $parameter): ?array
-    {
+    protected function getFunctionLikeParameterDataFromDocumentation(
+        ReflectionParameter $parameter,
+        ReflectionFunctionAbstract $function
+    ): ?array {
         $function = $parameter->getDeclaringFunction();
 
         $documentationName = $function->getName();
@@ -450,8 +453,12 @@ class BuiltinIndexer
             $documentationParameterName = '$...';
         }
 
-        foreach ($extendedInfo as $parameterInfo) {
-            if ($parameterInfo['var'] === $documentationParameterName) {
+        $hasEqualSignatureParameterCount = (count($extendedInfo) === $function->getNumberOfParameters());
+
+        foreach ($extendedInfo as $i => $parameterInfo) {
+            if ($parameterInfo['var'] === $documentationParameterName ||
+                ($hasEqualSignatureParameterCount && $i === $parameter->getPosition())
+            ) {
                 $fqcn = $parameterInfo['type'];
 
                 if (!$this->typeAnalyzer->isSpecialType($fqcn)) {
@@ -465,12 +472,19 @@ class BuiltinIndexer
                     ]
                 ];
 
+                $defaultValue = array_key_exists('default', $parameterInfo) ? $parameterInfo['default'] : null;
+
                 $data = [
+                    'default_value'    => $defaultValue,
                     'types_serialized' => serialize($types),
                     'description'      => ($parameterInfo['desc'] !== null) ?
                         $this->getNormalizedDocumentation($parameterInfo['desc']) :
                         null
                 ];
+
+                if ($defaultValue === 'null') {
+                    $data['is_nullable'] = true;
+                }
 
                 return $data;
             }

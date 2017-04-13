@@ -86,5 +86,23 @@ class GlobalFunctionsCommandTest extends AbstractIntegrationTest
                 'type'         => 'string'
             ]
         ], $output['\urlencode']['returnTypes']);
+
+        $this->assertEquals([
+            'name'         => 'index_key',
+            'typeHint'     => null,
+            'types'        => [
+                [
+                    'type'         => 'mixed',
+                    'fqcn'         => '\mixed',
+                    'resolvedType' => '\mixed'
+                ]
+            ],
+            'defaultValue' => 'null',
+            'isNullable'   => true,
+            'isReference'  => false,
+            'isVariadic'   => false,
+            'isOptional'   => true,
+            'description'  => 'The column to use as the index/keys for the returned array. This value may be the integer key of the column, or it may be the string key name.'
+        ], $output['\array_column']['parameters'][2]);
     }
 }

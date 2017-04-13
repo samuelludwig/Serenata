@@ -35,6 +35,10 @@
 * When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35).
 * Fix not being able to use the same namespace multiple times in a file.
 * Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present.
+* The indexer will now try to determine default values for built-in functions and methods from their documentation from the website.
+  * This is always a best effort, but better than having no information at all.
+  * PHP's reflection does not offer a way to retrieve default values for built-in functions and methods (it only works for user functions and methods).
+  * (A JSON copy of the documentation is part of the package, so no actual internet connection is required.)
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
