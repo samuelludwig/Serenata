@@ -6,12 +6,12 @@ use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
 /**
- * Proxy class for a Parser that caches nodes to avoid parsing the same file or source code multiple times.
+ * Parser that caches nodes to avoid parsing the same file or source code multiple times.
  *
  * Only the last parsed result is retained. If different code is passed, the cache will miss and a new parse call will
  * occur.
  */
-class CachingParserProxy implements Parser
+class CachingParser implements Parser
 {
     /**
      * @var Parser

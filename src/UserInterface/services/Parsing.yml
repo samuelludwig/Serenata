@@ -29,13 +29,13 @@ services:
         arguments:
             - '@parser.phpParser'
 
-    parser.cachingParserProxy:
-        class: PhpIntegrator\Parsing\CachingParserProxy
+    parser.cachingParser:
+        class: PhpIntegrator\Parsing\CachingParser
         arguments:
             - '@parser.metadataAttachingParser'
 
     parser:
-        alias: parser.cachingParserProxy
+        alias: parser.cachingParser
 
     partialParser:
         class: PhpIntegrator\Parsing\PartialParser
