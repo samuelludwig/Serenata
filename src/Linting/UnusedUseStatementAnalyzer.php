@@ -5,7 +5,6 @@ namespace PhpIntegrator\Linting;
 use LogicException;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
-use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
@@ -21,11 +20,6 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
  */
 class UnusedUseStatementAnalyzer implements AnalyzerInterface
 {
-    /**
-     * @var NamespaceAttachingVisitor
-     */
-    private $namespaceAttachingVisitor;
-
     /**
      * @var ClassUsageFetchingVisitor
      */
@@ -59,7 +53,6 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
      */
     public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
     {
-        $this->namespaceAttachingVisitor = new NamespaceAttachingVisitor();
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
         $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
@@ -73,7 +66,6 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
     public function getVisitors(): array
     {
         return [
-            $this->namespaceAttachingVisitor,
             $this->classUsageFetchingVisitor,
             $this->useStatementFetchingVisitor,
             $this->docblockClassUsageFetchingVisitor,

@@ -24,10 +24,15 @@ services:
             - !php/const:PhpParser\ParserFactory::PREFER_PHP7
             - '@lexer'
 
+    parser.metadataAttachingParser:
+        class: PhpIntegrator\Parsing\MetadataAttachingParser
+        arguments:
+            - '@parser.phpParser'
+
     parser.cachingParserProxy:
         class: PhpIntegrator\Parsing\CachingParserProxy
         arguments:
-            - '@parser.phpParser'
+            - '@parser.metadataAttachingParser'
 
     parser:
         alias: parser.cachingParserProxy

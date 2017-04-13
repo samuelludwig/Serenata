@@ -9,9 +9,6 @@ use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
 use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\ParentAttachingVisitor;
-use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
-use PhpIntegrator\Analysis\Visiting\ResolvedNameAttachingVisitor;
 
 use PhpIntegrator\Parsing\ParserTokenHelper;
 
@@ -115,11 +112,7 @@ class SignatureHelpRetriever
         $visitor = new NodeFetchingVisitor($position);
 
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new ResolvedNameAttachingVisitor());
-        $traverser->addVisitor(new NamespaceAttachingVisitor());
-        $traverser->addVisitor(new ParentAttachingVisitor());
         $traverser->addVisitor($visitor);
-
         $traverser->traverse($nodes);
 
         $node = $visitor->getNode();

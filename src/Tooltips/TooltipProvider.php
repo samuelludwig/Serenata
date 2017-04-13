@@ -5,8 +5,6 @@ namespace PhpIntegrator\Tooltips;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
-use PhpIntegrator\Analysis\Visiting\ResolvedNameAttachingVisitor;
 
 use PhpParser\Node;
 use PhpParser\Parser;
@@ -148,10 +146,7 @@ class TooltipProvider
         $visitor = new NodeFetchingVisitor($position);
 
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new ResolvedNameAttachingVisitor());
-        $traverser->addVisitor(new NamespaceAttachingVisitor());
         $traverser->addVisitor($visitor);
-
         $traverser->traverse($nodes);
 
         $node = $visitor->getNode();

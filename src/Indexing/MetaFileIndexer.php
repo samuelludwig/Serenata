@@ -77,7 +77,6 @@ class MetaFileIndexer extends NodeVisitorAbstract implements FileIndexerInterfac
 
         try {
             $traverser = new NodeTraverser(false);
-            $traverser->addVisitor(new ResolvedNameAttachingVisitor());
             $traverser->addVisitor($this);
             $traverser->traverse($nodes);
 

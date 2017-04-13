@@ -6,7 +6,6 @@ use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
 
 /**
@@ -14,11 +13,6 @@ use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
  */
 class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
 {
-    /**
-     * @var NamespaceAttachingVisitor
-     */
-    private $namespaceAttachingVisitor;
-
     /**
      * @var GlobalFunctionUsageFetchingVisitor
      */
@@ -36,7 +30,6 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     {
         $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
 
-        $this->namespaceAttachingVisitor = new NamespaceAttachingVisitor();
         $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
     }
 
@@ -46,7 +39,6 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     public function getVisitors(): array
     {
         return [
-            $this->namespaceAttachingVisitor,
             $this->globalFunctionUsageFetchingVisitor
         ];
     }
