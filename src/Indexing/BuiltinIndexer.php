@@ -174,27 +174,6 @@ class BuiltinIndexer
     {
         $defaultValue = $this->getNormalizedDefaultValue($value);
 
-        $types = [];
-
-        if (!empty($defaultValue)) {
-            try {
-                $nodes = $this->parser->parse($defaultValue);
-            } catch (\PhpParser\Error $e) {
-                throw new LogicException(
-                    'Default value failed parsing, which should never happen. The value was: ' . $defaultValue
-                );
-            }
-
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $nodes[0],
-                'test',
-                $defaultValue,
-                0
-            );
-
-            $types = $this->getTypeDataForTypeList($typeList);
-        }
-
         return $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
             'name'               => $name,
             'fqcn'               => $this->typeAnalyzer->getNormalizedFqcn($name),
@@ -208,7 +187,7 @@ class BuiltinIndexer
             'short_description'  => null,
             'long_description'   => null,
             'type_description'   => null,
-            'types_serialized'   => serialize($types)
+            'types_serialized'   => serialize($this->determineTypesByValue($defaultValue))
         ]);
     }
 
@@ -220,6 +199,35 @@ class BuiltinIndexer
     protected function getNormalizedDefaultValue($value): string
     {
         return json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string[]
+     */
+    protected function determineTypesByValue(string $value): array
+    {
+        if (!empty($value)) {
+            try {
+                $nodes = $this->parser->parse($value);
+            } catch (\PhpParser\Error $e) {
+                throw new LogicException(
+                    'Default value failed parsing, which should never happen. The value was: ' . $value
+                );
+            }
+
+            $typeList = $this->nodeTypeDeducer->deduce(
+                $nodes[0],
+                'test',
+                $value,
+                0
+            );
+
+            return $this->getTypeDataForTypeList($typeList);
+        }
+
+        return [];
     }
 
     /**
