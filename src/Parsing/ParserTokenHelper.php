@@ -24,35 +24,8 @@ class ParserTokenHelper
             T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR, T_MINUS_EQUAL, T_MOD_EQUAL, T_MUL_EQUAL, T_NAMESPACE, T_NEW,
             T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_OR_EQUAL, T_PLUS_EQUAL, T_PRINT, T_PRIVATE, T_PUBLIC, T_PROTECTED,
             T_REQUIRE, T_REQUIRE_ONCE, T_RETURN, T_SL, T_SL_EQUAL, T_SR, T_SR_EQUAL, T_SWITCH, T_THROW, T_TRAIT, T_TRY,
-            T_USE, T_VAR, T_WHILE, T_XOR_EQUAL
+            T_USE, T_VAR, T_WHILE, T_XOR_EQUAL, T_FINALLY, T_YIELD, T_ELLIPSIS, T_POW, T_POW_EQUAL, T_SPACESHIP
         ];
-
-        // PHP >= 5.5
-        if (defined('T_FINALLY')) {
-            $expressionBoundaryTokens[] = T_FINALLY;
-        }
-
-        if (defined('T_YIELD')) {
-            $expressionBoundaryTokens[] = T_YIELD;
-        }
-
-        // PHP >= 5.6
-        if (defined('T_ELLIPSIS')) {
-            $expressionBoundaryTokens[] = T_ELLIPSIS;
-        }
-
-        if (defined('T_POW')) {
-            $expressionBoundaryTokens[] = T_POW;
-        }
-
-        if (defined('T_POW_EQUAL')) {
-            $expressionBoundaryTokens[] = T_POW_EQUAL;
-        }
-
-        // PHP >= 7.0
-        if (defined('T_SPACESHIP')) {
-            $expressionBoundaryTokens[] = T_SPACESHIP;
-        }
 
         return $expressionBoundaryTokens;
     }

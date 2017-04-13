@@ -262,17 +262,13 @@ class BuiltinIndexer
     protected function indexFunctionLike(ReflectionFunctionAbstract $function): int
     {
         $returnTypes = [];
+        $returnType = $function->getReturnType();
 
-        // Requires PHP >= 7.
-        if (method_exists($function, 'getReturnType')) {
-            $returnType = $function->getReturnType();
-
-            if ($returnType) {
-                $returnTypes[] = [
-                    'type' => (string) $returnType,
-                    'fqcn' => $this->typeAnalyzer->getNormalizedFqcn((string) $returnType)
-                ];
-            }
+        if ($returnType) {
+            $returnTypes[] = [
+                'type' => (string) $returnType,
+                'fqcn' => $this->typeAnalyzer->getNormalizedFqcn((string) $returnType)
+            ];
         }
 
         $functionIndexData = [
@@ -318,19 +314,15 @@ class BuiltinIndexer
             $types = [];
             $isNullable = false;
 
-            // Requires PHP >= 7, good thing this only affects built-in functions, which don't have any type
-            // hinting yet anyways (at least in PHP < 7).
-            if (method_exists($parameter, 'getType')) {
-                $type = $parameter->getType();
+            $type = $parameter->getType();
 
-                if ($type) {
-                    $isNullable = $type->allowsNull();
+            if ($type) {
+                $isNullable = $type->allowsNull();
 
-                    $types[] = [
-                        'type' => (string) $type,
-                        'fqcn' => $this->typeAnalyzer->getNormalizedFqcn((string) $type)
-                    ];
-                }
+                $types[] = [
+                    'type' => (string) $type,
+                    'fqcn' => $this->typeAnalyzer->getNormalizedFqcn((string) $type)
+                ];
             }
 
             $parameterData = [
