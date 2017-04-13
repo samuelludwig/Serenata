@@ -51,7 +51,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function prepareContainer(ContainerBuilder $container, bool $indexBuiltinItems): void
     {
         // Replace some container items for testing purposes.
-        $container->setAlias('parser', 'parser.phpParser');
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
         $container->get('indexDatabase')->setDatabasePath(':memory:');
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
