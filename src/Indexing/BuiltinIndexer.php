@@ -208,26 +208,26 @@ class BuiltinIndexer
      */
     protected function determineTypesByValue(string $value): array
     {
-        if (!empty($value)) {
-            try {
-                $nodes = $this->parser->parse($value);
-            } catch (\PhpParser\Error $e) {
-                throw new LogicException(
-                    'Default value failed parsing, which should never happen. The value was: ' . $value
-                );
-            }
-
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $nodes[0],
-                'test',
-                $value,
-                0
-            );
-
-            return $this->getTypeDataForTypeList($typeList);
+        if (empty($value)) {
+            return [];
         }
 
-        return [];
+        try {
+            $nodes = $this->parser->parse($value);
+        } catch (\PhpParser\Error $e) {
+            throw new LogicException(
+                'Default value failed parsing, which should never happen. The value was: ' . $value
+            );
+        }
+
+        $typeList = $this->nodeTypeDeducer->deduce(
+            $nodes[0],
+            'test',
+            $value,
+            0
+        );
+
+        return $this->getTypeDataForTypeList($typeList);
     }
 
     /**
