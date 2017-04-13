@@ -343,9 +343,9 @@ class BuiltinIndexer
                     '  - WARNING: Ignoring malformed function parameters for ' . $function->getName()
                 );
 
-                // Some PHP extensions somehow contain parameters that have no name. An example of this is
-                // ssh2_poll (from the ssh2 extension). Strangely enough this mystery function also can't be
-                // found in the documentation. (Perhaps a bug in the extension?) Ignore these.
+                // Some PHP extensions somehow contain parameters that have no name. An example of this is ssh2_poll
+                // (from the ssh2 extension). Strangely enough this mystery function also can't be found in the
+                // documentation. (Perhaps a bug in the extension?) Ignore these.
                 continue;
             }
 
