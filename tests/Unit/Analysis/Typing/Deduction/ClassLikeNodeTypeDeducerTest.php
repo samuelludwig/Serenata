@@ -50,4 +50,14 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, '', '', 0));
     }
+
+    /**
+     * @return void
+     */
+    public function testAnonymousClassNode(): void
+    {
+        $node = new Node\Stmt\Class_(null);
+
+        $this->assertEquals([], $this->classLikeNodeTypeDeducer->deduce($node, '', '', 0));
+    }
 }

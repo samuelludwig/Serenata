@@ -40,6 +40,7 @@
   * PHP's reflection does not offer a way to retrieve default values for built-in functions and methods (it only works for user functions and methods).
   * (A JSON copy of the documentation is part of the package, so no actual internet connection is required.)
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
+* Fixed errors being generated whilst trying to deduce the type of anonymous classes.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php

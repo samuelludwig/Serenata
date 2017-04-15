@@ -30,6 +30,10 @@ class ClassLikeNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromClassLikeNode(Node\Stmt\ClassLike $node): array
     {
+        if ($node->name === null) {
+            return [];
+        }
+
         return [(string) $node->name];
     }
 }
