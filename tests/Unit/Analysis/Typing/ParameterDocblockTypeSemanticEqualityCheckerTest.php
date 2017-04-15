@@ -1084,6 +1084,39 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     }
 
     /**
+     * @return void
+     */
+    public function testMismatchingClassTypeAndStringDocblockTypeFailsButDoesNotGenerateError(): void
+    {
+        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['resolve'])
+            ->getMock();
+
+        $checker = new ParameterDocblockTypeSemanticEqualityChecker(
+            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->getClasslikeInfoBuilderMock()
+        );
+
+        $parameter = [
+            'isReference' => false,
+            'isVariadic'  => false,
+            'isNullable'  => false,
+            'type'        => 'Foo'
+        ];
+
+        $docblockParameter = [
+            'type'        => new DocblockTypeParser\StringDocblockType(),
+            'description' => null,
+            'isVariadic'  => false,
+            'isReference' => false
+        ];
+
+        $fileTypeResolver->method('resolve')->willReturn('Foo');
+        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+    }
+
+    /**
      * @param FileTypeResolver $fileTypeResolverMock
      *
      * @return FileTypeResolverFactory

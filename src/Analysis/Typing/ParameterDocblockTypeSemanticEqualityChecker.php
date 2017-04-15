@@ -244,6 +244,8 @@ class ParameterDocblockTypeSemanticEqualityChecker
             $docblockTypesThatAreClassTypes = $docblockType->filter(function (DocblockTypeParser\DocblockType $docblockType) {
                 return $docblockType instanceof DocblockTypeParser\ClassDocblockType;
             });
+        } elseif (!$docblockType instanceof DocblockTypeParser\ClassDocblockType) {
+            return false;
         } else {
             $docblockTypesThatAreClassTypes = [$docblockType];
         }
