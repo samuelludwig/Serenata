@@ -125,7 +125,7 @@ class FileIndexer implements FileIndexerInterface
                 throw new Error('Unknown syntax error encountered');
             }
         } catch (Error $e) {
-            throw new IndexingFailedException();
+            throw new IndexingFailedException($e->getMessage(), 0, $e);
         }
 
         $this->storage->beginTransaction();
@@ -147,7 +147,7 @@ class FileIndexer implements FileIndexerInterface
         } catch (Error $e) {
             $this->storage->rollbackTransaction();
 
-            throw new IndexingFailedException();
+            throw new IndexingFailedException($e->getMessage(), 0, $e);
         }
 
         try {
