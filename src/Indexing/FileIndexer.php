@@ -12,14 +12,12 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
 use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
-use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminer;
+use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
-
-use PhpIntegrator\Utility\NamespaceData;
 
 use PhpParser\Error;
 use PhpParser\Parser;
@@ -82,12 +80,18 @@ class FileIndexer implements FileIndexerInterface
     private $structureTypeMap;
 
     /**
-     * @param StorageInterface         $storage
-     * @param TypeAnalyzer             $typeAnalyzer
-     * @param TypeResolverInterface    $typeResolver
-     * @param DocblockParser           $docblockParser
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param Parser                   $parser
+     * @var FileTypeResolverFactoryInterface
+     */
+    private $fileTypeResolverFactory;
+
+    /**
+     * @param StorageInterface                 $storage
+     * @param TypeAnalyzer                     $typeAnalyzer
+     * @param TypeResolverInterface            $typeResolver
+     * @param DocblockParser                   $docblockParser
+     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
+     * @param Parser                           $parser
+     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      */
     public function __construct(
         StorageInterface $storage,
@@ -95,7 +99,8 @@ class FileIndexer implements FileIndexerInterface
         TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        Parser $parser
+        Parser $parser,
+        FileTypeResolverFactoryInterface $fileTypeResolverFactory
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -103,6 +108,7 @@ class FileIndexer implements FileIndexerInterface
         $this->docblockParser = $docblockParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
+        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
     }
 
     /**
@@ -170,8 +176,6 @@ class FileIndexer implements FileIndexerInterface
         OutlineFetchingVisitor $outlineIndexingVisitor,
         UseStatementFetchingVisitor $useStatementFetchingVisitor
     ): void {
-        $imports = [];
-        $namespaceObjects = [];
         $namespaces = $useStatementFetchingVisitor->getNamespaces();
 
         foreach ($namespaces as $namespace) {
@@ -183,8 +187,6 @@ class FileIndexer implements FileIndexerInterface
             ]);
 
             foreach ($namespace['useStatements'] as $useStatement) {
-                $imports[] = $useStatement;
-
                 $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, [
                     'line'               => $useStatement['line'],
                     'alias'              => $useStatement['alias'] ?: null,
@@ -193,13 +195,9 @@ class FileIndexer implements FileIndexerInterface
                     'files_namespace_id' => $namespaceId
                 ]);
             }
-
-            $namespaceObjects[] = new NamespaceData($namespace['name'], $namespace['startLine'], $namespace['endLine']);
         }
 
-        $fileLineNamespaceDeterminer = new FileLineNamespaceDeterminer($namespaceObjects);
-
-        $fileTypeResolver = new FileTypeResolver($this->typeResolver, $fileLineNamespaceDeterminer, $imports);
+        $fileTypeResolver = $this->fileTypeResolverFactory->create($filePath);
 
         foreach ($outlineIndexingVisitor->getStructures() as $fqcn => $structure) {
              $this->indexStructure(
