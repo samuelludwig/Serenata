@@ -15,7 +15,6 @@ use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
