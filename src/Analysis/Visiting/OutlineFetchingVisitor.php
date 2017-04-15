@@ -8,12 +8,13 @@ use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Node visitor that fetches the outline of a file, creating a list of structural elements (classes, interfaces, ...)
  * with their direct methods, properties, constants, and so on.
  */
-class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
+class OutlineFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array
@@ -56,8 +57,6 @@ class OutlineFetchingVisitor extends ResolvedNameAttachingVisitor
      */
     public function __construct(TypeNormalizerInterface $typeNormalizer, string $code)
     {
-        parent::__construct();
-
         $this->typeNormalizer = $typeNormalizer;
         $this->code = $code;
     }
