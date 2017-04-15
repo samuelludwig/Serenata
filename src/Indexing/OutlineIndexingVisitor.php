@@ -11,13 +11,11 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
 use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
-use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminer;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpIntegrator\Utility\NodeHelpers;
-use PhpIntegrator\Utility\NamespaceData;
 
 use PhpParser\Node;
 use PhpParser\Parser;
