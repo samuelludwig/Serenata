@@ -124,14 +124,6 @@ class FileIndexer implements FileIndexerInterface
             if ($nodes === null) {
                 throw new Error('Unknown syntax error encountered');
             }
-
-            $outlineIndexingVisitor = new OutlineFetchingVisitor($this->typeAnalyzer, $code);
-            $useStatementFetchingVisitor = new UseStatementFetchingVisitor();
-
-            $traverser = new NodeTraverser();
-            $traverser->addVisitor($outlineIndexingVisitor);
-            $traverser->addVisitor($useStatementFetchingVisitor);
-            $traverser->traverse($nodes);
         } catch (Error $e) {
             throw new IndexingFailedException();
         }
@@ -146,7 +138,20 @@ class FileIndexer implements FileIndexerInterface
         ]);
 
         try {
-            $this->indexVisitorResults($filePath, $fileId, $outlineIndexingVisitor, $useStatementFetchingVisitor);
+            $outlineIndexingVisitor = new OutlineFetchingVisitor($this->typeAnalyzer, $code);
+
+            $traverser = new NodeTraverser();
+            $traverser->addVisitor($outlineIndexingVisitor);
+            $traverser->addVisitor(new UseStatementIndexingVisitor($this->storage, $fileId));
+            $traverser->traverse($nodes);
+        } catch (Error $e) {
+            $this->storage->rollbackTransaction();
+
+            throw new IndexingFailedException();
+        }
+
+        try {
+            $this->indexVisitorResults($filePath, $fileId, $outlineIndexingVisitor);
 
             $this->storage->commitTransaction();
         } catch (Exception $e) {
@@ -163,40 +168,17 @@ class FileIndexer implements FileIndexerInterface
      * the file. For structural elements, this also includes (direct) members, information about the parent class,
      * used traits, etc.
      *
-     * @param string                      $filePath
-     * @param int                         $fileId
-     * @param OutlineFetchingVisitor      $outlineIndexingVisitor
-     * @param UseStatementFetchingVisitor $useStatementFetchingVisitor
+     * @param string                 $filePath
+     * @param int                    $fileId
+     * @param OutlineFetchingVisitor $outlineIndexingVisitor
      *
      * @return void
      */
     protected function indexVisitorResults(
         string $filePath,
         int $fileId,
-        OutlineFetchingVisitor $outlineIndexingVisitor,
-        UseStatementFetchingVisitor $useStatementFetchingVisitor
+        OutlineFetchingVisitor $outlineIndexingVisitor
     ): void {
-        $namespaces = $useStatementFetchingVisitor->getNamespaces();
-
-        foreach ($namespaces as $namespace) {
-            $namespaceId = $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES, [
-                'start_line'  => $namespace['startLine'],
-                'end_line'    => $namespace['endLine'],
-                'namespace'   => $namespace['name'],
-                'file_id'     => $fileId
-            ]);
-
-            foreach ($namespace['useStatements'] as $useStatement) {
-                $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, [
-                    'line'               => $useStatement['line'],
-                    'alias'              => $useStatement['alias'] ?: null,
-                    'name'               => $useStatement['name'],
-                    'kind'               => $useStatement['kind'],
-                    'files_namespace_id' => $namespaceId
-                ]);
-            }
-        }
-
         $fileTypeResolver = $this->fileTypeResolverFactory->create($filePath);
 
         foreach ($outlineIndexingVisitor->getStructures() as $fqcn => $structure) {
