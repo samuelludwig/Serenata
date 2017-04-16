@@ -159,7 +159,6 @@ class FileIndexer implements FileIndexerInterface
                 $this->docblockParser,
                 $this->typeAnalyzer,
                 $this->typeResolver,
-                $this->nodeTypeDeducer,
                 $fileId,
                 $code,
                 $filePath
