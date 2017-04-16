@@ -151,12 +151,7 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
         );
 
         if ($node->args[1]) {
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $node->args[1],
-                $this->filePath,
-                $defaultValue,
-                0
-            );
+            $typeList = $this->nodeTypeDeducer->deduce($node->args[1], $this->filePath, $defaultValue, 0);
 
             $types = array_map(function (string $type) {
                 return [
