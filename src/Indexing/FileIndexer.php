@@ -172,7 +172,7 @@ class FileIndexer implements FileIndexerInterface
                 $filePath
             );
 
-            $outlineIndexingVisitor = new Visiting\OutlineIndexingVisitor(
+            $classlikeIndexingVisitor = new Visiting\ClasslikeIndexingVisitor(
                 $this->storage,
                 $this->typeAnalyzer,
                 $this->typeResolver,
@@ -195,7 +195,7 @@ class FileIndexer implements FileIndexerInterface
             $traverser->addVisitor($globalDefineIndexingVisitor);
             $traverser->addVisitor($globalConstantIndexingVisitor);
             $traverser->addVisitor($globalFunctionIndexingVisitor);
-            $traverser->addVisitor($outlineIndexingVisitor);
+            $traverser->addVisitor($classlikeIndexingVisitor);
             $traverser->traverse($nodes);
 
             $this->storage->commitTransaction();

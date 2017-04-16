@@ -24,17 +24,9 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Visitor that traverses a set of nodes, indexing the nodes in the process.
- *
- * The outline index only contains "direct" data, meaning data that is directly attached to an element. For example,
- * classes will only have their direct members attached in the index. The index will also keep track of links between
- * structural elements and parents, implemented interfaces, and more, but it will not duplicate data, meaning parent
- * methods will not be copied and attached to child classes.
- *
- * The index keeps track of 'outlines' that are confined to a single file. It in itself does not do anything
- * "intelligent" such as automatically inheriting docblocks from overridden methods.
+ * Visitor that traverses a set of nodes, indexing classlikes in the process.
  */
-final class OutlineIndexingVisitor extends NodeVisitorAbstract
+final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var FileTypeResolverFactoryInterface
