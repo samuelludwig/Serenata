@@ -2,16 +2,10 @@
 
 namespace PhpIntegrator\Indexing\Visiting;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
-
-use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
-
-use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpIntegrator\Utility\NodeHelpers;
 
@@ -27,21 +21,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
      * @var StorageInterface
      */
     private $storage;
-
-    /**
-     * @var DocblockParser
-     */
-    private $docblockParser;
-
-    /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
-     * @var TypeResolverInterface
-     */
-    private $typeResolver;
 
     /**
      * @var NodeTypeDeducerInterface
@@ -64,29 +43,20 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
     private $filePath;
 
     /**
-     * @param StorageInterface                 $storage
-     * @param DocblockParser                   $docblockParser
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param TypeResolverInterface            $typeResolver
-     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param int                              $fileId
-     * @param string                           $code
-     * @param string                           $filePath
+     * @param StorageInterface         $storage
+     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @param int                      $fileId
+     * @param string                   $code
+     * @param string                   $filePath
      */
     public function __construct(
         StorageInterface $storage,
-        DocblockParser $docblockParser,
-        TypeAnalyzer $typeAnalyzer,
-        TypeResolverInterface $typeResolver,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         int $fileId,
         string $code,
         string $filePath
     ) {
         $this->storage = $storage;
-        $this->docblockParser = $docblockParser;
-        $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->fileId = $fileId;
         $this->code = $code;
@@ -128,20 +98,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
         // https://php.net/manual/en/function.define.php#90282
         $name = new Node\Name((string) $nameValue->value);
 
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
-
-        $documentation = $this->docblockParser->parse($docComment, [
-            DocblockParser::VAR_TYPE,
-            DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
-        ], $name->getLast());
-
-        $varDocumentation = isset($documentation['var']['$' . $name->getLast()]) ?
-            $documentation['var']['$' . $name->getLast()] :
-            null;
-
-        $shortDescription = $documentation['descriptions']['short'];
-
         $types = [];
 
         $defaultValue = substr(
@@ -169,11 +125,11 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
             'end_line'              => $node->getAttribute('endLine'),
             'default_value'         => $defaultValue,
             'is_builtin'            => 0,
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'has_docblock'          => empty($docComment) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
+            'is_deprecated'         => 0,
+            'has_docblock'          => 0,
+            'short_description'     => null,
+            'long_description'      => null,
+            'type_description'      => null,
             'types_serialized'      => serialize($types),
             'structure_id'          => null,
             'access_modifier_id'    => null
