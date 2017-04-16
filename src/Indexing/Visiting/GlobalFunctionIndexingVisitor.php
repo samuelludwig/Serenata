@@ -129,10 +129,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseFunctionNode(Node\Stmt\Function_ $node): void
     {
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
-        );
-
         $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
 
         $localType = null;
@@ -281,7 +277,9 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 
         $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
             'name'                    => $node->name,
-            'fqcn'                    => $fqcn,
+            'fqcn'                    => $this->typeNormalizer->getNormalizedFqcn(
+                isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
+            ),
             'file_id'                 => $this->fileId,
             'start_line'              => $node->getLine(),
             'end_line'                => $node->getAttribute('endLine'),
