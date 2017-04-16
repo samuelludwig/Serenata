@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Typing;
 
-use Doctrine\Common\Cache\Cache;
-
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 
 /**
