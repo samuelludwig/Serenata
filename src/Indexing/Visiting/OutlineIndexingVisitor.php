@@ -173,12 +173,6 @@ final class OutlineIndexingVisitor extends NodeVisitorAbstract
             $this->parseClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->parseTraitUseNode($node);
-        } elseif (
-            $node instanceof Node\Expr\FuncCall &&
-            $node->name instanceof Node\Name &&
-            $node->name->toString() === 'define'
-        ) {
-            $this->parseDefineNode($node);
         }
     }
 
@@ -935,97 +929,6 @@ final class OutlineIndexingVisitor extends NodeVisitorAbstract
             'types_serialized'      => serialize($types),
             'structure_id'          => $this->seId,
             'access_modifier_id'    => $accessModifier ? $accessModifierMap[$accessModifier] : null
-        ]);
-    }
-
-    /**
-     * @param Node\Expr\FuncCall $node
-     *
-     * @return void
-     */
-    protected function parseDefineNode(Node\Expr\FuncCall $node): void
-    {
-        if (count($node->args) < 2) {
-            return;
-        }
-
-        $nameValue = $node->args[0]->value;
-
-        if (!$nameValue instanceof Node\Scalar\String_) {
-            return;
-        }
-
-        // Defines can be namespaced if their name contains slashes, see also
-        // https://php.net/manual/en/function.define.php#90282
-        $name = new Node\Name((string) $nameValue->value);
-
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
-
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $name->getLast()
-        );
-
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
-
-        $documentation = $this->docblockParser->parse($docComment, [
-            DocblockParser::VAR_TYPE,
-            DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
-        ], $name->getLast());
-
-        $varDocumentation = isset($documentation['var']['$' . $name->getLast()]) ?
-            $documentation['var']['$' . $name->getLast()] :
-            null;
-
-        $shortDescription = $documentation['descriptions']['short'];
-
-        $types = [];
-
-        $defaultValue = substr(
-            $this->code,
-            $node->args[1]->getAttribute('startFilePos'),
-            $node->args[1]->getAttribute('endFilePos') - $node->args[1]->getAttribute('startFilePos') + 1
-        );
-
-        if ($varDocumentation) {
-            // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
-            // from the latter to the former.
-            if (!empty($varDocumentation['description'])) {
-                $shortDescription = $varDocumentation['description'];
-            }
-
-            $types = $this->getTypeDataForTypeSpecification(
-                $varDocumentation['type'],
-                $node->getLine(),
-                $fileTypeResolver
-            );
-        } elseif ($node->args[1]) {
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $node->args[1],
-                $this->filePath,
-                $defaultValue,
-                0
-            );
-
-            $types = $this->getTypeDataForTypeList($typeList, $node->getLine(), $fileTypeResolver);
-        }
-
-        $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $name->getLast(),
-            'fqcn'                  => $this->typeNormalizer->getNormalizedFqcn($name->toString()),
-            'file_id'               => $this->fileId,
-            'start_line'            => $node->getLine(),
-            'end_line'              => $node->getAttribute('endLine'),
-            'default_value'         => $defaultValue,
-            'is_builtin'            => 0,
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'has_docblock'          => empty($docComment) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-            'types_serialized'      => serialize($types),
-            'structure_id'          => null,
-            'access_modifier_id'    => null
         ]);
     }
 

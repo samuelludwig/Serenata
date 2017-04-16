@@ -146,6 +146,19 @@ class FileIndexer implements FileIndexerInterface
                 $filePath
             );
 
+            $globalDefineIndexingVisitor = new Visiting\GlobalDefineIndexingVisitor(
+                $this->fileTypeResolverFactory,
+                $this->typeAnalyzer,
+                $this->storage,
+                $this->docblockParser,
+                $this->typeAnalyzer,
+                $this->typeResolver,
+                $this->nodeTypeDeducer,
+                $fileId,
+                $code,
+                $filePath
+            );
+
             $outlineIndexingVisitor = new Visiting\OutlineIndexingVisitor(
                 $this->storage,
                 $this->typeAnalyzer,
@@ -166,6 +179,7 @@ class FileIndexer implements FileIndexerInterface
             $traverser->traverse($nodes);
 
             $traverser = new NodeTraverser();
+            $traverser->addVisitor($globalDefineIndexingVisitor);
             $traverser->addVisitor($globalConstantIndexingVisitor);
             $traverser->addVisitor($outlineIndexingVisitor);
             $traverser->traverse($nodes);
