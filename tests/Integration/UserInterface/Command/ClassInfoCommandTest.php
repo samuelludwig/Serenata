@@ -339,7 +339,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             'name'               => 'testMethod',
-            'fqcn'              => null,
+            'fqcn'               => null,
             'isBuiltin'          => false,
             'startLine'          => 19,
             'endLine'            => 22,

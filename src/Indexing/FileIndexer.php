@@ -147,8 +147,12 @@ class FileIndexer implements FileIndexerInterface
                 $filePath
             );
 
+            // TODO: Refactor to traverse once.
             $traverser = new NodeTraverser();
             $traverser->addVisitor(new UseStatementIndexingVisitor($this->storage, $fileId));
+            $traverser->traverse($nodes);
+
+            $traverser = new NodeTraverser();
             $traverser->addVisitor($outlineIndexingVisitor);
             $traverser->traverse($nodes);
 
