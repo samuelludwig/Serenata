@@ -147,9 +147,6 @@ class FileIndexer implements FileIndexerInterface
 
             $globalDefineIndexingVisitor = new Visiting\GlobalDefineIndexingVisitor(
                 $this->storage,
-                $this->docblockParser,
-                $this->typeAnalyzer,
-                $this->typeResolver,
                 $this->nodeTypeDeducer,
                 $fileId,
                 $code,
@@ -174,7 +171,6 @@ class FileIndexer implements FileIndexerInterface
                 $this->typeResolver,
                 $this->docblockParser,
                 $this->nodeTypeDeducer,
-                $this->parser,
                 $this->fileTypeResolverFactory,
                 $fileId,
                 $code,

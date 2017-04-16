@@ -18,7 +18,6 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\Parser;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
@@ -51,11 +50,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @var TypeResolverInterface
      */
     private $typeResolver;
-
-    /**
-     * @var Parser
-     */
-    private $parser;
 
     /**
      * @var NodeTypeDeducerInterface
@@ -98,7 +92,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param TypeResolverInterface            $typeResolver
      * @param DocblockParser                   $docblockParser
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param Parser                           $parser
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param int                              $fileId
      * @param string                           $code
@@ -110,7 +103,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        Parser $parser,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         int $fileId,
         string $code,
@@ -121,7 +113,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->parser = $parser;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->fileId = $fileId;
         $this->code = $code;
