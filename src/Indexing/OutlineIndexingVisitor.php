@@ -157,8 +157,6 @@ final class OutlineIndexingVisitor extends NodeVisitorAbstract
             $this->parseClassConstantStatementNode($node);
         } elseif ($node instanceof Node\Stmt\Function_) {
             $this->parseFunctionNode($node);
-        } elseif ($node instanceof Node\Stmt\Const_) {
-            $this->parseConstantStatementNode($node);
         } elseif ($node instanceof Node\Stmt\Class_) {
             if ($node->isAnonymous()) {
                 // Ticket #45 - Skip PHP 7 anonymous classes.
@@ -934,96 +932,6 @@ final class OutlineIndexingVisitor extends NodeVisitorAbstract
             'types_serialized'      => serialize($types),
             'structure_id'          => $this->seId,
             'access_modifier_id'    => $accessModifier ? $accessModifierMap[$accessModifier] : null
-        ]);
-    }
-
-    /**
-     * @param Node\Stmt\Const_ $node
-     *
-     * @return void
-     */
-    protected function parseConstantStatementNode(Node\Stmt\Const_ $node): void
-    {
-        foreach ($node->consts as $const) {
-            $this->parseConstantNode($const, $node);
-        }
-    }
-
-    /**
-     * @param Node\Const_      $node
-     * @param Node\Stmt\Const_ $const
-     *
-     * @return void
-     */
-    protected function parseConstantNode(Node\Const_ $node, Node\Stmt\Const_ $const): void
-    {
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
-
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
-        );
-
-        $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
-
-        $documentation = $this->docblockParser->parse($docComment, [
-            DocblockParser::VAR_TYPE,
-            DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
-        ], $node->name);
-
-        $varDocumentation = isset($documentation['var']['$' . $node->name]) ?
-            $documentation['var']['$' . $node->name] :
-            null;
-
-        $shortDescription = $documentation['descriptions']['short'];
-
-        $types = [];
-
-        $defaultValue = substr(
-            $this->code,
-            $node->value->getAttribute('startFilePos'),
-            $node->value->getAttribute('endFilePos') - $node->value->getAttribute('startFilePos') + 1
-        );
-
-        if ($varDocumentation) {
-            // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
-            // from the latter to the former.
-            if (!empty($varDocumentation['description'])) {
-                $shortDescription = $varDocumentation['description'];
-            }
-
-            $types = $this->getTypeDataForTypeSpecification(
-                $varDocumentation['type'],
-                $node->getLine(),
-                $fileTypeResolver
-            );
-        } elseif ($node->value) {
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $node->value,
-                $this->filePath,
-                $defaultValue,
-                0
-            );
-
-            $types = $this->getTypeDataForTypeList($typeList, $node->getLine(), $fileTypeResolver);
-        }
-
-        $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $node->name,
-            'fqcn'                  => $fqcn,
-            'file_id'               => $this->fileId,
-            'start_line'            => $node->getLine(),
-            'end_line'              => $node->getAttribute('endLine'),
-            'default_value'         => $defaultValue,
-            'is_builtin'            => 0,
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'has_docblock'          => empty($docComment) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-            'types_serialized'      => serialize($types),
-            'structure_id'          => null,
-            'access_modifier_id'    => null
         ]);
     }
 
