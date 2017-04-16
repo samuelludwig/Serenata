@@ -6,9 +6,7 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
 use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
@@ -25,11 +23,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var FileTypeResolverFactoryInterface
-     */
-    private $fileTypeResolverFactory;
-
     /**
      * @var StorageInterface
      */
@@ -71,7 +64,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
     private $filePath;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param StorageInterface                 $storage
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
@@ -82,7 +74,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
      * @param string                           $filePath
      */
     public function __construct(
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
@@ -92,7 +83,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
         string $code,
         string $filePath
     ) {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -138,8 +128,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
         // https://php.net/manual/en/function.define.php#90282
         $name = new Node\Name((string) $nameValue->value);
 
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
-
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
@@ -170,7 +158,12 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
                 0
             );
 
-            $types = $this->getTypeDataForTypeList($typeList, $node->getLine(), $fileTypeResolver);
+            $types = array_map(function (string $type) {
+                return [
+                    'type' => $type,
+                    'fqcn' => $type
+                ];
+            }, $typeList);
         }
 
         $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
@@ -190,43 +183,5 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
             'structure_id'          => null,
             'access_modifier_id'    => null
         ]);
-    }
-
-    /**
-     * @param string           $typeSpecification
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return array[]
-     */
-    protected function getTypeDataForTypeSpecification(
-        string $typeSpecification,
-        int $line,
-        FileTypeResolver $fileTypeResolver
-    ): array {
-        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
-    }
-
-    /**
-     * @param string[]         $typeList
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return array[]
-     */
-    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
-    {
-        $types = [];
-
-        foreach ($typeList as $type) {
-            $types[] = [
-                'type' => $type,
-                'fqcn' => $fileTypeResolver->resolve($type, $line)
-            ];
-        }
-
-        return $types;
     }
 }
