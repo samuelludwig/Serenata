@@ -34,6 +34,11 @@ use PhpParser\NodeVisitorAbstract;
 final class OutlineIndexingVisitor extends NodeVisitorAbstract
 {
     /**
+     * @var FileTypeResolverFactoryInterface
+     */
+    private $fileTypeResolverFactory;
+
+    /**
      * @var TypeNormalizerInterface
      */
     private $typeNormalizer;
