@@ -454,25 +454,27 @@ class DocblockParser
             foreach ($tags[static::VAR_TYPE] as $tag) {
                 list($varType, $varName, $varDescription) = $this->filterParameterTag($tag, 3);
 
+                $type = $this->docblockTypeParser->parse($varType);
+
                 if ($varName) {
                     if (mb_substr($varName, 0, 1) === '$') {
                         // Example: "@var DateTime $foo My description". The tag includes the name of the property it
                         // documents, it must match the property we're fetching documentation about.
                         $vars[$varName] = [
-                            'type'        => $varType,
+                            'type'        => $type,
                             'description' => $varDescription
                         ];
                     } else {
                         // Example: "@var DateTime My description".
                         $vars['$' . $itemName] = [
-                            'type'        => $varType,
+                            'type'        => $type,
                             'description' => trim($varName . ' ' . $varDescription)
                         ];
                     }
                 } elseif (!$varName && !$varDescription) {
                     // Example: "@var DateTime".
                     $vars['$' . $itemName] = [
-                        'type'        => $varType,
+                        'type'        => $type,
                         'description' => null
                     ];
                 }
