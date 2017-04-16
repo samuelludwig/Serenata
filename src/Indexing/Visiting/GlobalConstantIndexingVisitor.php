@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -24,11 +23,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var TypeNormalizerInterface
-     */
-    private $typeNormalizer;
-
     /**
      * @var StorageInterface
      */
@@ -75,7 +69,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     private $filePath;
 
     /**
-     * @param TypeNormalizerInterface          $typeNormalizer
      * @param StorageInterface                 $storage
      * @param DocblockParser                   $docblockParser
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
@@ -87,7 +80,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
      * @param string                           $filePath
      */
     public function __construct(
-        TypeNormalizerInterface $typeNormalizer,
         StorageInterface $storage,
         DocblockParser $docblockParser,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
@@ -98,7 +90,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         string $code,
         string $filePath
     ) {
-        $this->typeNormalizer = $typeNormalizer;
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
@@ -141,10 +132,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     protected function parseConstantNode(Node\Const_ $node, Node\Stmt\Const_ $const): void
     {
         $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
-
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
-        );
 
         $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
 
@@ -193,7 +180,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
 
         $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
             'name'                  => $node->name,
-            'fqcn'                  => $fqcn,
+            'fqcn'                  => '\\' . $node->namespacedName->toString(),
             'file_id'               => $this->fileId,
             'start_line'            => $node->getLine(),
             'end_line'              => $node->getAttribute('endLine'),

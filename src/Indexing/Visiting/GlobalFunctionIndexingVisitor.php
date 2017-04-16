@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -30,11 +29,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      * @var FileTypeResolverFactoryInterface
      */
     private $fileTypeResolverFactory;
-
-    /**
-     * @var TypeNormalizerInterface
-     */
-    private $typeNormalizer;
 
     /**
      * @var StorageInterface
@@ -78,7 +72,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeNormalizerInterface          $typeNormalizer
      * @param StorageInterface                 $storage
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
@@ -90,7 +83,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      */
     public function __construct(
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        TypeNormalizerInterface $typeNormalizer,
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
@@ -101,7 +93,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         string $filePath
     ) {
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeNormalizer = $typeNormalizer;
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -277,9 +268,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 
         $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
             'name'                    => $node->name,
-            'fqcn'                    => $this->typeNormalizer->getNormalizedFqcn(
-                isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
-            ),
+            'fqcn'                    => '\\' . $node->namespacedName->toString(),
             'file_id'                 => $this->fileId,
             'start_line'              => $node->getLine(),
             'end_line'                => $node->getAttribute('endLine'),

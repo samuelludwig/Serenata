@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -32,11 +31,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @var FileTypeResolverFactoryInterface
      */
     private $fileTypeResolverFactory;
-
-    /**
-     * @var TypeNormalizerInterface
-     */
-    private $typeNormalizer;
 
     /**
      * @var StorageInterface
@@ -106,7 +100,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
      * @param Parser                           $parser
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeNormalizerInterface          $typeNormalizer
      * @param int                              $fileId
      * @param string                           $code
      * @param string                           $filePath
@@ -119,7 +112,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Parser $parser,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        TypeNormalizerInterface $typeNormalizer,
         int $fileId,
         string $code,
         string $filePath
@@ -131,7 +123,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeNormalizer = $typeNormalizer;
         $this->fileId = $fileId;
         $this->code = $code;
         $this->filePath = $filePath;
@@ -193,8 +184,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY_WRITE
         ], $node->name);
 
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
-
         if ($node instanceof Node\Stmt\Class_) {
             $structureTypeId = $structureTypeMap['class'];
         } elseif ($node instanceof Node\Stmt\Interface_) {
@@ -205,7 +194,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $seData = [
             'name'              => $node->name,
-            'fqcn'              => $fqcn,
+            'fqcn'              => '\\' . $node->namespacedName->toString(),
             'file_id'           => $this->fileId,
             'start_line'        => $node->getLine(),
             'end_line'          => $node->getAttribute('endLine'),

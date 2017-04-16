@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -15,6 +14,8 @@ use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
 use PhpIntegrator\Parsing\DocblockParser;
+
+use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
@@ -28,11 +29,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
      * @var FileTypeResolverFactoryInterface
      */
     private $fileTypeResolverFactory;
-
-    /**
-     * @var TypeNormalizerInterface
-     */
-    private $typeNormalizer;
 
     /**
      * @var StorageInterface
@@ -76,7 +72,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeNormalizerInterface          $typeNormalizer
      * @param StorageInterface                 $storage
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
@@ -88,7 +83,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
      */
     public function __construct(
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        TypeNormalizerInterface $typeNormalizer,
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
@@ -99,7 +93,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
         string $filePath
     ) {
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->typeNormalizer = $typeNormalizer;
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -147,10 +140,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
 
         $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
 
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $name->getLast()
-        );
-
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
@@ -186,7 +175,7 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
 
         $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
             'name'                  => $name->getLast(),
-            'fqcn'                  => $this->typeNormalizer->getNormalizedFqcn($name->toString()),
+            'fqcn'                  => '\\' . NodeHelpers::fetchClassName($name),
             'file_id'               => $this->fileId,
             'start_line'            => $node->getLine(),
             'end_line'              => $node->getAttribute('endLine'),

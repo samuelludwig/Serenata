@@ -134,7 +134,6 @@ class FileIndexer implements FileIndexerInterface
 
         try {
             $globalConstantIndexingVisitor = new Visiting\GlobalConstantIndexingVisitor(
-                $this->typeAnalyzer,
                 $this->storage,
                 $this->docblockParser,
                 $this->fileTypeResolverFactory,
@@ -148,7 +147,6 @@ class FileIndexer implements FileIndexerInterface
 
             $globalDefineIndexingVisitor = new Visiting\GlobalDefineIndexingVisitor(
                 $this->fileTypeResolverFactory,
-                $this->typeAnalyzer,
                 $this->storage,
                 $this->docblockParser,
                 $this->typeAnalyzer,
@@ -161,7 +159,6 @@ class FileIndexer implements FileIndexerInterface
 
             $globalFunctionIndexingVisitor = new Visiting\GlobalFunctionIndexingVisitor(
                 $this->fileTypeResolverFactory,
-                $this->typeAnalyzer,
                 $this->storage,
                 $this->docblockParser,
                 $this->typeAnalyzer,
@@ -180,7 +177,6 @@ class FileIndexer implements FileIndexerInterface
                 $this->nodeTypeDeducer,
                 $this->parser,
                 $this->fileTypeResolverFactory,
-                $this->typeAnalyzer,
                 $fileId,
                 $code,
                 $filePath
