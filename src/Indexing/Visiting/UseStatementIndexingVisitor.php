@@ -1,8 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
+
+use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
