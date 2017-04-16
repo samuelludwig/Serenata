@@ -168,12 +168,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
                 $fileTypeResolver
             );
         } elseif ($node->value) {
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $node->value,
-                $this->filePath,
-                $defaultValue,
-                0
-            );
+            $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->filePath, $defaultValue, 0);
 
             $types = array_map(function (string $type) {
                 return [
