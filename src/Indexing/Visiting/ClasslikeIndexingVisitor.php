@@ -735,44 +735,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param string           $typeSpecification
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return array[]
-     */
-    protected function getTypeDataForTypeSpecification(
-        string $typeSpecification,
-        int $line,
-        FileTypeResolver $fileTypeResolver
-    ): array {
-        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
-    }
-
-    /**
-     * @param string[]         $typeList
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return array[]
-     */
-    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
-    {
-        $types = [];
-
-        foreach ($typeList as $type) {
-            $types[] = [
-                'type' => $type,
-                'fqcn' => $fileTypeResolver->resolve($type, $line)
-            ];
-        }
-
-        return $types;
-    }
-
-    /**
      * @param array            $rawData
      * @param int              $fileId
      * @param int              $seId
@@ -923,6 +885,44 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameter);
         }
+    }
+
+    /**
+     * @param string           $typeSpecification
+     * @param int              $line
+     * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return array[]
+     */
+    protected function getTypeDataForTypeSpecification(
+        string $typeSpecification,
+        int $line,
+        FileTypeResolver $fileTypeResolver
+    ): array {
+        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
+
+        return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
+    }
+
+    /**
+     * @param string[]         $typeList
+     * @param int              $line
+     * @param FileTypeResolver $fileTypeResolver
+     *
+     * @return array[]
+     */
+    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
+    {
+        $types = [];
+
+        foreach ($typeList as $type) {
+            $types[] = [
+                'type' => $type,
+                'fqcn' => $fileTypeResolver->resolve($type, $line)
+            ];
+        }
+
+        return $types;
     }
 
     /**
