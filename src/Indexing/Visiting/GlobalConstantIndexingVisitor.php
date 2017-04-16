@@ -175,7 +175,12 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
                 0
             );
 
-            $types = $this->getTypeDataForTypeList($typeList, $node->getLine(), $fileTypeResolver);
+            $types = array_map(function (string $type) {
+                return [
+                    'type' => $type,
+                    'fqcn' => $type
+                ];
+            }, $typeList);
         }
 
         $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
