@@ -384,7 +384,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     0
                 );
 
-                $types = $this->getTypeDataForTypeList($typeList, $property->getLine(), $fileTypeResolver);
+                $types = array_map(function (string $type) {
+                    return [
+                        'type' => $type,
+                        'fqcn' => $type
+                    ];
+                }, $typeList);
             }
 
             $accessModifierMap = $this->getAccessModifierMap();
@@ -680,7 +685,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 0
             );
 
-            $types = $this->getTypeDataForTypeList($typeList, $node->getLine(), $fileTypeResolver);
+            $types = array_map(function (string $type) {
+                return [
+                    'type' => $type,
+                    'fqcn' => $type
+                ];
+            }, $typeList);
         }
 
         $accessModifierMap = $this->getAccessModifierMap();
