@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use JsonSerializable;
 
-use PhpIntegrator\Utility\Range;
+use PhpIntegrator\Common\Range;
 
 /**
  * Represents the result of a tooltip provision.
