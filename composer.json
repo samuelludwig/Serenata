@@ -8,7 +8,7 @@
         "php": ">=7.1.0",
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
-        "php-integrator/docblock-type-parser": "0.1.*",
+        "php-integrator/docblock-type-parser": "dev-master#a85867b843a4b6811b95b908d4be5614e27f84e8",
         "doctrine/cache": "1.6.*",
         "doctrine/dbal": "2.5.*",
         "evenement/evenement": "2.0.*",
