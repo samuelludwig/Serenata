@@ -8,7 +8,7 @@ use UnexpectedValueException;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
 
-use PhpIntegrator\Utility\Position;
+use PhpIntegrator\Common\Position;
 
 use PhpParser\Node;
 

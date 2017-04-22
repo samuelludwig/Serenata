@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis;
 
 use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
 
-use PhpIntegrator\Utility\Position;
+use PhpIntegrator\Common\Position;
 
 /**
  * Determines in which class a position (offset) in a file is located.
