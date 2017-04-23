@@ -7,7 +7,6 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
@@ -44,11 +43,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     private $typeAnalyzer;
 
     /**
-     * @var TypeResolverInterface
-     */
-    private $typeResolver;
-
-    /**
      * @var NodeTypeDeducerInterface
      */
     private $nodeTypeDeducer;
@@ -73,7 +67,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
      * @param DocblockParser                   $docblockParser
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
      * @param TypeAnalyzer                     $typeAnalyzer
-     * @param TypeResolverInterface            $typeResolver
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
      * @param int                              $fileId
      * @param string                           $code
@@ -84,7 +77,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         DocblockParser $docblockParser,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolverInterface $typeResolver,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         int $fileId,
         string $code,
@@ -94,7 +86,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         $this->docblockParser = $docblockParser;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->fileId = $fileId;
         $this->code = $code;
