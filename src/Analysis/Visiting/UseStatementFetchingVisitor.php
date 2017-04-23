@@ -49,7 +49,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             $this->namespaces[++$this->lastNamespaceIndex] = [
                 'name'          => $node->name ? (string) $node->name : '',
                 'startLine'     => $node->getLine(),
-                'endLine'       => null,
+                'endLine'       => $node->getLine() + 1,
                 'useStatements' => []
             ];
         } elseif ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\GroupUse) {
@@ -82,6 +82,10 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
                     'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null
                 ];
             }
+        }
+
+        if (isset($this->namespaces[$this->lastNamespaceIndex])) {
+            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $node->getLine() + 1;
         }
     }
 
