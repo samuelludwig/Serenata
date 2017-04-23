@@ -7,7 +7,6 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
@@ -47,11 +46,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $typeAnalyzer;
 
     /**
-     * @var TypeResolverInterface
-     */
-    private $typeResolver;
-
-    /**
      * @var NodeTypeDeducerInterface
      */
     private $nodeTypeDeducer;
@@ -89,7 +83,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @param StorageInterface                 $storage
      * @param TypeAnalyzer                     $typeAnalyzer
-     * @param TypeResolverInterface            $typeResolver
      * @param DocblockParser                   $docblockParser
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
@@ -100,7 +93,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     public function __construct(
         StorageInterface $storage,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory,
@@ -110,7 +102,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;

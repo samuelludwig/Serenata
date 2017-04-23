@@ -167,7 +167,6 @@ class FileIndexer implements FileIndexerInterface
             $classlikeIndexingVisitor = new Visiting\ClasslikeIndexingVisitor(
                 $this->storage,
                 $this->typeAnalyzer,
-                $this->typeResolver,
                 $this->docblockParser,
                 $this->nodeTypeDeducer,
                 $this->fileTypeResolverFactory,
