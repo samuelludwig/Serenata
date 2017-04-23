@@ -94,7 +94,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
         return new FileIndexer(
             $this->storage,
             $this->typeAnalyzer,
-            $this->typeResolver,
             $this->docblockParser,
             $this->nodeTypeDeducer,
             $this->parser,
