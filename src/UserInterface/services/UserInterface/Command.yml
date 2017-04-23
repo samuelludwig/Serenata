@@ -62,7 +62,7 @@ services:
         class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
         arguments:
             - '@indexDatabase'
-            - '@fileTypeLocalizerFactory'
+            - '@positionalNameLocalizerFactory'
 
     lintCommand:
         class: PhpIntegrator\UserInterface\Command\LintCommand
@@ -83,7 +83,7 @@ services:
             - '@nodeTypeDeducer'
             - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
-            - '@fileLineNamespaceDeterminerFactory'
+            - '@positionalNamespaceDeterminer'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand

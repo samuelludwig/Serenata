@@ -6,7 +6,7 @@ use PhpIntegrator\Analysis\ClasslikeExistenceChecker;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -21,9 +21,9 @@ class UnknownClassAnalyzerFactory
     private $classlikeExistenceChecker;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
      * @var TypeAnalyzer
@@ -36,19 +36,19 @@ class UnknownClassAnalyzerFactory
     private $docblockParser;
 
     /**
-     * @param ClasslikeExistenceChecker        $classlikeExistenceChecker
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param DocblockParser                   $docblockParser
+     * @param ClasslikeExistenceChecker                  $classlikeExistenceChecker
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param DocblockParser                             $docblockParser
      */
     public function __construct(
         ClasslikeExistenceChecker $classlikeExistenceChecker,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         TypeAnalyzer $typeAnalyzer,
         DocblockParser $docblockParser
     ) {
         $this->classlikeExistenceChecker = $classlikeExistenceChecker;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockParser = $docblockParser;
     }
@@ -62,9 +62,10 @@ class UnknownClassAnalyzerFactory
     {
         return new UnknownClassAnalyzer(
             $this->classlikeExistenceChecker,
-            $this->fileTypeResolverFactory->create($file),
+            $this->structureAwareNameResolverFactory,
             $this->typeAnalyzer,
-            $this->docblockParser
+            $this->docblockParser,
+            $file
         );
     }
 }

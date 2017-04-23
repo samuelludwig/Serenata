@@ -2,9 +2,12 @@
 
 namespace PhpIntegrator\Analysis\Node;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 
@@ -16,16 +19,16 @@ use PhpParser\Node;
 class NameNodeFqsenDeterminer
 {
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
-    public function __construct(FileTypeResolverFactoryInterface $fileTypeResolverFactory)
+    public function __construct(StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory)
     {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
@@ -37,10 +40,12 @@ class NameNodeFqsenDeterminer
      */
     public function determine(Node\Name $node, string $file, int $line): string
     {
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($file);
+        $filePosition = new FilePosition($file, new Position($line, 0));
+
+        $fileTypeResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         $type = NodeHelpers::fetchClassName($node);
 
-        return $fileTypeResolver->resolve($type, $line, UseStatementKind::TYPE_CLASSLIKE);
+        return $fileTypeResolver->resolve($type, $filePosition, UseStatementKind::TYPE_CLASSLIKE);
     }
 }

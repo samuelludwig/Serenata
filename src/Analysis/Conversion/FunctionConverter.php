@@ -37,7 +37,10 @@ class FunctionConverter extends AbstractConverter
         $throwsAssoc = [];
 
         foreach ($throws as $throws) {
-            $throwsAssoc[$throws['type']] = $throws['description'];
+            $throwsAssoc[] = [
+                'type'        => $throws['type'],
+                'description' => $throws['description']
+            ];
         }
 
         return [

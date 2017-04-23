@@ -5,6 +5,38 @@ parameters:
 
 
 services:
+    databaseFileNamespaceProvider:
+        class: PhpIntegrator\Analysis\DatabaseFileNamespaceProvider
+        arguments:
+            - '@indexDatabase'
+
+    fileNamespaceProvider:
+        alias: databaseFileNamespaceProvider
+
+    positionalNamespaceDeterminer:
+        class: PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminer
+        arguments:
+            - '@fileNamespaceProvider'
+
+    positionalNameResolverFactory:
+        class: PhpIntegrator\NameQualificationUtilities\PositionalNameResolverFactory
+        arguments:
+            - '@positionalNamespaceDeterminer'
+
+    structureAwareNameResolverFactory.backend:
+        class: PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactory
+        arguments:
+            - '@positionalNameResolverFactory'
+            - '@positionalNamespaceDeterminer'
+            - '@globalConstantExistenceChecker'
+            - '@globalFunctionExistenceChecker'
+
+    structureAwareNameResolverFactory:
+        class: PhpIntegrator\Analysis\SpecialNameIgnoringPositionalNameResolverFactory
+        arguments:
+            - '@structureAwareNameResolverFactory.backend'
+            - '@typeAnalyzer'
+
     variableScanner:
         class: PhpIntegrator\Analysis\VariableScanner
 
@@ -147,7 +179,7 @@ services:
     nameNodeFqsenDeterminer:
         class: PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer
         arguments:
-            - '@fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
 
     propertyFetchPropertyInfoRetriever:
         class: PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever

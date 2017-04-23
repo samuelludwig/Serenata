@@ -14,7 +14,7 @@ services:
         class: PhpIntegrator\Linting\UnknownClassAnalyzerFactory
         arguments:
             - '@classlikeExistenceChecker'
-            - '@fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
             - '@typeAnalyzer'
             - '@docblockParser'
 

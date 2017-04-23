@@ -4,11 +4,14 @@ namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -23,9 +26,9 @@ use PhpParser\NodeVisitorAbstract;
 final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
      * @var StorageInterface
@@ -58,16 +61,16 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
     private $filePath;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param StorageInterface                 $storage
-     * @param DocblockParser                   $docblockParser
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param int                              $fileId
-     * @param string                           $code
-     * @param string                           $filePath
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param StorageInterface                           $storage
+     * @param DocblockParser                             $docblockParser
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param int                                        $fileId
+     * @param string                                     $code
+     * @param string                                     $filePath
      */
     public function __construct(
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
@@ -75,7 +78,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         string $code,
         string $filePath
     ) {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -101,8 +104,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseFunctionNode(Node\Stmt\Function_ $node): void
     {
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
-
         $localType = null;
         $resolvedType = null;
         $nodeType = $node->getReturnType();
@@ -121,6 +122,10 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
+        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+
+        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
+
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::THROWS,
             DocblockParser::PARAM_TYPE,
@@ -134,8 +139,8 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         if ($documentation && $documentation['return']['type']) {
             $returnTypes = $this->getTypeDataForTypeSpecification(
                 $documentation['return']['type'],
-                $node->getLine(),
-                $fileTypeResolver
+                $filePosition,
+                $positionalNameResolver
             );
         } elseif ($resolvedType) {
             $returnTypes = [
@@ -152,14 +157,14 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 
         $throws = [];
 
-        foreach ($documentation['throws'] as $type => $description) {
-            $typeData = $this->getTypeDataForTypeSpecification($type, $node->getLine(), $fileTypeResolver);
+        foreach ($documentation['throws'] as $throw) {
+            $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition, $positionalNameResolver);
             $typeData = array_shift($typeData);
 
             $throwsData = [
                 'type'        => $typeData['type'],
                 'full_type'   => $typeData['fqcn'],
-                'description' => $description ?: null
+                'description' => $throw['description'] ?: null
             ];
 
             $throws[] = $throwsData;
@@ -207,8 +212,8 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             if ($parameterDoc) {
                 $types = $this->getTypeDataForTypeSpecification(
                     $parameterDoc['type'],
-                    $node->getLine(),
-                    $fileTypeResolver
+                    $filePosition,
+                    $positionalNameResolver
                 );
             } elseif ($localType) {
                 $parameterType = $localType;
@@ -279,37 +284,40 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param string           $typeSpecification
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
+     * @param string                          $typeSpecification
+     * @param FilePosition                    $filePosition
+     * @param PositionalNameResolverInterface $positionalNameResolver
      *
      * @return array[]
      */
     protected function getTypeDataForTypeSpecification(
         string $typeSpecification,
-        int $line,
-        FileTypeResolver $fileTypeResolver
+        FilePosition $filePosition,
+        PositionalNameResolverInterface $positionalNameResolver
     ): array {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
-        return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
+        return $this->getTypeDataForTypeList($typeList, $filePosition, $positionalNameResolver);
     }
 
     /**
-     * @param string[]         $typeList
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
+     * @param string[]                        $typeList
+     * @param FilePosition                    $filePosition
+     * @param PositionalNameResolverInterface $positionalNameResolver
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
-    {
+    protected function getTypeDataForTypeList(
+        array $typeList,
+        FilePosition $filePosition,
+        PositionalNameResolverInterface $positionalNameResolver
+    ): array {
         $types = [];
 
         foreach ($typeList as $type) {
             $types[] = [
                 'type' => $type,
-                'fqcn' => $fileTypeResolver->resolve($type, $line)
+                'fqcn' => $positionalNameResolver->resolve($type, $filePosition)
             ];
         }
 

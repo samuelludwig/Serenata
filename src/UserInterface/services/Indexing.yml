@@ -16,13 +16,6 @@ services:
             - '@partialParser'
             - '@nodeTypeDeducer'
 
-    fileIndexerFactory.backend.fileTypeResolverFactory:
-        class: PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory
-        arguments:
-            - '@typeResolver'
-            - '@namespaceImportProvider.backend'
-            - '@fileLineNamespaceDeterminerFactory'
-
     fileIndexerFactory.backend:
         class: PhpIntegrator\Indexing\FileIndexerFactory
         arguments:
@@ -31,7 +24,7 @@ services:
             - '@typeAnalyzer'
             - '@parser'
             - '@nodeTypeDeducer'
-            - '@fileIndexerFactory.backend.fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
 
     cachingFileIndexerFactory.cache:
         class: Doctrine\Common\Cache\ArrayCache

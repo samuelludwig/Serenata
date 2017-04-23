@@ -4,10 +4,14 @@ namespace PhpIntegrator\Analysis;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 
+use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
+
 /**
  * Checks if a global function exists.
  */
-class GlobalFunctionExistenceChecker implements GlobalFunctionExistenceCheckerInterface
+class GlobalFunctionExistenceChecker implements
+    GlobalFunctionExistenceCheckerInterface,
+    FunctionPresenceIndicatorInterface
 {
     /**
      * @var IndexDatabase
@@ -30,6 +34,14 @@ class GlobalFunctionExistenceChecker implements GlobalFunctionExistenceCheckerIn
         $globalFunctionsFqcnMap = $this->getGlobalFunctionsFqcnMap();
 
         return isset($globalFunctionsFqcnMap[$fqcn]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isPresent(string $fullyQualifiedName): bool
+    {
+        return $this->exists($fullyQualifiedName);
     }
 
     /**

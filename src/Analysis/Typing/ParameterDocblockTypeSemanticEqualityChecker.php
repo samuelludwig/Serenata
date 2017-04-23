@@ -6,10 +6,13 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
-
 use PhpIntegrator\DocblockTypeParser;
+
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\Typing\Type;
 use PhpIntegrator\Utility\Typing\TypeList;
@@ -22,9 +25,9 @@ use PhpIntegrator\Utility\Typing\SpecialTypeString;
 class ParameterDocblockTypeSemanticEqualityChecker
 {
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
      * @var ClasslikeInfoBuilder
@@ -32,14 +35,14 @@ class ParameterDocblockTypeSemanticEqualityChecker
     private $classlikeInfoBuilder;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
      */
     public function __construct(
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         ClasslikeInfoBuilder $classlikeInfoBuilder
     ) {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
@@ -53,10 +56,12 @@ class ParameterDocblockTypeSemanticEqualityChecker
      */
     public function isEqual(array $parameter, array $docblockParameter, string $filePath, int $line): bool
     {
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($filePath);
+        $filePosition = new FilePosition($filePath, new Position($line, 0));
 
-        $parameterTypeList = $this->calculateParameterTypeList($parameter, $line, $fileTypeResolver);
-        $docblockType = $this->getResolvedDocblockParameterType($docblockParameter['type'], $line, $fileTypeResolver);
+        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
+
+        $parameterTypeList = $this->calculateParameterTypeList($parameter, $filePosition, $positionalNameResolver);
+        $docblockType = $this->getResolvedDocblockParameterType($docblockParameter['type'], $filePosition, $positionalNameResolver);
 
         if (!$this->doesParameterTypeListMatchDocblockTypeList($parameterTypeList, $docblockType)) {
             return false;
@@ -68,18 +73,18 @@ class ParameterDocblockTypeSemanticEqualityChecker
     }
 
     /**
-     * @param array                     $parameter
-     * @param int                       $line
-     * @param FileTypeResolverInterface $fileTypeResolver
+     * @param array                           $parameter
+     * @param FilePosition                    $filePosition
+     * @param PositionalNameResolverInterface $positionalNameResolver
      *
      * @return array
      */
     protected function calculateParameterTypeList(
         array $parameter,
-        int $line,
-        FileTypeResolverInterface $fileTypeResolver
+        FilePosition $filePosition,
+        PositionalNameResolverInterface $positionalNameResolver
     ): TypeList {
-        $baseType = $fileTypeResolver->resolve($parameter['type'], $line);
+        $baseType = $positionalNameResolver->resolve($parameter['type'], $filePosition);
 
         if ($parameter['isVariadic']) {
             $baseType .= '[]';
@@ -95,27 +100,27 @@ class ParameterDocblockTypeSemanticEqualityChecker
     }
 
     /**
-     * @param DocblockTypeParser\DocblockType $docblockType
-     * @param int                        $line
-     * @param FileTypeResolverInterface  $fileTypeResolver
+     * @param DocblockTypeParser\DocblockType  $docblockType
+     * @param FilePosition                     $filePosition
+     * @param PositionalNameResolverInterface  $positionalNameResolver
      *
      * @return DocblockTypeParser\DocblockType
      */
     protected function getResolvedDocblockParameterType(
         DocblockTypeParser\DocblockType $docblockType,
-        int $line,
-        FileTypeResolverInterface $fileTypeResolver
+        FilePosition $filePosition,
+        PositionalNameResolverInterface $positionalNameResolver
     ): DocblockTypeParser\DocblockType {
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
-            return new DocblockTypeParser\CompoundDocblockType(...array_map(function (DocblockTypeParser\DocblockType $type) use ($line, $fileTypeResolver) {
-                return $this->getResolvedDocblockParameterType($type, $line, $fileTypeResolver);
+            return new DocblockTypeParser\CompoundDocblockType(...array_map(function (DocblockTypeParser\DocblockType $type) use ($filePosition, $positionalNameResolver) {
+                return $this->getResolvedDocblockParameterType($type, $filePosition, $positionalNameResolver);
             }, $docblockType->getParts()));
         } elseif ($docblockType instanceof DocblockTypeParser\SpecializedArrayDocblockType) {
-            $resolvedType = $this->getResolvedDocblockParameterType($docblockType->getType(), $line, $fileTypeResolver);
+            $resolvedType = $this->getResolvedDocblockParameterType($docblockType->getType(), $filePosition, $positionalNameResolver);
 
             return new DocblockTypeParser\SpecializedArrayDocblockType($resolvedType);
         } elseif ($docblockType instanceof DocblockTypeParser\ClassDocblockType) {
-            $resolvedType = $fileTypeResolver->resolve($docblockType->getName(), $line);
+            $resolvedType = $positionalNameResolver->resolve($docblockType->getName(), $filePosition);
 
             return new DocblockTypeParser\ClassDocblockType($resolvedType);
         }
@@ -124,7 +129,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
     }
 
     /**
-     * @param TypeList                   $parameterTypeList
+     * @param TypeList                        $parameterTypeList
      * @param DocblockTypeParser\DocblockType $docblockType
      *
      * @return bool
@@ -145,7 +150,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
     }
 
     /**
-     * @param TypeList                   $parameterTypeList
+     * @param TypeList                        $parameterTypeList
      * @param DocblockTypeParser\DocblockType $docblockType
      *
      * @return bool
@@ -178,7 +183,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
     }
 
     /**
-     * @param TypeList                   $parameterTypeList
+     * @param TypeList                        $parameterTypeList
      * @param DocblockTypeParser\DocblockType $docblockType
      *
      * @return bool
@@ -211,7 +216,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
     }
 
     /**
-     * @param TypeList                   $parameterTypeList
+     * @param TypeList                        $parameterTypeList
      * @param DocblockTypeParser\DocblockType $docblockType
      *
      * @return bool
@@ -272,7 +277,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      * specializes the parameter type (i.e. it is a subclass of it or implements it as interface).
      *
      * @param DocblockTypeParser\ClassDocblockType $docblockType
-     * @param ClassType                       $type
+     * @param ClassType                            $type
      *
      * @return bool
      */

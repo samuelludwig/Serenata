@@ -6,9 +6,12 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\IndexDatabase;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -21,9 +24,9 @@ use PhpParser\Node;
 class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
      * @var IndexDatabase
@@ -36,16 +39,16 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $constantConverter;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param IndexDatabase                    $indexDatabase
      * @param ConstantConverter                $constantConverter
      */
     public function __construct(
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         IndexDatabase $indexDatabase,
         ConstantConverter $constantConverter
     ) {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->indexDatabase = $indexDatabase;
         $this->constantConverter = $constantConverter;
     }
@@ -84,9 +87,12 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             return ['bool'];
         }
 
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+        $filePosition = new FilePosition(
+            $file,
+            new Position(SourceCodeHelpers::calculateLineByOffset($code, $offset), 0)
+        );
 
-        $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($name, $line);
+        $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);
 
         $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
 

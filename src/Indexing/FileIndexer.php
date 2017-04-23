@@ -9,7 +9,7 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -69,17 +69,17 @@ class FileIndexer implements FileIndexerInterface
     private $structureTypeMap;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @param StorageInterface                 $storage
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param DocblockParser                   $docblockParser
-     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param Parser                           $parser
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param StorageInterface                           $storage
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param DocblockParser                             $docblockParser
+     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
+     * @param Parser                                     $parser
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         StorageInterface $storage,
@@ -87,14 +87,14 @@ class FileIndexer implements FileIndexerInterface
         DocblockParser $docblockParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Parser $parser,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockParser = $docblockParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
@@ -127,7 +127,7 @@ class FileIndexer implements FileIndexerInterface
             $globalConstantIndexingVisitor = new Visiting\GlobalConstantIndexingVisitor(
                 $this->storage,
                 $this->docblockParser,
-                $this->fileTypeResolverFactory,
+                $this->structureAwareNameResolverFactory,
                 $this->typeAnalyzer,
                 $this->nodeTypeDeducer,
                 $fileId,
@@ -144,7 +144,7 @@ class FileIndexer implements FileIndexerInterface
             );
 
             $globalFunctionIndexingVisitor = new Visiting\GlobalFunctionIndexingVisitor(
-                $this->fileTypeResolverFactory,
+                $this->structureAwareNameResolverFactory,
                 $this->storage,
                 $this->docblockParser,
                 $this->typeAnalyzer,
@@ -158,7 +158,7 @@ class FileIndexer implements FileIndexerInterface
                 $this->typeAnalyzer,
                 $this->docblockParser,
                 $this->nodeTypeDeducer,
-                $this->fileTypeResolverFactory,
+                $this->structureAwareNameResolverFactory,
                 $fileId,
                 $code,
                 $filePath
@@ -166,7 +166,7 @@ class FileIndexer implements FileIndexerInterface
 
             // TODO: Refactor to traverse once.
             $traverser = new NodeTraverser();
-            $traverser->addVisitor(new Visiting\UseStatementIndexingVisitor($this->storage, $fileId));
+            $traverser->addVisitor(new Visiting\UseStatementIndexingVisitor($this->storage, $fileId, $code));
             $traverser->traverse($nodes);
 
             $traverser = new NodeTraverser();

@@ -6,11 +6,14 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -33,9 +36,9 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     private $docblockParser;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
      * @var TypeAnalyzer
@@ -63,19 +66,19 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     private $filePath;
 
     /**
-     * @param StorageInterface                 $storage
-     * @param DocblockParser                   $docblockParser
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param int                              $fileId
-     * @param string                           $code
-     * @param string                           $filePath
+     * @param StorageInterface                           $storage
+     * @param DocblockParser                             $docblockParser
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
+     * @param int                                        $fileId
+     * @param string                                     $code
+     * @param string                                     $filePath
      */
     public function __construct(
         StorageInterface $storage,
         DocblockParser $docblockParser,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         int $fileId,
@@ -84,7 +87,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->fileId = $fileId;
@@ -122,7 +125,9 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseConstantNode(Node\Const_ $node, Node\Stmt\Const_ $const): void
     {
-        $fileTypeResolver = $this->fileTypeResolverFactory->create($this->filePath);
+        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+
+        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
 
@@ -155,8 +160,8 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
 
             $types = $this->getTypeDataForTypeSpecification(
                 $varDocumentation['type'],
-                $node->getLine(),
-                $fileTypeResolver
+                $filePosition,
+                $positionalNameResolver
             );
         } elseif ($node->value) {
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->filePath, $defaultValue, 0);
@@ -189,37 +194,40 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param string           $typeSpecification
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
+     * @param string                          $typeSpecification
+     * @param FilePosition                    $filePosition
+     * @param PositionalNameResolverInterface $positionalNameResolver
      *
      * @return array[]
      */
     protected function getTypeDataForTypeSpecification(
         string $typeSpecification,
-        int $line,
-        FileTypeResolver $fileTypeResolver
+        FilePosition $filePosition,
+        PositionalNameResolverInterface $positionalNameResolver
     ): array {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
-        return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
+        return $this->getTypeDataForTypeList($typeList, $filePosition, $positionalNameResolver);
     }
 
     /**
-     * @param string[]         $typeList
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
+     * @param string[]                        $typeList
+     * @param FilePosition                    $filePosition
+     * @param PositionalNameResolverInterface $positionalNameResolver
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
-    {
+    protected function getTypeDataForTypeList(
+        array $typeList,
+        FilePosition $filePosition,
+        PositionalNameResolverInterface $positionalNameResolver
+    ): array {
         $types = [];
 
         foreach ($typeList as $type) {
             $types[] = [
                 'type' => $type,
-                'fqcn' => $fileTypeResolver->resolve($type, $line)
+                'fqcn' => $positionalNameResolver->resolve($type, $filePosition)
             ];
         }
 

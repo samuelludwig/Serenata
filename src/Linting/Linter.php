@@ -174,7 +174,7 @@ class Linter
         }
 
         if ($settings->getLintUnusedUseStatements()) {
-            $analyzers[] = $this->unusedUseStatementAnalyzerFactory->create();
+            $analyzers[] = $this->unusedUseStatementAnalyzerFactory->create($code);
         }
 
         if ($settings->getLintDocblockCorrectness()) {

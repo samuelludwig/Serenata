@@ -9,7 +9,10 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -37,26 +40,26 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $fileClassListProvider;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param ClasslikeInfoBuilder             $classlikeInfoBuilder
-     * @param FileClassListProviderInterface   $fileClassListProvider
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
+     * @param FileClassListProviderInterface             $fileClassListProvider
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         TypeAnalyzer $typeAnalyzer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         FileClassListProviderInterface $fileClassListProvider,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->fileClassListProvider = $fileClassListProvider;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
@@ -111,7 +114,12 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
-        $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($nameString, $line);
+        $filePosition = new FilePosition(
+            $file,
+            new Position($line, 0)
+        );
+
+        $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($nameString, $filePosition);
 
         return [$fqcn];
     }

@@ -13,7 +13,7 @@ services:
         class: PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner
         arguments:
             - '@docblockParser'
-            - '@fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
             - '@typeAnalyzer'
             - '@nodeTypeDeducer'
             - '@foreachNodeLoopValueTypeDeducer'
@@ -37,7 +37,7 @@ services:
     constFetchNodeTypeDeducer:
         class: PhpIntegrator\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer
         arguments:
-            - '@fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
             - '@indexDatabase'
             - '@constantConverter'
 
@@ -84,7 +84,7 @@ services:
             - '@typeAnalyzer'
             - '@classlikeInfoBuilder'
             - '@fileClassListProvider'
-            - '@fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
 
     funcCallNodeTypeDeducer:
         class: PhpIntegrator\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer

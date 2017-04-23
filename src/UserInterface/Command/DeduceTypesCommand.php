@@ -6,7 +6,10 @@ use ArrayAccess;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileLineNamespaceDeterminerFactory;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
 use PhpIntegrator\Parsing\LastExpressionParser;
 
@@ -38,26 +41,26 @@ class DeduceTypesCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
-     * @var FileLineNamespaceDeterminerFactory
+     * @var PositionalNamespaceDeterminerInterface
      */
-    private $fileLineNamespaceDeterminerFactory;
+    private $positionalNamespaceDeterminer;
 
     /**
-     * @param NodeTypeDeducerInterface           $nodeTypeDeducer
-     * @param LastExpressionParser               $lastExpressionParser
-     * @param SourceCodeStreamReader             $sourceCodeStreamReader
-     * @param FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
+     * @param NodeTypeDeducerInterface               $nodeTypeDeducer
+     * @param LastExpressionParser                   $lastExpressionParser
+     * @param SourceCodeStreamReader                 $sourceCodeStreamReader
+     * @param PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
         LastExpressionParser $lastExpressionParser,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        FileLineNamespaceDeterminerFactory $fileLineNamespaceDeterminerFactory
+        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->fileLineNamespaceDeterminerFactory = $fileLineNamespaceDeterminerFactory;
+        $this->positionalNamespaceDeterminer = $positionalNamespaceDeterminer;
     }
 
     /**
@@ -172,11 +175,11 @@ class DeduceTypesCommand extends AbstractCommand
     protected function attachRelevantNamespaceToNode(Node $node, string $filePath, int $line): void
     {
         $namespace = null;
-
-        $fileLineNamespaceDeterminer = $this->fileLineNamespaceDeterminerFactory->create($filePath);
-
         $namespaceNode = null;
-        $namespace = $fileLineNamespaceDeterminer->determine($line);
+
+        $filePosition = new FilePosition($filePath, new Position($line, 0));
+
+        $namespace = $this->positionalNamespaceDeterminer->determine($filePosition);
 
         if ($namespace->getName() !== null) {
             $namespaceNode = new Node\Name\FullyQualified($namespace->getName());

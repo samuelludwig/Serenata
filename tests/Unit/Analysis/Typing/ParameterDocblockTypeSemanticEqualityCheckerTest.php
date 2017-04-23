@@ -7,9 +7,11 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactory;
 
 use PhpIntegrator\DocblockTypeParser;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framework\TestCase
 {
@@ -18,13 +20,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMatchingTypeNamePasses(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -42,7 +44,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int');
+        $resolver->method('resolve')->willReturn('int');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -51,13 +53,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMismatchingTypeNameFails(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -75,7 +77,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('bool');
+        $resolver->method('resolve')->willReturn('bool');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -84,13 +86,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMatchingNullableTypePasses(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -111,7 +113,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int');
+        $resolver->method('resolve')->willReturn('int');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -120,13 +122,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMismatchingNullableTypeFails(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -144,7 +146,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int');
+        $resolver->method('resolve')->willReturn('int');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -153,13 +155,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testClassTypesWithSameQualificationPasses(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -177,7 +179,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\A');
+        $resolver->method('resolve')->willReturn('\A', '\A');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -186,13 +188,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testClassTypesWithDifferentQualificationPasses(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -210,7 +212,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\B\A', '\B\A');
+        $resolver->method('resolve')->willReturn('\B\A', '\B\A');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -219,13 +221,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testDifferentClassTypesFails(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\A'
@@ -252,7 +254,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\B');
+        $resolver->method('resolve')->willReturn('\A', '\B');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -261,13 +263,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testClassTypeAllowsSpecializationByParent(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\A'
@@ -294,7 +296,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\B');
+        $resolver->method('resolve')->willReturn('\A', '\B');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -303,13 +305,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testClassTypeAllowsSpecializationByInterface(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\A'
@@ -336,7 +338,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\B');
+        $resolver->method('resolve')->willReturn('\A', '\B');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -345,13 +347,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testClassTypeAllowsMultipleSpecializationsByParentOrInterface(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\A'
@@ -389,7 +391,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\B', '\C');
+        $resolver->method('resolve')->willReturn('\A', '\B', '\C');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -398,13 +400,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testVariadicParameterRequiresArrayTypeHintAndPassesWhenItIsPresent(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\A'
@@ -433,7 +435,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\A');
+        $resolver->method('resolve')->willReturn('\A', '\A');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -442,13 +444,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testVariadicParameterRequiresArrayTypeHintAndailsWhenItIsMissing(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\A'
@@ -475,7 +477,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\A', '\A');
+        $resolver->method('resolve')->willReturn('\A', '\A');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -484,13 +486,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testVariadicParameterWithDifferentQualification(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
                     'name'       => '\B\A'
@@ -519,7 +521,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('\B\A', '\B\A');
+        $resolver->method('resolve')->willReturn('\B\A', '\B\A');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -528,13 +530,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeAllowsSpecialization(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -554,7 +556,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -563,13 +565,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeDoesNotAllowOtherTypes(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -587,7 +589,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -596,13 +598,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testNullableArrayTypeWithMatchingNullabilityPasses(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -623,7 +625,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -632,13 +634,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testNullableArrayTypeWithMismatchingNullabilityFails(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -656,7 +658,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -665,13 +667,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeWithMismatchingNullabilityFails(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -692,7 +694,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -701,13 +703,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testNullableArrayTypeAllowsSpecialization(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -730,7 +732,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -739,13 +741,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeAllowsMultipleSpecializations(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -770,7 +772,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -779,13 +781,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeAllowsMultipleSpecializationsButFailsWhenAnotherTypeIsPresent(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -811,7 +813,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -820,13 +822,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeAllowsMultipleSpecializationsButFailsWhenAnotherTypeIsPresentAndThatTypeIsNull(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -852,7 +854,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -861,13 +863,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testNullableArrayTypeAllowsMultipleSpecializations(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -893,7 +895,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -902,13 +904,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testNullableArrayTypeAllowsMultipleSpecializationsButFailsWhenNullIsMissing(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -934,7 +936,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -943,13 +945,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMatchingReferenceTypesPasses(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -967,7 +969,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => true
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int');
+        $resolver->method('resolve')->willReturn('int');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -976,13 +978,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMismatchingReferenceTypesFails(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -1000,7 +1002,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('int');
+        $resolver->method('resolve')->willReturn('int');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -1009,13 +1011,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testArrayTypeWithParanthesizedSpecialization(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -1038,7 +1040,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -1047,13 +1049,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testNullableArrayTypeWithParanthesizedSpecialization(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -1079,7 +1081,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('array');
+        $resolver->method('resolve')->willReturn('array');
         $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
@@ -1088,13 +1090,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      */
     public function testMismatchingClassTypeAndStringDocblockTypeFailsButDoesNotGenerateError(): void
     {
-        $fileTypeResolver = $this->getMockBuilder(FileTypeResolver::class)
+        $resolver = $this->getMockBuilder(PositionalNameResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
             ->getMock();
 
         $checker = new ParameterDocblockTypeSemanticEqualityChecker(
-            $this->mockFileTypeResolverFactory($fileTypeResolver),
+            $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock()
         );
 
@@ -1112,25 +1114,26 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false
         ];
 
-        $fileTypeResolver->method('resolve')->willReturn('Foo');
+        $resolver->method('resolve')->willReturn('Foo');
         $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
-     * @param FileTypeResolver $fileTypeResolverMock
+     * @param PositionalNameResolverInterface $structureAwareNameResolverMock
      *
-     * @return FileTypeResolverFactory
+     * @return StructureAwareNameResolver
      */
-    protected function mockFileTypeResolverFactory(FileTypeResolver $fileTypeResolverMock): FileTypeResolverFactory
-    {
-        $fileTypeResolverFactory = $this->getMockBuilder(FileTypeResolverFactory::class)
+    protected function mockStructureAwareNameResolverFactory(
+        PositionalNameResolverInterface $structureAwareNameResolverMock
+    ): StructureAwareNameResolverFactoryInterface {
+        $resolver = $this->getMockBuilder(StructureAwareNameResolverFactoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $fileTypeResolverFactory->method('create')->will($this->returnValue($fileTypeResolverMock));
+        $resolver->method('create')->will($this->returnValue($structureAwareNameResolverMock));
 
-        return $fileTypeResolverFactory;
+        return $resolver;
     }
 
     /**

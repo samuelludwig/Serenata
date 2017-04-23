@@ -50,11 +50,12 @@ class UnusedUseStatementAnalyzer implements AnalyzerInterface
      *
      * @param TypeAnalyzer   $typeAnalyzer
      * @param DocblockParser $docblockParser
+     * @param string         $code
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
+    public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser, string $code)
     {
         $this->classUsageFetchingVisitor = new ClassUsageFetchingVisitor($typeAnalyzer);
-        $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
+        $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor($code);
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
         $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
         $this->docblockClassUsageFetchingVisitor = new DocblockClassUsageFetchingVisitor($typeAnalyzer, $docblockParser);

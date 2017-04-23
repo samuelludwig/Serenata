@@ -32,13 +32,16 @@ class UnusedUseStatementAnalyzerFactory
     }
 
     /**
+     * @param string $code
+     *
      * @return UnusedUseStatementAnalyzer
      */
-    public function create(): UnusedUseStatementAnalyzer
+    public function create(string $code): UnusedUseStatementAnalyzer
     {
         return new UnusedUseStatementAnalyzer(
             $this->typeAnalyzer,
-            $this->docblockParser
+            $this->docblockParser,
+            $code
         );
     }
 }

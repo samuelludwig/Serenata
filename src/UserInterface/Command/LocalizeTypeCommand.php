@@ -4,11 +4,14 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\Localization\FileTypeLocalizerFactory;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
 use PhpIntegrator\Indexing\IndexDatabase;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
 /**
  * Command that makes a FQCN relative to local use statements in a file.
@@ -21,18 +24,20 @@ class LocalizeTypeCommand extends AbstractCommand
     private $indexDatabase;
 
     /**
-     * @var FileTypeLocalizerFactory
+     * @var PositionalNameLocalizerFactoryInterface
      */
-    private $fileTypeLocalizerFactory;
+    private $positionalNameLocalizerFactory;
 
     /**
-     * @param IndexDatabase            $indexDatabase
-     * @param FileTypeLocalizerFactory $fileTypeLocalizerFactory
+     * @param IndexDatabase                           $indexDatabase
+     * @param PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory
      */
-    public function __construct(IndexDatabase $indexDatabase, FileTypeLocalizerFactory $fileTypeLocalizerFactory)
-    {
+    public function __construct(
+        IndexDatabase $indexDatabase,
+        PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory
+    ) {
         $this->indexDatabase = $indexDatabase;
-        $this->fileTypeLocalizerFactory = $fileTypeLocalizerFactory;
+        $this->positionalNameLocalizerFactory = $positionalNameLocalizerFactory;
     }
 
     /**
@@ -76,6 +81,8 @@ class LocalizeTypeCommand extends AbstractCommand
             throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
         }
 
-        return $this->fileTypeLocalizerFactory->create($file)->resolve($type, $line, $kind);
+        $filePosition = new FilePosition($file, new Position($line, 0));
+
+        return $this->positionalNameLocalizerFactory->create($filePosition)->localize($type, $kind);
     }
 }

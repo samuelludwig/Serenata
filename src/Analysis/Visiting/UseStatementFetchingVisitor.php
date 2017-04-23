@@ -23,10 +23,17 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
     private $lastNamespaceIndex = 0;
 
     /**
-     * Constructor.
+     * @var int
      */
-    public function __construct()
+    private $lastLine;
+
+    /**
+     * @param string $code
+     */
+    public function __construct(string $code)
     {
+        $this->lastLine = mb_substr_count($code, "\n");
+
         $this->namespaces[0] = [
             'name'          => null,
             'startLine'     => 0,
@@ -89,6 +96,16 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 $this->namespaces[$this->lastNamespaceIndex]['endLine'],
                 $node->getAttribute('endLine') + 1
             );
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterTraverse(array $nodes)
+    {
+        if (isset($this->namespaces[$this->lastNamespaceIndex])) {
+            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $this->lastLine + 1;
         }
     }
 

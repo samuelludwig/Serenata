@@ -33,13 +33,14 @@ class UseStatementIndexingVisitor implements NodeVisitor
     /**
      * @param StorageInterface $storage
      * @param int              $fileId
+     * @param string           $code
      */
-    public function __construct(StorageInterface $storage, int $fileId)
+    public function __construct(StorageInterface $storage, int $fileId, string $code)
     {
         $this->storage = $storage;
         $this->fileId = $fileId;
 
-        $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor();
+        $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor($code);
     }
 
     /**

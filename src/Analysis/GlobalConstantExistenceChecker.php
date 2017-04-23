@@ -4,10 +4,14 @@ namespace PhpIntegrator\Analysis;
 
 use PhpIntegrator\Indexing\IndexDatabase;
 
+use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+
 /**
  * Checks if a global constant exists.
  */
-class GlobalConstantExistenceChecker implements GlobalConstantExistenceCheckerInterface
+class GlobalConstantExistenceChecker implements
+    GlobalConstantExistenceCheckerInterface,
+    ConstantPresenceIndicatorInterface
 {
     /**
      * @var IndexDatabase
@@ -30,6 +34,14 @@ class GlobalConstantExistenceChecker implements GlobalConstantExistenceCheckerIn
         $globalConstantFqcnMap = $this->getGlobalConstantFqcnMap();
 
         return isset($globalConstantFqcnMap[$fqcn]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isPresent(string $fullyQualifiedName): bool
+    {
+        return $this->exists($fullyQualifiedName);
     }
 
     /**

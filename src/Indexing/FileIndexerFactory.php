@@ -6,8 +6,7 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -44,17 +43,17 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
     private $nodeTypeDeducer;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @param StorageInterface                 $storage
-     * @param DocblockParser                   $docblockParser
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param Parser                           $parser
-     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
+     * @param StorageInterface                           $storage
+     * @param DocblockParser                             $docblockParser
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param Parser                                     $parser
+     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         StorageInterface $storage,
@@ -62,14 +61,14 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
         TypeAnalyzer $typeAnalyzer,
         Parser $parser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->parser = $parser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
@@ -89,7 +88,7 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
             $this->docblockParser,
             $this->nodeTypeDeducer,
             $this->parser,
-            $this->fileTypeResolverFactory
+            $this->structureAwareNameResolverFactory
         );
     }
 }

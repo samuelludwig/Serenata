@@ -1,7 +1,6 @@
 imports:
     - { resource: Typing/Deduction.yml }
     - { resource: Typing/Localization.yml }
-    - { resource: Typing/Resolving.yml }
 
 parameters:
 
@@ -10,7 +9,7 @@ services:
     ParameterDocblockTypeSemanticEqualityChecker:
         class: PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker
         arguments:
-            - '@fileTypeResolverFactory'
+            - '@structureAwareNameResolverFactory'
             - '@classlikeInfoBuilder'
 
     namespaceImportProvider.backend:
