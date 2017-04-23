@@ -85,7 +85,10 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
         }
 
         if (isset($this->namespaces[$this->lastNamespaceIndex])) {
-            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $node->getLine() + 1;
+            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = max(
+                $this->namespaces[$this->lastNamespaceIndex]['endLine'],
+                $node->getAttribute('endLine') + 1
+            );
         }
     }
 
