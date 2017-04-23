@@ -5,7 +5,6 @@ namespace PhpIntegrator\Indexing\Visiting;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
 use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
@@ -44,11 +43,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
     private $typeAnalyzer;
 
     /**
-     * @var TypeResolverInterface
-     */
-    private $typeResolver;
-
-    /**
      * @var int
      */
     private $fileId;
@@ -68,7 +62,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      * @param StorageInterface                 $storage
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
-     * @param TypeResolverInterface            $typeResolver
      * @param int                              $fileId
      * @param string                           $code
      * @param string                           $filePath
@@ -78,7 +71,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolverInterface $typeResolver,
         int $fileId,
         string $code,
         string $filePath
@@ -87,7 +79,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->fileId = $fileId;
         $this->code = $code;
         $this->filePath = $filePath;
