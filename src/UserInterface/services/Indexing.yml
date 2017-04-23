@@ -29,7 +29,6 @@ services:
             - '@storageForIndexers'
             - '@docblockParser'
             - '@typeAnalyzer'
-            - '@typeResolver'
             - '@parser'
             - '@nodeTypeDeducer'
             - '@fileIndexerFactory.backend.fileTypeResolverFactory'

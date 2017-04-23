@@ -34,11 +34,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
     private $typeAnalyzer;
 
     /**
-     * @var TypeResolverInterface
-     */
-    private $typeResolver;
-
-    /**
      * @var Parser
      */
     private $parser;
@@ -57,7 +52,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
      * @param StorageInterface                 $storage
      * @param DocblockParser                   $docblockParser
      * @param TypeAnalyzer                     $typeAnalyzer
-     * @param TypeResolverInterface            $typeResolver
      * @param Parser                           $parser
      * @param NodeTypeDeducerInterface         $nodeTypeDeducer
      * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
@@ -66,7 +60,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolverInterface $typeResolver,
         Parser $parser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         FileTypeResolverFactoryInterface $fileTypeResolverFactory
@@ -74,7 +67,6 @@ class FileIndexerFactory implements FileIndexerFactoryInterface
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->parser = $parser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->fileTypeResolverFactory = $fileTypeResolverFactory;
