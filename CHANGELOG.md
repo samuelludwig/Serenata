@@ -41,6 +41,7 @@
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
 * Fixed errors being generated whilst trying to deduce the type of anonymous classes.
 * The `LocalizeType` command will no longer make any chances to names that aren't fully qualified, as they are already "local" as they are.
+* Namespaces supplied by the `NamespaceList` command will now always have a start and end line (no more `null` for the last namespace).
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php
