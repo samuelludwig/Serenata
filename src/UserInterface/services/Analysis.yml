@@ -23,7 +23,7 @@ services:
         arguments:
             - '@positionalNamespaceDeterminer'
 
-    structureAwareNameResolverFactory.backend:
+    structureAwareNameResolverFactory.structureAwareNameResolverBackend:
         class: PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactory
         arguments:
             - '@positionalNameResolverFactory'
@@ -31,11 +31,20 @@ services:
             - '@globalConstantExistenceChecker'
             - '@globalFunctionExistenceChecker'
 
-    structureAwareNameResolverFactory:
+    structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend:
         class: PhpIntegrator\Analysis\SpecialNameIgnoringPositionalNameResolverFactory
         arguments:
-            - '@structureAwareNameResolverFactory.backend'
+            - '@structureAwareNameResolverFactory.structureAwareNameResolverBackend'
             - '@typeAnalyzer'
+
+    structureAwareNameResolverFactory.docblockPositionalNameResolverBackend:
+        class: PhpIntegrator\Analysis\DocblockPositionalNameResolverFactory
+        arguments:
+            - '@structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend'
+            - '@typeAnalyzer'
+
+    structureAwareNameResolverFactory:
+        alias: structureAwareNameResolverFactory.docblockPositionalNameResolverBackend
 
     variableScanner:
         class: PhpIntegrator\Analysis\VariableScanner
