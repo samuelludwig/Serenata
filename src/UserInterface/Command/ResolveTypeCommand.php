@@ -4,11 +4,14 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
 use PhpIntegrator\Indexing\IndexDatabase;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 /**
  * Command that resolves local types in a file.
@@ -21,20 +24,20 @@ class ResolveTypeCommand extends AbstractCommand
     private $indexDatabase;
 
     /**
-     * @var ProjectTypeResolverFactoryFacade
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    private $projectTypeResolverFactoryFacade;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @param IndexDatabase                    $indexDatabase
-     * @param ProjectTypeResolverFactoryFacade $projectTypeResolverFactoryFacade
+     * @param IndexDatabase                              $indexDatabase
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         IndexDatabase $indexDatabase,
-        ProjectTypeResolverFactoryFacade $projectTypeResolverFactoryFacade
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->indexDatabase = $indexDatabase;
-        $this->projectTypeResolverFactoryFacade = $projectTypeResolverFactoryFacade;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
@@ -90,6 +93,8 @@ class ResolveTypeCommand extends AbstractCommand
             throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
         }
 
-        return $this->projectTypeResolverFactoryFacade->create($file)->resolve($name, $line, $kind);
+        $filePosition = new FilePosition($file, new Position($line, 0));
+
+        return $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition, $kind);
     }
 }
