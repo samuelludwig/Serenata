@@ -11,14 +11,3 @@ services:
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@classlikeInfoBuilder'
-
-    namespaceImportProvider.backend:
-        alias: indexDatabase
-
-    namespaceImportProvider.cachingDecorator:
-        class: PhpIntegrator\Analysis\Typing\CachingNamespaceImportProvider
-        arguments:
-            - '@namespaceImportProvider.backend'
-
-    namespaceImportProvider:
-        alias: namespaceImportProvider.cachingDecorator
