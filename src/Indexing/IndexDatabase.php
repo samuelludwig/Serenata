@@ -28,7 +28,7 @@ class IndexDatabase implements
      *
      * @var int
      */
-    public const SCHEMA_VERSION = 35;
+    public const SCHEMA_VERSION = 36;
 
     /**
      * @var Connection
