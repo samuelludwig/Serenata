@@ -4,8 +4,6 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\UserInterface\Command\ResolveTypeCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class ResolveTypeCommandTest extends AbstractIntegrationTest
