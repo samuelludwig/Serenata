@@ -9,7 +9,7 @@
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
         "php-integrator/common": "dev-master#d554a26fe0ef3972f5f996a4a7838368b6cfb352",
-        "php-integrator/name-qualification-utilities": "dev-master#0f22d432a3bb8cabb54eb72471c929b136e0f005",
+        "php-integrator/name-qualification-utilities": "dev-master#6a8754a30b7cdfb419169dbffdd123ec7fbc9894",
         "php-integrator/docblock-type-parser": "dev-master#a85867b843a4b6811b95b908d4be5614e27f84e8",
         "doctrine/cache": "1.6.*",
         "doctrine/dbal": "2.5.*",
