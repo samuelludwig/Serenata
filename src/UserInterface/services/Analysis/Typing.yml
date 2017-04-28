@@ -6,7 +6,7 @@ parameters:
 
 
 services:
-    ParameterDocblockTypeSemanticEqualityChecker:
+    parameterDocblockTypeSemanticEqualityChecker:
         class: PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker
         arguments:
             - '@structureAwareNameResolverFactory'
