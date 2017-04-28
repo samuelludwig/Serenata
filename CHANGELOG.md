@@ -40,6 +40,7 @@
   * (A JSON copy of the documentation is part of the package, so no actual internet connection is required.)
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
 * Fixed errors being generated whilst trying to deduce the type of anonymous classes.
+* The `LocalizeType` command will no longer make any chances to names that aren't fully qualified, as they are already "local" as they are.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php
