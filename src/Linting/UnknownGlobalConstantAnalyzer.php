@@ -2,11 +2,11 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
-
 use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
 use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
+
+use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 /**
  * Looks for unknown global constant names.
@@ -14,9 +14,9 @@ use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
 {
     /**
-     * @var GlobalConstantExistenceCheckerInterface
+     * @var ConstantPresenceIndicatorInterface
      */
-    private $globalConstantExistenceChecker;
+    private $constantPresenceIndicator;
 
     /**
      * @var GlobalConstantUsageFetchingVisitor
@@ -24,11 +24,11 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     private $globalConstantUsageFetchingVisitor;
 
     /**
-     * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
+     * @param ConstantPresenceIndicatorInterface $constantPresenceIndicator
      */
-    public function __construct(GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker)
+    public function __construct(ConstantPresenceIndicatorInterface $constantPresenceIndicator)
     {
-        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
+        $this->constantPresenceIndicator = $constantPresenceIndicator;
 
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
     }
@@ -53,12 +53,12 @@ class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
         $unknownGlobalConstants = [];
 
         // TODO: Inject this.
-        $determiner = new ConstNameNodeFqsenDeterminer($this->globalConstantExistenceChecker);
+        $determiner = new ConstNameNodeFqsenDeterminer($this->constantPresenceIndicator);
 
         foreach ($globalConstants as $node) {
             $fqsen = $determiner->determine($node->name);
 
-            if ($this->globalConstantExistenceChecker->exists($fqsen)) {
+            if ($this->constantPresenceIndicator->isPresent($fqsen)) {
                 continue;
             }
 

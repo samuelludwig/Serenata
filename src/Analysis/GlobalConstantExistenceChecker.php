@@ -9,9 +9,7 @@ use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 /**
  * Checks if a global constant exists.
  */
-class GlobalConstantExistenceChecker implements
-    GlobalConstantExistenceCheckerInterface,
-    ConstantPresenceIndicatorInterface
+class GlobalConstantExistenceChecker implements ConstantPresenceIndicatorInterface
 {
     /**
      * @var IndexDatabase

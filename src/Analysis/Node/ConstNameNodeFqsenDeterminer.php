@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Node;
 
 use LogicException;
 
-use PhpIntegrator\Analysis\GlobalConstantExistenceCheckerInterface;
+use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 
@@ -16,16 +16,16 @@ use PhpParser\Node;
 class ConstNameNodeFqsenDeterminer
 {
     /**
-     * @var GlobalConstantExistenceCheckerInterface
+     * @var ConstantPresenceIndicatorInterface
      */
-    private $globalConstantExistenceChecker;
+    private $constantPresenceIndicator;
 
     /**
-     * @param GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker
+     * @param ConstantPresenceIndicatorInterface $constantPresenceIndicator
      */
-    public function __construct(GlobalConstantExistenceCheckerInterface $globalConstantExistenceChecker)
+    public function __construct(ConstantPresenceIndicatorInterface $constantPresenceIndicator)
     {
-        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
+        $this->constantPresenceIndicator = $constantPresenceIndicator;
     }
 
     /**
@@ -59,7 +59,7 @@ class ConstNameNodeFqsenDeterminer
         // (e.g. "\array_walk").
         $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->toString();
 
-        if ($this->globalConstantExistenceChecker->exists($fqcnForCurrentNamespace)) {
+        if ($this->constantPresenceIndicator->isPresent($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 
