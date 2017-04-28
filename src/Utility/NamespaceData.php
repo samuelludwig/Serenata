@@ -22,16 +22,16 @@ class NamespaceData implements JsonSerializable
     private $startLine;
 
     /**
-     * @var int|null
+     * @var int
      */
     private $endLine;
 
     /**
      * @param string|null $name
      * @param int         $startLine
-     * @param int|null    $endLine
+     * @param int         $endLine
      */
-    public function __construct(?string $name, int $startLine, int $endLine = null)
+    public function __construct(?string $name, int $startLine, int $endLine)
     {
         $this->name = $name;
         $this->startLine = $startLine;
@@ -68,7 +68,7 @@ class NamespaceData implements JsonSerializable
     }
 
     /**
-     * @return int|null
+     * @return int
      */
     public function getEndLine(): ?int
     {
