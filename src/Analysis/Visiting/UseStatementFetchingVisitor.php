@@ -54,7 +54,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             // end of the file).
             $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $node->getLine() - 1;
             $this->namespaces[++$this->lastNamespaceIndex] = [
-                'name'          => $node->name ? (string) $node->name : '',
+                'name'          => $node->name ? (string) $node->name : null,
                 'startLine'     => $node->getLine(),
                 'endLine'       => $node->getLine() + 1,
                 'useStatements' => []
