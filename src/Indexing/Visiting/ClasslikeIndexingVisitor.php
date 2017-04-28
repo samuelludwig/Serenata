@@ -265,7 +265,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $this->fileId,
                 $seId,
                 $accessModifierMap['public'],
-                true,
                 $positionalNameResolver,
                 $filePosition
             );
@@ -778,7 +777,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param int                             $fileId
      * @param int|null                        $seId
      * @param int|null                        $amId
-     * @param bool                            $isMagic
      * @param PositionalNameResolverInterface $positionalNameResolver
      * @param FilePosition                    $filePosition
      *
@@ -789,7 +787,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         int $fileId,
         ?int $seId,
         ?int $amId,
-        bool $isMagic,
         PositionalNameResolverInterface $positionalNameResolver,
         FilePosition $filePosition
     ): void {
