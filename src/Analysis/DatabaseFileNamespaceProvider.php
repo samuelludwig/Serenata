@@ -99,7 +99,7 @@ class DatabaseFileNamespaceProvider implements FileNamespaceProviderInterface
     {
         $range = new Range(
             new Position($rawNamespace->getStartLine(), 0),
-            new Position($rawNamespace->getEndLine(), 0)
+            new Position($rawNamespace->getEndLine() + 1, 0)
         );
 
         $relevantImports = array_filter($imports, function (Import $import) use ($range) {
