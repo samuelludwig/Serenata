@@ -49,10 +49,7 @@ class LocalizeTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new LocalizeTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('fileTypeLocalizerFactory')
-        );
+        $command = $container->get('localizeTypeCommand');
 
         $this->assertEquals('\C\D\Test', $command->localizeType('\C\D\Test', $path, 13, UseStatementKind::TYPE_CONSTANT));
         $this->assertEquals('\SOME_CONSTANT', $command->localizeType('\SOME_CONSTANT', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
@@ -68,10 +65,7 @@ class LocalizeTypeCommandTest extends AbstractIntegrationTest
     {
         $container = $this->createTestContainer();
 
-        $command = new LocalizeTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('fileTypeLocalizerFactory')
-        );
+        $command = $container->get('localizeTypeCommand');
 
         $command->localizeType('C', 'MissingFile.php', 1, UseStatementKind::TYPE_CLASSLIKE);
     }
