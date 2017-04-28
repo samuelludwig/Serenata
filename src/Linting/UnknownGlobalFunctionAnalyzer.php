@@ -2,11 +2,11 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
-
 use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
 use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
+
+use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 /**
  * Looks for unknown global function names (i.e. used during calls).
@@ -19,16 +19,16 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
     private $globalFunctionUsageFetchingVisitor;
 
     /**
-     * @var GlobalFunctionExistenceCheckerInterface
+     * @var FunctionPresenceIndicatorInterface
      */
-    private $globalFunctionExistenceChecker;
+    private $functionPresenceIndicator;
 
     /**
-     * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
+     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicator
      */
-    public function __construct(GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker)
+    public function __construct(FunctionPresenceIndicatorInterface $functionPresenceIndicator)
     {
-        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
+        $this->functionPresenceIndicator = $functionPresenceIndicator;
 
         $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
     }
@@ -53,12 +53,12 @@ class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
         $unknownGlobalFunctions = [];
 
         // TODO: Inject this.
-        $determiner = new FunctionNameNodeFqsenDeterminer($this->globalFunctionExistenceChecker);
+        $determiner = new FunctionNameNodeFqsenDeterminer($this->functionPresenceIndicator);
 
         foreach ($globalFunctions as $node) {
             $fqsen = $determiner->determine($node->name);
 
-            if ($this->globalFunctionExistenceChecker->exists($fqsen)) {
+            if ($this->functionPresenceIndicator->isPresent($fqsen)) {
                 continue;
             }
 

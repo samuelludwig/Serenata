@@ -9,9 +9,7 @@ use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 /**
  * Checks if a global function exists.
  */
-class GlobalFunctionExistenceChecker implements
-    GlobalFunctionExistenceCheckerInterface,
-    FunctionPresenceIndicatorInterface
+class GlobalFunctionExistenceChecker implements FunctionPresenceIndicatorInterface
 {
     /**
      * @var IndexDatabase

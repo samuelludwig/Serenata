@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\Tests\Unit\Analysis;
 
-use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
-
 use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+
+use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 use PhpParser\Node;
 
@@ -15,11 +15,11 @@ class FunctionNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
      */
     public function testFullyQualifiedName(): void
     {
-        $existenceChecker = $this->getMockBuilder(GlobalFunctionExistenceCheckerInterface::class)
-            ->setMethods(['exists'])
+        $existenceChecker = $this->getMockBuilder(FunctionPresenceIndicatorInterface::class)
+            ->setMethods(['isPresent'])
             ->getMock();
 
-        $existenceChecker->method('exists')->will($this->returnValue(false));
+        $existenceChecker->method('isPresent')->will($this->returnValue(false));
 
         $determiner = new FunctionNameNodeFqsenDeterminer($existenceChecker);
 
@@ -34,11 +34,11 @@ class FunctionNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
      */
     public function testQualifiedName(): void
     {
-        $existenceChecker = $this->getMockBuilder(GlobalFunctionExistenceCheckerInterface::class)
-            ->setMethods(['exists'])
+        $existenceChecker = $this->getMockBuilder(FunctionPresenceIndicatorInterface::class)
+            ->setMethods(['isPresent'])
             ->getMock();
 
-        $existenceChecker->method('exists')->will($this->returnValue(false));
+        $existenceChecker->method('isPresent')->will($this->returnValue(false));
 
         $determiner = new FunctionNameNodeFqsenDeterminer($existenceChecker);
 
@@ -55,11 +55,11 @@ class FunctionNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnqualifiedNameThatDoesNotExistRelativeToCurrentNamespace(): void
     {
-        $existenceChecker = $this->getMockBuilder(GlobalFunctionExistenceCheckerInterface::class)
-            ->setMethods(['exists'])
+        $existenceChecker = $this->getMockBuilder(FunctionPresenceIndicatorInterface::class)
+            ->setMethods(['isPresent'])
             ->getMock();
 
-        $existenceChecker->method('exists')->will($this->returnValue(false));
+        $existenceChecker->method('isPresent')->will($this->returnValue(false));
 
         $determiner = new FunctionNameNodeFqsenDeterminer($existenceChecker);
 
@@ -76,11 +76,11 @@ class FunctionNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnqualifiedNameThatExistsRelativeToCurrentNamespace(): void
     {
-        $existenceChecker = $this->getMockBuilder(GlobalFunctionExistenceCheckerInterface::class)
-            ->setMethods(['exists'])
+        $existenceChecker = $this->getMockBuilder(FunctionPresenceIndicatorInterface::class)
+            ->setMethods(['isPresent'])
             ->getMock();
 
-        $existenceChecker->method('exists')->will($this->returnValue(true));
+        $existenceChecker->method('isPresent')->will($this->returnValue(true));
 
         $determiner = new FunctionNameNodeFqsenDeterminer($existenceChecker);
 

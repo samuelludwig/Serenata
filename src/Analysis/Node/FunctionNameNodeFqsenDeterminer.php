@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Node;
 
 use LogicException;
 
-use PhpIntegrator\Analysis\GlobalFunctionExistenceCheckerInterface;
+use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 
@@ -16,16 +16,16 @@ use PhpParser\Node;
 class FunctionNameNodeFqsenDeterminer
 {
     /**
-     * @var GlobalFunctionExistenceCheckerInterface
+     * @var FunctionPresenceIndicatorInterface
      */
-    private $globalFunctionExistenceChecker;
+    private $functionPresenceIndicator;
 
     /**
-     * @param GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker
+     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicator
      */
-    public function __construct(GlobalFunctionExistenceCheckerInterface $globalFunctionExistenceChecker)
+    public function __construct(FunctionPresenceIndicatorInterface $functionPresenceIndicator)
     {
-        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
+        $this->functionPresenceIndicator = $functionPresenceIndicator;
     }
 
     /**
@@ -59,7 +59,7 @@ class FunctionNameNodeFqsenDeterminer
         // (e.g. "\array_walk").
         $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->toString();
 
-        if ($this->globalFunctionExistenceChecker->exists($fqcnForCurrentNamespace)) {
+        if ($this->functionPresenceIndicator->isPresent($fqcnForCurrentNamespace)) {
             return $fqcnForCurrentNamespace;
         }
 
