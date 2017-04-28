@@ -1,8 +1,8 @@
 CREATE TABLE files_namespaces(
     id                         integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 
-    start_line                 integer unsigned,
-    end_line                   integer unsigned,
+    start_line                 integer unsigned NOT NULL,
+    end_line                   integer unsigned NOT NULL,
     namespace                  varchar(255),
     file_id                    integer,
 
@@ -14,7 +14,7 @@ CREATE TABLE files_namespaces(
 CREATE TABLE files_namespaces_imports(
     id                         integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 
-    line                       integer unsigned,
+    line                       integer unsigned NOT NULL,
     alias                      varchar(255) NOT NULL,
     name                       varchar(255) NOT NULL,
     kind                       varchar(255) NOT NULL,
