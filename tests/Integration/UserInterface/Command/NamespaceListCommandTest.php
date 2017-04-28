@@ -41,7 +41,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
             [
                 'name'      => 'NamespaceA',
                 'startLine' => 3,
-                'endLine'   => null
+                'endLine'   => 9
             ]
         ], $output);
     }
