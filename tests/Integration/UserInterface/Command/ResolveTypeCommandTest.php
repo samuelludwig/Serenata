@@ -47,10 +47,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 2, UseStatementKind::TYPE_CONSTANT));
     }
@@ -66,10 +63,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\SOME_ROOT_CONSTANT', $command->resolveType('SOME_ROOT_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
     }
@@ -85,10 +79,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
     }
@@ -104,10 +95,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 2, UseStatementKind::TYPE_FUNCTION));
     }
@@ -123,10 +111,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\some_root_function', $command->resolveType('some_root_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
     }
@@ -142,10 +127,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
     }
@@ -161,10 +143,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
@@ -179,10 +158,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $container = $this->createTestContainer();
 
-        $command = new ResolveTypeCommand(
-            $container->get('indexDatabase'),
-            $container->get('projectTypeResolverFactoryFacade')
-        );
+        $command = $container->get('resolveTypeCommand');
 
         $command->resolveType('\C', 'MissingFile.php', 1, UseStatementKind::TYPE_CLASSLIKE);
     }
