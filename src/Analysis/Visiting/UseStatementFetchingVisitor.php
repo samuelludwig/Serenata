@@ -138,7 +138,6 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             Node\Stmt\Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT
         ];
 
-        // NOTE: The namespace may be null here (intended behavior).
         $this->namespaces[$this->lastNamespaceIndex]['useStatements'][(string) $use->alias] = [
             'name'  => $prefix . ((string) $use->name),
             'alias' => $use->alias,
