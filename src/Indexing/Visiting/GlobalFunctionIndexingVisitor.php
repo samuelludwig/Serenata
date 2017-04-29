@@ -124,8 +124,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
 
         $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
 
-        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
-
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::THROWS,
             DocblockParser::PARAM_TYPE,
@@ -137,11 +135,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         $returnTypes = [];
 
         if ($documentation && $documentation['return']['type']) {
-            $returnTypes = $this->getTypeDataForTypeSpecification(
-                $documentation['return']['type'],
-                $filePosition,
-                $positionalNameResolver
-            );
+            $returnTypes = $this->getTypeDataForTypeSpecification($documentation['return']['type'], $filePosition);
         } elseif ($resolvedType) {
             $returnTypes = [
                 [
@@ -158,7 +152,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         $throws = [];
 
         foreach ($documentation['throws'] as $throw) {
-            $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition, $positionalNameResolver);
+            $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition);
             $typeData = array_shift($typeData);
 
             $throwsData = [
@@ -210,11 +204,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             $types = [];
 
             if ($parameterDoc) {
-                $types = $this->getTypeDataForTypeSpecification(
-                    $parameterDoc['type'],
-                    $filePosition,
-                    $positionalNameResolver
-                );
+                $types = $this->getTypeDataForTypeSpecification($parameterDoc['type'], $filePosition);
             } elseif ($localType) {
                 $parameterType = $localType;
                 $parameterFullType = $resolvedType ?: $parameterType;
@@ -284,35 +274,29 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param string                          $typeSpecification
-     * @param FilePosition                    $filePosition
-     * @param PositionalNameResolverInterface $positionalNameResolver
+     * @param string       $typeSpecification
+     * @param FilePosition $filePosition
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeSpecification(
-        string $typeSpecification,
-        FilePosition $filePosition,
-        PositionalNameResolverInterface $positionalNameResolver
-    ): array {
+    protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
+    {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
-        return $this->getTypeDataForTypeList($typeList, $filePosition, $positionalNameResolver);
+        return $this->getTypeDataForTypeList($typeList, $filePosition);
     }
 
     /**
-     * @param string[]                        $typeList
-     * @param FilePosition                    $filePosition
-     * @param PositionalNameResolverInterface $positionalNameResolver
+     * @param string[]     $typeList
+     * @param FilePosition $filePosition
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeList(
-        array $typeList,
-        FilePosition $filePosition,
-        PositionalNameResolverInterface $positionalNameResolver
-    ): array {
+    protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
+    {
         $types = [];
+
+        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         foreach ($typeList as $type) {
             $types[] = [
