@@ -40,10 +40,10 @@ class MethodCallMethodInfoRetriever
     }
 
     /**
-     * @param Node\Expr\MethodCall|Node\Expr\StaticCall||Node\Expr\New_ $node
-     * @param string                                                    $file
-     * @param string                                                    $code
-     * @param int                                                       $offset
+     * @param Node\Expr\MethodCall|Node\Expr\StaticCall|Node\Expr\New_ $node
+     * @param string                                                   $file
+     * @param string                                                   $code
+     * @param int                                                      $offset
      *
      * @throws UnexpectedValueException when a dynamic method call is passed.
      * @throws UnexpectedValueException when the type the method is called on could not be determined.
