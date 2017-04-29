@@ -542,6 +542,22 @@ class IndexDatabase implements
     /**
      * @inheritDoc
      */
+    public function insertNamespace(array $data): int
+    {
+        return $this->insert(IndexStorageItemEnum::FILES_NAMESPACES, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function insertImport(array $data): int
+    {
+        return $this->insert(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function insert(string $indexStorageItem, array $data): int
     {
         $this->getConnection()->insert($indexStorageItem, $data);

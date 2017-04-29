@@ -5,13 +5,18 @@ parameters:
 
 
 services:
-    databaseFileNamespaceProvider:
+    fileNamespaceProvider.databaseBackend:
         class: PhpIntegrator\Analysis\DatabaseFileNamespaceProvider
         arguments:
             - '@indexDatabase'
 
+    fileNamespaceProvider.cachingFileNamespaceProvider:
+        class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
+        arguments:
+            - '@fileNamespaceProvider.databaseBackend'
+
     fileNamespaceProvider:
-        alias: databaseFileNamespaceProvider
+        alias: fileNamespaceProvider.cachingFileNamespaceProvider
 
     positionalNamespaceDeterminer:
         class: PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminer

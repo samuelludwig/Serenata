@@ -227,7 +227,11 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      */
     protected function instantiateRequiredServices(ContainerBuilder $container): void
     {
-        $container->get('cacheClearingEventMediator');
+        // TODO: Need to refactor this at some point to have more select cache clearing and to not instantiate multiple
+        // mediators.
+        $container->get('cacheClearingEventMediator1');
+        $container->get('cacheClearingEventMediator2');
+        $container->get('cacheClearingEventMediator3');
     }
 
     /**

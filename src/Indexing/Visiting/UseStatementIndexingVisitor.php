@@ -5,7 +5,6 @@ namespace PhpIntegrator\Indexing\Visiting;
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 
 use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;
@@ -86,7 +85,7 @@ class UseStatementIndexingVisitor implements NodeVisitor
      */
     protected function indexNamespace(array $namespace): void
     {
-        $namespaceId = $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES, [
+        $namespaceId = $this->storage->insertNamespace([
             'start_line'  => $namespace['startLine'],
             'end_line'    => $namespace['endLine'],
             'namespace'   => $namespace['name'],
@@ -106,7 +105,7 @@ class UseStatementIndexingVisitor implements NodeVisitor
      */
     protected function indexUseStatement(array $useStatement, int $namespaceId): void
     {
-        $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, [
+        $this->storage->insertImport([
             'line'               => $useStatement['line'],
             'alias'              => $useStatement['alias'] ?: null,
             'name'               => $useStatement['name'],

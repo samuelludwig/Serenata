@@ -2,12 +2,27 @@
 
 namespace PhpIntegrator\Indexing;
 
+use Evenement\EventEmitterTrait;
+use Evenement\EventEmitterInterface;
+
 /**
  * Proxy for classes implementing {@see StorageInterface} that will invoke callback functions when specific methods are
  * called.
  */
-class CallbackStorageProxy implements StorageInterface
+class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
 {
+    use EventEmitterTrait;
+
+    /**
+     * @var string
+     */
+    public const EVENT_NAMESPACE_INSERTED = 'namespaceInserted';
+
+    /**
+     * @var string
+     */
+    public const EVENT_IMPORT_INSERTED = 'namespaceInserted';
+
     /**
      * @var StorageInterface
      */
@@ -77,6 +92,30 @@ class CallbackStorageProxy implements StorageInterface
         $callback($data['fqcn']);
 
         return $this->storage->insertStructure($data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function insertNamespace(array $data): int
+    {
+        $id = $this->storage->insertNamespace($data);
+
+        $this->emit(self::EVENT_NAMESPACE_INSERTED);
+
+        return $id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function insertImport(array $data): int
+    {
+        $id = $this->storage->insertImport($data);
+
+        $this->emit(self::EVENT_IMPORT_INSERTED);
+
+        return $id;
     }
 
     /**

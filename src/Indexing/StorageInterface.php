@@ -53,6 +53,20 @@ interface StorageInterface
     public function insertStructure(array $data): int;
 
     /**
+     * @param array $data
+     *
+     * @return int The unique identifier assigned to the inserted data.
+     */
+    public function insertNamespace(array $data): int;
+
+    /**
+     * @param array $data
+     *
+     * @return int The unique identifier assigned to the inserted data.
+     */
+    public function insertImport(array $data): int;
+
+    /**
      * Inserts the specified index item into the storage.
      *
      * @param string $indexStorageItem
