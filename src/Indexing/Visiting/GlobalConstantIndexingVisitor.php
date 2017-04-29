@@ -127,8 +127,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     {
         $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
 
-        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
-
         $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
@@ -158,11 +156,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription = $varDocumentation['description'];
             }
 
-            $types = $this->getTypeDataForTypeSpecification(
-                $varDocumentation['type'],
-                $filePosition,
-                $positionalNameResolver
-            );
+            $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
         } elseif ($node->value) {
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->filePath, $defaultValue, 0);
 
@@ -194,35 +188,29 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param string                          $typeSpecification
-     * @param FilePosition                    $filePosition
-     * @param PositionalNameResolverInterface $positionalNameResolver
+     * @param string       $typeSpecification
+     * @param FilePosition $filePosition
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeSpecification(
-        string $typeSpecification,
-        FilePosition $filePosition,
-        PositionalNameResolverInterface $positionalNameResolver
-    ): array {
+    protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
+    {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
-        return $this->getTypeDataForTypeList($typeList, $filePosition, $positionalNameResolver);
+        return $this->getTypeDataForTypeList($typeList, $filePosition);
     }
 
     /**
-     * @param string[]                        $typeList
-     * @param FilePosition                    $filePosition
-     * @param PositionalNameResolverInterface $positionalNameResolver
+     * @param string[]     $typeList
+     * @param FilePosition $filePosition
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeList(
-        array $typeList,
-        FilePosition $filePosition,
-        PositionalNameResolverInterface $positionalNameResolver
-    ): array {
+    protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
+    {
         $types = [];
+
+        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         foreach ($typeList as $type) {
             $types[] = [
