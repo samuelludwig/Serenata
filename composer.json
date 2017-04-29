@@ -10,7 +10,7 @@
         "ext-pdo_sqlite": "*",
         "php-integrator/common": "dev-master#d554a26fe0ef3972f5f996a4a7838368b6cfb352",
         "php-integrator/name-qualification-utilities": "dev-master#b8eb7528cf0b5b4b14603f9ac16cc1fb58f557e5",
-        "php-integrator/docblock-type-parser": "dev-master#a85867b843a4b6811b95b908d4be5614e27f84e8",
+        "php-integrator/docblock-type-parser": "dev-master#a7e2ffdb99706b9bf5378ac184f5252fb5b98148",
         "doctrine/cache": "1.6.*",
         "doctrine/dbal": "2.5.*",
         "evenement/evenement": "2.0.*",
