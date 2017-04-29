@@ -131,14 +131,16 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
         } catch (\Exception $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line' => $e->getLine(),
-                'file' => $e->getFile()
+                'line'      => $e->getLine(),
+                'file'      => $e->getFile(),
+                'backtrace' => $e->getTraceAsString()
             ]);
         } catch (\Throwable $e) {
             // On PHP < 7, throwable simply won't exist and this clause is never triggered.
             $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line' => $e->getLine(),
-                'file' => $e->getFile()
+                'line'      => $e->getLine(),
+                'file'      => $e->getFile(),
+                'backtrace' => $e->getTraceAsString()
             ]);
         }
 
