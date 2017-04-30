@@ -1,5 +1,6 @@
 ## 3.0.0
 * At least PHP 7.1 is now required to run.
+* Updated dependencies.
 * PHP 7.1 is now supported (https://gitlab.com/php-integrator/core/issues/40).
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
 * The class list will now only provide fields directly relevant to the class.
@@ -12,7 +13,6 @@
   * This also increases readability, as markdown is no longer used (since it is not allowed by the language server protocol nor supported by Atom's linter v2 anymore).
   * Mentioning the name was redundant as the location of the linter message provides the necessary context.
 * It is now possible to disable linting missing documentation separately from linting docblock correctness.
-* Updated to react/socket 0.5.0.
 * Fix disabling unknown global constant linting having no effect.
 * Fix the linter complaining about type mismatches in docblocks when the qualifications of the types are different (https://gitlab.com/php-integrator/core/issues/89).
 * Some docblock linter warnings have been promoted to errors (https://gitlab.com/php-integrator/core/issues/33).
