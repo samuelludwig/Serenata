@@ -162,6 +162,10 @@ class DeduceTypesCommand extends AbstractCommand
     {
         $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
 
+        if ($node instanceof Node\Stmt\Expression) {
+            $node = $node->expr;
+        }
+
         return $this->deduceTypes($file, $code, $node, $offset);
     }
 

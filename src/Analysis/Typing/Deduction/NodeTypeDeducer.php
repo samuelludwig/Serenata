@@ -127,6 +127,11 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
     private $catchNodeTypeDeducer;
 
     /**
+     * @var NodeTypeDeducerInterface
+     */
+    private $expressionNodeTypeDeducer;
+
+    /**
      * @param NodeTypeDeducerInterface $variableNodeTypeDeducer
      * @param NodeTypeDeducerInterface $lNumberNodeTypeDeducer
      * @param NodeTypeDeducerInterface $dNumberNodeTypeDeducer
@@ -149,6 +154,7 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
      * @param NodeTypeDeducerInterface $ternaryNodeTypeDeducer
      * @param NodeTypeDeducerInterface $classLikeNodeTypeDeducer
      * @param NodeTypeDeducerInterface $catchNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $expressionNodeTypeDeducer
      */
     public function __construct(
         NodeTypeDeducerInterface $variableNodeTypeDeducer,
@@ -172,7 +178,8 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
         NodeTypeDeducerInterface $assignNodeTypeDeducer,
         NodeTypeDeducerInterface $ternaryNodeTypeDeducer,
         NodeTypeDeducerInterface $classLikeNodeTypeDeducer,
-        NodeTypeDeducerInterface $catchNodeTypeDeducer
+        NodeTypeDeducerInterface $catchNodeTypeDeducer,
+        NodeTypeDeducerInterface $expressionNodeTypeDeducer
     ) {
         $this->variableNodeTypeDeducer = $variableNodeTypeDeducer;
         $this->lNumberNodeTypeDeducer = $lNumberNodeTypeDeducer;
@@ -196,6 +203,7 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
         $this->ternaryNodeTypeDeducer = $ternaryNodeTypeDeducer;
         $this->classLikeNodeTypeDeducer = $classLikeNodeTypeDeducer;
         $this->catchNodeTypeDeducer = $catchNodeTypeDeducer;
+        $this->expressionNodeTypeDeducer = $expressionNodeTypeDeducer;
     }
 
     /**
@@ -263,7 +271,8 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
             Node\Stmt\Class_::class              => $this->classLikeNodeTypeDeducer,
             Node\Stmt\Interface_::class          => $this->classLikeNodeTypeDeducer,
             Node\Stmt\Trait_::class              => $this->classLikeNodeTypeDeducer,
-            Node\Stmt\Catch_::class              => $this->catchNodeTypeDeducer
+            Node\Stmt\Catch_::class              => $this->catchNodeTypeDeducer,
+            Node\Stmt\Expression::class          => $this->expressionNodeTypeDeducer
         ];
 
         if (!isset($map[$class])) {

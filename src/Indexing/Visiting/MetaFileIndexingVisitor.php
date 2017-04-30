@@ -100,7 +100,7 @@ class MetaFileIndexingVisitor extends NodeVisitorAbstract
             throw new UnexpectedValueException(
                 'Static method call used as key must not use a dynamic expression as class name'
             );
-        } elseif (!is_string($node->key->name)) {
+        } elseif (!$node->key->name instanceof Node\Identifier) {
             throw new UnexpectedValueException(
                 'Static method call used as key must not use a dynamic expression as method name'
             );

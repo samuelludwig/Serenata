@@ -17,27 +17,34 @@ use PhpParser\NodeVisitor\NameResolver;
  */
 class ResolvedNameAttachingVisitor extends NameResolver
 {
-    /**
-     * @inheritDoc
-     */
-    protected function resolveClassName(Name $name)
+    public function __construct(ErrorHandler $errorHandler = null, array $options = [])
     {
-        $resolvedName = parent::resolveClassName($name);
-
-        $name->setAttribute('resolvedName', $resolvedName);
-
-        return $name;
+        parent::__construct(null, array_merge($options, [
+            'replaceNodes' => false
+        ]));
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function resolveOtherName(Name $name, $type)
-    {
-        $resolvedName = parent::resolveOtherName($name, $type);
-
-        $name->setAttribute('resolvedName', $resolvedName);
-
-        return $name;
-    }
+    // /**
+    //  * @inheritDoc
+    //  */
+    // protected function resolveClassName(Name $name)
+    // {
+    //     $resolvedName = parent::resolveClassName($name);
+    //
+    //     $name->setAttribute('resolvedName', $resolvedName);
+    //
+    //     return $name;
+    // }
+    //
+    // /**
+    //  * @inheritDoc
+    //  */
+    // protected function resolveOtherName(Name $name, $type)
+    // {
+    //     $resolvedName = parent::resolveOtherName($name, $type);
+    //
+    //     $name->setAttribute('resolvedName', $resolvedName);
+    //
+    //     return $name;
+    // }
 }

@@ -58,7 +58,7 @@ class ClassConstFetchNodeTooltipGenerator
      */
     public function generate(Node\Expr\ClassConstFetch $node, string $file, string $code): string
     {
-        if (!is_string($node->name)) {
+        if (!$node->name instanceof Node\Identifier) {
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
 
@@ -75,6 +75,8 @@ class ClassConstFetchNodeTooltipGenerator
 
             $tooltips[] = $this->constantTooltipGenerator->generate($constantInfo);
         }
+
+        // die(\Symfony\Component\VarDumper\VarDumper::dump(['location' => __FILE__ . ':' . __LINE__, 'var' => $tooltips]));
 
         if (empty($tooltips)) {
             throw new UnexpectedValueException('Could not determine any tooltips for the class constant');

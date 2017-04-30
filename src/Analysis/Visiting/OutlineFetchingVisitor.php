@@ -118,7 +118,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
         $this->structures[$fqcn] = [
-            'name'           => $node->name,
+            'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'class',
             'startLine'      => $node->getLine(),
@@ -159,7 +159,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
         $this->structures[$fqcn] = [
-            'name'           => $node->name,
+            'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'interface',
             'startLine'      => $node->getLine(),
@@ -191,7 +191,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
         $this->structures[$fqcn] = [
-            'name'           => $node->name,
+            'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'trait',
             'startLine'      => $node->getLine(),
@@ -249,8 +249,8 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->props as $property) {
-            $this->structures[$fqcn]['properties'][$property->name] = [
-                'name'             => $property->name,
+            $this->structures[$fqcn]['properties'][$property->name->name] = [
+                'name'             => $property->name->name,
                 'startLine'        => $property->getLine(),
                 'endLine'          => $property->getAttribute('endLine'),
                 'startPosName'     => $property->getAttribute('startFilePos') ? $property->getAttribute('startFilePos') : null,
@@ -283,7 +283,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $data = $this->extractFunctionLikeNodeData($node);
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
+            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name->name
         );
 
         $this->globalFunctions[$fqcn] = $data + [
@@ -300,7 +300,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
-        $this->structures[$fqcn]['methods'][$node->name] = $this->extractFunctionLikeNodeData($node) + [
+        $this->structures[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
             'isPublic'       => $node->isPublic(),
             'isPrivate'      => $node->isPrivate(),
             'isProtected'    => $node->isProtected(),
@@ -332,13 +332,13 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
-            } elseif (is_string($typeNode)) {
-                $localType = (string) $typeNode;
-                $resolvedType = (string) $typeNode;
+            } elseif ($typeNode instanceof Node\Identifier) {
+                $localType = $typeNode->name;
+                $resolvedType = $typeNode->name;
             }
 
             $parameters[$i] = [
-                'name'             => $param->name,
+                'name'             => $param->var->name,
                 'type'             => $localType,
                 'fullType'         => $resolvedType,
                 'isReference'      => $param->byRef,
@@ -372,13 +372,13 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
-        } elseif (is_string($nodeType)) {
-            $localType = (string) $nodeType;
-            $resolvedType = (string) $nodeType;
+        } elseif ($nodeType instanceof Node\Identifier) {
+            $localType = $nodeType->name;
+            $resolvedType = $nodeType->name;
         }
 
         return [
-            'name'                 => $node->name,
+            'name'                 => $node->name->name,
             'startLine'            => $node->getLine(),
             'endLine'              => $node->getAttribute('endLine'),
             'startPosName'         => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
@@ -401,8 +401,8 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->consts as $const) {
-            $this->structures[$fqcn]['constants'][$const->name] = [
-                'name'             => $const->name,
+            $this->structures[$fqcn]['constants'][$const->name->name] = [
+                'name'             => $const->name->name,
                 'startLine'        => $const->getLine(),
                 'endLine'          => $const->getAttribute('endLine'),
                 'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,

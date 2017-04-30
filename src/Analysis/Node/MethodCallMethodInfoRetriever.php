@@ -71,7 +71,7 @@ class MethodCallMethodInfoRetriever
         }
 
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
-        $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name;
+        $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name->name;
 
         $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 

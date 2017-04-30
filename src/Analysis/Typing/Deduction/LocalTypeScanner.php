@@ -320,7 +320,7 @@ class LocalTypeScanner
         int $offset
     ): array {
         foreach ($node->getParams() as $param) {
-            if ($param->name === mb_substr($parameterName, 1)) {
+            if ($param->var->name === mb_substr($parameterName, 1)) {
                 $this->functionLikeParameterTypeDeducer->setFunctionDocblock($node->getDocComment());
 
                 return $this->functionLikeParameterTypeDeducer->deduce($param, $file, $code, $offset);

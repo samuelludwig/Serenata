@@ -67,7 +67,7 @@ class NodeFetchingVisitor extends NodeVisitorAbstract
 
         $this->matchingNode = $node;
 
-        if (!$node instanceof Node\Name) {
+        if (!$node instanceof Node\Name && !$node instanceof Node\Identifier) {
             $this->mostInterestingNode = $node;
         }
     }

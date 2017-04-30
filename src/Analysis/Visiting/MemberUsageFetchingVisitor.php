@@ -129,7 +129,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
         if (empty($objectTypes)) {
             $this->memberCallList[] = [
                 'type'       => self::TYPE_EXPRESSION_HAS_NO_TYPE,
-                'memberName' => is_string($node->name) ? $node->name : null,
+                'memberName' => $node->name->name,
                 'start'      => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
                 'end'        => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
             ];
@@ -138,7 +138,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
         }
 
         foreach ($objectTypes as $objectType) {
-            if (!is_string($node->name)) {
+            if (!$node->name instanceof Node\Identifier) {
                 continue;
             }
 
@@ -160,7 +160,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
                 $key = 'constants';
             }
 
-            if (!$classInfo || !isset($classInfo[$key][$node->name])) {
+            if (!$classInfo || !isset($classInfo[$key][$node->name->name])) {
                 if (!$this->isClassExcluded($objectType)) {
                     if ($previousNode instanceof Node\Expr\Assign ||
                         $previousNode instanceof Node\Expr\AssignOp ||
@@ -168,7 +168,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
                     ) {
                         $this->memberCallList[] = [
                             'type'           => self::TYPE_EXPRESSION_NEW_MEMBER_WILL_BE_CREATED,
-                            'memberName'     => is_string($node->name) ? $node->name : null,
+                            'memberName'     => $node->name->name,
                             'expressionType' => $objectType,
                             'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
                             'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
@@ -176,7 +176,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
                     } else {
                         $this->memberCallList[] = [
                             'type'           => self::TYPE_EXPRESSION_HAS_NO_SUCH_MEMBER,
-                            'memberName'     => is_string($node->name) ? $node->name : null,
+                            'memberName'     => $node->name->name,
                             'expressionType' => $objectType,
                             'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
                             'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null

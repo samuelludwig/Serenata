@@ -13,7 +13,7 @@ class Dummy extends Node\Expr
     /**
      * @inheritDoc
      */
-    public function getSubNodeNames()
+    public function getSubNodeNames(): array
     {
         return [];
     }

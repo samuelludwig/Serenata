@@ -39,7 +39,7 @@ class CachingParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse($code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         $cacheKey = md5($code);
 

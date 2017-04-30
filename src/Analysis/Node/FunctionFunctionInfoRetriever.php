@@ -53,7 +53,7 @@ class FunctionFunctionInfoRetriever
             );
         }
 
-        $nameNode = new Node\Name\Relative($node->name);
+        $nameNode = new Node\Name\Relative((string) $node->name);
         $nameNode->setAttribute('namespace', $node->getAttribute('namespace'));
 
         $fqsen = $this->functionCallNodeFqsenDeterminer->determine($nameNode);

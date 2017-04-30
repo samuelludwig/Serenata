@@ -165,7 +165,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY,
             DocblockParser::PROPERTY_READ,
             DocblockParser::PROPERTY_WRITE
-        ], $node->name);
+        ], $node->name->name);
 
         if ($node instanceof Node\Stmt\Class_) {
             $structureTypeId = $structureTypeMap['class'];
@@ -176,7 +176,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         $seData = [
-            'name'              => $node->name,
+            'name'              => $node->name->name,
             'fqcn'              => '\\' . $node->namespacedName->toString(),
             'file_id'           => $this->fileId,
             'start_line'        => $node->getLine(),
@@ -429,9 +429,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
-        } elseif (is_string($nodeType)) {
-            $localType = (string) $nodeType;
-            $resolvedType = (string) $nodeType;
+        } elseif ($nodeType instanceof Node\Identifier) {
+            $localType = $nodeType->name;
+            $resolvedType = $nodeType->name;
         }
 
         $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
@@ -445,7 +445,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::DEPRECATED,
             DocblockParser::DESCRIPTION,
             DocblockParser::RETURN_VALUE
-        ], $node->name);
+        ], $node->name->name);
 
         $returnTypes = [];
 
@@ -494,9 +494,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
-            } elseif (is_string($typeNode)) {
-                $localType = (string) $typeNode;
-                $resolvedType = (string) $typeNode;
+            } elseif ($typeNode instanceof Node\Identifier) {
+                $localType = $typeNode->name;
+                $resolvedType = $typeNode->name;
             }
 
             $isNullable = (
@@ -512,7 +512,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 ) :
                 null;
 
-            $parameterKey = '$' . $param->name;
+            $parameterKey = '$' . $param->var->name;
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
@@ -545,7 +545,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             }
 
             $parameters[] = [
-                'name'             => $param->name,
+                'name'             => $param->var->name,
                 'type_hint'        => $localType,
                 'types_serialized' => serialize($types),
                 'description'      => $parameterDoc ? $parameterDoc['description'] : null,
@@ -570,7 +570,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
-            'name'                    => $node->name,
+            'name'                    => $node->name->name,
             'fqcn'                    => null,
             'file_id'                 => $this->fileId,
             'start_line'              => $node->getLine(),
@@ -628,10 +628,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::VAR_TYPE,
             DocblockParser::DEPRECATED,
             DocblockParser::DESCRIPTION
-        ], $node->name);
+        ], $node->name->name);
 
-        $varDocumentation = isset($documentation['var']['$' . $node->name]) ?
-            $documentation['var']['$' . $node->name] :
+        $varDocumentation = isset($documentation['var']['$' . $node->name->name]) ?
+            $documentation['var']['$' . $node->name->name] :
             null;
 
         $shortDescription = $documentation['descriptions']['short'];
@@ -681,7 +681,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $node->name,
+            'name'                  => $node->name->name,
             'fqcn'                  => null,
             'file_id'               => $this->fileId,
             'start_line'            => $node->getLine(),

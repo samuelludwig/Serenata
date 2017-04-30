@@ -138,9 +138,9 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             Node\Stmt\Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT
         ];
 
-        $this->namespaces[$this->lastNamespaceIndex]['useStatements'][(string) $use->alias] = [
+        $this->namespaces[$this->lastNamespaceIndex]['useStatements'][$use->getAlias()->name] = [
             'name'  => $prefix . ((string) $use->name),
-            'alias' => $use->alias,
+            'alias' => $use->getAlias()->name,
             'kind'  => $kindMap[$type],
             'line'  => $node->getLine(),
             'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,

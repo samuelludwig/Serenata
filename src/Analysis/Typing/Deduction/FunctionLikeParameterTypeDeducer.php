@@ -80,8 +80,8 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
                 DocblockParser::PARAM_TYPE
             ], '', true);
 
-            if (isset($result['params']['$' . $node->name])) {
-                return $this->typeAnalyzer->getTypesForTypeSpecification($result['params']['$' . $node->name]['type']);
+            if (isset($result['params']['$' . $node->var->name])) {
+                return $this->typeAnalyzer->getTypesForTypeSpecification($result['params']['$' . $node->var->name]['type']);
             }
         }
 
@@ -103,8 +103,8 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
             }
 
             return $isNullable ? [$typeHintType, 'null'] : [$typeHintType];
-        } elseif (is_string($node->type)) {
-            return [$node->type];
+        } elseif ($node->type instanceof Node\Identifier) {
+            return [$node->type->name];
         }
 
         return [];

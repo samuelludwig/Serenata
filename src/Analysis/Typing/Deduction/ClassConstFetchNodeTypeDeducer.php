@@ -74,8 +74,8 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                 continue;
             }
 
-            if (isset($info['constants'][$node->name])) {
-                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name]['types']);
+            if (isset($info['constants'][$node->name->name])) {
+                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name->name]['types']);
 
                 if (!empty($fetchedTypes)) {
                     $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));

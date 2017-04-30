@@ -152,6 +152,11 @@ services:
             - '@typeAnalyzer'
             - '@docblockParser'
 
+    expressionNodeTypeDeducer:
+        class: PhpIntegrator\Analysis\Typing\Deduction\ExpressionNodeTypeDeducer
+        arguments:
+            - '@nodeTypeDeducer'
+
     nodeTypeDeducer.instance:
         class: PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducer
         arguments:
@@ -177,6 +182,7 @@ services:
             - '@ternaryNodeTypeDeducer'
             - '@classLikeNodeTypeDeducer'
             - '@catchNodeTypeDeducer'
+            - '@expressionNodeTypeDeducer'
 
     nodeTypeDeducer:
         alias: nodeTypeDeducer.configurableDelegator

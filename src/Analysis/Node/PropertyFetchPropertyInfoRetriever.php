@@ -71,11 +71,11 @@ class PropertyFetchPropertyInfoRetriever
                 continue;
             }
 
-            if (!isset($info['properties'][$node->name])) {
+            if (!isset($info['properties'][$node->name->name])) {
                 continue;
             }
 
-            $infoElements[] = $info['properties'][$node->name];
+            $infoElements[] = $info['properties'][$node->name->name];
         }
 
         return $infoElements;

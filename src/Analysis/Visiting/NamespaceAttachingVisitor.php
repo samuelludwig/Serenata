@@ -16,6 +16,6 @@ class NamespaceAttachingVisitor extends ResolvedNameAttachingVisitor
     {
         parent::enterNode($node);
 
-        $node->setAttribute('namespace', $this->namespace);
+        $node->setAttribute('namespace', $this->nameContext->getNamespace());
     }
 }

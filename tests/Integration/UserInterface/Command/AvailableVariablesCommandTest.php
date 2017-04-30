@@ -185,10 +185,10 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
         $doMarkerTest(22, ['$j']);
         $doMarkerTest(23, []);
         $doMarkerTest(24, ['$k']);
-        $doMarkerTest(25, []);
-        $doMarkerTest(26, ['$l']);
-        $doMarkerTest(27, []);
-        $doMarkerTest(28, ['$m']);
+        $doMarkerTest(25, ['$e']);
+        $doMarkerTest(26, ['$l', '$e']);
+        $doMarkerTest(27, ['$e']);
+        $doMarkerTest(28, ['$m', '$e']);
         // $doMarkerTest(29, []); // TODO: Can't be solved for now, see also the implementation code.
         $doMarkerTest(30, ['$n']);
     }

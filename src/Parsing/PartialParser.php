@@ -51,7 +51,7 @@ class PartialParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse($code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
             throw new LogicException('Error handling is not supported as error recovery will be attempted automatically');
@@ -150,15 +150,17 @@ class PartialParser implements Parser
 
         $node = $nodes[count($nodes) - 1];
 
-        if ($node instanceof Node\Expr\MethodCall ||
-            $node instanceof Node\Expr\FuncCall ||
-            $node instanceof Node\Expr\StaticCall ||
-            $node instanceof Node\Expr\New_
-        ) {
-            foreach ($node->args as $i => $arg) {
-                if ($arg->value instanceof Node\Expr\ConstFetch && $arg->value->name->toString() === $dummyName) {
-                    array_splice($node->args, $i, $i+1);
-                    break;
+        if ($node instanceof Node\Stmt\Expression) {
+            if ($node->expr instanceof Node\Expr\MethodCall ||
+                $node->expr instanceof Node\Expr\FuncCall ||
+                $node->expr instanceof Node\Expr\StaticCall ||
+                $node->expr instanceof Node\Expr\New_
+            ) {
+                foreach ($node->expr->args as $i => $arg) {
+                    if ($arg->value instanceof Node\Expr\ConstFetch && $arg->value->name->toString() === $dummyName) {
+                        array_splice($node->expr->args, $i, $i+1);
+                        break;
+                    }
                 }
             }
         }
@@ -225,11 +227,14 @@ class PartialParser implements Parser
 
         $node = $nodes[count($nodes) - 1];
 
-        if ($node instanceof Node\Expr\ClassConstFetch || $node instanceof Node\Expr\PropertyFetch) {
-            if ($node->name === $dummyName) {
-                $node->name = '';
+        if ($node instanceof Node\Stmt\Expression) {
+            if ($node->expr instanceof Node\Expr\ClassConstFetch || $node->expr instanceof Node\Expr\PropertyFetch) {
+                if ($node->expr->name->name === $dummyName) {
+                    $node->expr->name->name = '';
+                }
             }
         }
+
 
         return $nodes;
     }

@@ -31,7 +31,7 @@ class MetadataAttachingParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse($code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         $nodes = $this->delegate->parse($code, $errorHandler);
 

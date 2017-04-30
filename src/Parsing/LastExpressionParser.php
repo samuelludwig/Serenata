@@ -243,7 +243,7 @@ class LastExpressionParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse($code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
             throw new LogicException('Error handling is not supported as error recovery will be attempted automatically');

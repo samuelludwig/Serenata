@@ -114,9 +114,9 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
-        } elseif (is_string($nodeType)) {
-            $localType = (string) $nodeType;
-            $resolvedType = (string) $nodeType;
+        } elseif ($nodeType instanceof Node\Identifier) {
+            $localType = $nodeType->name;
+            $resolvedType = $nodeType->name;
         }
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
@@ -178,9 +178,9 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
-            } elseif (is_string($typeNode)) {
-                $localType = (string) $typeNode;
-                $resolvedType = (string) $typeNode;
+            } elseif ($typeNode instanceof Node\Identifier) {
+                $localType = $typeNode->name;
+                $resolvedType = $typeNode->name;
             }
 
             $isNullable = (
@@ -196,7 +196,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
                 ) :
                 null;
 
-            $parameterKey = '$' . $param->name;
+            $parameterKey = '$' . $param->var->name;
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
@@ -229,7 +229,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             }
 
             $parameters[] = [
-                'name'             => $param->name,
+                'name'             => $param->var->name,
                 'type_hint'        => $localType,
                 'types_serialized' => serialize($types),
                 'description'      => $parameterDoc ? $parameterDoc['description'] : null,
