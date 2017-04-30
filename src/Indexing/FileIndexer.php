@@ -149,57 +149,75 @@ class FileIndexer implements FileIndexerInterface
      */
     protected function createTraverser(array $nodes, string $filePath, string $code, int $fileId): NodeTraverser
     {
-        $globalConstantIndexingVisitor = new Visiting\GlobalConstantIndexingVisitor(
-            $this->storage,
-            $this->docblockParser,
-            $this->structureAwareNameResolverFactory,
-            $this->typeAnalyzer,
-            $this->nodeTypeDeducer,
-            $fileId,
-            $code,
-            $filePath
-        );
+        $visitors = $this->getVisitorsForFile($filePath, $code, $fileId);
 
-        $globalDefineIndexingVisitor = new Visiting\GlobalDefineIndexingVisitor(
-            $this->storage,
-            $this->nodeTypeDeducer,
-            $fileId,
-            $code,
-            $filePath
-        );
-
-        $globalFunctionIndexingVisitor = new Visiting\GlobalFunctionIndexingVisitor(
-            $this->structureAwareNameResolverFactory,
-            $this->storage,
-            $this->docblockParser,
-            $this->typeAnalyzer,
-            $fileId,
-            $code,
-            $filePath
-        );
-
-        $classlikeIndexingVisitor = new Visiting\ClasslikeIndexingVisitor(
-            $this->storage,
-            $this->typeAnalyzer,
-            $this->docblockParser,
-            $this->nodeTypeDeducer,
-            $this->structureAwareNameResolverFactory,
-            $fileId,
-            $code,
-            $filePath
-        );
+        $useStatementIndexingVisitor = array_shift($visitors);
 
         // TODO: Refactor to traverse once.
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new Visiting\UseStatementIndexingVisitor($this->storage, $fileId, $code));
+        $traverser->addVisitor($useStatementIndexingVisitor);
         $traverser->traverse($nodes);
 
         $traverser = new NodeTraverser();
-        $traverser->addVisitor($globalDefineIndexingVisitor);
-        $traverser->addVisitor($globalConstantIndexingVisitor);
-        $traverser->addVisitor($globalFunctionIndexingVisitor);
-        $traverser->addVisitor($classlikeIndexingVisitor);
+
+        foreach ($visitors as $visitor) {
+            $traverser->addVisitor($visitor);
+        }
 
         return $traverser;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $code
+     * @param int    $fileId
+     *
+     * @return array
+     */
+    protected function getVisitorsForFile(string $filePath, string $code, int $fileId): array
+    {
+        return [
+            new Visiting\UseStatementIndexingVisitor($this->storage, $fileId, $code),
+
+            new Visiting\GlobalConstantIndexingVisitor(
+                $this->storage,
+                $this->docblockParser,
+                $this->structureAwareNameResolverFactory,
+                $this->typeAnalyzer,
+                $this->nodeTypeDeducer,
+                $fileId,
+                $code,
+                $filePath
+            ),
+
+            new Visiting\GlobalDefineIndexingVisitor(
+                $this->storage,
+                $this->nodeTypeDeducer,
+                $fileId,
+                $code,
+                $filePath
+            ),
+
+            new Visiting\GlobalFunctionIndexingVisitor(
+                $this->structureAwareNameResolverFactory,
+                $this->storage,
+                $this->docblockParser,
+                $this->typeAnalyzer,
+                $fileId,
+                $code,
+                $filePath
+            ),
+
+            new Visiting\ClasslikeIndexingVisitor(
+                $this->storage,
+                $this->typeAnalyzer,
+                $this->docblockParser,
+                $this->nodeTypeDeducer,
+                $this->structureAwareNameResolverFactory,
+                $fileId,
+                $code,
+                $filePath
+            )
+        ];
     }
 }
