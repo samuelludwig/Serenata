@@ -4,15 +4,27 @@ namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpParser\Node;
 
+use PhpParser\NodeVisitor\NameResolver;
+
 /**
  * Node visitor that fetches usages of (global) functions.
  */
-class GlobalFunctionUsageFetchingVisitor extends ResolvedNameAttachingVisitor
+class GlobalFunctionUsageFetchingVisitor extends NameResolver
 {
     /**
      * @var Node\Expr\FuncCall[]
      */
     private $globalFunctionCallList = [];
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(null, [
+            'replaceNodes' => false
+        ]);
+    }
 
     /**
      * @inheritDoc

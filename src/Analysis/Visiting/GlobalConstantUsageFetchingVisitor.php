@@ -4,15 +4,27 @@ namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpParser\Node;
 
+use PhpParser\NodeVisitor\NameResolver;
+
 /**
  * Node visitor that fetches usages of (global) constants.
  */
-class GlobalConstantUsageFetchingVisitor extends ResolvedNameAttachingVisitor
+class GlobalConstantUsageFetchingVisitor extends NameResolver
 {
     /**
      * @var Node\Expr\ConstFetch[]
      */
     private $globalConstantList = [];
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(null, [
+            'replaceNodes' => false
+        ]);
+    }
 
     /**
      * @inheritDoc

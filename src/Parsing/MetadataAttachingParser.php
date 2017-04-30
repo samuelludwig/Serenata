@@ -4,11 +4,12 @@ namespace PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\Visiting\ParentAttachingVisitor;
 use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
-use PhpIntegrator\Analysis\Visiting\ResolvedNameAttachingVisitor;
 
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
+
+use PhpParser\NodeVisitor\NameResolver;
 
 /**
  * Parser that delegates parsing to another parser and attaches metadata to the nodes.
@@ -40,7 +41,11 @@ class MetadataAttachingParser implements Parser
         }
 
         $traverser = new NodeTraverser();
-        $traverser->addVisitor(new ResolvedNameAttachingVisitor());
+
+        $traverser->addVisitor(new NameResolver(null, [
+            'replaceNodes' => false
+        ]));
+
         $traverser->addVisitor(new NamespaceAttachingVisitor());
         $traverser->addVisitor(new ParentAttachingVisitor());
 
