@@ -40,7 +40,7 @@ class MetaFileIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
-    public function leaveNode(Node $node)
+    public function enterNode(Node $node)
     {
         if ($node instanceof Node\Expr\Assign) {
             $this->enterAssignNode($node);
