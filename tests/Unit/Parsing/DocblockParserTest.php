@@ -117,6 +117,21 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testThrowsTagWithoutType(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @throws
+             */
+        ', [DocblockParser::THROWS], '');
+
+        $this->assertEquals([], $result['throws']);
+    }
+
+    /**
+     * @return void
+     */
     public function testThrowsTagWithDescription(): void
     {
         $parser = $this->getDocblockParser();
