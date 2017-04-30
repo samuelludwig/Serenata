@@ -53,15 +53,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
 
         $container = $this->createTestContainer();
 
-        $metaFileIndexer = new MetaFileIndexer(
-            $container->get('indexDatabase'),
-            $container->get('parser')
-        );
-
-        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($metaFilePath);
-
-        $metaFileIndexer->index($metaFilePath, $code);
-
+        $this->indexTestFile($container, $metaFilePath);
         $this->indexTestFile($container, $path);
 
         $command = $container->get('deduceTypesCommand');

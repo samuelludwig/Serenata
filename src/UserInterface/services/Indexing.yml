@@ -16,33 +16,21 @@ services:
             - '@partialParser'
             - '@nodeTypeDeducer'
 
-    fileIndexerFactory.backend:
-        class: PhpIntegrator\Indexing\FileIndexerFactory
+    fileIndexer:
+        class: PhpIntegrator\Indexing\FileIndexer
         arguments:
             - '@storageForIndexers'
-            - '@docblockParser'
             - '@typeAnalyzer'
-            - '@parser'
+            - '@docblockParser'
             - '@nodeTypeDeducer'
+            - '@parser'
             - '@structureAwareNameResolverFactory'
-
-    cachingFileIndexerFactory.cache:
-        class: Doctrine\Common\Cache\ArrayCache
-
-    cachingFileIndexerFactory:
-        class: PhpIntegrator\Indexing\CachingFileIndexerFactory
-        arguments:
-            - '@fileIndexerFactory.backend'
-            - '@cachingFileIndexerFactory.cache'
-
-    fileIndexerFactory:
-        alias: cachingFileIndexerFactory
 
     projectIndexer:
         class: PhpIntegrator\Indexing\ProjectIndexer
         arguments:
             - '@storageForIndexers'
-            - '@fileIndexerFactory'
+            - '@fileIndexer'
             - '@sourceCodeStreamReader'
 
     indexer:

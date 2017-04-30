@@ -17,9 +17,9 @@ class ProjectIndexer
     private $storage;
 
     /**
-     * @var FileIndexerFactoryInterface
+     * @var FileIndexerInterface
      */
-    private $fileIndexerFactory;
+    private $fileIndexer;
 
     /**
      * @var SourceCodeStreamReader
@@ -37,17 +37,17 @@ class ProjectIndexer
     private $progressStreamingCallback;
 
     /**
-     * @param StorageInterface            $storage
-     * @param FileIndexerFactoryInterface $fileIndexerFactory
-     * @param SourceCodeStreamReader      $sourceCodeStreamReader
+     * @param StorageInterface       $storage
+     * @param FileIndexerInterface   $fileIndexer
+     * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
     public function __construct(
         StorageInterface $storage,
-        FileIndexerFactoryInterface $fileIndexerFactory,
+        FileIndexerInterface $fileIndexer,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->storage = $storage;
-        $this->fileIndexerFactory = $fileIndexerFactory;
+        $this->fileIndexer = $fileIndexer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
 
@@ -187,7 +187,7 @@ class ProjectIndexer
 
             if ($code !== null) {
                 try {
-                    $this->fileIndexerFactory->create($filePath)->index($filePath, $code);
+                    $this->fileIndexer->index($filePath, $code);
                 } catch (IndexingFailedException $e) {
                     $this->logMessage('    - ERROR: Indexing failed due to parsing errors!');
                 }

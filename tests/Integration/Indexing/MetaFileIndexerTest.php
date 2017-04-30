@@ -27,12 +27,7 @@ class MetaFileIndexerTest extends AbstractIntegrationTest
 
         $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
 
-        $fileIndexer = new MetaFileIndexer(
-            $container->get('indexDatabase'),
-            $container->get('parser')
-        );
-
-        $fileIndexer->index($path, $code);
+        $container->get('fileIndexer')->index($path, $code);
 
         return $container;
     }

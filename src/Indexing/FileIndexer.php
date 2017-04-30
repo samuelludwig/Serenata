@@ -176,7 +176,7 @@ class FileIndexer implements FileIndexerInterface
      */
     protected function getVisitorsForFile(string $filePath, string $code, int $fileId): array
     {
-        return [
+        $visitors = [
             new Visiting\UseStatementIndexingVisitor($this->storage, $fileId, $code),
 
             new Visiting\GlobalConstantIndexingVisitor(
@@ -217,7 +217,14 @@ class FileIndexer implements FileIndexerInterface
                 $fileId,
                 $code,
                 $filePath
+            ),
+
+            new Visiting\MetaFileIndexingVisitor(
+                $this->storage,
+                $fileId
             )
         ];
+
+        return $visitors;
     }
 }
