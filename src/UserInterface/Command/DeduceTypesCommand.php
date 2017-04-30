@@ -102,25 +102,6 @@ class DeduceTypesCommand extends AbstractCommand
     }
 
     /**
-     * @param Node $node
-     *
-     * @return Node
-     */
-    protected function getNodeWithoutLastElement(Node $node): Node
-    {
-        if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
-            return $node->var;
-        } elseif ($node instanceof Node\Expr\StaticCall ||
-            $node instanceof Node\Expr\StaticPropertyFetch ||
-            $node instanceof Node\Expr\ClassConstFetch
-        ) {
-            return $node->class;
-        }
-
-        return $node;
-    }
-
-    /**
      * @param string $file
      * @param string $code
      * @param string $expression
@@ -151,6 +132,25 @@ class DeduceTypesCommand extends AbstractCommand
         }
 
         return $this->deduceTypesFromNode($file, $code, $node, $offset);
+    }
+
+    /**
+     * @param Node $node
+     *
+     * @return Node
+     */
+    protected function getNodeWithoutLastElement(Node $node): Node
+    {
+        if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
+            return $node->var;
+        } elseif ($node instanceof Node\Expr\StaticCall ||
+            $node instanceof Node\Expr\StaticPropertyFetch ||
+            $node instanceof Node\Expr\ClassConstFetch
+        ) {
+            return $node->class;
+        }
+
+        return $node;
     }
 
     /**
