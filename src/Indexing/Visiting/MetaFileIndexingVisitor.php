@@ -42,6 +42,12 @@ class MetaFileIndexingVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
+        $namespaceName = $node->getAttribute('namespace');
+
+        if (!$namespaceName instanceof Node\Name || $namespaceName->toString() !== 'PHPSTORM_META') {
+            return;
+        }
+
         if ($node instanceof Node\Expr\Assign) {
             $this->enterAssignNode($node);
         }
