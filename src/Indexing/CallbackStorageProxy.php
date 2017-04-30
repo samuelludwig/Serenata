@@ -21,7 +21,7 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
     /**
      * @var string
      */
-    public const EVENT_IMPORT_INSERTED = 'namespaceInserted';
+    public const EVENT_IMPORT_INSERTED = 'importInserted';
 
     /**
      * @var StorageInterface
