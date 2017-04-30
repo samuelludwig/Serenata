@@ -371,25 +371,29 @@ class DocblockParser
      */
     protected function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
+        $return = null;
+
         if (isset($tags[static::RETURN_VALUE])) {
             list($type, $description) = $this->filterParameterTag($tags[static::RETURN_VALUE][0], 2);
-        } else {
-            $type = null;
-            $description = null;
 
+            if ($type) {
+                $return = [
+                    'type'        => $type,
+                    'description' => $description
+                ];
+            }
+        } elseif ($docblock !== null) {
             // According to https://www.phpdoc.org/docs/latest/references/phpdoc/tags/return.html, a method that does
             // have a docblock, but no explicit return type returns void. Constructors, however, must return self. If
             // there is no docblock at all, we can't assume either of these types.
-            if ($docblock !== null) {
-                $type = ($itemName === '__construct') ? 'self' : 'void';
-            }
+            $return = [
+                'type'        => ($itemName === '__construct') ? 'self' : 'void',
+                'description' => null
+            ];
         }
 
         return [
-            'return' => [
-                'type'        => $type,
-                'description' => $description
-            ]
+            'return' => $return
         ];
     }
 

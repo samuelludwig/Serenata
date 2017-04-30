@@ -200,6 +200,21 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testReturnTagWithoutType(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @return
+             */
+        ', [DocblockParser::RETURN_VALUE], '');
+
+        $this->assertNull($result['return']);
+    }
+
+    /**
      * @return DocblockParser
      */
     protected function getDocblockParser(): DocblockParser
