@@ -15,10 +15,11 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
     /**
      * @param string $file
      * @param string $expression
+     * @param bool   $ignoreLastElement
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpression(string $file, string $expression): array
+    protected function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
     {
         $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
 
@@ -34,7 +35,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
         $reflectionMethod->setAccessible(true);
 
-        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset, false);
+        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset, $ignoreLastElement);
     }
 
     /**
@@ -1065,6 +1066,20 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
             '\Exception',
             '\Throwable'
         ], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIgnoreLastElement(): void
+    {
+        $result = $this->deduceTypesFromExpression(
+            'AssignmentIgnoreLastElement.phpt',
+            '$a->test',
+            true
+        );
+
+        $this->assertEquals(['\DateTime'], $result);
     }
 
     /**

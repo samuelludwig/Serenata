@@ -121,14 +121,12 @@ class DeduceTypesCommand extends AbstractCommand
 
         if ($node === null) {
             return [];
+        } elseif ($node instanceof Node\Stmt\Expression) {
+            $node = $node->expr;
         }
 
         if ($ignoreLastElement) {
             $node = $this->getNodeWithoutLastElement($node);
-        }
-
-        if ($node instanceof Node\Stmt\Expression) {
-            $node = $node->expr;
         }
 
         return $this->deduceTypesFromNode($file, $code, $node, $offset);
