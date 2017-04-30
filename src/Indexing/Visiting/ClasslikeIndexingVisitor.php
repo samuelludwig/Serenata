@@ -84,6 +84,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $seId;
 
     /**
+     * @var string[]
+     */
+    private $traitsUsed = [];
+
+    /**
      * @param StorageInterface                           $storage
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param DocblockParser                             $docblockParser
@@ -153,6 +158,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             return;
         }
 
+        $this->traitsUsed = [];
+
         $structureTypeMap = $this->getStructureTypeMap();
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
@@ -211,21 +218,29 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 ]);
             }
 
-            foreach ($node->implements as $implementedName) {
-                $resolvedName = NodeHelpers::fetchClassName($implementedName->getAttribute('resolvedName'));
+            $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
+                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
+                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+            }, $node->implements));
+
+            foreach ($implementedFqcns as $implementedFqcn) {
                 $this->storage->insert(IndexStorageItemEnum::STRUCTURES_INTERFACES_LINKED, [
                     'structure_id'          => $seId,
-                    'linked_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($resolvedName)
+                    'linked_structure_fqcn' => $implementedFqcn
                 ]);
             }
         } elseif ($node instanceof Node\Stmt\Interface_) {
-            foreach ($node->extends as $extends) {
-                $parent = NodeHelpers::fetchClassName($extends->getAttribute('resolvedName'));
+            $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
+                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
+                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+            }, $node->extends));
+
+            foreach ($extendedFqcns as $extendedFqcn) {
                 $this->storage->insert(IndexStorageItemEnum::STRUCTURES_PARENTS_LINKED, [
                     'structure_id'          => $seId,
-                    'linked_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($parent)
+                    'linked_structure_fqcn' => $extendedFqcn
                 ]);
             }
         }
@@ -277,11 +292,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
         foreach ($node->traits as $traitName) {
-            $trait = NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
+            $traitFqcn = NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
+            $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
+
+            if (isset($this->traitsUsed[$traitFqcn])) {
+                continue; // Don't index the same trait twice to avoid duplicates.
+            }
+
+            $this->traitsUsed[$traitFqcn] = true;
 
             $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_LINKED, [
                 'structure_id'          => $this->seId,
-                'linked_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($trait)
+                'linked_structure_fqcn' => $traitFqcn
             ]);
         }
 

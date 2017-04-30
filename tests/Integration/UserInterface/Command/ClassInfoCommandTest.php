@@ -2176,6 +2176,42 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testSkipsInterfaceImplementedTwice(): void
+    {
+        $fileName = 'InterfaceImplementedTwice.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestClass');
+
+        $this->assertEquals(['\A\I'], $output['interfaces']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsTraitUsedTwice(): void
+    {
+        $fileName = 'TraitUsedTwice.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestClass');
+
+        $this->assertEquals(['\A\T', '\A\T2'], $output['traits']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsInterfaceExtendedTwice(): void
+    {
+        $fileName = 'InterfaceExtendedTwice.phpt';
+
+        $output = $this->getClassInfo($fileName, '\A\TestInterface');
+
+        $this->assertEquals(['\A\I'], $output['parents']);
+    }
+
+    /**
+     * @return void
+     */
     public function testExplicitlyNullableParameter(): void
     {
         $fileName = 'ExplicitlyNullableParameter.phpt';

@@ -40,6 +40,7 @@
   * (A JSON copy of the documentation is part of the package, so no actual internet connection is required.)
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
 * Fixed errors being generated whilst trying to deduce the type of anonymous classes.
+* Errors will no longer be thrown when a class implements the same interface twice, uses the same trait twice, or an interface extends the same interface twice.
 * The `LocalizeType` command will no longer make any chances to names that aren't fully qualified, as they are already "local" as they are.
 * The variable defined in a `catch` block wasn't always being returned in the variable list.
 * Namespaces supplied by the `NamespaceList` command will now always have a start and end line (no more `null` for the last namespace).
