@@ -34,7 +34,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
         $reflectionMethod->setAccessible(true);
 
-        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset);
+        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset, false);
     }
 
     /**
@@ -62,7 +62,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
         $reflectionMethod->setAccessible(true);
 
-        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset);
+        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset, false);
     }
 
     /**

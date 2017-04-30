@@ -92,24 +92,13 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
-        $node = $this->lastExpressionParser->getLastNodeAt($codeWithExpression, $offset);
-
-        if ($node === null) {
-            return [];
-        }
-
-        if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
-            $node = $this->getNodeWithoutLastElement($node);
-        }
-
-        $result = $this->deduceTypes(
-           isset($arguments['file']) ? $arguments['file'] : null,
-           $code,
-           $node,
-           $offset
+        return $this->deduceTypesFromExpression(
+            $arguments['file'],
+            $code,
+            $codeWithExpression,
+            $offset,
+            isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
         );
-
-        return $result;
     }
 
     /**
@@ -134,12 +123,45 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @param string $file
      * @param string $code
+     * @param string $expression
+     * @param int    $offset
+     * @param bool   $ignoreLastElement
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromExpression(
+        string $file,
+        string $code,
+        string $expression,
+        int $offset,
+        bool $ignoreLastElement
+    ): array {
+        $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
+
+        if ($node === null) {
+            return [];
+        }
+
+        if ($ignoreLastElement) {
+            $node = $this->getNodeWithoutLastElement($node);
+        }
+
+        if ($node instanceof Node\Stmt\Expression) {
+            $node = $node->expr;
+        }
+
+        return $this->deduceTypesFromNode($file, $code, $node, $offset);
+    }
+
+    /**
+     * @param string $file
+     * @param string $code
      * @param Node   $node
      * @param int    $offset
      *
      * @return string[]
      */
-    protected function deduceTypes(string $file, string $code, Node $node, int $offset): array
+    protected function deduceTypesFromNode(string $file, string $code, Node $node, int $offset): array
     {
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
@@ -148,25 +170,6 @@ class DeduceTypesCommand extends AbstractCommand
         $this->attachRelevantNamespaceToNode($node, $file, $line);
 
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param string $file
-     * @param string $code
-     * @param string $expression
-     * @param int    $offset
-     *
-     * @return string[]
-     */
-    protected function deduceTypesFromExpression(string $file, string $code, string $expression, int $offset): array
-    {
-        $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
-
-        if ($node instanceof Node\Stmt\Expression) {
-            $node = $node->expr;
-        }
-
-        return $this->deduceTypes($file, $code, $node, $offset);
     }
 
     /**
