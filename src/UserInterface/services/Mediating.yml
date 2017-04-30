@@ -22,12 +22,12 @@ services:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
-            - '@indexer'
+            - '@storageForIndexers'
             - !php/const:PhpIntegrator\Indexing\CallbackStorageProxy::EVENT_NAMESPACE_INSERTED
 
     cacheClearingEventMediator3:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
-            - '@indexer'
+            - '@storageForIndexers'
             - !php/const:PhpIntegrator\Indexing\CallbackStorageProxy::EVENT_IMPORT_INSERTED
