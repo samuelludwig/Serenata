@@ -170,6 +170,36 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testParamTagWithoutType(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @param
+             */
+        ', [DocblockParser::PARAM_TYPE], '');
+
+        $this->assertEquals([], $result['params']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testParamTagWithoutName(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @param Type
+             */
+        ', [DocblockParser::PARAM_TYPE], '');
+
+        $this->assertEquals([], $result['params']);
+    }
+
+    /**
      * @return DocblockParser
      */
     protected function getDocblockParser(): DocblockParser

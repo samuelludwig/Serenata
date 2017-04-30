@@ -410,6 +410,10 @@ class DocblockParser
             foreach ($tags[static::PARAM_TYPE] as $tag) {
                 list($type, $variableName, $description) = $this->filterParameterTag($tag, 3);
 
+                if (empty($type) || empty($variableName)) {
+                    continue;
+                }
+
                 $isVariadic = false;
                 $isReference = false;
 
