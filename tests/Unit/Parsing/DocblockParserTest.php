@@ -155,6 +155,21 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testVarTagWithoutType(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @var
+             */
+        ', [DocblockParser::VAR_TYPE], '');
+
+        $this->assertEquals([], $result['var']);
+    }
+
+    /**
      * @return DocblockParser
      */
     protected function getDocblockParser(): DocblockParser

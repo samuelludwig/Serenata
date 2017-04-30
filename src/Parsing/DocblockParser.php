@@ -454,6 +454,10 @@ class DocblockParser
             foreach ($tags[static::VAR_TYPE] as $tag) {
                 list($varType, $varName, $varDescription) = $this->filterParameterTag($tag, 3);
 
+                if (empty($varType)) {
+                    continue;
+                }
+
                 $type = $this->docblockTypeParser->parse($varType);
 
                 if ($varName) {
