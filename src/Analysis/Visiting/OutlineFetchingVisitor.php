@@ -298,6 +298,10 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     protected function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
+        if (!isset($node->namespacedName)) {
+            return;
+        }
+
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         $this->structures[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
