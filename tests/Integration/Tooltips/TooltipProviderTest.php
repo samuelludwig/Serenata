@@ -52,7 +52,7 @@ class TooltipProviderTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->getTooltip($fileName, $i);
 
-            $this->assertNotNull($result);
+            $this->assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
             $this->assertNull($result->getRange());
             $this->assertEquals($result->getContents(), $contents);
 
