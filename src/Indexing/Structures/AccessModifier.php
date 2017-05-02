@@ -20,7 +20,6 @@ class AccessModifier
     private $name;
 
     /**
-     * @param int    $id
      * @param string $name
      */
     public function __construct(string $name)
