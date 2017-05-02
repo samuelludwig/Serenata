@@ -298,7 +298,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     protected function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
-        if (!isset($node->namespacedName)) {
+        if (!isset($this->currentStructure->namespacedName)) {
             return;
         }
 
