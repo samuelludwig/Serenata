@@ -123,6 +123,7 @@ class Constant
         ?Structure $structure,
         ?AccessModifier $accessModifier
     ) {
+        $this->id = Uuid::uuid4();
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;
