@@ -23,7 +23,7 @@
         <field name="types"              type="json"    nullable="false" />
 
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="properties">
-            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="true" />
+            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
         </many-to-one>
 
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
