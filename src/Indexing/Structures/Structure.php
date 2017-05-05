@@ -112,6 +112,21 @@ class Structure
     private $traitPrecedences;
 
     /**
+     * @var ArrayCollection
+     */
+    private $constants;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $properties;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $methods;
+
+    /**
      * @param string                     $name
      * @param string                     $fqcn
      * @param File                       $file
@@ -173,6 +188,10 @@ class Structure
         $this->traits = new ArrayCollection($traits);
         $this->traitAliases = new ArrayCollection($traitAliases);
         $this->traitPrecedences = new ArrayCollection($traitPrecedences);
+
+        $this->constants = new ArrayCollection();
+        $this->properties = new ArrayCollection();
+        $this->methods = new ArrayCollection();
     }
 
     /**
@@ -333,5 +352,29 @@ class Structure
     public function getTraitPrecedences(): array
     {
         return $this->traitPrecedences->toArray();
+    }
+
+    /**
+     * @return Constant[]
+     */
+    public function getConstants(): array
+    {
+        return $this->constants->toArray();
+    }
+
+    /**
+     * @return Property[]
+     */
+    public function getProperties(): array
+    {
+        return $this->properties->toArray();
+    }
+
+    /**
+     * @return Function_[]
+     */
+    public function getMethods(): array
+    {
+        return $this->methods->toArray();
     }
 }
