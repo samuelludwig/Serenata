@@ -18,7 +18,7 @@
 
         <one-to-many field="imports" target-entity="PhpIntegrator\Indexing\Structures\FileNamespaceImport" mapped-by="namespace">
 
-        </many-to-one>
+        </one-to-many>
     </entity>
 
 </doctrine-mapping>
