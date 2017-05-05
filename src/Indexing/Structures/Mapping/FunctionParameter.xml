@@ -1,0 +1,26 @@
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
+>
+
+    <entity name="PhpIntegrator\Indexing\Structures\FunctionParameter">
+        <id name="id" type="string"></id>
+
+        <field name="name"         type="string"  nullable="false" length="255" />
+        <field name="typeHint"     type="string"  nullable="true"  length="255" />
+        <field name="types"        type="json"    nullable="false" />
+        <field name="description"  type="text"    nullable="true"  length="15000" />
+        <field name="defaultValue" type="string"  nullable="true"  length="255" />
+        <field name="isNullable"   type="boolean" nullable="false" />
+        <field name="isReference"  type="boolean" nullable="false" />
+        <field name="isOptional"   type="boolean" nullable="false" />
+        <field name="isVariadic"   type="boolean" nullable="false" />
+
+        <many-to-one field="function" target-entity="PhpIntegrator\Indexing\Structures\Function_">
+            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>
