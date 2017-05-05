@@ -1,0 +1,23 @@
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
+>
+
+    <entity name="PhpIntegrator\Indexing\Structures\MetaStaticMethodType">
+        <id name="id" type="string"></id>
+
+        <field name="fqcn"             type="string"  nullable="false"  length="255" />
+        <field name="name"             type="string"  nullable="false"  length="255" />
+        <field name="argumentIndex"    type="int"     nullable="false" />
+        <field name="value"            type="string"  nullable="false"  length="255" />
+        <field name="valueNodeType"    type="string"  nullable="false"  length="255" />
+        <field name="returnType"       type="string"  nullable="false"  length="255" />
+
+        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
+            <join-column on-delete="CASCADE" on-update="CASCADE" />
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>
