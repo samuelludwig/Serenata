@@ -87,6 +87,11 @@ class Structure
     private $hasDocblock;
 
     /**
+     * @var Structure|null
+     */
+    private $parent;
+
+    /**
      * @var ArrayCollection
      */
     private $parents;
@@ -99,7 +104,17 @@ class Structure
     /**
      * @var ArrayCollection
      */
+    private $implementors;
+
+    /**
+     * @var ArrayCollection
+     */
     private $traits;
+
+    /**
+     * @var ArrayCollection
+     */
+    private $traitUsers;
 
     /**
      * @var ArrayCollection
@@ -315,6 +330,14 @@ class Structure
     }
 
     /**
+     * @return Structure|null
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
      * @return Structure[]
      */
     public function getParents(): array
@@ -333,9 +356,25 @@ class Structure
     /**
      * @return Structure[]
      */
+    public function getImplementors(): array
+    {
+        return $this->implementors->toArray();
+    }
+
+    /**
+     * @return Structure[]
+     */
     public function getTraits(): array
     {
         return $this->traits->toArray();
+    }
+
+    /**
+     * @return Structure[]
+     */
+    public function getTraitUsers(): array
+    {
+        return $this->traitUsers->toArray();
     }
 
     /**
