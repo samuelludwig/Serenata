@@ -18,7 +18,7 @@
         <field name="isOptional"   type="boolean" nullable="false" />
         <field name="isVariadic"   type="boolean" nullable="false" />
 
-        <many-to-one field="function" target-entity="PhpIntegrator\Indexing\Structures\Function_">
+        <many-to-one field="function" target-entity="PhpIntegrator\Indexing\Structures\Function_" inversed-by="parameters">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
         </many-to-one>
     </entity>
