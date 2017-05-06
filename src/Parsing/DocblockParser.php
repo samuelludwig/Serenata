@@ -378,7 +378,7 @@ class DocblockParser
 
             if ($type) {
                 $return = [
-                    'type'        => $type,
+                    'type'        => $this->docblockTypeParser->parse($type),
                     'description' => $description
                 ];
             }
@@ -387,7 +387,7 @@ class DocblockParser
             // have a docblock, but no explicit return type returns void. Constructors, however, must return self. If
             // there is no docblock at all, we can't assume either of these types.
             $return = [
-                'type'        => ($itemName === '__construct') ? 'self' : 'void',
+                'type'        => $this->docblockTypeParser->parse(($itemName === '__construct') ? 'self' : 'void'),
                 'description' => null
             ];
         }
