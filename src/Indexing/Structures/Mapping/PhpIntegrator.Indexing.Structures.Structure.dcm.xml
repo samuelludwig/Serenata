@@ -10,8 +10,8 @@
 
         <field name="name"               type="string"  nullable="false" length="255" />
         <field name="fqcn"               type="string"  nullable="false" length="255" />
-        <field name="startLine"          type="int"     nullable="false" />
-        <field name="endLine"            type="int"     nullable="false" />
+        <field name="startLine"          type="integer" nullable="false" />
+        <field name="endLine"            type="integer" nullable="false" />
         <field name="shortDescription"   type="text"    nullable="true"  length="15000" />
         <field name="longDescription"    type="text"    nullable="true"  length="15000" />
         <field name="isBuiltin"          type="boolean" nullable="false" />
