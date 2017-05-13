@@ -79,10 +79,10 @@ class FunctionParameter
     public function __construct(
         Function_ $function,
         string $name,
-        string $typeHint = null,
+        ?string $typeHint,
         array $types,
-        string $description = null,
-        string $defaultValue = null,
+        ?string $description,
+        ?string $defaultValue,
         bool $isNullable,
         bool $isReference,
         bool $isOptional,
