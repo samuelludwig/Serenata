@@ -8,6 +8,11 @@ namespace PhpIntegrator\Analysis\Typing;
 interface FileClassListProviderInterface
 {
     /**
+     * @return array
+     */
+    public function getAll(): array;
+
+    /**
      * @param string $filePath
      *
      * @return array
