@@ -61,7 +61,7 @@
 
         </one-to-many>
 
-        <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Methods" mapped-by="structure">
+        <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Function_" mapped-by="structure">
 
         </one-to-many>
     </entity>
