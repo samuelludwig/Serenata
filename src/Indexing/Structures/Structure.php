@@ -87,14 +87,14 @@ class Structure
     private $hasDocblock;
 
     /**
-     * @var Structure|null
+     * @var ArrayCollection
      */
-    private $parent;
+    private $parents;
 
     /**
      * @var ArrayCollection
      */
-    private $parents;
+    private $children;
 
     /**
      * @var ArrayCollection
@@ -330,19 +330,43 @@ class Structure
     }
 
     /**
-     * @return Structure|null
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
      * @return Structure[]
      */
     public function getParents(): array
     {
         return $this->parents->toArray();
+    }
+
+    /**
+     * @param Structure $structure
+     *
+     * @return void
+     */
+    public function addParent(Structure $structure): void
+    {
+        $this->parents->add($structure);
+
+        $structure->addChild($this);
+    }
+
+    /**
+     * @return Structure[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children->toArray();
+    }
+
+    /**
+     * @param Structure $structure
+     *
+     * @return void
+     */
+    public function addChild(Structure $structure): void
+    {
+        $this->children->add($structure);
+
+        $structure->addParent($this);
     }
 
     /**
@@ -354,11 +378,35 @@ class Structure
     }
 
     /**
+     * @param Structure $structure
+     *
+     * @return void
+     */
+    public function addInterface(Structure $structure): void
+    {
+        $this->interfaces->add($structure);
+
+        $structure->addImplementor($this);
+    }
+
+    /**
      * @return Structure[]
      */
     public function getImplementors(): array
     {
         return $this->implementors->toArray();
+    }
+
+    /**
+     * @param Structure $structure
+     *
+     * @return void
+     */
+    public function addImplementor(Structure $structure): void
+    {
+        $this->implementors->add($structure);
+
+        $structure->addInterface($this);
     }
 
     /**

@@ -99,6 +99,8 @@ class FunctionParameter
         $this->isReference = $isReference;
         $this->isOptional = $isOptional;
         $this->isVariadic = $isVariadic;
+
+        $this->function->addParameter($this);
     }
 
     /**

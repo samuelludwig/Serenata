@@ -54,6 +54,8 @@ class FileNamespaceImport
         $this->name = $name;
         $this->kind = $kind;
         $this->namespace = $namespace;
+
+        $namespace->addImport($this);
     }
 
     /**

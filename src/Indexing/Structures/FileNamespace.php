@@ -61,6 +61,8 @@ class FileNamespace
         $this->name = $name;
         $this->file = $file;
         $this->imports = new ArrayCollection($imports);
+
+        $file->addNamespace($this);
     }
 
     /**
@@ -109,5 +111,15 @@ class FileNamespace
     public function getImports(): array
     {
         return $this->imports->toArray();
+    }
+
+    /**
+     * @param FileNamespaceImport $import
+     *
+     * @return void
+     */
+    public function addImport(FileNamespaceImport $import): void
+    {
+        $this->imports->add($import);
     }
 }

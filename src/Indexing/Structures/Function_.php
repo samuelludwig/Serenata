@@ -358,6 +358,16 @@ class Function_
     }
 
     /**
+     * @param FunctionParameter $parameter
+     *
+     * @return void
+     */
+    public function addParameter(FunctionParameter $parameter): void
+    {
+        $this->parameters->add($parameter);
+    }
+
+    /**
      * @return array[]
      */
     public function getReturnTypes(): array
