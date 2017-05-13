@@ -75,7 +75,7 @@ class Constant
     private $typeDescription;
 
     /**
-     * @var array[]
+     * @var TypeInfo[]
      */
     private $types;
 
@@ -102,7 +102,7 @@ class Constant
      * @param string|null         $shortDescription
      * @param string|null         $longDescription
      * @param string|null         $typeDescription
-     * @param array[]             $types
+     * @param TypeInfo[]          $types
      * @param Structure|null      $structure
      * @param AccessModifier|null $accessModifier
      */
@@ -246,7 +246,7 @@ class Constant
     }
 
     /**
-     * @return array[]
+     * @return TypeInfo[]
      */
     public function getTypes(): array
     {

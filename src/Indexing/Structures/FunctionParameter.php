@@ -30,7 +30,7 @@ class FunctionParameter
     private $typeHint;
 
     /**
-     * @var array[]
+     * @var TypeInfo[]
      */
     private $types;
 
@@ -68,7 +68,7 @@ class FunctionParameter
      * @param Function_   $function
      * @param string      $name
      * @param string|null $typeHint
-     * @param array[]     $types
+     * @param TypeInfo[]  $types
      * @param string|null $description
      * @param string|null $defaultValue
      * @param bool        $isNullable
@@ -136,7 +136,7 @@ class FunctionParameter
     }
 
     /**
-     * @return array[]
+     * @return TypeInfo[]
      */
     public function getTypes(): array
     {

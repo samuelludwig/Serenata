@@ -115,7 +115,7 @@ class Function_
     private $parameters;
 
     /**
-     * @var array[]
+     * @var TypeInfo[]
      */
     private $returnTypes;
 
@@ -140,7 +140,7 @@ class Function_
      * @param bool                $hasDocblock
      * @param array[]             $throws
      * @param FunctionParameter[] $parameters
-     * @param array[]             $returnTypes
+     * @param TypeInfo[]          $returnTypes
      */
     public function __construct(
         string $name,
@@ -368,7 +368,7 @@ class Function_
     }
 
     /**
-     * @return array[]
+     * @return TypeInfo[]
      */
     public function getReturnTypes(): array
     {

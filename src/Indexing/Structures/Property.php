@@ -90,7 +90,7 @@ class Property
     private $accessModifier;
 
     /**
-     * @var array[]
+     * @var TypeInfo[]
      */
     private $types;
 
@@ -110,7 +110,7 @@ class Property
      * @param string|null    $returnTypeHint
      * @param Structure      $structure
      * @param AccessModifier $accessModifier
-     * @param array[]        $types
+     * @param TypeInfo[]     $types
      */
     public function __construct(
         string $name,
@@ -278,7 +278,7 @@ class Property
     }
 
     /**
-     * @return array[]
+     * @return TypeInfo[]
      */
     public function getTypes(): array
     {
