@@ -735,4 +735,60 @@ class IndexDatabase implements
     {
         $this->getConnection()->rollBack();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFiles(): array
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAccessModifiers(): array
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getStructureTypes(): array
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findFileByPath(string $path): ?Structures\File
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function persist($entity): void
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function delete($entity): void
+    {
+        throw new \LogicException('Not implemented'); // TODO
+    }
 }

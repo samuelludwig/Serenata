@@ -2,6 +2,25 @@ parameters:
 
 
 services:
+    sqliteConnectionFactory:
+        class: PhpIntegrator\Indexing\SqliteConnectionFactory
+
+    managerRegistry:
+        class: PhpIntegrator\Indexing\ManagerRegistry
+        arguments:
+            - '@sqliteConnectionFactory'
+
+    schemaInitializer:
+        class: PhpIntegrator\Indexing\SchemaInitializer
+        arguments:
+            - '@managerRegistry'
+
+    doctrineStorage:
+        class: PhpIntegrator\Indexing\DoctrineStorage
+        arguments:
+            - '@managerRegistry'
+
+    # TODO: Remove me.
     indexDatabase:
         class: PhpIntegrator\Indexing\IndexDatabase
 
@@ -11,7 +30,7 @@ services:
     builtinIndexer:
         class: PhpIntegrator\Indexing\BuiltinIndexer
         arguments:
-            - '@indexDatabase'
+            - '@doctrineStorage'
             - '@typeAnalyzer'
             - '@partialParser'
             - '@nodeTypeDeducer'
@@ -19,7 +38,7 @@ services:
     fileIndexer:
         class: PhpIntegrator\Indexing\FileIndexer
         arguments:
-            - '@storageForIndexers'
+            - '@doctrineStorage'
             - '@typeAnalyzer'
             - '@docblockParser'
             - '@nodeTypeDeducer'
@@ -29,7 +48,7 @@ services:
     projectIndexer:
         class: PhpIntegrator\Indexing\ProjectIndexer
         arguments:
-            - '@storageForIndexers'
+            - '@doctrineStorage'
             - '@fileIndexer'
             - '@sourceCodeStreamReader'
 

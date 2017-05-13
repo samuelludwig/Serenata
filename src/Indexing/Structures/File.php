@@ -42,7 +42,7 @@ class File
     {
         $this->id = Uuid::uuid4();
         $this->path = $path;
-        $this->indexedTime = $indexedOn;
+        $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);
     }
 
@@ -65,9 +65,9 @@ class File
     /**
      * @return DateTime
      */
-    public function getIndexedTime(): DateTime
+    public function getIndexedOn(): DateTime
     {
-        return $this->indexedTime;
+        return $this->indexedOn;
     }
 
     /**
@@ -76,5 +76,15 @@ class File
     public function getNamespaces(): array
     {
         return $this->namespaces->toArray();
+    }
+
+    /**
+     * @param FileNamespace $namespace
+     *
+     * @return void
+     */
+    public function addNamespace(FileNamespace $namespace): void
+    {
+        $this->namespaces->add($namespace);
     }
 }

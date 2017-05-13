@@ -7,6 +7,7 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
@@ -45,9 +46,9 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
     private $typeAnalyzer;
 
     /**
-     * @var int
+     * @var Structures\File
      */
-    private $fileId;
+    private $file;
 
     /**
      * @var string
@@ -64,7 +65,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      * @param StorageInterface                           $storage
      * @param DocblockParser                             $docblockParser
      * @param TypeAnalyzer                               $typeAnalyzer
-     * @param int                                        $fileId
+     * @param Structures\File                            $file
      * @param string                                     $code
      * @param string                                     $filePath
      */
@@ -73,7 +74,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
-        int $fileId,
+        Structures\File $file,
         string $code,
         string $filePath
     ) {
@@ -81,7 +82,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->fileId = $fileId;
+        $this->file = $file;
         $this->code = $code;
         $this->filePath = $filePath;
     }
@@ -163,6 +164,32 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             $throws[] = $throwsData;
         }
 
+        $function = new Structures\Function_(
+            $node->name,
+            '\\' . $node->namespacedName->toString(),
+            $this->file,
+            $node->getLine(),
+            $node->getAttribute('endLine'),
+            false,
+            false,
+            $documentation['descriptions']['short'],
+            $documentation['descriptions']['long'],
+            $documentation['return']['description'],
+            $localType,
+            null,
+            null,
+            false,
+            $documentation['deprecated'],
+            false,
+            false,
+            !empty($docComment),
+            $throws,
+            [],
+            $returnTypes
+        );
+
+        $this->storage->persist($function);
+
         $parameters = [];
 
         foreach ($node->getParams() as $param) {
@@ -228,47 +255,20 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
                 }
             }
 
-            $parameters[] = [
-                'name'             => $param->var->name,
-                'type_hint'        => $localType,
-                'types_serialized' => serialize($types),
-                'description'      => $parameterDoc ? $parameterDoc['description'] : null,
-                'default_value'    => $defaultValue,
-                'is_nullable'      => $isNullable ? 1 : 0,
-                'is_reference'     => $param->byRef ? 1 : 0,
-                'is_optional'      => $param->default ? 1 : 0,
-                'is_variadic'      => $param->variadic ? 1 : 0
-            ];
-        }
+            $parameter = new Structures\FunctionParameter(
+                $function,
+                $param->var->name,
+                $localType,
+                $types,
+                $parameterDoc ? $parameterDoc['description'] : null,
+                $defaultValue,
+                $isNullable,
+                $param->byRef,
+                $param->default,
+                $param->variadic
+            );
 
-        $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
-            'name'                    => $node->name,
-            'fqcn'                    => '\\' . $node->namespacedName->toString(),
-            'file_id'                 => $this->fileId,
-            'start_line'              => $node->getLine(),
-            'end_line'                => $node->getAttribute('endLine'),
-            'is_builtin'              => 0,
-            'is_abstract'             => 0,
-            'is_final'                => 0,
-            'is_deprecated'           => $documentation['deprecated'] ? 1 : 0,
-            'short_description'       => $documentation['descriptions']['short'],
-            'long_description'        => $documentation['descriptions']['long'],
-            'return_description'      => $documentation['return']['description'],
-            'return_type_hint'        => $localType,
-            'structure_id'            => null,
-            'access_modifier_id'      => null,
-            'is_magic'                => 0,
-            'is_static'               => 0,
-            'has_docblock'            => empty($docComment) ? 0 : 1,
-            'throws_serialized'       => serialize($throws),
-            'parameters_serialized'   => serialize($parameters),
-            'return_types_serialized' => serialize($returnTypes)
-        ]);
-
-        foreach ($parameters as $parameter) {
-            $parameter['function_id'] = $functionId;
-
-            $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameter);
+            $this->storage->persist($parameter);
         }
     }
 

@@ -52,7 +52,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     {
         // Replace some container items for testing purposes.
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
-        $container->get('indexDatabase')->setDatabasePath(':memory:');
+        $container->get('managerRegistry')->setDatabasePath(':memory:');
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
         $success = $container->get('initializeCommand')->initialize($indexBuiltinItems);

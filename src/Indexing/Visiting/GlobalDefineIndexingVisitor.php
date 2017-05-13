@@ -4,6 +4,7 @@ namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
@@ -28,9 +29,9 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
     private $nodeTypeDeducer;
 
     /**
-     * @var int
+     * @var Structures\File
      */
-    private $fileId;
+    private $file;
 
     /**
      * @var string
@@ -45,20 +46,20 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
     /**
      * @param StorageInterface         $storage
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param int                      $fileId
+     * @param Structures\File          $file
      * @param string                   $code
      * @param string                   $filePath
      */
     public function __construct(
         StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        int $fileId,
+        Structures\File $file,
         string $code,
         string $filePath
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->fileId = $fileId;
+        $this->file = $file;
         $this->code = $code;
         $this->filePath = $filePath;
     }
@@ -117,22 +118,24 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
             }, $typeList);
         }
 
-        $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $name->getLast(),
-            'fqcn'                  => '\\' . NodeHelpers::fetchClassName($name),
-            'file_id'               => $this->fileId,
-            'start_line'            => $node->getLine(),
-            'end_line'              => $node->getAttribute('endLine'),
-            'default_value'         => $defaultValue,
-            'is_builtin'            => 0,
-            'is_deprecated'         => 0,
-            'has_docblock'          => 0,
-            'short_description'     => null,
-            'long_description'      => null,
-            'type_description'      => null,
-            'types_serialized'      => serialize($types),
-            'structure_id'          => null,
-            'access_modifier_id'    => null
-        ]);
+        $constant = new Structures\Constant(
+            $name->getLast(),
+            '\\' . NodeHelpers::fetchClassName($name),
+            $this->file,
+            $node->getLine(),
+            $node->getAttribute('endLine'),
+            $defaultValue,
+            false,
+            false,
+            false,
+            null,
+            null,
+            null,
+            $types,
+            null,
+            null
+        );
+
+        $this->storage->persist($constant);
     }
 }

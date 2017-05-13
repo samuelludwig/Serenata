@@ -4,6 +4,7 @@ namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpParser\Node;
@@ -20,9 +21,9 @@ class UseStatementIndexingVisitor implements NodeVisitor
     private $storage;
 
     /**
-     * @var int
+     * @var Structures\File
      */
-    private $fileId;
+    private $file;
 
     /**
      * @var UseStatementFetchingVisitor
@@ -31,13 +32,13 @@ class UseStatementIndexingVisitor implements NodeVisitor
 
     /**
      * @param StorageInterface $storage
-     * @param int              $fileId
+     * @param Structures\File  $file
      * @param string           $code
      */
-    public function __construct(StorageInterface $storage, int $fileId, string $code)
+    public function __construct(StorageInterface $storage, Structures\File $file, string $code)
     {
         $this->storage = $storage;
-        $this->fileId = $fileId;
+        $this->file = $file;
 
         $this->useStatementFetchingVisitor = new UseStatementFetchingVisitor($code);
     }
@@ -85,32 +86,37 @@ class UseStatementIndexingVisitor implements NodeVisitor
      */
     protected function indexNamespace(array $namespace): void
     {
-        $namespaceId = $this->storage->insertNamespace([
-            'start_line'  => $namespace['startLine'],
-            'end_line'    => $namespace['endLine'],
-            'namespace'   => $namespace['name'],
-            'file_id'     => $this->fileId
-        ]);
+        $namespaceEntity = new Structures\FileNamespace(
+            $namespace['startLine'],
+            $namespace['endLine'],
+            $namespace['name'],
+            $this->file,
+            []
+        );
+
+        $this->storage->persist($namespaceEntity);
 
         foreach ($namespace['useStatements'] as $useStatement) {
-            $this->indexUseStatement($useStatement, $namespaceId);
+            $this->indexUseStatement($useStatement, $namespaceEntity);
         }
     }
 
     /**
-     * @param array $useStatement
-     * @param int   $namespaceId
+     * @param array                    $useStatement
+     * @param Structures\FileNamespace $namespace
      *
      * @return void
      */
-    protected function indexUseStatement(array $useStatement, int $namespaceId): void
+    protected function indexUseStatement(array $useStatement, Structures\FileNamespace $namespace): void
     {
-        $this->storage->insertImport([
-            'line'               => $useStatement['line'],
-            'alias'              => $useStatement['alias'] ?: null,
-            'name'               => $useStatement['name'],
-            'kind'               => $useStatement['kind'],
-            'files_namespace_id' => $namespaceId
-        ]);
+        $import = new Structures\FileNamespaceImport(
+            $useStatement['line'],
+            $useStatement['alias'] ?: null,
+            $useStatement['name'],
+            $useStatement['kind'],
+            $namespace
+        );
+
+        $this->storage->persist($import);
     }
 }

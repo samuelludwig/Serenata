@@ -11,17 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class ClassListProviderTest extends AbstractIntegrationTest
 {
     /**
-     * @return ClassListProvider
-     */
-    protected function createClassListProvider(ContainerBuilder $container): ClassListProvider
-    {
-        return new ClassListProvider(
-            $container->get('classlikeConverter'),
-            $container->get('indexDatabase')
-        );
-    }
-
-    /**
      * @return void
      */
     public function testRetrievesAllClasses(): void
@@ -34,7 +23,7 @@ class ClassListProviderTest extends AbstractIntegrationTest
         $this->indexTestFile($container, $path);
         $this->indexTestFile($container, $secondPath);
 
-        $provider = $this->createClassListProvider($container);
+        $provider = $container->get('doctrineClassListProvider');
 
         $output = $provider->getAll();
 
@@ -58,7 +47,7 @@ class ClassListProviderTest extends AbstractIntegrationTest
         $this->indexTestFile($container, $path);
         $this->indexTestFile($container, $secondPath);
 
-        $provider = $this->createClassListProvider($container);
+        $provider = $container->get('doctrineClassListProvider');
 
         $output = $provider->getAllForFile($path);
 

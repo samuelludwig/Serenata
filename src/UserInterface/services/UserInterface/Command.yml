@@ -6,6 +6,7 @@ services:
         class: PhpIntegrator\UserInterface\Command\InitializeCommand
         arguments:
             - '@indexDatabase'
+            - '@schemaInitializer'
             - '@builtinIndexer'
             - '@projectIndexer'
             - '@cache'
@@ -34,7 +35,7 @@ services:
     classListCommand:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
         arguments:
-            - '@classListProvider'
+            - '@doctrineClassListProvider'
 
     classInfoCommand:
         class: PhpIntegrator\UserInterface\Command\ClassInfoCommand

@@ -10,6 +10,7 @@ use Doctrine\Common\Cache\ClearableCache;
 use PhpIntegrator\Indexing\IndexDatabase;
 use PhpIntegrator\Indexing\ProjectIndexer;
 use PhpIntegrator\Indexing\BuiltinIndexer;
+use PhpIntegrator\Indexing\SchemaInitializer;
 
 /**
  * Command that initializes a project.
@@ -20,6 +21,11 @@ class InitializeCommand extends AbstractCommand
      * @var IndexDatabase
      */
     private $indexDatabase;
+
+    /**
+     * @var SchemaInitializer
+     */
+    private $schemaInitializer;
 
     /**
      * @var BuiltinIndexer
@@ -37,18 +43,21 @@ class InitializeCommand extends AbstractCommand
     private $cache;
 
     /**
-     * @param IndexDatabase  $indexDatabase
-     * @param BuiltinIndexer $builtinIndexer
-     * @param ProjectIndexer $projectIndexer
-     * @param Cache          $cache
+     * @param IndexDatabase     $indexDatabase
+     * @param SchemaInitializer $schemaInitializer
+     * @param BuiltinIndexer    $builtinIndexer
+     * @param ProjectIndexer    $projectIndexer
+     * @param Cache             $cache
      */
     public function __construct(
         IndexDatabase $indexDatabase,
+        SchemaInitializer $schemaInitializer,
         BuiltinIndexer $builtinIndexer,
         ProjectIndexer $projectIndexer,
         Cache $cache
     ) {
         $this->indexDatabase = $indexDatabase;
+        $this->schemaInitializer = $schemaInitializer;
         $this->builtinIndexer = $builtinIndexer;
         $this->projectIndexer = $projectIndexer;
         $this->cache = $cache;
@@ -71,9 +80,16 @@ class InitializeCommand extends AbstractCommand
      */
     public function initialize(bool $includeBuiltinItems = true): bool
     {
-        $this->ensureIndexDatabaseDoesNotExist();
 
-        $this->indexDatabase->initialize();
+
+
+        // TODO: Rewrite.
+        // $this->ensureIndexDatabaseDoesNotExist();
+
+
+
+
+        $this->schemaInitializer->initialize();
 
         if ($includeBuiltinItems) {
             $this->builtinIndexer->index();

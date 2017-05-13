@@ -4,6 +4,7 @@ namespace PhpIntegrator\Indexing\Visiting;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
@@ -23,18 +24,18 @@ class MetaFileIndexingVisitor extends NodeVisitorAbstract
     private $storage;
 
     /**
-     * @var int
+     * @var Structures\File
      */
-    private $fileId;
+    private $file;
 
     /**
      * @param StorageInterface $storage
-     * @param int              $fileId
+     * @param Structures\File  $file
      */
-    public function __construct(StorageInterface $storage, int $fileId)
+    public function __construct(StorageInterface $storage, Structures\File $file)
     {
         $this->storage = $storage;
-        $this->fileId = $fileId;
+        $this->file = $file;
     }
 
     /**
@@ -146,14 +147,16 @@ class MetaFileIndexingVisitor extends NodeVisitorAbstract
         $resolvedName = $item->value->class->getAttribute('resolvedName');
         $returnType = NodeHelpers::fetchClassName($resolvedName);
 
-        $this->storage->insert(IndexStorageItemEnum::META_STATIC_METHOD_TYPES, [
-            'file_id'         => $this->fileId,
-            'fqcn'            => $fqcn,
-            'name'            => $name,
-            'argument_index'  => $argumentIndex,
-            'value'           => $item->value->expr->value,
-            'value_node_type' => Node\Scalar\String_::class,
-            'return_type'     => $returnType
-        ]);
+        $metaStaticMethodType = new Structures\MetaStaticMethodType(
+            $this->file,
+            $fqcn,
+            $name,
+            $argumentIndex,
+            $item->value->expr->value,
+            Node\Scalar\String_::class,
+            $returnType
+        );
+
+        $this->storage->persist($metaStaticMethodType);
     }
 }
