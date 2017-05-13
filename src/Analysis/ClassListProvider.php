@@ -33,7 +33,7 @@ class ClassListProvider implements FileClassListProviderInterface
     }
 
     /**
-     * @return array
+     * @inheritDoc
      */
     public function getAll(): array
     {
@@ -41,9 +41,7 @@ class ClassListProvider implements FileClassListProviderInterface
     }
 
     /**
-     * @param string $file
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getAllForFile(string $file): array
     {
