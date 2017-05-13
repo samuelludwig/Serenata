@@ -8,18 +8,18 @@
     <entity name="PhpIntegrator\Indexing\Structures\Constant">
         <id name="id" type="string"></id>
 
-        <field name="name"             type="string"  nullable="false" length="255" />
-        <field name="fqcn"             type="string"  nullable="true"  length="255" />
-        <field name="startLine"        type="integer" nullable="false" />
-        <field name="endLine"          type="integer" nullable="false" />
-        <field name="defaultValue"     type="string"  nullable="false" length="255" />
-        <field name="isDeprecated"     type="boolean" nullable="false" />
-        <field name="isBuiltin"        type="boolean" nullable="false" />
-        <field name="hasDocblock"      type="boolean" nullable="false" />
-        <field name="shortDescription" type="text"    nullable="true"  length="15000" />
-        <field name="longDescription"  type="text"    nullable="true"  length="15000" />
-        <field name="typeDescription"  type="text"    nullable="true"  length="15000" />
-        <field name="types"            type="json"    nullable="false" />
+        <field name="name"             type="string"     nullable="false" length="255" />
+        <field name="fqcn"             type="string"     nullable="true"  length="255" />
+        <field name="startLine"        type="integer"    nullable="false" />
+        <field name="endLine"          type="integer"    nullable="false" />
+        <field name="defaultValue"     type="string"     nullable="false" length="255" />
+        <field name="isDeprecated"     type="boolean"    nullable="false" />
+        <field name="isBuiltin"        type="boolean"    nullable="false" />
+        <field name="hasDocblock"      type="boolean"    nullable="false" />
+        <field name="shortDescription" type="text"       nullable="true"  length="15000" />
+        <field name="longDescription"  type="text"       nullable="true"  length="15000" />
+        <field name="typeDescription"  type="text"       nullable="true"  length="15000" />
+        <field name="types"            type="json_array" nullable="false" />
 
         <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />

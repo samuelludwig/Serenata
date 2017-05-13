@@ -8,22 +8,22 @@
     <entity name="PhpIntegrator\Indexing\Structures\Function_">
         <id name="id" type="string"></id>
 
-        <field name="name"               type="string"  nullable="false" length="255" />
-        <field name="fqcn"               type="string"  nullable="true"  length="255" />
-        <field name="startLine"          type="integer" nullable="false" />
-        <field name="endLine"            type="integer" nullable="false" />
-        <field name="isBuiltin"          type="boolean" nullable="false" />
-        <field name="isDeprecated"       type="boolean" nullable="false" />
-        <field name="shortDescription"   type="text"    nullable="true"  length="15000" />
-        <field name="longDescription"    type="text"    nullable="true"  length="15000" />
-        <field name="returnDescription"  type="text"    nullable="true"  length="15000" />
-        <field name="isMagic"            type="boolean" nullable="false" />
-        <field name="isStatic"           type="boolean" nullable="false" />
-        <field name="isAbstract"         type="boolean" nullable="false" />
-        <field name="isFinal"            type="boolean" nullable="false" />
-        <field name="hasDocblock"        type="boolean" nullable="false" />
-        <field name="throws"             type="json"    nullable="false" />
-        <field name="returnTypes"        type="json"    nullable="false" />
+        <field name="name"               type="string"     nullable="false" length="255" />
+        <field name="fqcn"               type="string"     nullable="true"  length="255" />
+        <field name="startLine"          type="integer"    nullable="false" />
+        <field name="endLine"            type="integer"    nullable="false" />
+        <field name="isBuiltin"          type="boolean"    nullable="false" />
+        <field name="isDeprecated"       type="boolean"    nullable="false" />
+        <field name="shortDescription"   type="text"       nullable="true"  length="15000" />
+        <field name="longDescription"    type="text"       nullable="true"  length="15000" />
+        <field name="returnDescription"  type="text"       nullable="true"  length="15000" />
+        <field name="isMagic"            type="boolean"    nullable="false" />
+        <field name="isStatic"           type="boolean"    nullable="false" />
+        <field name="isAbstract"         type="boolean"    nullable="false" />
+        <field name="isFinal"            type="boolean"    nullable="false" />
+        <field name="hasDocblock"        type="boolean"    nullable="false" />
+        <field name="throws"             type="json_array" nullable="false" />
+        <field name="returnTypes"        type="json_array" nullable="false" />
 
         <one-to-many field="parameters" target-entity="PhpIntegrator\Indexing\Structures\FunctionParameter" mapped-by="function">
 
