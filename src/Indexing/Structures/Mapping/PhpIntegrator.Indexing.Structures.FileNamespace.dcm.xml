@@ -12,7 +12,7 @@
         <field name="endLine"          type="integer" nullable="false" />
         <field name="name"             type="string"  nullable="true"  length="255" />
 
-        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
+        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="namespaces">
             <join-column on-delete="CASCADE" on-update="CASCADE" />
         </many-to-one>
 

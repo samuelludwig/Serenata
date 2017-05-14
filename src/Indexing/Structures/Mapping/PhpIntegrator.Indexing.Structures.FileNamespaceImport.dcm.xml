@@ -13,7 +13,7 @@
         <field name="name"  type="string"  nullable="false" length="255" />
         <field name="kind"  type="string"  nullable="false" length="255" />
 
-        <many-to-one field="namespace" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace">
+        <many-to-one field="namespace" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace" inversed-by="imports">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
         </many-to-one>
     </entity>
