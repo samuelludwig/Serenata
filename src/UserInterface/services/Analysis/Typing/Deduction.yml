@@ -103,7 +103,7 @@ services:
         arguments:
             - '@methodCallNodeTypeDeducer.delegate'
             - '@nodeTypeDeducer'
-            - '@indexDatabase'
+            - '@metadataProvider'
 
     methodCallNodeTypeDeducer:
         alias: methodCallNodeMetaTypeDeducer
