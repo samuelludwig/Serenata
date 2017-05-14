@@ -4,38 +4,40 @@ namespace PhpIntegrator\Analysis\Conversion;
 
 use ArrayAccess;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Converts raw property data from the index to more useful data.
  */
 class PropertyConverter extends AbstractConverter
 {
     /**
-     * @param array       $rawInfo
-     * @param ArrayAccess $class
+     * @param Structures\Property $property
+     * @param ArrayAccess         $class
      *
      * @return array
      */
-    public function convertForClass(array $rawInfo, ArrayAccess $class): array
+    public function convertForClass(Structures\Property $property, ArrayAccess $class): array
     {
         $data = [
-            'name'               => $rawInfo['name'],
-            'startLine'          => (int) $rawInfo['start_line'],
-            'endLine'            => (int) $rawInfo['end_line'],
-            'defaultValue'       => $rawInfo['default_value'],
-            'isMagic'            => !!$rawInfo['is_magic'],
-            'isPublic'           => ($rawInfo['access_modifier'] === 'public'),
-            'isProtected'        => ($rawInfo['access_modifier'] === 'protected'),
-            'isPrivate'          => ($rawInfo['access_modifier'] === 'private'),
-            'isStatic'           => !!$rawInfo['is_static'],
-            'isDeprecated'       => !!$rawInfo['is_deprecated'],
-            'hasDocblock'        => !!$rawInfo['has_docblock'],
-            'hasDocumentation'   => !!$rawInfo['has_docblock'],
+            'name'               => $property->getName(),
+            'startLine'          => $property->getStartLine(),
+            'endLine'            => $property->getEndLine(),
+            'defaultValue'       => $property->getDefaultValue(),
+            'isMagic'            => $property->getIsMagic(),
+            'isPublic'           => $property->getAccessModifier()->getName() === 'public',
+            'isProtected'        => $property->getAccessModifier()->getName() === 'protected',
+            'isPrivate'          => $property->getAccessModifier()->getName() === 'private',
+            'isStatic'           => $property->getIsStatic(),
+            'isDeprecated'       => $property->getIsDeprecated(),
+            'hasDocblock'        => $property->getHasDocblock(),
+            'hasDocumentation'   => $property->getHasDocblock(),
 
-            'shortDescription'  => $rawInfo['short_description'],
-            'longDescription'   => $rawInfo['long_description'],
-            'typeDescription'   => $rawInfo['type_description'],
+            'shortDescription'  => $property->getShortDescription(),
+            'longDescription'   => $property->getLongDescription(),
+            'typeDescription'   => $property->getTypeDescription(),
 
-            'types'             => $this->getReturnTypeDataForSerializedTypes($rawInfo['types_serialized']),
+            'types'             => $this->convertTypes($property->getTypes()),
         ];
 
         return array_merge($data, [
@@ -55,8 +57,8 @@ class PropertyConverter extends AbstractConverter
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
-                'startLineMember' => $data['startLine'],
-                'endLineMember'   => $data['endLine']
+                'startLineMember' => $property->getStartLine(),
+                'endLineMember'   => $property->getEndLine()
             ]
         ]);
     }

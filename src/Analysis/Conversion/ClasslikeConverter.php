@@ -2,34 +2,35 @@
 
 namespace PhpIntegrator\Analysis\Conversion;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Converts raw classlike data from the index to more useful data.
  */
 class ClasslikeConverter extends AbstractConverter
 {
     /**
-     * @param array $rawInfo
+     * @param Structures\Structure $structure
      *
      * @return array
      */
-    public function convert(array $rawInfo): array
+    public function convert(Structures\Structure $structure): array
     {
         return [
-            'name'               => $rawInfo['fqcn'],
-            'startLine'          => (int) $rawInfo['start_line'],
-            'endLine'            => (int) $rawInfo['end_line'],
-            'shortName'          => $rawInfo['name'],
-            'filename'           => $rawInfo['path'],
-            'type'               => $rawInfo['type_name'],
-            'isAbstract'         => !!$rawInfo['is_abstract'],
-            'isFinal'            => !!$rawInfo['is_final'],
-            'isBuiltin'          => !!$rawInfo['is_builtin'],
-            'isDeprecated'       => !!$rawInfo['is_deprecated'],
-            'isAnnotation'       => !!$rawInfo['is_annotation'],
-            'hasDocblock'        => !!$rawInfo['has_docblock'],
-            'hasDocumentation'   => !!$rawInfo['has_docblock'],
-            'shortDescription'   => $rawInfo['short_description'],
-            'longDescription'    => $rawInfo['long_description']
+            'name'               => $structure->getName(),
+            'startLine'          => $structure->getStartLine(),
+            'endLine'            => $structure->getEndLine(),
+            'filename'           => $structure->getFile()->getPath(),
+            'type'               => $structure->getType(),
+            'isAbstract'         => $structure->getIsAbstract(),
+            'isFinal'            => $structure->getIsFinal(),
+            'isBuiltin'          => $structure->getIsBuiltin(),
+            'isDeprecated'       => $structure->getIsDeprecated(),
+            'isAnnotation'       => $structure->getIsAnnotation(),
+            'hasDocblock'        => $structure->getHasDocblock(),
+            'hasDocumentation'   => $structure->getHasDocblock(),
+            'shortDescription'   => $structure->getShortDescription(),
+            'longDescription'    => $structure->getLongDescription()
         ];
     }
 }

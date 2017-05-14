@@ -2,40 +2,42 @@
 
 namespace PhpIntegrator\Analysis\Conversion;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Converts raw constant data from the index to more useful data.
  */
 class ConstantConverter extends AbstractConverter
 {
     /**
-     * @param array $rawInfo
+     * @param Structures\Constant $constant
      *
      * @return array
      */
-    public function convert(array $rawInfo): array
+    public function convert(Structures\Constant $constant): array
     {
         return [
-            'name'              => $rawInfo['name'],
-            'fqcn'              => $rawInfo['fqcn'],
-            'isBuiltin'         => !!$rawInfo['is_builtin'],
-            'startLine'         => (int) $rawInfo['start_line'],
-            'endLine'           => (int) $rawInfo['end_line'],
-            'defaultValue'      => $rawInfo['default_value'],
-            'filename'          => $rawInfo['path'],
+            'name'              => $constant->getName(),
+            'fqcn'              => $constant->getFqcn(),
+            'isBuiltin'         => $constant->getIsBuiltin(),
+            'startLine'         => $constant->getStartLine(),
+            'endLine'           => $constant->getEndLine(),
+            'defaultValue'      => $constant->getDefaultValue(),
+            'filename'          => $constant->getFilename(),
 
-            'isPublic'          => (isset($rawInfo['access_modifier']) ? $rawInfo['access_modifier'] === 'public' : true),
-            'isProtected'       => (isset($rawInfo['access_modifier']) ? $rawInfo['access_modifier'] === 'protected' : false),
-            'isPrivate'         => (isset($rawInfo['access_modifier']) ? $rawInfo['access_modifier'] === 'private' : false),
-            'isStatic'          => true,
-            'isDeprecated'      => !!$rawInfo['is_deprecated'],
-            'hasDocblock'       => !!$rawInfo['has_docblock'],
-            'hasDocumentation'  => !!$rawInfo['has_docblock'],
+            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
+            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
+            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'private' : false,
+            'isStatic'          => $constant->getIsStatic(),
+            'isDeprecated'      => $constant->getIsDeprecated(),
+            'hasDocblock'       => $constant->getHasDocblock(),
+            'hasDocumentation'  => $constant->getHasDocumentation(),
 
-            'shortDescription'  => $rawInfo['short_description'],
-            'longDescription'   => $rawInfo['long_description'],
-            'typeDescription'   => $rawInfo['type_description'],
+            'shortDescription'  => $constant->getShortDescription(),
+            'longDescription'   => $constant->getLongDescription(),
+            'typeDescription'   => $constant->getTypeDescription(),
 
-            'types'             => $this->getReturnTypeDataForSerializedTypes($rawInfo['types_serialized'])
+            'types'             => $this->convertTypes($constant->getTypes())
         ];
     }
 }

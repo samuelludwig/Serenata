@@ -2,27 +2,27 @@
 
 namespace PhpIntegrator\Analysis\Conversion;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Base class for converters.
  */
 abstract class AbstractConverter
 {
     /**
-     * @param string $serializedTypes
+     * @param Structures\TypeInfo[] $rawTypes
      *
      * @return array[]
      */
-    protected function getReturnTypeDataForSerializedTypes(string $serializedTypes): array
+    protected function convertTypes(array $rawTypes): array
     {
         $types = [];
 
-        $rawTypes = unserialize($serializedTypes);
-
         foreach ($rawTypes as $rawType) {
             $types[] = [
-                'type'         => $rawType['type'],
-                'fqcn'         => $rawType['fqcn'],
-                'resolvedType' => $rawType['fqcn']
+                'type'         => $rawType->getType(),
+                'fqcn'         => $rawType->getFqcn(),
+                'resolvedType' => $rawType->getFqcn()
             ];
         }
 
