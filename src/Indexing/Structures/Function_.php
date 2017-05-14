@@ -165,7 +165,7 @@ class Function_
         array $parameters,
         array $returnTypes
     ) {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;

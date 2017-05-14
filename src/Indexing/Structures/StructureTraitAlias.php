@@ -53,7 +53,7 @@ class StructureTraitAlias
         string $name,
         ?string $alias
     ) {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->structure = $structure;
         $this->trait = $trait;
         $this->accessModifier = $accessModifier;

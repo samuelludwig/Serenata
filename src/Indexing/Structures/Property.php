@@ -130,7 +130,7 @@ class Property
         AccessModifier $accessModifier,
         array $types
     ) {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->name = $name;
         $this->file = $file;
         $this->startLine = $startLine;

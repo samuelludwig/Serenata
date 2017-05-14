@@ -24,7 +24,7 @@ class AccessModifier
      */
     public function __construct(string $name)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->name = $name;
     }
 

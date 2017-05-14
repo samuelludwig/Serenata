@@ -48,7 +48,7 @@ class FileNamespaceImport
      */
     public function __construct(int $line, string $alias, string $name, string $kind, FileNamespace $namespace)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->line = $line;
         $this->alias = $alias;
         $this->name = $name;

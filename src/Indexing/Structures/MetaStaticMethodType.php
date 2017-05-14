@@ -67,7 +67,7 @@ class MetaStaticMethodType
         string $valueNodeType,
         string $returnType
     ) {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->file = $file;
         $this->fqcn = $fqcn;
         $this->name = $name;

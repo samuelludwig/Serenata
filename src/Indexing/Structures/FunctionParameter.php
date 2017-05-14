@@ -88,7 +88,7 @@ class FunctionParameter
         bool $isOptional,
         bool $isVariadic
     ) {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->function = $function;
         $this->name = $name;
         $this->typeHint = $typeHint;

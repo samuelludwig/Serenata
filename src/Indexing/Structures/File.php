@@ -40,7 +40,7 @@ class File
      */
     public function __construct(string $path, DateTime $indexedOn, array $namespaces)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->path = $path;
         $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);

@@ -55,7 +55,7 @@ class FileNamespace
         File $file,
         array $imports
     ) {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->startLine = $startLine;
         $this->endLine = $endLine;
         $this->name = $name;

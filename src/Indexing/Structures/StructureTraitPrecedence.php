@@ -36,7 +36,7 @@ class StructureTraitPrecedence
      */
     public function __construct(Structure $structure, Structure $trait, string $name)
     {
-        $this->id = Uuid::uuid4();
+        $this->id = (string) Uuid::uuid4();
         $this->structure = $structure;
         $this->trait = $trait;
         $this->name = $name;
