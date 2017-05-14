@@ -53,17 +53,18 @@ class DoctrineClassListProvider implements FileClassListProviderInterface
      */
     public function getAllForFile(string $file): array
     {
-        $iterator = $this->managerRegistry->getRepository(Structures\Structure::class)->createQueryBuilder('entity')
+        $items = $this->managerRegistry->getRepository(Structures\Structure::class)->createQueryBuilder('entity')
+            ->select('entity')
             ->innerJoin('entity.file', 'file')
             ->andWhere('file.path = :path')
             ->setParameter('path', $file)
             ->getQuery()
-            ->iterate();
+            ->execute();
 
         $result = [];
 
-        foreach ($iterator as $element) {
-            $result[$element['fqcn']] = $this->classlikeConverter->convert($element);
+        foreach ($items as $element) {
+            $result[$element->getFqcn()] = $this->classlikeConverter->convert($element);
         }
 
         return $result;
