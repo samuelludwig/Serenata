@@ -5,15 +5,15 @@ parameters:
 
 
 services:
-    fileNamespaceProvider.databaseBackend:
-        class: PhpIntegrator\Analysis\DatabaseFileNamespaceProvider
+    fileNamespaceProvider.storageBackend:
+        class: PhpIntegrator\Analysis\StorageFileNamespaceProvider
         arguments:
-            - '@indexDatabase'
+            - '@doctrineStorage'
 
     fileNamespaceProvider.cachingFileNamespaceProvider:
         class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
         arguments:
-            - '@fileNamespaceProvider.databaseBackend'
+            - '@fileNamespaceProvider.storageBackend'
 
     fileNamespaceProvider:
         alias: fileNamespaceProvider.cachingFileNamespaceProvider
