@@ -143,7 +143,7 @@ class ManagerRegistry extends AbstractManagerRegistry
      */
     public function ensureConnectionClosed(): void
     {
-        if ($this->connection) {
+        if ($this->connection !== null) {
             $this->connection->close();
             $this->connection = null;
         }
