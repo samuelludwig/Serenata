@@ -104,7 +104,13 @@ class ManagerRegistry extends AbstractManagerRegistry
     protected function resetService($name)
     {
         if ($name === 'defaultConnection') {
-            $this->ensureConnectionClosed();
+            if ($this->connection !== null) {
+                $this->connection->close();
+                $this->connection = null;
+            }
+
+            // Entity manager depends on connection, cascade reset.
+            $this->resetService('defaultEntityManager');
         } elseif ($name === 'defaultEntityManager') {
             $this->entityManager = null;
         }
@@ -133,19 +139,8 @@ class ManagerRegistry extends AbstractManagerRegistry
      */
     public function setDatabasePath(string $databasePath): void
     {
-        $this->ensureConnectionClosed();
-
         $this->databasePath = $databasePath;
-    }
 
-    /**
-     * @return void
-     */
-    public function ensureConnectionClosed(): void
-    {
-        if ($this->connection !== null) {
-            $this->connection->close();
-            $this->connection = null;
-        }
+        $this->resetService('defaultConnection');
     }
 }
