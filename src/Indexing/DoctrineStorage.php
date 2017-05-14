@@ -10,6 +10,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
 
+use PhpIntegrator\Analysis\MetadataProviderInterface;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProviderInterface;
 
 use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
@@ -19,7 +20,7 @@ use PhpIntegrator\Utility\NamespaceData;
 /**
  * Storage backend that uses Doctrine.
  */
-class DoctrineStorage implements StorageInterface
+class DoctrineStorage implements StorageInterface, MetadataProviderInterface
 {
     /**
      * @var ManagerRegistry
