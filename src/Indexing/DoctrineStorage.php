@@ -119,4 +119,15 @@ class DoctrineStorage implements StorageInterface
     {
         $this->managerRegistry->getConnection()->rollback();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMetaStaticMethodTypesFor(string $fqcn, string $method): array
+    {
+        return $this->managerRegistry->getRepository(Structures\MetaStaticMethodType::class)->findBy([
+            'fqcn' => $fqcn,
+            'name' => $method
+        ]);
+    }
 }

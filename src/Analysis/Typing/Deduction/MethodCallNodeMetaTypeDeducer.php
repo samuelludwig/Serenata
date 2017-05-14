@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Analysis\MetadataProviderInterface;
 
 use PhpParser\Node;
 
@@ -25,23 +25,23 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
     private $nodeTypeDeducer;
 
     /**
-     * @var IndexDatabase
+     * @var MetadataProviderInterface
      */
-    private $indexDatabase;
+    private $metadataProvider;
 
     /**
-     * @param NodeTypeDeducerInterface $delegate
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param IndexDatabase            $indexDatabase
+     * @param NodeTypeDeducerInterface  $delegate
+     * @param NodeTypeDeducerInterface  $nodeTypeDeducer
+     * @param MetadataProviderInterface $metadataProvider
      */
     public function __construct(
         NodeTypeDeducerInterface $delegate,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        IndexDatabase $indexDatabase
+        MetadataProviderInterface $metadataProvider
     ) {
         $this->delegate = $delegate;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->indexDatabase = $indexDatabase;
+        $this->metadataProvider = $metadataProvider;
     }
 
     /**
@@ -76,7 +76,7 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         foreach ($typesOfVar as $type) {
             $staticTypes = array_merge(
                 $staticTypes,
-                $this->indexDatabase->getMetaStaticMethodTypesFor($type, $methodName)
+                $this->metadataProvider->getMetaStaticMethodTypesFor($type, $methodName)
             );
         }
 
