@@ -45,6 +45,7 @@
 * The variable defined in a `catch` block wasn't always being returned in the variable list.
 * Namespaces supplied by the `NamespaceList` command will now always have a start and end line (no more `null` for the last namespace).
 * Anonymous namespaces supplied by the `NamespaceList` command will now always have `null` as name instead of an empty string for explicitly anonymous namespaces and `null` for implicitly anonymous namespaces, as they are both the same.
+* The `shortName` property for classlikes was removed, use `name` instead.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php
