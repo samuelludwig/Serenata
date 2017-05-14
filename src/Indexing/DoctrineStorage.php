@@ -131,4 +131,6 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
             'name' => $method
         ]);
     }
+
+    public function hack_remove_me() { $this->managerRegistry->getManager()->clear(); }
 }

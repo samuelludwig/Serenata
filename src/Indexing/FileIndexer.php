@@ -122,6 +122,12 @@ class FileIndexer implements FileIndexerInterface
             $this->storage->delete($file);
         }
 
+        // TODO: Rewrite indexing to update the file instead of delete it in its entirety later on. Flushing to remove
+        // should then be obsolete.
+        $this->storage->commitTransaction();
+        $this->storage->beginTransaction();
+        $this->storage->hack_remove_me();
+
         $file = new Structures\File($filePath, new DateTime(), []);
 
         $this->storage->persist($file);
