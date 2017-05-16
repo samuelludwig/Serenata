@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis;
 
+use LogicException;
+
 use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
