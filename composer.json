@@ -11,7 +11,7 @@
         "doctrine/cache": "^1.6",
         "doctrine/dbal": "^2.5",
         "evenement/evenement": "^2.0",
-        "nikic/php-parser": "dev-master#d5873b177b80ef292e4d10eb51449a3f411d93c0",
+        "nikic/php-parser": "3.0.5",
         "react/socket": "~0.4.4",
         "symfony/dependency-injection": "^3.2"
     },
