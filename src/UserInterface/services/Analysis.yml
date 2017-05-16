@@ -135,20 +135,44 @@ services:
     classlikeInfoBuilderProvider:
         alias: classlikeInfoBuilderProvider.cachingProxy
 
-    classlikeExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingClasslikeExistenceChecker
+    classlikeExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineClasslikeExistenceChecker
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
+
+    classlikeExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingClasslikeExistenceChecker
+        arguments:
+            - '@classlikeExistenceChecker.doctrine'
+
+    classlikeExistenceChecker:
+        alias: classlikeExistenceChecker.arrayCachingDecorator
+
+    globalFunctionExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineGlobalFunctionExistenceChecker
+        arguments:
+            - '@managerRegistry'
+
+    globalFunctionExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingGlobalFunctionExistenceChecker
+        arguments:
+            - '@globalFunctionExistenceChecker.doctrine'
 
     globalFunctionExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingGlobalFunctionExistenceChecker
+        alias: globalFunctionExistenceChecker.arrayCachingDecorator
+
+    globalConstantExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineGlobalConstantExistenceChecker
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
+
+    globalConstantExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingGlobalConstantExistenceChecker
+        arguments:
+            - '@globalConstantExistenceChecker.doctrine'
 
     globalConstantExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker
-        arguments:
-            - '@indexDatabase'
+        alias: globalConstantExistenceChecker.arrayCachingDecorator
 
     globalFunctionsProvider:
         class: PhpIntegrator\Analysis\GlobalFunctionsProvider
