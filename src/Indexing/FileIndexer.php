@@ -163,9 +163,11 @@ class FileIndexer implements FileIndexerInterface
         $useStatementIndexingVisitor = array_shift($visitors);
 
         // TODO: Refactor to traverse once.
+        $this->storage->commitTransaction();
         $traverser = new NodeTraverser();
         $traverser->addVisitor($useStatementIndexingVisitor);
         $traverser->traverse($nodes);
+        $this->storage->beginTransaction();
 
         $traverser = new NodeTraverser();
 
