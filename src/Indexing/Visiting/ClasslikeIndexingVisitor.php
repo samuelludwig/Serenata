@@ -503,6 +503,44 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $throws[] = $throwsData;
         }
 
+        $accessModifierMap = $this->getAccessModifierMap();
+
+        $accessModifier = null;
+
+        if ($node->isPublic()) {
+            $accessModifier = 'public';
+        } elseif ($node->isProtected()) {
+            $accessModifier = 'protected';
+        } elseif ($node->isPrivate()) {
+            $accessModifier = 'private';
+        }
+
+        $function = new Structures\Function_(
+            $node->name->name,
+            null,
+            $this->file,
+            $node->getLine(),
+            $node->getAttribute('endLine'),
+            false,
+            $documentation['deprecated'],
+            $documentation['descriptions']['short'],
+            $documentation['descriptions']['long'],
+            $documentation['return']['description'],
+            $localType,
+            $this->structure,
+            $accessModifier ? $accessModifierMap[$accessModifier] : null,
+            false,
+            $node->isStatic(),
+            $node->isAbstract(),
+            $node->isFinal(),
+            !empty($docComment),
+            $throws,
+            [],
+            $returnTypes
+        );
+
+        $this->storage->persist($function);
+
         $parameters = [];
 
         foreach ($node->getParams() as $param) {
@@ -568,59 +606,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
             }
 
-            $parameters[] = [
-                'name'             => $param->var->name,
-                'type_hint'        => $localType,
-                'types_serialized' => serialize($types),
-                'description'      => $parameterDoc ? $parameterDoc['description'] : null,
-                'default_value'    => $defaultValue,
-                'is_nullable'      => $isNullable ? 1 : 0,
-                'is_reference'     => $param->byRef ? 1 : 0,
-                'is_optional'      => $param->default ? 1 : 0,
-                'is_variadic'      => $param->variadic ? 1 : 0
-            ];
-        }
+            $parameter = new Structures\FunctionParameter(
+                $function,
+                $param->var->name,
+                $localType,
+                $types,
+                $parameterDoc ? $parameterDoc['description'] : null,
+                $defaultValue,
+                $isNullable,
+                $param->byRef,
+                $param->default,
+                $param->variadic
+            );
 
-        $accessModifierMap = $this->getAccessModifierMap();
-
-        $accessModifier = null;
-
-        if ($node->isPublic()) {
-            $accessModifier = 'public';
-        } elseif ($node->isProtected()) {
-            $accessModifier = 'protected';
-        } elseif ($node->isPrivate()) {
-            $accessModifier = 'private';
-        }
-
-        $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
-            'name'                    => $node->name->name,
-            'fqcn'                    => null,
-            'file_id'                 => $this->file,
-            'start_line'              => $node->getLine(),
-            'end_line'                => $node->getAttribute('endLine'),
-            'is_builtin'              => 0,
-            'is_abstract'             => $node->isAbstract() ? 1 : 0,
-            'is_final'                => $node->isFinal() ? 1 : 0,
-            'is_deprecated'           => $documentation['deprecated'] ? 1 : 0,
-            'short_description'       => $documentation['descriptions']['short'],
-            'long_description'        => $documentation['descriptions']['long'],
-            'return_description'      => $documentation['return']['description'],
-            'return_type_hint'        => $localType,
-            'structure_id'            => $this->structure,
-            'access_modifier_id'      => $accessModifier ? $accessModifierMap[$accessModifier] : null,
-            'is_magic'                => 0,
-            'is_static'               => $node->isStatic() ? 1 : 0,
-            'has_docblock'            => empty($docComment) ? 0 : 1,
-            'throws_serialized'       => serialize($throws),
-            'parameters_serialized'   => serialize($parameters),
-            'return_types_serialized' => serialize($returnTypes)
-        ]);
-
-        foreach ($parameters as $parameter) {
-            $parameter['function_id'] = $functionId;
-
-            $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameter);
+            $this->storage->persist($parameter);
         }
     }
 
