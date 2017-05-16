@@ -200,8 +200,11 @@ class Structure
         $this->hasDocblock = $hasDocblock;
 
         $this->parents = new ArrayCollection($parents);
+        $this->children = new ArrayCollection([]);
         $this->interfaces = new ArrayCollection($interfaces);
+        $this->implementors = new ArrayCollection([]);
         $this->traits = new ArrayCollection($traits);
+        $this->traitUsers = new ArrayCollection([]);
         $this->traitAliases = new ArrayCollection($traitAliases);
         $this->traitPrecedences = new ArrayCollection($traitPrecedences);
 
