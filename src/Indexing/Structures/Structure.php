@@ -198,6 +198,7 @@ class Structure
         $this->isAnnotation = $isAnnotation;
         $this->isDeprecated = $isDeprecated;
         $this->hasDocblock = $hasDocblock;
+
         $this->parents = new ArrayCollection($parents);
         $this->interfaces = new ArrayCollection($interfaces);
         $this->traits = new ArrayCollection($traits);
