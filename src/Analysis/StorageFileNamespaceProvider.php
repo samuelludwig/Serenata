@@ -39,13 +39,13 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
      */
     public function provide(string $file): array
     {
-        $file = $this->storage->findFileByPath($file);
+        $fileEntity = $this->storage->findFileByPath($file);
 
-        if ($file === null) {
+        if ($fileEntity === null) {
             throw new LogicException("Can't provide data for file \"{$file}\" because it wasn\'t indexed");
         }
 
-        return $this->mapNamespaces($file->getNamespaces());
+        return $this->mapNamespaces($fileEntity->getNamespaces());
     }
 
     /**
