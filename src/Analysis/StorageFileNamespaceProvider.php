@@ -86,7 +86,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
      */
     protected function mapImports(array $imports): array
     {
-        return array_map(function (array $import): Import {
+        return array_map(function (Structures\FileNamespaceImport $import): Import {
             return $this->mapImport($import);
         }, $imports);
     }
