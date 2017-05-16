@@ -5,8 +5,3 @@ parameters:
 
 
 services:
-    classlikeInfoBuilderProvider.cachingProxy:
-        class: PhpIntegrator\UserInterface\ClasslikeInfoBuilderProviderCachingProxy
-        arguments:
-            - '@classlikeInfoBuilderProvider.instance'
-            - '@cache'

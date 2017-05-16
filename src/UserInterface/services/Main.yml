@@ -15,6 +15,3 @@ parameters:
 services:
     cache:
         class: Doctrine\Common\Cache\ArrayCache
-
-    classlikeInfoBuilderProvider:
-        alias: classlikeInfoBuilderProvider.cachingProxy

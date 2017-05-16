@@ -17,10 +17,7 @@ use PhpIntegrator\Utility\NamespaceData;
 /**
  * Represents that database that is used for indexing.
  */
-class IndexDatabase implements
-    StorageInterface,
-    ClasslikeInfoBuilderProviderInterface,
-    NamespaceImportProviderInterface
+class IndexDatabase implements StorageInterface, NamespaceImportProviderInterface
 {
     /**
      * The version of the schema we're currently at. When there are large changes to the layout of the database, this

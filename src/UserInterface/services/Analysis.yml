@@ -115,26 +115,6 @@ services:
             - '@docblockAnalyzer'
             - '@typeAnalyzer'
 
-    indexDatabase:
-        class: PhpIntegrator\Indexing\IndexDatabase
-
-    classlikeInfoBuilderProvider.backend:
-        alias: indexDatabase
-
-    classlikeInfoBuilderProvider.instance:
-        class: PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider
-        arguments:
-            - '@classlikeInfoBuilderProvider.backend'
-
-    classlikeInfoBuilderProvider.cachingProxy:
-        class: PhpIntegrator\UserInterface\ClasslikeInfoBuilderProviderCachingProxy
-        arguments:
-            - '@classlikeInfoBuilderProvider.instance'
-            - '@cache'
-
-    classlikeInfoBuilderProvider:
-        alias: classlikeInfoBuilderProvider.cachingProxy
-
     classlikeExistenceChecker.doctrine:
         class: PhpIntegrator\Analysis\DoctrineClasslikeExistenceChecker
         arguments:
@@ -204,7 +184,7 @@ services:
             - '@inheritanceResolver'
             - '@interfaceImplementationResolver'
             - '@traitUsageResolver'
-            - '@classlikeInfoBuilderProvider'
+            - '@doctrineStorage'
             - '@typeAnalyzer'
 
     functionNameNodeFqsenDeterminer:
