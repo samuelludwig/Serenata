@@ -28,7 +28,7 @@ class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheckerInte
      */
     public function doesClassExist(string $fqcn): bool
     {
-        return !!$this->managerRegistry->getRepository(Structures\Classlike::class)->findOneBy([
+        return !!$this->managerRegistry->getRepository(Structures\Structure::class)->findOneBy([
             'fqcn' => $fqcn
         ]);
     }
