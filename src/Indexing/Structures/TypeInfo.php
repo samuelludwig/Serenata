@@ -34,7 +34,7 @@ class StructureType
      * @param string      $fqcn
      * @param string|null $resolvedType
      */
-    public function __construct(string $type, string $fqcn, ?string $resolvedType)
+    public function __construct(string $type, string $fqcn, ?string $resolvedType = null)
     {
         $this->type = $type;
         $this->fqcn = $fqcn;
