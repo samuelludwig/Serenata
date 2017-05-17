@@ -358,7 +358,7 @@ class Function_
      */
     public function getParameters(): array
     {
-        return $this->parameters;
+        return $this->parameters->toArray();
     }
 
     /**
