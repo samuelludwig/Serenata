@@ -264,7 +264,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
                 $defaultValue,
                 $isNullable,
                 $param->byRef,
-                $param->default,
+                !!$param->default,
                 $param->variadic
             );
 
