@@ -23,7 +23,7 @@ class ConstantConverter extends AbstractConverter
             'startLine'         => $constant->getStartLine(),
             'endLine'           => $constant->getEndLine(),
             'defaultValue'      => $constant->getDefaultValue(),
-            'filename'          => $constant->getFilename(),
+            'filename'          => $constant->getFile()->getPath(),
 
             'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
             'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
