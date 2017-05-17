@@ -21,7 +21,7 @@ class ClasslikeConverter extends AbstractConverter
             'startLine'          => $structure->getStartLine(),
             'endLine'            => $structure->getEndLine(),
             'filename'           => $structure->getFile()->getPath(),
-            'type'               => $structure->getType(),
+            'type'               => $structure->getType()->getName(),
             'isAbstract'         => $structure->getIsAbstract(),
             'isFinal'            => $structure->getIsFinal(),
             'isBuiltin'          => $structure->getIsBuiltin(),
