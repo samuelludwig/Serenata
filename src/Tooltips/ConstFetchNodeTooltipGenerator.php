@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalConstantsProvider;
+use PhpIntegrator\Analysis\ConstantListProviderInterface;
 
 use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
@@ -26,23 +26,23 @@ class ConstFetchNodeTooltipGenerator
     private $constFetchNodeFqsenDeterminer;
 
     /**
-     * @var GlobalConstantsProvider
+     * @var ConstantListProviderInterface
      */
-    private $globalConstantsProvider;
+    private $constantListProvider;
 
     /**
      * @param ConstantTooltipGenerator      $constantTooltipGenerator
-     * @param ConstNameNodeFqsenDeterminer $constFetchNodeFqsenDeterminer
-     * @param GlobalConstantsProvider       $globalConstantsProvider
+     * @param ConstNameNodeFqsenDeterminer  $constFetchNodeFqsenDeterminer
+     * @param ConstantListProviderInterface $constantListProvider
      */
     public function __construct(
         ConstantTooltipGenerator $constantTooltipGenerator,
         ConstNameNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
-        GlobalConstantsProvider $globalConstantsProvider
+        ConstantListProviderInterface $constantListProvider
     ) {
         $this->constantTooltipGenerator = $constantTooltipGenerator;
         $this->constFetchNodeFqsenDeterminer = $constFetchNodeFqsenDeterminer;
-        $this->globalConstantsProvider = $globalConstantsProvider;
+        $this->constantListProvider = $constantListProvider;
     }
 
     /**
@@ -70,7 +70,7 @@ class ConstFetchNodeTooltipGenerator
      */
     protected function getConstantInfo(string $fullyQualifiedName): array
     {
-        $functions = $this->globalConstantsProvider->getAll();
+        $functions = $this->constantListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
             throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);

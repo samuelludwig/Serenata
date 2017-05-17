@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
+use PhpIntegrator\Analysis\functionListProviderInterface;
 
 use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
@@ -26,23 +26,23 @@ class FuncCallNodeTooltipGenerator
     private $functionCallNodeFqsenDeterminer;
 
     /**
-     * @var GlobalFunctionsProvider
+     * @var functionListProviderInterface
      */
-    private $globalFunctionsProvider;
+    private $functionListProvider;
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator
      * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
-     * @param GlobalFunctionsProvider         $globalFunctionsProvider
+     * @param functionListProviderInterface   $functionListProvider
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
         FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
-        GlobalFunctionsProvider $globalFunctionsProvider
+        functionListProviderInterface $functionListProvider
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
         $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
-        $this->globalFunctionsProvider = $globalFunctionsProvider;
+        $this->functionListProvider = $functionListProvider;
     }
 
     /**
@@ -75,7 +75,7 @@ class FuncCallNodeTooltipGenerator
      */
     protected function getFunctionInfo(string $fullyQualifiedName): array
     {
-        $functions = $this->globalFunctionsProvider->getAll();
+        $functions = $this->functionListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
             throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);

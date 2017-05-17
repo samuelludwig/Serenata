@@ -154,17 +154,17 @@ services:
     globalConstantExistenceChecker:
         alias: globalConstantExistenceChecker.arrayCachingDecorator
 
-    globalFunctionsProvider:
-        class: PhpIntegrator\Analysis\GlobalFunctionsProvider
+    doctrineFunctionListProvider:
+        class: PhpIntegrator\Analysis\DoctrineFunctionListProvider
         arguments:
             - '@functionConverter'
-            - '@indexDatabase'
+            - '@managerRegistry'
 
-    globalConstantsProvider:
-        class: PhpIntegrator\Analysis\GlobalConstantsProvider
+    doctrineConstantListProvider:
+        class: PhpIntegrator\Analysis\DoctrineConstantListProvider
         arguments:
             - '@constantConverter'
-            - '@indexDatabase'
+            - '@managerRegistry'
 
     doctrineClassListProvider:
         class: PhpIntegrator\Analysis\DoctrineClassListProvider
@@ -212,7 +212,7 @@ services:
         class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
             - '@functionNameNodeFqsenDeterminer'
-            - '@globalFunctionsProvider'
+            - '@doctrineFunctionListProvider'
 
     methodCallMethodInfoRetriever:
         class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever

@@ -31,7 +31,7 @@ services:
         arguments:
             - '@functionTooltipGenerator'
             - '@functionNameNodeFqsenDeterminer'
-            - '@globalFunctionsProvider'
+            - '@doctrineFunctionListProvider'
 
     methodCallNodeTooltipGenerator:
         class: PhpIntegrator\Tooltips\MethodCallNodeTooltipGenerator
@@ -62,7 +62,7 @@ services:
         arguments:
             - '@constantTooltipGenerator'
             - '@constFetchNodeFqsenDeterminer'
-            - '@globalConstantsProvider'
+            - '@doctrineConstantListProvider'
 
     classConstFetchNodeTooltipGenerator:
         class: PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator
