@@ -415,23 +415,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $accessModifier = 'private';
             }
 
-            $propertyId = $this->storage->insert(IndexStorageItemEnum::PROPERTIES, [
-                'name'                  => $property->name,
-                'file_id'               => $this->file,
-                'start_line'            => $property->getLine(),
-                'end_line'              => $property->getAttribute('endLine'),
-                'default_value'         => $defaultValue,
-                'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-                'is_magic'              => 0,
-                'is_static'             => $node->isStatic() ? 1 : 0,
-                'has_docblock'          => empty($docComment) ? 0 : 1,
-                'short_description'     => $shortDescription,
-                'long_description'      => $documentation['descriptions']['long'],
-                'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-                'structure_id'          => $this->structure,
-                'access_modifier_id'    => $accessModifier ? $accessModifierMap[$accessModifier] : null,
-                'types_serialized'      => serialize($types)
-            ]);
+            $property = new Structures\Property(
+                $property->name,
+                $this->file,
+                $property->getLine(),
+                $property->getAttribute('endLine'),
+                $defaultValue,
+                $documentation['deprecated'],
+                false,
+                $node->isStatic(),
+                !empty($docComment),
+                $shortDescription,
+                $documentation['descriptions']['long'],
+                $varDocumentation ? $varDocumentation['description'] : null,
+                $this->structure,
+                $accessModifierMap[$accessModifier],
+                $types
+            );
+
+            $this->storage->persist($property);
         }
     }
 
