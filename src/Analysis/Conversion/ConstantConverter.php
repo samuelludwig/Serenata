@@ -28,7 +28,7 @@ class ConstantConverter extends AbstractConverter
             'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
             'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
             'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'private' : false,
-            'isStatic'          => $constant->getIsStatic(),
+            'isStatic'          => true,
             'isDeprecated'      => $constant->getIsDeprecated(),
             'hasDocblock'       => $constant->getHasDocblock(),
             'hasDocumentation'  => $constant->getHasDocumentation(),
