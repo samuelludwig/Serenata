@@ -30,7 +30,7 @@
         </many-to-one>
 
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
-            <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="false" />
+            <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="true" />
         </many-to-one>
     </entity>
 
