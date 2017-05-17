@@ -452,6 +452,16 @@ class Structure
     }
 
     /**
+     * @param Constant $constant
+     *
+     * @return void
+     */
+    public function addConstant(Constant $constant): void
+    {
+        $this->constants->add($constant);
+    }
+
+    /**
      * @return Property[]
      */
     public function getProperties(): array
@@ -460,10 +470,30 @@ class Structure
     }
 
     /**
+     * @param Property $property
+     *
+     * @return void
+     */
+    public function addProperty(Property $property): void
+    {
+        $this->properties->add($property);
+    }
+
+    /**
      * @return Function_[]
      */
     public function getMethods(): array
     {
         return $this->methods->toArray();
+    }
+
+    /**
+     * @param Function_ $method
+     *
+     * @return void
+     */
+    public function addMethod(Function_ $method): void
+    {
+        $this->methods->add($method);
     }
 }

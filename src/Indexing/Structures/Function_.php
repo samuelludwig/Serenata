@@ -187,6 +187,10 @@ class Function_
         $this->throws = $throws;
         $this->parameters = $parameters;
         $this->returnTypes = $returnTypes;
+
+        if ($structure) {
+            $structure->addMethod($this);
+        }
     }
 
     /**

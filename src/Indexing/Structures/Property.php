@@ -147,6 +147,8 @@ class Property
         $this->structure = $structure;
         $this->accessModifier = $accessModifier;
         $this->types = $types;
+
+        $structure->addProperty($this);
     }
 
     /**

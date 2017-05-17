@@ -139,6 +139,10 @@ class Constant
         $this->types = $types;
         $this->structure = $structure;
         $this->accessModifier = $accessModifier;
+
+        if ($structure) {
+            $structure->addConstant($this);
+        }
     }
 
     /**
