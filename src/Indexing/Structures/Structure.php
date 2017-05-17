@@ -388,7 +388,7 @@ class Structure
     {
         $this->interfaces->add($structure);
 
-        $structure->addImplementor($this);
+        $structure->implementors->add($this);
     }
 
     /**
@@ -406,8 +406,6 @@ class Structure
      */
     public function addImplementor(Structure $structure): void
     {
-        $this->implementors->add($structure);
-
         $structure->addInterface($this);
     }
 
