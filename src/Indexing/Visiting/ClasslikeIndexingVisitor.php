@@ -614,7 +614,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $defaultValue,
                 $isNullable,
                 $param->byRef,
-                $param->default,
+                !!$param->default,
                 $param->variadic
             );
 
