@@ -207,7 +207,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
      * @param string[]     $typeList
      * @param FilePosition $filePosition
      *
-     * @return array[]
+     * @return Structures\TypeInfo[]
      */
     protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
     {
@@ -216,10 +216,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         foreach ($typeList as $type) {
-            $types[] = [
-                'type' => $type,
-                'fqcn' => $positionalNameResolver->resolve($type, $filePosition)
-            ];
+            $types[] = new Structures\TypeInfo($type, $positionalNameResolver->resolve($type, $filePosition));
         }
 
         return $types;

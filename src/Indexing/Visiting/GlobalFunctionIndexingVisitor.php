@@ -156,8 +156,8 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             $typeData = array_shift($typeData);
 
             $throwsData = [
-                'type'        => $typeData['type'],
-                'full_type'   => $typeData['fqcn'],
+                'type'        => $typeData->getType(),
+                'full_type'   => $typeData->getFqcn(),
                 'description' => $throw['description'] ?: null
             ];
 
@@ -289,7 +289,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
      * @param string[]     $typeList
      * @param FilePosition $filePosition
      *
-     * @return array[]
+     * @return Structures\TypeInfo[]
      */
     protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
     {
@@ -298,10 +298,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
         $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         foreach ($typeList as $type) {
-            $types[] = [
-                'type' => $type,
-                'fqcn' => $positionalNameResolver->resolve($type, $filePosition)
-            ];
+            $types[] = new Structures\TypeInfo($type, $positionalNameResolver->resolve($type, $filePosition));
         }
 
         return $types;
