@@ -396,10 +396,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 );
 
                 $types = array_map(function (string $type) {
-                    return [
-                        'type' => $type,
-                        'fqcn' => $type
-                    ];
+                    return new Structures\TypeInfo($type, $type);
                 }, $typeList);
             }
 
@@ -686,10 +683,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             );
 
             $types = array_map(function (string $type) {
-                return [
-                    'type' => $type,
-                    'fqcn' => $type
-                ];
+                return new Structures\TypeInfo($type, $type);
             }, $typeList);
         }
 
