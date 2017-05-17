@@ -47,7 +47,7 @@ class FunctionConverter extends AbstractConverter
             'isBuiltin'         => $function->getIsBuiltin(),
             'startLine'         => $function->getStartLine(),
             'endLine'           => $function->getEndLine(),
-            'filename'          => $function->getPath(),
+            'filename'          => $function->getFile()->getPath(),
 
             'parameters'        => $parameters,
             'throws'            => $throwsAssoc,
