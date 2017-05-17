@@ -31,7 +31,7 @@ class ConstantConverter extends AbstractConverter
             'isStatic'          => true,
             'isDeprecated'      => $constant->getIsDeprecated(),
             'hasDocblock'       => $constant->getHasDocblock(),
-            'hasDocumentation'  => $constant->getHasDocumentation(),
+            'hasDocumentation'  => $constant->getHasDocblock(),
 
             'shortDescription'  => $constant->getShortDescription(),
             'longDescription'   => $constant->getLongDescription(),
