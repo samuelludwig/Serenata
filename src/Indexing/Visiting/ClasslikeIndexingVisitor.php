@@ -705,23 +705,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = 'private';
         }
 
-        $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $node->name->name,
-            'fqcn'                  => null,
-            'file_id'               => $this->file,
-            'start_line'            => $node->getLine(),
-            'end_line'              => $node->getAttribute('endLine'),
-            'default_value'         => $defaultValue,
-            'is_builtin'            => 0,
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'has_docblock'          => empty($docComment) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-            'types_serialized'      => serialize($types),
-            'structure_id'          => $this->structure,
-            'access_modifier_id'    => $accessModifier ? $accessModifierMap[$accessModifier] : null
-        ]);
+        $constant = new Structures\Constant(
+            $node->name->name,
+            null,
+            $this->file,
+            $node->getLine(),
+            $node->getAttribute('endLine'),
+            $defaultValue,
+            $documentation['deprecated'] ? 1 : 0,
+            false,
+            !empty($docComment),
+            $shortDescription,
+            $documentation['descriptions']['long'],
+            $varDocumentation ? $varDocumentation['description'] : null,
+            $types,
+            $this->structure,
+            $accessModifier ? $accessModifierMap[$accessModifier] : null
+        );
+
+        $this->storage->persist($constant);
     }
 
     /**
