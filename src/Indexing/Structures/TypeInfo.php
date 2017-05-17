@@ -7,7 +7,7 @@ use LogicException;
 /**
  * Represents a structure type.
  */
-class StructureType
+class TypeInfo
 {
     /**
      * @var string
