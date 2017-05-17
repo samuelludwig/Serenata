@@ -61,7 +61,7 @@ class ClassLikeTooltipGenerator
      */
     protected function generateFullName(array $info): string
     {
-        return "# Full Name\n*{$info['name']}*";
+        return "# Full Name\n*{$info['fqcn']}*";
     }
 
     /**
