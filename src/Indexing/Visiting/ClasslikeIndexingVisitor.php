@@ -476,14 +476,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes = $this->getTypeDataForTypeSpecification($documentation['return']['type'], $filePosition);
         } elseif ($localType) {
             $returnTypes = [
-                [
-                    'type' => $localType,
-                    'fqcn' => $resolvedType ?: $localType
-                ]
+                new Structures\TypeInfo($localType, $resolvedType ?: $localType)
             ];
 
             if ($isReturnTypeNullable) {
-                $returnTypes[] = ['type' => 'null', 'fqcn' => 'null'];
+                $returnTypes[] = [new Structures\TypeInfo('null', 'null')];
             }
         }
 
@@ -591,17 +588,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 $types = [
-                    [
-                        'type' => $parameterType,
-                        'fqcn' => $parameterFullType
-                    ]
+                    new Structures\TypeInfo($parameterType, $parameterFullType)
                 ];
 
                 if ($isNullable) {
-                    $types[] = [
-                        'type' => 'null',
-                        'fqcn' => 'null'
-                    ];
+                    $types[] = new Structures\TypeInfo('null', 'null');
                 }
             }
 

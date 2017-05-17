@@ -111,10 +111,7 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
             $typeList = $this->nodeTypeDeducer->deduce($node->args[1], $this->filePath, $defaultValue, 0);
 
             $types = array_map(function (string $type) {
-                return [
-                    'type' => $type,
-                    'fqcn' => $type
-                ];
+                return new Structures\TypeInfo($type, $type);
             }, $typeList);
         }
 

@@ -138,14 +138,11 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             $returnTypes = $this->getTypeDataForTypeSpecification($documentation['return']['type'], $filePosition);
         } elseif ($resolvedType) {
             $returnTypes = [
-                [
-                    'type' => $localType,
-                    'fqcn' => $resolvedType ? $resolvedType : $localType
-                ]
+                new Structures\TypeInfo($localType, $resolvedType ?: $localType)
             ];
 
             if ($node->getReturnType() instanceof Node\NullableType) {
-                $returnTypes[] = ['type' => 'null', 'fqcn' => 'null'];
+                $returnTypes[] = [new Structures\TypeInfo('null', 'null')];
             }
         }
 
@@ -241,16 +238,12 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 $types = [
-                    [
-                        'type' => $parameterType,
-                        'fqcn' => $parameterFullType
-                    ]
+                    new Structures\TypeInfo($parameterType, $parameterFullType)
                 ];
 
                 if ($isNullable) {
                     $types[] = [
-                        'type' => 'null',
-                        'fqcn' => 'null'
+                        new Structures\TypeInfo('null', 'null')
                     ];
                 }
             }

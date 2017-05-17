@@ -162,10 +162,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->filePath, $defaultValue, 0);
 
             $types = array_map(function (string $type) {
-                return [
-                    'type' => $type,
-                    'fqcn' => $type
-                ];
+                return new Structures\TypeInfo($type, $type);
             }, $typeList);
         }
 
