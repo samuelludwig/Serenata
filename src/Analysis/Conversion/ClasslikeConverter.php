@@ -18,6 +18,7 @@ class ClasslikeConverter extends AbstractConverter
     {
         return [
             'name'               => $structure->getName(),
+            'fqcn'               => $structure->getFqcn(),
             'startLine'          => $structure->getStartLine(),
             'endLine'            => $structure->getEndLine(),
             'filename'           => $structure->getFile()->getPath(),
