@@ -350,7 +350,7 @@ class Structure
     {
         $this->parents->add($structure);
 
-        $structure->addChild($this);
+        $structure->children->add($this);
     }
 
     /**
@@ -368,8 +368,6 @@ class Structure
      */
     public function addChild(Structure $structure): void
     {
-        $this->children->add($structure);
-
         $structure->addParent($this);
     }
 
