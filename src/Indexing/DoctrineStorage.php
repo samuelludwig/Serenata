@@ -85,6 +85,7 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     public function persist($entity): void
     {
         $this->managerRegistry->getManager()->persist($entity);
+        $this->managerRegistry->getManager()->flush();
     }
 
     /**
