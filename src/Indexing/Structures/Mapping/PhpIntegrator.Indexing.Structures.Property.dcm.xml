@@ -19,7 +19,6 @@
         <field name="shortDescription"   type="text"       nullable="true"  length="15000" />
         <field name="longDescription"    type="text"       nullable="true"  length="15000" />
         <field name="typeDescription"    type="text"       nullable="true"  length="15000" />
-        <field name="returnTypeHint"     type="string"     nullable="true"  length="255" />
         <field name="types"              type="json_array" nullable="false" />
 
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="properties">

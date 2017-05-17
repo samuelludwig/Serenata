@@ -75,11 +75,6 @@ class Property
     private $typeDescription;
 
     /**
-     * @var string|null
-     */
-    private $returnTypeHint;
-
-    /**
      * @var Structure
      */
     private $structure;
@@ -107,7 +102,6 @@ class Property
      * @param string|null    $shortDescription
      * @param string|null    $longDescription
      * @param string|null    $typeDescription
-     * @param string|null    $returnTypeHint
      * @param Structure      $structure
      * @param AccessModifier $accessModifier
      * @param TypeInfo[]     $types
@@ -125,7 +119,6 @@ class Property
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        ?string $returnTypeHint,
         Structure $structure,
         AccessModifier $accessModifier,
         array $types
@@ -143,7 +136,6 @@ class Property
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
-        $this->returnTypeHint = $returnTypeHint;
         $this->structure = $structure;
         $this->accessModifier = $accessModifier;
         $this->types = $types;
@@ -253,14 +245,6 @@ class Property
     public function getTypeDescription(): ?string
     {
         return $this->typeDescription;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getReturnTypeHint(): ?string
-    {
-        return $this->returnTypeHint;
     }
 
     /**
