@@ -106,10 +106,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'name'               => 'class',
                     'fqcn'               => null,
                     'isBuiltin'          => true,
-                    'startLine'          => 0,
-                    'endLine'            => 0,
-                    'defaultValue'       => 'ignored',
-                    'filename'           => null,
+                    'startLine'          => 10,
+                    'endLine'            => 10,
+                    'defaultValue'       => 'A\SimpleClass',
+                    'filename'           => $this->getPathFor($fileName),
                     'isPublic'           => true,
                     'isProtected'        => false,
                     'isPrivate'          => false,
@@ -122,7 +122,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'longDescription'    => null,
                     'typeDescription'    => null,
 
-                    'types'             => [                        [
+                    'types'             => [
+                        [
                             'type'         => 'string',
                             'fqcn'         => 'string',
                             'resolvedType' => 'string'
@@ -130,7 +131,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     ],
 
                     'declaringClass'     => [
-                        'name'      => '\A\SimpleClass',
+                        'fqcn'      => '\A\SimpleClass',
                         'filename'  => $this->getPathFor($fileName),
                         'startLine' => 10,
                         'endLine'   => 13,
@@ -138,13 +139,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     ],
 
                     'declaringStructure' => [
-                        'name'            => '\A\SimpleClass',
+                        'fqcn'            => '\A\SimpleClass',
                         'filename'        => $this->getPathFor($fileName),
                         'startLine'       => 10,
                         'endLine'         => 13,
                         'type'            => 'class',
-                        'startLineMember' => 0,
-                        'endLineMember'   => 0
+                        'startLineMember' => 10,
+                        'endLineMember'   => 10
                     ]
                 ]
             ],
@@ -220,7 +221,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'override'           => null,
 
             'declaringClass' => [
-                'name'      => '\A\TestClass',
+                'fqcn'      => '\A\TestClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 5,
                 'endLine'   => 15,
@@ -228,7 +229,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\TestClass',
+                'fqcn'            => '\A\TestClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 5,
                 'endLine'         => 15,
@@ -442,7 +443,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'implementations'    => [],
 
             'declaringClass'     => [
-                'name'      => '\A\TestClass',
+                'fqcn'      => '\A\TestClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 5,
                 'endLine'   => 23,
@@ -450,7 +451,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\TestClass',
+                'fqcn'            => '\A\TestClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 5,
                 'endLine'         => 23,
@@ -517,7 +518,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringClass'     => [
-                'name'      => '\A\TestClass',
+                'fqcn'      => '\A\TestClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 5,
                 'endLine'   => 15,
@@ -525,7 +526,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\TestClass',
+                'fqcn'            => '\A\TestClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 5,
                 'endLine'         => 15,
@@ -703,7 +704,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
@@ -711,7 +712,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 21,
                 'endLine'         => 39,
@@ -757,7 +758,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
@@ -765,7 +766,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentTrait',
+                'fqcn'            => '\A\ParentTrait',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 13,
                 'endLine'         => 19,
@@ -811,7 +812,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
@@ -819,7 +820,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 21,
                 'endLine'         => 39,
@@ -838,7 +839,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
@@ -846,7 +847,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 21,
                 'endLine'         => 39,
@@ -892,7 +893,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\TestTrait',
+                'fqcn'      => '\A\TestTrait',
                 'filename'  =>  $this->getPathFor($fileName),
                 'startLine' => 41,
                 'endLine'   => 49,
@@ -900,7 +901,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\TestTrait',
+                'fqcn'            => '\A\TestTrait',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 41,
                 'endLine'         => 49,
@@ -958,7 +959,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  =>  $this->getPathFor($fileName),
                 'startLine' => 10,
                 'endLine'   => 16,
@@ -966,7 +967,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 10,
                 'endLine'         => 16,
@@ -997,7 +998,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'     => 7,
 
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface',
+                    'fqcn'      => '\A\TestInterface',
                     'filename'  =>  $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
@@ -1005,7 +1006,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface',
+                    'fqcn'            => '\A\TestInterface',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1022,7 +1023,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  =>  $this->getPathFor($fileName),
                 'startLine' => 10,
                 'endLine'   => 16,
@@ -1030,7 +1031,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 10,
                 'endLine'         => 16,
@@ -1058,7 +1059,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'endLine'   => 12,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 15,
                 'endLine'   => 21,
@@ -1066,7 +1067,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentTrait',
+                'fqcn'            => '\A\ParentTrait',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 10,
                 'endLine'         => 13,
@@ -1081,7 +1082,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'endLine'   => 19,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 15,
                 'endLine'   => 21,
@@ -1089,7 +1090,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 15,
                 'endLine'         => 21,
@@ -1104,7 +1105,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'endLine'   => 20,
 
             'declaringClass' => [
-                'name'      => '\A\ParentClass',
+                'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 15,
                 'endLine'   => 21,
@@ -1112,7 +1113,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\A\ParentClass',
+                'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
                 'startLine'       => 15,
                 'endLine'         => 21,
@@ -1165,7 +1166,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'   => 7,
 
                 'declaringClass' => [
-                    'name'      => '\A\ParentClass',
+                    'fqcn'      => '\A\ParentClass',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 10,
                     'endLine'   => 13,
@@ -1173,7 +1174,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\ParentInterface',
+                    'fqcn'            => '\A\ParentInterface',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1184,8 +1185,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['parentInterfaceMethod']['implementations']);
 
-        $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1203,7 +1204,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'   => 7,
 
                 'declaringClass' => [
-                    'name'      => '\A\ParentInterface',
+                    'fqcn'      => '\A\ParentInterface',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
@@ -1211,7 +1212,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\ParentInterface',
+                    'fqcn'            => '\A\ParentInterface',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1224,8 +1225,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertNull($output['methods']['interfaceParentMethod']['override']);
 
-        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1243,7 +1244,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'   => 7,
 
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface',
+                    'fqcn'      => '\A\TestInterface',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
@@ -1251,7 +1252,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface',
+                    'fqcn'            => '\A\TestInterface',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1262,8 +1263,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['interfaceMethod']['implementations']);
 
-        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1557,13 +1558,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertThat($output['methods'], $this->arrayHasKey('childMethod'));
 
         // Do a couple of sanity checks.
-        $this->assertEquals('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseClass', $output['properties']['inheritedProperty']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseClass', $output['methods']['inheritedMethod']['declaringClass']['name']);
+        $this->assertEquals('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\BaseClass', $output['properties']['inheritedProperty']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\BaseClass', $output['methods']['inheritedMethod']['declaringClass']['fqcn']);
 
-        $this->assertEquals('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringStructure']['name']);
-        $this->assertEquals('\A\BaseClass', $output['properties']['inheritedProperty']['declaringStructure']['name']);
-        $this->assertEquals('\A\BaseClass', $output['methods']['inheritedMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringStructure']['fqcn']);
+        $this->assertEquals('\A\BaseClass', $output['properties']['inheritedProperty']['declaringStructure']['fqcn']);
+        $this->assertEquals('\A\BaseClass', $output['methods']['inheritedMethod']['declaringStructure']['fqcn']);
 
         $output = $this->getClassInfo($fileName, 'A\BaseClass');
 
@@ -1590,15 +1591,15 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertThat($output['methods'], $this->arrayHasKey('methodFromSecondInterface'));
 
         // Do a couple of sanity checks.
-        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['name']);
+        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['name']);
+        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1622,23 +1623,23 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertThat($output['methods'], $this->arrayHasKey('baseTraitMethod'));
 
         // Do a couple of sanity checks.
-        $this->assertEquals('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['name']);
+        $this->assertEquals('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestClass', $output['methods']['test1']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['test1']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
         $this->assertThat($output['methods'], $this->arrayHasKey('test1'));
@@ -1646,11 +1647,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertTrue($output['methods']['test1']['isPrivate']);
 
-        $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['name']);
-        $this->assertEquals('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['name']);
-        $this->assertEquals('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1662,11 +1663,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['name']);
-        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
         $this->assertEmpty($output['methods']['someMethod']['implementations']);
     }
@@ -1680,11 +1681,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['name']);
+        $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
         $this->assertEmpty($output['methods']['someMethod']['implementations']);
     }
@@ -1698,11 +1699,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestInterface');
 
-        $this->assertEquals('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['name']);
-        $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['name']);
+        $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['fqcn']);
 
         $this->assertEmpty($output['methods']['interfaceMethod']['implementations']);
     }
@@ -1716,11 +1717,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['name']);
-        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['name']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['fqcn']);
 
         $this->assertNull($output['methods']['someMethod']['override']);
     }
@@ -1734,8 +1735,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
         $this->assertEmpty($output['methods']['someMethod']['implementations']);
 
@@ -1751,8 +1752,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1764,13 +1765,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
         $this->assertEquals([
             [
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface1',
+                    'fqcn'      => '\A\TestInterface1',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
@@ -1778,7 +1779,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface1',
+                    'fqcn'            => '\A\TestInterface1',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1793,7 +1794,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
             [
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface2',
+                    'fqcn'      => '\A\TestInterface2',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 10,
                     'endLine'   => 13,
@@ -1801,7 +1802,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface2',
+                    'fqcn'            => '\A\TestInterface2',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 10,
                     'endLine'         => 13,
@@ -1827,13 +1828,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
         $this->assertEquals([
             [
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface1',
+                    'fqcn'      => '\A\TestInterface1',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
@@ -1841,7 +1842,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface1',
+                    'fqcn'            => '\A\TestInterface1',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1856,7 +1857,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
             [
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface2',
+                    'fqcn'      => '\A\TestInterface2',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 10,
                     'endLine'   => 13,
@@ -1864,7 +1865,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface2',
+                    'fqcn'            => '\A\TestInterface2',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 10,
                     'endLine'         => 13,
@@ -1890,13 +1891,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['name']);
-        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['name']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
         $this->assertEquals([
             [
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface1',
+                    'fqcn'      => '\A\TestInterface1',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
@@ -1904,7 +1905,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface1',
+                    'fqcn'            => '\A\TestInterface1',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 5,
                     'endLine'         => 8,
@@ -1919,7 +1920,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
             [
                 'declaringClass' => [
-                    'name'      => '\A\TestInterface2',
+                    'fqcn'      => '\A\TestInterface2',
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 10,
                     'endLine'   => 13,
@@ -1927,7 +1928,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 ],
 
                 'declaringStructure' => [
-                    'name'            => '\A\TestInterface2',
+                    'fqcn'            => '\A\TestInterface2',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 10,
                     'endLine'         => 13,
@@ -2380,7 +2381,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'implementations'    => null,
 
             'declaringClass' => [
-                'name'      => '\IteratorAggregate',
+                'fqcn'      => '\IteratorAggregate',
                 'filename'  => null,
                 'startLine' => 0,
                 'endLine'   => 0,
@@ -2388,7 +2389,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ],
 
             'declaringStructure' => [
-                'name'            => '\IteratorAggregate',
+                'fqcn'            => '\IteratorAggregate',
                 'filename'        => null,
                 'startLine'       => 0,
                 'endLine'         => 0,
@@ -2416,7 +2417,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getBuiltinClassInfo('\SeekableIterator');
 
-        $this->assertEquals('\Iterator', $output['methods']['next']['declaringClass']['name']);
+        $this->assertEquals('\Iterator', $output['methods']['next']['declaringClass']['fqcn']);
     }
 
     /**
@@ -2426,7 +2427,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getBuiltinClassInfo('\DomainException');
 
-        $this->assertEquals('\Exception', $output['properties']['message']['declaringClass']['name']);
+        $this->assertEquals('\Exception', $output['properties']['message']['declaringClass']['fqcn']);
     }
 
     /**
@@ -2436,7 +2437,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getBuiltinClassInfo('\SplTempFileObject');
 
-        $this->assertEquals('\SplFileObject', $output['constants']['DROP_NEW_LINE']['declaringClass']['name']);
+        $this->assertEquals('\SplFileObject', $output['constants']['DROP_NEW_LINE']['declaringClass']['fqcn']);
     }
 
     /**
