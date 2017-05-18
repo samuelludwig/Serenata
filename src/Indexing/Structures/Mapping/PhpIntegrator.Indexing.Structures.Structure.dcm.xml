@@ -63,7 +63,7 @@
 
         </one-to-many>
 
-        <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\StructureTraitAlias" mapped-by="structure">
+        <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\StructureTraitPrecedence" mapped-by="structure">
 
         </one-to-many>
 
