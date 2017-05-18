@@ -418,11 +418,33 @@ class Structure
     }
 
     /**
+     * @param Structure $structure
+     *
+     * @return void
+     */
+    public function addTrait(Structure $structure): void
+    {
+        $this->traits->add($structure);
+
+        $structure->traitUsers->add($this);
+    }
+
+    /**
      * @return Structure[]
      */
     public function getTraitUsers(): array
     {
         return $this->traitUsers->toArray();
+    }
+
+    /**
+     * @param Structure $structure
+     *
+     * @return void
+     */
+    public function addTraitUser(Structure $structure): void
+    {
+        $structure->addTrait($this);
     }
 
     /**

@@ -302,10 +302,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->traitsUsed[$traitFqcn] = true;
 
-            $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_LINKED, [
-                'structure_id'          => $this->structure,
-                'linked_structure_fqcn' => $traitFqcn
-            ]);
+            $linkEntity = $this->storage->findStructureByFqcn($traitFqcn);
+
+            $this->structure->addTrait($linkEntity);
         }
 
         $accessModifierMap = $this->getAccessModifierMap();
