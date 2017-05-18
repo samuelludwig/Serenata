@@ -281,6 +281,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             );
         }
 
+        $this->indexClassKeyword($structure);
+
         $this->structure = $structure;
     }
 
@@ -853,6 +855,34 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->persist($parameter);
         }
+    }
+
+    /**
+     * @param Structures\Structure $structure
+     *
+     * @return void
+     */
+    protected function indexClassKeyword(Structures\Structure $structure): void
+    {
+        $constant = new Structures\Constant(
+            'class',
+            null,
+            $this->file,
+            $structure->getStartLine(),
+            $structure->getStartLine(),
+            mb_substr($structure->getFqcn(), 1),
+            false,
+            true,
+            false,
+            'PHP built-in class constant that evaluates to the FCQN.',
+            null,
+            null,
+            [new Structures\TypeInfo('string', 'string')],
+            $structure,
+            $this->getAccessModifierMap()['public']
+        );
+
+        $this->storage->persist($constant);
     }
 
     /**
