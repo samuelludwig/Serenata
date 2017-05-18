@@ -723,7 +723,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param array                     $rawData
-     * @param int                       $structure
+     * @param Structures\Structure      $structure
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
      *
@@ -731,7 +731,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexMagicProperty(
         array $rawData,
-        int $structure,
+        Structures\Structure $structure,
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
@@ -763,17 +763,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param array        $rawData
-     * @param int|null     $structure
-     * @param int|null     $amId
-     * @param FilePosition $filePosition
+     * @param array                     $rawData
+     * @param Structures\Structure      $structure
+     * @param Structures\AccessModifier $accessModifier
+     * @param FilePosition              $filePosition
      *
      * @return void
      */
     protected function indexMagicMethod(
         array $rawData,
-        ?int $structure,
-        ?int $amId,
+        Structures\Structure $structure,
+        Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
         $returnTypes = [];
@@ -795,7 +795,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             null,
             null,
             $structure,
-            $amId,
+            $accessModifier,
             true,
             $rawData['isStatic'],
             false,
