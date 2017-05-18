@@ -276,7 +276,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->indexMagicMethod(
                 $methodData,
-                $this->file,
                 $structure,
                 $accessModifierMap['public'],
                 $filePosition
@@ -754,7 +753,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param array        $rawData
-     * @param int          $file
      * @param int|null     $structure
      * @param int|null     $amId
      * @param FilePosition $filePosition
@@ -763,7 +761,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexMagicMethod(
         array $rawData,
-        int $file,
         ?int $structure,
         ?int $amId,
         FilePosition $filePosition
@@ -774,7 +771,31 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes = $this->getTypeDataForTypeSpecification($rawData['type'], $filePosition);
         }
 
-        $parameters = [];
+        $function = new Structures\Function_(
+            $rawData['name'],
+            null,
+            $this->file,
+            $filePosition->getPosition()->getLine(),
+            $filePosition->getPosition()->getLine(),
+            false,
+            false,
+            $rawData['description'],
+            null,
+            null,
+            null,
+            $structure,
+            $amId,
+            true,
+            $rawData['isStatic'],
+            false,
+            false,
+            false,
+            [],
+            [],
+            $returnTypes
+        );
+
+        $this->storage->persist($function);
 
         foreach ($rawData['requiredParameters'] as $parameterName => $parameter) {
             $types = [];
@@ -783,17 +804,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
             }
 
-            $parameters[] = [
-                'name'             => mb_substr($parameterName, 1),
-                'type_hint'        => null,
-                'types_serialized' => serialize($types),
-                'description'      => null,
-                'default_value'    => null,
-                'is_nullable'      => 0,
-                'is_reference'     => 0,
-                'is_optional'      => 0,
-                'is_variadic'      => 0
-            ];
+            $parameter = new Structures\FunctionParameter(
+                $function,
+                mb_substr($parameterName, 1),
+                null,
+                $types,
+                null,
+                null,
+                false,
+                false,
+                false,
+                false
+            );
+
+            $this->storage->persist($parameter);
         }
 
         foreach ($rawData['optionalParameters'] as $parameterName => $parameter) {
@@ -803,46 +827,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
             }
 
-            $parameters[] = [
-                'name'             => mb_substr($parameterName, 1),
-                'type_hint'        => null,
-                'types_serialized' => serialize($types),
-                'description'      => null,
-                'default_value'    => null,
-                'is_nullable'      => 0,
-                'is_reference'     => 0,
-                'is_optional'      => 1,
-                'is_variadic'      => 0,
-            ];
-        }
+            $parameter = new Structures\FunctionParameter(
+                $function,
+                mb_substr($parameterName, 1),
+                null,
+                $types,
+                null,
+                null,
+                false,
+                false,
+                true,
+                false
+            );
 
-        $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
-            'name'                    => $rawData['name'],
-            'fqcn'                    => null,
-            'file_id'                 => $file,
-            'start_line'              => $filePosition->getPosition()->getLine(),
-            'end_line'                => $filePosition->getPosition()->getLine(),
-            'is_builtin'              => 0,
-            'is_abstract'             => 0,
-            'is_deprecated'           => 0,
-            'short_description'       => $rawData['description'],
-            'long_description'        => null,
-            'return_description'      => null,
-            'return_type_hint'        => null,
-            'structure_id'            => $structure,
-            'access_modifier_id'      => $amId,
-            'is_magic'                => 1,
-            'is_static'               => $rawData['isStatic'] ? 1 : 0,
-            'has_docblock'            => 0,
-            'throws_serialized'       => serialize([]),
-            'parameters_serialized'   => serialize($parameters),
-            'return_types_serialized' => serialize($returnTypes)
-        ]);
-
-        foreach ($parameters as $parameter) {
-            $parameter['function_id'] = $functionId;
-
-            $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameter);
+            $this->storage->persist($parameter);
         }
     }
 
