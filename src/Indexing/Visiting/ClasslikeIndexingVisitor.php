@@ -311,7 +311,14 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         foreach ($node->adaptations as $adaptation) {
             if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
-                $trait = $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null;
+                $traitFqcn = $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null;
+                $traitFqcn = $traitFqcn !== null ? $this->typeAnalyzer->getNormalizedFqcn($traitFqcn) : null;
+
+                $trait = null;
+
+                if ($traitFqcn !== null) {
+                    $trait = $this->storage->findStructureByFqcn($traitFqcn);
+                }
 
                 $accessModifier = null;
 
@@ -323,14 +330,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $accessModifier = 'private';
                 }
 
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_ALIASES, [
-                    'structure_id'         => $this->structure,
-                    'trait_structure_fqcn' => ($trait !== null) ?
-                        $this->typeAnalyzer->getNormalizedFqcn($trait) : null,
-                    'access_modifier_id'   => $accessModifier ? $accessModifierMap[$accessModifier] : null,
-                    'name'                 => $adaptation->method,
-                    'alias'                => $adaptation->newName
-                ]);
+                $traitAlias = new Structures\StructureTraitAlias(
+                    $this->structure,
+                    $trait,
+                    $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                    $adaptation->method,
+                    $adaptation->newName
+                );
+
+                $this->storage->persist($traitAlias);
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 $fqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
 

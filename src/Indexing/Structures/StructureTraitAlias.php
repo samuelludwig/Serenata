@@ -59,6 +59,8 @@ class StructureTraitAlias
         $this->accessModifier = $accessModifier;
         $this->name = $name;
         $this->alias = $alias;
+
+        $structure->addTraitAlias($this);
     }
 
     /**

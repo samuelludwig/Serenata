@@ -456,6 +456,16 @@ class Structure
     }
 
     /**
+     * @param StructureTraitAlias $structureTraitAlias
+     *
+     * @return void
+     */
+    public function addTraitAlias(StructureTraitAlias $structureTraitAlias): void
+    {
+        $this->traitAliases->add($structureTraitAlias);
+    }
+
+    /**
      * @return StructureTraitPrecedence[]
      */
     public function getTraitPrecedences(): array
