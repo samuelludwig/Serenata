@@ -84,7 +84,7 @@ class TraitUsageResolver extends AbstractResolver
             }
 
             $childProperty['declaringStructure'] = [
-                'name'            => $traitPropertyData['declaringStructure']['name'],
+                'fqcn'            => $traitPropertyData['declaringStructure']['fqcn'],
                 'filename'        => $traitPropertyData['declaringStructure']['filename'],
                 'startLine'       => $traitPropertyData['declaringStructure']['startLine'],
                 'endLine'         => $traitPropertyData['declaringStructure']['endLine'],
@@ -100,7 +100,7 @@ class TraitUsageResolver extends AbstractResolver
             'override' => $overriddenPropertyData,
 
             'declaringClass' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
@@ -135,7 +135,7 @@ class TraitUsageResolver extends AbstractResolver
                     ]
                 ]);
             } else {
-                if ($childMethod['declaringStructure']['name'] === $class['name']) {
+                if ($childMethod['declaringStructure']['fqcn'] === $class['fqcn']) {
                     // We are in the special case where the class is defining a method with the same name as a method
                     // we're trying to import from a trait. In that case the class' method takes precedence.
                     if (!$childMethod['override']) {
@@ -181,9 +181,9 @@ class TraitUsageResolver extends AbstractResolver
                 );
             }
 
-            if ($childMethod['declaringStructure']['name'] !== $class['name']) {
+            if ($childMethod['declaringStructure']['fqcn'] !== $class['fqcn']) {
                 $childMethod['declaringStructure'] = [
-                    'name'            => $traitMethodData['declaringStructure']['name'],
+                    'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
                     'filename'        => $traitMethodData['declaringStructure']['filename'],
                     'startLine'       => $traitMethodData['declaringStructure']['startLine'],
                     'endLine'         => $traitMethodData['declaringStructure']['endLine'],
@@ -193,7 +193,7 @@ class TraitUsageResolver extends AbstractResolver
                 ];
             } else {
                 $childMethod['declaringStructure'] = [
-                    'name'            => $class['name'],
+                    'fqcn'            => $class['fqcn'],
                     'filename'        => $class['filename'],
                     'startLine'       => $class['startLine'],
                     'endLine'         => $class['endLine'],
@@ -205,7 +205,7 @@ class TraitUsageResolver extends AbstractResolver
         } else {
             $childMethod = [
                 'declaringStructure' => [
-                    'name'            => $traitMethodData['declaringStructure']['name'],
+                    'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
                     'filename'        => $traitMethodData['declaringStructure']['filename'],
                     'startLine'       => $traitMethodData['declaringStructure']['startLine'],
                     'endLine'         => $traitMethodData['declaringStructure']['endLine'],
@@ -221,7 +221,7 @@ class TraitUsageResolver extends AbstractResolver
             'implementations' => $implementationData,
 
             'declaringClass' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],

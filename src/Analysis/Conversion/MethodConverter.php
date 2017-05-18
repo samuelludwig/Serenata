@@ -34,7 +34,7 @@ class MethodConverter extends FunctionConverter
             'implementations' => [],
 
             'declaringClass' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
@@ -42,7 +42,7 @@ class MethodConverter extends FunctionConverter
             ],
 
             'declaringStructure' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],

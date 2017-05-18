@@ -23,7 +23,7 @@ class ClasslikeConstantConverter extends ConstantConverter
 
         return array_merge($data, [
             'declaringClass' => [
-                'name'      => $class['name'],
+                'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
@@ -31,7 +31,7 @@ class ClasslikeConstantConverter extends ConstantConverter
             ],
 
             'declaringStructure' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
