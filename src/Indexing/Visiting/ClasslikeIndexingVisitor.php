@@ -503,8 +503,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $typeData = array_shift($typeData);
 
             $throwsData = [
-                'type'        => $typeData['type'],
-                'full_type'   => $typeData['fqcn'],
+                'type'        => $typeData->getType(),
+                'full_type'   => $typeData->getFqcn(),
                 'description' => $throw['description'] ?: null
             ];
 
