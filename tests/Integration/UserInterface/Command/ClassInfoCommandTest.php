@@ -77,10 +77,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $output = $this->getClassInfo($fileName, 'A\SimpleClass');
 
         $this->assertEquals([
-            'name'               => '\A\SimpleClass',
+            'name'               => 'SimpleClass',
+            'fqcn'               => '\A\SimpleClass',
             'startLine'          => 10,
             'endLine'            => 13,
-            'shortName'          => 'SimpleClass',
             'filename'           => $this->getPathFor($fileName),
             'type'               => 'class',
             'isAbstract'         => false,
@@ -2170,7 +2170,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'TestClass');
 
-        $this->assertEquals('\TestClass', $output['name']);
+        $this->assertEquals('\TestClass', $output['fqcn']);
     }
 
     /**
@@ -2318,10 +2318,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $output = $this->getBuiltinClassInfo('\IteratorAggregate');
 
         $this->assertArraySubset([
-            'name'             => '\IteratorAggregate',
+            'name'             => 'IteratorAggregate',
+            'fqcn'             => '\IteratorAggregate',
             'startLine'        => 0,
             'endLine'          => 0,
-            'shortName'        => 'IteratorAggregate',
             'filename'         => null,
             'type'             => 'interface',
             'isAbstract'       => false,
