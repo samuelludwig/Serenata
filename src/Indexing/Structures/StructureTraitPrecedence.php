@@ -40,6 +40,8 @@ class StructureTraitPrecedence
         $this->structure = $structure;
         $this->trait = $trait;
         $this->name = $name;
+
+        $structure->addTraitPrecedence($this);
     }
 
     /**

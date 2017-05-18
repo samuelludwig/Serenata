@@ -340,13 +340,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $this->storage->persist($traitAlias);
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
-                $fqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
+                $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
+                $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_PRECEDENCES, [
-                    'structure_id'         => $this->structure,
-                    'trait_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($fqcn),
-                    'name'                 => $adaptation->method
-                ]);
+                $trait = $this->storage->findStructureByFqcn($traitFqcn);
+
+                $traitPrecedence = new Structures\StructureTraitPrecedence(
+                    $this->structure,
+                    $trait,
+                    $adaptation->method
+                );
+
+                $this->storage->persist($traitPrecedence);
             }
         }
     }

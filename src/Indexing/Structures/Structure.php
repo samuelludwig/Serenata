@@ -474,6 +474,16 @@ class Structure
     }
 
     /**
+     * @param StructureTraitPrecedence $structureTraitPrecedence
+     *
+     * @return void
+     */
+    public function addTraitPrecedence(StructureTraitPrecedence $structureTraitPrecedence): void
+    {
+        $this->traitPrecedences->add($structureTraitPrecedence);
+    }
+
+    /**
      * @return Constant[]
      */
     public function getConstants(): array
