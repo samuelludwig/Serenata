@@ -262,7 +262,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->indexMagicProperty(
                 $propertyData,
-                $this->file,
                 $structure,
                 $accessModifierMap['public'],
                 $filePosition
@@ -723,19 +722,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param array        $rawData
-     * @param int          $file
-     * @param int          $structure
-     * @param int          $amId
-     * @param FilePosition $filePosition
+     * @param array                     $rawData
+     * @param int                       $structure
+     * @param Structures\AccessModifier $accessModifier
+     * @param FilePosition              $filePosition
      *
      * @return void
      */
     protected function indexMagicProperty(
         array $rawData,
-        int $file,
         int $structure,
-        int $amId,
+        Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
         $types = [];
@@ -744,23 +741,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $types = $this->getTypeDataForTypeSpecification($rawData['type'], $filePosition);
         }
 
-        $propertyId = $this->storage->insert(IndexStorageItemEnum::PROPERTIES, [
-            'name'                  => $rawData['name'],
-            'file_id'               => $file,
-            'start_line'            => $filePosition->getPosition()->getLine(),
-            'end_line'              => $filePosition->getPosition()->getLine(),
-            'default_value'         => null,
-            'is_deprecated'         => 0,
-            'is_magic'              => 1,
-            'is_static'             => $rawData['isStatic'] ? 1 : 0,
-            'has_docblock'          => 0,
-            'short_description'     => $rawData['description'],
-            'long_description'      => null,
-            'type_description'      => null,
-            'structure_id'          => $structure,
-            'access_modifier_id'    => $amId,
-            'types_serialized'      => serialize($types)
-        ]);
+        $property = new Structures\Property(
+            $rawData['name'],
+            $this->file,
+            $filePosition->getPosition()->getLine(),
+            $filePosition->getPosition()->getLine(),
+            null,
+            false,
+            true,
+            $rawData['isStatic'],
+            false,
+            $rawData['description'],
+            null,
+            null,
+            $structure,
+            $accessModifier,
+            $types
+        );
+
+        $this->storage->persist($property);
     }
 
     /**
