@@ -89,7 +89,7 @@ services:
     funcCallNodeTypeDeducer:
         class: PhpIntegrator\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
             - '@functionConverter'
             - '@functionNameNodeFqsenDeterminer'
 

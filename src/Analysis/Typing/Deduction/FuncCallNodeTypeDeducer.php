@@ -8,7 +8,8 @@ use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
 use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\Structures;
+use PhpIntegrator\Indexing\ManagerRegistry;
 
 use PhpParser\Node;
 
@@ -18,9 +19,9 @@ use PhpParser\Node;
 class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var IndexDatabase
+     * @var ManagerRegistry
      */
-    private $indexDatabase;
+    private $managerRegistry;
 
     /**
      * @var FunctionConverter
@@ -33,16 +34,16 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $functionNameNodeFqsenDeterminer;
 
     /**
-     * @param IndexDatabase                   $indexDatabase
+     * @param ManagerRegistry                   $managerRegistry
      * @param FunctionConverter               $functionConverter
      * @param FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
      */
     public function __construct(
-        IndexDatabase $indexDatabase,
+        ManagerRegistry $managerRegistry,
         FunctionConverter $functionConverter,
         FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
     ) {
-        $this->indexDatabase = $indexDatabase;
+        $this->managerRegistry = $managerRegistry;
         $this->functionConverter = $functionConverter;
         $this->functionNameNodeFqsenDeterminer = $functionNameNodeFqsenDeterminer;
     }
@@ -72,7 +73,9 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $fqsen = $this->functionNameNodeFqsenDeterminer->determine($node->name);
 
-        $globalFunction = $this->indexDatabase->getGlobalFunctionByFqcn($fqsen);
+        $globalFunction = $this->managerRegistry->getRepository(Structures\Function_::class)->findOneBy([
+            'fqcn' => $fqsen
+        ]);
 
         if (!$globalFunction) {
             return [];
