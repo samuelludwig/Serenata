@@ -7,8 +7,7 @@ services:
         arguments:
             - '@indexDatabase'
             - '@schemaInitializer'
-            - '@builtinIndexer'
-            - '@projectIndexer'
+            - '@indexer'
             - '@cache'
 
     reindexCommand:
@@ -56,13 +55,11 @@ services:
     resolveTypeCommand:
         class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
         arguments:
-            - '@indexDatabase'
             - '@structureAwareNameResolverFactory'
 
     localizeTypeCommand:
         class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
         arguments:
-            - '@indexDatabase'
             - '@positionalNameLocalizerFactory'
 
     lintCommand:
@@ -95,4 +92,4 @@ services:
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
