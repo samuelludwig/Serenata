@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Indexing\Visiting;
 
+use SplObjectStorage;
+
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -90,6 +92,16 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $traitsUsed = [];
 
     /**
+     * @var SplObjectStorage
+     */
+    private $relationsStorage;
+
+    /**
+     * @var SplObjectStorage
+     */
+    private $traitUseStorage;
+
+    /**
      * @param StorageInterface                           $storage
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param DocblockParser                             $docblockParser
@@ -145,6 +157,37 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $this->parseClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->parseTraitUseNode($node);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeTraverse(array $nodes)
+    {
+        $this->relationsStorage = new SplObjectStorage();
+        $this->traitUseStorage = new SplObjectStorage();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterTraverse(array $nodes)
+    {
+        // Index relations after traversal as, in PHP, a child class can be defined before a parent class in a single
+        // file. When walking the tree and indexing the child, the parent may not yet have been indexed.
+        foreach ($this->relationsStorage as $structure) {
+            $node = $this->relationsStorage[$structure];
+
+            $this->processClassLikeRelations($node, $structure);
+        }
+
+        foreach ($this->traitUseStorage as $structure) {
+            $nodes = $this->traitUseStorage[$structure];
+
+            foreach ($nodes as $node) {
+                $this->processTraitUseNode($node, $structure);
+            }
         }
     }
 
@@ -211,51 +254,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $accessModifierMap = $this->getAccessModifierMap();
 
-        if ($node instanceof Node\Stmt\Class_) {
-            if ($node->extends) {
-                $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
-
-                $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
-
-                $linkEntity = $this->storage->findStructureByFqcn($parentFqcn);
-
-                if ($linkEntity) {
-                    $structure->addParent($linkEntity);
-                }
-            }
-
-            $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
-                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
-
-                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
-            }, $node->implements));
-
-            foreach ($implementedFqcns as $implementedFqcn) {
-                $linkEntity = $this->storage->findStructureByFqcn($implementedFqcn);
-
-                if (!$linkEntity) {
-                    continue;
-                }
-
-                $structure->addInterface($linkEntity);
-            }
-        } elseif ($node instanceof Node\Stmt\Interface_) {
-            $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
-                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
-
-                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
-            }, $node->extends));
-
-            foreach ($extendedFqcns as $extendedFqcn) {
-                $linkEntity = $this->storage->findStructureByFqcn($extendedFqcn);
-
-                if (!$linkEntity) {
-                    continue;
-                }
-
-                $structure->addParent($linkEntity);
-            }
-        }
+        $this->relationsStorage->attach($structure, $node);
 
         // Index magic properties.
         $magicProperties = array_merge(
@@ -303,6 +302,80 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
+        $traitUses = [];
+
+        if ($this->traitUseStorage->contains($this->structure)) {
+            $traitUses = $this->traitUseStorage[$this->structure];
+        }
+
+        $traitUses[] = $node;
+
+        $this->traitUseStorage->attach($this->structure, $traitUses);
+    }
+
+    /**
+     * @param Node\Stmt\ClassLike  $node
+     * @param Structures\Structure $structure
+     *
+     * @return void
+     */
+    protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Structure $structure): void
+    {
+        if ($node instanceof Node\Stmt\Class_) {
+            if ($node->extends) {
+                $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
+
+                $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
+
+                $linkEntity = $this->storage->findStructureByFqcn($parentFqcn);
+
+                if ($linkEntity) {
+                    $structure->addParent($linkEntity);
+                }
+            }
+
+            $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
+                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
+
+                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+            }, $node->implements));
+
+            foreach ($implementedFqcns as $implementedFqcn) {
+                $linkEntity = $this->storage->findStructureByFqcn($implementedFqcn);
+
+                if (!$linkEntity) {
+                    continue;
+                }
+
+                $structure->addInterface($linkEntity);
+            }
+        } elseif ($node instanceof Node\Stmt\Interface_) {
+            $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
+                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
+
+                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+            }, $node->extends));
+
+            foreach ($extendedFqcns as $extendedFqcn) {
+                $linkEntity = $this->storage->findStructureByFqcn($extendedFqcn);
+
+                if (!$linkEntity) {
+                    continue;
+                }
+
+                $structure->addParent($linkEntity);
+            }
+        }
+    }
+
+    /**
+     * @param Node\Stmt\TraitUse   $node
+     * @param Structures\Structure $structure
+     *
+     * @return void
+     */
+    protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Structure $structure): void
+    {
         foreach ($node->traits as $traitName) {
             $traitFqcn = NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
             $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
@@ -319,7 +392,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 continue;
             }
 
-            $this->structure->addTrait($linkEntity);
+            $structure->addTrait($linkEntity);
         }
 
         $accessModifierMap = $this->getAccessModifierMap();
@@ -350,7 +423,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 $traitAlias = new Structures\StructureTraitAlias(
-                    $this->structure,
+                    $structure,
                     $trait,
                     $accessModifier ? $accessModifierMap[$accessModifier] : null,
                     $adaptation->method,
@@ -369,7 +442,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 $traitPrecedence = new Structures\StructureTraitPrecedence(
-                    $this->structure,
+                    $structure,
                     $trait,
                     $adaptation->method
                 );
