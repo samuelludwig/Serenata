@@ -9,6 +9,7 @@ use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
