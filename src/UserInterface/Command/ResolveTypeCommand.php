@@ -87,12 +87,6 @@ class ResolveTypeCommand extends AbstractCommand
             throw new InvalidArgumentsException('Unknown kind specified!');
         }
 
-        $fileId = $this->indexDatabase->getFileId($file);
-
-        if (!$fileId) {
-            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
-        }
-
         $filePosition = new FilePosition($file, new Position($line, 0));
 
         return $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition, $kind);
