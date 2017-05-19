@@ -207,12 +207,12 @@ class ClasslikeInfoBuilder
         $this->buildTraitsInfo($classlike, $structure);
 
         $this->resolveNormalTypes($classlike);
-        $this->resolveSelfTypesTo($classlike, $classlike['name']);
+        $this->resolveSelfTypesTo($classlike, $classlike['fqcn']);
 
         $this->buildParentsInfo($classlike, $structure);
         $this->buildInterfacesInfo($classlike, $structure);
 
-        $this->resolveStaticTypesTo($classlike, $classlike['name']);
+        $this->resolveStaticTypesTo($classlike, $classlike['fqcn']);
 
         return $classlike;
     }
