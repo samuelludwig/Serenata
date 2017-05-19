@@ -7,9 +7,7 @@ use ArrayAccess;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-use PhpIntegrator\Indexing\ProjectIndexer;
-use PhpIntegrator\Indexing\BuiltinIndexer;
+use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\SchemaInitializer;
 
 /**
@@ -18,24 +16,14 @@ use PhpIntegrator\Indexing\SchemaInitializer;
 class InitializeCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
-     */
-    private $indexDatabase;
-
-    /**
      * @var SchemaInitializer
      */
     private $schemaInitializer;
 
     /**
-     * @var BuiltinIndexer
-     */
-    private $builtinIndexer;
-
-    /**
      * @var ProjectIndexer
      */
-    private $projectIndexer;
+    private $indexer;
 
     /**
      * @var Cache
@@ -43,23 +31,17 @@ class InitializeCommand extends AbstractCommand
     private $cache;
 
     /**
-     * @param IndexDatabase     $indexDatabase
      * @param SchemaInitializer $schemaInitializer
-     * @param BuiltinIndexer    $builtinIndexer
-     * @param ProjectIndexer    $projectIndexer
+     * @param Indexer           $indexer
      * @param Cache             $cache
      */
     public function __construct(
-        IndexDatabase $indexDatabase,
         SchemaInitializer $schemaInitializer,
-        BuiltinIndexer $builtinIndexer,
-        ProjectIndexer $projectIndexer,
+        Indexer $indexer,
         Cache $cache
     ) {
-        $this->indexDatabase = $indexDatabase;
         $this->schemaInitializer = $schemaInitializer;
-        $this->builtinIndexer = $builtinIndexer;
-        $this->projectIndexer = $projectIndexer;
+        $this->indexer = $indexer;
         $this->cache = $cache;
     }
 
@@ -80,19 +62,21 @@ class InitializeCommand extends AbstractCommand
      */
     public function initialize(bool $includeBuiltinItems = true): bool
     {
-
-
-
-        // TODO: Rewrite.
+        // TODO: This might not be necessary anymore, schema is already dropped on existing database and recreated.
+        // Only need to ensure version is correctly set.
         // $this->ensureIndexDatabaseDoesNotExist();
-
-
-
 
         $this->schemaInitializer->initialize();
 
         if ($includeBuiltinItems) {
-            $this->builtinIndexer->index();
+            $this->indexer->reindex(
+                [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
+                false,
+                false,
+                false,
+                [],
+                ['php']
+            );
         }
 
         $this->clearCache();
@@ -100,17 +84,17 @@ class InitializeCommand extends AbstractCommand
         return true;
     }
 
-    /**
-     * @return void
-     */
-    protected function ensureIndexDatabaseDoesNotExist(): void
-    {
-        if (file_exists($this->indexDatabase->getDatabasePath())) {
-            $this->indexDatabase->ensureConnectionClosed();
-
-            unlink($this->indexDatabase->getDatabasePath());
-        }
-    }
+    // /**
+    //  * @return void
+    //  */
+    // protected function ensureIndexDatabaseDoesNotExist(): void
+    // {
+    //     if (file_exists($this->indexDatabase->getDatabasePath())) {
+    //         $this->indexDatabase->ensureConnectionClosed();
+    //
+    //         unlink($this->indexDatabase->getDatabasePath());
+    //     }
+    // }
 
     /**
      * @return void

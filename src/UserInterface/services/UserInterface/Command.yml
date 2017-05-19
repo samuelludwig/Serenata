@@ -5,7 +5,6 @@ services:
     initializeCommand:
         class: PhpIntegrator\UserInterface\Command\InitializeCommand
         arguments:
-            - '@indexDatabase'
             - '@schemaInitializer'
             - '@indexer'
             - '@cache'
