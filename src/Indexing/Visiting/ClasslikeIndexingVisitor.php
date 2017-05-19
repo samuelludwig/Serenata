@@ -219,7 +219,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $linkEntity = $this->storage->findStructureByFqcn($parentFqcn);
 
-                $structure->addParent($linkEntity);
+                if ($linkEntity) {
+                    $structure->addParent($linkEntity);
+                }
             }
 
             $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
@@ -230,6 +232,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             foreach ($implementedFqcns as $implementedFqcn) {
                 $linkEntity = $this->storage->findStructureByFqcn($implementedFqcn);
+
+                if (!$linkEntity) {
+                    continue;
+                }
 
                 $structure->addInterface($linkEntity);
             }
@@ -242,6 +248,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             foreach ($extendedFqcns as $extendedFqcn) {
                 $linkEntity = $this->storage->findStructureByFqcn($extendedFqcn);
+
+                if (!$linkEntity) {
+                    continue;
+                }
 
                 $structure->addParent($linkEntity);
             }
@@ -305,6 +315,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $linkEntity = $this->storage->findStructureByFqcn($traitFqcn);
 
+            if (!$linkEntity) {
+                continue;
+            }
+
             $this->structure->addTrait($linkEntity);
         }
 
@@ -319,6 +333,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 if ($traitFqcn !== null) {
                     $trait = $this->storage->findStructureByFqcn($traitFqcn);
+
+                    if (!$trait) {
+                        continue;
+                    }
                 }
 
                 $accessModifier = null;
@@ -345,6 +363,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
                 $trait = $this->storage->findStructureByFqcn($traitFqcn);
+
+                if (!$trait) {
+                    continue;
+                }
 
                 $traitPrecedence = new Structures\StructureTraitPrecedence(
                     $this->structure,
