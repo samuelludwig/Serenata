@@ -87,16 +87,6 @@ abstract class AbstractApplication
             ->setArguments([$this->getStdinStream()]);
 
         $container
-            ->register('storageForIndexers', CallbackStorageProxy::class)
-            ->setArguments([new Reference('indexDatabase'), function ($fqcn) use ($container) {
-                $provider = $container->get('classlikeInfoBuilderProvider');
-
-                if ($provider instanceof ClasslikeInfoBuilderProviderCachingProxy) {
-                    $provider->clearCacheFor($fqcn);
-                }
-            }]);
-
-        $container
             ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)
             ->setArguments([])
             ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $configurableDelegatingNodeTypeDeducer) use ($container) {
@@ -120,8 +110,8 @@ abstract class AbstractApplication
         // TODO: Need to refactor this at some point to have more select cache clearing and to not instantiate multiple
         // mediators.
         $container->get('cacheClearingEventMediator1');
-        $container->get('cacheClearingEventMediator2');
-        $container->get('cacheClearingEventMediator3');
+        // $container->get('cacheClearingEventMediator2');
+        // $container->get('cacheClearingEventMediator3');
     }
 
     /**
