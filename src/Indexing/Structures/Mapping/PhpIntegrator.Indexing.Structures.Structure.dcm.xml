@@ -32,10 +32,10 @@
         <many-to-many field="parents" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="children">
             <join-table name="structures_parents_linked">
                 <join-columns>
-                    <join-column referenced-column-name="id" nullable="false" />
+                    <join-column name="structure_id" referenced-column-name="id" nullable="false" />
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column referenced-column-name="id" nullable="false" />
+                    <join-column name="parent_structure_id" referenced-column-name="id" nullable="false" />
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
@@ -47,10 +47,10 @@
         <many-to-many field="interfaces" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="implementors">
             <join-table name="structures_interfaces_linked">
                 <join-columns>
-                    <join-column referenced-column-name="id" nullable="false" />
+                    <join-column name="structure_id" referenced-column-name="id" nullable="false" />
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column referenced-column-name="id" nullable="false" />
+                    <join-column name="interface_structure_id" referenced-column-name="id" nullable="false" />
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
