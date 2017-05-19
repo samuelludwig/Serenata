@@ -30,7 +30,7 @@
         </many-to-one>
 
         <many-to-many field="parents" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="children">
-            <join-table name="structures_parents_linked">
+            <join-table name="StructureParentLinks">
                 <join-columns>
                     <join-column name="structure_id" referenced-column-name="id" nullable="false" />
                 </join-columns>
@@ -45,7 +45,7 @@
         </many-to-many>
 
         <many-to-many field="interfaces" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="implementors">
-            <join-table name="structures_interfaces_linked">
+            <join-table name="StructureInterfaceLinks">
                 <join-columns>
                     <join-column name="structure_id" referenced-column-name="id" nullable="false" />
                 </join-columns>
@@ -60,7 +60,7 @@
         </many-to-many>
 
         <many-to-many field="traits" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="traitUsers">
-            <join-table name="structures_traits_linked">
+            <join-table name="StructureTraitLinks">
                 <join-columns>
                     <join-column name="structure_id" referenced-column-name="id" nullable="false" />
                 </join-columns>
