@@ -10,10 +10,10 @@ use ArrayObject;
 class TraitUsageResolver extends AbstractResolver
 {
     /**
-     * @param ArrayObject $trait
-     * @param ArrayObject $class
-     * @param array       $traitAliases
-     * @param array       $traitPrecedences
+     * @param ArrayObject                           $trait
+     * @param ArrayObject                           $class
+     * @param Structures\StructureTraitAlias[]      $traitAliases
+     * @param Structures\StructureTraitPrecedence[] $traitPrecedences
      *
      * @return void
      */
@@ -29,19 +29,19 @@ class TraitUsageResolver extends AbstractResolver
 
         foreach ($trait['methods'] as $method) {
             // If the method was aliased, pretend it has another name and access modifier before "inheriting" it.
-            if (isset($traitAliases[$method['name']])) {
-                $alias = $traitAliases[$method['name']];
-
-                if ($alias['trait_fqcn'] === null || $alias['trait_fqcn'] === $trait['name']) {
-                    $method['name']        = $alias['alias'] ?: $method['name'];
-                    $method['isPublic']    = ($alias['access_modifier'] === 'public');
-                    $method['isProtected'] = ($alias['access_modifier'] === 'protected');
-                    $method['isPrivate']   = ($alias['access_modifier'] === 'private');
+            foreach ($traitAliases as $traitAlias) {
+                if ($traitAlias->getName() === $method['name'] &&
+                    ($traitAlias->getTrait() === null  || $traitAlias->getTrait()->getFqcn() === $trait['name'])
+                ) {
+                    $method['name']        = $traitAlias->getAlias() ?: $method['name'];
+                    $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === 'public');
+                    $method['isProtected'] = ($traitAlias->getAccessModifier()->getName() === 'protected');
+                    $method['isPrivate']   = ($traitAlias->getAccessModifier()->getName() === 'private');
                 }
             }
 
-            if (isset($traitPrecedences[$method['name']])) {
-                if ($traitPrecedences[$method['name']]['trait_fqcn'] !== $trait['name']) {
+            foreach ($traitPrecedences as $traitPrecedence) {
+                if ($traitPrecedence->getName() === $method['name'] && $traitPrecedence->getTrait()->getFqcn() !== $trait['name']) {
                     // The method is present in multiple used traits and precedences indicate that the one
                     // from this trait should not be imported.
                     continue;
