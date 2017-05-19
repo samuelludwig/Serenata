@@ -87,21 +87,21 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         $types = [];
 
         foreach ($staticTypes as $staticType) {
-            if (count($node->args) <= $staticType['argument_index']) {
+            if (count($node->args) <= $staticType->getArgumentIndex()) {
                 continue;
             }
 
-            $relevantArgumentNode = $node->args[$staticType['argument_index']];
+            $relevantArgumentNode = $node->args[$staticType->getArgumentIndex()];
 
-            if (get_class($relevantArgumentNode->value) !== $staticType['value_node_type']) {
+            if (get_class($relevantArgumentNode->value) !== $staticType->getValueNodeType()) {
                 continue;
             }
 
             if (
                 $relevantArgumentNode->value instanceof Node\Scalar\String_ &&
-                $relevantArgumentNode->value->value === $staticType['value']
+                $relevantArgumentNode->value->value === $staticType->getValue()
             ) {
-                $types[] = $staticType['return_type'];
+                $types[] = $staticType->getReturnType();
             }
         }
 
