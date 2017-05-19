@@ -40,12 +40,19 @@ class TraitUsageResolver extends AbstractResolver
                 }
             }
 
+            $skipMethod = false;
+
             foreach ($traitPrecedences as $traitPrecedence) {
                 if ($traitPrecedence->getName() === $method['name'] && $traitPrecedence->getTrait()->getFqcn() !== $trait['fqcn']) {
                     // The method is present in multiple used traits and precedences indicate that the one
                     // from this trait should not be imported.
-                    continue;
+                    $skipMethod = true;
+                    break;
                 }
+            }
+
+            if ($skipMethod) {
+                continue;
             }
 
             $this->resolveTraitUseOfMethod($method, $class);
