@@ -9,7 +9,7 @@ use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\ManagerRegistry;
 
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
@@ -29,9 +29,9 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $structureAwareNameResolverFactory;
 
     /**
-     * @var IndexDatabase
+     * @var ManagerRegistry
      */
-    private $indexDatabase;
+    private $managerRegistry;
 
     /**
      * @var ConstantConverter
@@ -40,16 +40,16 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-     * @param IndexDatabase                    $indexDatabase
-     * @param ConstantConverter                $constantConverter
+     * @param ManagerRegistry                            $managerRegistry
+     * @param ConstantConverter                          $constantConverter
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        IndexDatabase $indexDatabase,
+        ManagerRegistry $managerRegistry,
         ConstantConverter $constantConverter
     ) {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
-        $this->indexDatabase = $indexDatabase;
+        $this->managerRegistry = $managerRegistry;
         $this->constantConverter = $constantConverter;
     }
 
@@ -94,7 +94,9 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);
 
-        $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
+        $globalConstant = $this->managerRegistry->getRepository(Structures\Constant::class)->findOneBy([
+            'fqcn' => $fqcn
+        ]);
 
         if (!$globalConstant) {
             return [];
