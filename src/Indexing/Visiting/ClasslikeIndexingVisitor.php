@@ -514,7 +514,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             ];
 
             if ($isReturnTypeNullable) {
-                $returnTypes[] = [new Structures\TypeInfo('null', 'null')];
+                $returnTypes[] = new Structures\TypeInfo('null', 'null');
             }
         }
 

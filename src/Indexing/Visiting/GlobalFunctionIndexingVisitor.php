@@ -142,7 +142,7 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             ];
 
             if ($node->getReturnType() instanceof Node\NullableType) {
-                $returnTypes[] = [new Structures\TypeInfo('null', 'null')];
+                $returnTypes[] = new Structures\TypeInfo('null', 'null');
             }
         }
 
