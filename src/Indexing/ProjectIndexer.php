@@ -204,7 +204,7 @@ class ProjectIndexer
      */
     public function pruneRemovedFiles(): void
     {
-        foreach ($this->storage->getFileModifiedMap() as $fileName => $indexedTime) {
+        foreach ($this->getFileModifiedMap() as $fileName => $indexedTime) {
             if (!file_exists($fileName)) {
                 $this->logMessage('  - ' . $fileName);
 
