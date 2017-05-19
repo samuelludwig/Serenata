@@ -93,10 +93,10 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             new Position(SourceCodeHelpers::calculateLineByOffset($code, $offset), 0)
         );
 
-        $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);
+        $fqsen = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);
 
         $globalConstant = $this->managerRegistry->getRepository(Structures\Constant::class)->findOneBy([
-            'fqcn' => $fqcn
+            'fqcn' => $fqsen
         ]);
 
         if (!$globalConstant) {
