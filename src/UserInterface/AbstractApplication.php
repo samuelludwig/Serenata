@@ -6,7 +6,7 @@ use PhpIntegrator\Analysis\ClearableCacheInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -131,11 +131,13 @@ abstract class AbstractApplication
      */
     public function setDatabaseFile(string $databaseFile)
     {
-        /** @var IndexDatabase $indexDatabase */
-        $indexDatabase = $this->getContainer()->get('indexDatabase');
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = $this->getContainer()->get('managerRegistry');
 
-        if (!$indexDatabase->hasDatabasePathConfigured() || $indexDatabase->getDatabasePath() !== $databaseFile) {
-            $indexDatabase->setDatabasePath($databaseFile);
+        if (!$managerRegistry->hasInitialDatabasePathConfigured() ||
+            $managerRegistry->getDatabasePath() !== $databaseFile
+        ) {
+            $managerRegistry->setDatabasePath($databaseFile);
 
             /** @var ClearableCacheInterface $clearableCache */
             $clearableCache = $this->getContainer()->get('cacheClearingEventMediator.clearableCache');
