@@ -21,11 +21,11 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
 
         $output = $command->getNamespaceList();
 
-        $this->assertCount(2, $output);
-        $this->assertArrayHasKey('namespace', $output[0]);
-        $this->assertSame('NamespaceA', $output[0]['namespace']);
-        $this->assertArrayHasKey('namespace', $output[1]);
-        $this->assertSame('NamespaceB', $output[1]['namespace']);
+        $this->assertCount(4, $output);
+        $this->assertArrayHasKey('name', $output[1]);
+        $this->assertSame('NamespaceA', $output[1]['name']);
+        $this->assertArrayHasKey('name', $output[3]);
+        $this->assertSame('NamespaceB', $output[3]['name']);
 
         $output = $command->getNamespaceList($path . 'NamespaceA.phpt');
 
