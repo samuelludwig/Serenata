@@ -10,7 +10,7 @@
 
         <field name="name"         type="string"     nullable="false" length="255" />
         <field name="typeHint"     type="string"     nullable="true"  length="255" />
-        <field name="types"        type="json_array" nullable="false" />
+        <field name="types"        type="array"      nullable="false" />
         <field name="description"  type="text"       nullable="true"  length="15000" />
         <field name="defaultValue" type="string"     nullable="true"  length="255" />
         <field name="isNullable"   type="boolean"    nullable="false" />

@@ -19,7 +19,7 @@
         <field name="shortDescription"   type="text"       nullable="true"  length="15000" />
         <field name="longDescription"    type="text"       nullable="true"  length="15000" />
         <field name="typeDescription"    type="text"       nullable="true"  length="15000" />
-        <field name="types"              type="json_array" nullable="false" />
+        <field name="types"              type="array"      nullable="false" />
 
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="properties">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />

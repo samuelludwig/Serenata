@@ -22,8 +22,8 @@
         <field name="isAbstract"         type="boolean"    nullable="false" />
         <field name="isFinal"            type="boolean"    nullable="false" />
         <field name="hasDocblock"        type="boolean"    nullable="false" />
-        <field name="throws"             type="json_array" nullable="false" />
-        <field name="returnTypes"        type="json_array" nullable="false" />
+        <field name="throws"             type="array"      nullable="false" />
+        <field name="returnTypes"        type="array"      nullable="false" />
 
         <one-to-many field="parameters" target-entity="PhpIntegrator\Indexing\Structures\FunctionParameter" mapped-by="function">
 
