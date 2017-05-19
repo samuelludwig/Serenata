@@ -31,7 +31,7 @@ class TraitUsageResolver extends AbstractResolver
             // If the method was aliased, pretend it has another name and access modifier before "inheriting" it.
             foreach ($traitAliases as $traitAlias) {
                 if ($traitAlias->getName() === $method['name'] &&
-                    ($traitAlias->getTrait() === null  || $traitAlias->getTrait()->getFqcn() === $trait['name'])
+                    ($traitAlias->getTrait() === null  || $traitAlias->getTrait()->getFqcn() === $trait['fqcn'])
                 ) {
                     $method['name']        = $traitAlias->getAlias() ?: $method['name'];
                     $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === 'public');
@@ -41,7 +41,7 @@ class TraitUsageResolver extends AbstractResolver
             }
 
             foreach ($traitPrecedences as $traitPrecedence) {
-                if ($traitPrecedence->getName() === $method['name'] && $traitPrecedence->getTrait()->getFqcn() !== $trait['name']) {
+                if ($traitPrecedence->getName() === $method['name'] && $traitPrecedence->getTrait()->getFqcn() !== $trait['fqcn']) {
                     // The method is present in multiple used traits and precedences indicate that the one
                     // from this trait should not be imported.
                     continue;
