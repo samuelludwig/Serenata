@@ -20,9 +20,8 @@ class TypeInfo
     private $fqcn;
 
     /**
-     * @param string      $type
-     * @param string      $fqcn
-     * @param string|null $resolvedType
+     * @param string $type
+     * @param string $fqcn
      */
     public function __construct(string $type, string $fqcn)
     {
