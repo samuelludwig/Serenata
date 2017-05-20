@@ -32,10 +32,10 @@
         <many-to-many field="parents" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="children">
             <join-table name="StructureParentLinks">
                 <join-columns>
-                    <join-column name="structure_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+                    <join-column name="structureId" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column name="parent_structure_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+                    <join-column name="parentStructureId" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
@@ -47,10 +47,10 @@
         <many-to-many field="interfaces" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="implementors">
             <join-table name="StructureInterfaceLinks">
                 <join-columns>
-                    <join-column name="structure_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+                    <join-column name="structureId" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column name="interface_structure_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+                    <join-column name="interfaceStructureId" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
@@ -62,10 +62,10 @@
         <many-to-many field="traits" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="traitUsers">
             <join-table name="StructureTraitLinks">
                 <join-columns>
-                    <join-column name="structure_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+                    <join-column name="structureId" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
                 </join-columns>
                 <inverse-join-columns>
-                    <join-column name="trait_structure_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+                    <join-column name="traitStructureId" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
