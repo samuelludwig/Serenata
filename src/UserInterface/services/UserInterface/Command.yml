@@ -22,7 +22,7 @@ services:
     testCommand:
         class: PhpIntegrator\UserInterface\Command\TestCommand
         arguments:
-            - '@indexDatabase'
+            - '@storageVersionChecker'
 
     tooltipCommand:
         class: PhpIntegrator\UserInterface\Command\TooltipCommand

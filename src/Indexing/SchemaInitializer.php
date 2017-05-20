@@ -12,6 +12,16 @@ use Doctrine\ORM\Tools\SchemaTool;
 class SchemaInitializer
 {
     /**
+     * @var int
+     */
+    public const SCHEMA_VERSION = 1;
+
+    /**
+     * @var int
+     */
+    public const VERSION_SETTING_NAME = 'version';
+
+    /**
      * @var ManagerRegistry
      */
     private $managerRegistry;
@@ -53,6 +63,8 @@ class SchemaInitializer
         $entityManager->persist(new Structures\AccessModifier('public'));
         $entityManager->persist(new Structures\AccessModifier('protected'));
         $entityManager->persist(new Structures\AccessModifier('private'));
+
+        $entityManager->persist(new Structures\Setting(self::VERSION_SETTING_NAME, self::SCHEMA_VERSION));
 
         $entityManager->flush();
     }
