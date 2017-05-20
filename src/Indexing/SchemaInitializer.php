@@ -43,7 +43,7 @@ class SchemaInitializer
 
         $schemaTool = new SchemaTool($entityManager);
 
-        $schemaTool->dropDatabase();
+        // $schemaTool->dropDatabase();
         $schemaTool->createSchema($entityManager->getMetadataFactory()->getAllMetadata());
 
         $this->loadFixtures();

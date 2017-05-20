@@ -8,6 +8,7 @@ use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
 
 use PhpIntegrator\Indexing\Indexer;
+use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\SchemaInitializer;
 
 /**
@@ -21,6 +22,11 @@ class InitializeCommand extends AbstractCommand
     private $schemaInitializer;
 
     /**
+     * @var ManagerRegistry
+     */
+    private $managerRegistry;
+
+    /**
      * @var ProjectIndexer
      */
     private $indexer;
@@ -32,15 +38,18 @@ class InitializeCommand extends AbstractCommand
 
     /**
      * @param SchemaInitializer $schemaInitializer
+     * @param ManagerRegistry   $managerRegistry
      * @param Indexer           $indexer
      * @param Cache             $cache
      */
     public function __construct(
         SchemaInitializer $schemaInitializer,
+        ManagerRegistry $managerRegistry,
         Indexer $indexer,
         Cache $cache
     ) {
         $this->schemaInitializer = $schemaInitializer;
+        $this->managerRegistry = $managerRegistry;
         $this->indexer = $indexer;
         $this->cache = $cache;
     }
@@ -62,9 +71,7 @@ class InitializeCommand extends AbstractCommand
      */
     public function initialize(bool $includeBuiltinItems = true): bool
     {
-        // TODO: This might not be necessary anymore, schema is already dropped on existing database and recreated.
-        // Only need to ensure version is correctly set.
-        // $this->ensureIndexDatabaseDoesNotExist();
+        $this->ensureIndexDatabaseDoesNotExist();
 
         $this->schemaInitializer->initialize();
 
@@ -84,17 +91,17 @@ class InitializeCommand extends AbstractCommand
         return true;
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // protected function ensureIndexDatabaseDoesNotExist(): void
-    // {
-    //     if (file_exists($this->indexDatabase->getDatabasePath())) {
-    //         $this->indexDatabase->ensureConnectionClosed();
-    //
-    //         unlink($this->indexDatabase->getDatabasePath());
-    //     }
-    // }
+    /**
+     * @return void
+     */
+    protected function ensureIndexDatabaseDoesNotExist(): void
+    {
+        if (file_exists($this->managerRegistry->getDatabasePath())) {
+            $this->managerRegistry->ensureConnectionClosed();
+
+            unlink($this->managerRegistry->getDatabasePath());
+        }
+    }
 
     /**
      * @return void

@@ -104,15 +104,23 @@ class ManagerRegistry extends AbstractManagerRegistry
     protected function resetService($name)
     {
         if ($name === 'defaultConnection') {
-            if ($this->connection !== null) {
-                $this->connection->close();
-                $this->connection = null;
-            }
+            $this->ensureConnectionClosed();
 
             // Entity manager depends on connection, cascade reset.
             $this->resetService('defaultEntityManager');
         } elseif ($name === 'defaultEntityManager') {
             $this->entityManager = null;
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function ensureConnectionClosed(): void
+    {
+        if ($this->connection !== null) {
+            $this->connection->close();
+            $this->connection = null;
         }
     }
 

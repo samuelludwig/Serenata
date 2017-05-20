@@ -6,6 +6,7 @@ services:
         class: PhpIntegrator\UserInterface\Command\InitializeCommand
         arguments:
             - '@schemaInitializer'
+            - '@managerRegistry'
             - '@indexer'
             - '@cache'
 
