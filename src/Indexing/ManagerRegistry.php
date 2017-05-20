@@ -143,4 +143,12 @@ class ManagerRegistry extends AbstractManagerRegistry
 
         $this->resetService('defaultConnection');
     }
+
+    /**
+     * @return bool
+     */
+    public function hasInitialDatabasePathConfigured(): bool
+    {
+        return !!$this->databasePath;
+    }
 }
