@@ -2,13 +2,16 @@
 
 namespace PhpIntegrator\Indexing;
 
+use LogicException;
 use UnexpectedValueException;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Configuration;
+
+use Doctrine\DBAL\Exception\DriverException;
 
 use PhpIntegrator\Analysis\MetadataProviderInterface;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilderProviderInterface;
@@ -40,7 +43,13 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function getFiles(): array
     {
-        return $this->managerRegistry->getRepository(Structures\File::class)->findAll();
+        try {
+            return $this->managerRegistry->getRepository(Structures\File::class)->findAll();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
+
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -48,7 +57,13 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function getAccessModifiers(): array
     {
-        return $this->managerRegistry->getRepository(Structures\AccessModifier::class)->findAll();
+        try {
+            return $this->managerRegistry->getRepository(Structures\AccessModifier::class)->findAll();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
+
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -56,7 +71,13 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function getStructureTypes(): array
     {
-        return $this->managerRegistry->getRepository(Structures\StructureType::class)->findAll();
+        try {
+            return $this->managerRegistry->getRepository(Structures\StructureType::class)->findAll();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
+
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -64,9 +85,15 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function findStructureByFqcn(string $fqcn): ?Structures\Structure
     {
-        return $this->managerRegistry->getRepository(Structures\Structure::class)->findOneBy([
-            'fqcn' => $fqcn
-        ]);
+        try {
+            return $this->managerRegistry->getRepository(Structures\Structure::class)->findOneBy([
+                'fqcn' => $fqcn
+            ]);
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
+
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -74,9 +101,15 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function findFileByPath(string $path): ?Structures\File
     {
-        return $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
-            'path' => $path
-        ]);
+        try {
+            return $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
+                'path' => $path
+            ]);
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
+
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -84,8 +117,12 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function persist($entity): void
     {
-        $this->managerRegistry->getManager()->persist($entity);
-        $this->managerRegistry->getManager()->flush();
+        try {
+            $this->managerRegistry->getManager()->persist($entity);
+            $this->managerRegistry->getManager()->flush();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -93,7 +130,11 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function delete($entity): void
     {
-        $this->managerRegistry->getManager()->remove($entity);
+        try {
+            $this->managerRegistry->getManager()->remove($entity);
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -101,7 +142,11 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function beginTransaction(): void
     {
-        $this->managerRegistry->getConnection()->beginTransaction();
+        try {
+            $this->managerRegistry->getConnection()->beginTransaction();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -109,9 +154,13 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function commitTransaction(): void
     {
-        $this->managerRegistry->getManager()->flush();
+        try {
+            $this->managerRegistry->getManager()->flush();
 
-        $this->managerRegistry->getConnection()->commit();
+            $this->managerRegistry->getConnection()->commit();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -119,7 +168,11 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function rollbackTransaction(): void
     {
-        $this->managerRegistry->getConnection()->rollback();
+        try {
+            $this->managerRegistry->getConnection()->rollback();
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -127,10 +180,16 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
      */
     public function getMetaStaticMethodTypesFor(string $fqcn, string $method): array
     {
-        return $this->managerRegistry->getRepository(Structures\MetaStaticMethodType::class)->findBy([
-            'fqcn' => $fqcn,
-            'name' => $method
-        ]);
+        try {
+            return $this->managerRegistry->getRepository(Structures\MetaStaticMethodType::class)->findBy([
+                'fqcn' => $fqcn,
+                'name' => $method
+            ]);
+        } catch (DriverException $e) {
+            throw new StorageException($e->getMessage(), 0, $e);
+        }
+
+        throw new LogicException('Should never be reached');
     }
 
     public function hack_remove_me() { $this->managerRegistry->getManager()->clear(); }

@@ -9,22 +9,30 @@ namespace PhpIntegrator\Indexing;
 interface StorageInterface
 {
     /**
+     * @throws StorageException
+     *
      * @return Structures\File[]
      */
     public function getFiles(): array;
 
     /**
-    * @return Structures\AccessModifier[]
-    */
+     * @throws StorageException
+     *
+     * @return Structures\AccessModifier[]
+     */
     public function getAccessModifiers(): array;
 
      /**
-     * @return Structures\StructureType[]
-     */
+      * @throws StorageException
+      *
+      * @return Structures\StructureType[]
+      */
     public function getStructureTypes(): array;
 
     /**
      * @param string $fqcn
+     *
+     * @throws StorageException
      *
      * @return Structures\Structure|null
      */
@@ -33,12 +41,16 @@ interface StorageInterface
     /**
      * @param string $path
      *
+     * @throws StorageException
+     *
      * @return Structures\File|null
      */
     public function findFileByPath(string $path): ?Structures\File;
 
     /**
      * @param object $entity
+     *
+     * @throws StorageException
      *
      * @return void
      */
@@ -47,21 +59,29 @@ interface StorageInterface
     /**
      * @param object $entity
      *
+     * @throws StorageException
+     *
      * @return void
      */
     public function delete($entity): void;
 
     /**
+     * @throws StorageException
+     *
      * @return void
      */
     public function beginTransaction(): void;
 
     /**
+     * @throws StorageException
+     *
      * @return void
      */
     public function commitTransaction(): void;
 
     /**
+     * @throws StorageException
+     *
      * @return void
      */
     public function rollbackTransaction(): void;

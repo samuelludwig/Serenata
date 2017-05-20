@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis;
 
+use RuntimeException;
+
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
 /**
@@ -10,6 +12,8 @@ use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 interface ConstantListProviderInterface
 {
      /**
+      * @throws RuntimeException
+      *
       * @return array[]
       */
      public function getAll(): array;

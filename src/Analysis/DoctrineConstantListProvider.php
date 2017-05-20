@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis;
 
+use RuntimeException;
+
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 
 use PhpIntegrator\Indexing\Structures;
@@ -35,13 +37,18 @@ final class DoctrineConstantListProvider implements ConstantListProviderInterfac
     /// @inherited
     public function getAll(): array
     {
+        $items = [];
         $constants = [];
 
-        $items = $this->managerRegistry->getRepository(Structures\Constant::class)->createQueryBuilder('entity')
-            ->select('entity')
-            ->andWhere('entity.structure IS NULL')
-            ->getQuery()
-            ->execute();
+        try {
+            $items = $this->managerRegistry->getRepository(Structures\Constant::class)->createQueryBuilder('entity')
+                ->select('entity')
+                ->andWhere('entity.structure IS NULL')
+                ->getQuery()
+                ->execute();
+        } catch (DriverException $e) {
+            throw new RuntimeException($e->getMessage(), 0, $e);
+        }
 
         foreach ($items as $constant) {
             $constants[$constant->getFqcn()] = $this->constantConverter->convert($constant);

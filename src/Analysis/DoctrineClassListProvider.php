@@ -2,6 +2,10 @@
 
 namespace PhpIntegrator\Analysis;
 
+use RuntimeException;
+
+use Doctrine\DBAL\Exception\DriverException;
+
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 
 use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
@@ -39,9 +43,16 @@ class DoctrineClassListProvider implements FileClassListProviderInterface
      */
     public function getAll(): array
     {
+        $items = [];
         $result = [];
 
-        foreach ($this->managerRegistry->getRepository(Structures\Structure::class)->findAll() as $element) {
+        try {
+            $items = $this->managerRegistry->getRepository(Structures\Structure::class)->findAll();
+        } catch (DriverException $e) {
+            throw new RuntimeException($e->getMessage(), 0, $e);
+        }
+
+        foreach ($items as $element) {
             $result[$element->getFqcn()] = $this->classlikeConverter->convert($element);
         }
 
@@ -53,13 +64,17 @@ class DoctrineClassListProvider implements FileClassListProviderInterface
      */
     public function getAllForFile(string $file): array
     {
-        $items = $this->managerRegistry->getRepository(Structures\Structure::class)->createQueryBuilder('entity')
-            ->select('entity')
-            ->innerJoin('entity.file', 'file')
-            ->andWhere('file.path = :path')
-            ->setParameter('path', $file)
-            ->getQuery()
-            ->execute();
+        try {
+            $items = $this->managerRegistry->getRepository(Structures\Structure::class)->createQueryBuilder('entity')
+                ->select('entity')
+                ->innerJoin('entity.file', 'file')
+                ->andWhere('file.path = :path')
+                ->setParameter('path', $file)
+                ->getQuery()
+                ->execute();
+        } catch (DriverException $e) {
+            throw new RuntimeException($e->getMessage(), 0, $e);
+        }
 
         $result = [];
 

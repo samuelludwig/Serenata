@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis;
 
+use RuntimeException;
+
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
 use PhpIntegrator\Indexing\Structures;
@@ -35,13 +37,18 @@ final class DoctrineFunctionListProvider implements FunctionListProviderInterfac
      /// @inherited
      public function getAll(): array
      {
+         $items = [];
          $result = [];
 
-         $items = $this->managerRegistry->getRepository(Structures\Function_::class)->createQueryBuilder('entity')
-             ->select('entity')
-             ->andWhere('entity.structure IS NULL')
-             ->getQuery()
-             ->execute();
+         try {
+             $items = $this->managerRegistry->getRepository(Structures\Function_::class)->createQueryBuilder('entity')
+                 ->select('entity')
+                 ->andWhere('entity.structure IS NULL')
+                 ->getQuery()
+                 ->execute();
+         } catch (DriverException $e) {
+             throw new RuntimeException($e->getMessage(), 0, $e);
+         }
 
          foreach ($items as $function) {
              $result[$function->getFqcn()] = $this->functionConverter->convert($function);
