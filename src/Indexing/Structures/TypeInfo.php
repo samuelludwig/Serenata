@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Indexing\Structures;
 
-use LogicException;
-
 /**
  * Represents a structure type.
  */
