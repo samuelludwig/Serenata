@@ -44,18 +44,17 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param ContainerBuilder $container
-     * @param bool             $indexBuiltinItems
      *
      * @return void
      */
-    protected function prepareContainer(ContainerBuilder $container, bool $indexBuiltinItems): void
+    protected function prepareContainer(ContainerBuilder $container): void
     {
         // Replace some container items for testing purposes.
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
         $container->get('managerRegistry')->setDatabasePath(':memory:');
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
-        $success = $container->get('initializeCommand')->initialize($indexBuiltinItems);
+        $success = $container->get('initializeCommand')->initialize(false);
 
         $this->assertTrue($success);
     }

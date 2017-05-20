@@ -15,22 +15,15 @@ services:
         arguments:
             - '@managerRegistry'
 
+    storageVersionChecker:
+        class: PhpIntegrator\Indexing\StorageVersionChecker
+        arguments:
+            - '@managerRegistry'
+
     doctrineStorage:
         class: PhpIntegrator\Indexing\DoctrineStorage
         arguments:
             - '@managerRegistry'
-
-    # TODO: Remove me.
-    indexDatabase:
-        class: PhpIntegrator\Indexing\IndexDatabase
-
-    builtinIndexer:
-        class: PhpIntegrator\Indexing\BuiltinIndexer
-        arguments:
-            - '@doctrineStorage'
-            - '@typeAnalyzer'
-            - '@partialParser'
-            - '@nodeTypeDeducer'
 
     fileIndexer:
         class: PhpIntegrator\Indexing\FileIndexer

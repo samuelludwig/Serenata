@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\StorageVersionChecker;
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 /**
@@ -13,16 +13,16 @@ use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 class TestCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
+     * @var StorageVersionChecker
      */
-    private $indexDatabase;
+    private $storageVersionChecker;
 
     /**
-     * @param IndexDatabase  $indexDatabase
+     * @param StorageVersionChecker  $storageVersionChecker
      */
-    public function __construct(IndexDatabase $indexDatabase)
+    public function __construct(StorageVersionChecker $storageVersionChecker)
     {
-        $this->indexDatabase = $indexDatabase;
+        $this->storageVersionChecker = $storageVersionChecker;
     }
 
     /**
@@ -40,12 +40,6 @@ class TestCommand extends AbstractCommand
      */
     public function test(): bool
     {
-        try {
-            $this->indexDatabase->checkDatabaseVersion();
-        } catch (IncorrectDatabaseVersionException $e) {
-            return false;
-        }
-
-        return true;
+        return $this->storageVersionChecker->isUpToDate();
     }
 }

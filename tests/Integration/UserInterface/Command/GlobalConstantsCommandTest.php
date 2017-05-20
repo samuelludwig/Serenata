@@ -65,49 +65,6 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testBuiltinGlobalConstants(): void
-    {
-        $container = $this->createTestContainerForBuiltinStructuralElements();
-
-        $command = new GlobalConstantsCommand(
-            $container->get('globalConstantsProvider')
-        );
-
-        $output = $command->getGlobalConstants();
-
-        $this->assertArraySubset([
-            'name'             => 'PHP_EOL',
-            'fqcn'             => '\PHP_EOL',
-            'startLine'        => 0,
-            'endLine'          => 0,
-            'filename'         => null,
-            'isBuiltin'        => true,
-            'isDeprecated'     => false,
-            'hasDocblock'      => false,
-            'hasDocumentation' => false,
-
-            'defaultValue'     => '"\n"',
-            'isPublic'         => true,
-            'isProtected'      => false,
-            'isPrivate'        => false,
-            'isStatic'         => true,
-            'shortDescription' => null,
-            'longDescription'  => null,
-            'typeDescription'  => null
-        ], $output['\PHP_EOL']);
-
-        $this->assertEquals([
-            [
-                'type'         => 'string',
-                'fqcn'         => 'string',
-                'resolvedType' => 'string'
-            ]
-        ], $output['\PHP_EOL']['types']);
-    }
-
-    /**
-     * @return void
-     */
     public function testCorrectlyFetchesDefaultValueOfDefineWithExpression(): void
     {
         $output = $this->getGlobalConstants('DefineWithExpression.phpt');
