@@ -156,11 +156,6 @@ class Structure
      * @param bool                       $isAnnotation
      * @param bool                       $isDeprecated
      * @param bool                       $hasDocblock
-     * @param Structure[]                $parents
-     * @param Structure[]                $interfaces
-     * @param Structure[]                $traits
-     * @param StructureTraitAlias[]      $traitAliases
-     * @param StructureTraitPrecedence[] $traitPrecedences
      */
     public function __construct(
         string $name,
@@ -176,12 +171,7 @@ class Structure
         bool $isFinal,
         bool $isAnnotation,
         bool $isDeprecated,
-        bool $hasDocblock,
-        array $parents,
-        array $interfaces,
-        array $traits,
-        array $traitAliases,
-        array $traitPrecedences
+        bool $hasDocblock
     ) {
         $this->id = (string) Uuid::uuid4();
         $this->name = $name;
@@ -199,14 +189,14 @@ class Structure
         $this->isDeprecated = $isDeprecated;
         $this->hasDocblock = $hasDocblock;
 
-        $this->parents = new ArrayCollection($parents);
-        $this->children = new ArrayCollection([]);
-        $this->interfaces = new ArrayCollection($interfaces);
-        $this->implementors = new ArrayCollection([]);
-        $this->traits = new ArrayCollection($traits);
-        $this->traitUsers = new ArrayCollection([]);
-        $this->traitAliases = new ArrayCollection($traitAliases);
-        $this->traitPrecedences = new ArrayCollection($traitPrecedences);
+        $this->parents = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->interfaces = new ArrayCollection();
+        $this->implementors = new ArrayCollection();
+        $this->traits = new ArrayCollection();
+        $this->traitUsers = new ArrayCollection();
+        $this->traitAliases = new ArrayCollection();
+        $this->traitPrecedences = new ArrayCollection();
 
         $this->constants = new ArrayCollection();
         $this->properties = new ArrayCollection();

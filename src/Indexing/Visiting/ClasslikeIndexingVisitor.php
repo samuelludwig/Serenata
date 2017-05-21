@@ -242,12 +242,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Stmt\Class_ && $node->isFinal(),
             $documentation['annotation'],
             $documentation['deprecated'],
-            !empty($docComment),
-            [],
-            [],
-            [],
-            [],
-            []
+            !empty($docComment)
         );
 
         $this->storage->persist($structure);
