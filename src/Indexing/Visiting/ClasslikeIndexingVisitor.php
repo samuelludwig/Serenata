@@ -633,7 +633,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $node->isFinal(),
             !empty($docComment),
             $throws,
-            [],
             $returnTypes
         );
 
@@ -893,7 +892,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             false,
             false,
             false,
-            [],
             [],
             $returnTypes
         );

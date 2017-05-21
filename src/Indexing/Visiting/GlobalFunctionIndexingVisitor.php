@@ -181,7 +181,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             false,
             !empty($docComment),
             $throws,
-            [],
             $returnTypes
         );
 

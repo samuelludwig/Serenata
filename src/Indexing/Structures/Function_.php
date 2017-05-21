@@ -164,7 +164,6 @@ class Function_
         bool $isFinal,
         bool $hasDocblock,
         array $throws,
-        array $parameters,
         array $returnTypes
     ) {
         $this->id = (string) Uuid::uuid4();
@@ -189,7 +188,7 @@ class Function_
         $this->throws = $throws;
         $this->returnTypes = $returnTypes;
 
-        $this->parameters = new ArrayCollection($parameters);
+        $this->parameters = new ArrayCollection();
 
         if ($structure) {
             $structure->addMethod($this);
