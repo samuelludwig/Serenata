@@ -385,11 +385,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $linkEntity = $this->storage->findStructureByFqcn($traitFqcn);
 
-            if (!$linkEntity) {
-                continue;
+            if ($linkEntity) {
+                $structure->addTrait($linkEntity);
+            } else {
+                $structure->addTraitFqcn($traitFqcn);
             }
-
-            $structure->addTrait($linkEntity);
         }
 
         $accessModifierMap = $this->getAccessModifierMap();
