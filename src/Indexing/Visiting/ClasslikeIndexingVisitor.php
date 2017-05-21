@@ -641,8 +641,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $this->storage->persist($function);
 
-        $parameters = [];
-
         foreach ($node->getParams() as $param) {
             $localType = null;
             $resolvedType = null;
