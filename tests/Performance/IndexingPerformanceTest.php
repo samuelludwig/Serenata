@@ -12,7 +12,7 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
      */
     public function testInitializationWithStubs(): void
     {
-        $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs/couchbase';
+        $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
         $dummyDatabasePath = $this->getOutputDirectory() . '/test-stubs.sqlite';
 
         @unlink($dummyDatabasePath);
