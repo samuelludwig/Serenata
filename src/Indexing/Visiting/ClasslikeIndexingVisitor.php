@@ -92,6 +92,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $traitsUsed = [];
 
     /**
+     * Stores structures that were found during the traversal.
+     *
+     * Whilst traversing, structures found first may be referencing structures found later and the other way around.
+     * Because changes are not flushed during traversal, fetching these structures may not work if they are located
+     * in the same file.
+     *
+     * We could also flush the changes constantly, but this hurts performance and not fetching information we already
+     * have benefits performance in large files with many interdependencies.
+     *
+     * @var SplObjectStorage
+     */
+    private $structuresFound;
+
+    /**
      * @var SplObjectStorage
      */
     private $relationsStorage;
@@ -165,6 +179,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes)
     {
+        $this->structuresFound = new SplObjectStorage();;
         $this->relationsStorage = new SplObjectStorage();
         $this->traitUseStorage = new SplObjectStorage();
     }
@@ -247,6 +262,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $this->storage->persist($structure);
 
+        $this->structuresFound->attach($structure, $structure->getFqcn());
+
         $accessModifierMap = $this->getAccessModifierMap();
 
         $this->relationsStorage->attach($structure, $node);
@@ -322,7 +339,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
 
-                $linkEntity = $this->storage->findStructureByFqcn($parentFqcn);
+                $linkEntity = $this->findStructureByFqcn($parentFqcn);
 
                 if ($linkEntity) {
                     $structure->addParent($linkEntity);
@@ -338,7 +355,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             }, $node->implements));
 
             foreach ($implementedFqcns as $implementedFqcn) {
-                $linkEntity = $this->storage->findStructureByFqcn($implementedFqcn);
+                $linkEntity = $this->findStructureByFqcn($implementedFqcn);
 
                 if ($linkEntity) {
                     $structure->addInterface($linkEntity);
@@ -354,7 +371,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             }, $node->extends));
 
             foreach ($extendedFqcns as $extendedFqcn) {
-                $linkEntity = $this->storage->findStructureByFqcn($extendedFqcn);
+                $linkEntity = $this->findStructureByFqcn($extendedFqcn);
 
                 if ($linkEntity) {
                     $structure->addParent($linkEntity);
@@ -383,7 +400,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->traitsUsed[$traitFqcn] = true;
 
-            $linkEntity = $this->storage->findStructureByFqcn($traitFqcn);
+            $linkEntity = $this->findStructureByFqcn($traitFqcn);
 
             if ($linkEntity) {
                 $structure->addTrait($linkEntity);
@@ -402,7 +419,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $trait = null;
 
                 if ($traitFqcn !== null) {
-                    $trait = $this->storage->findStructureByFqcn($traitFqcn);
+                    $trait = $this->findStructureByFqcn($traitFqcn);
 
                     if (!$trait) {
                         continue;
@@ -432,7 +449,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                $trait = $this->storage->findStructureByFqcn($traitFqcn);
+                $trait = $this->findStructureByFqcn($traitFqcn);
 
                 if (!$trait) {
                     continue;
@@ -1041,5 +1058,23 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         return $this->structureTypeMap;
+    }
+
+    /**
+     * @param string $fqcn
+     *
+     * @return Structures\Structure|null
+     */
+    protected function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    {
+        foreach ($this->structuresFound as $structure) {
+            $foundFqcn = $this->structuresFound[$structure];
+
+            if ($fqcn === $foundFqcn) {
+                return $structure;
+            }
+        }
+
+        return $this->storage->findStructureByFqcn($traitFqcn);
     }
 }
