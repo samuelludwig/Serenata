@@ -1075,6 +1075,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             }
         }
 
-        return $this->storage->findStructureByFqcn($traitFqcn);
+        return $this->storage->findStructureByFqcn($fqcn);
     }
 }
