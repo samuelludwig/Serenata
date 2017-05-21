@@ -106,7 +106,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             false,
             false,
             [],
-            ['phpt']
+            ['php', 'phpt']
         );
 
         if (!$mayFail) {
