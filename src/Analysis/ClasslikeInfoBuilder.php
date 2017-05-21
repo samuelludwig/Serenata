@@ -313,7 +313,11 @@ class ClasslikeInfoBuilder
             $classlike['traits'][] = $traitFqcn;
             $classlike['directTraits'][] = $traitFqcn;
 
-            $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlike['fqcn']);
+            try {
+                $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlike['fqcn']);
+            } catch (UnexpectedValueException $e) {
+                continue;
+            }
 
             $this->traitUsageResolver->resolveUseOf(
                 $traitInfo,
@@ -336,7 +340,11 @@ class ClasslikeInfoBuilder
             $classlike['parents'][] = $parentFqcn;
             $classlike['directParents'][] = $parentFqcn;
 
-            $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlike['fqcn']);
+            try {
+                $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlike['fqcn']);
+            } catch (UnexpectedValueException $e) {
+                continue;
+            }
 
             $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlike);
         }
@@ -354,7 +362,11 @@ class ClasslikeInfoBuilder
             $classlike['interfaces'][] = $interfaceFqcn;
             $classlike['directInterfaces'][] = $interfaceFqcn;
 
-            $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlike['fqcn']);
+            try {
+                $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlike['fqcn']);
+            } catch (UnexpectedValueException $e) {
+                continue;
+            }
 
             $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
         }
