@@ -98,7 +98,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
+    protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
         $success = $container->get('indexer')->reindex(
             [$testPath],
@@ -112,5 +112,17 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         if (!$mayFail) {
             $this->assertTrue($success);
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $testPath
+     * @param bool             $mayFail
+     *
+     * @return void
+     */
+    protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
+    {
+        $this->indexPath($container, $testPath, $mayFail);
     }
 }
