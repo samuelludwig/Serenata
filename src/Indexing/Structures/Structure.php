@@ -333,13 +333,23 @@ class Structure
     }
 
     /**
+     * @param string $fqcn
+     *
+     * @return void
+     */
+    public function addParentFqcn(string $fqcn): void
+    {
+        $this->parentFqcns[] = $fqcn;
+    }
+
+    /**
      * @param Structure $structure
      *
      * @return void
      */
     public function addParent(Structure $structure): void
     {
-        $this->parentFqcns[] = $structure->getFqcn();
+        $this->addParentFqcn($structure->getFqcn());
 
         $structure->childFqcns[] = $this->getFqcn();
     }
@@ -371,13 +381,23 @@ class Structure
     }
 
     /**
+     * @param string $fqcn
+     *
+     * @return void
+     */
+    public function addInterfaceFqcn(string $fqcn): void
+    {
+        $this->interfaceFqcns[] = $fqcn;
+    }
+
+    /**
      * @param Structure $structure
      *
      * @return void
      */
     public function addInterface(Structure $structure): void
     {
-        $this->interfaceFqcns[] = $structure->getFqcn();
+        $this->addInterfaceFqcn($structure->getFqcn());
 
         $structure->implementorFqcns[] = $this->getFqcn();
     }
@@ -409,13 +429,23 @@ class Structure
     }
 
     /**
+     * @param string $fqcn
+     *
+     * @return void
+     */
+    public function addTraitFqcn(string $fqcn): void
+    {
+        $this->traitFqcns[] = $fqcn;
+    }
+
+    /**
      * @param Structure $structure
      *
      * @return void
      */
     public function addTrait(Structure $structure): void
     {
-        $this->traitFqcns[] = $structure->getFqcn();
+        $this->addTraitFqcn($structure->getFqcn());
 
         $structure->traitUserFqcns[] = $this->getFqcn();
     }

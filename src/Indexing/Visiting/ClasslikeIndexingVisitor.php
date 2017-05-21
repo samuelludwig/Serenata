@@ -326,6 +326,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 if ($linkEntity) {
                     $structure->addParent($linkEntity);
+                } else {
+                    $structure->addParentFqcn($parentFqcn);
                 }
             }
 
@@ -338,11 +340,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             foreach ($implementedFqcns as $implementedFqcn) {
                 $linkEntity = $this->storage->findStructureByFqcn($implementedFqcn);
 
-                if (!$linkEntity) {
-                    continue;
+                if ($linkEntity) {
+                    $structure->addInterface($linkEntity);
+                } else {
+                    $structure->addInterfaceFqcn($implementedFqcn);
                 }
-
-                $structure->addInterface($linkEntity);
             }
         } elseif ($node instanceof Node\Stmt\Interface_) {
             $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
@@ -354,11 +356,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             foreach ($extendedFqcns as $extendedFqcn) {
                 $linkEntity = $this->storage->findStructureByFqcn($extendedFqcn);
 
-                if (!$linkEntity) {
-                    continue;
+                if ($linkEntity) {
+                    $structure->addParent($linkEntity);
+                } else {
+                    $structure->addParentFqcn($implementedFqcn);
                 }
-
-                $structure->addParent($linkEntity);
             }
         }
     }
