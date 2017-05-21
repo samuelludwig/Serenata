@@ -359,7 +359,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 if ($linkEntity) {
                     $structure->addParent($linkEntity);
                 } else {
-                    $structure->addParentFqcn($implementedFqcn);
+                    $structure->addParentFqcn($extendedFqcn);
                 }
             }
         }
