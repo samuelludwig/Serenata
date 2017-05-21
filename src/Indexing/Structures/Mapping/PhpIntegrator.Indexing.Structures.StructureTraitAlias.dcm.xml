@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\StructureTraitAlias">
+    <entity name="PhpIntegrator\Indexing\Structures\StructureTraitAlias" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
         <field name="name"      type="string"  nullable="false" length="255" />
