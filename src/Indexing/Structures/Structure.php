@@ -87,34 +87,34 @@ class Structure
     private $hasDocblock;
 
     /**
-     * @var ArrayCollection
+     * @var string[]
      */
-    private $parents;
+    private $parentFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var string[]
      */
-    private $children;
+    private $childFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var string[]
      */
-    private $interfaces;
+    private $interfaceFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var string[]
      */
-    private $implementors;
+    private $implementorFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var string[]
      */
-    private $traits;
+    private $traitFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var string[]
      */
-    private $traitUsers;
+    private $traitUserFqcns;
 
     /**
      * @var ArrayCollection
@@ -189,12 +189,13 @@ class Structure
         $this->isDeprecated = $isDeprecated;
         $this->hasDocblock = $hasDocblock;
 
-        $this->parents = new ArrayCollection();
-        $this->children = new ArrayCollection();
-        $this->interfaces = new ArrayCollection();
-        $this->implementors = new ArrayCollection();
-        $this->traits = new ArrayCollection();
-        $this->traitUsers = new ArrayCollection();
+        $this->parentFqcns = [];
+        $this->childFqcns = [];
+        $this->interfaceFqcns = [];
+        $this->implementorFqcns = [];
+        $this->traitFqcns = [];
+        $this->traitUserFqcns = [];
+
         $this->traitAliases = new ArrayCollection();
         $this->traitPrecedences = new ArrayCollection();
 
@@ -324,11 +325,11 @@ class Structure
     }
 
     /**
-     * @return Structure[]
+     * @return string[]
      */
-    public function getParents(): array
+    public function getParentFqcns(): array
     {
-        return $this->parents->toArray();
+        return $this->parentFqcns;
     }
 
     /**
@@ -338,17 +339,17 @@ class Structure
      */
     public function addParent(Structure $structure): void
     {
-        $this->parents->add($structure);
+        $this->parentFqcns[] = $structure->getFqcn();
 
-        $structure->children->add($this);
+        $structure->childFqcns[] = $this->getFqcn();
     }
 
     /**
-     * @return Structure[]
+     * @return string[]
      */
-    public function getChildren(): array
+    public function getChildFqcns(): array
     {
-        return $this->children->toArray();
+        return $this->childFqcns;
     }
 
     /**
@@ -362,11 +363,11 @@ class Structure
     }
 
     /**
-     * @return Structure[]
+     * @return string[]
      */
-    public function getInterfaces(): array
+    public function getInterfaceFqcns(): array
     {
-        return $this->interfaces->toArray();
+        return $this->interfaceFqcns;
     }
 
     /**
@@ -376,17 +377,17 @@ class Structure
      */
     public function addInterface(Structure $structure): void
     {
-        $this->interfaces->add($structure);
+        $this->interfaceFqcns[] = $structure->getFqcn();
 
-        $structure->implementors->add($this);
+        $structure->implementorFqcns[] = $this->getFqcn();
     }
 
     /**
-     * @return Structure[]
+     * @return string[]
      */
-    public function getImplementors(): array
+    public function getImplementorFqcns(): array
     {
-        return $this->implementors->toArray();
+        return $this->implementorFqcns;
     }
 
     /**
@@ -400,11 +401,11 @@ class Structure
     }
 
     /**
-     * @return Structure[]
+     * @return string[]
      */
-    public function getTraits(): array
+    public function getTraitFqcns(): array
     {
-        return $this->traits->toArray();
+        return $this->traitFqcns;
     }
 
     /**
@@ -414,17 +415,17 @@ class Structure
      */
     public function addTrait(Structure $structure): void
     {
-        $this->traits->add($structure);
+        $this->traitFqcns[] = $structure->getFqcn();
 
-        $structure->traitUsers->add($this);
+        $structure->traitUserFqcns[] = $this->getFqcn();
     }
 
     /**
-     * @return Structure[]
+     * @return string[]
      */
-    public function getTraitUsers(): array
+    public function getTraitUserFqcns(): array
     {
-        return $this->traitUsers->toArray();
+        return $this->traitUserFqcns;
     }
 
     /**

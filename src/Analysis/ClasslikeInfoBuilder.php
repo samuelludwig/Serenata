@@ -225,8 +225,8 @@ class ClasslikeInfoBuilder
      */
     protected function buildDirectChildrenInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getChildren() as $child) {
-            $classlike['directChildren'][] = $child->getFqcn();
+        foreach ($structure->getChildFqcns() as $childFqcn) {
+            $classlike['directChildren'][] = $childFqcn;
         }
     }
 
@@ -238,8 +238,8 @@ class ClasslikeInfoBuilder
      */
     protected function buildDirectImplementorsInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getImplementors() as $implementor) {
-            $classlike['directImplementors'][] = $implementor->getFqcn();
+        foreach ($structure->getImplementorFqcns() as $implementorFqcn) {
+            $classlike['directImplementors'][] = $implementorFqcn;
         }
     }
 
@@ -251,8 +251,8 @@ class ClasslikeInfoBuilder
      */
     protected function buildTraitUsersInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getTraitUsers() as $trait) {
-            $classlike['directTraitUsers'][] = $trait->getFqcn();
+        foreach ($structure->getTraitUserFqcns() as $traitUserFqcn) {
+            $classlike['directTraitUsers'][] = $traitUserFqcn;
         }
     }
 
@@ -309,11 +309,11 @@ class ClasslikeInfoBuilder
      */
     protected function buildTraitsInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getTraits() as $trait) {
-            $classlike['traits'][] = $trait->getFqcn();
-            $classlike['directTraits'][] = $trait->getFqcn();
+        foreach ($structure->getTraitFqcns() as $traitFqcn) {
+            $classlike['traits'][] = $traitFqcn;
+            $classlike['directTraits'][] = $traitFqcn;
 
-            $traitInfo = $this->getCheckedClasslikeInfo($trait->getFqcn(), $classlike['fqcn']);
+            $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlike['fqcn']);
 
             $this->traitUsageResolver->resolveUseOf(
                 $traitInfo,
@@ -332,11 +332,11 @@ class ClasslikeInfoBuilder
      */
     protected function buildParentsInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getParents() as $parent) {
-            $classlike['parents'][] = $parent->getFqcn();
-            $classlike['directParents'][] = $parent->getFqcn();
+        foreach ($structure->getParentFqcns() as $parentFqcn) {
+            $classlike['parents'][] = $parentFqcn;
+            $classlike['directParents'][] = $parentFqcn;
 
-            $parentInfo = $this->getCheckedClasslikeInfo($parent->getFqcn(), $classlike['fqcn']);
+            $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlike['fqcn']);
 
             $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlike);
         }
@@ -350,11 +350,11 @@ class ClasslikeInfoBuilder
      */
     protected function buildInterfacesInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getInterfaces() as $interface) {
-            $classlike['interfaces'][] = $interface->getFqcn();
-            $classlike['directInterfaces'][] = $interface->getFqcn();
+        foreach ($structure->getInterfaceFqcns() as $interfaceFqcn) {
+            $classlike['interfaces'][] = $interfaceFqcn;
+            $classlike['directInterfaces'][] = $interfaceFqcn;
 
-            $interfaceInfo = $this->getCheckedClasslikeInfo($interface->getFqcn(), $classlike['fqcn']);
+            $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlike['fqcn']);
 
             $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
         }
