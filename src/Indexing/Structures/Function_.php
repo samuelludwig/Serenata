@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Indexing\Structures;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -185,8 +187,9 @@ class Function_
         $this->isFinal = $isFinal;
         $this->hasDocblock = $hasDocblock;
         $this->throws = $throws;
-        $this->parameters = $parameters;
         $this->returnTypes = $returnTypes;
+
+        $this->parameters = new ArrayCollection($parameters);
 
         if ($structure) {
             $structure->addMethod($this);
