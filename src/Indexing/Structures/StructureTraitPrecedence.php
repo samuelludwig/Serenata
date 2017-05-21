@@ -20,9 +20,9 @@ class StructureTraitPrecedence
     private $structure;
 
     /**
-     * @var Structure
+     * @var string
      */
-    private $trait;
+    private $traitFqcn;
 
     /**
      * @var string
@@ -31,14 +31,14 @@ class StructureTraitPrecedence
 
     /**
      * @param Structure $structure
-     * @param Structure $trait
+     * @param string    $traitFqcn
      * @param string    $name
      */
-    public function __construct(Structure $structure, Structure $trait, string $name)
+    public function __construct(Structure $structure, string $traitFqcn, string $name)
     {
         $this->id = (string) Uuid::uuid4();
         $this->structure = $structure;
-        $this->trait = $trait;
+        $this->traitFqcn = $traitFqcn;
         $this->name = $name;
 
         $structure->addTraitPrecedence($this);
@@ -61,11 +61,11 @@ class StructureTraitPrecedence
     }
 
     /**
-     * @return Structure
+     * @return string
      */
-    public function getTrait(): Structure
+    public function getTraitFqcn(): string
     {
-        return $this->trait;
+        return $this->traitFqcn;
     }
 
     /**

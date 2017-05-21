@@ -416,16 +416,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $traitFqcn = $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null;
                 $traitFqcn = $traitFqcn !== null ? $this->typeAnalyzer->getNormalizedFqcn($traitFqcn) : null;
 
-                $trait = null;
-
-                if ($traitFqcn !== null) {
-                    $trait = $this->findStructureByFqcn($traitFqcn);
-
-                    if (!$trait) {
-                        continue;
-                    }
-                }
-
                 $accessModifier = null;
 
                 if ($adaptation->newModifier === 1) {
@@ -438,7 +428,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $traitAlias = new Structures\StructureTraitAlias(
                     $structure,
-                    $trait,
+                    $traitFqcn,
                     $accessModifier ? $accessModifierMap[$accessModifier] : null,
                     $adaptation->method,
                     $adaptation->newName
@@ -449,15 +439,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                $trait = $this->findStructureByFqcn($traitFqcn);
-
-                if (!$trait) {
-                    continue;
-                }
-
                 $traitPrecedence = new Structures\StructureTraitPrecedence(
                     $structure,
-                    $trait,
+                    $traitFqcn,
                     $adaptation->method
                 );
 

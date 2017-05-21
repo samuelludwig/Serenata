@@ -8,13 +8,10 @@
     <entity name="PhpIntegrator\Indexing\Structures\StructureTraitPrecedence">
         <id name="id" type="string"></id>
 
-        <field name="name" type="string"  nullable="false" length="255" />
+        <field name="name"      type="string"  nullable="false" length="255" />
+        <field name="traitFqcn" type="string"  nullable="false"  length="255" />
 
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="traitPrecedences">
-            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
-        </many-to-one>
-
-        <many-to-one field="trait" target-entity="PhpIntegrator\Indexing\Structures\Structure">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
         </many-to-one>
     </entity>

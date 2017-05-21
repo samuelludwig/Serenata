@@ -20,9 +20,9 @@ class StructureTraitAlias
     private $structure;
 
     /**
-     * @var Structure|null
+     * @var string|null
      */
-    private $trait;
+    private $traitFqcn;
 
     /**
      * @var AccessModifier|null
@@ -41,21 +41,21 @@ class StructureTraitAlias
 
     /**
      * @param Structure           $structure
-     * @param Structure|null      $trait
+     * @param string|null         $traitFqcn
      * @param AccessModifier|null $accessModifier
      * @param string              $name
      * @param string|null         $alias
      */
     public function __construct(
         Structure $structure,
-        ?Structure $trait,
+        ?string $traitFqcn,
         ?AccessModifier $accessModifier,
         string $name,
         ?string $alias
     ) {
         $this->id = (string) Uuid::uuid4();
         $this->structure = $structure;
-        $this->trait = $trait;
+        $this->traitFqcn = $traitFqcn;
         $this->accessModifier = $accessModifier;
         $this->name = $name;
         $this->alias = $alias;
@@ -80,11 +80,11 @@ class StructureTraitAlias
     }
 
     /**
-     * @return Structure|null
+     * @return string|null
      */
-    public function getTrait(): ?Structure
+    public function getTraitFqcn(): ?string
     {
-        return $this->trait;
+        return $this->traitFqcn;
     }
 
     /**
