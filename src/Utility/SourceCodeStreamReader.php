@@ -12,12 +12,12 @@ class SourceCodeStreamReader
     /**
      * @var resource|null
      */
-    protected $stdinStream;
+    private $stdinStream;
 
     /**
      * @var bool
      */
-    protected $autoConvertToUtf8;
+    private $autoConvertToUtf8;
 
     /**
      * @param resource|null $stdinStream
@@ -130,6 +130,10 @@ class SourceCodeStreamReader
     protected function convertEncodingToUtf8(string $code): string
     {
         $encoding = mb_detect_encoding($code, null, true);
+
+        if (!$encoding) {
+            $encoding = 'ASCII';
+        }
 
         if (!in_array($encoding, ['UTF-8', 'ASCII'], true)) {
             $code = mb_convert_encoding($code, 'UTF-8', $encoding);

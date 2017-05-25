@@ -6,9 +6,13 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Conversion\ConstantConverter;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\Structures;
+use PhpIntegrator\Indexing\ManagerRegistry;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -21,39 +25,39 @@ use PhpParser\Node;
 class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @var IndexDatabase
+     * @var ManagerRegistry
      */
-    protected $indexDatabase;
+    private $managerRegistry;
 
     /**
      * @var ConstantConverter
      */
-    protected $constantConverter;
+    private $constantConverter;
 
     /**
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param IndexDatabase                    $indexDatabase
-     * @param ConstantConverter                $constantConverter
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param ManagerRegistry                            $managerRegistry
+     * @param ConstantConverter                          $constantConverter
      */
     public function __construct(
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
-        IndexDatabase $indexDatabase,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
+        ManagerRegistry $managerRegistry,
         ConstantConverter $constantConverter
     ) {
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
-        $this->indexDatabase = $indexDatabase;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
+        $this->managerRegistry = $managerRegistry;
         $this->constantConverter = $constantConverter;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\ConstFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -64,7 +68,7 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\ConstFetch $node
-     * @param string|null          $file
+     * @param string               $file
      * @param string               $code
      * @param int                  $offset
      *
@@ -72,7 +76,7 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromConstFetchNode(
         Node\Expr\ConstFetch $node,
-        ?string $file,
+        string $file,
         string $code,
         int $offset
     ): array {
@@ -84,11 +88,16 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             return ['bool'];
         }
 
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+        $filePosition = new FilePosition(
+            $file,
+            new Position(SourceCodeHelpers::calculateLineByOffset($code, $offset), 0)
+        );
 
-        $fqcn = $this->fileTypeResolverFactory->create($file)->resolve($name, $line);
+        $fqsen = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);
 
-        $globalConstant = $this->indexDatabase->getGlobalConstantByFqcn($fqcn);
+        $globalConstant = $this->managerRegistry->getRepository(Structures\Constant::class)->findOneBy([
+            'fqcn' => $fqsen
+        ]);
 
         if (!$globalConstant) {
             return [];

@@ -16,12 +16,12 @@ class ClassInfoCommand extends AbstractCommand
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param TypeAnalyzer         $typeAnalyzer

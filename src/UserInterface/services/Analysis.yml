@@ -1,0 +1,222 @@
+imports:
+    - { resource: Analysis/Typing.yml }
+    - { resource: Analysis/Autocompletion.yml }
+
+parameters:
+
+
+services:
+    fileNamespaceProvider.storageBackend:
+        class: PhpIntegrator\Analysis\StorageFileNamespaceProvider
+        arguments:
+            - '@doctrineStorage'
+
+    fileNamespaceProvider.cachingFileNamespaceProvider:
+        class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
+        arguments:
+            - '@fileNamespaceProvider.storageBackend'
+
+    metadataProvider:
+        alias: doctrineStorage
+
+    fileNamespaceProvider:
+        alias: fileNamespaceProvider.cachingFileNamespaceProvider
+
+    positionalNamespaceDeterminer:
+        class: PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminer
+        arguments:
+            - '@fileNamespaceProvider'
+
+    positionalNameResolverFactory:
+        class: PhpIntegrator\NameQualificationUtilities\PositionalNameResolverFactory
+        arguments:
+            - '@positionalNamespaceDeterminer'
+
+    structureAwareNameResolverFactory.structureAwareNameResolverBackend:
+        class: PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactory
+        arguments:
+            - '@positionalNameResolverFactory'
+            - '@positionalNamespaceDeterminer'
+            - '@globalConstantExistenceChecker'
+            - '@globalFunctionExistenceChecker'
+
+    structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend:
+        class: PhpIntegrator\Analysis\SpecialNameIgnoringPositionalNameResolverFactory
+        arguments:
+            - '@structureAwareNameResolverFactory.structureAwareNameResolverBackend'
+            - '@typeAnalyzer'
+
+    structureAwareNameResolverFactory.docblockPositionalNameResolverBackend:
+        class: PhpIntegrator\Analysis\DocblockPositionalNameResolverFactory
+        arguments:
+            - '@structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend'
+            - '@typeAnalyzer'
+
+    structureAwareNameResolverFactory:
+        alias: structureAwareNameResolverFactory.docblockPositionalNameResolverBackend
+
+    variableScanner:
+        class: PhpIntegrator\Analysis\VariableScanner
+
+    typeAnalyzer:
+        class: PhpIntegrator\Analysis\Typing\TypeAnalyzer
+
+    docblockAnalyzer:
+        class: PhpIntegrator\Analysis\DocblockAnalyzer
+
+    constantConverter:
+        class: PhpIntegrator\Analysis\Conversion\ConstantConverter
+
+    classlikeConstantConverter:
+        class: PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter
+
+    propertyConverter:
+        class: PhpIntegrator\Analysis\Conversion\PropertyConverter
+
+    classlikeConverter:
+        class: PhpIntegrator\Analysis\Conversion\ClasslikeConverter
+
+    functionConverter:
+        class: PhpIntegrator\Analysis\Conversion\FunctionConverter
+
+    methodConverter:
+        class: PhpIntegrator\Analysis\Conversion\MethodConverter
+
+    fileClassListProvider.instance:
+        alias: doctrineClassListProvider
+
+    fileClassListProvider.cachingDecorator:
+        class: PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator
+        arguments:
+            - '@fileClassListProvider.instance'
+
+    fileClassListProvider:
+        alias: fileClassListProvider.cachingDecorator
+
+    filePositionClasslikeDeterminer:
+        class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
+        arguments:
+            - '@fileClassListProvider'
+
+    inheritanceResolver:
+        class: PhpIntegrator\Analysis\Relations\InheritanceResolver
+        arguments:
+            - '@docblockAnalyzer'
+            - '@typeAnalyzer'
+
+    interfaceImplementationResolver:
+        class: PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver
+        arguments:
+            - '@docblockAnalyzer'
+            - '@typeAnalyzer'
+
+    traitUsageResolver:
+        class: PhpIntegrator\Analysis\Relations\TraitUsageResolver
+        arguments:
+            - '@docblockAnalyzer'
+            - '@typeAnalyzer'
+
+    classlikeExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineClasslikeExistenceChecker
+        arguments:
+            - '@managerRegistry'
+
+    classlikeExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingClasslikeExistenceChecker
+        arguments:
+            - '@classlikeExistenceChecker.doctrine'
+
+    classlikeExistenceChecker:
+        alias: classlikeExistenceChecker.arrayCachingDecorator
+
+    globalFunctionExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineGlobalFunctionExistenceChecker
+        arguments:
+            - '@managerRegistry'
+
+    globalFunctionExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingGlobalFunctionExistenceChecker
+        arguments:
+            - '@globalFunctionExistenceChecker.doctrine'
+
+    globalFunctionExistenceChecker:
+        alias: globalFunctionExistenceChecker.arrayCachingDecorator
+
+    globalConstantExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineGlobalConstantExistenceChecker
+        arguments:
+            - '@managerRegistry'
+
+    globalConstantExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingGlobalConstantExistenceChecker
+        arguments:
+            - '@globalConstantExistenceChecker.doctrine'
+
+    globalConstantExistenceChecker:
+        alias: globalConstantExistenceChecker.arrayCachingDecorator
+
+    doctrineFunctionListProvider:
+        class: PhpIntegrator\Analysis\DoctrineFunctionListProvider
+        arguments:
+            - '@functionConverter'
+            - '@managerRegistry'
+
+    doctrineConstantListProvider:
+        class: PhpIntegrator\Analysis\DoctrineConstantListProvider
+        arguments:
+            - '@constantConverter'
+            - '@managerRegistry'
+
+    doctrineClassListProvider:
+        class: PhpIntegrator\Analysis\DoctrineClassListProvider
+        arguments:
+            - '@classlikeConverter'
+            - '@managerRegistry'
+
+    classlikeInfoBuilder:
+        class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
+        arguments:
+            - '@constantConverter'
+            - '@classlikeConstantConverter'
+            - '@propertyConverter'
+            - '@functionConverter'
+            - '@methodConverter'
+            - '@classlikeConverter'
+            - '@inheritanceResolver'
+            - '@interfaceImplementationResolver'
+            - '@traitUsageResolver'
+            - '@doctrineStorage'
+            - '@typeAnalyzer'
+
+    functionNameNodeFqsenDeterminer:
+        class: PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer
+        arguments:
+            - '@globalFunctionExistenceChecker'
+
+    constFetchNodeFqsenDeterminer:
+        class: PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer
+        arguments:
+            - '@globalConstantExistenceChecker'
+
+    nameNodeFqsenDeterminer:
+        class: PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer
+        arguments:
+            - '@structureAwareNameResolverFactory'
+
+    propertyFetchPropertyInfoRetriever:
+        class: PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever
+        arguments:
+            - '@nodeTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    functionFunctionInfoRetriever:
+        class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
+        arguments:
+            - '@functionNameNodeFqsenDeterminer'
+            - '@doctrineFunctionListProvider'
+
+    methodCallMethodInfoRetriever:
+        class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever
+        arguments:
+            - '@nodeTypeDeducer'
+            - '@classlikeInfoBuilder'

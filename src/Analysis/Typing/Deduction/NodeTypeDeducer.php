@@ -17,162 +17,169 @@ use PhpParser\Node;
 class NodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var VariableNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $variableNodeTypeDeducer;
+    private $variableNodeTypeDeducer;
 
     /**
-     * @var LNumberNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $lNumberNodeTypeDeducer;
+    private $lNumberNodeTypeDeducer;
 
     /**
-     * @var DNumberNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $dNumberNodeTypeDeducer;
+    private $dNumberNodeTypeDeducer;
 
     /**
-     * @var StringNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $stringNodeTypeDeducer;
+    private $stringNodeTypeDeducer;
 
     /**
-     * @var ConstFetchNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $constFetchNodeTypeDeducer;
+    private $constFetchNodeTypeDeducer;
 
     /**
-     * @var ArrayDimFetchNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $arrayDimFetchNodeTypeDeducer;
+    private $arrayDimFetchNodeTypeDeducer;
 
     /**
-     * @var ClosureNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $closureNodeTypeDeducer;
+    private $closureNodeTypeDeducer;
 
     /**
-     * @var NewNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $newNodeTypeDeducer;
+    private $newNodeTypeDeducer;
 
     /**
-     * @var CloneNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $cloneNodeTypeDeducer;
+    private $cloneNodeTypeDeducer;
 
     /**
-     * @var ArrayNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $arrayNodeTypeDeducer;
+    private $arrayNodeTypeDeducer;
 
     /**
-     * @var SelfNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $selfNodeTypeDeducer;
+    private $selfNodeTypeDeducer;
 
     /**
-     * @var StaticNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $staticNodeTypeDeducer;
+    private $staticNodeTypeDeducer;
 
     /**
-     * @var ParentNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $parentNodeTypeDeducer;
+    private $parentNodeTypeDeducer;
 
     /**
-     * @var NameNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $nameNodeTypeDeducer;
+    private $nameNodeTypeDeducer;
 
     /**
-     * @var FuncCallNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $funcCallNodeTypeDeducer;
+    private $funcCallNodeTypeDeducer;
 
     /**
-     * @var MethodCallNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $methodCallNodeTypeDeducer;
+    private $methodCallNodeTypeDeducer;
 
     /**
-     * @var PropertyFetchNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $propertyFetchNodeTypeDeducer;
+    private $propertyFetchNodeTypeDeducer;
 
     /**
-     * @var ClassConstFetchNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $classConstFetchNodeTypeDeducer;
+    private $classConstFetchNodeTypeDeducer;
 
     /**
-     * @var AssignNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $assignNodeTypeDeducer;
+    private $assignNodeTypeDeducer;
 
     /**
-     * @var TernaryNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $ternaryNodeTypeDeducer;
+    private $ternaryNodeTypeDeducer;
 
     /**
-     * @var ClassLikeNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $classLikeNodeTypeDeducer;
+    private $classLikeNodeTypeDeducer;
 
     /**
-     * @var CatchNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
      */
-    protected $catchNodeTypeDeducer;
+    private $catchNodeTypeDeducer;
 
     /**
-     * @param VariableNodeTypeDeducer        $variableNodeTypeDeducer
-     * @param LNumberNodeTypeDeducer         $lNumberNodeTypeDeducer
-     * @param DNumberNodeTypeDeducer         $dNumberNodeTypeDeducer
-     * @param StringNodeTypeDeducer          $stringNodeTypeDeducer
-     * @param ConstFetchNodeTypeDeducer      $constFetchNodeTypeDeducer
-     * @param ArrayDimFetchNodeTypeDeducer   $arrayDimFetchNodeTypeDeducer
-     * @param ClosureNodeTypeDeducer         $closureNodeTypeDeducer
-     * @param NewNodeTypeDeducer             $newNodeTypeDeducer
-     * @param CloneNodeTypeDeducer           $cloneNodeTypeDeducer
-     * @param ArrayNodeTypeDeducer           $arrayNodeTypeDeducer
-     * @param SelfNodeTypeDeducer            $selfNodeTypeDeducer
-     * @param StaticNodeTypeDeducer          $staticNodeTypeDeducer
-     * @param ParentNodeTypeDeducer          $parentNodeTypeDeducer
-     * @param NameNodeTypeDeducer            $nameNodeTypeDeducer
-     * @param FuncCallNodeTypeDeducer        $funcCallNodeTypeDeducer
-     * @param MethodCallNodeTypeDeducer      $methodCallNodeTypeDeducer
-     * @param PropertyFetchNodeTypeDeducer   $propertyFetchNodeTypeDeducer
-     * @param ClassConstFetchNodeTypeDeducer $classConstFetchNodeTypeDeducer
-     * @param AssignNodeTypeDeducer          $assignNodeTypeDeducer
-     * @param TernaryNodeTypeDeducer         $ternaryNodeTypeDeducer
-     * @param ClassLikeNodeTypeDeducer       $classLikeNodeTypeDeducer
-     * @param CatchNodeTypeDeducer           $catchNodeTypeDeducer
+     * @var NodeTypeDeducerInterface
+     */
+    private $expressionNodeTypeDeducer;
+
+    /**
+     * @param NodeTypeDeducerInterface $variableNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $lNumberNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $dNumberNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $stringNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $constFetchNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $arrayDimFetchNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $closureNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $newNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $cloneNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $arrayNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $selfNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $staticNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $parentNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $nameNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $funcCallNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $methodCallNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $propertyFetchNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $classConstFetchNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $assignNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $ternaryNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $classLikeNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $catchNodeTypeDeducer
+     * @param NodeTypeDeducerInterface $expressionNodeTypeDeducer
      */
     public function __construct(
-        VariableNodeTypeDeducer $variableNodeTypeDeducer,
-        LNumberNodeTypeDeducer $lNumberNodeTypeDeducer,
-        DNumberNodeTypeDeducer $dNumberNodeTypeDeducer,
-        StringNodeTypeDeducer $stringNodeTypeDeducer,
-        ConstFetchNodeTypeDeducer $constFetchNodeTypeDeducer,
-        ArrayDimFetchNodeTypeDeducer $arrayDimFetchNodeTypeDeducer,
-        ClosureNodeTypeDeducer $closureNodeTypeDeducer,
-        NewNodeTypeDeducer $newNodeTypeDeducer,
-        CloneNodeTypeDeducer $cloneNodeTypeDeducer,
-        ArrayNodeTypeDeducer $arrayNodeTypeDeducer,
-        SelfNodeTypeDeducer $selfNodeTypeDeducer,
-        StaticNodeTypeDeducer $staticNodeTypeDeducer,
-        ParentNodeTypeDeducer $parentNodeTypeDeducer,
-        NameNodeTypeDeducer $nameNodeTypeDeducer,
-        FuncCallNodeTypeDeducer $funcCallNodeTypeDeducer,
-        MethodCallNodeTypeDeducer $methodCallNodeTypeDeducer,
-        PropertyFetchNodeTypeDeducer $propertyFetchNodeTypeDeducer,
-        ClassConstFetchNodeTypeDeducer $classConstFetchNodeTypeDeducer,
-        AssignNodeTypeDeducer $assignNodeTypeDeducer,
-        TernaryNodeTypeDeducer $ternaryNodeTypeDeducer,
-        ClassLikeNodeTypeDeducer $classLikeNodeTypeDeducer,
-        CatchNodeTypeDeducer $catchNodeTypeDeducer
+        NodeTypeDeducerInterface $variableNodeTypeDeducer,
+        NodeTypeDeducerInterface $lNumberNodeTypeDeducer,
+        NodeTypeDeducerInterface $dNumberNodeTypeDeducer,
+        NodeTypeDeducerInterface $stringNodeTypeDeducer,
+        NodeTypeDeducerInterface $constFetchNodeTypeDeducer,
+        NodeTypeDeducerInterface $arrayDimFetchNodeTypeDeducer,
+        NodeTypeDeducerInterface $closureNodeTypeDeducer,
+        NodeTypeDeducerInterface $newNodeTypeDeducer,
+        NodeTypeDeducerInterface $cloneNodeTypeDeducer,
+        NodeTypeDeducerInterface $arrayNodeTypeDeducer,
+        NodeTypeDeducerInterface $selfNodeTypeDeducer,
+        NodeTypeDeducerInterface $staticNodeTypeDeducer,
+        NodeTypeDeducerInterface $parentNodeTypeDeducer,
+        NodeTypeDeducerInterface $nameNodeTypeDeducer,
+        NodeTypeDeducerInterface $funcCallNodeTypeDeducer,
+        NodeTypeDeducerInterface $methodCallNodeTypeDeducer,
+        NodeTypeDeducerInterface $propertyFetchNodeTypeDeducer,
+        NodeTypeDeducerInterface $classConstFetchNodeTypeDeducer,
+        NodeTypeDeducerInterface $assignNodeTypeDeducer,
+        NodeTypeDeducerInterface $ternaryNodeTypeDeducer,
+        NodeTypeDeducerInterface $classLikeNodeTypeDeducer,
+        NodeTypeDeducerInterface $catchNodeTypeDeducer,
+        NodeTypeDeducerInterface $expressionNodeTypeDeducer
     ) {
         $this->variableNodeTypeDeducer = $variableNodeTypeDeducer;
         $this->lNumberNodeTypeDeducer = $lNumberNodeTypeDeducer;
@@ -196,12 +203,13 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
         $this->ternaryNodeTypeDeducer = $ternaryNodeTypeDeducer;
         $this->classLikeNodeTypeDeducer = $classLikeNodeTypeDeducer;
         $this->catchNodeTypeDeducer = $catchNodeTypeDeducer;
+        $this->expressionNodeTypeDeducer = $expressionNodeTypeDeducer;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         $typeDeducer = null;
 
@@ -263,7 +271,8 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
             Node\Stmt\Class_::class              => $this->classLikeNodeTypeDeducer,
             Node\Stmt\Interface_::class          => $this->classLikeNodeTypeDeducer,
             Node\Stmt\Trait_::class              => $this->classLikeNodeTypeDeducer,
-            Node\Stmt\Catch_::class              => $this->catchNodeTypeDeducer
+            Node\Stmt\Catch_::class              => $this->catchNodeTypeDeducer,
+            Node\Stmt\Expression::class          => $this->expressionNodeTypeDeducer
         ];
 
         if (!isset($map[$class])) {

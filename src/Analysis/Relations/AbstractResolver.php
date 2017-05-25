@@ -18,12 +18,12 @@ abstract class AbstractResolver
     /**
      * @var DocblockAnalyzer
      */
-    protected $docblockAnalyzer;
+    private $docblockAnalyzer;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @param DocblockAnalyzer $docblockAnalyzer

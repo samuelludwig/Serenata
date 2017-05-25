@@ -2,64 +2,65 @@
 
 namespace PhpIntegrator\Analysis\Conversion;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Converts raw function data from the index to more useful data.
  */
 class FunctionConverter extends AbstractConverter
 {
     /**
-     * @param array $rawInfo
+     * @param Structures\Function_ $function
      *
      * @return array
      */
-    public function convert(array $rawInfo): array
+    public function convert(Structures\Function_ $function): array
     {
-        $rawParameters = unserialize($rawInfo['parameters_serialized']);
-
         $parameters = [];
 
-        foreach ($rawParameters as $rawParameter) {
+        foreach ($function->getParameters() as $parameter) {
             $parameters[] = [
-                'name'         => $rawParameter['name'],
-                'typeHint'     => $rawParameter['type_hint'],
-                'types'        => $this->getReturnTypeDataForSerializedTypes($rawParameter['types_serialized']),
-                'description'  => $rawParameter['description'],
-                'defaultValue' => $rawParameter['default_value'],
-                'isNullable'   => !!$rawParameter['is_nullable'],
-                'isReference'  => !!$rawParameter['is_reference'],
-                'isVariadic'   => !!$rawParameter['is_variadic'],
-                'isOptional'   => !!$rawParameter['is_optional']
+                'name'         => $parameter->getName(),
+                'typeHint'     => $parameter->getTypeHint(),
+                'types'        => $this->convertTypes($parameter->getTypes()),
+                'description'  => $parameter->getDescription(),
+                'defaultValue' => $parameter->getDefaultValue(),
+                'isNullable'   => $parameter->getIsNullable(),
+                'isReference'  => $parameter->getIsReference(),
+                'isVariadic'   => $parameter->getIsVariadic(),
+                'isOptional'   => $parameter->getIsOptional()
             ];
         }
 
-        $throws = unserialize($rawInfo['throws_serialized']);
-
         $throwsAssoc = [];
 
-        foreach ($throws as $throws) {
-            $throwsAssoc[$throws['type']] = $throws['description'];
+        foreach ($function->getThrows() as $throws) {
+            $throwsAssoc[] = [
+                'type'        => $throws['type'],
+                'description' => $throws['description']
+            ];
         }
 
         return [
-            'name'              => $rawInfo['name'],
-            'fqcn'              => $rawInfo['fqcn'],
-            'isBuiltin'         => !!$rawInfo['is_builtin'],
-            'startLine'         => (int) $rawInfo['start_line'],
-            'endLine'           => (int) $rawInfo['end_line'],
-            'filename'          => $rawInfo['path'],
+            'name'              => $function->getName(),
+            'fqcn'              => $function->getFqcn(),
+            'isBuiltin'         => $function->getIsBuiltin(),
+            'startLine'         => $function->getStartLine(),
+            'endLine'           => $function->getEndLine(),
+            'filename'          => $function->getFile()->getPath(),
 
             'parameters'        => $parameters,
             'throws'            => $throwsAssoc,
-            'isDeprecated'      => !!$rawInfo['is_deprecated'],
-            'hasDocblock'       => !!$rawInfo['has_docblock'],
-            'hasDocumentation'  => !!$rawInfo['has_docblock'],
+            'isDeprecated'      => $function->getIsDeprecated(),
+            'hasDocblock'       => $function->getHasDocblock(),
+            'hasDocumentation'  => $function->getHasDocblock(),
 
-            'shortDescription'  => $rawInfo['short_description'],
-            'longDescription'   => $rawInfo['long_description'],
-            'returnDescription' => $rawInfo['return_description'],
+            'shortDescription'  => $function->getShortDescription(),
+            'longDescription'   => $function->getLongDescription(),
+            'returnDescription' => $function->getReturnDescription(),
 
-            'returnTypeHint'    => $rawInfo['return_type_hint'],
-            'returnTypes'       => $this->getReturnTypeDataForSerializedTypes($rawInfo['return_types_serialized'])
+            'returnTypeHint'    => $function->getReturnTypeHint(),
+            'returnTypes'       => $this->convertTypes($function->getReturnTypes())
         ];
     }
 }

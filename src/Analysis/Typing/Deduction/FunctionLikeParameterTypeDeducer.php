@@ -20,22 +20,22 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var string|null
      */
-    protected $functionDocblock;
+    private $functionDocblock;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
@@ -55,7 +55,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Param) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -66,13 +66,13 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Param $node
-     * @param string|null       $file
-     * @param string            $code
-     * @param int               $offset
+     * @param string     $file
+     * @param string     $code
+     * @param int        $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromFunctionLikeParameterNode(Node\Param $node, ?string $file, string $code, int $offset): array
+    protected function deduceTypesFromFunctionLikeParameterNode(Node\Param $node, string $file, string $code, int $offset): array
     {
         if ($docBlock = $this->getFunctionDocblock()) {
             // Analyze the docblock's @param tags.
@@ -80,22 +80,31 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
                 DocblockParser::PARAM_TYPE
             ], '', true);
 
-            if (isset($result['params']['$' . $node->name])) {
-                return $this->typeAnalyzer->getTypesForTypeSpecification($result['params']['$' . $node->name]['type']);
+            if (isset($result['params']['$' . $node->var->name])) {
+                return $this->typeAnalyzer->getTypesForTypeSpecification($result['params']['$' . $node->var->name]['type']);
             }
         }
 
-        // TODO: Support NullableType (PHP 7.1).
-        if ($node->type instanceof Node\Name) {
-            $typeHintType = NodeHelpers::fetchClassName($node->type);
+        $isNullable = false;
+        $typeNode = $node->type;
+
+        if ($typeNode instanceof Node\NullableType) {
+            $typeNode = $typeNode->type;
+            $isNullable = true;
+        } elseif ($node->default instanceof Node\Expr\ConstFetch && $node->default->name->toString() === 'null') {
+            $isNullable = true;
+        }
+
+        if ($typeNode instanceof Node\Name) {
+            $typeHintType = NodeHelpers::fetchClassName($typeNode);
 
             if ($node->variadic) {
                 $typeHintType .= '[]';
             }
 
-            return [$typeHintType];
-        } elseif (is_string($node->type)) {
-            return [$node->type];
+            return $isNullable ? [$typeHintType, 'null'] : [$typeHintType];
+        } elseif ($node->type instanceof Node\Identifier) {
+            return [$node->type->name];
         }
 
         return [];

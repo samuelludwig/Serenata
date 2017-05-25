@@ -15,7 +15,7 @@ trait ParserAwareTrait
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @param string            $code

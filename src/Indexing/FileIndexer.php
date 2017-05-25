@@ -4,18 +4,12 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
-use LogicException;
-use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-use PhpIntegrator\Analysis\Typing\Resolving\TypeResolverInterface;
-
-use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -35,127 +29,117 @@ use PhpParser\NodeTraverser;
  * The index keeps track of 'outlines' that are confined to a single file. It in itself does not do anything
  * "intelligent" such as automatically inheriting docblocks from overridden methods.
  */
-class FileIndexer
+class FileIndexer implements FileIndexerInterface
 {
     /**
      * The storage to use for index data.
      *
      * @var StorageInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
-
-    /**
-     * @var TypeResolverInterface
-     */
-    protected $typeResolver;
+    private $typeAnalyzer;
 
     /**
      * @var Parser
      */
-    protected $parser;
+    private $parser;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
-
-    /**
-     * @var Parser
-     */
-    protected $defaultValueParser;
+    private $nodeTypeDeducer;
 
     /**
      * @var array
      */
-    protected $accessModifierMap;
+    private $accessModifierMap;
 
     /**
      * @var array
      */
-    protected $structureTypeMap;
+    private $structureTypeMap;
 
     /**
-     * @param StorageInterface         $storage
-     * @param TypeAnalyzer             $typeAnalyzer
-     * @param TypeResolverInterface    $typeResolver
-     * @param DocblockParser           $docblockParser
-     * @param Parser                   $defaultValueParser
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param Parser                   $parser
+     * @var StructureAwareNameResolverFactoryInterface
+     */
+    private $structureAwareNameResolverFactory;
+
+    /**
+     * @param StorageInterface                           $storage
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param DocblockParser                             $docblockParser
+     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
+     * @param Parser                                     $parser
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         StorageInterface $storage,
         TypeAnalyzer $typeAnalyzer,
-        TypeResolverInterface $typeResolver,
         DocblockParser $docblockParser,
-        Parser $defaultValueParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        Parser $parser
+        Parser $parser,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
-        $this->typeResolver = $typeResolver;
         $this->docblockParser = $docblockParser;
-        $this->defaultValueParser = $defaultValueParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
-     * Indexes the specified file.
-     *
-     * @param string $filePath
-     * @param string $code
-     *
-     * @throws IndexingFailedException
-     *
-     * @return void
+     * @inheritDoc
      */
     public function index(string $filePath, string $code): void
     {
         $handler = new ErrorHandler\Collecting();
 
         try {
-            $nodes = $this->getParser()->parse($code, $handler);
+            $nodes = $this->parser->parse($code, $handler);
 
             if ($nodes === null) {
                 throw new Error('Unknown syntax error encountered');
             }
-
-            $outlineIndexingVisitor = new OutlineFetchingVisitor($this->typeAnalyzer, $code);
-            $useStatementFetchingVisitor = new UseStatementFetchingVisitor();
-
-            $traverser = new NodeTraverser(false);
-            $traverser->addVisitor($outlineIndexingVisitor);
-            $traverser->addVisitor($useStatementFetchingVisitor);
-            $traverser->traverse($nodes);
         } catch (Error $e) {
-            throw new IndexingFailedException();
+            throw new IndexingFailedException($e->getMessage(), 0, $e);
         }
 
         $this->storage->beginTransaction();
 
-        $this->storage->deleteFile($filePath);
+        $file = $this->storage->findFileByPath($filePath);
 
-        $fileId = $this->storage->insert(IndexStorageItemEnum::FILES, [
-            'path'         => $filePath,
-            'indexed_time' => (new DateTime())->format('Y-m-d H:i:s')
-        ]);
+        if ($file !== null) {
+            $this->storage->delete($file);
+        }
+
+        // TODO: Rewrite indexing to update the file instead of delete it in its entirety later on. Flushing to remove
+        // should then be obsolete.
+        $this->storage->commitTransaction();
+        $this->storage->beginTransaction();
+
+        $file = new Structures\File($filePath, new DateTime(), []);
+
+        $this->storage->persist($file);
 
         try {
-            $this->indexVisitorResults($filePath, $fileId, $outlineIndexingVisitor, $useStatementFetchingVisitor);
+            $traverser = $this->createTraverser($nodes, $filePath, $code, $file);
+            $traverser->traverse($nodes);
 
             $this->storage->commitTransaction();
+        } catch (Error $e) {
+            $this->storage->rollbackTransaction();
+
+            throw new IndexingFailedException($e->getMessage(), 0, $e);
         } catch (Exception $e) {
             $this->storage->rollbackTransaction();
 
@@ -164,818 +148,93 @@ class FileIndexer
     }
 
     /**
-     * Indexes the results of the visitors (the outline of the specified file).
+     * @param array           $nodes
+     * @param string          $filePath
+     * @param string          $code
+     * @param Structures\File $file
      *
-     * The outline consists of functions, structural elements (classes, interfaces, traits, ...), ... contained within
-     * the file. For structural elements, this also includes (direct) members, information about the parent class,
-     * used traits, etc.
-     *
-     * @param string                      $filePath
-     * @param int                         $fileId
-     * @param OutlineFetchingVisitor      $outlineIndexingVisitor
-     * @param UseStatementFetchingVisitor $useStatementFetchingVisitor
-     *
-     * @return void
+     * @return NodeTraverser
      */
-    protected function indexVisitorResults(
-        string $filePath,
-        int $fileId,
-        OutlineFetchingVisitor $outlineIndexingVisitor,
-        UseStatementFetchingVisitor $useStatementFetchingVisitor
-    ): void {
-        $imports = [];
-        $namespaces = $useStatementFetchingVisitor->getNamespaces();
+    protected function createTraverser(array $nodes, string $filePath, string $code, Structures\File $file): NodeTraverser
+    {
+        $visitors = $this->getVisitorsForFile($filePath, $code, $file);
 
-        foreach ($namespaces as $namespace) {
-            $namespaceId = $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES, [
-                'start_line'  => $namespace['startLine'],
-                'end_line'    => $namespace['endLine'],
-                'namespace'   => $namespace['name'],
-                'file_id'     => $fileId
-            ]);
+        $useStatementIndexingVisitor = array_shift($visitors);
 
-            foreach ($namespace['useStatements'] as $useStatement) {
-                $imports[] = $useStatement;
+        // TODO: Refactor to traverse once.
+        $this->storage->commitTransaction();
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor($useStatementIndexingVisitor);
+        $traverser->traverse($nodes);
+        $this->storage->beginTransaction();
 
-                $this->storage->insert(IndexStorageItemEnum::FILES_NAMESPACES_IMPORTS, [
-                    'line'               => $useStatement['line'],
-                    'alias'              => $useStatement['alias'] ?: null,
-                    'name'               => $useStatement['name'],
-                    'kind'               => $useStatement['kind'],
-                    'files_namespace_id' => $namespaceId
-                ]);
-            }
+        $traverser = new NodeTraverser();
+
+        foreach ($visitors as $visitor) {
+            $traverser->addVisitor($visitor);
         }
 
-        $fileTypeResolver = new FileTypeResolver($this->typeResolver, $namespaces, $imports);
-
-        foreach ($outlineIndexingVisitor->getStructures() as $fqcn => $structure) {
-             $this->indexStructure(
-                 $structure,
-                 $filePath,
-                 $fileId,
-                 $fqcn,
-                 false,
-                 $fileTypeResolver
-             );
-         }
-
-         foreach ($outlineIndexingVisitor->getGlobalFunctions() as $function) {
-             $this->indexFunction($function, $fileId, null, null, false, $fileTypeResolver);
-         }
-
-         foreach ($outlineIndexingVisitor->getGlobalConstants() as $constant) {
-             $this->indexConstant($constant, $filePath, $fileId, null, $fileTypeResolver);
-         }
-
-         foreach ($outlineIndexingVisitor->getGlobalDefines() as $define) {
-             $this->indexConstant($define, $filePath, $fileId, null, $fileTypeResolver);
-         }
-     }
+        return $traverser;
+    }
 
     /**
-     * Indexes the specified structural element.
+     * @param string          $filePath
+     * @param string          $code
+     * @param Structures\File $file
      *
-     * @param array            $rawData
-     * @param string           $filePath
-     * @param int              $fileId
-     * @param string           $fqcn
-     * @param bool             $isBuiltin
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return int The ID of the structural element.
+     * @return array
      */
-    protected function indexStructure(
-        array $rawData,
-        string $filePath,
-        int $fileId,
-        string $fqcn,
-        bool $isBuiltin,
-        FileTypeResolver $fileTypeResolver
-    ): int {
-        $structureTypeMap = $this->getStructureTypeMap();
+    protected function getVisitorsForFile(string $filePath, string $code, Structures\File $file): array
+    {
+        $visitors = [
+            new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code),
 
-        $documentation = $this->docblockParser->parse($rawData['docComment'], [
-            DocblockParser::DEPRECATED,
-            DocblockParser::ANNOTATION,
-            DocblockParser::DESCRIPTION,
-            DocblockParser::METHOD,
-            DocblockParser::PROPERTY,
-            DocblockParser::PROPERTY_READ,
-            DocblockParser::PROPERTY_WRITE
-        ], $rawData['name']);
+            new Visiting\GlobalConstantIndexingVisitor(
+                $this->storage,
+                $this->docblockParser,
+                $this->structureAwareNameResolverFactory,
+                $this->typeAnalyzer,
+                $this->nodeTypeDeducer,
+                $file,
+                $code,
+                $filePath
+            ),
 
-        $seData = [
-            'name'              => $rawData['name'],
-            'fqcn'              => $fqcn,
-            'file_id'           => $fileId,
-            'start_line'        => $rawData['startLine'],
-            'end_line'          => $rawData['endLine'],
-            'structure_type_id' => $structureTypeMap[$rawData['type']],
-            'is_abstract'       => (isset($rawData['isAbstract']) && $rawData['isAbstract']) ? 1 : 0,
-            'is_final'          => (isset($rawData['isFinal']) && $rawData['isFinal']) ? 1 : 0,
-            'is_deprecated'     => $documentation['deprecated'] ? 1 : 0,
-            'is_annotation'     => $documentation['annotation'] ? 1 : 0,
-            'is_builtin'        => $isBuiltin ? 1 : 0,
-            'has_docblock'      => empty($rawData['docComment']) ? 0 : 1,
-            'short_description' => $documentation['descriptions']['short'],
-            'long_description'  => $documentation['descriptions']['long']
+            new Visiting\GlobalDefineIndexingVisitor(
+                $this->storage,
+                $this->nodeTypeDeducer,
+                $file,
+                $code,
+                $filePath
+            ),
+
+            new Visiting\GlobalFunctionIndexingVisitor(
+                $this->structureAwareNameResolverFactory,
+                $this->storage,
+                $this->docblockParser,
+                $this->typeAnalyzer,
+                $file,
+                $code,
+                $filePath
+            ),
+
+            new Visiting\ClasslikeIndexingVisitor(
+                $this->storage,
+                $this->typeAnalyzer,
+                $this->docblockParser,
+                $this->nodeTypeDeducer,
+                $this->structureAwareNameResolverFactory,
+                $file,
+                $code,
+                $filePath
+            ),
+
+            new Visiting\MetaFileIndexingVisitor(
+                $this->storage,
+                $file
+            )
         ];
 
-        $seId = $this->storage->insertStructure($seData);
-
-        $accessModifierMap = $this->getAccessModifierMap();
-
-        if (isset($rawData['parents'])) {
-            foreach ($rawData['parents'] as $parent) {
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_PARENTS_LINKED, [
-                    'structure_id'          => $seId,
-                    'linked_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($parent)
-                ]);
-            }
-        }
-
-        if (isset($rawData['interfaces'])) {
-            foreach ($rawData['interfaces'] as $interface) {
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_INTERFACES_LINKED, [
-                    'structure_id'          => $seId,
-                    'linked_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($interface)
-                ]);
-            }
-        }
-
-        if (isset($rawData['traits'])) {
-            foreach ($rawData['traits'] as $trait) {
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_LINKED, [
-                    'structure_id'          => $seId,
-                    'linked_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($trait)
-                ]);
-            }
-        }
-
-        if (isset($rawData['traitAliases'])) {
-            foreach ($rawData['traitAliases'] as $traitAlias) {
-                $accessModifier = $this->parseAccessModifier($traitAlias, true);
-
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_ALIASES, [
-                    'structure_id'         => $seId,
-                    'trait_structure_fqcn' => ($traitAlias['trait'] !== null) ?
-                        $this->typeAnalyzer->getNormalizedFqcn($traitAlias['trait']) : null,
-                    'access_modifier_id'   => $accessModifier ? $accessModifierMap[$accessModifier] : null,
-                    'name'                 => $traitAlias['name'],
-                    'alias'                => $traitAlias['alias']
-                ]);
-            }
-        }
-
-        if (isset($rawData['traitPrecedences'])) {
-            foreach ($rawData['traitPrecedences'] as $traitPrecedence) {
-                $this->storage->insert(IndexStorageItemEnum::STRUCTURES_TRAITS_PRECEDENCES, [
-                    'structure_id'         => $seId,
-                    'trait_structure_fqcn' => $this->typeAnalyzer->getNormalizedFqcn($traitPrecedence['trait']),
-                    'name'                 => $traitPrecedence['name']
-                ]);
-            }
-        }
-
-        foreach ($rawData['properties'] as $property) {
-            $accessModifier = $this->parseAccessModifier($property);
-
-            $this->indexProperty(
-                $property,
-                $filePath,
-                $fileId,
-                $seId,
-                $accessModifierMap[$accessModifier],
-                $fileTypeResolver
-            );
-        }
-
-        foreach ($rawData['methods'] as $method) {
-            $accessModifier = $this->parseAccessModifier($method);
-
-            $this->indexFunction(
-                $method,
-                $fileId,
-                $seId,
-                $accessModifierMap[$accessModifier],
-                false,
-                $fileTypeResolver
-            );
-        }
-
-        foreach ($rawData['constants'] as $constant) {
-            $this->indexConstant(
-                $constant,
-                $filePath,
-                $fileId,
-                $seId,
-                $fileTypeResolver
-            );
-        }
-
-        // Index magic properties.
-        $magicProperties = array_merge(
-            $documentation['properties'],
-            $documentation['propertiesReadOnly'],
-            $documentation['propertiesWriteOnly']
-        );
-
-        foreach ($magicProperties as $propertyName => $propertyData) {
-            // Use the same line as the class definition, it matters for e.g. type resolution.
-            $propertyData['name'] = mb_substr($propertyName, 1);
-            $propertyData['startLine'] = $propertyData['endLine'] = $rawData['startLine'];
-
-            $this->indexMagicProperty(
-                $propertyData,
-                $fileId,
-                $seId,
-                $accessModifierMap['public'],
-                $fileTypeResolver
-            );
-        }
-
-        // Index magic methods.
-        foreach ($documentation['methods'] as $methodName => $methodData) {
-            // Use the same line as the class definition, it matters for e.g. type resolution.
-            $methodData['name'] = $methodName;
-            $methodData['startLine'] = $methodData['endLine'] = $rawData['startLine'];
-
-            $this->indexMagicMethod(
-                $methodData,
-                $fileId,
-                $seId,
-                $accessModifierMap['public'],
-                true,
-                $fileTypeResolver
-            );
-        }
-
-        return $seId;
-    }
-
-    /**
-     * @param string           $typeSpecification
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return array[]
-     */
-    protected function getTypeDataForTypeSpecification(
-        string $typeSpecification,
-        int $line,
-        FileTypeResolver $fileTypeResolver
-    ): array {
-        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->getTypeDataForTypeList($typeList, $line, $fileTypeResolver);
-    }
-
-    /**
-     * @param string[]         $typeList
-     * @param int              $line
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return array[]
-     */
-    protected function getTypeDataForTypeList(array $typeList, int $line, FileTypeResolver $fileTypeResolver): array
-    {
-        $types = [];
-
-        foreach ($typeList as $type) {
-            $types[] = [
-                'type' => $type,
-                'fqcn' => $fileTypeResolver->resolve($type, $line)
-            ];
-        }
-
-        return $types;
-    }
-
-    /**
-     * Indexes the specified constant.
-     *
-     * @param array            $rawData
-     * @param string           $filePath
-     * @param int              $fileId
-     * @param int|null         $seId
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return void
-     */
-    protected function indexConstant(
-        array $rawData,
-        string $filePath,
-        int $fileId,
-        ?int $seId,
-        FileTypeResolver $fileTypeResolver
-    ): void {
-        $documentation = $this->docblockParser->parse($rawData['docComment'], [
-            DocblockParser::VAR_TYPE,
-            DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
-        ], $rawData['name']);
-
-        $varDocumentation = isset($documentation['var']['$' . $rawData['name']]) ?
-            $documentation['var']['$' . $rawData['name']] :
-            null;
-
-        $shortDescription = $documentation['descriptions']['short'];
-
-        $types = [];
-
-        if ($varDocumentation) {
-            // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
-            // from the latter to the former.
-            if (!empty($varDocumentation['description'])) {
-                $shortDescription = $varDocumentation['description'];
-            }
-
-            $types = $this->getTypeDataForTypeSpecification(
-                $varDocumentation['type'],
-                $rawData['startLine'],
-                $fileTypeResolver
-            );
-        } elseif (!empty($rawData['defaultValue'])) {
-            try {
-                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
-            } catch (\PhpParser\Error $e) {
-                throw new LogicException(
-                    'Default value failed parsing, which should never happen. The value was: ' .
-                    $rawData['defaultValue']
-                );
-            }
-
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $nodes[0],
-                $filePath,
-                $rawData['defaultValue'],
-                0
-            );
-
-            $types = $this->getTypeDataForTypeList($typeList, $rawData['startLine'], $fileTypeResolver);
-        }
-
-        $constantId = $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $rawData['name'],
-            'fqcn'                  => isset($rawData['fqcn']) ? $rawData['fqcn'] : null,
-            'file_id'               => $fileId,
-            'start_line'            => $rawData['startLine'],
-            'end_line'              => $rawData['endLine'],
-            'default_value'         => $rawData['defaultValue'],
-            'is_builtin'            => 0,
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'has_docblock'          => empty($rawData['docComment']) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-            'types_serialized'      => serialize($types),
-            'structure_id'          => $seId
-        ]);
-    }
-
-    /**
-     * Indexes the specified property.
-     *
-     * @param array            $rawData
-     * @param string           $filePath
-     * @param int              $fileId
-     * @param int              $seId
-     * @param int              $amId
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return void
-     */
-    protected function indexProperty(
-        array $rawData,
-        string $filePath,
-        int $fileId,
-        int $seId,
-        int $amId,
-        FileTypeResolver $fileTypeResolver
-    ): void {
-        $documentation = $this->docblockParser->parse($rawData['docComment'], [
-            DocblockParser::VAR_TYPE,
-            DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
-        ], $rawData['name']);
-
-        $varDocumentation = isset($documentation['var']['$' . $rawData['name']]) ?
-            $documentation['var']['$' . $rawData['name']] :
-            null;
-
-        $shortDescription = $documentation['descriptions']['short'];
-
-        $types = [];
-
-        if ($varDocumentation) {
-            // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
-            // from the latter to the former.
-            if (!empty($varDocumentation['description'])) {
-                $shortDescription = $varDocumentation['description'];
-            }
-
-            $types = $this->getTypeDataForTypeSpecification(
-                $varDocumentation['type'],
-                $rawData['startLine'],
-                $fileTypeResolver
-            );
-        } elseif (isset($rawData['returnType'])) {
-            $types = [
-                [
-                    'type' => $rawData['returnType'],
-                    'fqcn' => isset($rawData['fullReturnType']) ? $rawData['fullReturnType'] : $rawData['returnType']
-                ]
-            ];
-        } elseif ($rawData['defaultValue']) {
-            try {
-                $nodes = $this->defaultValueParser->parse($rawData['defaultValue']);
-            } catch (\PhpParser\Error $e) {
-                throw new LogicException(
-                    'Default value failed parsing, which should never happen. The value was: ' .
-                    $rawData['defaultValue']
-                );
-            }
-
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $nodes[0],
-                $filePath,
-                $rawData['defaultValue'],
-                0
-            );
-
-            $types = $this->getTypeDataForTypeList($typeList, $rawData['startLine'], $fileTypeResolver);
-        }
-
-        $propertyId = $this->storage->insert(IndexStorageItemEnum::PROPERTIES, [
-            'name'                  => $rawData['name'],
-            'file_id'               => $fileId,
-            'start_line'            => $rawData['startLine'],
-            'end_line'              => $rawData['endLine'],
-            'default_value'         => $rawData['defaultValue'],
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'is_magic'              => 0,
-            'is_static'             => $rawData['isStatic'] ? 1 : 0,
-            'has_docblock'          => empty($rawData['docComment']) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-            'structure_id'          => $seId,
-            'access_modifier_id'    => $amId,
-            'types_serialized'      => serialize($types)
-        ]);
-    }
-
-    /**
-     * @param array            $rawData
-     * @param int              $fileId
-     * @param int              $seId
-     * @param int              $amId
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return void
-     */
-    protected function indexMagicProperty(
-        array $rawData,
-        int $fileId,
-        int $seId,
-        int $amId,
-        FileTypeResolver $fileTypeResolver
-    ): void {
-        $types = [];
-
-        if ($rawData['type']) {
-            $types = $this->getTypeDataForTypeSpecification(
-                $rawData['type'],
-                $rawData['startLine'],
-                $fileTypeResolver
-            );
-        }
-
-        $propertyId = $this->storage->insert(IndexStorageItemEnum::PROPERTIES, [
-            'name'                  => $rawData['name'],
-            'file_id'               => $fileId,
-            'start_line'            => $rawData['startLine'],
-            'end_line'              => $rawData['endLine'],
-            'default_value'         => null,
-            'is_deprecated'         => 0,
-            'is_magic'              => 1,
-            'is_static'             => $rawData['isStatic'] ? 1 : 0,
-            'has_docblock'          => 0,
-            'short_description'     => $rawData['description'],
-            'long_description'      => null,
-            'type_description'      => null,
-            'structure_id'          => $seId,
-            'access_modifier_id'    => $amId,
-            'types_serialized'      => serialize($types)
-        ]);
-    }
-
-    /**
-     * Indexes the specified function.
-     *
-     * @param array            $rawData
-     * @param int              $fileId
-     * @param int|null         $seId
-     * @param int|null         $amId
-     * @param bool             $isMagic
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return void
-     */
-    protected function indexFunction(
-        array $rawData,
-        int $fileId,
-        ?int $seId,
-        ?int $amId,
-        bool $isMagic,
-        FileTypeResolver $fileTypeResolver
-    ): void {
-        $documentation = $this->docblockParser->parse($rawData['docComment'], [
-            DocblockParser::THROWS,
-            DocblockParser::PARAM_TYPE,
-            DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION,
-            DocblockParser::RETURN_VALUE
-        ], $rawData['name']);
-
-        $returnTypes = [];
-
-        if ($documentation && $documentation['return']['type']) {
-            $returnTypes = $this->getTypeDataForTypeSpecification(
-                $documentation['return']['type'],
-                $rawData['startLine'],
-                $fileTypeResolver
-            );
-        } elseif (isset($rawData['returnType'])) {
-            $returnTypes = [
-                [
-                    'type' => $rawData['returnType'],
-                    'fqcn' => isset($rawData['fullReturnType']) ? $rawData['fullReturnType'] : $rawData['returnType']
-                ]
-            ];
-        }
-
-        $shortDescription = $documentation['descriptions']['short'];
-
-        $throws = [];
-
-        foreach ($documentation['throws'] as $type => $description) {
-            $typeData = $this->getTypeDataForTypeSpecification($type, $rawData['startLine'], $fileTypeResolver);
-            $typeData = array_shift($typeData);
-
-            $throwsData = [
-                'type'        => $typeData['type'],
-                'full_type'   => $typeData['fqcn'],
-                'description' => $description ?: null
-            ];
-
-            $throws[] = $throwsData;
-        }
-
-        $parameters = [];
-
-        foreach ($rawData['parameters'] as $parameter) {
-            $parameterKey = '$' . $parameter['name'];
-            $parameterDoc = isset($documentation['params'][$parameterKey]) ?
-                $documentation['params'][$parameterKey] : null;
-
-            $types = [];
-
-            if ($parameterDoc) {
-                $types = $this->getTypeDataForTypeSpecification(
-                    $parameterDoc['type'],
-                    $rawData['startLine'],
-                    $fileTypeResolver
-                );
-            } elseif (isset($parameter['type'])) {
-                $parameterType = $parameter['type'];
-                $parameterFullType = isset($parameter['fullType']) ? $parameter['fullType'] : $parameterType;
-
-                if ($parameter['isVariadic']) {
-                    $parameterType .= '[]';
-                    $parameterFullType .= '[]';
-                }
-
-                $types = [
-                    [
-                        'type' => $parameterType,
-                        'fqcn' => $parameterFullType
-                    ]
-                ];
-
-                if ($parameter['isNullable']) {
-                    $types[] = [
-                        'type' => 'null',
-                        'fqcn' => 'null'
-                    ];
-                }
-            }
-
-            $parameters[] = [
-                'name'             => $parameter['name'],
-                'type_hint'        => $parameter['type'],
-                'types_serialized' => serialize($types),
-                'description'      => $parameterDoc ? $parameterDoc['description'] : null,
-                'default_value'    => $parameter['defaultValue'],
-                'is_nullable'      => $parameter['isNullable'] ? 1 : 0,
-                'is_reference'     => $parameter['isReference'] ? 1 : 0,
-                'is_optional'      => $parameter['isOptional'] ? 1 : 0,
-                'is_variadic'      => $parameter['isVariadic'] ? 1 : 0
-            ];
-        }
-
-        $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
-            'name'                    => $rawData['name'],
-            'fqcn'                    => isset($rawData['fqcn']) ? $rawData['fqcn'] : null,
-            'file_id'                 => $fileId,
-            'start_line'              => $rawData['startLine'],
-            'end_line'                => $rawData['endLine'],
-            'is_builtin'              => 0,
-            'is_abstract'             => (isset($rawData['isAbstract']) && $rawData['isAbstract']) ? 1 : 0,
-            'is_final'                => (isset($rawData['isFinal']) && $rawData['isFinal']) ? 1 : 0,
-            'is_deprecated'           => $documentation['deprecated'] ? 1 : 0,
-            'short_description'       => $shortDescription,
-            'long_description'        => $documentation['descriptions']['long'],
-            'return_description'      => $documentation['return']['description'],
-            'return_type_hint'        => $rawData['returnType'],
-            'structure_id'            => $seId,
-            'access_modifier_id'      => $amId,
-            'is_magic'                => $isMagic ? 1 : 0,
-            'is_static'               => isset($rawData['isStatic']) ? ($rawData['isStatic'] ? 1 : 0) : 0,
-            'has_docblock'            => empty($rawData['docComment']) ? 0 : 1,
-            'throws_serialized'       => serialize($throws),
-            'parameters_serialized'   => serialize($parameters),
-            'return_types_serialized' => serialize($returnTypes)
-        ]);
-
-        foreach ($parameters as $parameter) {
-            $parameter['function_id'] = $functionId;
-
-            $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameter);
-        }
-    }
-
-    /**
-     * @param array            $rawData
-     * @param int              $fileId
-     * @param int|null         $seId
-     * @param int|null         $amId
-     * @param bool             $isMagic
-     * @param FileTypeResolver $fileTypeResolver
-     *
-     * @return void
-     */
-    protected function indexMagicMethod(
-        array $rawData,
-        int $fileId,
-        ?int $seId,
-        ?int $amId,
-        bool $isMagic,
-        FileTypeResolver $fileTypeResolver
-    ): void {
-        $returnTypes = [];
-
-        if ($rawData['type']) {
-            $returnTypes = $this->getTypeDataForTypeSpecification(
-                $rawData['type'],
-                $rawData['startLine'],
-                $fileTypeResolver
-            );
-        }
-
-        $parameters = [];
-
-        foreach ($rawData['requiredParameters'] as $parameterName => $parameter) {
-            $types = [];
-
-            if ($parameter['type']) {
-                $types = $this->getTypeDataForTypeSpecification(
-                    $parameter['type'],
-                    $rawData['startLine'],
-                    $fileTypeResolver
-                );
-            }
-
-            $parameters[] = [
-                'name'             => mb_substr($parameterName, 1),
-                'type_hint'        => null,
-                'types_serialized' => serialize($types),
-                'description'      => null,
-                'default_value'    => null,
-                'is_nullable'      => 0,
-                'is_reference'     => 0,
-                'is_optional'      => 0,
-                'is_variadic'      => 0
-            ];
-        }
-
-        foreach ($rawData['optionalParameters'] as $parameterName => $parameter) {
-            $types = [];
-
-            if ($parameter['type']) {
-                $types = $this->getTypeDataForTypeSpecification(
-                    $parameter['type'],
-                    $rawData['startLine'],
-                    $fileTypeResolver
-                );
-            }
-
-            $parameters[] = [
-                'name'             => mb_substr($parameterName, 1),
-                'type_hint'        => null,
-                'types_serialized' => serialize($types),
-                'description'      => null,
-                'default_value'    => null,
-                'is_nullable'      => 0,
-                'is_reference'     => 0,
-                'is_optional'      => 1,
-                'is_variadic'      => 0,
-            ];
-        }
-
-        $functionId = $this->storage->insert(IndexStorageItemEnum::FUNCTIONS, [
-            'name'                    => $rawData['name'],
-            'fqcn'                    => null,
-            'file_id'                 => $fileId,
-            'start_line'              => $rawData['startLine'],
-            'end_line'                => $rawData['endLine'],
-            'is_builtin'              => 0,
-            'is_abstract'             => 0,
-            'is_deprecated'           => 0,
-            'short_description'       => $rawData['description'],
-            'long_description'        => null,
-            'return_description'      => null,
-            'return_type_hint'        => null,
-            'structure_id'            => $seId,
-            'access_modifier_id'      => $amId,
-            'is_magic'                => 1,
-            'is_static'               => $rawData['isStatic'] ? 1 : 0,
-            'has_docblock'            => 0,
-            'throws_serialized'       => serialize([]),
-            'parameters_serialized'   => serialize($parameters),
-            'return_types_serialized' => serialize($returnTypes)
-        ]);
-
-        foreach ($parameters as $parameter) {
-            $parameter['function_id'] = $functionId;
-
-            $this->storage->insert(IndexStorageItemEnum::FUNCTIONS_PARAMETERS, $parameter);
-        }
-    }
-
-    /**
-     * @param array $rawData
-     * @param bool  $returnNull
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return string|null
-     */
-    protected function parseAccessModifier(array $rawData, bool $returnNull = false): ?string
-    {
-        if ($rawData['isPublic']) {
-            return 'public';
-        } elseif ($rawData['isProtected']) {
-            return 'protected';
-        } elseif ($rawData['isPrivate']) {
-            return 'private';
-        } elseif ($returnNull) {
-            return null;
-        }
-
-        throw new UnexpectedValueException('Unknown access modifier returned!');
-    }
-
-    /**
-     * @return array
-     */
-    protected function getAccessModifierMap(): array
-    {
-        if (!$this->accessModifierMap) {
-            $this->accessModifierMap = $this->storage->getAccessModifierMap();
-        }
-
-        return $this->accessModifierMap;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getStructureTypeMap(): array
-    {
-        if (!$this->structureTypeMap) {
-            $this->structureTypeMap = $this->storage->getStructureTypeMap();
-        }
-
-        return $this->structureTypeMap;
-    }
-
-    /**
-     * @return Parser
-     */
-    protected function getParser(): Parser
-    {
-        return $this->parser;
+        return $visitors;
     }
 }

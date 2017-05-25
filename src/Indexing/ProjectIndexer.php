@@ -14,36 +14,36 @@ class ProjectIndexer
     /**
      * @var StorageInterface
      */
-    protected $storage;
+    private $storage;
 
     /**
-     * @var FileIndexer
+     * @var FileIndexerInterface
      */
-    protected $fileIndexer;
+    private $fileIndexer;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @var resource|null
      */
-    protected $loggingStream;
+    private $loggingStream;
 
     /**
      * @var callable|null
      */
-    protected $progressStreamingCallback;
+    private $progressStreamingCallback;
 
     /**
      * @param StorageInterface       $storage
-     * @param FileIndexer            $fileIndexer
+     * @param FileIndexerInterface   $fileIndexer
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
     public function __construct(
         StorageInterface $storage,
-        FileIndexer $fileIndexer,
+        FileIndexerInterface $fileIndexer,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->storage = $storage;
@@ -146,7 +146,7 @@ class ProjectIndexer
         array $excludedPaths = [],
         array $sourceOverrideMap = []
     ): void {
-        $fileModifiedMap = $this->storage->getFileModifiedMap();
+        $fileModifiedMap = $this->getFileModifiedMap();
 
         // The modification time doesn't matter for files we have direct source code for, as this source code always
         // needs to be indexed (e.g it may simply not have been saved to disk yet).
@@ -204,12 +204,28 @@ class ProjectIndexer
      */
     public function pruneRemovedFiles(): void
     {
-        foreach ($this->storage->getFileModifiedMap() as $fileName => $indexedTime) {
+        foreach ($this->getFileModifiedMap() as $fileName => $indexedTime) {
             if (!file_exists($fileName)) {
                 $this->logMessage('  - ' . $fileName);
 
                 $this->storage->deleteFile($fileName);
             }
         }
+    }
+
+    /**
+     * @return Structures\File[]
+     */
+    protected function getFileModifiedMap(): array
+    {
+        $files = $this->storage->getFiles();
+
+        $map = [];
+
+        foreach ($files as $file) {
+            $map[$file->getPath()] = $file;
+        }
+
+        return $map;
     }
 }

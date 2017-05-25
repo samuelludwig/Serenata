@@ -14,17 +14,17 @@ class JsonRpcError implements JsonSerializable
     /**
      * @var int
      */
-    protected $code;
+    private $code;
 
     /**
      * @var string
      */
-    protected $message;
+    private $message;
 
     /**
      * @var mixed|null
      */
-    protected $data;
+    private $data;
 
     /**
      * @param int        $code

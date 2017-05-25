@@ -2,19 +2,29 @@
 
 namespace PhpIntegrator\Analysis\Visiting;
 
-use PhpIntegrator\Utility\NodeHelpers;
-
 use PhpParser\Node;
+
+use PhpParser\NodeVisitor\NameResolver;
 
 /**
  * Node visitor that fetches usages of (global) constants.
  */
-class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
+class GlobalConstantUsageFetchingVisitor extends NameResolver
 {
     /**
-     * @var array
+     * @var Node\Expr\ConstFetch[]
      */
-    protected $globalConstantList = [];
+    private $globalConstantList = [];
+
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct(null, [
+            'replaceNodes' => false
+        ]);
+    }
 
     /**
      * @inheritDoc
@@ -28,16 +38,7 @@ class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
         }
 
         if (!$this->isConstantExcluded($node->name->toString())) {
-            $this->globalConstantList[] = [
-                'name'               => NodeHelpers::fetchClassName($node->name->getAttribute('resolvedName')),
-                'localName'          => NodeHelpers::fetchClassName($node->name),
-                'localNameFirstPart' => $node->name->getFirst(),
-                'isFullyQualified'   => $node->name->isFullyQualified(),
-                'namespace'          => $this->namespace ? NodeHelpers::fetchClassName($this->namespace) : null,
-                'isUnqualified'      => $node->name->isUnqualified(),
-                'start'              => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                'end'                => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-            ];
+            $this->globalConstantList[] = $node;
         }
     }
 
@@ -52,7 +53,7 @@ class GlobalConstantUsageFetchingVisitor extends AbstractNameResolvingVisitor
    }
 
     /**
-     * @return array
+     * @return Node\Expr\ConstFetch[]
      */
     public function getGlobalConstantList(): array
     {

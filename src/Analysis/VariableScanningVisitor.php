@@ -14,17 +14,17 @@ class VariableScanningVisitor extends NodeVisitorAbstract
     /**
      * @var string[]
      */
-    protected $variables = [];
+    private $variables = [];
 
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var bool
      */
-    protected $hasThisContext;
+    private $hasThisContext;
 
     /**
      * Constructor.
@@ -96,7 +96,7 @@ class VariableScanningVisitor extends NodeVisitorAbstract
      */
     protected function parseClosureUse(Node\Expr\ClosureUse $node): void
     {
-        $this->variables[] = '$' . $node->var;
+        $this->variables[] = '$' . $node->var->name;
     }
 
     /**
@@ -106,7 +106,7 @@ class VariableScanningVisitor extends NodeVisitorAbstract
      */
     protected function parseParam(Node\Param $node): void
     {
-        $this->variables[] = '$' . $node->name;
+        $this->variables[] = '$' . $node->var->name;
     }
 
     /**

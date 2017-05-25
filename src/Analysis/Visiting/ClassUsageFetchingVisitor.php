@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -16,22 +18,22 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var array
      */
-    protected $classUsageList = [];
+    private $classUsageList = [];
 
     /**
      * @var Node|null
      */
-    protected $lastNode;
+    private $lastNode;
 
     /**
      * @var TypeAnalyzer|null
      */
-    protected $typeAnalyzer = null;
+    private $typeAnalyzer = null;
 
     /**
      * @var string|null
      */
-    protected $lastNamespace = null;
+    private $lastNamespace = null;
 
     /**
      * @param TypeAnalyzer $typeAnalyzer
@@ -80,34 +82,34 @@ class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      */
     protected function processName(Node\Name $node): void
     {
-        if (!$this->lastNode instanceof Node\Expr\FuncCall &&
-            !$this->lastNode instanceof Node\Expr\ConstFetch &&
-            !$this->lastNode instanceof Node\Stmt\Namespace_
+        if ($this->lastNode instanceof Node\Expr\FuncCall ||
+            $this->lastNode instanceof Node\Expr\ConstFetch ||
+            $this->lastNode instanceof Node\Stmt\Namespace_
         ) {
-            $name = (string) $node;
-
-            if ($this->isValidType($name)) {
-                $this->classUsageList[] = [
-                    'name'             => $name,
-                    'firstPart'        => $node->getFirst(),
-                    'isFullyQualified' => $node->isFullyQualified(),
-                    'namespace'        => $this->lastNamespace,
-                    'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
-                    'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                    'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
-                ];
-            }
+            return;
+        } elseif (!$this->isValidNameNode($node)) {
+            return;
         }
+
+        $this->classUsageList[] = [
+            'name'             => (string) $node,
+            'firstPart'        => $node->getFirst(),
+            'isFullyQualified' => $node->isFullyQualified(),
+            'namespace'        => $this->lastNamespace,
+            'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
+            'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
+            'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+        ];
     }
 
     /**
-     * @param string $type
+     * @param Node\Name $node
      *
      * @return bool
      */
-     protected function isValidType(string $type): bool
+     protected function isValidNameNode(Node\Name $node): bool
      {
-         return $this->typeAnalyzer->isClassType($type);
+         return !NodeHelpers::isReservedNameNode($node);
      }
 
     /**

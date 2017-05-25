@@ -8,47 +8,48 @@ use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Node visitor that fetches the outline of a file, creating a list of structural elements (classes, interfaces, ...)
  * with their direct methods, properties, constants, and so on.
  */
-class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
+class OutlineFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array
      */
-    protected $structures = [];
+    private $structures = [];
 
     /**
      * @var array
      */
-    protected $globalFunctions = [];
+    private $globalFunctions = [];
 
     /**
      * @var array
      */
-    protected $globalConstants = [];
+    private $globalConstants = [];
 
     /**
      * @var array
      */
-    protected $globalDefines = [];
+    private $globalDefines = [];
 
     /**
      * @var Node\Stmt\Class_|null
      */
-    protected $currentStructure;
+    private $currentStructure;
 
     /**
      * @var TypeNormalizerInterface
      */
-    protected $typeNormalizer;
+    private $typeNormalizer;
 
     /**
      * @var string
      */
-    protected $code;
+    private $code;
 
     /**
      * @param TypeNormalizerInterface $typeNormalizer
@@ -56,8 +57,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     public function __construct(TypeNormalizerInterface $typeNormalizer, string $code)
     {
-        parent::__construct();
-
         $this->typeNormalizer = $typeNormalizer;
         $this->code = $code;
     }
@@ -67,6 +66,8 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     public function enterNode(Node $node)
     {
+        parent::enterNode($node);
+
         if ($node instanceof Node\Stmt\Property) {
             $this->parseClassPropertyNode($node);
         } elseif ($node instanceof Node\Stmt\ClassMethod) {
@@ -96,9 +97,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
             $node->name->toString() === 'define'
         ) {
             $this->parseDefineNode($node);
-        } else {
-            // Resolve the names for other nodes as the nodes we need depend on them being resolved.
-            parent::enterNode($node);
         }
     }
 
@@ -109,8 +107,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseClassNode(Node\Stmt\Class_ $node): void
     {
-        parent::enterNode($node);
-
         $this->currentStructure = $node;
 
         $interfaces = [];
@@ -122,7 +118,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
         $this->structures[$fqcn] = [
-            'name'           => $node->name,
+            'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'class',
             'startLine'      => $node->getLine(),
@@ -148,8 +144,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseInterfaceNode(Node\Stmt\Interface_ $node): void
     {
-        parent::enterNode($node);
-
         if (!isset($node->namespacedName)) {
             return;
         }
@@ -165,7 +159,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
         $this->structures[$fqcn] = [
-            'name'           => $node->name,
+            'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'interface',
             'startLine'      => $node->getLine(),
@@ -188,8 +182,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseTraitNode(Node\Stmt\Trait_ $node): void
     {
-        parent::enterNode($node);
-
         if (!isset($node->namespacedName)) {
             return;
         }
@@ -199,7 +191,7 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
         $this->structures[$fqcn] = [
-            'name'           => $node->name,
+            'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'trait',
             'startLine'      => $node->getLine(),
@@ -220,8 +212,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
-        parent::enterNode($node);
-
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->traits as $traitName) {
@@ -259,17 +249,18 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->props as $property) {
-            $this->structures[$fqcn]['properties'][$property->name] = [
-                'name'            => $property->name,
-                'startLine'       => $property->getLine(),
-                'endLine'         => $property->getAttribute('endLine'),
-                'startPosName'    => $property->getAttribute('startFilePos') ? $property->getAttribute('startFilePos') : null,
-                'endPosName'      => $property->getAttribute('startFilePos') ? ($property->getAttribute('startFilePos') + mb_strlen($property->name) + 1) : null,
-                'isPublic'        => $node->isPublic(),
-                'isPrivate'       => $node->isPrivate(),
-                'isStatic'        => $node->isStatic(),
-                'isProtected'     => $node->isProtected(),
-                'docComment'      => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+            $this->structures[$fqcn]['properties'][$property->name->name] = [
+                'name'             => $property->name->name,
+                'startLine'        => $property->getLine(),
+                'endLine'          => $property->getAttribute('endLine'),
+                'startPosName'     => $property->getAttribute('startFilePos') ? $property->getAttribute('startFilePos') : null,
+                'endPosName'       => $property->getAttribute('startFilePos') ? ($property->getAttribute('startFilePos') + mb_strlen($property->name) + 1) : null,
+                'isPublic'         => $node->isPublic(),
+                'isPrivate'        => $node->isPrivate(),
+                'isStatic'         => $node->isStatic(),
+                'isProtected'      => $node->isProtected(),
+                'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'defaultValueNode' => $property->default,
 
                 'defaultValue' => $property->default ?
                     substr(
@@ -291,10 +282,8 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
     {
         $data = $this->extractFunctionLikeNodeData($node);
 
-        parent::enterNode($node);
-
         $fqcn = $this->typeNormalizer->getNormalizedFqcn(
-            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name
+            isset($node->namespacedName) ? $node->namespacedName->toString() : $node->name->name
         );
 
         $this->globalFunctions[$fqcn] = $data + [
@@ -309,9 +298,13 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
+        if (!isset($this->currentStructure->namespacedName)) {
+            return;
+        }
+
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
-        $this->structures[$fqcn]['methods'][$node->name] = $this->extractFunctionLikeNodeData($node) + [
+        $this->structures[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
             'isPublic'       => $node->isPublic(),
             'isPrivate'      => $node->isPrivate(),
             'isProtected'    => $node->isProtected(),
@@ -332,24 +325,34 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
 
         foreach ($node->getParams() as $i => $param) {
             $localType = null;
+            $resolvedType = null;
 
-            // TODO: Support NullableType (PHP 7.1).
-            if ($param->type instanceof Node\Name) {
-                $localType = NodeHelpers::fetchClassName($param->type);
-            } elseif (is_string($param->type)) {
-                $localType = (string) $param->type;
+            $typeNode = $param->type;
+
+            if ($typeNode instanceof Node\NullableType) {
+                $typeNode = $typeNode->type;
+            }
+
+            if ($typeNode instanceof Node\Name) {
+                $localType = NodeHelpers::fetchClassName($typeNode);
+                $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
+            } elseif ($typeNode instanceof Node\Identifier) {
+                $localType = $typeNode->name;
+                $resolvedType = $typeNode->name;
             }
 
             $parameters[$i] = [
-                'name'         => $param->name,
-                'type'         => $localType,
-                'fullType'     => null, // Filled in below.
-                'isReference'  => $param->byRef,
-                'isVariadic'   => $param->variadic,
-                'isOptional'   => $param->default ? true : false,
+                'name'             => $param->var->name,
+                'type'             => $localType,
+                'fullType'         => $resolvedType,
+                'isReference'      => $param->byRef,
+                'isVariadic'       => $param->variadic,
+                'isOptional'       => $param->default ? true : false,
+                'defaultValueNode' => $param->default,
 
                 'isNullable'   => (
-                    $param->default instanceof Node\Expr\ConstFetch && $param->default->name->toString() === 'null'
+                    ($param->type instanceof Node\NullableType) ||
+                    ($param->default instanceof Node\Expr\ConstFetch && $param->default->name->toString() === 'null')
                 ),
 
                 'defaultValue' => $param->default ?
@@ -363,50 +366,32 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         }
 
         $localType = null;
-        $nodeType = $node->getReturnType();
-
-        // TODO: Support NullableType (PHP 7.1).
-        if ($nodeType instanceof Node\Name) {
-            $localType = NodeHelpers::fetchClassName($nodeType);
-        } elseif (is_string($nodeType)) {
-            $localType = (string) $nodeType;
-        }
-
-        parent::enterNode($node);
-
-        foreach ($node->getParams() as $i => $param) {
-            $resolvedType = null;
-
-            // TODO: Support NullableType (PHP 7.1).
-            if ($param->type instanceof Node\Name) {
-                $resolvedType = NodeHelpers::fetchClassName($param->type->getAttribute('resolvedName'));
-            } elseif (is_string($param->type)) {
-                $resolvedType = (string) $param->type;
-            }
-
-            $parameters[$i]['fullType'] = $resolvedType;
-        }
-
         $resolvedType = null;
         $nodeType = $node->getReturnType();
 
-        // TODO: Support NullableType (PHP 7.1).
+        if ($nodeType instanceof Node\NullableType) {
+            $nodeType = $nodeType->type;
+        }
+
         if ($nodeType instanceof Node\Name) {
-            $resolvedType = NodeHelpers::fetchClassName($nodeType);
-        } elseif (is_string($nodeType)) {
-            $resolvedType = (string) $nodeType;
+            $localType = NodeHelpers::fetchClassName($nodeType);
+            $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
+        } elseif ($nodeType instanceof Node\Identifier) {
+            $localType = $nodeType->name;
+            $resolvedType = $nodeType->name;
         }
 
         return [
-            'name'           => $node->name,
-            'startLine'      => $node->getLine(),
-            'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
-            'returnType'     => $localType,
-            'fullReturnType' => $resolvedType,
-            'parameters'     => $parameters,
-            'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null
+            'name'                 => $node->name->name,
+            'startLine'            => $node->getLine(),
+            'endLine'              => $node->getAttribute('endLine'),
+            'startPosName'         => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
+            'endPosName'           => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
+            'returnType'           => $localType,
+            'fullReturnType'       => $resolvedType,
+            'isReturnTypeNullable' => ($node->getReturnType() instanceof Node\NullableType),
+            'parameters'           => $parameters,
+            'docComment'           => $node->getDocComment() ? $node->getDocComment()->getText() : null
         ];
     }
 
@@ -420,13 +405,17 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->consts as $const) {
-            $this->structures[$fqcn]['constants'][$const->name] = [
-                'name'           => $const->name,
-                'startLine'      => $const->getLine(),
-                'endLine'        => $const->getAttribute('endLine'),
-                'startPosName'   => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
-                'endPosName'     => $const->getAttribute('startFilePos') ? ($const->getAttribute('startFilePos') + mb_strlen($const->name)) : null,
-                'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+            $this->structures[$fqcn]['constants'][$const->name->name] = [
+                'name'             => $const->name->name,
+                'startLine'        => $const->getLine(),
+                'endLine'          => $const->getAttribute('endLine'),
+                'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
+                'endPosName'       => $const->getAttribute('startFilePos') ? ($const->getAttribute('startFilePos') + mb_strlen($const->name)) : null,
+                'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'isPublic'         => $node->isPublic(),
+                'isPrivate'        => $node->isPrivate(),
+                'isProtected'      => $node->isProtected(),
+                'defaultValueNode' => $const->value,
 
                 'defaultValue' => substr(
                     $this->code,
@@ -444,21 +433,20 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseConstantNode(Node\Stmt\Const_ $node): void
     {
-        parent::enterNode($node);
-
         foreach ($node->consts as $const) {
             $fqcn = $this->typeNormalizer->getNormalizedFqcn(
                 isset($const->namespacedName) ? $const->namespacedName->toString() : $const->name
             );
 
             $this->globalConstants[$fqcn] = [
-                'name'           => $const->name,
-                'fqcn'           => $fqcn,
-                'startLine'      => $const->getLine(),
-                'endLine'        => $const->getAttribute('endLine'),
-                'startPosName'   => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
-                'endPosName'     => $const->getAttribute('endFilePos') ? $const->getAttribute('endFilePos') : null,
-                'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'name'             => $const->name,
+                'fqcn'             => $fqcn,
+                'startLine'        => $const->getLine(),
+                'endLine'          => $const->getAttribute('endLine'),
+                'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
+                'endPosName'       => $const->getAttribute('endFilePos') ? $const->getAttribute('endFilePos') : null,
+                'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+                'defaultValueNode' => $const->value,
 
                 'defaultValue' => substr(
                     $this->code,
@@ -476,8 +464,6 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
      */
     protected function parseDefineNode(Node\Expr\FuncCall $node): void
     {
-        parent::enterNode($node);
-
         if (count($node->args) < 2) {
             return;
         }
@@ -495,13 +481,14 @@ class OutlineFetchingVisitor extends AbstractNameResolvingVisitor
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($name->toString());
 
         $this->globalDefines[$fqcn] = [
-            'name'           => $name->getLast(),
-            'fqcn'           => $fqcn,
-            'startLine'      => $node->getLine(),
-            'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('endFilePos') ? $node->getAttribute('endFilePos') : null,
-            'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+            'name'             => $name->getLast(),
+            'fqcn'             => $fqcn,
+            'startLine'        => $node->getLine(),
+            'endLine'          => $node->getAttribute('endLine'),
+            'startPosName'     => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
+            'endPosName'       => $node->getAttribute('endFilePos') ? $node->getAttribute('endFilePos') : null,
+            'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
+            'defaultValueNode' => $node->args[1],
 
             'defaultValue' => substr(
                 $this->code,

@@ -12,7 +12,7 @@ class ExpressionTypeInfoMap
     /**
      * @var array
      */
-    protected $map = [];
+    private $map = [];
 
     /**
      * @param string $expression

@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\DocblockTypeParser\SpecialDocblockTypeString;
+
 /**
  * Provides functionality for analyzing type names.
  */
@@ -20,21 +22,6 @@ class TypeAnalyzer implements TypeNormalizerInterface
     protected const ARRAY_TYPE_HINT_REGEX = '/^(.+)\[\]$/';
 
     /**
-     * @var string
-     */
-    protected const TYPE_SELF = 'self';
-
-    /**
-     * @var string
-     */
-    protected const TYPE_STATIC = 'static';
-
-    /**
-     * @var string
-     */
-    protected const TYPE_THIS = '$this';
-
-    /**
      * Indicates if a type is "special", i.e. it is not an actual class type, but rather a basic type (e.g. "int",
      * "bool", ...) or another special type (e.g. "$this", "false", ...).
      *
@@ -47,24 +34,23 @@ class TypeAnalyzer implements TypeNormalizerInterface
     public function isSpecialType(string $type): bool
     {
         $isReservedKeyword = in_array($type, [
-            'string',
-            'int',
-            'bool',
-            'float',
-            'object',
-            'mixed',
-            'array',
-            'resource',
-            'void',
-            'null',
-            'callable',
-            'false',
-            'true',
-            'self',
-            'static',
-            'parent',
-            '$this',
-            'iterable'
+            SpecialDocblockTypeString::STRING_,
+            SpecialDocblockTypeString::INT_,
+            SpecialDocblockTypeString::BOOL_,
+            SpecialDocblockTypeString::FLOAT_,
+            SpecialDocblockTypeString::OBJECT_,
+            SpecialDocblockTypeString::MIXED_,
+            SpecialDocblockTypeString::ARRAY_,
+            SpecialDocblockTypeString::RESOURCE_,
+            SpecialDocblockTypeString::VOID_,
+            SpecialDocblockTypeString::NULL_,
+            SpecialDocblockTypeString::CALLABLE_,
+            SpecialDocblockTypeString::FALSE_,
+            SpecialDocblockTypeString::TRUE_,
+            SpecialDocblockTypeString::SELF_,
+            SpecialDocblockTypeString::STATIC_,
+            SpecialDocblockTypeString::THIS_,
+            SpecialDocblockTypeString::ITERABLE_
         ]);
 
         return $isReservedKeyword || $this->isArraySyntaxTypeHint($type);
@@ -107,44 +93,6 @@ class TypeAnalyzer implements TypeNormalizerInterface
     }
 
     /**
-     * Returns a boolean indicating if the specified type (i.e. from a type hint) is valid according to the passed
-     * docblock type identifier.
-     *
-     * @param string $type
-     * @param string $typeSpecification
-     *
-     * @return bool
-     */
-    public function isTypeConformantWithDocblockType(string $type, string $typeSpecification): bool
-    {
-        $docblockTypes = $this->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->isTypeConformantWithDocblockTypes($type, $docblockTypes);
-    }
-
-    /**
-     * @param string   $type
-     * @param string[] $docblockTypes
-     *
-     * @return bool
-     */
-    protected function isTypeConformantWithDocblockTypes(string $type, array $docblockTypes): bool
-    {
-        $isPresent = in_array($type, $docblockTypes);
-
-        if (!$isPresent && $type === 'array') {
-            foreach ($docblockTypes as $docblockType) {
-                // The 'type[]' syntax is also valid for the 'array' type hint.
-                if ($this->isArraySyntaxTypeHint($docblockType)) {
-                    return true;
-                }
-            }
-        }
-
-        return $isPresent;
-    }
-
-    /**
      * @param string $type
      *
      * @return bool
@@ -183,7 +131,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeSelfWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, self::TYPE_SELF, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeString::SELF_, $newType);
     }
 
     /**
@@ -199,7 +147,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeStaticWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, self::TYPE_STATIC, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeString::STATIC_, $newType);
     }
 
     /**
@@ -215,7 +163,7 @@ class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeThisWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, self::TYPE_THIS, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeString::THIS_, $newType);
     }
 
     /**

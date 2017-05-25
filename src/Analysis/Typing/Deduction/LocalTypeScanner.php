@@ -6,10 +6,13 @@ use PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverFactoryInterface;
-
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfo;
 use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;
+
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
@@ -28,50 +31,50 @@ class LocalTypeScanner
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
-     * @var FileTypeResolverFactoryInterface
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    protected $fileTypeResolverFactory;
+    private $structureAwareNameResolverFacotry;
 
     /**
      * @var TypeAnalyzer
      */
-    protected $typeAnalyzer;
+    private $typeAnalyzer;
 
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var ForeachNodeLoopValueTypeDeducer
      */
-    protected $foreachNodeLoopValueTypeDeducer;
+    private $foreachNodeLoopValueTypeDeducer;
 
     /**
      * @var FunctionLikeParameterTypeDeducer
      */
-    protected $functionLikeParameterTypeDeducer;
+    private $functionLikeParameterTypeDeducer;
 
     /**
      * @var ExpressionLocalTypeAnalyzer
      */
-    protected $expressionLocalTypeAnalyzer;
+    private $expressionLocalTypeAnalyzer;
 
     /**
-     * @param DocblockParser                   $docblockParser
-     * @param FileTypeResolverFactoryInterface $fileTypeResolverFactory
-     * @param TypeAnalyzer                     $typeAnalyzer
-     * @param NodeTypeDeducerInterface         $nodeTypeDeducer
-     * @param ForeachNodeLoopValueTypeDeducer  $foreachNodeLoopValueTypeDeducer
-     * @param FunctionLikeParameterTypeDeducer $functionLikeParameterTypeDeducer
-     * @param ExpressionLocalTypeAnalyzer      $expressionLocalTypeAnalyzer
+     * @param DocblockParser                             $docblockParser
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFacotry
+     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
+     * @param ForeachNodeLoopValueTypeDeducer            $foreachNodeLoopValueTypeDeducer
+     * @param FunctionLikeParameterTypeDeducer           $functionLikeParameterTypeDeducer
+     * @param ExpressionLocalTypeAnalyzer                $expressionLocalTypeAnalyzer
      */
     public function __construct(
         DocblockParser $docblockParser,
-        FileTypeResolverFactoryInterface $fileTypeResolverFactory,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFacotry,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ForeachNodeLoopValueTypeDeducer $foreachNodeLoopValueTypeDeducer,
@@ -79,7 +82,7 @@ class LocalTypeScanner
         ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer
     ) {
         $this->docblockParser = $docblockParser;
-        $this->fileTypeResolverFactory = $fileTypeResolverFactory;
+        $this->structureAwareNameResolverFacotry = $structureAwareNameResolverFacotry;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->foreachNodeLoopValueTypeDeducer = $foreachNodeLoopValueTypeDeducer;
@@ -159,7 +162,12 @@ class LocalTypeScanner
                 $expressionTypeInfo->getBestTypeOverrideMatchLine() :
                 $line;
 
-            $resolvedTypes[] = $this->fileTypeResolverFactory->create($file)->resolve($type, $typeLine);
+            $filePosition = new FilePosition($file, new Position($typeLine, 0));
+
+            $resolvedTypes[] = $this->structureAwareNameResolverFacotry->create($filePosition)->resolve(
+                $type,
+                $filePosition
+            );
         }
 
         return $resolvedTypes;
@@ -312,7 +320,7 @@ class LocalTypeScanner
         int $offset
     ): array {
         foreach ($node->getParams() as $param) {
-            if ($param->name === mb_substr($parameterName, 1)) {
+            if ($param->var->name === mb_substr($parameterName, 1)) {
                 $this->functionLikeParameterTypeDeducer->setFunctionDocblock($node->getDocComment());
 
                 return $this->functionLikeParameterTypeDeducer->deduce($param, $file, $code, $offset);

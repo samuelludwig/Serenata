@@ -1,0 +1,58 @@
+<?php
+
+namespace PhpIntegrator\Parsing;
+
+use PhpParser\Parser;
+use PhpParser\ErrorHandler;
+
+/**
+ * Parser that caches nodes to avoid parsing the same file or source code multiple times.
+ *
+ * Only the last parsed result is retained. If different code is passed, the cache will miss and a new parse call will
+ * occur.
+ */
+class CachingParser implements Parser
+{
+    /**
+     * @var Parser
+     */
+    private $proxiedObject;
+
+    /**
+     * @var array|null
+     */
+    private $cache = null;
+
+    /**
+     * @var string|null
+     */
+    private $lastCacheKey = null;
+
+    /**
+     * @param Parser $proxiedObject
+     */
+    public function __construct(Parser $proxiedObject)
+    {
+        $this->proxiedObject = $proxiedObject;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function parse(string $code, ErrorHandler $errorHandler = null)
+    {
+        $cacheKey = md5($code);
+
+        if ($errorHandler !== null) {
+            $cacheKey .= spl_object_hash($errorHandler);
+        }
+
+        if ($cacheKey !== $this->lastCacheKey || $this->cache === null) {
+            $this->cache = $this->proxiedObject->parse($code, $errorHandler);
+        }
+
+        $this->lastCacheKey = $cacheKey;
+
+        return $this->cache;
+    }
+}

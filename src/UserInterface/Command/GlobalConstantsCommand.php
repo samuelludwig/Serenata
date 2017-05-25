@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\GlobalConstantsProvider;
+use PhpIntegrator\Analysis\ConstantListProviderInterface;
 
 /**
  * Command that shows a list of global constants.
@@ -12,16 +12,16 @@ use PhpIntegrator\Analysis\GlobalConstantsProvider;
 class GlobalConstantsCommand extends AbstractCommand
 {
     /**
-     * @var GlobalConstantsProvider
+     * @var ConstantListProviderInterface
      */
-    protected $globalConstantsProvider;
+    private $constantListProvider;
 
     /**
-     * @param GlobalConstantsProvider $globalConstantsProvider
+     * @param ConstantListProviderInterface $constantListProvider
      */
-    public function __construct(GlobalConstantsProvider $globalConstantsProvider)
+    public function __construct(ConstantListProviderInterface $constantListProvider)
     {
-        $this->globalConstantsProvider = $globalConstantsProvider;
+        $this->constantListProvider = $constantListProvider;
     }
 
     /**
@@ -37,6 +37,6 @@ class GlobalConstantsCommand extends AbstractCommand
      */
     public function getGlobalConstants(): array
     {
-        return $this->globalConstantsProvider->getAll();
+        return $this->constantListProvider->getAll();
     }
 }

@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
 use PhpParser\Node;
 use PhpParser\PrettyPrinterAbstract;
@@ -15,47 +15,39 @@ use PhpParser\PrettyPrinterAbstract;
 class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var LocalTypeScanner
+     * @var PropertyFetchPropertyInfoRetriever
      */
-    protected $localTypeScanner;
+    private $propertyFetchPropertyInfoRetriever;
 
     /**
-     * @var NodeTypeDeducerInterface
+     * @var LocalTypeScanner
      */
-    protected $nodeTypeDeducer;
+    private $localTypeScanner;
 
     /**
      * @var PrettyPrinterAbstract
      */
-    protected $prettyPrinter;
+    private $prettyPrinter;
 
     /**
-     * @var ClasslikeInfoBuilder
-     */
-    protected $classlikeInfoBuilder;
-
-    /**
-     * @param LocalTypeScanner         $localTypeScanner
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param PrettyPrinterAbstract    $prettyPrinter
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
+     * @param PropertyFetchPropertyInfoRetriever $propertyFetchPropertyInfoRetriever
+     * @param LocalTypeScanner                   $localTypeScanner
+     * @param PrettyPrinterAbstract              $prettyPrinter
      */
     public function __construct(
+        PropertyFetchPropertyInfoRetriever $propertyFetchPropertyInfoRetriever,
         LocalTypeScanner $localTypeScanner,
-        NodeTypeDeducerInterface $nodeTypeDeducer,
-        PrettyPrinterAbstract $prettyPrinter,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        PrettyPrinterAbstract $prettyPrinter
     ) {
+        $this->propertyFetchPropertyInfoRetriever = $propertyFetchPropertyInfoRetriever;
         $this->localTypeScanner = $localTypeScanner;
-        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->prettyPrinter = $prettyPrinter;
-        $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\PropertyFetch && !$node instanceof Node\Expr\StaticPropertyFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -66,7 +58,7 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\PropertyFetch|Node\Expr\StaticPropertyFetch $node
-     * @param string|null                                           $file
+     * @param string                                                $file
      * @param string                                                $code
      * @param int                                                   $offset
      *
@@ -74,46 +66,30 @@ class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromPropertyFetchNode(
         Node\Expr $node,
-        ?string $file,
+        string $file,
         string $code,
         int $offset
     ): array {
-        if ($node->name instanceof Node\Expr) {
-            return []; // Can't currently deduce type of an expression such as "$this->{$foo}";
+        $infoItems = [];
+
+        try {
+            $infoItems = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $file, $code, $offset);
+        } catch (UnexpectedValueException $e) {
+            return [];
         }
 
-        $objectNode = ($node instanceof Node\Expr\PropertyFetch) ? $node->var : $node->class;
+        $types = [];
 
-        if ($node instanceof Node\Expr\PropertyFetch) {
-            $objectNode = $node->var;
-        } else {
-            $objectNode = $node->class;
-        }
+        foreach ($infoItems as $info) {
+            $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['types']);
 
-        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
-
-        $typeMap = [];
-
-        foreach ($typesOfVar as $type) {
-            $info = null;
-
-            try {
-                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
-            } catch (UnexpectedValueException $e) {
-                continue;
-            }
-
-            if (isset($info['properties'][$node->name])) {
-                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['properties'][$node->name]['types']);
-
-                if (!empty($fetchedTypes)) {
-                    $typeMap += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-                }
+            if (!empty($fetchedTypes)) {
+                $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
             }
         }
 
         // We use an associative array so we automatically avoid duplicate types.
-        $types = array_keys($typeMap);
+        $types = array_keys($types);
 
         $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
 

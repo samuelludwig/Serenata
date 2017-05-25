@@ -23,22 +23,22 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * @var DocblockParser
      */
-    protected $docblockParser;
+    private $docblockParser;
 
     /**
      * @var ExpressionTypeInfoMap
      */
-    protected $expressionTypeInfoMap;
+    private $expressionTypeInfoMap;
 
     /**
      * @var PrettyPrinterAbstract
      */
-    protected $prettyPrinter;
+    private $prettyPrinter;
 
     /**
      * Constructor.
@@ -100,7 +100,7 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     protected function parseCatch(Node\Stmt\Catch_ $node): void
     {
-        $this->expressionTypeInfoMap->setBestMatch('$' . $node->var, $node);
+        $this->expressionTypeInfoMap->setBestMatch('$' . $node->var->name, $node);
     }
 
     /**
@@ -200,14 +200,14 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
             // examine the parent scope of the closure where the variable is defined.
             if ($node instanceof Node\Expr\Closure) {
                 foreach ($node->uses as $closureUse) {
-                    $variablesOutsideCurrentScope[] = '$' . $closureUse->var;
+                    $variablesOutsideCurrentScope[] = '$' . $closureUse->var->name;
                 }
             }
 
             $this->expressionTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
 
             foreach ($node->getParams() as $param) {
-                $this->expressionTypeInfoMap->setBestMatch('$' . $param->name, $node);
+                $this->expressionTypeInfoMap->setBestMatch('$' . $param->var->name, $node);
             }
         }
     }
@@ -505,9 +505,9 @@ class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         if ($expression instanceof Node\Expr\Variable && is_string($expression->name)) {
             return true;
-        } elseif ($expression instanceof Node\Expr\PropertyFetch && is_string($expression->name)) {
+        } elseif ($expression instanceof Node\Expr\PropertyFetch && $expression->name instanceof Node\Identifier) {
             return true;
-        } elseif ($expression instanceof Node\Expr\StaticPropertyFetch && is_string($expression->name)) {
+        } elseif ($expression instanceof Node\Expr\StaticPropertyFetch && $expression->name instanceof Node\Identifier) {
             return true;
         }
 

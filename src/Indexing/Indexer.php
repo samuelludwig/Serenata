@@ -29,17 +29,17 @@ class Indexer implements EventEmitterInterface
     /**
      * @var ProjectIndexer
      */
-    protected $projectIndexer;
+    private $projectIndexer;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @var callable|null
      */
-    protected $progressStreamingCallback;
+    private $progressStreamingCallback;
 
     /**
      * @param ProjectIndexer         $projectIndexer

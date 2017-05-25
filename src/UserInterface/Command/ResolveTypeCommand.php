@@ -4,11 +4,12 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\Resolving\ProjectTypeResolverFactoryFacade;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 /**
  * Command that resolves local types in a file.
@@ -16,25 +17,16 @@ use PhpIntegrator\Indexing\IndexDatabase;
 class ResolveTypeCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
+     * @var StructureAwareNameResolverFactoryInterface
      */
-    protected $indexDatabase;
+    private $structureAwareNameResolverFactory;
 
     /**
-     * @var ProjectTypeResolverFactoryFacade
+     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
-    protected $projectTypeResolverFactoryFacade;
-
-    /**
-     * @param IndexDatabase                    $indexDatabase
-     * @param ProjectTypeResolverFactoryFacade $projectTypeResolverFactoryFacade
-     */
-    public function __construct(
-        IndexDatabase $indexDatabase,
-        ProjectTypeResolverFactoryFacade $projectTypeResolverFactoryFacade
-    ) {
-        $this->indexDatabase = $indexDatabase;
-        $this->projectTypeResolverFactoryFacade = $projectTypeResolverFactoryFacade;
+    public function __construct(StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory)
+    {
+        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
     /**
@@ -84,12 +76,8 @@ class ResolveTypeCommand extends AbstractCommand
             throw new InvalidArgumentsException('Unknown kind specified!');
         }
 
-        $fileId = $this->indexDatabase->getFileId($file);
+        $filePosition = new FilePosition($file, new Position($line, 0));
 
-        if (!$fileId) {
-            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
-        }
-
-        return $this->projectTypeResolverFactoryFacade->create($file)->resolve($name, $line, $kind);
+        return $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition, $kind);
     }
 }

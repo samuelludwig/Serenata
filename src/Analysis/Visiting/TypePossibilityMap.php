@@ -19,7 +19,7 @@ class TypePossibilityMap
      *
      * @var array
      */
-    protected $map = [];
+    private $map = [];
 
     /**
      * @return void

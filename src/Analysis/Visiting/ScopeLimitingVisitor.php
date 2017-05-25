@@ -20,7 +20,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    protected $position;
+    private $position;
 
     /**
      * Keeps track of previous values of node properties.
@@ -31,7 +31,7 @@ class ScopeLimitingVisitor extends NodeVisitorAbstract
      *
      * @var array
      */
-    protected $memorizedNodeProperties;
+    private $memorizedNodeProperties;
 
     /**
      * Constructor.

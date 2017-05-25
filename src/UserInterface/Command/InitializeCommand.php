@@ -7,9 +7,9 @@ use ArrayAccess;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-use PhpIntegrator\Indexing\ProjectIndexer;
-use PhpIntegrator\Indexing\BuiltinIndexer;
+use PhpIntegrator\Indexing\Indexer;
+use PhpIntegrator\Indexing\ManagerRegistry;
+use PhpIntegrator\Indexing\SchemaInitializer;
 
 /**
  * Command that initializes a project.
@@ -17,40 +17,40 @@ use PhpIntegrator\Indexing\BuiltinIndexer;
 class InitializeCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
+     * @var SchemaInitializer
      */
-    protected $indexDatabase;
+    private $schemaInitializer;
 
     /**
-     * @var BuiltinIndexer
+     * @var ManagerRegistry
      */
-    protected $builtinIndexer;
+    private $managerRegistry;
 
     /**
      * @var ProjectIndexer
      */
-    protected $projectIndexer;
+    private $indexer;
 
     /**
      * @var Cache
      */
-    protected $cache;
+    private $cache;
 
     /**
-     * @param IndexDatabase  $indexDatabase
-     * @param BuiltinIndexer $builtinIndexer
-     * @param ProjectIndexer $projectIndexer
-     * @param Cache          $cache
+     * @param SchemaInitializer $schemaInitializer
+     * @param ManagerRegistry   $managerRegistry
+     * @param Indexer           $indexer
+     * @param Cache             $cache
      */
     public function __construct(
-        IndexDatabase $indexDatabase,
-        BuiltinIndexer $builtinIndexer,
-        ProjectIndexer $projectIndexer,
+        SchemaInitializer $schemaInitializer,
+        ManagerRegistry $managerRegistry,
+        Indexer $indexer,
         Cache $cache
     ) {
-        $this->indexDatabase = $indexDatabase;
-        $this->builtinIndexer = $builtinIndexer;
-        $this->projectIndexer = $projectIndexer;
+        $this->schemaInitializer = $schemaInitializer;
+        $this->managerRegistry = $managerRegistry;
+        $this->indexer = $indexer;
         $this->cache = $cache;
     }
 
@@ -73,10 +73,17 @@ class InitializeCommand extends AbstractCommand
     {
         $this->ensureIndexDatabaseDoesNotExist();
 
-        $this->indexDatabase->initialize();
+        $this->schemaInitializer->initialize();
 
         if ($includeBuiltinItems) {
-            $this->builtinIndexer->index();
+            $this->indexer->reindex(
+                [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
+                false,
+                false,
+                false,
+                [],
+                ['php']
+            );
         }
 
         $this->clearCache();
@@ -89,10 +96,10 @@ class InitializeCommand extends AbstractCommand
      */
     protected function ensureIndexDatabaseDoesNotExist(): void
     {
-        if (file_exists($this->indexDatabase->getDatabasePath())) {
-            $this->indexDatabase->ensureConnectionClosed();
+        if (file_exists($this->managerRegistry->getDatabasePath())) {
+            $this->managerRegistry->ensureConnectionClosed();
 
-            unlink($this->indexDatabase->getDatabasePath());
+            unlink($this->managerRegistry->getDatabasePath());
         }
     }
 

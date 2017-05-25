@@ -18,7 +18,7 @@ class ExpressionTypeInfo
      *
      * @var Node|null
      */
-    protected $bestMatch;
+    private $bestMatch;
 
     /**
      * Describes an override of the type.
@@ -29,19 +29,19 @@ class ExpressionTypeInfo
      *
      * @var string|null
      */
-    protected $bestTypeOverrideMatch;
+    private $bestTypeOverrideMatch;
 
     /**
      * The line to type override was encountered at.
      *
      * @var int|null
      */
-    protected $bestTypeOverrideMatchLine;
+    private $bestTypeOverrideMatchLine;
 
     /**
      * @var TypePossibilityMap
      */
-    protected $typePossibilityMap;
+    private $typePossibilityMap;
 
     /**
      *

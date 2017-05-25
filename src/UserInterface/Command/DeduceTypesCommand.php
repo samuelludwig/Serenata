@@ -6,12 +6,19 @@ use ArrayAccess;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Parsing\PartialParser;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
+
+use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
 
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
@@ -21,31 +28,39 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
-     * @var PartialParser
+     * @var LastExpressionParser
      */
-    protected $partialParser;
+    private $lastExpressionParser;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param PartialParser            $partialParser
-     * @param SourceCodeStreamReader   $sourceCodeStreamReader
+     * @var PositionalNamespaceDeterminerInterface
+     */
+    private $positionalNamespaceDeterminer;
+
+    /**
+     * @param NodeTypeDeducerInterface               $nodeTypeDeducer
+     * @param LastExpressionParser                   $lastExpressionParser
+     * @param SourceCodeStreamReader                 $sourceCodeStreamReader
+     * @param PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        PartialParser $partialParser,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        LastExpressionParser $lastExpressionParser,
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->partialParser = $partialParser;
+        $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->positionalNamespaceDeterminer = $positionalNamespaceDeterminer;
     }
 
     /**
@@ -77,24 +92,44 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
-        $node = $this->partialParser->getLastNodeAt($codeWithExpression, $offset);
+        return $this->deduceTypesFromExpression(
+            $arguments['file'],
+            $code,
+            $codeWithExpression,
+            $offset,
+            isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
+        );
+    }
+
+    /**
+     * @param string $file
+     * @param string $code
+     * @param string $expression
+     * @param int    $offset
+     * @param bool   $ignoreLastElement
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromExpression(
+        string $file,
+        string $code,
+        string $expression,
+        int $offset,
+        bool $ignoreLastElement
+    ): array {
+        $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
 
         if ($node === null) {
             return [];
+        } elseif ($node instanceof Node\Stmt\Expression) {
+            $node = $node->expr;
         }
 
-        if (isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']) {
+        if ($ignoreLastElement) {
             $node = $this->getNodeWithoutLastElement($node);
         }
 
-        $result = $this->deduceTypes(
-           isset($arguments['file']) ? $arguments['file'] : null,
-           $code,
-           $node,
-           $offset
-        );
-
-        return $result;
+        return $this->deduceTypesFromNode($file, $code, $node, $offset);
     }
 
     /**
@@ -124,23 +159,52 @@ class DeduceTypesCommand extends AbstractCommand
      *
      * @return string[]
      */
-    protected function deduceTypes(string $file, string $code, Node $node, int $offset): array
+    protected function deduceTypesFromNode(string $file, string $code, Node $node, int $offset): array
     {
+        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
+
+        // We're dealing with partial code, its context may be lost because of it being invalid, so we can't rely on
+        // the namespace attaching visitor here.
+        $this->attachRelevantNamespaceToNode($node, $file, $line);
+
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param string $expression
-     * @param int    $offset
+     * @param Node   $node
+     * @param string $filePath
+     * @param int    $line
      *
-     * @return string[]
+     * @return void
      */
-    protected function deduceTypesFromExpression(string $file, string $code, string $expression, int $offset): array
+    protected function attachRelevantNamespaceToNode(Node $node, string $filePath, int $line): void
     {
-        $node = $this->partialParser->getLastNodeAt($expression, $offset);
+        $namespace = null;
+        $namespaceNode = null;
 
-        return $this->deduceTypes($file, $code, $node, $offset);
+        $filePosition = new FilePosition($filePath, new Position($line, 0));
+
+        $namespace = $this->positionalNamespaceDeterminer->determine($filePosition);
+
+        if ($namespace->getName() !== null) {
+            $namespaceNode = new Node\Name\FullyQualified($namespace->getName());
+        }
+
+        $traverser = new NodeTraverser();
+        $traverser->addVisitor(new class($namespaceNode) extends NodeVisitorAbstract {
+            private $namespaceNode;
+
+            public function __construct(?Node\Name $namespaceNode)
+            {
+                $this->namespaceNode = $namespaceNode;
+            }
+
+            public function enterNode(Node $node)
+            {
+                $node->setAttribute('namespace', $this->namespaceNode);
+            }
+        });
+
+        $traverser->traverse([$node]);
     }
 }

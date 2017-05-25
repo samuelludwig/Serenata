@@ -20,17 +20,17 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @var array
      */
-    protected $request;
+    private $request;
 
     /**
      * @var Connection
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var JsonRpcRequestHandlerInterface
      */
-    protected $jsonRpcRequestHandler;
+    private $jsonRpcRequestHandler;
 
     /**
      * @param Connection                     $connection

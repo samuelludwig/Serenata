@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Sockets;
 
+use RuntimeException;
 use SplObjectStorage;
 
 use React\EventLoop\LoopInterface;
@@ -15,30 +16,40 @@ use React\Socket\Connection;
  * This class simply requests a configured factory to create a handler for each new connection and does not handle any
  * communication itself.
  */
-class SocketServer extends Server
+class SocketServer
 {
+    /**
+     * @var Server
+     */
+    private $server;
+
     /**
      * @var SplObjectStorage
      */
-    protected $connectionMap;
+    private $connectionMap;
 
     /**
      * @var ConnectionHandlerFactoryInterface
      */
-    protected $connectionHandlerFactory;
+    private $connectionHandlerFactory;
 
     /**
+     * @param int                               $port
      * @param LoopInterface                     $loop
      * @param ConnectionHandlerFactoryInterface $connectionHandlerFactory
+     *
+     * @throws RuntimeException when setting up the server is impossible (e.g. the socket is already in use).
      */
-    public function __construct(LoopInterface $loop, ConnectionHandlerFactoryInterface $connectionHandlerFactory)
+    public function __construct(int $port, LoopInterface $loop, ConnectionHandlerFactoryInterface $connectionHandlerFactory)
     {
-        parent::__construct($loop);
+        $this->server = new Server($port, $loop);
 
         $this->connectionMap = new SplObjectStorage();
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 
-        $this->on('connection', [$this, 'onConnectionEstablished']);
+        $this->server->on('connection', function (Connection $connection) {
+             $this->onConnectionEstablished($connection);
+        });
     }
 
     /**
@@ -52,7 +63,9 @@ class SocketServer extends Server
 
         $this->connectionMap->attach($connection, $handler);
 
-        $connection->on('close', [$this, 'onConnectionClosed']);
+        $connection->on('close', function (Connection $connection) {
+            $this->onConnectionClosed($connection);
+        });
     }
 
     /**

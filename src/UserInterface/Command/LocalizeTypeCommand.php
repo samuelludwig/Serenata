@@ -4,11 +4,12 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\Localization\FileTypeLocalizerFactory;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Common\Position;
+use PhpIntegrator\Common\FilePosition;
+
+use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
 /**
  * Command that makes a FQCN relative to local use statements in a file.
@@ -16,23 +17,16 @@ use PhpIntegrator\Indexing\IndexDatabase;
 class LocalizeTypeCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
+     * @var PositionalNameLocalizerFactoryInterface
      */
-    protected $indexDatabase;
+    private $positionalNameLocalizerFactory;
 
     /**
-     * @var FileTypeLocalizerFactory
+     * @param PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory
      */
-    protected $fileTypeLocalizerFactory;
-
-    /**
-     * @param IndexDatabase            $indexDatabase
-     * @param FileTypeLocalizerFactory $fileTypeLocalizerFactory
-     */
-    public function __construct(IndexDatabase $indexDatabase, FileTypeLocalizerFactory $fileTypeLocalizerFactory)
+    public function __construct(PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory)
     {
-        $this->indexDatabase = $indexDatabase;
-        $this->fileTypeLocalizerFactory = $fileTypeLocalizerFactory;
+        $this->positionalNameLocalizerFactory = $positionalNameLocalizerFactory;
     }
 
     /**
@@ -70,12 +64,8 @@ class LocalizeTypeCommand extends AbstractCommand
      */
     public function localizeType(string $type, string $file, int $line, string $kind): ?string
     {
-        $fileId = $this->indexDatabase->getFileId($file);
+        $filePosition = new FilePosition($file, new Position($line, 0));
 
-        if (!$fileId) {
-            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
-        }
-
-        return $this->fileTypeLocalizerFactory->create($file)->resolve($type, $line, $kind);
+        return $this->positionalNameLocalizerFactory->create($filePosition)->localize($type, $kind);
     }
 }

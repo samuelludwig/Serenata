@@ -14,7 +14,7 @@ class ReindexCommand extends AbstractCommand
     /**
      * @var Indexer
      */
-    protected $indexer;
+    private $indexer;
 
     /**
      * @param Indexer $indexer

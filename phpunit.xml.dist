@@ -11,15 +11,26 @@
          failOnRisky="true"
          failOnWarning="true"
          processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
+         stopOnError="true"
+         stopOnFailure="true"
          verbose="true"
 >
     <testsuites>
-        <testsuite name="PHP Integrator Test Suite">
-            <directory suffix="Test.php">./tests</directory>
+        <testsuite name="PHP Integrator Unit Test Suite">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="PHP Integrator Integration Test Suite">
+            <directory suffix="Test.php">./tests/Integration</directory>
+        </testsuite>
+        <testsuite name="PHP Integrator Performance Test Suite">
+            <directory suffix="Test.php">./tests/Performance</directory>
         </testsuite>
     </testsuites>
+    <groups>
+        <exclude>
+            <group>Performance</group>
+        </exclude>
+    </groups>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>

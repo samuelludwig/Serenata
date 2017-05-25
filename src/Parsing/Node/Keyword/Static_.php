@@ -12,7 +12,7 @@ class Static_ extends Expr
     /**
      * @inheritDoc
      */
-    public function getSubNodeNames()
+    public function getSubNodeNames(): array
     {
         return [];
     }

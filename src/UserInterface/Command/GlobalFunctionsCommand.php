@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
+use PhpIntegrator\Analysis\functionListProviderInterface;
 
 /**
  * Command that shows a list of global functions.
@@ -12,16 +12,16 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 class GlobalFunctionsCommand
 {
     /**
-     * @var GlobalFunctionsProvider
+     * @var functionListProviderInterface
      */
-    protected $globalFunctionsProvider;
+    private $functionListProvider;
 
     /**
-     * @param GlobalFunctionsProvider $globalFunctionsProvider
+     * @param functionListProviderInterface $functionListProvider
      */
-    public function __construct(GlobalFunctionsProvider $globalFunctionsProvider)
+    public function __construct(functionListProviderInterface $functionListProvider)
     {
-        $this->globalFunctionsProvider = $globalFunctionsProvider;
+        $this->functionListProvider = $functionListProvider;
     }
 
     /**
@@ -37,6 +37,6 @@ class GlobalFunctionsCommand
       */
      public function getGlobalFunctions(): array
      {
-         return $this->globalFunctionsProvider->getAll();
+         return $this->functionListProvider->getAll();
      }
 }

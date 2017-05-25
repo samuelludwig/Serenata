@@ -13,7 +13,7 @@ class ExclusionFilterIterator extends FilterIterator
     /**
      * @var string[]
      */
-    protected $excludedPatterns;
+    private $excludedPatterns;
 
     /**
      * @param Iterator $iterator

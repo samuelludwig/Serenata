@@ -4,6 +4,7 @@ namespace PhpIntegrator\UserInterface;
 
 use React;
 use ArrayObject;
+use RuntimeException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Indexing\Indexer;
@@ -20,8 +21,6 @@ use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\EventLoop\LoopInterface;
-
-use React\Socket\ConnectionException;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -40,7 +39,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      *
      * @var resource|null
      */
-    protected $stdinStream;
+    private $stdinStream;
 
     /**
      * @inheritDoc
@@ -60,13 +59,15 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         try {
             $this->setupRequestHandlingSocketServer($loop, $requestHandlingPort);
-        } catch (ConnectionException $e) {
+        } catch (RuntimeException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($this->stdinStream);
             return 2;
         }
 
         echo "Starting socket server on port {$requestHandlingPort}...\n";
+
+        $this->instantiateRequiredServices($this->getContainer());
 
         $loop->run();
 
@@ -97,14 +98,15 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      * @param React\EventLoop\LoopInterface $loop
      * @param int                           $port
      *
+     * @throws RuntimeException
+     *
      * @return void
      */
     protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
-        $requestHandlingSocketServer = new SocketServer($loop, $connectionHandlerFactory);
-        $requestHandlingSocketServer->listen($port);
+        $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
     }
 
     /**
@@ -129,14 +131,16 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
         } catch (\Exception $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line' => $e->getLine(),
-                'file' => $e->getFile()
+                'line'      => $e->getLine(),
+                'file'      => $e->getFile(),
+                'backtrace' => $e->getTraceAsString()
             ]);
         } catch (\Throwable $e) {
             // On PHP < 7, throwable simply won't exist and this clause is never triggered.
             $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line' => $e->getLine(),
-                'file' => $e->getFile()
+                'line'      => $e->getLine(),
+                'file'      => $e->getFile(),
+                'backtrace' => $e->getTraceAsString()
             ]);
         }
 
@@ -211,33 +215,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         /** @var Indexer $indexer */
         $indexer = $this->getContainer()->get('indexer');
         $indexer->setProgressStreamingCallback($progressStreamingCallback);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function createContainer(): ContainerBuilder
-    {
-        $value = parent::createContainer();
-
-        $this->instantiateRequiredServices($value);
-
-        return $value;
-    }
-
-    /**
-     * Instantiates services that are required for the application to function correctly.
-     *
-     * Usually we prefer to rely on lazy loading of services, but some services aren't explicitly required by any other
-     * service, but do provide necessary interaction (i.e. they are required by the application itself).
-     *
-     * @param ContainerBuilder $container
-     *
-     * @return void
-     */
-    protected function instantiateRequiredServices(ContainerBuilder $container): void
-    {
-        $container->get('cacheClearingEventMediator');
     }
 
     /**

@@ -14,7 +14,7 @@ class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
@@ -27,7 +27,7 @@ class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\Assign) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -38,13 +38,13 @@ class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\Assign $node
-     * @param string|null      $file
+     * @param string           $file
      * @param string           $code
      * @param int              $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromAssignNode(Node\Expr\Assign $node, ?string $file, string $code, int $offset): array
+    protected function deduceTypesFromAssignNode(Node\Expr\Assign $node, string $file, string $code, int $offset): array
     {
         return $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
     }

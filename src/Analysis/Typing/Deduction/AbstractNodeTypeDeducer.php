@@ -10,9 +10,9 @@ abstract class AbstractNodeTypeDeducer implements NodeTypeDeducerInterface
     /**
      * @param array $typeArray
      *
-     * @return string
+     * @return string|null
      */
-    protected function fetchResolvedTypeFromTypeArray(array $typeArray): string
+    protected function fetchResolvedTypeFromTypeArray(array $typeArray): ?string
     {
         return $typeArray['resolvedType'];
     }

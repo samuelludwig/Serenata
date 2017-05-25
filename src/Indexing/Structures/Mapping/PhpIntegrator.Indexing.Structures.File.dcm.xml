@@ -1,0 +1,27 @@
+<doctrine-mapping
+    xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+        https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
+>
+
+    <entity name="PhpIntegrator\Indexing\Structures\File" change-tracking-policy="DEFERRED_EXPLICIT">
+        <id name="id" type="string"></id>
+
+        <field name="path"      type="string"   nullable="false" length="512" unique="true" />
+        <field name="indexedOn" type="datetime" nullable="false" />
+
+        <one-to-many field="namespaces" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace" mapped-by="file">
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>fileNamespaces</region>
+            </cache>
+        </one-to-many>
+
+        <cache>
+            <usage>READ_ONLY</usage>
+            <region>file</region>
+        </cache>
+    </entity>
+
+</doctrine-mapping>

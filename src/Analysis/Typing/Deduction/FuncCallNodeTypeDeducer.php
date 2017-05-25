@@ -6,9 +6,10 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use PhpIntegrator\Indexing\Structures;
+use PhpIntegrator\Indexing\ManagerRegistry;
 
 use PhpParser\Node;
 
@@ -18,29 +19,39 @@ use PhpParser\Node;
 class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var IndexDatabase
+     * @var ManagerRegistry
      */
-    protected $indexDatabase;
+    private $managerRegistry;
 
     /**
      * @var FunctionConverter
      */
-    protected $functionConverter;
+    private $functionConverter;
 
     /**
-     * @param IndexDatabase     $indexDatabase
-     * @param FunctionConverter $functionConverter
+     * @var FunctionNameNodeFqsenDeterminer
      */
-    public function __construct(IndexDatabase $indexDatabase, FunctionConverter $functionConverter)
-    {
-        $this->indexDatabase = $indexDatabase;
+    private $functionNameNodeFqsenDeterminer;
+
+    /**
+     * @param ManagerRegistry                   $managerRegistry
+     * @param FunctionConverter               $functionConverter
+     * @param FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
+     */
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        FunctionConverter $functionConverter,
+        FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
+    ) {
+        $this->managerRegistry = $managerRegistry;
         $this->functionConverter = $functionConverter;
+        $this->functionNameNodeFqsenDeterminer = $functionNameNodeFqsenDeterminer;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\FuncCall) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -60,9 +71,11 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
             return []; // Can't currently deduce type of an expression such as "{$foo}()";
         }
 
-        $name = NodeHelpers::fetchClassName($node->name);
+        $fqsen = $this->functionNameNodeFqsenDeterminer->determine($node->name);
 
-        $globalFunction = $this->indexDatabase->getGlobalFunctionByFqcn($name);
+        $globalFunction = $this->managerRegistry->getRepository(Structures\Function_::class)->findOneBy([
+            'fqcn' => $fqsen
+        ]);
 
         if (!$globalFunction) {
             return [];

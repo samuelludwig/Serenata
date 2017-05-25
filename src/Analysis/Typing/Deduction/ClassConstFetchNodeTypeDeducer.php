@@ -16,12 +16,12 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @var NodeTypeDeducerInterface
      */
-    protected $nodeTypeDeducer;
+    private $nodeTypeDeducer;
 
     /**
      * @var ClasslikeInfoBuilder
      */
-    protected $classlikeInfoBuilder;
+    private $classlikeInfoBuilder;
 
     /**
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
@@ -38,7 +38,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, ?string $file, string $code, int $offset): array
+    public function deduce(Node $node, string $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\ClassConstFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -49,7 +49,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param string|null               $file
+     * @param string                    $file
      * @param string                    $code
      * @param int                       $offset
      *
@@ -57,7 +57,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
-        ?string $file,
+        string $file,
         string $code,
         int $offset
     ): array {
@@ -74,8 +74,8 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                 continue;
             }
 
-            if (isset($info['constants'][$node->name])) {
-                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name]['types']);
+            if (isset($info['constants'][$node->name->name])) {
+                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name->name]['types']);
 
                 if (!empty($fetchedTypes)) {
                     $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));

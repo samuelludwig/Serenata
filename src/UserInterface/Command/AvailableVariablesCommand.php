@@ -22,12 +22,12 @@ class AvailableVariablesCommand extends AbstractCommand
     /**
      * @var VariableScanner
      */
-    protected $variableScanner;
+    private $variableScanner;
 
     /**
      * @var SourceCodeStreamReader
      */
-    protected $sourceCodeStreamReader;
+    private $sourceCodeStreamReader;
 
     /**
      * @param VariableScanner        $variableScanner

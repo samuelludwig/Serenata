@@ -16,7 +16,7 @@ class VacuumCommand extends AbstractCommand
     /**
      * @var ProjectIndexer
      */
-    protected $projectIndexer;
+    private $projectIndexer;
 
     /**
      * @param ProjectIndexer $projectIndexer

@@ -4,7 +4,10 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\Structures;
+use PhpIntegrator\Indexing\ManagerRegistry;
+
+use PhpIntegrator\Utility\NamespaceData;
 
 /**
  * Command that shows a list of available namespace.
@@ -12,16 +15,16 @@ use PhpIntegrator\Indexing\IndexDatabase;
 class NamespaceListCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
+     * @var ManagerRegistry
      */
-    protected $indexDatabase;
+    private $managerRegistry;
 
     /**
-     * @param IndexDatabase $indexDatabase
+     * @param ManagerRegistry $managerRegistry
      */
-    public function __construct(IndexDatabase $indexDatabase)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        $this->indexDatabase = $indexDatabase;
+        $this->managerRegistry = $managerRegistry;
     }
 
     /**
@@ -43,10 +46,28 @@ class NamespaceListCommand extends AbstractCommand
      */
     public function getNamespaceList(?string $file = null): array
     {
+        $criteria = [];
+
         if ($file !== null) {
-            return $this->indexDatabase->getNamespacesForFile($file);
+            $fileEntity = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
+                'path' => $file
+            ]);
+
+            if ($fileEntity === null) {
+                throw new InvalidArgumentsException("File \"{$file}\" is not present in the index");
+            }
+
+            $criteria['file'] = $fileEntity;
         }
 
-        return $this->indexDatabase->getNamespaces($file);
+        $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy($criteria);
+
+        return array_map(function (Structures\FileNamespace $namespace) {
+            return [
+                'name'      => $namespace->getName(),
+                'startLine' => $namespace->getStartLine(),
+                'endLine'   => $namespace->getEndLine()
+            ];
+        }, $namespaces);
     }
 }

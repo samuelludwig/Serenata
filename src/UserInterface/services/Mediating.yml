@@ -1,0 +1,33 @@
+parameters:
+
+
+services:
+    cacheClearingEventMediator.clearableCache:
+        class: PhpIntegrator\Analysis\ClearableCacheCollection
+        arguments:
+            -
+                - '@classlikeExistenceChecker'
+                - '@globalFunctionExistenceChecker'
+                - '@globalConstantExistenceChecker'
+                - '@fileClassListProvider.cachingDecorator'
+
+    cacheClearingEventMediator1:
+        class: PhpIntegrator\Mediating\CacheClearingEventMediator
+        arguments:
+            - '@cacheClearingEventMediator.clearableCache'
+            - '@indexer'
+            - !php/const:PhpIntegrator\Indexing\Indexer::INDEXING_SUCCEEDED_EVENT
+
+    # cacheClearingEventMediator2:
+    #     class: PhpIntegrator\Mediating\CacheClearingEventMediator
+    #     arguments:
+    #         - '@fileNamespaceProvider.cachingFileNamespaceProvider'
+    #         - '@storageForIndexers'
+    #         - !php/const:PhpIntegrator\Indexing\CallbackStorageProxy::EVENT_NAMESPACE_INSERTED
+    #
+    # cacheClearingEventMediator3:
+    #     class: PhpIntegrator\Mediating\CacheClearingEventMediator
+    #     arguments:
+    #         - '@fileNamespaceProvider.cachingFileNamespaceProvider'
+    #         - '@storageForIndexers'
+    #         - !php/const:PhpIntegrator\Indexing\CallbackStorageProxy::EVENT_IMPORT_INSERTED

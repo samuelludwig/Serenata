@@ -4,24 +4,26 @@ namespace PhpIntegrator\Analysis\Conversion;
 
 use ArrayAccess;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Converts raw class constant data from the index to more useful data.
  */
 class ClasslikeConstantConverter extends ConstantConverter
 {
     /**
-     * @param array       $rawInfo
-     * @param ArrayAccess $class
+     * @param Structures\Constant $constant
+     * @param ArrayAccess         $class
      *
      * @return array
      */
-    public function convertForClass(array $rawInfo, ArrayAccess $class): array
+    public function convertForClass(Structures\Constant $constant, ArrayAccess $class): array
     {
-        $data = parent::convert($rawInfo);
+        $data = parent::convert($constant);
 
         return array_merge($data, [
             'declaringClass' => [
-                'name'      => $class['name'],
+                'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
@@ -29,13 +31,13 @@ class ClasslikeConstantConverter extends ConstantConverter
             ],
 
             'declaringStructure' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
-                'startLineMember' => $data['startLine'],
-                'endLineMember'   => $data['endLine']
+                'startLineMember' => $constant->getStartLine(),
+                'endLineMember'   => $constant->getEndLine()
             ]
         ]);
     }

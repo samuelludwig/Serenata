@@ -4,6 +4,8 @@ namespace PhpIntegrator\Parsing;
 
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 
+use PhpIntegrator\DocblockTypeParser\DocblockTypeParserInterface;
+
 /**
  * Parser for PHP docblocks.
  */
@@ -101,7 +103,22 @@ class DocblockParser
     /**
      * @var DocblockAnalyzer
      */
-    protected $docblockAnalyzer;
+    private $docblockAnalyzer;
+
+    /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
+     * @param DocblockAnalyzer            $docblockAnalyzer
+     * @param DocblockTypeParserInterface $docblockTypeParser
+     */
+    public function __construct(DocblockAnalyzer $docblockAnalyzer, DocblockTypeParserInterface $docblockTypeParser)
+    {
+        $this->docblockAnalyzer = $docblockAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
+    }
 
     /**
      * Parse the comment string to get its elements.
@@ -354,25 +371,29 @@ class DocblockParser
      */
     protected function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
+        $return = null;
+
         if (isset($tags[static::RETURN_VALUE])) {
             list($type, $description) = $this->filterParameterTag($tags[static::RETURN_VALUE][0], 2);
-        } else {
-            $type = null;
-            $description = null;
 
+            if ($type) {
+                $return = [
+                    'type'        => $this->docblockTypeParser->parse($type),
+                    'description' => $description
+                ];
+            }
+        } elseif ($docblock !== null) {
             // According to https://www.phpdoc.org/docs/latest/references/phpdoc/tags/return.html, a method that does
             // have a docblock, but no explicit return type returns void. Constructors, however, must return self. If
             // there is no docblock at all, we can't assume either of these types.
-            if ($docblock !== null) {
-                $type = ($itemName === '__construct') ? 'self' : 'void';
-            }
+            $return = [
+                'type'        => $this->docblockTypeParser->parse(($itemName === '__construct') ? 'self' : 'void'),
+                'description' => null
+            ];
         }
 
         return [
-            'return' => [
-                'type'        => $type,
-                'description' => $description
-            ]
+            'return' => $return
         ];
     }
 
@@ -393,6 +414,10 @@ class DocblockParser
             foreach ($tags[static::PARAM_TYPE] as $tag) {
                 list($type, $variableName, $description) = $this->filterParameterTag($tag, 3);
 
+                if (empty($type) || empty($variableName)) {
+                    continue;
+                }
+
                 $isVariadic = false;
                 $isReference = false;
 
@@ -407,7 +432,7 @@ class DocblockParser
                 }
 
                 $params[$variableName] = [
-                    'type'        => $type,
+                    'type'        => $this->docblockTypeParser->parse($type),
                     'description' => $description,
                     'isVariadic'  => $isVariadic,
                     'isReference' => $isReference
@@ -437,25 +462,31 @@ class DocblockParser
             foreach ($tags[static::VAR_TYPE] as $tag) {
                 list($varType, $varName, $varDescription) = $this->filterParameterTag($tag, 3);
 
+                if (empty($varType)) {
+                    continue;
+                }
+
+                $type = $this->docblockTypeParser->parse($varType);
+
                 if ($varName) {
                     if (mb_substr($varName, 0, 1) === '$') {
                         // Example: "@var DateTime $foo My description". The tag includes the name of the property it
                         // documents, it must match the property we're fetching documentation about.
                         $vars[$varName] = [
-                            'type'        => $varType,
+                            'type'        => $type,
                             'description' => $varDescription
                         ];
                     } else {
                         // Example: "@var DateTime My description".
                         $vars['$' . $itemName] = [
-                            'type'        => $varType,
+                            'type'        => $type,
                             'description' => trim($varName . ' ' . $varDescription)
                         ];
                     }
                 } elseif (!$varName && !$varDescription) {
                     // Example: "@var DateTime".
                     $vars['$' . $itemName] = [
-                        'type'        => $varType,
+                        'type'        => $type,
                         'description' => null
                     ];
                 }
@@ -501,7 +532,10 @@ class DocblockParser
                 list($type, $description) = $this->filterParameterTag($tag, 2);
 
                 if ($type) {
-                    $throws[$type] = $description;
+                    $throws[] = [
+                        'type'        => $type,
+                        'description' => $description
+                    ];
                 }
             }
         }
@@ -810,7 +844,7 @@ class DocblockParser
         foreach ($lines as $i => $line) {
             $matches = null;
 
-            if (preg_match(self::TAG_START_REGEX, $line, $matches) === 1 && !$this->getDocblockAnalyzer()->isFullInheritDocSyntax(trim($matches[1]))) {
+            if (preg_match(self::TAG_START_REGEX, $line, $matches) === 1 && !$this->docblockAnalyzer->isFullInheritDocSyntax(trim($matches[1]))) {
                 break; // Found the start of a tag, the summary and description are finished.
             }
 
@@ -872,19 +906,5 @@ class DocblockParser
     protected function normalizeNewlines(string $string): string
     {
         return $this->replaceNewlines($string, "\n");
-    }
-
-    /**
-     * Retrieves an instance of DocblockAnalyzer. The object will only be created once if needed.
-     *
-     * @return DocblockAnalyzer
-     */
-    protected function getDocblockAnalyzer(): DocblockAnalyzer
-    {
-        if (!$this->docblockAnalyzer instanceof DocblockAnalyzer) {
-            $this->docblockAnalyzer = new DocblockAnalyzer();
-        }
-
-        return $this->docblockAnalyzer;
     }
 }

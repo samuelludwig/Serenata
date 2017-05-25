@@ -5,19 +5,21 @@ namespace PhpIntegrator\Indexing\Iterating;
 use Iterator;
 use FilterIterator;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Filters out {@see \SplFileInfo} values that haven't been modified since a preconfigured time.
  */
 class ModificationTimeFilterIterator extends FilterIterator
 {
     /**
-     * @var array
+     * @var Structures\File[]
      */
-    protected $fileModifiedMap;
+    private $fileModifiedMap;
 
     /**
-     * @param Iterator $iterator
-     * @param array    $fileModifiedMap
+     * @param Iterator          $iterator
+     * @param Structures\File[] $fileModifiedMap
      */
     public function __construct(Iterator $iterator, array $fileModifiedMap)
     {
@@ -38,6 +40,6 @@ class ModificationTimeFilterIterator extends FilterIterator
 
         return
             !isset($this->fileModifiedMap[$filename]) ||
-            $value->getMTime() > $this->fileModifiedMap[$filename]->getTimestamp();
+            $value->getMTime() > $this->fileModifiedMap[$filename]->getIndexedOn()->getTimestamp();
     }
 }

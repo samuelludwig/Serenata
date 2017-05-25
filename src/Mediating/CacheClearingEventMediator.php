@@ -17,17 +17,17 @@ class CacheClearingEventMediator
     /**
      * @var ClearableCacheInterface
      */
-    protected $clearableCache;
+    private $clearableCache;
 
     /**
      * @var EventEmitterInterface
      */
-    protected $eventEmitter;
+    private $eventEmitter;
 
     /**
      * @var string
      */
-    protected $eventName;
+    private $eventName;
 
     /**
      * @param ClearableCacheInterface $clearableCache

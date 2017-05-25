@@ -13,7 +13,7 @@ class ExtensionFilterIterator extends FilterIterator
     /**
      * @var string[]
      */
-    protected $allowedExtensions;
+    private $allowedExtensions;
 
     /**
      * @param Iterator $iterator
