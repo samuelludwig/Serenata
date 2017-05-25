@@ -17,8 +17,16 @@
         </many-to-one>
 
         <one-to-many field="imports" target-entity="PhpIntegrator\Indexing\Structures\FileNamespaceImport" mapped-by="namespace">
-
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>fileNamespaceImports</region>
+            </cache>
         </one-to-many>
+
+        <cache>
+            <usage>READ_ONLY</usage>
+            <region>fileNamespace</region>
+        </cache>
     </entity>
 
 </doctrine-mapping>

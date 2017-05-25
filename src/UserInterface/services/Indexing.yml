@@ -5,10 +5,14 @@ services:
     sqliteConnectionFactory:
         class: PhpIntegrator\Indexing\SqliteConnectionFactory
 
+    managerRegistry.cache:
+        class: Doctrine\Common\Cache\VoidCache
+
     managerRegistry:
         class: PhpIntegrator\Indexing\ManagerRegistry
         arguments:
             - '@sqliteConnectionFactory'
+            - '@managerRegistry.cache'
 
     schemaInitializer:
         class: PhpIntegrator\Indexing\SchemaInitializer

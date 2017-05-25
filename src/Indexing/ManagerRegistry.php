@@ -6,11 +6,16 @@ use LogicException;
 
 use Doctrine\ORM;
 
+use Doctrine\Common\Cache\Cache;
+
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
 use Doctrine\DBAL\Driver\Connection;
 
 use Doctrine\ORM\EntityManager;
+
+use Doctrine\ORM\Cache\DefaultCacheFactory;
+use Doctrine\ORM\Cache\RegionsConfiguration;
 
 /**
  * Handles indexation of PHP code.
@@ -21,6 +26,11 @@ class ManagerRegistry extends AbstractManagerRegistry
      * @var SqliteConnectionFactory
      */
     private $sqliteConnectionFactory;
+
+    /**
+     * @var Cache
+     */
+    private $cache;
 
     /**
      * @var Connection
@@ -39,8 +49,9 @@ class ManagerRegistry extends AbstractManagerRegistry
 
     /**
      * @param SqliteConnectionFactory $sqliteConnectionFactory
+     * @param Cache                   $cache
      */
-    public function __construct(SqliteConnectionFactory $sqliteConnectionFactory)
+    public function __construct(SqliteConnectionFactory $sqliteConnectionFactory, Cache $cache)
     {
         parent::__construct(
             'managerRegistry',
@@ -56,6 +67,7 @@ class ManagerRegistry extends AbstractManagerRegistry
         );
 
         $this->sqliteConnectionFactory = $sqliteConnectionFactory;
+        $this->cache = $cache;
     }
 
     /**
@@ -90,7 +102,12 @@ class ManagerRegistry extends AbstractManagerRegistry
     protected function getEntityManagerInstance(): EntityManager
     {
         if ($this->entityManager === null) {
+            $regionConfig = new RegionsConfiguration();
+            $cacheFactory = new DefaultCacheFactory($regionConfig, $this->cache);
+
             $config = ORM\Tools\Setup::createXMLMetadataConfiguration([__DIR__ . "/Structures/Mapping"], true);
+            $config->setSecondLevelCacheEnabled();
+            $config->getSecondLevelCacheConfiguration()->setCacheFactory($cacheFactory);
 
             $this->entityManager = EntityManager::create($this->getConnectionInstance(), $config);
         }

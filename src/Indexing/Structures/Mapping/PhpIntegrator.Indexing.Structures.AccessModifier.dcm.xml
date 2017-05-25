@@ -9,6 +9,11 @@
         <id name="id" type="string"></id>
 
         <field name="name" type="string" nullable="false" length="255" unique="true" />
+
+        <cache>
+            <usage>READ_ONLY</usage>
+            <region>accessModifier</region>
+        </cache>
     </entity>
 
 </doctrine-mapping>

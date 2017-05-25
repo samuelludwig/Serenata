@@ -32,31 +32,61 @@
 
         <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
+
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureFile</region>
+            </cache>
         </many-to-one>
 
         <many-to-one field="type" target-entity="PhpIntegrator\Indexing\Structures\StructureType">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="false" />
+
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureType</region>
+            </cache>
         </many-to-one>
 
         <one-to-many field="traitAliases" target-entity="PhpIntegrator\Indexing\Structures\StructureTraitAlias" mapped-by="structure">
-
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureTraitAliases</region>
+            </cache>
         </one-to-many>
 
         <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\StructureTraitPrecedence" mapped-by="structure">
-
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureTraitPrecedences</region>
+            </cache>
         </one-to-many>
 
         <one-to-many field="constants" target-entity="PhpIntegrator\Indexing\Structures\Constant" mapped-by="structure">
-
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureConstants</region>
+            </cache>
         </one-to-many>
 
         <one-to-many field="properties" target-entity="PhpIntegrator\Indexing\Structures\Property" mapped-by="structure">
-
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureProperties</region>
+            </cache>
         </one-to-many>
 
         <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Function_" mapped-by="structure">
-
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>structureMethods</region>
+            </cache>
         </one-to-many>
+
+        <cache>
+            <usage>READ_ONLY</usage>
+            <region>structure</region>
+        </cache>
     </entity>
 
 </doctrine-mapping>

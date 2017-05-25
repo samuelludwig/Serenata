@@ -40,6 +40,11 @@
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="true" />
         </many-to-one>
+
+        <cache>
+            <usage>READ_ONLY</usage>
+            <region>function</region>
+        </cache>
     </entity>
 
 </doctrine-mapping>
