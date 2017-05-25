@@ -191,6 +191,4 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
 
         throw new LogicException('Should never be reached');
     }
-
-    public function hack_remove_me() { $this->managerRegistry->getManager()->clear(); }
 }

@@ -126,7 +126,6 @@ class FileIndexer implements FileIndexerInterface
         // should then be obsolete.
         $this->storage->commitTransaction();
         $this->storage->beginTransaction();
-        $this->storage->hack_remove_me();
 
         $file = new Structures\File($filePath, new DateTime(), []);
 
