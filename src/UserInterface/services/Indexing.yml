@@ -2,24 +2,37 @@ parameters:
 
 
 services:
-    indexDatabase:
-        class: PhpIntegrator\Indexing\IndexDatabase
+    sqliteConnectionFactory:
+        class: PhpIntegrator\Indexing\SqliteConnectionFactory
 
-    classlikeInfoBuilderProvider.backend:
-        alias: indexDatabase
+    managerRegistry.cache:
+        class: Doctrine\Common\Cache\VoidCache
 
-    builtinIndexer:
-        class: PhpIntegrator\Indexing\BuiltinIndexer
+    managerRegistry:
+        class: PhpIntegrator\Indexing\ManagerRegistry
         arguments:
-            - '@indexDatabase'
-            - '@typeAnalyzer'
-            - '@partialParser'
-            - '@nodeTypeDeducer'
+            - '@sqliteConnectionFactory'
+            - '@managerRegistry.cache'
+
+    schemaInitializer:
+        class: PhpIntegrator\Indexing\SchemaInitializer
+        arguments:
+            - '@managerRegistry'
+
+    storageVersionChecker:
+        class: PhpIntegrator\Indexing\StorageVersionChecker
+        arguments:
+            - '@managerRegistry'
+
+    doctrineStorage:
+        class: PhpIntegrator\Indexing\DoctrineStorage
+        arguments:
+            - '@managerRegistry'
 
     fileIndexer:
         class: PhpIntegrator\Indexing\FileIndexer
         arguments:
-            - '@storageForIndexers'
+            - '@doctrineStorage'
             - '@typeAnalyzer'
             - '@docblockParser'
             - '@nodeTypeDeducer'
@@ -29,7 +42,7 @@ services:
     projectIndexer:
         class: PhpIntegrator\Indexing\ProjectIndexer
         arguments:
-            - '@storageForIndexers'
+            - '@doctrineStorage'
             - '@fileIndexer'
             - '@sourceCodeStreamReader'
 

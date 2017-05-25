@@ -9,8 +9,6 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-
 use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
 /**
@@ -19,24 +17,15 @@ use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInter
 class LocalizeTypeCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
-     */
-    private $indexDatabase;
-
-    /**
      * @var PositionalNameLocalizerFactoryInterface
      */
     private $positionalNameLocalizerFactory;
 
     /**
-     * @param IndexDatabase                           $indexDatabase
      * @param PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory
      */
-    public function __construct(
-        IndexDatabase $indexDatabase,
-        PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory
-    ) {
-        $this->indexDatabase = $indexDatabase;
+    public function __construct(PositionalNameLocalizerFactoryInterface $positionalNameLocalizerFactory)
+    {
         $this->positionalNameLocalizerFactory = $positionalNameLocalizerFactory;
     }
 
@@ -75,12 +64,6 @@ class LocalizeTypeCommand extends AbstractCommand
      */
     public function localizeType(string $type, string $file, int $line, string $kind): ?string
     {
-        $fileId = $this->indexDatabase->getFileId($file);
-
-        if (!$fileId) {
-            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
-        }
-
         $filePosition = new FilePosition($file, new Position($line, 0));
 
         return $this->positionalNameLocalizerFactory->create($filePosition)->localize($type, $kind);

@@ -38,7 +38,7 @@ services:
         class: PhpIntegrator\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer
         arguments:
             - '@structureAwareNameResolverFactory'
-            - '@indexDatabase'
+            - '@managerRegistry'
             - '@constantConverter'
 
     arrayDimFetchNodeTypeDeducer:
@@ -89,7 +89,7 @@ services:
     funcCallNodeTypeDeducer:
         class: PhpIntegrator\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
             - '@functionConverter'
             - '@functionNameNodeFqsenDeterminer'
 
@@ -103,7 +103,7 @@ services:
         arguments:
             - '@methodCallNodeTypeDeducer.delegate'
             - '@nodeTypeDeducer'
-            - '@indexDatabase'
+            - '@metadataProvider'
 
     methodCallNodeTypeDeducer:
         alias: methodCallNodeMetaTypeDeducer

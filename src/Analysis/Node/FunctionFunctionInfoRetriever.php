@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\Node;
 use LogicException;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
+use PhpIntegrator\Analysis\FunctionListProviderInterface;
 
 use PhpParser\Node;
 
@@ -20,20 +20,20 @@ class FunctionFunctionInfoRetriever
     private $functionCallNodeFqsenDeterminer;
 
     /**
-     * @var GlobalFunctionsProvider
+     * @var FunctionListProviderInterface
      */
-    private $globalFunctionsProvider;
+    private $functionListProvider;
 
     /**
      * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
-     * @param GlobalFunctionsProvider         $globalFunctionsProvider
+     * @param FunctionListProviderInterface   $functionListProvider
      */
     public function __construct(
         FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
-        GlobalFunctionsProvider $globalFunctionsProvider
+        FunctionListProviderInterface $functionListProvider
     ) {
         $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
-        $this->globalFunctionsProvider = $globalFunctionsProvider;
+        $this->functionListProvider = $functionListProvider;
     }
 
     /**
@@ -70,7 +70,7 @@ class FunctionFunctionInfoRetriever
      */
     protected function getFunctionInfo(string $fullyQualifiedName): array
     {
-        $functions = $this->globalFunctionsProvider->getAll();
+        $functions = $this->functionListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
             throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);

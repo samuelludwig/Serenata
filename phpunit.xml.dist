@@ -22,7 +22,15 @@
         <testsuite name="PHP Integrator Integration Test Suite">
             <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
+        <testsuite name="PHP Integrator Performance Test Suite">
+            <directory suffix="Test.php">./tests/Performance</directory>
+        </testsuite>
     </testsuites>
+    <groups>
+        <exclude>
+            <group>Performance</group>
+        </exclude>
+    </groups>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>

@@ -5,9 +5,9 @@ services:
     initializeCommand:
         class: PhpIntegrator\UserInterface\Command\InitializeCommand
         arguments:
-            - '@indexDatabase'
-            - '@builtinIndexer'
-            - '@projectIndexer'
+            - '@schemaInitializer'
+            - '@managerRegistry'
+            - '@indexer'
             - '@cache'
 
     reindexCommand:
@@ -23,7 +23,7 @@ services:
     testCommand:
         class: PhpIntegrator\UserInterface\Command\TestCommand
         arguments:
-            - '@indexDatabase'
+            - '@storageVersionChecker'
 
     tooltipCommand:
         class: PhpIntegrator\UserInterface\Command\TooltipCommand
@@ -34,7 +34,7 @@ services:
     classListCommand:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
         arguments:
-            - '@classListProvider'
+            - '@doctrineClassListProvider'
 
     classInfoCommand:
         class: PhpIntegrator\UserInterface\Command\ClassInfoCommand
@@ -45,23 +45,21 @@ services:
     globalFunctionsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand
         arguments:
-            - '@globalFunctionsProvider'
+            - '@doctrineFunctionListProvider'
 
     globalConstantsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalConstantsCommand
         arguments:
-            - '@globalConstantsProvider'
+            - '@doctrineConstantListProvider'
 
     resolveTypeCommand:
         class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
         arguments:
-            - '@indexDatabase'
             - '@structureAwareNameResolverFactory'
 
     localizeTypeCommand:
         class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
         arguments:
-            - '@indexDatabase'
             - '@positionalNameLocalizerFactory'
 
     lintCommand:
@@ -94,4 +92,4 @@ services:
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'

@@ -4,35 +4,37 @@ namespace PhpIntegrator\Analysis\Conversion;
 
 use ArrayAccess;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Converts raw method data from the index to more useful data.
  */
 class MethodConverter extends FunctionConverter
 {
     /**
-     * @param array       $rawInfo
-     * @param ArrayAccess $class
+     * @param Structures\Function_ $method
+     * @param ArrayAccess          $class
      *
      * @return array
      */
-    public function convertForClass(array $rawInfo, ArrayAccess $class): array
+    public function convertForClass(Structures\Function_ $method, ArrayAccess $class): array
     {
-        $data = parent::convert($rawInfo);
+        $data = parent::convert($method);
 
         return array_merge($data, [
-            'isMagic'         => !!$rawInfo['is_magic'],
-            'isPublic'        => ($rawInfo['access_modifier'] === 'public'),
-            'isProtected'     => ($rawInfo['access_modifier'] === 'protected'),
-            'isPrivate'       => ($rawInfo['access_modifier'] === 'private'),
-            'isStatic'        => !!$rawInfo['is_static'],
-            'isAbstract'      => !!$rawInfo['is_abstract'],
-            'isFinal'         => !!$rawInfo['is_final'],
+            'isMagic'         => $method->getIsMagic(),
+            'isPublic'        => $method->getAccessModifier()->getName() === 'public',
+            'isProtected'     => $method->getAccessModifier()->getName() === 'protected',
+            'isPrivate'       => $method->getAccessModifier()->getName() === 'private',
+            'isStatic'        => $method->getIsStatic(),
+            'isAbstract'      => $method->getIsAbstract(),
+            'isFinal'         => $method->getIsFinal(),
 
             'override'        => null,
             'implementations' => [],
 
             'declaringClass' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
@@ -40,13 +42,13 @@ class MethodConverter extends FunctionConverter
             ],
 
             'declaringStructure' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
-                'startLineMember' => $data['startLine'],
-                'endLineMember'   => $data['endLine']
+                'startLineMember' => $method->getStartLine(),
+                'endLineMember'   => $method->getEndLine()
             ]
         ]);
     }

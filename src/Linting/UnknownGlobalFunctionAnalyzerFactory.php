@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\GlobalFunctionExistenceChecker;
+use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 /**
  * Factory that produces instances of {@see UnknownGlobalFunctionAnalyzer}.
@@ -10,16 +10,16 @@ use PhpIntegrator\Analysis\GlobalFunctionExistenceChecker;
 class UnknownGlobalFunctionAnalyzerFactory
 {
     /**
-     * @var GlobalFunctionExistenceChecker
+     * @var FunctionPresenceIndicatorInterface
      */
-    private $globalFunctionExistenceChecker;
+    private $functionPresenceIndicatorInterface;
 
     /**
-     * @param GlobalFunctionExistenceChecker $globalFunctionExistenceChecker
+     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicatorInterface
      */
-    public function __construct(GlobalFunctionExistenceChecker $globalFunctionExistenceChecker)
+    public function __construct(FunctionPresenceIndicatorInterface $functionPresenceIndicatorInterface)
     {
-        $this->globalFunctionExistenceChecker = $globalFunctionExistenceChecker;
+        $this->functionPresenceIndicatorInterface = $functionPresenceIndicatorInterface;
     }
 
     /**
@@ -28,7 +28,7 @@ class UnknownGlobalFunctionAnalyzerFactory
     public function create(): UnknownGlobalFunctionAnalyzer
     {
         return new UnknownGlobalFunctionAnalyzer(
-            $this->globalFunctionExistenceChecker
+            $this->functionPresenceIndicatorInterface
         );
     }
 }

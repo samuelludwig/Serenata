@@ -49,22 +49,18 @@ class MetaFileIndexerTest extends AbstractIntegrationTest
     {
         $container = $this->index('StaticMethodTypes.phpt');
 
-        $types = $container->get('indexDatabase')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
+        $types = $container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
 
-        $this->assertEquals([
-            [
-                'argument_index'  => 0,
-                'value'           => 'bar',
-                'value_node_type' => Node\Scalar\String_::class,
-                'return_type'     => '\B\Bar'
-            ],
+        $this->assertCount(2, $types);
 
-            [
-                'argument_index'  => 0,
-                'value'           => 'car',
-                'value_node_type' => Node\Scalar\String_::class,
-                'return_type'     => '\B\Car'
-            ]
-        ], $types);
+        $this->assertEquals(0, $types[0]->getArgumentIndex());
+        $this->assertEquals('bar', $types[0]->getValue());
+        $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+        $this->assertEquals('\B\Bar', $types[0]->getReturnType());
+
+        $this->assertEquals(0, $types[1]->getArgumentIndex());
+        $this->assertEquals('car', $types[1]->getValue());
+        $this->assertEquals(Node\Scalar\String_::class, $types[1]->getValueNodeType());
+        $this->assertEquals('\B\Car', $types[1]->getReturnType());
     }
 }

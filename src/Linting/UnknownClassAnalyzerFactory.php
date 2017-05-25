@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeExistenceChecker;
+use PhpIntegrator\Analysis\ClasslikeExistenceCheckerInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -16,7 +16,7 @@ use PhpIntegrator\Parsing\DocblockParser;
 class UnknownClassAnalyzerFactory
 {
     /**
-     * @var ClasslikeExistenceChecker
+     * @var ClasslikeExistenceCheckerInterface
      */
     private $classlikeExistenceChecker;
 
@@ -36,13 +36,13 @@ class UnknownClassAnalyzerFactory
     private $docblockParser;
 
     /**
-     * @param ClasslikeExistenceChecker                  $classlikeExistenceChecker
+     * @param ClasslikeExistenceCheckerInterface         $classlikeExistenceChecker
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param DocblockParser                             $docblockParser
      */
     public function __construct(
-        ClasslikeExistenceChecker $classlikeExistenceChecker,
+        ClasslikeExistenceCheckerInterface $classlikeExistenceChecker,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         TypeAnalyzer $typeAnalyzer,
         DocblockParser $docblockParser

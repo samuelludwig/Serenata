@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\GlobalConstantExistenceChecker;
+use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 /**
  * Factory that produces instances of {@see UnknownGlobalConstantAnalyzer}.
@@ -10,16 +10,16 @@ use PhpIntegrator\Analysis\GlobalConstantExistenceChecker;
 class UnknownGlobalConstantAnalyzerFactory
 {
     /**
-     * @var GlobalConstantExistenceChecker
+     * @var ConstantPresenceIndicatorInterface
      */
-    private $globalConstantExistenceChecker;
+    private $constantPresenceIndicatorInterface;
 
     /**
-     * @param GlobalConstantExistenceChecker $globalConstantExistenceChecker
+     * @param ConstantPresenceIndicatorInterface $constantPresenceIndicatorInterface
      */
-    public function __construct(GlobalConstantExistenceChecker $globalConstantExistenceChecker)
+    public function __construct(ConstantPresenceIndicatorInterface $constantPresenceIndicatorInterface)
     {
-        $this->globalConstantExistenceChecker = $globalConstantExistenceChecker;
+        $this->constantPresenceIndicatorInterface = $constantPresenceIndicatorInterface;
     }
 
     /**
@@ -28,7 +28,7 @@ class UnknownGlobalConstantAnalyzerFactory
     public function create(): UnknownGlobalConstantAnalyzer
     {
         return new UnknownGlobalConstantAnalyzer(
-            $this->globalConstantExistenceChecker
+            $this->constantPresenceIndicatorInterface
         );
     }
 }

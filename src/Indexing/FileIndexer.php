@@ -116,15 +116,23 @@ class FileIndexer implements FileIndexerInterface
 
         $this->storage->beginTransaction();
 
-        $this->storage->deleteFile($filePath);
+        $file = $this->storage->findFileByPath($filePath);
 
-        $fileId = $this->storage->insert(IndexStorageItemEnum::FILES, [
-            'path'         => $filePath,
-            'indexed_time' => (new DateTime())->format('Y-m-d H:i:s')
-        ]);
+        if ($file !== null) {
+            $this->storage->delete($file);
+        }
+
+        // TODO: Rewrite indexing to update the file instead of delete it in its entirety later on. Flushing to remove
+        // should then be obsolete.
+        $this->storage->commitTransaction();
+        $this->storage->beginTransaction();
+
+        $file = new Structures\File($filePath, new DateTime(), []);
+
+        $this->storage->persist($file);
 
         try {
-            $traverser = $this->createTraverser($nodes, $filePath, $code, $fileId);
+            $traverser = $this->createTraverser($nodes, $filePath, $code, $file);
             $traverser->traverse($nodes);
 
             $this->storage->commitTransaction();
@@ -140,23 +148,25 @@ class FileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param array  $nodes
-     * @param string $filePath
-     * @param string $code
-     * @param int    $fileId
+     * @param array           $nodes
+     * @param string          $filePath
+     * @param string          $code
+     * @param Structures\File $file
      *
      * @return NodeTraverser
      */
-    protected function createTraverser(array $nodes, string $filePath, string $code, int $fileId): NodeTraverser
+    protected function createTraverser(array $nodes, string $filePath, string $code, Structures\File $file): NodeTraverser
     {
-        $visitors = $this->getVisitorsForFile($filePath, $code, $fileId);
+        $visitors = $this->getVisitorsForFile($filePath, $code, $file);
 
         $useStatementIndexingVisitor = array_shift($visitors);
 
         // TODO: Refactor to traverse once.
+        $this->storage->commitTransaction();
         $traverser = new NodeTraverser();
         $traverser->addVisitor($useStatementIndexingVisitor);
         $traverser->traverse($nodes);
+        $this->storage->beginTransaction();
 
         $traverser = new NodeTraverser();
 
@@ -168,16 +178,16 @@ class FileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param int    $fileId
+     * @param string          $filePath
+     * @param string          $code
+     * @param Structures\File $file
      *
      * @return array
      */
-    protected function getVisitorsForFile(string $filePath, string $code, int $fileId): array
+    protected function getVisitorsForFile(string $filePath, string $code, Structures\File $file): array
     {
         $visitors = [
-            new Visiting\UseStatementIndexingVisitor($this->storage, $fileId, $code),
+            new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code),
 
             new Visiting\GlobalConstantIndexingVisitor(
                 $this->storage,
@@ -185,7 +195,7 @@ class FileIndexer implements FileIndexerInterface
                 $this->structureAwareNameResolverFactory,
                 $this->typeAnalyzer,
                 $this->nodeTypeDeducer,
-                $fileId,
+                $file,
                 $code,
                 $filePath
             ),
@@ -193,7 +203,7 @@ class FileIndexer implements FileIndexerInterface
             new Visiting\GlobalDefineIndexingVisitor(
                 $this->storage,
                 $this->nodeTypeDeducer,
-                $fileId,
+                $file,
                 $code,
                 $filePath
             ),
@@ -203,7 +213,7 @@ class FileIndexer implements FileIndexerInterface
                 $this->storage,
                 $this->docblockParser,
                 $this->typeAnalyzer,
-                $fileId,
+                $file,
                 $code,
                 $filePath
             ),
@@ -214,14 +224,14 @@ class FileIndexer implements FileIndexerInterface
                 $this->docblockParser,
                 $this->nodeTypeDeducer,
                 $this->structureAwareNameResolverFactory,
-                $fileId,
+                $file,
                 $code,
                 $filePath
             ),
 
             new Visiting\MetaFileIndexingVisitor(
                 $this->storage,
-                $fileId
+                $file
             )
         ];
 

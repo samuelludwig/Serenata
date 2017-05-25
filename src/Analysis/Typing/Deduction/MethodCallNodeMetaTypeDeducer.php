@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Analysis\MetadataProviderInterface;
 
 use PhpParser\Node;
 
@@ -25,23 +25,23 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
     private $nodeTypeDeducer;
 
     /**
-     * @var IndexDatabase
+     * @var MetadataProviderInterface
      */
-    private $indexDatabase;
+    private $metadataProvider;
 
     /**
-     * @param NodeTypeDeducerInterface $delegate
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param IndexDatabase            $indexDatabase
+     * @param NodeTypeDeducerInterface  $delegate
+     * @param NodeTypeDeducerInterface  $nodeTypeDeducer
+     * @param MetadataProviderInterface $metadataProvider
      */
     public function __construct(
         NodeTypeDeducerInterface $delegate,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        IndexDatabase $indexDatabase
+        MetadataProviderInterface $metadataProvider
     ) {
         $this->delegate = $delegate;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->indexDatabase = $indexDatabase;
+        $this->metadataProvider = $metadataProvider;
     }
 
     /**
@@ -76,7 +76,7 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         foreach ($typesOfVar as $type) {
             $staticTypes = array_merge(
                 $staticTypes,
-                $this->indexDatabase->getMetaStaticMethodTypesFor($type, $methodName)
+                $this->metadataProvider->getMetaStaticMethodTypesFor($type, $methodName)
             );
         }
 
@@ -87,21 +87,21 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         $types = [];
 
         foreach ($staticTypes as $staticType) {
-            if (count($node->args) <= $staticType['argument_index']) {
+            if (count($node->args) <= $staticType->getArgumentIndex()) {
                 continue;
             }
 
-            $relevantArgumentNode = $node->args[$staticType['argument_index']];
+            $relevantArgumentNode = $node->args[$staticType->getArgumentIndex()];
 
-            if (get_class($relevantArgumentNode->value) !== $staticType['value_node_type']) {
+            if (get_class($relevantArgumentNode->value) !== $staticType->getValueNodeType()) {
                 continue;
             }
 
             if (
                 $relevantArgumentNode->value instanceof Node\Scalar\String_ &&
-                $relevantArgumentNode->value->value === $staticType['value']
+                $relevantArgumentNode->value->value === $staticType->getValue()
             ) {
-                $types[] = $staticType['return_type'];
+                $types[] = $staticType->getReturnType();
             }
         }
 

@@ -44,18 +44,17 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param ContainerBuilder $container
-     * @param bool             $indexBuiltinItems
      *
      * @return void
      */
-    protected function prepareContainer(ContainerBuilder $container, bool $indexBuiltinItems): void
+    protected function prepareContainer(ContainerBuilder $container): void
     {
         // Replace some container items for testing purposes.
         $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
-        $container->get('indexDatabase')->setDatabasePath(':memory:');
+        $container->get('managerRegistry')->setDatabasePath(':memory:');
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
-        $success = $container->get('initializeCommand')->initialize($indexBuiltinItems);
+        $success = $container->get('initializeCommand')->initialize(false);
 
         $this->assertTrue($success);
     }
@@ -99,7 +98,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
+    protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
         $success = $container->get('indexer')->reindex(
             [$testPath],
@@ -107,11 +106,23 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             false,
             false,
             [],
-            ['phpt']
+            ['php', 'phpt']
         );
 
         if (!$mayFail) {
             $this->assertTrue($success);
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $testPath
+     * @param bool             $mayFail
+     *
+     * @return void
+     */
+    protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
+    {
+        $this->indexPath($container, $testPath, $mayFail);
     }
 }

@@ -30,6 +30,18 @@ class FileClassListProviderCachingDecorator implements FileClassListProviderInte
     /**
      * @inheritDoc
      */
+    public function getAll(): array
+    {
+        if (!isset($this->cache[null])) {
+            $this->cache[null] = $this->fileClassListProviderInterface->getAll();
+        }
+
+        return $this->cache[null];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAllForFile(string $filePath): array
     {
         if (!isset($this->cache[$filePath])) {

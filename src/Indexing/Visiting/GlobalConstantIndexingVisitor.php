@@ -9,6 +9,7 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
@@ -51,9 +52,9 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
     private $nodeTypeDeducer;
 
     /**
-     * @var int
+     * @var Structures\File
      */
-    private $fileId;
+    private $file;
 
     /**
      * @var string
@@ -71,7 +72,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
-     * @param int                                        $fileId
+     * @param Structures\File                            $file
      * @param string                                     $code
      * @param string                                     $filePath
      */
@@ -81,7 +82,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        int $fileId,
+        Structures\File $file,
         string $code,
         string $filePath
     ) {
@@ -90,7 +91,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->fileId = $fileId;
+        $this->file = $file;
         $this->code = $code;
         $this->filePath = $filePath;
     }
@@ -161,30 +162,29 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->filePath, $defaultValue, 0);
 
             $types = array_map(function (string $type) {
-                return [
-                    'type' => $type,
-                    'fqcn' => $type
-                ];
+                return new Structures\TypeInfo($type, $type);
             }, $typeList);
         }
 
-        $this->storage->insert(IndexStorageItemEnum::CONSTANTS, [
-            'name'                  => $node->name,
-            'fqcn'                  => '\\' . $node->namespacedName->toString(),
-            'file_id'               => $this->fileId,
-            'start_line'            => $node->getLine(),
-            'end_line'              => $node->getAttribute('endLine'),
-            'default_value'         => $defaultValue,
-            'is_builtin'            => 0,
-            'is_deprecated'         => $documentation['deprecated'] ? 1 : 0,
-            'has_docblock'          => empty($docComment) ? 0 : 1,
-            'short_description'     => $shortDescription,
-            'long_description'      => $documentation['descriptions']['long'],
-            'type_description'      => $varDocumentation ? $varDocumentation['description'] : null,
-            'types_serialized'      => serialize($types),
-            'structure_id'          => null,
-            'access_modifier_id'    => null
-        ]);
+        $constant = new Structures\Constant(
+            $node->name,
+            '\\' . $node->namespacedName->toString(),
+            $this->file,
+            $node->getLine(),
+            $node->getAttribute('endLine'),
+            $defaultValue,
+            false,
+            $documentation['deprecated'],
+            !empty($docComment),
+            $shortDescription,
+            $documentation['descriptions']['long'],
+            $varDocumentation ? $varDocumentation['description'] : null,
+            $types,
+            null,
+            null
+        );
+
+        $this->storage->persist($constant);
     }
 
     /**
@@ -204,7 +204,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
      * @param string[]     $typeList
      * @param FilePosition $filePosition
      *
-     * @return array[]
+     * @return Structures\TypeInfo[]
      */
     protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
     {
@@ -213,10 +213,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
         $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         foreach ($typeList as $type) {
-            $types[] = [
-                'type' => $type,
-                'fqcn' => $positionalNameResolver->resolve($type, $filePosition)
-            ];
+            $types[] = new Structures\TypeInfo($type, $positionalNameResolver->resolve($type, $filePosition));
         }
 
         return $types;

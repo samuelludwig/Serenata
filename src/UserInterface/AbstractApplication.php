@@ -6,7 +6,7 @@ use PhpIntegrator\Analysis\ClearableCacheInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
-use PhpIntegrator\Indexing\IndexDatabase;
+use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -87,22 +87,31 @@ abstract class AbstractApplication
             ->setArguments([$this->getStdinStream()]);
 
         $container
-            ->register('storageForIndexers', CallbackStorageProxy::class)
-            ->setArguments([new Reference('indexDatabase'), function ($fqcn) use ($container) {
-                $provider = $container->get('classlikeInfoBuilderProvider');
-
-                if ($provider instanceof ClasslikeInfoBuilderProviderCachingProxy) {
-                    $provider->clearCacheFor($fqcn);
-                }
-            }]);
-
-        $container
             ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)
             ->setArguments([])
             ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $configurableDelegatingNodeTypeDeducer) use ($container) {
                 // Avoid circular references due to two-way object usage.
                 $configurableDelegatingNodeTypeDeducer->setNodeTypeDeducer($container->get('nodeTypeDeducer.instance'));
             });
+    }
+
+    /**
+     * Instantiates services that are required for the application to function correctly.
+     *
+     * Usually we prefer to rely on lazy loading of services, but some services aren't explicitly required by any other
+     * service, but do provide necessary interaction (i.e. they are required by the application itself).
+     *
+     * @param ContainerBuilder $container
+     *
+     * @return void
+     */
+    protected function instantiateRequiredServices(ContainerBuilder $container): void
+    {
+        // TODO: Need to refactor this at some point to have more select cache clearing and to not instantiate multiple
+        // mediators.
+        $container->get('cacheClearingEventMediator1');
+        // $container->get('cacheClearingEventMediator2');
+        // $container->get('cacheClearingEventMediator3');
     }
 
     /**
@@ -122,11 +131,13 @@ abstract class AbstractApplication
      */
     public function setDatabaseFile(string $databaseFile)
     {
-        /** @var IndexDatabase $indexDatabase */
-        $indexDatabase = $this->getContainer()->get('indexDatabase');
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = $this->getContainer()->get('managerRegistry');
 
-        if (!$indexDatabase->hasDatabasePathConfigured() || $indexDatabase->getDatabasePath() !== $databaseFile) {
-            $indexDatabase->setDatabasePath($databaseFile);
+        if (!$managerRegistry->hasInitialDatabasePathConfigured() ||
+            $managerRegistry->getDatabasePath() !== $databaseFile
+        ) {
+            $managerRegistry->setDatabasePath($databaseFile);
 
             /** @var ClearableCacheInterface $clearableCache */
             $clearableCache = $this->getContainer()->get('cacheClearingEventMediator.clearableCache');

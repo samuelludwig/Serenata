@@ -9,8 +9,6 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
-use PhpIntegrator\Indexing\IndexDatabase;
-
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 /**
@@ -19,24 +17,15 @@ use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryIn
 class ResolveTypeCommand extends AbstractCommand
 {
     /**
-     * @var IndexDatabase
-     */
-    private $indexDatabase;
-
-    /**
      * @var StructureAwareNameResolverFactoryInterface
      */
     private $structureAwareNameResolverFactory;
 
     /**
-     * @param IndexDatabase                              $indexDatabase
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
-    public function __construct(
-        IndexDatabase $indexDatabase,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-    ) {
-        $this->indexDatabase = $indexDatabase;
+    public function __construct(StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory)
+    {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
@@ -85,12 +74,6 @@ class ResolveTypeCommand extends AbstractCommand
 
         if (!in_array($kind, $recognizedKinds)) {
             throw new InvalidArgumentsException('Unknown kind specified!');
-        }
-
-        $fileId = $this->indexDatabase->getFileId($file);
-
-        if (!$fileId) {
-            throw new InvalidArgumentsException('File "' . $file . '" is not present in the index!');
         }
 
         $filePosition = new FilePosition($file, new Position($line, 0));

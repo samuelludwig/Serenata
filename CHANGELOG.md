@@ -44,7 +44,12 @@
 * The `LocalizeType` command will no longer make any chances to names that aren't fully qualified, as they are already "local" as they are.
 * The variable defined in a `catch` block wasn't always being returned in the variable list.
 * Namespaces supplied by the `NamespaceList` command will now always have a start and end line (no more `null` for the last namespace).
+* The `class` keyword returned as constant will now have a file, start line and end line (which are the same as the class it belongs to). It will also have a default value which is equal to the class name without leading slash.
 * Anonymous namespaces supplied by the `NamespaceList` command will now always have `null` as name instead of an empty string for explicitly anonymous namespaces and `null` for implicitly anonymous namespaces, as they are both the same.
+* The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name.
+* `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency.
+* Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed. These provide more accurate return type information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`) and reduce the maintenance burden of having two separate indexing procedures.
+* `declaringStructure.name` was renamed to `declaringStructure.fqcn` for consistency.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php

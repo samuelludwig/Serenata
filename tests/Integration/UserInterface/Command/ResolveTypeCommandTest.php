@@ -146,18 +146,4 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
     }
-
-    /**
-     * @expectedException \PhpIntegrator\UserInterface\Command\InvalidArgumentsException
-     *
-     * @return void
-     */
-    public function testThrowsExceptionOnUnknownFile(): void
-    {
-        $container = $this->createTestContainer();
-
-        $command = $container->get('resolveTypeCommand');
-
-        $command->resolveType('\C', 'MissingFile.php', 1, UseStatementKind::TYPE_CLASSLIKE);
-    }
 }

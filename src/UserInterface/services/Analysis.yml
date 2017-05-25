@@ -5,15 +5,18 @@ parameters:
 
 
 services:
-    fileNamespaceProvider.databaseBackend:
-        class: PhpIntegrator\Analysis\DatabaseFileNamespaceProvider
+    fileNamespaceProvider.storageBackend:
+        class: PhpIntegrator\Analysis\StorageFileNamespaceProvider
         arguments:
-            - '@indexDatabase'
+            - '@doctrineStorage'
 
     fileNamespaceProvider.cachingFileNamespaceProvider:
         class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
         arguments:
-            - '@fileNamespaceProvider.databaseBackend'
+            - '@fileNamespaceProvider.storageBackend'
+
+    metadataProvider:
+        alias: doctrineStorage
 
     fileNamespaceProvider:
         alias: fileNamespaceProvider.cachingFileNamespaceProvider
@@ -79,7 +82,7 @@ services:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
 
     fileClassListProvider.instance:
-        alias: classListProvider
+        alias: doctrineClassListProvider
 
     fileClassListProvider.cachingDecorator:
         class: PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator
@@ -112,58 +115,62 @@ services:
             - '@docblockAnalyzer'
             - '@typeAnalyzer'
 
-    indexDatabase:
-        class: PhpIntegrator\Indexing\IndexDatabase
-
-    classlikeInfoBuilderProvider.backend:
-        alias: indexDatabase
-
-    classlikeInfoBuilderProvider.instance:
-        class: PhpIntegrator\Analysis\ClasslikeInfoBuilderProvider
+    classlikeExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineClasslikeExistenceChecker
         arguments:
-            - '@classlikeInfoBuilderProvider.backend'
+            - '@managerRegistry'
 
-    classlikeInfoBuilderProvider.cachingProxy:
-        class: PhpIntegrator\UserInterface\ClasslikeInfoBuilderProviderCachingProxy
+    classlikeExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingClasslikeExistenceChecker
         arguments:
-            - '@classlikeInfoBuilderProvider.instance'
-            - '@cache'
-
-    classlikeInfoBuilderProvider:
-        alias: classlikeInfoBuilderProvider.cachingProxy
+            - '@classlikeExistenceChecker.doctrine'
 
     classlikeExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingClasslikeExistenceChecker
+        alias: classlikeExistenceChecker.arrayCachingDecorator
+
+    globalFunctionExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineGlobalFunctionExistenceChecker
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
+
+    globalFunctionExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingGlobalFunctionExistenceChecker
+        arguments:
+            - '@globalFunctionExistenceChecker.doctrine'
 
     globalFunctionExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingGlobalFunctionExistenceChecker
+        alias: globalFunctionExistenceChecker.arrayCachingDecorator
+
+    globalConstantExistenceChecker.doctrine:
+        class: PhpIntegrator\Analysis\DoctrineGlobalConstantExistenceChecker
         arguments:
-            - '@indexDatabase'
+            - '@managerRegistry'
+
+    globalConstantExistenceChecker.arrayCachingDecorator:
+        class: PhpIntegrator\Analysis\ArrayCachingGlobalConstantExistenceChecker
+        arguments:
+            - '@globalConstantExistenceChecker.doctrine'
 
     globalConstantExistenceChecker:
-        class: PhpIntegrator\Analysis\CachingGlobalConstantExistenceChecker
-        arguments:
-            - '@indexDatabase'
+        alias: globalConstantExistenceChecker.arrayCachingDecorator
 
-    globalFunctionsProvider:
-        class: PhpIntegrator\Analysis\GlobalFunctionsProvider
+    doctrineFunctionListProvider:
+        class: PhpIntegrator\Analysis\DoctrineFunctionListProvider
         arguments:
             - '@functionConverter'
-            - '@indexDatabase'
+            - '@managerRegistry'
 
-    globalConstantsProvider:
-        class: PhpIntegrator\Analysis\GlobalConstantsProvider
+    doctrineConstantListProvider:
+        class: PhpIntegrator\Analysis\DoctrineConstantListProvider
         arguments:
             - '@constantConverter'
-            - '@indexDatabase'
+            - '@managerRegistry'
 
-    classListProvider:
-        class: PhpIntegrator\Analysis\ClassListProvider
+    doctrineClassListProvider:
+        class: PhpIntegrator\Analysis\DoctrineClassListProvider
         arguments:
             - '@classlikeConverter'
-            - '@indexDatabase'
+            - '@managerRegistry'
 
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
@@ -177,7 +184,7 @@ services:
             - '@inheritanceResolver'
             - '@interfaceImplementationResolver'
             - '@traitUsageResolver'
-            - '@classlikeInfoBuilderProvider'
+            - '@doctrineStorage'
             - '@typeAnalyzer'
 
     functionNameNodeFqsenDeterminer:
@@ -205,7 +212,7 @@ services:
         class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
             - '@functionNameNodeFqsenDeterminer'
-            - '@globalFunctionsProvider'
+            - '@doctrineFunctionListProvider'
 
     methodCallMethodInfoRetriever:
         class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever

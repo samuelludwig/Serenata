@@ -26,7 +26,7 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
     /**
      * @var StorageInterface
      */
-    private $storage;
+    private $delegate;
 
     /**
      * @var callable
@@ -34,104 +34,80 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
     private $insertStructureCallback;
 
     /**
-     * @param StorageInterface $storage
+     * @param StorageInterface $delegate
      * @param callable         $insertStructureCallback
      */
-    public function __construct(StorageInterface $storage, callable $insertStructureCallback)
+    public function __construct(StorageInterface $delegate, callable $insertStructureCallback)
     {
-        $this->storage = $storage;
+        $this->delegate = $delegate;
         $this->insertStructureCallback = $insertStructureCallback;
     }
 
     /**
      * @inheritDoc
      */
-    public function getFileModifiedMap(): array
+    public function getFiles(): array
     {
-        return $this->storage->getFileModifiedMap();
+        return $this->delegate->getFiles();
     }
 
     /**
      * @inheritDoc
      */
-    public function getAccessModifierMap(): array
+    public function getAccessModifiers(): array
     {
-        return $this->storage->getAccessModifierMap();
+        return $this->delegate->getAccessModifiers();
     }
 
     /**
      * @inheritDoc
      */
-    public function getStructureTypeMap(): array
+    public function getStructureTypes(): array
     {
-        return $this->storage->getStructureTypeMap();
+        return $this->delegate->getStructureTypes();
     }
 
     /**
      * @inheritDoc
      */
-    public function getFileId(string $path): ?int
+    public function findStructureByFqcn(string $fqcn): ?Structures\Structure
     {
-        return $this->storage->getFileId($path);
+        return $this->delegate->findStructureByFqcn($path);
     }
 
     /**
      * @inheritDoc
      */
-    public function deleteFile(string $path): void
+    public function findFileByPath(string $path): ?Structures\File
     {
-        $this->storage->deleteFile($path);
+        return $this->delegate->findFileByPath($path);
     }
 
     /**
      * @inheritDoc
      */
-    public function insertStructure(array $data): int
+    public function persist($entity): void
     {
-        $callback = $this->insertStructureCallback;
-        $callback($data['fqcn']);
+        if ($entity instanceof Structures\Structure) {
+            $callback = $this->insertStructureCallback;
+            $callback($data['fqcn']);
+        }
 
-        return $this->storage->insertStructure($data);
+        $this->delegate->persist($entity);
+
+        if ($entity instanceof Structures\FileNamespace) {
+            $this->emit(self::EVENT_NAMESPACE_INSERTED);
+        } elseif ($entity instanceof Structures\FileNamespaceImport) {
+            $this->emit(self::EVENT_IMPORT_INSERTED);
+        }
     }
 
     /**
      * @inheritDoc
      */
-    public function insertNamespace(array $data): int
+    public function delete($entity): void
     {
-        $id = $this->storage->insertNamespace($data);
-
-        $this->emit(self::EVENT_NAMESPACE_INSERTED);
-
-        return $id;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function insertImport(array $data): int
-    {
-        $id = $this->storage->insertImport($data);
-
-        $this->emit(self::EVENT_IMPORT_INSERTED);
-
-        return $id;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function insert(string $indexStorageItem, array $data): int
-    {
-        return $this->storage->insert($indexStorageItem, $data);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function update(string $indexStorageItem, $id, array $data): void
-    {
-        $this->storage->update($indexStorageItem, $id, $data);
+        $this->delegate->delete($entity);
     }
 
     /**
@@ -139,7 +115,7 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
      */
     public function beginTransaction(): void
     {
-        $this->storage->beginTransaction();
+        $this->delegate->beginTransaction();
     }
 
     /**
@@ -147,7 +123,7 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
      */
     public function commitTransaction(): void
     {
-        $this->storage->commitTransaction();
+        $this->delegate->commitTransaction();
     }
 
     /**
@@ -155,6 +131,6 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
      */
     public function rollbackTransaction(): void
     {
-        $this->storage->rollbackTransaction();
+        $this->delegate->rollbackTransaction();
     }
 }

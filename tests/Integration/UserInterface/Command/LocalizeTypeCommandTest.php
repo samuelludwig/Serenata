@@ -55,18 +55,4 @@ class LocalizeTypeCommandTest extends AbstractIntegrationTest
         $this->assertEquals('\SOME_CONSTANT', $command->localizeType('\SOME_CONSTANT', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\some_function', $command->localizeType('\some_function', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
     }
-
-    /**
-     * @expectedException \PhpIntegrator\UserInterface\Command\InvalidArgumentsException
-     *
-     * @return void
-     */
-    public function testThrowsExceptionOnUnknownFile(): void
-    {
-        $container = $this->createTestContainer();
-
-        $command = $container->get('localizeTypeCommand');
-
-        $command->localizeType('C', 'MissingFile.php', 1, UseStatementKind::TYPE_CLASSLIKE);
-    }
 }

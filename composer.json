@@ -13,12 +13,15 @@
         "php-integrator/docblock-type-parser": "dev-master#a7e2ffdb99706b9bf5378ac184f5252fb5b98148",
         "doctrine/cache": "1.6.*",
         "doctrine/dbal": "2.5.*",
+        "doctrine/orm": "2.5.*",
         "evenement/evenement": "2.0.*",
         "nikic/php-parser": "dev-master#b2c6497d632b952ad9a53f3ad10e6dc7ae50e41e",
         "react/socket": "0.7.*",
         "symfony/yaml": "3.2.*",
         "symfony/config": "3.2.*",
-        "symfony/dependency-injection": "3.2.*"
+        "symfony/dependency-injection": "3.2.*",
+        "ramsey/uuid": "3.6.*",
+        "jetbrains/phpstorm-stubs": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "6.1.*",

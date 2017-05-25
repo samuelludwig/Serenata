@@ -56,7 +56,7 @@ class InheritanceResolver extends AbstractResolver
     {
         $class['constants'][$parentConstantData['name']] = $parentConstantData + [
             'declaringClass' => [
-                'name'      => $class['name'],
+                'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
@@ -64,7 +64,7 @@ class InheritanceResolver extends AbstractResolver
             ],
 
             'declaringStructure' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
@@ -107,7 +107,7 @@ class InheritanceResolver extends AbstractResolver
             }
 
             $childProperty['declaringClass'] = [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
@@ -115,7 +115,7 @@ class InheritanceResolver extends AbstractResolver
             ];
 
             $childProperty['declaringStructure'] = [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],

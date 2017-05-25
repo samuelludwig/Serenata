@@ -146,7 +146,7 @@ class ProjectIndexer
         array $excludedPaths = [],
         array $sourceOverrideMap = []
     ): void {
-        $fileModifiedMap = $this->storage->getFileModifiedMap();
+        $fileModifiedMap = $this->getFileModifiedMap();
 
         // The modification time doesn't matter for files we have direct source code for, as this source code always
         // needs to be indexed (e.g it may simply not have been saved to disk yet).
@@ -204,12 +204,28 @@ class ProjectIndexer
      */
     public function pruneRemovedFiles(): void
     {
-        foreach ($this->storage->getFileModifiedMap() as $fileName => $indexedTime) {
+        foreach ($this->getFileModifiedMap() as $fileName => $indexedTime) {
             if (!file_exists($fileName)) {
                 $this->logMessage('  - ' . $fileName);
 
                 $this->storage->deleteFile($fileName);
             }
         }
+    }
+
+    /**
+     * @return Structures\File[]
+     */
+    protected function getFileModifiedMap(): array
+    {
+        $files = $this->storage->getFiles();
+
+        $map = [];
+
+        foreach ($files as $file) {
+            $map[$file->getPath()] = $file;
+        }
+
+        return $map;
     }
 }

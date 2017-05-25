@@ -40,7 +40,7 @@ class InterfaceImplementationResolver extends AbstractResolver
     {
         $class['constants'][$interfaceConstantData['name']] = $interfaceConstantData + [
             'declaringClass' => [
-                'name'      => $class['name'],
+                'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
@@ -48,7 +48,7 @@ class InterfaceImplementationResolver extends AbstractResolver
             ],
 
             'declaringStructure' => [
-                'name'            => $class['name'],
+                'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
@@ -94,7 +94,7 @@ class InterfaceImplementationResolver extends AbstractResolver
 
         $class['methods'][$interfaceMethodData['name']] = array_merge($interfaceMethodData, $childMethod, $inheritedData, [
             'declaringClass' => [
-                'name'     => $class['name'],
+                'fqcn'     => $class['fqcn'],
                 'filename' => $class['filename'],
                 'startLine'=> $class['startLine'],
                 'endLine'  => $class['endLine'],
