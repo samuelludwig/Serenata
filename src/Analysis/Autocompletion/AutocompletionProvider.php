@@ -219,7 +219,7 @@ class AutocompletionProvider
     {
         $shortTypes = [];
 
-        foreach ($function['types'] as $type) {
+        foreach ($function['returnTypes'] as $type) {
             $shortTypes[] = $this->getClassShortNameFromFqcn($type);
         }
 
