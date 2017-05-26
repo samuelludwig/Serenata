@@ -37,22 +37,22 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
     {
         $suggestions = [];
 
-        foreach ($this->functionListProvider->getAll() as $globalFunction) {
-            $suggestions[] = $this->createSuggestion($globalFunction);
+        foreach ($this->functionListProvider->getAll() as $function) {
+            $suggestions[] = $this->createSuggestion($function);
         }
 
         return $suggestions;
     }
 
     /**
-     * @param array $globalFunction
+     * @param array $function
      *
      * @return AutocompletionSuggestion
      */
-    protected function createSuggestion(array $globalFunction): AutocompletionSuggestion
+    protected function createSuggestion(array $function): AutocompletionSuggestion
     {
-        $insertText = $globalFunction['name'];
-        $placeCursorBetweenParentheses = !empty($globalFunction['parameters']);
+        $insertText = $function['name'];
+        $placeCursorBetweenParentheses = !empty($function['parameters']);
 
 
         if (true) {
@@ -61,17 +61,17 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
         }
 
         return new AutocompletionSuggestion(
-            $globalFunction['name'],
+            $function['name'],
             SuggestionKind::FUNCTION,
             $insertText,
-            $this->createLabel($globalFunction),
-            $this->createDocumentation($globalFunction),
+            $this->createLabel($function),
+            $this->createDocumentation($function),
             [
-                'isDeprecated'                  => $globalFunction['isDeprecated'],
+                'isDeprecated'                  => $function['isDeprecated'],
                 'protectionLevel'               => null, // TODO: For leftLabel
                 'declaringStructure'            => null,
-                'url'                           => $this->createUrl($globalFunction),
-                'returnTypes'                   => $this->createReturnTypes($globalFunction),
+                'url'                           => $this->createUrl($function),
+                'returnTypes'                   => $this->createReturnTypes($function),
                 'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
             ]
         );
