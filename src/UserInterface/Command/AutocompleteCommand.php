@@ -16,7 +16,7 @@ class AutocompleteCommand extends AbstractCommand
     /**
      * @var AutocompletionProvider
      */
-    protected $autocompletionProvider;
+    private $autocompletionProvider;
 
     /**
      * @param AutocompletionProvider $autocompletionProvider
