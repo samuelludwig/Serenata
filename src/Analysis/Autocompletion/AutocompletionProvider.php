@@ -7,7 +7,7 @@ use PhpIntegrator\Analysis\FunctionListProviderInterface;
 /**
  * Provides autocompletion suggestions at a specific location in a file.
  */
-class AutocompletionProvider
+class AutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
      * @var FunctionListProviderInterface
@@ -23,10 +23,7 @@ class AutocompletionProvider
     }
 
     /**
-     * @param string $code
-     * @param int    $offset
-     *
-     * @return array
+     * @inheritDoc
      */
     public function getSuggestions(string $code, int $offset): array
     {
