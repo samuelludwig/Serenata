@@ -50,7 +50,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
     }
 
     /**
-     * @return array
+     * @return AutocompletionSuggestion[]
      */
     protected function getFunctionSuggestions(): array
     {
@@ -66,9 +66,9 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
     /**
      * @param array $globalFunction
      *
-     * @return array
+     * @return AutocompletionSuggestion
      */
-    protected function getFunctionSuggestionFromSuggestion(array $globalFunction): array
+    protected function getFunctionSuggestionFromSuggestion(array $globalFunction): AutocompletionSuggestion
     {
         $insertText = $globalFunction['name'];
         $placeCursorBetweenParentheses = !empty($globalFunction['parameters']);
@@ -79,14 +79,13 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
             $insertText .= '()';
         }
 
-        return [
-            'filterText'    => $globalFunction['name'],
-            'kind'          => SuggestionKind::FUNCTION,
-            'insertText'    => $insertText,
-            'label'         => $this->getFunctionLabel($globalFunction),
-            'documentation' => $this->getFunctionDocumentation($globalFunction),
-
-            'data' => [
+        return new AutocompletionSuggestion(
+            $globalFunction['name'],
+            SuggestionKind::FUNCTION,
+            $insertText,
+            $this->getFunctionLabel($globalFunction),
+            $this->getFunctionDocumentation($globalFunction),
+            [
                 'isDeprecated'                  => $globalFunction['isDeprecated'],
                 'protectionLevel'               => null, // TODO: For leftLabel
                 'declaringStructure'            => null,
@@ -94,7 +93,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
                 'returnTypes'                   => $this->getFunctionReturnTypes($globalFunction),
                 'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
             ]
-        ];
+        );
     }
 
     /**

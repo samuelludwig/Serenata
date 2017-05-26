@@ -11,7 +11,7 @@ interface AutocompletionProviderInterface
      * @param string $code
      * @param int    $offset
      *
-     * @return array
+     * @return AutocompletionSuggestion[]
      */
     public function provide(string $code, int $offset): array;
 }
