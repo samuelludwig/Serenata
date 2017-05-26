@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Autocompletion\AutocompletionProvider;
+use PhpIntegrator\Analysis\Autocompletion\AutocompletionProviderInterface;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -15,7 +15,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class AutocompleteCommand extends AbstractCommand
 {
     /**
-     * @var AutocompletionProvider
+     * @var AutocompletionProviderInterface
      */
     private $autocompletionProvider;
 
@@ -25,11 +25,11 @@ class AutocompleteCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
-     * @param AutocompletionProvider $autocompletionProvider
-     * @param sourceCodeStreamReader $sourceCodeStreamReader
+     * @param AutocompletionProviderInterface $autocompletionProvider
+     * @param sourceCodeStreamReader          $sourceCodeStreamReader
      */
     public function __construct(
-        AutocompletionProvider $autocompletionProvider,
+        AutocompletionProviderInterface $autocompletionProvider,
         sourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->autocompletionProvider = $autocompletionProvider;

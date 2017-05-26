@@ -2,7 +2,15 @@ parameters:
 
 
 services:
-    autocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\AutocompletionProvider
+    functionAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
             - '@doctrineFunctionListProvider'
+
+    aggregatingAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
+        arguments:
+            - '@functionAutocompletionProvider'
+
+    autocompletionProvider:
+        alias: aggregatingAutocompletionProvider

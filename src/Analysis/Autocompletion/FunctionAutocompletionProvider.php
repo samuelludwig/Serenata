@@ -5,9 +5,9 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
 
 /**
- * Provides autocompletion suggestions at a specific location in a file.
+ * Provides function autocompletion suggestions at a specific location in a file.
  */
-class AutocompletionProvider implements AutocompletionProviderInterface
+class FunctionAutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
      * @var FunctionListProviderInterface
