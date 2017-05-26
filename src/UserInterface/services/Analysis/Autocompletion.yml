@@ -5,4 +5,4 @@ services:
     autocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AutocompletionProvider
         arguments:
-            - '@globalFunctionsProvider'
+            - '@doctrineFunctionListProvider'
