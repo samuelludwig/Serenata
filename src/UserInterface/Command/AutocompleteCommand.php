@@ -31,7 +31,9 @@ class AutocompleteCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        if (!isset($arguments['offset'])) {
+        if (!isset($arguments['file'])) {
+            throw new InvalidArgumentsException('A --file must be supplied!');
+        } elseif (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }
 
@@ -39,10 +41,8 @@ class AutocompleteCommand extends AbstractCommand
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-        } elseif (isset($arguments['file']) && $arguments['file']) {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         } else {
-            throw new InvalidArgumentsException('Either a --file file must be supplied or --stdin must be passed!');
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         }
 
         $offset = $arguments['offset'];
