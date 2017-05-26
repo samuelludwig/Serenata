@@ -27,22 +27,6 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      */
     public function provide(string $code, int $offset): array
     {
-        // $exampleSuggestion = [
-        //     'filterText'    => null, // TODO: For text
-        //     'kind'          => null, // TODO: For type
-        //     'insertText'    => null, // TODO: For snippet
-        //     'label'         => null, // TODO: For displayText
-        //     'documentation' => null, // TODO: For description
-        //
-        //     'data' => [
-        //         'isDeprecated'       => null, // TODO: For className
-        //         'protectionLevel'    => null, // TODO: For leftLabel
-        //         'declaringStructure' => null, // TODO: For rightLabelHTML
-        //         'url'                => null, // TODO: For descriptionMoreURL
-        //     ]
-        // ];
-
-
         $suggestions = [];
         $suggestions = array_merge($suggestions, $this->getFunctionSuggestions());
 
