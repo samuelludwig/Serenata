@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
-use PhpIntegrator\Analysis\GlobalFunctionsProvider;
+use PhpIntegrator\Analysis\FunctionListProviderInterface;
 
 /**
  * Provides autocompletion suggestions at a specific location in a file.
@@ -10,16 +10,16 @@ use PhpIntegrator\Analysis\GlobalFunctionsProvider;
 class AutocompletionProvider
 {
     /**
-     * @var GlobalFunctionsProvider
+     * @var FunctionListProviderInterface
      */
-    protected $globalFunctionsProvider;
+    protected $functionListProvider;
 
     /**
-     * @param GlobalFunctionsProvider $globalFunctionsProvider
+     * @param FunctionListProviderInterface $functionListProvider
      */
-    public function __construct(GlobalFunctionsProvider $globalFunctionsProvider)
+    public function __construct(FunctionListProviderInterface $functionListProvider)
     {
-        $this->globalFunctionsProvider = $globalFunctionsProvider;
+        $this->functionListProvider = $functionListProvider;
     }
 
     /**
@@ -59,7 +59,7 @@ class AutocompletionProvider
     {
         $suggestions = [];
 
-        foreach ($this->globalFunctionsProvider->getAll() as $globalFunction) {
+        foreach ($this->functionListProvider->getAll() as $globalFunction) {
             $suggestions = $this->getGlobalFunctionSuggestionFromSuggestion($globalFunction);
         }
 
