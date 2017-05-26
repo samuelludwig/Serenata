@@ -32,7 +32,7 @@ class AutocompletionSuggestion implements JsonSerializable
     private $label;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $documentation;
 
@@ -42,19 +42,19 @@ class AutocompletionSuggestion implements JsonSerializable
     private $extraData;
 
     /**
-     * @param string $filterText
-     * @param string $kind
-     * @param string $insertText
-     * @param string $label
-     * @param string $documentation
-     * @param array  $extraData
+     * @param string      $filterText
+     * @param string      $kind
+     * @param string      $insertText
+     * @param string      $label
+     * @param string|null $documentation
+     * @param array       $extraData
      */
     public function __construct(
         string $filterText,
         string $kind,
         string $insertText,
         string $label,
-        string $documentation,
+        ?string $documentation,
         array $extraData = []
     ) {
         $this->filterText = $filterText;
@@ -100,7 +100,7 @@ class AutocompletionSuggestion implements JsonSerializable
     /**
      * @return string
      */
-    public function getDocumentation(): string
+    public function getDocumentation(): ?string
     {
         return $this->documentation;
     }
