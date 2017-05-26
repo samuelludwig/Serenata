@@ -124,7 +124,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
 
         $body .= ')';
 
-        return $body;
+        return $function['name'] . $body;
     }
 
     /**
