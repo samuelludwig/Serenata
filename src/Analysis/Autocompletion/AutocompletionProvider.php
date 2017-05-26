@@ -12,7 +12,7 @@ class AutocompletionProvider
     /**
      * @var FunctionListProviderInterface
      */
-    protected $functionListProvider;
+    private $functionListProvider;
 
     /**
      * @param FunctionListProviderInterface $functionListProvider
