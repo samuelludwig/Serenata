@@ -47,7 +47,7 @@ class AutocompletionProvider
 
 
         $suggestions = [];
-        $suggestions = array_merge($suggestions, $this->getGlobalFunctionSuggestions());
+        $suggestions = array_merge($suggestions, $this->getFunctionSuggestions());
 
         return $suggestions;
     }
@@ -55,7 +55,7 @@ class AutocompletionProvider
     /**
      * @return array
      */
-    protected function getGlobalFunctionSuggestions(): array
+    protected function getFunctionSuggestions(): array
     {
         $suggestions = [];
 
