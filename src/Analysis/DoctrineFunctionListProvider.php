@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis;
 
 use RuntimeException;
 
+use Doctrine\DBAL\Exception\DriverException;
+
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
 use PhpIntegrator\Indexing\Structures;
