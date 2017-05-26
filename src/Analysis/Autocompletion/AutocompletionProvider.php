@@ -25,7 +25,7 @@ class AutocompletionProvider implements AutocompletionProviderInterface
     /**
      * @inheritDoc
      */
-    public function getSuggestions(string $code, int $offset): array
+    public function provide(string $code, int $offset): array
     {
         // $exampleSuggestion = [
         //     'filterText'    => null, // TODO: For text
