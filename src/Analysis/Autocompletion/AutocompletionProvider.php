@@ -201,9 +201,9 @@ class AutocompletionProvider
     /**
      * @param array $function
      *
-     * @return string[]
+     * @return string
      */
-    protected function getFunctionReturnTypes(array $function): array
+    protected function getFunctionReturnTypes(array $function): string
     {
         $typeNames = $this->getShortFunctionReturnTypes($function);
 
