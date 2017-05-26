@@ -98,3 +98,4 @@ services:
         class: PhpIntegrator\UserInterface\Command\AutocompleteCommand
         arguments:
             - '@autocompletionProvider'
+            - '@sourceCodeStreamReader'

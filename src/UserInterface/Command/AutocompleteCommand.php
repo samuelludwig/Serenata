@@ -7,6 +7,7 @@ use ArrayAccess;
 use PhpIntegrator\Analysis\Autocompletion\AutocompletionProvider;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
+use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 /**
  * Command that shows autocompletion suggestions at a specific location.
@@ -19,11 +20,20 @@ class AutocompleteCommand extends AbstractCommand
     private $autocompletionProvider;
 
     /**
-     * @param AutocompletionProvider $autocompletionProvider
+     * @var sourceCodeStreamReader
      */
-    public function __construct(AutocompletionProvider $autocompletionProvider)
-    {
+    private $sourceCodeStreamReader;
+
+    /**
+     * @param AutocompletionProvider $autocompletionProvider
+     * @param sourceCodeStreamReader $sourceCodeStreamReader
+     */
+    public function __construct(
+        AutocompletionProvider $autocompletionProvider,
+        sourceCodeStreamReader $sourceCodeStreamReader
+    ) {
         $this->autocompletionProvider = $autocompletionProvider;
+        $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
 
     /**
