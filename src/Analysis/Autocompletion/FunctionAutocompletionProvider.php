@@ -27,10 +27,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      */
     public function provide(string $code, int $offset): array
     {
-        $suggestions = [];
-        $suggestions = array_merge($suggestions, $this->getFunctionSuggestions());
-
-        return $suggestions;
+        return $this->getFunctionSuggestions();
     }
 
     /**
