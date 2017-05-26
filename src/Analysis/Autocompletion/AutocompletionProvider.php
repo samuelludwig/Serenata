@@ -136,7 +136,7 @@ class AutocompletionProvider
                 $description .= ' = ' . $param['defaultValue'];
             }
 
-            if ($param['isOptional'] && $index === (count($function['parameters'] - 1))) {
+            if ($param['isOptional'] && $index === (count($function['parameters']) - 1)) {
                 $description .= ']';
             }
 
