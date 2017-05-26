@@ -60,7 +60,7 @@ class AutocompletionProvider
         $suggestions = [];
 
         foreach ($this->functionListProvider->getAll() as $globalFunction) {
-            $suggestions = $this->getGlobalFunctionSuggestionFromSuggestion($globalFunction);
+            $suggestions = $this->getFunctionSuggestionFromSuggestion($globalFunction);
         }
 
         return $suggestions;
@@ -71,7 +71,7 @@ class AutocompletionProvider
      *
      * @return array
      */
-    protected function getGlobalFunctionSuggestionFromSuggestion(array $globalFunction): array
+    protected function getFunctionSuggestionFromSuggestion(array $globalFunction): array
     {
         $insertText = $globalFunction['name'];
         $placeCursorBetweenParentheses = !empty($globalFunction['parameters']);
