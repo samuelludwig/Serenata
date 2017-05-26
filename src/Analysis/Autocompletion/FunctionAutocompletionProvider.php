@@ -27,18 +27,18 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      */
     public function provide(string $code, int $offset): array
     {
-        return $this->getFunctionSuggestions();
+        return $this->getSuggestions();
     }
 
     /**
      * @return AutocompletionSuggestion[]
      */
-    protected function getFunctionSuggestions(): array
+    protected function getSuggestions(): array
     {
         $suggestions = [];
 
         foreach ($this->functionListProvider->getAll() as $globalFunction) {
-            $suggestions[] = $this->getFunctionSuggestionFromSuggestion($globalFunction);
+            $suggestions[] = $this->createSuggestion($globalFunction);
         }
 
         return $suggestions;
@@ -49,7 +49,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return AutocompletionSuggestion
      */
-    protected function getFunctionSuggestionFromSuggestion(array $globalFunction): AutocompletionSuggestion
+    protected function createSuggestion(array $globalFunction): AutocompletionSuggestion
     {
         $insertText = $globalFunction['name'];
         $placeCursorBetweenParentheses = !empty($globalFunction['parameters']);
@@ -64,14 +64,14 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
             $globalFunction['name'],
             SuggestionKind::FUNCTION,
             $insertText,
-            $this->getFunctionLabel($globalFunction),
-            $this->getFunctionDocumentation($globalFunction),
+            $this->createLabel($globalFunction),
+            $this->createDocumentation($globalFunction),
             [
                 'isDeprecated'                  => $globalFunction['isDeprecated'],
                 'protectionLevel'               => null, // TODO: For leftLabel
                 'declaringStructure'            => null,
-                'url'                           => $this->getFunctionUrl($globalFunction),
-                'returnTypes'                   => $this->getFunctionReturnTypes($globalFunction),
+                'url'                           => $this->createUrl($globalFunction),
+                'returnTypes'                   => $this->createReturnTypes($globalFunction),
                 'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
             ]
         );
@@ -82,7 +82,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string
      */
-    protected function getFunctionLabel(array $function): string
+    protected function createLabel(array $function): string
     {
         $body = '(';
 
@@ -132,7 +132,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string|null
      */
-    protected function getFunctionDocumentation(array $function): ?string
+    protected function createDocumentation(array $function): ?string
     {
         if ($function['shortDescription']) {
             return $function['shortDescription'];
@@ -166,7 +166,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string|null
      */
-    protected function getFunctionUrl(array $function): ?string
+    protected function createUrl(array $function): ?string
     {
         if ($function['isBuiltin']) {
             return DocumentationBaseUrl::FUNCTIONS . $function['name'];
@@ -180,9 +180,9 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string
      */
-    protected function getFunctionReturnTypes(array $function): string
+    protected function createReturnTypes(array $function): string
     {
-        $typeNames = $this->getShortFunctionReturnTypes($function);
+        $typeNames = $this->getShortReturnTypes($function);
 
         return implode('|', $typeNames);
     }
@@ -192,7 +192,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string[]
      */
-    protected function getShortFunctionReturnTypes(array $function): array
+    protected function getShortReturnTypes(array $function): array
     {
         $shortTypes = [];
 
