@@ -51,9 +51,7 @@ class AutocompleteCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        $result = $this->getAutocompletionSuggestions($code, $offset);
-
-        return $result;
+        return $this->getAutocompletionSuggestions($code, $offset);
     }
 
     /**
