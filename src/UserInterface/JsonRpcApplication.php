@@ -22,8 +22,6 @@ use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\EventLoop\LoopInterface;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
