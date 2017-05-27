@@ -9,65 +9,6 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 class AvailableVariablesCommandTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param bool   $mayFail
-     *
-     * @return AvailableVariablesCommand
-     */
-    protected function getCommand(string $file, bool $mayFail = false): AvailableVariablesCommand
-    {
-        $path = $this->getTestFilePath($file);
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path, $mayFail);
-
-        return $container->get('availableVariablesCommand');
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    protected function getTestFilePath(string $name): string
-    {
-        return __DIR__ . '/AvailableVariablesCommandTest/' . $name;
-    }
-
-    /**
-     * @param string $file
-     * @param bool   $mayIndexingFail
-     *
-     * @return array
-     */
-    protected function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
-    {
-        $command = $this->getCommand($file, $mayIndexingFail);
-
-        $path = $this->getTestFilePath($file);
-
-        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
-
-        return $command->getAvailableVariables(file_get_contents($path), $markerOffset);
-    }
-
-    /**
-     * @param string $path
-     * @param string $marker
-     *
-     * @return int|null
-     */
-    protected function getMarkerOffset(string $path, string $marker): ?int
-    {
-        $testFileContents = file_get_contents($path);
-
-        $markerOffset = mb_strpos($testFileContents, $marker);
-
-        return $markerOffset !== false ? $markerOffset : null;
-    }
-
-    /**
      * @return void
      */
     public function testReturnsOnlyVariablesRelevantToTheGlobalScope(): void
@@ -191,5 +132,64 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
         $doMarkerTest(28, ['$m', '$e']);
         // $doMarkerTest(29, []); // TODO: Can't be solved for now, see also the implementation code.
         $doMarkerTest(30, ['$n']);
+    }
+
+    /**
+     * @param string $file
+     * @param bool   $mayFail
+     *
+     * @return AvailableVariablesCommand
+     */
+    protected function getCommand(string $file, bool $mayFail = false): AvailableVariablesCommand
+    {
+        $path = $this->getTestFilePath($file);
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path, $mayFail);
+
+        return $container->get('availableVariablesCommand');
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getTestFilePath(string $name): string
+    {
+        return __DIR__ . '/AvailableVariablesCommandTest/' . $name;
+    }
+
+    /**
+     * @param string $file
+     * @param bool   $mayIndexingFail
+     *
+     * @return array
+     */
+    protected function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
+    {
+        $command = $this->getCommand($file, $mayIndexingFail);
+
+        $path = $this->getTestFilePath($file);
+
+        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
+
+        return $command->getAvailableVariables(file_get_contents($path), $markerOffset);
+    }
+
+    /**
+     * @param string $path
+     * @param string $marker
+     *
+     * @return int|null
+     */
+    protected function getMarkerOffset(string $path, string $marker): ?int
+    {
+        $testFileContents = file_get_contents($path);
+
+        $markerOffset = mb_strpos($testFileContents, $marker);
+
+        return $markerOffset !== false ? $markerOffset : null;
     }
 }

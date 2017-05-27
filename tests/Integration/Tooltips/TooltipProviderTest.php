@@ -9,71 +9,6 @@ use PhpIntegrator\Tooltips\TooltipResult;
 class TooltipProviderTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param int    $position
-     *
-     * @return TooltipResult|null
-     */
-    protected function getTooltip(string $file, int $position): ?TooltipResult
-    {
-        $path = $this->getPathFor($file);
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
-
-        return $container->get('tooltipProvider')->get($path, $code, $position);
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getPathFor(string $file): string
-    {
-        return __DIR__ . '/TooltipProviderTest/' . $file;
-    }
-
-    /**
-     * @param string $fileName
-     * @param int    $start
-     * @param int    $end
-     * @param string $contents
-     *
-     * @return void
-     */
-    protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents): void
-    {
-        $i = $start;
-
-        while ($i <= $end) {
-            $result = $this->getTooltip($fileName, $i);
-
-            $this->assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
-            $this->assertNull($result->getRange());
-            $this->assertEquals($result->getContents(), $contents);
-
-            ++$i;
-        }
-
-        // Assert that the range doesn't extend longer than it should.
-        $resultBeforeRange = $this->getTooltip($fileName, $start - 1);
-        $this->assertTrue(
-            $resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents,
-            "Range does not start exactly at position {$start}, but seems to continue before it"
-        );
-
-        $resultAfterRange = $this->getTooltip($fileName, $end + 1);
-        $this->assertTrue(
-            $resultAfterRange === null || $resultAfterRange->getContents() !== $contents,
-            "Range does not end exactly at position {$end}, but seems to continue after it"
-        );
-    }
-
-    /**
      * @return void
      */
     public function testFuncCallContainsAllSections(): void
@@ -466,5 +401,70 @@ Hello!
 
 # Returns
 *void*');
+    }
+
+    /**
+     * @param string $file
+     * @param int    $position
+     *
+     * @return TooltipResult|null
+     */
+    protected function getTooltip(string $file, int $position): ?TooltipResult
+    {
+        $path = $this->getPathFor($file);
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
+
+        return $container->get('tooltipProvider')->get($path, $code, $position);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor(string $file): string
+    {
+        return __DIR__ . '/TooltipProviderTest/' . $file;
+    }
+
+    /**
+     * @param string $fileName
+     * @param int    $start
+     * @param int    $end
+     * @param string $contents
+     *
+     * @return void
+     */
+    protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents): void
+    {
+        $i = $start;
+
+        while ($i <= $end) {
+            $result = $this->getTooltip($fileName, $i);
+
+            $this->assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
+            $this->assertNull($result->getRange());
+            $this->assertEquals($result->getContents(), $contents);
+
+            ++$i;
+        }
+
+        // Assert that the range doesn't extend longer than it should.
+        $resultBeforeRange = $this->getTooltip($fileName, $start - 1);
+        $this->assertTrue(
+            $resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents,
+            "Range does not start exactly at position {$start}, but seems to continue before it"
+        );
+
+        $resultAfterRange = $this->getTooltip($fileName, $end + 1);
+        $this->assertTrue(
+            $resultAfterRange === null || $resultAfterRange->getContents() !== $contents,
+            "Range does not end exactly at position {$end}, but seems to continue after it"
+        );
     }
 }

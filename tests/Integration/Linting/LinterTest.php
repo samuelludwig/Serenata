@@ -9,35 +9,6 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 class LinterTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param bool   $indexingMayFail
-     *
-     * @return array
-     */
-    protected function lintFile(string $file, bool $indexingMayFail = false): array
-    {
-        $path = __DIR__ . '/LinterTest/' . $file;
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path, $indexingMayFail);
-
-        $linter = $container->get('linter');
-
-        $settings = new LintingSettings(
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true
-        );
-
-        return $linter->lint($path, file_get_contents($path), $settings);
-    }
-
-    /**
      * @return void
      */
     public function testIdentifiesSyntaxErrors(): void
@@ -677,5 +648,34 @@ class LinterTest extends AbstractIntegrationTest
                 'end'     => 64
             ]
         ], $output['warnings']);
+    }
+
+    /**
+     * @param string $file
+     * @param bool   $indexingMayFail
+     *
+     * @return array
+     */
+    protected function lintFile(string $file, bool $indexingMayFail = false): array
+    {
+        $path = __DIR__ . '/LinterTest/' . $file;
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path, $indexingMayFail);
+
+        $linter = $container->get('linter');
+
+        $settings = new LintingSettings(
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        );
+
+        return $linter->lint($path, file_get_contents($path), $settings);
     }
 }

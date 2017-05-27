@@ -7,34 +7,6 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 class GlobalConstantsCommandTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     *
-     * @return array
-     */
-    protected function getGlobalConstants(string $file): array
-    {
-        $path = $this->getPathFor($file);
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('globalConstantsCommand');
-
-        return $command->getGlobalConstants();
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getPathFor(string $file): string
-    {
-        return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
-    }
-
-    /**
      * @return void
      */
     public function testGlobalConstants(): void
@@ -78,5 +50,33 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
         $output = $this->getGlobalConstants('DefineWithIncompleteConstFetch.phpt');
 
         $this->assertEquals('\Test::', $output['\TEST_CONSTANT']['defaultValue']);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return array
+     */
+    protected function getGlobalConstants(string $file): array
+    {
+        $path = $this->getPathFor($file);
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = $container->get('globalConstantsCommand');
+
+        return $command->getGlobalConstants();
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor(string $file): string
+    {
+        return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
     }
 }

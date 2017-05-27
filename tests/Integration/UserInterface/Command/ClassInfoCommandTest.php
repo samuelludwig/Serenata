@@ -9,52 +9,6 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 class ClassInfoCommandTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param string $fqcn
-     *
-     * @return array
-     */
-    protected function getClassInfo(string $file, string $fqcn): array
-    {
-        $path = $this->getPathFor($file);
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('classInfoCommand');
-
-        return $command->getClassInfo($fqcn);
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return array
-     */
-    protected function getBuiltinClassInfo(string $fqcn): array
-    {
-        $container = $this->createTestContainerForBuiltinStructuralElements();
-
-        $command = new ClassInfoCommand(
-            $container->get('typeAnalyzer'),
-            $container->get('classlikeInfoBuilder')
-        );
-
-        return $command->getClassInfo($fqcn);
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getPathFor(string $file): string
-    {
-        return __DIR__ . '/ClassInfoCommandTest/' . $file;
-    }
-
-    /**
      * @return void
      */
     public function testLeadingSlashIsResolvedCorrectly(): void
@@ -2355,5 +2309,51 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $fileName = 'CircularDependencyUses.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\C');
+    }
+
+    /**
+     * @param string $file
+     * @param string $fqcn
+     *
+     * @return array
+     */
+    protected function getClassInfo(string $file, string $fqcn): array
+    {
+        $path = $this->getPathFor($file);
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = $container->get('classInfoCommand');
+
+        return $command->getClassInfo($fqcn);
+    }
+
+    /**
+     * @param string $fqcn
+     *
+     * @return array
+     */
+    protected function getBuiltinClassInfo(string $fqcn): array
+    {
+        $container = $this->createTestContainerForBuiltinStructuralElements();
+
+        $command = new ClassInfoCommand(
+            $container->get('typeAnalyzer'),
+            $container->get('classlikeInfoBuilder')
+        );
+
+        return $command->getClassInfo($fqcn);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor(string $file): string
+    {
+        return __DIR__ . '/ClassInfoCommandTest/' . $file;
     }
 }

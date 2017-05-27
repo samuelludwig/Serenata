@@ -12,32 +12,6 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
 {
     /**
      * @param string $file
-     * @param string $expression
-     * @param bool   $ignoreLastElement
-     *
-     * @return string[]
-     */
-    protected function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
-    {
-        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
-
-        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('deduceTypesCommand');
-
-        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
-        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
-        $reflectionMethod->setAccessible(true);
-
-        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset, $ignoreLastElement);
-    }
-
-    /**
-     * @param string $file
      * @param string $metaFile
      * @param string $expression
      *
@@ -1092,5 +1066,31 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         );
 
         $this->assertEquals(['\B\Bar'], $result);
+    }
+
+    /**
+     * @param string $file
+     * @param string $expression
+     * @param bool   $ignoreLastElement
+     *
+     * @return string[]
+     */
+    protected function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
+    {
+        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
+
+        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $command = $container->get('deduceTypesCommand');
+
+        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
+        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
+        $reflectionMethod->setAccessible(true);
+
+        return $reflectionMethod->invoke($command, $path, file_get_contents($path), $expression, $markerOffset, $ignoreLastElement);
     }
 }

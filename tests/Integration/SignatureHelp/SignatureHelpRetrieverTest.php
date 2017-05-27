@@ -13,136 +13,6 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param int    $position
-     *
-     * @return SignatureHelp
-     */
-    protected function getSignatureHelp(string $file, int $position): SignatureHelp
-    {
-        $path = $this->getPathFor($file);
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
-
-        return $container->get('signatureHelpRetriever')->get($path, $code, $position);
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getPathFor(string $file): string
-    {
-        return __DIR__ . '/SignatureHelpTest/' . $file;
-    }
-
-    /**
-     * @param string                 $fileName
-     * @param int                    $start
-     * @param int                    $end
-     * @param SignatureInformation[] $signatures
-     */
-    protected function assertSignatureHelpSignaturesEquals(
-        string $fileName,
-        int $start,
-        int $end,
-        array $signatures
-    ): void {
-        $i = $start;
-
-        while ($i <= $end) {
-            $result = $this->getSignatureHelp($fileName, $i);
-
-            $this->assertEquals(0, $result->getActiveSignature());
-            $this->assertEquals($signatures, $result->getSignatures());
-
-            ++$i;
-        }
-
-        // Assert that the range doesn't extend longer than it should.
-        $gotException = false;
-
-        try {
-            $resultBeforeRange = $this->getSignatureHelp($fileName, $start - 1);
-        } catch (UnexpectedValueException $e) {
-            $gotException = true;
-        }
-
-        $this->assertTrue(
-            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() !== $signatures),
-            "Range does not start exactly at position {$start}, but seems to continue before it"
-        );
-
-        $gotException = false;
-
-        try {
-            $resultAfterRange = $this->getSignatureHelp($fileName, $end + 1);
-        } catch (UnexpectedValueException $e) {
-            $gotException = true;
-        }
-
-        $this->assertTrue(
-            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() !== $signatures),
-            "Range does not end exactly at position {$end}, but seems to continue after it"
-        );
-    }
-
-    /**
-     * @param string $fileName
-     * @param int    $start
-     * @param int    $end
-     * @param int    $activeParameter
-     */
-    protected function assertSignatureHelpActiveParameterEquals(
-        string $fileName,
-        int $start,
-        int $end,
-        int $activeParameter
-    ): void {
-        $i = $start;
-
-        while ($i <= $end) {
-            $result = $this->getSignatureHelp($fileName, $i);
-
-            $this->assertEquals($activeParameter, $result->getActiveParameter());
-
-            ++$i;
-        }
-
-        // Assert that the range doesn't extend longer than it should.
-        $gotException = false;
-
-        try {
-            $resultBeforeRange = $this->getSignatureHelp($fileName, $start - 1);
-        } catch (UnexpectedValueException $e) {
-            $gotException = true;
-        }
-
-        $this->assertTrue(
-            $gotException === true || ($gotException === false && $resultBeforeRange->getActiveParameter() !== $activeParameter),
-            "Range does not start exactly at position {$start}, but seems to continue before it"
-        );
-
-        $gotException = false;
-
-        try {
-            $resultAfterRange = $this->getSignatureHelp($fileName, $end + 1);
-        } catch (UnexpectedValueException $e) {
-            $gotException = true;
-        }
-
-        $this->assertTrue(
-            $gotException === true || ($gotException === false && $resultAfterRange->getActiveParameter() !== $activeParameter),
-            "Range does not end exactly at position {$end}, but seems to continue after it"
-        );
-    }
-
-    /**
      * @return void
      */
     public function testFunctionCall(): void
@@ -448,5 +318,135 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNoInvocationWithMissingMemberNameFails(): void
     {
         $result = $this->getSignatureHelp('NoInvocationMissingMember.phpt', 17);
+    }
+
+    /**
+     * @param string $file
+     * @param int    $position
+     *
+     * @return SignatureHelp
+     */
+    protected function getSignatureHelp(string $file, int $position): SignatureHelp
+    {
+        $path = $this->getPathFor($file);
+
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $path);
+
+        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
+
+        return $container->get('signatureHelpRetriever')->get($path, $code, $position);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor(string $file): string
+    {
+        return __DIR__ . '/SignatureHelpTest/' . $file;
+    }
+
+    /**
+     * @param string                 $fileName
+     * @param int                    $start
+     * @param int                    $end
+     * @param SignatureInformation[] $signatures
+     */
+    protected function assertSignatureHelpSignaturesEquals(
+        string $fileName,
+        int $start,
+        int $end,
+        array $signatures
+    ): void {
+        $i = $start;
+
+        while ($i <= $end) {
+            $result = $this->getSignatureHelp($fileName, $i);
+
+            $this->assertEquals(0, $result->getActiveSignature());
+            $this->assertEquals($signatures, $result->getSignatures());
+
+            ++$i;
+        }
+
+        // Assert that the range doesn't extend longer than it should.
+        $gotException = false;
+
+        try {
+            $resultBeforeRange = $this->getSignatureHelp($fileName, $start - 1);
+        } catch (UnexpectedValueException $e) {
+            $gotException = true;
+        }
+
+        $this->assertTrue(
+            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() !== $signatures),
+            "Range does not start exactly at position {$start}, but seems to continue before it"
+        );
+
+        $gotException = false;
+
+        try {
+            $resultAfterRange = $this->getSignatureHelp($fileName, $end + 1);
+        } catch (UnexpectedValueException $e) {
+            $gotException = true;
+        }
+
+        $this->assertTrue(
+            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() !== $signatures),
+            "Range does not end exactly at position {$end}, but seems to continue after it"
+        );
+    }
+
+    /**
+     * @param string $fileName
+     * @param int    $start
+     * @param int    $end
+     * @param int    $activeParameter
+     */
+    protected function assertSignatureHelpActiveParameterEquals(
+        string $fileName,
+        int $start,
+        int $end,
+        int $activeParameter
+    ): void {
+        $i = $start;
+
+        while ($i <= $end) {
+            $result = $this->getSignatureHelp($fileName, $i);
+
+            $this->assertEquals($activeParameter, $result->getActiveParameter());
+
+            ++$i;
+        }
+
+        // Assert that the range doesn't extend longer than it should.
+        $gotException = false;
+
+        try {
+            $resultBeforeRange = $this->getSignatureHelp($fileName, $start - 1);
+        } catch (UnexpectedValueException $e) {
+            $gotException = true;
+        }
+
+        $this->assertTrue(
+            $gotException === true || ($gotException === false && $resultBeforeRange->getActiveParameter() !== $activeParameter),
+            "Range does not start exactly at position {$start}, but seems to continue before it"
+        );
+
+        $gotException = false;
+
+        try {
+            $resultAfterRange = $this->getSignatureHelp($fileName, $end + 1);
+        } catch (UnexpectedValueException $e) {
+            $gotException = true;
+        }
+
+        $this->assertTrue(
+            $gotException === true || ($gotException === false && $resultAfterRange->getActiveParameter() !== $activeParameter),
+            "Range does not end exactly at position {$end}, but seems to continue after it"
+        );
     }
 }
