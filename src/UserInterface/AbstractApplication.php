@@ -7,13 +7,11 @@ use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use PhpIntegrator\Indexing\ManagerRegistry;
-use PhpIntegrator\Indexing\CallbackStorageProxy;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\Config\FileLocator;
 
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
