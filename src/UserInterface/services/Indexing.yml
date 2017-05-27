@@ -29,10 +29,13 @@ services:
         arguments:
             - '@managerRegistry'
 
+    storage:
+        alias: doctrineStorage
+
     fileIndexer:
         class: PhpIntegrator\Indexing\FileIndexer
         arguments:
-            - '@doctrineStorage'
+            - '@storage'
             - '@typeAnalyzer'
             - '@docblockParser'
             - '@nodeTypeDeducer'
@@ -42,7 +45,7 @@ services:
     projectIndexer:
         class: PhpIntegrator\Indexing\ProjectIndexer
         arguments:
-            - '@doctrineStorage'
+            - '@storage'
             - '@fileIndexer'
             - '@sourceCodeStreamReader'
 

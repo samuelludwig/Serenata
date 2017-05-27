@@ -8,7 +8,7 @@ services:
     fileNamespaceProvider.storageBackend:
         class: PhpIntegrator\Analysis\StorageFileNamespaceProvider
         arguments:
-            - '@doctrineStorage'
+            - '@storage'
 
     fileNamespaceProvider.cachingFileNamespaceProvider:
         class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
@@ -16,7 +16,7 @@ services:
             - '@fileNamespaceProvider.storageBackend'
 
     metadataProvider:
-        alias: doctrineStorage
+        alias: storage
 
     fileNamespaceProvider:
         alias: fileNamespaceProvider.cachingFileNamespaceProvider
@@ -184,7 +184,7 @@ services:
             - '@inheritanceResolver'
             - '@interfaceImplementationResolver'
             - '@traitUsageResolver'
-            - '@doctrineStorage'
+            - '@storage'
             - '@typeAnalyzer'
 
     functionNameNodeFqsenDeterminer:
