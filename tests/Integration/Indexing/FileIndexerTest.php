@@ -43,6 +43,30 @@ class FileIndexerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testOldImportsAreRemovedOnReindex(): void
+    {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(3, $file->getNamespaces());
+            $this->assertCount(1, $file->getNamespaces()[2]->getImports());
+
+            return str_replace('use N\A', '// use N\A', $source);
+        };
+
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(3, $file->getNamespaces());
+            $this->assertEmpty($file->getNamespaces()[2]->getImports());
+        };
+
+        $this->testReindexingChanges('OldImportsAreRemoved.phpt', $afterIndex, $afterReindex);
+    }
+
+    /**
+     * @return void
+     */
     public function testStaticMethodTypes(): void
     {
         $container = $this->index('StaticMethodTypes.phpt');
