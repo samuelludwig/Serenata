@@ -136,7 +136,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             [$testPath],
             false,
             false,
-            false,
             [],
             ['php', 'phpt']
         );
@@ -179,7 +178,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             [$path],
             false,
             false,
-            false,
             [],
             ['phpt']
         );
@@ -193,7 +191,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $indexer->reindex(
             [$path],
             true,
-            false,
             false,
             [],
             ['phpt']

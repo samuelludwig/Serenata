@@ -27,11 +27,6 @@ class ProjectIndexer
     private $sourceCodeStreamReader;
 
     /**
-     * @var resource|null
-     */
-    private $loggingStream;
-
-    /**
      * @var callable|null
      */
     private $progressStreamingCallback;
@@ -52,25 +47,6 @@ class ProjectIndexer
     }
 
     /**
-     * @return resource|null
-     */
-    public function getLoggingStream()
-    {
-        return $this->loggingStream;
-    }
-
-    /**
-     * @param resource|null $loggingStream
-     *
-     * @return static
-     */
-    public function setLoggingStream($loggingStream)
-    {
-        $this->loggingStream = $loggingStream;
-        return $this;
-    }
-
-    /**
      * @return callable|null
      */
     public function getProgressStreamingCallback(): ?callable
@@ -87,22 +63,6 @@ class ProjectIndexer
     {
         $this->progressStreamingCallback = $progressStreamingCallback;
         return $this;
-    }
-
-    /**
-     * Logs a single message for debugging purposes.
-     *
-     * @param string $message
-     *
-     * @return void
-     */
-    protected function logMessage($message): void
-    {
-        if (!$this->loggingStream) {
-            return;
-        }
-
-        fwrite($this->loggingStream, $message . PHP_EOL);
     }
 
     /**
@@ -159,8 +119,6 @@ class ProjectIndexer
         $iterator = new Iterating\ExclusionFilterIterator($iterator, $excludedPaths);
         $iterator = new Iterating\ModificationTimeFilterIterator($iterator, $fileModifiedMap);
 
-        $this->logMessage('Scanning and indexing files that need (re)indexing...');
-
         $totalItems = iterator_count($iterator);
 
         $this->sendProgress(0, $totalItems);
@@ -170,8 +128,6 @@ class ProjectIndexer
         /** @var \SplFileInfo $fileInfo */
         foreach ($iterator as $fileInfo) {
             $filePath = $fileInfo->getPathname();
-
-            $this->logMessage('  - Indexing ' . $filePath);
 
             $code = null;
 
@@ -189,7 +145,7 @@ class ProjectIndexer
                 try {
                     $this->fileIndexer->index($filePath, $code);
                 } catch (IndexingFailedException $e) {
-                    $this->logMessage('    - ERROR: Indexing failed due to parsing errors!');
+                    // Simply proceed with the next file.
                 }
             }
 
@@ -206,8 +162,6 @@ class ProjectIndexer
     {
         foreach ($this->getFileModifiedMap() as $fileName => $file) {
             if (!file_exists($fileName)) {
-                $this->logMessage('  - ' . $fileName);
-
                 $this->storage->delete($file);
             }
         }

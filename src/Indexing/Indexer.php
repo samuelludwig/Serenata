@@ -54,7 +54,6 @@ class Indexer implements EventEmitterInterface
     /**
      * @param string[] $paths
      * @param bool     $useStdin
-     * @param bool     $showOutput
      * @param bool     $doStreamProgress
      * @param string[] $excludedPaths
      * @param string[] $extensionsToIndex
@@ -64,7 +63,6 @@ class Indexer implements EventEmitterInterface
     public function reindex(
         array $paths,
         bool $useStdin,
-        bool $showOutput,
         bool $doStreamProgress,
         array $excludedPaths = [],
         array $extensionsToIndex = ['php']
@@ -74,7 +72,6 @@ class Indexer implements EventEmitterInterface
         }
 
         $this->projectIndexer
-            ->setLoggingStream($showOutput ? STDOUT : null)
             ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
 
         $sourceOverrideMap = [];

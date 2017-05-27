@@ -80,7 +80,6 @@ class InitializeCommand extends AbstractCommand
                 [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
                 false,
                 false,
-                false,
                 [],
                 ['php']
             );
