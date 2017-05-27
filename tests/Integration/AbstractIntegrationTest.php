@@ -82,21 +82,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return ContainerBuilder
-     */
-    protected function createTestContainerForBuiltinStructuralElements(): ContainerBuilder
-    {
-        if (!self::$testContainerBuiltinStructuralElements) {
-            self::$testContainerBuiltinStructuralElements = $this->createApplicationContainer();
-
-            // Indexing builtin items is a fairy large performance hit to run every test, so keep the property static.
-            $this->prepareContainer(self::$testContainerBuiltinStructuralElements, true);
-        }
-
-        return self::$testContainerBuiltinStructuralElements;
-    }
-
-    /**
      * @param ContainerBuilder $container
      * @param string           $testPath
      * @param bool             $mayFail
