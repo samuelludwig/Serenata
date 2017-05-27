@@ -33,7 +33,7 @@ class FileIndexerTest extends AbstractIntegrationTest
 
         $path = $this->getPathFor('NewImportsAreAdded.phpt');
 
-        $this->testReindexingChanges($path, $afterIndex, $afterReindex);
+        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -59,7 +59,7 @@ class FileIndexerTest extends AbstractIntegrationTest
 
         $path = $this->getPathFor('OldImportsAreRemoved.phpt');
 
-        $this->testReindexingChanges($path, $afterIndex, $afterReindex);
+        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

@@ -138,7 +138,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function testReindexingChanges(string $path, Closure $afterIndex, Closure $afterReindex): void
+    protected function assertReindexingChanges(string $path, Closure $afterIndex, Closure $afterReindex): void
     {
         $container = $this->createTestContainer();
 
