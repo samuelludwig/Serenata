@@ -142,20 +142,20 @@ class Structure
     private $methods;
 
     /**
-     * @param string                     $name
-     * @param string                     $fqcn
-     * @param File                       $file
-     * @param int                        $startLine
-     * @param int                        $endLine
-     * @param StructureType              $type
-     * @param string|null                $shortDescription
-     * @param string|null                $longDescription
-     * @param bool                       $isBuiltin
-     * @param bool                       $isAbstract
-     * @param bool                       $isFinal
-     * @param bool                       $isAnnotation
-     * @param bool                       $isDeprecated
-     * @param bool                       $hasDocblock
+     * @param string        $name
+     * @param string        $fqcn
+     * @param File          $file
+     * @param int           $startLine
+     * @param int           $endLine
+     * @param StructureType $type
+     * @param string|null   $shortDescription
+     * @param string|null   $longDescription
+     * @param bool          $isBuiltin
+     * @param bool          $isAbstract
+     * @param bool          $isFinal
+     * @param bool          $isAnnotation
+     * @param bool          $isDeprecated
+     * @param bool          $hasDocblock
      */
     public function __construct(
         string $name,
