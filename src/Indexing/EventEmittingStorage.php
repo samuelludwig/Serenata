@@ -6,10 +6,9 @@ use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
 /**
- * Proxy for classes implementing {@see StorageInterface} that will invoke callback functions when specific methods are
- * called.
+ * Delegates storage to another object and emits events.
  */
-class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
+class EventEmittingStorage implements StorageInterface, EventEmitterInterface
 {
     use EventEmitterTrait;
 
@@ -29,18 +28,11 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
     private $delegate;
 
     /**
-     * @var callable
-     */
-    private $insertStructureCallback;
-
-    /**
      * @param StorageInterface $delegate
-     * @param callable         $insertStructureCallback
      */
-    public function __construct(StorageInterface $delegate, callable $insertStructureCallback)
+    public function __construct(StorageInterface $delegate)
     {
         $this->delegate = $delegate;
-        $this->insertStructureCallback = $insertStructureCallback;
     }
 
     /**
@@ -72,7 +64,7 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
      */
     public function findStructureByFqcn(string $fqcn): ?Structures\Structure
     {
-        return $this->delegate->findStructureByFqcn($path);
+        return $this->delegate->findStructureByFqcn($fqcn);
     }
 
     /**
@@ -88,11 +80,6 @@ class CallbackStorageProxy implements StorageInterface, EventEmitterInterface
      */
     public function persist($entity): void
     {
-        if ($entity instanceof Structures\Structure) {
-            $callback = $this->insertStructureCallback;
-            $callback($data['fqcn']);
-        }
-
         $this->delegate->persist($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
