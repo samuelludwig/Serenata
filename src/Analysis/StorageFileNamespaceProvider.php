@@ -80,7 +80,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
     }
 
     /**
-     * @param Structures\FileNamespaceImport[] $rawImports
+     * @param Structures\FileNamespaceImport[] $imports
      *
      * @return Import[]
      */
@@ -92,7 +92,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
     }
 
     /**
-     * @param Structures\FileNamespaceImport $rawImport
+     * @param Structures\FileNamespaceImport $import
      *
      * @return Import
      */
