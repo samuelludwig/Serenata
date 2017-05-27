@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\GlobalConstantsCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class GlobalConstantsCommandTest extends AbstractIntegrationTest
