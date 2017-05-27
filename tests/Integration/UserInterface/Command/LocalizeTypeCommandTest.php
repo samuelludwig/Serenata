@@ -4,8 +4,6 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\UserInterface\Command\LocalizeTypeCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class LocalizeTypeCommandTest extends AbstractIntegrationTest
