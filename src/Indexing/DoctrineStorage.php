@@ -3,22 +3,12 @@
 namespace PhpIntegrator\Indexing;
 
 use LogicException;
-use UnexpectedValueException;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Configuration;
 
 use Doctrine\DBAL\Exception\DriverException;
 
 use PhpIntegrator\Analysis\MetadataProviderInterface;
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderProviderInterface;
-
-use PhpIntegrator\Analysis\Typing\NamespaceImportProviderInterface;
-
-use PhpIntegrator\Utility\NamespaceData;
 
 /**
  * Storage backend that uses Doctrine.
