@@ -18,6 +18,52 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class FileIndexerTest extends AbstractIntegrationTest
 {
     /**
+     * @return void
+     */
+    public function testNewImportsAreUpdatedAfterReindex(): void
+    {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(3, $file->getNamespaces());
+            $this->assertEmpty($file->getNamespaces()[2]->getImports());
+
+            return str_replace('// ', '', $source);
+        };
+
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(3, $file->getNamespaces());
+            $this->assertCount(1, $file->getNamespaces()[2]->getImports());
+        };
+
+        $this->reindexWithSource('NewImportsAreAdded.phpt', $afterIndex, $afterReindex);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStaticMethodTypes(): void
+    {
+        $container = $this->index('StaticMethodTypes.phpt');
+
+        $types = $container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
+
+        $this->assertCount(2, $types);
+
+        $this->assertEquals(0, $types[0]->getArgumentIndex());
+        $this->assertEquals('bar', $types[0]->getValue());
+        $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+        $this->assertEquals('\B\Bar', $types[0]->getReturnType());
+
+        $this->assertEquals(0, $types[1]->getArgumentIndex());
+        $this->assertEquals('car', $types[1]->getValue());
+        $this->assertEquals(Node\Scalar\String_::class, $types[1]->getValueNodeType());
+        $this->assertEquals('\B\Car', $types[1]->getReturnType());
+    }
+
+    /**
      * @param string $file
      *
      * @return ContainerBuilder
@@ -89,51 +135,5 @@ class FileIndexerTest extends AbstractIntegrationTest
         $afterReindex($container, $path, $source);
 
         fclose($stream);
-    }
-
-    /**
-     * @return void
-     */
-    public function testNewImportsAreUpdatedAfterReindex(): void
-    {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
-
-            $this->assertCount(3, $file->getNamespaces());
-            $this->assertEmpty($file->getNamespaces()[2]->getImports());
-
-            return str_replace('// ', '', $source);
-        };
-
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
-
-            $this->assertCount(3, $file->getNamespaces());
-            $this->assertCount(1, $file->getNamespaces()[2]->getImports());
-        };
-
-        $this->reindexWithSource('NewImportsAreAdded.phpt', $afterIndex, $afterReindex);
-    }
-
-    /**
-     * @return void
-     */
-    public function testStaticMethodTypes(): void
-    {
-        $container = $this->index('StaticMethodTypes.phpt');
-
-        $types = $container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
-
-        $this->assertCount(2, $types);
-
-        $this->assertEquals(0, $types[0]->getArgumentIndex());
-        $this->assertEquals('bar', $types[0]->getValue());
-        $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-        $this->assertEquals('\B\Bar', $types[0]->getReturnType());
-
-        $this->assertEquals(0, $types[1]->getArgumentIndex());
-        $this->assertEquals('car', $types[1]->getValue());
-        $this->assertEquals(Node\Scalar\String_::class, $types[1]->getValueNodeType());
-        $this->assertEquals('\B\Car', $types[1]->getReturnType());
     }
 }
