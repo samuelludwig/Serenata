@@ -92,7 +92,7 @@ class FileIndexerTest extends AbstractIntegrationTest
     /**
      * @param string  $file
      * @param Closure $afterIndex
-     * @param string  $afterReindex
+     * @param Closure $afterReindex
      *
      * @return void
      */
