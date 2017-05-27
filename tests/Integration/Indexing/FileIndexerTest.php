@@ -2,7 +2,14 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
+use Closure;
+
+use PhpIntegrator\Indexing\Indexer;
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+
+use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use PhpParser\Node;
 
@@ -34,6 +41,78 @@ class FileIndexerTest extends AbstractIntegrationTest
     protected function getPathFor(string $file): string
     {
         return __DIR__ . '/FileIndexerTest/' . $file;
+    }
+
+    /**
+     * @param string  $file
+     * @param Closure $afterIndex
+     * @param string  $afterReindex
+     *
+     * @return void
+     */
+    protected function reindexWithSource(string $file, Closure $afterIndex, Closure $afterReindex): void
+    {
+        $path = $this->getPathFor($file);
+
+        $container = $this->createTestContainer();
+
+        $stream = tmpfile();
+
+        $sourceCodeStreamReader = new SourceCodeStreamReader($stream);
+
+        $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
+
+        $indexer->reindex(
+            [$path],
+            false,
+            false,
+            false,
+            [],
+            ['phpt']
+        );
+
+        $source = $sourceCodeStreamReader->getSourceCodeFromFile($path);
+        $source = $afterIndex($container, $path, $source);
+
+        fwrite($stream, $source);
+        rewind($stream);
+
+        $indexer->reindex(
+            [$path],
+            true,
+            false,
+            false,
+            [],
+            ['phpt']
+        );
+
+        $afterReindex($container, $path, $source);
+
+        fclose($stream);
+    }
+
+    /**
+     * @return void
+     */
+    public function testNewImportsAreUpdatedAfterReindex(): void
+    {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(3, $file->getNamespaces());
+            $this->assertEmpty($file->getNamespaces()[2]->getImports());
+
+            return str_replace('// ', '', $source);
+        };
+
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(3, $file->getNamespaces());
+            $this->assertCount(1, $file->getNamespaces()[2]->getImports());
+        };
+
+        $this->reindexWithSource('NewImportsAreAdded.phpt', $afterIndex, $afterReindex);
     }
 
     /**
