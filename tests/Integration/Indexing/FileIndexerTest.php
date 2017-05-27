@@ -38,7 +38,7 @@ class FileIndexerTest extends AbstractIntegrationTest
             $this->assertCount(1, $file->getNamespaces()[2]->getImports());
         };
 
-        $this->reindexWithSource('NewImportsAreAdded.phpt', $afterIndex, $afterReindex);
+        $this->testReindexingChanges('NewImportsAreAdded.phpt', $afterIndex, $afterReindex);
     }
 
     /**
@@ -96,7 +96,7 @@ class FileIndexerTest extends AbstractIntegrationTest
      *
      * @return void
      */
-    protected function reindexWithSource(string $file, Closure $afterIndex, Closure $afterReindex): void
+    protected function testReindexingChanges(string $file, Closure $afterIndex, Closure $afterReindex): void
     {
         $path = $this->getPathFor($file);
 
