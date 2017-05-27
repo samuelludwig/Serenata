@@ -14,8 +14,6 @@ use PhpIntegrator\NameQualificationUtilities\Import;
 use PhpIntegrator\NameQualificationUtilities\Namespace_;
 use PhpIntegrator\NameQualificationUtilities\FileNamespaceProviderInterface;
 
-use PhpIntegrator\Utility\NamespaceData;
-
 /**
  * Provides a list of namespaces and imports for a file based on data provided by a storage provider.
  */
