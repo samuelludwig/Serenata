@@ -4,8 +4,6 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use ReflectionClass;
 
-use PhpIntegrator\Indexing\MetaFileIndexer;
-
 use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
