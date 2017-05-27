@@ -13,9 +13,7 @@ use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
