@@ -16,7 +16,7 @@ services:
             - '@fileNamespaceProvider.storageBackend'
 
     metadataProvider:
-        alias: storage
+        alias: storage.doctrineStorage
 
     fileNamespaceProvider:
         alias: fileNamespaceProvider.cachingFileNamespaceProvider

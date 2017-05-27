@@ -24,13 +24,18 @@ services:
         arguments:
             - '@managerRegistry'
 
-    doctrineStorage:
+    storage.doctrineStorage:
         class: PhpIntegrator\Indexing\DoctrineStorage
         arguments:
             - '@managerRegistry'
 
+    storage.eventEmittingStorage:
+        class: PhpIntegrator\Indexing\EventEmittingStorage
+        arguments:
+            - '@storage.doctrineStorage'
+
     storage:
-        alias: doctrineStorage
+        alias: storage.eventEmittingStorage
 
     fileIndexer:
         class: PhpIntegrator\Indexing\FileIndexer
