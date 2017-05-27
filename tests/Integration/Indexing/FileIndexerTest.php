@@ -2,13 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
-use Closure;
-
-use PhpIntegrator\Indexing\Indexer;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
-
-use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use PhpParser\Node;
 
@@ -37,7 +31,9 @@ class FileIndexerTest extends AbstractIntegrationTest
             $this->assertCount(1, $file->getNamespaces()[2]->getImports());
         };
 
-        $this->testReindexingChanges('NewImportsAreAdded.phpt', $afterIndex, $afterReindex);
+        $path = $this->getPathFor('NewImportsAreAdded.phpt');
+
+        $this->testReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -61,7 +57,9 @@ class FileIndexerTest extends AbstractIntegrationTest
             $this->assertEmpty($file->getNamespaces()[2]->getImports());
         };
 
-        $this->testReindexingChanges('OldImportsAreRemoved.phpt', $afterIndex, $afterReindex);
+        $path = $this->getPathFor('OldImportsAreRemoved.phpt');
+
+        $this->testReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -110,53 +108,5 @@ class FileIndexerTest extends AbstractIntegrationTest
     protected function getPathFor(string $file): string
     {
         return __DIR__ . '/FileIndexerTest/' . $file;
-    }
-
-    /**
-     * @param string  $file
-     * @param Closure $afterIndex
-     * @param Closure $afterReindex
-     *
-     * @return void
-     */
-    protected function testReindexingChanges(string $file, Closure $afterIndex, Closure $afterReindex): void
-    {
-        $path = $this->getPathFor($file);
-
-        $container = $this->createTestContainer();
-
-        $stream = tmpfile();
-
-        $sourceCodeStreamReader = new SourceCodeStreamReader($stream);
-
-        $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
-
-        $indexer->reindex(
-            [$path],
-            false,
-            false,
-            false,
-            [],
-            ['phpt']
-        );
-
-        $source = $sourceCodeStreamReader->getSourceCodeFromFile($path);
-        $source = $afterIndex($container, $path, $source);
-
-        fwrite($stream, $source);
-        rewind($stream);
-
-        $indexer->reindex(
-            [$path],
-            true,
-            false,
-            false,
-            [],
-            ['phpt']
-        );
-
-        $afterReindex($container, $path, $source);
-
-        fclose($stream);
     }
 }

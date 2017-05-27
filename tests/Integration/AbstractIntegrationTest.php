@@ -2,9 +2,14 @@
 
 namespace PhpIntegrator\Tests\Integration;
 
+use Closure;
 use ReflectionClass;
 
+use PhpIntegrator\Indexing\Indexer;
+
 use PhpIntegrator\UserInterface\JsonRpcApplication;
+
+use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -124,5 +129,51 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
         $this->indexPath($container, $testPath, $mayFail);
+    }
+
+    /**
+     * @param string  $path
+     * @param Closure $afterIndex
+     * @param Closure $afterReindex
+     *
+     * @return void
+     */
+    protected function testReindexingChanges(string $path, Closure $afterIndex, Closure $afterReindex): void
+    {
+        $container = $this->createTestContainer();
+
+        $stream = tmpfile();
+
+        $sourceCodeStreamReader = new SourceCodeStreamReader($stream);
+
+        $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
+
+        $indexer->reindex(
+            [$path],
+            false,
+            false,
+            false,
+            [],
+            ['phpt']
+        );
+
+        $source = $sourceCodeStreamReader->getSourceCodeFromFile($path);
+        $source = $afterIndex($container, $path, $source);
+
+        fwrite($stream, $source);
+        rewind($stream);
+
+        $indexer->reindex(
+            [$path],
+            true,
+            false,
+            false,
+            [],
+            ['phpt']
+        );
+
+        $afterReindex($container, $path, $source);
+
+        fclose($stream);
     }
 }
