@@ -32,6 +32,19 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     private static $testContainerBuiltinStructuralElements;
 
     /**
+     * @var ContainerBuilder
+     */
+    protected $container;
+
+    /**
+     * @return void
+     */
+    public function setUp()
+    {
+        $this->container = $this->createTestContainer();
+    }
+
+    /**
      * @return JsonRpcApplication
      */
     protected function createApplication(): JsonRpcApplication
@@ -80,9 +93,9 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function prepareContainer(ContainerBuilder $container): void
     {
         // Replace some container items for testing purposes.
-        $container->set('cache', new \Doctrine\Common\Cache\VoidCache());
         $container->get('managerRegistry')->setDatabasePath(':memory:');
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
+        $container->get('cache')->deleteAll();
 
         $success = $container->get('initializeCommand')->initialize(false);
 

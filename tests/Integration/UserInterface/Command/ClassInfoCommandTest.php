@@ -2321,11 +2321,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor($file);
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('classInfoCommand');
+        $command = $this->container->get('classInfoCommand');
 
         return $command->getClassInfo($fqcn);
     }

@@ -13,11 +13,9 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/NamespaceListCommandTest/';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('namespaceListCommand');
+        $command = $this->container->get('namespaceListCommand');
 
         $output = $command->getNamespaceList();
 

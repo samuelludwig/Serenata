@@ -13,11 +13,9 @@ class GlobalFunctionsCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/GlobalFunctionsCommandTest/' . 'GlobalFunctions.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('globalFunctionsCommand');
+        $command = $this->container->get('globalFunctionsCommand');
 
         $output = $command->getGlobalFunctions();
 

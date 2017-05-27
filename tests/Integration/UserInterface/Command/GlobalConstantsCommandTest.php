@@ -61,11 +61,9 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor($file);
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('globalConstantsCommand');
+        $command = $this->container->get('globalConstantsCommand');
 
         return $command->getGlobalConstants();
     }

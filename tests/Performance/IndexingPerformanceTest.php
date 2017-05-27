@@ -17,11 +17,10 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
 
         @unlink($dummyDatabasePath);
 
-        $container = $this->createTestContainer();
-        $container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
-        $container->get('initializeCommand')->initialize(false);
+        $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
+        $this->container->get('initializeCommand')->initialize(false);
 
-        $this->indexPath($container, $pathToIndex);
+        $this->indexPath($this->container, $pathToIndex);
 
         $this->assertTrue(true);
 

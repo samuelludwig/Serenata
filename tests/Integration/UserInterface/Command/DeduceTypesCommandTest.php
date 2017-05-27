@@ -24,12 +24,10 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $metaFilePath);
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $metaFilePath);
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('deduceTypesCommand');
+        $command = $this->container->get('deduceTypesCommand');
 
         $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
         $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
@@ -1081,11 +1079,9 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('deduceTypesCommand');
+        $command = $this->container->get('deduceTypesCommand');
 
         $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
         $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');

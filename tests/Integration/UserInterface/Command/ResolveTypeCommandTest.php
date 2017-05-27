@@ -15,11 +15,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\C', $command->resolveType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\A\C', $command->resolveType('C', $path, 5, UseStatementKind::TYPE_CLASSLIKE));
@@ -41,11 +39,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 2, UseStatementKind::TYPE_CONSTANT));
     }
@@ -57,11 +53,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\SOME_ROOT_CONSTANT', $command->resolveType('SOME_ROOT_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
     }
@@ -73,11 +67,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedConstant.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
     }
@@ -89,11 +81,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 2, UseStatementKind::TYPE_FUNCTION));
     }
@@ -105,11 +95,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\some_root_function', $command->resolveType('some_root_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
     }
@@ -121,11 +109,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'UnqualifiedFunction.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
     }
@@ -137,11 +123,9 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/ResolveTypeCommandTest/' . 'ResolveType.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('resolveTypeCommand');
+        $command = $this->container->get('resolveTypeCommand');
 
         $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_CLASSLIKE));

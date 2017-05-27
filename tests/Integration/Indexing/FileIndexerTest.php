@@ -93,11 +93,9 @@ class FileIndexerTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor($file);
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        return $container;
+        return $this->container;
     }
 
     /**

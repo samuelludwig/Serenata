@@ -14,12 +14,10 @@ class ClassListProviderTest extends AbstractIntegrationTest
         $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
         $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
+        $this->indexTestFile($this->container, $secondPath);
 
-        $this->indexTestFile($container, $path);
-        $this->indexTestFile($container, $secondPath);
-
-        $provider = $container->get('doctrineClassListProvider');
+        $provider = $this->container->get('doctrineClassListProvider');
 
         $output = $provider->getAll();
 
@@ -38,12 +36,10 @@ class ClassListProviderTest extends AbstractIntegrationTest
         $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
         $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
+        $this->indexTestFile($this->container, $secondPath);
 
-        $this->indexTestFile($container, $path);
-        $this->indexTestFile($container, $secondPath);
-
-        $provider = $container->get('doctrineClassListProvider');
+        $provider = $this->container->get('doctrineClassListProvider');
 
         $output = $provider->getAllForFile($path);
 

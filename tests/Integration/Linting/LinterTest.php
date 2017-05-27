@@ -660,11 +660,9 @@ class LinterTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/LinterTest/' . $file;
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path, $indexingMayFail);
 
-        $this->indexTestFile($container, $path, $indexingMayFail);
-
-        $linter = $container->get('linter');
+        $linter = $this->container->get('linter');
 
         $settings = new LintingSettings(
             true,

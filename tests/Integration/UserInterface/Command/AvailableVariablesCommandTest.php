@@ -144,11 +144,9 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     {
         $path = $this->getTestFilePath($file);
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path, $mayFail);
 
-        $this->indexTestFile($container, $path, $mayFail);
-
-        return $container->get('availableVariablesCommand');
+        return $this->container->get('availableVariablesCommand');
     }
 
     /**
