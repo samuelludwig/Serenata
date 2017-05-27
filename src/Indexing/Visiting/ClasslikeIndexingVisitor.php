@@ -80,7 +80,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $filePath;
 
     /**
-     * @var Structure
+     * @var Structures\Structure
      */
     private $structure;
 
