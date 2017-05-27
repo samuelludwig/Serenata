@@ -19,7 +19,7 @@ class FileIndexerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testNewImportsAreUpdatedAfterReindex(): void
+    public function testNewImportsAreInsertedOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->findFileByPath($path);
