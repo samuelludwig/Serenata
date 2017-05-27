@@ -2331,23 +2331,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $fqcn
-     *
-     * @return array
-     */
-    protected function getBuiltinClassInfo(string $fqcn): array
-    {
-        $container = $this->createTestContainerForBuiltinStructuralElements();
-
-        $command = new ClassInfoCommand(
-            $container->get('typeAnalyzer'),
-            $container->get('classlikeInfoBuilder')
-        );
-
-        return $command->getClassInfo($fqcn);
-    }
-
-    /**
      * @param string $file
      *
      * @return string
