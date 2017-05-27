@@ -57,6 +57,22 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param AbstractApplication $application
+     * @param ContainerBuilder    $container
+     *
+     * @return void
+     */
+    protected function instantiateRequiredServices(AbstractApplication $application, ContainerBuilder $container): void
+    {
+        $refClass = new ReflectionClass(get_class($application));
+
+        $refMethod = $refClass->getMethod('instantiateRequiredServices');
+        $refMethod->setAccessible(true);
+
+        $container = $refMethod->invoke($application, $container);
+    }
+
+    /**
      * @param ContainerBuilder $container
      *
      * @return void
@@ -85,6 +101,8 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             // integration anyway, we can share this container. We only need to ensure state is not maintained between
             // creations, which is handled by prepareContainer.
             self::$testContainer = $this->createContainer($application);
+
+            $this->instantiateRequiredServices($application, self::$testContainer);
         }
 
         $this->prepareContainer(self::$testContainer, false);
