@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
-use PhpIntegrator\Indexing\MetaFileIndexer;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 use PhpParser\Node;
