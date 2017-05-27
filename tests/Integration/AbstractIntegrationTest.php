@@ -8,6 +8,7 @@ use ReflectionClass;
 use PhpIntegrator\Indexing\Indexer;
 
 use PhpIntegrator\UserInterface\JsonRpcApplication;
+use PhpIntegrator\UserInterface\AbstractApplication;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -31,18 +32,26 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     private static $testContainerBuiltinStructuralElements;
 
     /**
+     * @return JsonRpcApplication
+     */
+    protected function createApplication(): JsonRpcApplication
+    {
+        return new JsonRpcApplication();
+    }
+
+    /**
+     * @param AbstractApplication $application
+     *
      * @return ContainerBuilder
      */
-    protected function createApplicationContainer(): ContainerBuilder
+    protected function createContainer(AbstractApplication $application): ContainerBuilder
     {
-        $app = new JsonRpcApplication();
-
         $refClass = new ReflectionClass(JsonRpcApplication::class);
 
         $refMethod = $refClass->getMethod('createContainer');
         $refMethod->setAccessible(true);
 
-        $container = $refMethod->invoke($app);
+        $container = $refMethod->invoke($application);
 
         return $container;
     }
@@ -70,10 +79,12 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function createTestContainer(): ContainerBuilder
     {
         if (!self::$testContainer) {
+            $application = $this->createApplication();
+
             // Loading the container from the YAML file is expensive and a large slowdown to testing. As we're testing
             // integration anyway, we can share this container. We only need to ensure state is not maintained between
             // creations, which is handled by prepareContainer.
-            self::$testContainer = $this->createApplicationContainer();
+            self::$testContainer = $this->createContainer($application);
         }
 
         $this->prepareContainer(self::$testContainer, false);
