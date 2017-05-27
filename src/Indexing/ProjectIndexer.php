@@ -204,11 +204,11 @@ class ProjectIndexer
      */
     public function pruneRemovedFiles(): void
     {
-        foreach ($this->getFileModifiedMap() as $fileName => $indexedTime) {
+        foreach ($this->getFileModifiedMap() as $fileName => $file) {
             if (!file_exists($fileName)) {
                 $this->logMessage('  - ' . $fileName);
 
-                $this->storage->deleteFile($fileName);
+                $this->storage->delete($file);
             }
         }
     }
