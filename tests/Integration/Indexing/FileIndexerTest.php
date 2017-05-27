@@ -8,7 +8,7 @@ use PhpParser\Node;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class MetaFileIndexerTest extends AbstractIntegrationTest
+class FileIndexerTest extends AbstractIntegrationTest
 {
     /**
      * @param string $file
@@ -37,7 +37,7 @@ class MetaFileIndexerTest extends AbstractIntegrationTest
      */
     protected function getPathFor(string $file): string
     {
-        return __DIR__ . '/MetaFileIndexerTest/' . $file;
+        return __DIR__ . '/FileIndexerTest/' . $file;
     }
 
     /**
