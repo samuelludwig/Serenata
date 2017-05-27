@@ -5,7 +5,6 @@ namespace PhpIntegrator\Tests\Integration\Tooltips;
 use Closure;
 
 use PhpIntegrator\Indexing\Indexer;
-use PhpIntegrator\Indexing\Structures;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
