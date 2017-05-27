@@ -2,11 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis;
 
-use PhpIntegrator\Analysis\ClassListProvider;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
-
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ClassListProviderTest extends AbstractIntegrationTest
 {
