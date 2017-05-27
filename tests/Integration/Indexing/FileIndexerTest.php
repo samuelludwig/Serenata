@@ -23,10 +23,6 @@ class FileIndexerTest extends AbstractIntegrationTest
 
         $this->indexTestFile($container, $path);
 
-        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
-
-        $container->get('fileIndexer')->index($path, $code);
-
         return $container;
     }
 
