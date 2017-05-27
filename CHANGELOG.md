@@ -33,6 +33,7 @@
 * Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else.
 * When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35).
 * Fix not being able to use the same namespace multiple times in a file.
+* HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types). This means you can use HTML next to markdown and the client side is now able to properly format it.
 * Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present.
 * The indexer will now try to determine default values for built-in functions and methods from their documentation from the website.
   * This is always a best effort, but better than having no information at all.

@@ -346,7 +346,7 @@ class DocblockParser
 
         while ($partCount--) {
             if (!empty($parts)) {
-                $segments[] = $this->sanitizeText(array_shift($parts));
+                $segments[] = array_shift($parts);
             } else {
                 $segments[] = null;
             }
@@ -378,7 +378,7 @@ class DocblockParser
 
             if ($type) {
                 $return = [
-                    'type'        => $this->docblockTypeParser->parse($type),
+                    'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                     'description' => $description
                 ];
             }
@@ -417,6 +417,9 @@ class DocblockParser
                 if (empty($type) || empty($variableName)) {
                     continue;
                 }
+
+                $type = $this->sanitizeText($type);
+                $variableName = $this->sanitizeText($variableName);
 
                 $isVariadic = false;
                 $isReference = false;
@@ -466,9 +469,13 @@ class DocblockParser
                     continue;
                 }
 
+                $varType = $this->sanitizeText($varType);
+
                 $type = $this->docblockTypeParser->parse($varType);
 
                 if ($varName) {
+                    $varName = $this->sanitizeText($varName);
+
                     if (mb_substr($varName, 0, 1) === '$') {
                         // Example: "@var DateTime $foo My description". The tag includes the name of the property it
                         // documents, it must match the property we're fetching documentation about.
@@ -533,7 +540,7 @@ class DocblockParser
 
                 if ($type) {
                     $throws[] = [
-                        'type'        => $type,
+                        'type'        => $this->sanitizeText($type),
                         'description' => $description
                     ];
                 }
@@ -681,14 +688,18 @@ class DocblockParser
             foreach ($tags[$tagName] as $tag) {
                 list($staticKeyword, $type, $variableName, $description) = $this->filterParameterTag($tag, 4);
 
+                if (!$type || !$variableName) {
+                    continue;
+                }
+
                 // Normally, this tag consists of three parts. However, PHPStorm uses an extended syntax that allows
                 // putting the keyword 'static' as first part of the tag to indicate that the property is indeed static.
                 if ($staticKeyword !== 'static') {
                     list($type, $variableName, $description) = $this->filterParameterTag($tag, 3);
                 }
 
-                $properties[$variableName] = [
-                    'type'        => $type,
+                $properties[$this->sanitizeText($variableName)] = [
+                    'type'        => $this->sanitizeText($type),
                     'isStatic'    => ($staticKeyword === 'static'),
                     'description' => $description
                 ];
@@ -778,7 +789,7 @@ class DocblockParser
         }
 
         return [
-            'subpackage' => $name
+            'subpackage' => $name ? $this->sanitizeText($name) : null
         ];
     }
 
@@ -796,10 +807,12 @@ class DocblockParser
         if (isset($tags[static::LINK])) {
             list($uri, $description) = $this->filterParameterTag($tags[static::LINK][0], 2);
 
-            $links[] = [
-                'uri'         => $uri,
-                'description' => $description
-            ];
+            if ($uri) {
+                $links[] = [
+                    'uri'         => $this->sanitizeText($uri),
+                    'description' => $description
+                ];
+            }
         }
 
         return [
@@ -865,8 +878,8 @@ class DocblockParser
 
         return [
             'descriptions' => [
-                'short' => $this->sanitizeText($summary),
-                'long'  => $this->sanitizeText($description)
+                'short' => trim($summary, "\n"),
+                'long'  => trim($description, "\n")
             ]
         ];
     }
