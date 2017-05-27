@@ -44,11 +44,6 @@ class Function_
     /**
      * @var bool
      */
-    private $isBuiltin;
-
-    /**
-     * @var bool
-     */
     private $isDeprecated;
 
     /**
@@ -127,7 +122,6 @@ class Function_
      * @param File                $file
      * @param int                 $startLine
      * @param int                 $endLine
-     * @param bool                $isBuiltin
      * @param bool                $isDeprecated
      * @param string|null         $shortDescription
      * @param string|null         $longDescription
@@ -150,7 +144,6 @@ class Function_
         File $file,
         int $startLine,
         int $endLine,
-        bool $isBuiltin,
         bool $isDeprecated,
         ?string $shortDescription,
         ?string $longDescription,
@@ -172,7 +165,6 @@ class Function_
         $this->file = $file;
         $this->startLine = $startLine;
         $this->endLine = $endLine;
-        $this->isBuiltin = $isBuiltin;
         $this->isDeprecated = $isDeprecated;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
@@ -241,14 +233,6 @@ class Function_
     public function getEndLine(): int
     {
         return $this->endLine;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsBuiltin(): bool
-    {
-        return $this->isBuiltin;
     }
 
     /**

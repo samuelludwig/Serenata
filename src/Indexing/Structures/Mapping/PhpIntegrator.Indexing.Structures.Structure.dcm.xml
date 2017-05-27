@@ -14,7 +14,6 @@
         <field name="endLine"            type="integer" nullable="false" />
         <field name="shortDescription"   type="text"    nullable="true"  length="15000" />
         <field name="longDescription"    type="text"    nullable="true"  length="15000" />
-        <field name="isBuiltin"          type="boolean" nullable="false" />
         <field name="isAbstract"         type="boolean" nullable="false" />
         <field name="isFinal"            type="boolean" nullable="false" />
         <field name="isAnnotation"       type="boolean" nullable="false" />

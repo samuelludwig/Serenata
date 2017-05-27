@@ -168,7 +168,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             $node->getLine(),
             $node->getAttribute('endLine'),
             false,
-            false,
             $documentation['descriptions']['short'],
             $documentation['descriptions']['long'],
             $documentation['return']['description'],

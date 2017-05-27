@@ -39,7 +39,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'type'               => 'class',
             'isAbstract'         => false,
             'isFinal'            => false,
-            'isBuiltin'          => false,
             'isDeprecated'       => false,
             'isAnnotation'       => false,
             'hasDocblock'        => true,
@@ -59,7 +58,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'class' => [
                     'name'               => 'class',
                     'fqcn'               => null,
-                    'isBuiltin'          => true,
                     'startLine'          => 10,
                     'endLine'            => 10,
                     'defaultValue'       => 'A\SimpleClass',
@@ -295,7 +293,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             'name'               => 'testMethod',
             'fqcn'               => null,
-            'isBuiltin'          => false,
             'startLine'          => 19,
             'endLine'            => 22,
             'filename'           => $this->getPathFor($fileName),
@@ -440,7 +437,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals($output['constants']['TEST_CONSTANT'], [
             'name'               => 'TEST_CONSTANT',
             'fqcn'              => null,
-            'isBuiltin'          => false,
             'startLine'          => 14,
             'endLine'            => 14,
             'defaultValue'       => '5',

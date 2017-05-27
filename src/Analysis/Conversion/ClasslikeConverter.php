@@ -25,7 +25,6 @@ class ClasslikeConverter extends AbstractConverter
             'type'               => $structure->getType()->getName(),
             'isAbstract'         => $structure->getIsAbstract(),
             'isFinal'            => $structure->getIsFinal(),
-            'isBuiltin'          => $structure->getIsBuiltin(),
             'isDeprecated'       => $structure->getIsDeprecated(),
             'isAnnotation'       => $structure->getIsAnnotation(),
             'hasDocblock'        => $structure->getHasDocblock(),

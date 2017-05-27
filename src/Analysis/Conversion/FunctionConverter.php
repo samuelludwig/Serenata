@@ -44,7 +44,6 @@ class FunctionConverter extends AbstractConverter
         return [
             'name'              => $function->getName(),
             'fqcn'              => $function->getFqcn(),
-            'isBuiltin'         => $function->getIsBuiltin(),
             'startLine'         => $function->getStartLine(),
             'endLine'           => $function->getEndLine(),
             'filename'          => $function->getFile()->getPath(),

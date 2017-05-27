@@ -19,7 +19,6 @@ class ConstantConverter extends AbstractConverter
         return [
             'name'              => $constant->getName(),
             'fqcn'              => $constant->getFqcn(),
-            'isBuiltin'         => $constant->getIsBuiltin(),
             'startLine'         => $constant->getStartLine(),
             'endLine'           => $constant->getEndLine(),
             'defaultValue'      => $constant->getDefaultValue(),

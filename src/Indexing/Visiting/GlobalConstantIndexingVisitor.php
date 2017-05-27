@@ -173,7 +173,6 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
             $node->getLine(),
             $node->getAttribute('endLine'),
             $defaultValue,
-            false,
             $documentation['deprecated'],
             !empty($docComment),
             $shortDescription,

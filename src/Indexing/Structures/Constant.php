@@ -52,11 +52,6 @@ class Constant
     /**
      * @var bool
      */
-    private $isBuiltin;
-
-    /**
-     * @var bool
-     */
     private $hasDocblock;
 
     /**
@@ -97,7 +92,6 @@ class Constant
      * @param int                 $endLine
      * @param string              $defaultValue
      * @param bool                $isDeprecated
-     * @param bool                $isBuiltin
      * @param bool                $hasDocblock
      * @param string|null         $shortDescription
      * @param string|null         $longDescription
@@ -114,7 +108,6 @@ class Constant
         int $endLine,
         string $defaultValue,
         bool $isDeprecated,
-        bool $isBuiltin,
         bool $hasDocblock,
         ?string $shortDescription,
         ?string $longDescription,
@@ -131,7 +124,6 @@ class Constant
         $this->endLine = $endLine;
         $this->defaultValue = $defaultValue;
         $this->isDeprecated = $isDeprecated;
-        $this->isBuiltin = $isBuiltin;
         $this->hasDocblock = $hasDocblock;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
@@ -207,14 +199,6 @@ class Constant
     public function getIsDeprecated(): bool
     {
         return $this->isDeprecated;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsBuiltin(): bool
-    {
-        return $this->isBuiltin;
     }
 
     /**

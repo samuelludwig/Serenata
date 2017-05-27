@@ -59,11 +59,6 @@ class Structure
     /**
      * @var bool
      */
-    private $isBuiltin;
-
-    /**
-     * @var bool
-     */
     private $isAbstract;
 
     /**
@@ -150,7 +145,6 @@ class Structure
      * @param StructureType $type
      * @param string|null   $shortDescription
      * @param string|null   $longDescription
-     * @param bool          $isBuiltin
      * @param bool          $isAbstract
      * @param bool          $isFinal
      * @param bool          $isAnnotation
@@ -166,7 +160,6 @@ class Structure
         StructureType $type,
         string $shortDescription = null,
         string $longDescription = null,
-        bool $isBuiltin,
         bool $isAbstract,
         bool $isFinal,
         bool $isAnnotation,
@@ -182,7 +175,6 @@ class Structure
         $this->type = $type;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
-        $this->isBuiltin = $isBuiltin;
         $this->isAbstract = $isAbstract;
         $this->isFinal = $isFinal;
         $this->isAnnotation = $isAnnotation;
@@ -274,14 +266,6 @@ class Structure
     public function getLongDescription()
     {
         return $this->longDescription;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsBuiltin(): bool
-    {
-        return $this->isBuiltin;
     }
 
     /**

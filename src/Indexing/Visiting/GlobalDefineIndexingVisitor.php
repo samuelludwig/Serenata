@@ -124,7 +124,6 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
             $defaultValue,
             false,
             false,
-            false,
             null,
             null,
             null,

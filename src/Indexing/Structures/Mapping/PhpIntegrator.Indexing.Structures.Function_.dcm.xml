@@ -12,7 +12,6 @@
         <field name="fqcn"               type="string"     nullable="true"  length="255" />
         <field name="startLine"          type="integer"    nullable="false" />
         <field name="endLine"            type="integer"    nullable="false" />
-        <field name="isBuiltin"          type="boolean"    nullable="false" />
         <field name="isDeprecated"       type="boolean"    nullable="false" />
         <field name="shortDescription"   type="text"       nullable="true"  length="15000" />
         <field name="longDescription"    type="text"       nullable="true"  length="15000" />
