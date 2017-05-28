@@ -17,7 +17,7 @@ class ClassListProviderTest extends AbstractIntegrationTest
         $this->indexTestFile($this->container, $path);
         $this->indexTestFile($this->container, $secondPath);
 
-        $provider = $this->container->get('doctrineClassListProvider');
+        $provider = $this->container->get('classListProvider');
 
         $output = $provider->getAll();
 
@@ -39,7 +39,7 @@ class ClassListProviderTest extends AbstractIntegrationTest
         $this->indexTestFile($this->container, $path);
         $this->indexTestFile($this->container, $secondPath);
 
-        $provider = $this->container->get('doctrineClassListProvider');
+        $provider = $this->container->get('classListProvider');
 
         $output = $provider->getAllForFile($path);
 

@@ -82,7 +82,7 @@ services:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
 
     fileClassListProvider.instance:
-        alias: doctrineClassListProvider
+        alias: classListProvider
 
     fileClassListProvider.cachingDecorator:
         class: PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator
@@ -172,11 +172,14 @@ services:
     constantListProvider:
         alias: constantListProvider.doctrineBackend
 
-    doctrineClassListProvider:
+    classListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineClassListProvider
         arguments:
             - '@classlikeConverter'
             - '@managerRegistry'
+
+    classListProvider:
+        alias: classListProvider.doctrineBackend
 
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
