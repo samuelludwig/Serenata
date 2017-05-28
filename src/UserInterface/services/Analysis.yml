@@ -154,11 +154,14 @@ services:
     globalConstantExistenceChecker:
         alias: globalConstantExistenceChecker.arrayCachingDecorator
 
-    doctrineFunctionListProvider:
+    functionListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineFunctionListProvider
         arguments:
             - '@functionConverter'
             - '@managerRegistry'
+
+    functionListProvider:
+        alias: functionListProvider.doctrineBackend
 
     doctrineConstantListProvider:
         class: PhpIntegrator\Analysis\DoctrineConstantListProvider

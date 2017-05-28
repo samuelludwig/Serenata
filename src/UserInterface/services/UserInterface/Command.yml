@@ -45,7 +45,7 @@ services:
     globalFunctionsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand
         arguments:
-            - '@doctrineFunctionListProvider'
+            - '@functionListProvider'
 
     globalConstantsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalConstantsCommand
