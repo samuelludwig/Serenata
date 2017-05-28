@@ -166,38 +166,55 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected function assertReindexingChanges(string $path, Closure $afterIndex, Closure $afterReindex): void
     {
-        $container = $this->createTestContainer();
+        // Test once without clearing the entities from the manager and test once after removing the entities from the
+        // entity manager. This way we ensure that everything works when the entities are already loaded into memory as
+        // well as when they are not (and loaded from the database instead).
+        for ($i = 0; $i < 1; ++$i) {
+            $container = $this->createTestContainer();
 
-        $stream = tmpfile();
+            $stream = tmpfile();
 
-        $sourceCodeStreamReader = new SourceCodeStreamReader($stream);
+            $sourceCodeStreamReader = new SourceCodeStreamReader($stream);
 
-        $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
+            $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
 
-        $indexer->reindex(
-            [$path],
-            false,
-            false,
-            [],
-            ['phpt']
-        );
+            $indexer->reindex(
+                [$path],
+                false,
+                false,
+                [],
+                ['phpt']
+            );
 
-        $source = $sourceCodeStreamReader->getSourceCodeFromFile($path);
-        $source = $afterIndex($container, $path, $source);
+            if ($i === 1) {
+                $container->get('managerRegistry')->getManager()->clear();
+            }
 
-        fwrite($stream, $source);
-        rewind($stream);
+            $source = $sourceCodeStreamReader->getSourceCodeFromFile($path);
+            $source = $afterIndex($container, $path, $source);
 
-        $indexer->reindex(
-            [$path],
-            true,
-            false,
-            [],
-            ['phpt']
-        );
+            if ($i === 1) {
+                $container->get('managerRegistry')->getManager()->clear();
+            }
 
-        $afterReindex($container, $path, $source);
+            fwrite($stream, $source);
+            rewind($stream);
 
-        fclose($stream);
+            $indexer->reindex(
+                [$path],
+                true,
+                false,
+                [],
+                ['phpt']
+            );
+
+            if ($i === 1) {
+                $container->get('managerRegistry')->getManager()->clear();
+            }
+
+            $afterReindex($container, $path, $source);
+
+            fclose($stream);
+        }
     }
 }
