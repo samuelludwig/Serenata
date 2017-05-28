@@ -20,11 +20,13 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
         $this->container->get('initializeCommand')->initialize(false);
 
-        $this->indexPath($this->container, $pathToIndex);
-
-        $this->assertTrue(true);
+        $time = $this->time(function () use ($pathToIndex) {
+            $this->indexPath($this->container, $pathToIndex);
+        });
 
         unlink($dummyDatabasePath);
+
+        $this->finish($time);
     }
 
     /**
@@ -41,10 +43,12 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
         $this->container->get('initializeCommand')->initialize(false);
 
-        $this->indexPath($this->container, $pathToIndex);
-
-        $this->assertTrue(true);
+        $time = $this->time(function () use ($pathToIndex) {
+            $this->indexPath($this->container, $pathToIndex);
+        });
 
         unlink($dummyDatabasePath);
+
+        $this->finish($time);
     }
 }
