@@ -132,8 +132,7 @@ class FileIndexer implements FileIndexerInterface
         $this->storage->persist($file);
 
         try {
-            $traverser = $this->createTraverser($nodes, $filePath, $code, $file);
-            $traverser->traverse($nodes);
+            $traverser = $this->runVisitors($nodes, $filePath, $code, $file);
 
             $this->storage->commitTransaction();
         } catch (Error $e) {
@@ -153,9 +152,9 @@ class FileIndexer implements FileIndexerInterface
      * @param string          $code
      * @param Structures\File $file
      *
-     * @return NodeTraverser
+     * @return void
      */
-    protected function createTraverser(array $nodes, string $filePath, string $code, Structures\File $file): NodeTraverser
+    protected function runVisitors(array $nodes, string $filePath, string $code, Structures\File $file): void
     {
         $visitors = $this->getVisitorsForFile($filePath, $code, $file);
 
@@ -177,7 +176,7 @@ class FileIndexer implements FileIndexerInterface
             $traverser->addVisitor($visitor);
         }
 
-        return $traverser;
+        $traverser->traverse($nodes);
     }
 
     /**
