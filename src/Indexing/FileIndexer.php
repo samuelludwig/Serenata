@@ -161,7 +161,10 @@ class FileIndexer implements FileIndexerInterface
 
         $useStatementIndexingVisitor = array_shift($visitors);
 
-        // TODO: Refactor to traverse once.
+        // NOTE: Traversing twice may seem absurd, but a rewrite of the use statement indexing visitor to support
+        // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
+        // performance worse, because of the constant flushing and entity changes due to the end lines being
+        // recalculated, than just traversing twice.
         $this->storage->commitTransaction();
         $traverser = new NodeTraverser();
         $traverser->addVisitor($useStatementIndexingVisitor);
