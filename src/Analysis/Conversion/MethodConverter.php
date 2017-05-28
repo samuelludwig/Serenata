@@ -12,12 +12,12 @@ use PhpIntegrator\Indexing\Structures;
 class MethodConverter extends FunctionConverter
 {
     /**
-     * @param Structures\Function_ $method
-     * @param ArrayAccess          $class
+     * @param Structures\Method $method
+     * @param ArrayAccess       $class
      *
      * @return array
      */
-    public function convertForClass(Structures\Function_ $method, ArrayAccess $class): array
+    public function convertForClass(Structures\Method $method, ArrayAccess $class): array
     {
         $data = parent::convert($method);
 

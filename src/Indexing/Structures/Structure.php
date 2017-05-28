@@ -525,7 +525,7 @@ class Structure
     }
 
     /**
-     * @return Function_[]
+     * @return Method[]
      */
     public function getMethods(): array
     {
@@ -533,11 +533,11 @@ class Structure
     }
 
     /**
-     * @param Function_ $method
+     * @param Method $method
      *
      * @return void
      */
-    public function addMethod(Function_ $method): void
+    public function addMethod(Method $method): void
     {
         $this->methods->add($method);
     }

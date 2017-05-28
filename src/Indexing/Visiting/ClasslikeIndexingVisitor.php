@@ -613,7 +613,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = 'private';
         }
 
-        $function = new Structures\Function_(
+        $method = new Structures\Method(
             $node->name->name,
             null,
             $this->file,
@@ -635,7 +635,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes
         );
 
-        $this->storage->persist($function);
+        $this->storage->persist($method);
 
         foreach ($node->getParams() as $param) {
             $localType = null;
@@ -694,8 +694,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
             }
 
-            $parameter = new Structures\FunctionParameter(
-                $function,
+            $parameter = new Structures\MethodParameter(
+                $method,
                 $param->var->name,
                 $localType,
                 $types,
@@ -869,7 +869,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes = $this->getTypeDataForTypeSpecification($rawData['type'], $filePosition);
         }
 
-        $function = new Structures\Function_(
+        $method = new Structures\Method(
             $rawData['name'],
             null,
             $this->file,
@@ -891,7 +891,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes
         );
 
-        $this->storage->persist($function);
+        $this->storage->persist($method);
 
         foreach ($rawData['requiredParameters'] as $parameterName => $parameter) {
             $types = [];
@@ -900,8 +900,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
             }
 
-            $parameter = new Structures\FunctionParameter(
-                $function,
+            $parameter = new Structures\MethodParameter(
+                $method,
                 mb_substr($parameterName, 1),
                 null,
                 $types,
@@ -923,8 +923,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
             }
 
-            $parameter = new Structures\FunctionParameter(
-                $function,
+            $parameter = new Structures\MethodParameter(
+                $method,
                 mb_substr($parameterName, 1),
                 null,
                 $types,

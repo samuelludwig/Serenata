@@ -5,17 +5,17 @@ namespace PhpIntegrator\Indexing\Structures;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents a function parameter.
+ * Represents a method parameter.
  */
-class FunctionParameter extends FunctionLikeParameter
+class MethodParameter extends FunctionLikeParameter
 {
     /**
-     * @var Function_
+     * @var Method
      */
-    private $function;
+    private $method;
 
     /**
-     * @param Function_   $function
+     * @param Method      $method
      * @param string      $name
      * @param string|null $typeHint
      * @param TypeInfo[]  $types
@@ -27,7 +27,7 @@ class FunctionParameter extends FunctionLikeParameter
      * @param bool        $isVariadic
      */
     public function __construct(
-        Function_ $function,
+        Method $method,
         string $name,
         ?string $typeHint,
         array $types,
@@ -39,7 +39,7 @@ class FunctionParameter extends FunctionLikeParameter
         bool $isVariadic
     ) {
         $this->id = (string) Uuid::uuid4();
-        $this->function = $function;
+        $this->method = $method;
         $this->name = $name;
         $this->typeHint = $typeHint;
         $this->types = $types;
@@ -50,14 +50,14 @@ class FunctionParameter extends FunctionLikeParameter
         $this->isOptional = $isOptional;
         $this->isVariadic = $isVariadic;
 
-        $this->function->addParameter($this);
+        $this->method->addParameter($this);
     }
 
     /**
-     * @return Function_
+     * @return Method
      */
-    public function getFunction(): Function_
+    public function getMethod(): Method
     {
-        return $this->function;
+        return $this->method;
     }
 }

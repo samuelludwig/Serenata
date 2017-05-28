@@ -172,12 +172,6 @@ final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['long'],
             $documentation['return']['description'],
             $localType,
-            null,
-            null,
-            false,
-            false,
-            false,
-            false,
             !empty($docComment),
             $throws,
             $returnTypes

@@ -43,11 +43,7 @@ final class DoctrineFunctionListProvider implements FunctionListProviderInterfac
          $result = [];
 
          try {
-             $items = $this->managerRegistry->getRepository(Structures\Function_::class)->createQueryBuilder('entity')
-                 ->select('entity')
-                 ->andWhere('entity.structure IS NULL')
-                 ->getQuery()
-                 ->execute();
+             $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();;
          } catch (DriverException $e) {
              throw new RuntimeException($e->getMessage(), 0, $e);
          }

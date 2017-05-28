@@ -10,11 +10,11 @@ use PhpIntegrator\Indexing\Structures;
 class FunctionConverter extends AbstractConverter
 {
     /**
-     * @param Structures\Function_ $function
+     * @param Structures\FunctionLike $function
      *
      * @return array
      */
-    public function convert(Structures\Function_ $function): array
+    public function convert(Structures\FunctionLike $function): array
     {
         $parameters = [];
 
