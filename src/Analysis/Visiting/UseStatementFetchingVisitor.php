@@ -37,7 +37,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
         $this->namespaces[0] = [
             'name'          => null,
             'startLine'     => 0,
-            'endLine'       => null,
+            'endLine'       => $this->lastLine + 1,
             'useStatements' => []
         ];
 
