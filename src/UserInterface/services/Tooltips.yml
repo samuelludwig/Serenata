@@ -62,7 +62,7 @@ services:
         arguments:
             - '@constantTooltipGenerator'
             - '@constFetchNodeFqsenDeterminer'
-            - '@doctrineConstantListProvider'
+            - '@constantListProvider'
 
     classConstFetchNodeTooltipGenerator:
         class: PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator

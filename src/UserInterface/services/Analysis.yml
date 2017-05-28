@@ -163,11 +163,14 @@ services:
     functionListProvider:
         alias: functionListProvider.doctrineBackend
 
-    doctrineConstantListProvider:
+    constantListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineConstantListProvider
         arguments:
             - '@constantConverter'
             - '@managerRegistry'
+
+    constantListProvider:
+        alias: constantListProvider.doctrineBackend
 
     doctrineClassListProvider:
         class: PhpIntegrator\Analysis\DoctrineClassListProvider
