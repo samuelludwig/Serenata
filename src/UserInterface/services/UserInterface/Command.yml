@@ -50,7 +50,7 @@ services:
     globalConstantsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalConstantsCommand
         arguments:
-            - '@doctrineConstantListProvider'
+            - '@constantListProvider'
 
     resolveTypeCommand:
         class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand

@@ -218,7 +218,7 @@ services:
         class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
             - '@functionNameNodeFqsenDeterminer'
-            - '@doctrineFunctionListProvider'
+            - '@functionListProvider'
 
     methodCallMethodInfoRetriever:
         class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever
