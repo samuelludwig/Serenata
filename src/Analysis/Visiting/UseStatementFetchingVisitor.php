@@ -5,6 +5,7 @@ namespace PhpIntegrator\Analysis\Visiting;
 use DomainException;
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -57,12 +58,12 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             $this->registerImportNode($node);
         }
 
-        if (isset($this->namespaces[$this->lastNamespaceIndex])) {
-            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = max(
-                $this->namespaces[$this->lastNamespaceIndex]['endLine'],
-                $node->getAttribute('endLine') + 1
-            );
-        }
+        // if (isset($this->namespaces[$this->lastNamespaceIndex])) {
+        //     $this->namespaces[$this->lastNamespaceIndex]['endLine'] = max(
+        //         $this->namespaces[$this->lastNamespaceIndex]['endLine'],
+        //         $node->getAttribute('endLine') + 1
+        //     );
+        // }
     }
 
     /**
