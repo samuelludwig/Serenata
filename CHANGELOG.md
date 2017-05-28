@@ -53,6 +53,7 @@
 * Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed. These provide more accurate return type information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`) and reduce the maintenance burden of having two separate indexing procedures.
   * As a result, `isBuiltin` was removed for classlikes, global functions and global constants. This could previously be used for features such as code navigation since there was no physical file for the built-in items. Clients can now remove conditional code checking for this property as bulit-in items are indexed like any other code.
 * `declaringStructure.name` was renamed to `declaringStructure.fqcn` for consistency.
+* `isPublic`, `isProtected` and `isPrivate` will no longer be returned for global constants as they are only relevant for class constants.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php

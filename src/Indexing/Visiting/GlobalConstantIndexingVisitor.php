@@ -176,9 +176,7 @@ final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
             $shortDescription,
             $documentation['descriptions']['long'],
             $varDocumentation ? $varDocumentation['description'] : null,
-            $types,
-            null,
-            null
+            $types
         );
 
         $this->storage->persist($constant);

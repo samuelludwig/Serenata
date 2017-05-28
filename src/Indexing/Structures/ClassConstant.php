@@ -5,10 +5,20 @@ namespace PhpIntegrator\Indexing\Structures;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents a (global) constant.
+ * Represents a class constant.
  */
-class Constant extends ConstantLike
+class ClassConstant extends ConstantLike
 {
+    /**
+     * @var Structure
+     */
+    private $structure;
+
+    /**
+     * @var AccessModifier
+     */
+    private $accessModifier;
+
     /**
      * @param string              $name
      * @param string|null         $fqcn
@@ -22,6 +32,8 @@ class Constant extends ConstantLike
      * @param string|null         $longDescription
      * @param string|null         $typeDescription
      * @param TypeInfo[]          $types
+     * @param Structure           $structure
+     * @param AccessModifier      $accessModifier
      */
     public function __construct(
         string $name,
@@ -35,7 +47,9 @@ class Constant extends ConstantLike
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        array $types
+        array $types,
+        Structure $structure,
+        AccessModifier $accessModifier
     ) {
         $this->id = (string) Uuid::uuid4();
         $this->name = $name;
@@ -50,5 +64,25 @@ class Constant extends ConstantLike
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
         $this->types = $types;
+        $this->structure = $structure;
+        $this->accessModifier = $accessModifier;
+
+        $structure->addConstant($this);
+    }
+
+    /**
+     * @return Structure
+     */
+    public function getStructure(): Structure
+    {
+        return $this->structure;
+    }
+
+    /**
+     * @return AccessModifier
+     */
+    public function getAccessModifier(): AccessModifier
+    {
+        return $this->accessModifier;
     }
 }

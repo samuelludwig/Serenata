@@ -61,7 +61,7 @@
             </cache>
         </one-to-many>
 
-        <one-to-many field="constants" target-entity="PhpIntegrator\Indexing\Structures\Constant" mapped-by="structure">
+        <one-to-many field="constants" target-entity="PhpIntegrator\Indexing\Structures\ClassConstant" mapped-by="structure">
             <cache>
                 <usage>READ_ONLY</usage>
                 <region>structureConstants</region>

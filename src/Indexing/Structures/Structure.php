@@ -489,7 +489,7 @@ class Structure
     }
 
     /**
-     * @return Constant[]
+     * @return ClassConstant[]
      */
     public function getConstants(): array
     {
@@ -497,11 +497,11 @@ class Structure
     }
 
     /**
-     * @param Constant $constant
+     * @param ClassConstant $constant
      *
      * @return void
      */
-    public function addConstant(Constant $constant): void
+    public function addConstant(ClassConstant $constant): void
     {
         $this->constants->add($constant);
     }

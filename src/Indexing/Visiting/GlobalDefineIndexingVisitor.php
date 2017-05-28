@@ -126,9 +126,7 @@ final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
             null,
             null,
             null,
-            $types,
-            null,
-            null
+            $types
         );
 
         $this->storage->persist($constant);

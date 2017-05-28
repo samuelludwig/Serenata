@@ -12,16 +12,20 @@ use PhpIntegrator\Indexing\Structures;
 class ClasslikeConstantConverter extends ConstantConverter
 {
     /**
-     * @param Structures\Constant $constant
-     * @param ArrayAccess         $class
+     * @param Structures\ClassConstant $constant
+     * @param ArrayAccess              $class
      *
      * @return array
      */
-    public function convertForClass(Structures\Constant $constant, ArrayAccess $class): array
+    public function convertForClass(Structures\ClassConstant $constant, ArrayAccess $class): array
     {
         $data = parent::convert($constant);
 
         return array_merge($data, [
+            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
+            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
+            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'private' : false,
+
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],

@@ -788,7 +788,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = 'private';
         }
 
-        $constant = new Structures\Constant(
+        $constant = new Structures\ClassConstant(
             $node->name->name,
             null,
             $this->file,
@@ -947,7 +947,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexClassKeyword(Structures\Structure $structure): void
     {
-        $constant = new Structures\Constant(
+        $constant = new Structures\ClassConstant(
             'class',
             null,
             $this->file,

@@ -10,11 +10,11 @@ use PhpIntegrator\Indexing\Structures;
 class ConstantConverter extends AbstractConverter
 {
     /**
-     * @param Structures\Constant $constant
+     * @param Structures\ConstantLike $constant
      *
      * @return array
      */
-    public function convert(Structures\Constant $constant): array
+    public function convert(Structures\ConstantLike $constant): array
     {
         return [
             'name'              => $constant->getName(),
@@ -24,9 +24,6 @@ class ConstantConverter extends AbstractConverter
             'defaultValue'      => $constant->getDefaultValue(),
             'filename'          => $constant->getFile()->getPath(),
 
-            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
-            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
-            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'private' : false,
             'isStatic'          => true,
             'isDeprecated'      => $constant->getIsDeprecated(),
             'hasDocblock'       => $constant->getHasDocblock(),
