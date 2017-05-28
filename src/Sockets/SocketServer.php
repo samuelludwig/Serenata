@@ -63,7 +63,7 @@ class SocketServer
 
         $this->connectionMap->attach($connection, $handler);
 
-        $connection->on('close', function (Connection $connection) {
+        $connection->on('close', function () use ($connection) {
             $this->onConnectionClosed($connection);
         });
     }
