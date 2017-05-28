@@ -164,11 +164,9 @@ class FileIndexer implements FileIndexerInterface
         // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
         // performance worse, because of the constant flushing and entity changes due to the end lines being
         // recalculated, than just traversing twice.
-        $this->storage->commitTransaction();
         $traverser = new NodeTraverser();
         $traverser->addVisitor($useStatementIndexingVisitor);
         $traverser->traverse($nodes);
-        $this->storage->beginTransaction();
 
         $traverser = new NodeTraverser();
 
