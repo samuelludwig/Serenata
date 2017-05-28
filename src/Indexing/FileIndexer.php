@@ -132,7 +132,7 @@ class FileIndexer implements FileIndexerInterface
         $this->storage->persist($file);
 
         try {
-            $traverser = $this->runVisitors($nodes, $filePath, $code, $file);
+            $traverser = $this->runTraverser($nodes, $filePath, $code, $file);
 
             $this->storage->commitTransaction();
         } catch (Error $e) {
@@ -154,7 +154,7 @@ class FileIndexer implements FileIndexerInterface
      *
      * @return void
      */
-    protected function runVisitors(array $nodes, string $filePath, string $code, Structures\File $file): void
+    protected function runTraverser(array $nodes, string $filePath, string $code, Structures\File $file): void
     {
         $visitors = $this->getVisitorsForFile($filePath, $code, $file);
 
