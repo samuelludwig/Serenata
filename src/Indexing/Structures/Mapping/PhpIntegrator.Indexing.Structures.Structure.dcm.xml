@@ -75,7 +75,7 @@
             </cache>
         </one-to-many>
 
-        <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Function_" mapped-by="structure">
+        <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Method" mapped-by="structure">
             <cache>
                 <usage>READ_ONLY</usage>
                 <region>structureMethods</region>
