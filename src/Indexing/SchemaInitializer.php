@@ -14,7 +14,7 @@ class SchemaInitializer
     /**
      * @var int
      */
-    public const SCHEMA_VERSION = 5;
+    public const SCHEMA_VERSION = 6;
 
     /**
      * @var int
@@ -55,10 +55,6 @@ class SchemaInitializer
     protected function loadFixtures(): void
     {
         $entityManager = $this->managerRegistry->getManager();
-
-        $entityManager->persist(new Structures\StructureType('class'));
-        $entityManager->persist(new Structures\StructureType('trait'));
-        $entityManager->persist(new Structures\StructureType('interface'));
 
         $entityManager->persist(new Structures\AccessModifier('public'));
         $entityManager->persist(new Structures\AccessModifier('protected'));

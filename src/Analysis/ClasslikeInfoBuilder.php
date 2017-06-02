@@ -225,6 +225,10 @@ class ClasslikeInfoBuilder
      */
     protected function buildDirectChildrenInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
+        if (!$structure instanceof Structures\Class_ && !$structure instanceof Structures\Interface_) {
+            return;
+        }
+
         foreach ($structure->getChildFqcns() as $childFqcn) {
             $classlike['directChildren'][] = $childFqcn;
         }
@@ -238,6 +242,10 @@ class ClasslikeInfoBuilder
      */
     protected function buildDirectImplementorsInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
+        if (!$structure instanceof Structures\Interface_) {
+            return;
+        }
+
         foreach ($structure->getImplementorFqcns() as $implementorFqcn) {
             $classlike['directImplementors'][] = $implementorFqcn;
         }
@@ -251,6 +259,10 @@ class ClasslikeInfoBuilder
      */
     protected function buildTraitUsersInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
+        if (!$structure instanceof Structures\Trait_) {
+            return;
+        }
+
         foreach ($structure->getTraitUserFqcns() as $traitUserFqcn) {
             $classlike['directTraitUsers'][] = $traitUserFqcn;
         }
@@ -309,6 +321,10 @@ class ClasslikeInfoBuilder
      */
     protected function buildTraitsInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
+        if (!$structure instanceof Structures\Class_ && !$structure instanceof Structures\Trait_) {
+            return;
+        }
+
         foreach ($structure->getTraitFqcns() as $traitFqcn) {
             $classlike['traits'][] = $traitFqcn;
             $classlike['directTraits'][] = $traitFqcn;
@@ -336,7 +352,17 @@ class ClasslikeInfoBuilder
      */
     protected function buildParentsInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
-        foreach ($structure->getParentFqcns() as $parentFqcn) {
+        $parentFqcns = [];
+
+        if (!$structure instanceof Structures\Class_ && !$structure instanceof Structures\Interface_) {
+            return;
+        } elseif ($structure instanceof Structures\Class_) {
+            $parentFqcns = array_filter([$structure->getParentFqcn()]);
+        } else {
+            $parentFqcns = $structure->getParentFqcns();
+        }
+
+        foreach ($parentFqcns as $parentFqcn) {
             $classlike['parents'][] = $parentFqcn;
             $classlike['directParents'][] = $parentFqcn;
 
@@ -358,6 +384,10 @@ class ClasslikeInfoBuilder
      */
     protected function buildInterfacesInfo(ArrayObject $classlike, Structures\Structure $structure): void
     {
+        if (!$structure instanceof Structures\Class_) {
+            return;
+        }
+
         foreach ($structure->getInterfaceFqcns() as $interfaceFqcn) {
             $classlike['interfaces'][] = $interfaceFqcn;
             $classlike['directInterfaces'][] = $interfaceFqcn;

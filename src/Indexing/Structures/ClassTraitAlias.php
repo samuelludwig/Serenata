@@ -5,9 +5,9 @@ namespace PhpIntegrator\Indexing\Structures;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents an aliased trait method in a structure.
+ * Represents an aliased trait method in a class.
  */
-class StructureTraitAlias
+class ClassTraitAlias
 {
     /**
      * @var string
@@ -15,9 +15,9 @@ class StructureTraitAlias
     private $id;
 
     /**
-     * @var Structure
+     * @var Class_
      */
-    private $structure;
+    private $class;
 
     /**
      * @var string|null
@@ -40,27 +40,27 @@ class StructureTraitAlias
     private $alias;
 
     /**
-     * @param Structure           $structure
+     * @param Class_           $class
      * @param string|null         $traitFqcn
      * @param AccessModifier|null $accessModifier
      * @param string              $name
      * @param string|null         $alias
      */
     public function __construct(
-        Structure $structure,
+        Class_ $class,
         ?string $traitFqcn,
         ?AccessModifier $accessModifier,
         string $name,
         ?string $alias
     ) {
         $this->id = (string) Uuid::uuid4();
-        $this->structure = $structure;
+        $this->class = $class;
         $this->traitFqcn = $traitFqcn;
         $this->accessModifier = $accessModifier;
         $this->name = $name;
         $this->alias = $alias;
 
-        $structure->addTraitAlias($this);
+        $class->addTraitAlias($this);
     }
 
     /**
@@ -72,11 +72,11 @@ class StructureTraitAlias
     }
 
     /**
-     * @return Structure
+     * @return Class_
      */
-    public function getStructure(): Structure
+    public function getClass_(): Class_
     {
-        return $this->structure;
+        return $this->class;
     }
 
     /**

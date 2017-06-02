@@ -5,14 +5,15 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\StructureType" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="PhpIntegrator\Indexing\Structures\ClassTraitPrecedence" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
-        <field name="name" type="string" nullable="false" length="255" unique="true" />
+        <field name="name"      type="string"  nullable="false" length="255" />
+        <field name="traitFqcn" type="string"  nullable="false"  length="255" />
 
         <cache>
             <usage>READ_ONLY</usage>
-            <region>structureType</region>
+            <region>classTraitPrecedence</region>
         </cache>
     </entity>
 

@@ -5,9 +5,9 @@ namespace PhpIntegrator\Indexing\Structures;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents trait method precedence in a structure.
+ * Represents trait method precedence in a class.
  */
-class StructureTraitPrecedence
+class ClassTraitPrecedence
 {
     /**
      * @var string
@@ -15,9 +15,9 @@ class StructureTraitPrecedence
     private $id;
 
     /**
-     * @var Structure
+     * @var Class_
      */
-    private $structure;
+    private $class;
 
     /**
      * @var string
@@ -30,18 +30,18 @@ class StructureTraitPrecedence
     private $name;
 
     /**
-     * @param Structure $structure
-     * @param string    $traitFqcn
-     * @param string    $name
+     * @param Class_ $class
+     * @param string $traitFqcn
+     * @param string $name
      */
-    public function __construct(Structure $structure, string $traitFqcn, string $name)
+    public function __construct(Class_ $class, string $traitFqcn, string $name)
     {
         $this->id = (string) Uuid::uuid4();
-        $this->structure = $structure;
+        $this->class = $class;
         $this->traitFqcn = $traitFqcn;
         $this->name = $name;
 
-        $structure->addTraitPrecedence($this);
+        $class->addTraitPrecedence($this);
     }
 
     /**
@@ -53,11 +53,11 @@ class StructureTraitPrecedence
     }
 
     /**
-     * @return Structure
+     * @return Class_
      */
-    public function getStructure(): Structure
+    public function getClass(): Class_
     {
-        return $this->structure;
+        return $this->class;
     }
 
     /**

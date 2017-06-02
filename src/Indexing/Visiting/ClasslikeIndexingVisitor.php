@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Indexing\Visiting;
 
+use DomainException;
 use SplObjectStorage;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
@@ -217,8 +218,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $this->traitsUsed = [];
 
-        $structureTypeMap = $this->getStructureTypeMap();
-
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
@@ -231,31 +230,49 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY_WRITE
         ], $node->name->name);
 
-        $structureType = null;
+        $structure = null;
 
         if ($node instanceof Node\Stmt\Class_) {
-            $structureType = $structureTypeMap['class'];
+            $structure = new Structures\Class_(
+                $node->name->name,
+                '\\' . $node->namespacedName->toString(),
+                $this->file,
+                $node->getLine(),
+                $node->getAttribute('endLine'),
+                $documentation['descriptions']['short'],
+                $documentation['descriptions']['long'],
+                $node->isAbstract(),
+                $node->isFinal(),
+                $documentation['annotation'],
+                $documentation['deprecated'],
+                !empty($docComment),
+                null
+            );
         } elseif ($node instanceof Node\Stmt\Interface_) {
-            $structureType = $structureTypeMap['interface'];
+            $structure = new Structures\Interface_(
+                $node->name->name,
+                '\\' . $node->namespacedName->toString(),
+                $this->file,
+                $node->getLine(),
+                $node->getAttribute('endLine'),
+                $documentation['descriptions']['short'],
+                $documentation['descriptions']['long'],
+                $documentation['deprecated'],
+                !empty($docComment)
+            );
         } elseif ($node instanceof Node\Stmt\Trait_) {
-            $structureType = $structureTypeMap['trait'];
+            $structure = new Structures\Trait_(
+                $node->name->name,
+                '\\' . $node->namespacedName->toString(),
+                $this->file,
+                $node->getLine(),
+                $node->getAttribute('endLine'),
+                $documentation['descriptions']['short'],
+                $documentation['descriptions']['long'],
+                $documentation['deprecated'],
+                !empty($docComment)
+            );
         }
-
-        $structure = new Structures\Structure(
-            $node->name->name,
-            '\\' . $node->namespacedName->toString(),
-            $this->file,
-            $node->getLine(),
-            $node->getAttribute('endLine'),
-            $structureType,
-            $documentation['descriptions']['short'],
-            $documentation['descriptions']['long'],
-            $node instanceof Node\Stmt\Class_ && $node->isAbstract(),
-            $node instanceof Node\Stmt\Class_ && $node->isFinal(),
-            $documentation['annotation'],
-            $documentation['deprecated'],
-            !empty($docComment)
-        );
 
         $this->storage->persist($structure);
 
@@ -330,51 +347,77 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Structure $structure): void
     {
-        if ($node instanceof Node\Stmt\Class_) {
-            if ($node->extends) {
-                $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
+        if ($structure instanceof Structures\Class_) {
+            $this->processClassRelations($node, $structure);
+        } elseif ($structure instanceof Structures\Interface_) {
+            $this->processInterfaceRelations($node, $structure);
+        } elseif ($structure instanceof Structures\Trait_) {
+            // Traits can't have relations.
+        } else {
+            throw new DomainException("Don't know how to handle structure of type " . get_class($structure));
+        }
+    }
 
-                $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
+    /**
+     * @param Node\Stmt\Class_  $node
+     * @param Structures\Class_ $class
+     *
+     * @return void
+     */
+    protected function processClassRelations(Node\Stmt\Class_ $node, Structures\Class_ $class): void
+    {
+        if ($node->extends) {
+            $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
 
-                $linkEntity = $this->findStructureByFqcn($parentFqcn);
+            $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
 
-                if ($linkEntity) {
-                    $structure->addParent($linkEntity);
-                } else {
-                    $structure->addParentFqcn($parentFqcn);
-                }
+            $linkEntity = $this->findStructureByFqcn($parentFqcn);
+
+            if ($linkEntity && $linkEntity instanceof Structures\Class_) {
+                $class->setParent($linkEntity);
+            } else {
+                $class->setParentFqcn($parentFqcn);
             }
+        }
 
-            $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
-                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
+        $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
+            $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
-                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
-            }, $node->implements));
+            return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+        }, $node->implements));
 
-            foreach ($implementedFqcns as $implementedFqcn) {
-                $linkEntity = $this->findStructureByFqcn($implementedFqcn);
+        foreach ($implementedFqcns as $implementedFqcn) {
+            $linkEntity = $this->findStructureByFqcn($implementedFqcn);
 
-                if ($linkEntity) {
-                    $structure->addInterface($linkEntity);
-                } else {
-                    $structure->addInterfaceFqcn($implementedFqcn);
-                }
+            if ($linkEntity && $linkEntity instanceof Structures\Interface_) {
+                $class->addInterface($linkEntity);
+            } else {
+                $class->addInterfaceFqcn($implementedFqcn);
             }
-        } elseif ($node instanceof Node\Stmt\Interface_) {
-            $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
-                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
+        }
+    }
 
-                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
-            }, $node->extends));
+    /**
+     * @param Node\Stmt\Interface_  $node
+     * @param Structures\Interface_ $interface
+     *
+     * @return void
+     */
+    protected function processInterfaceRelations(Node\Stmt\Interface_ $node, Structures\Interface_ $interface): void
+    {
+        $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
+            $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
-            foreach ($extendedFqcns as $extendedFqcn) {
-                $linkEntity = $this->findStructureByFqcn($extendedFqcn);
+            return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+        }, $node->extends));
 
-                if ($linkEntity) {
-                    $structure->addParent($linkEntity);
-                } else {
-                    $structure->addParentFqcn($extendedFqcn);
-                }
+        foreach ($extendedFqcns as $extendedFqcn) {
+            $linkEntity = $this->findStructureByFqcn($extendedFqcn);
+
+            if ($linkEntity && $linkEntity instanceof Structures\Interface_) {
+                $interface->addParent($linkEntity);
+            } else {
+                $interface->addParentFqcn($extendedFqcn);
             }
         }
     }
@@ -399,7 +442,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $linkEntity = $this->findStructureByFqcn($traitFqcn);
 
-            if ($linkEntity) {
+            if ($linkEntity && $linkEntity instanceof Structures\Trait_) {
                 $structure->addTrait($linkEntity);
             } else {
                 $structure->addTraitFqcn($traitFqcn);
@@ -423,7 +466,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $accessModifier = 'private';
                 }
 
-                $traitAlias = new Structures\StructureTraitAlias(
+                $traitAlias = new Structures\ClassTraitAlias(
                     $structure,
                     $traitFqcn,
                     $accessModifier ? $accessModifierMap[$accessModifier] : null,
@@ -436,7 +479,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                $traitPrecedence = new Structures\StructureTraitPrecedence(
+                $traitPrecedence = new Structures\ClassTraitPrecedence(
                     $structure,
                     $traitFqcn,
                     $adaptation->method
@@ -1015,24 +1058,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         return $this->accessModifierMap;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getStructureTypeMap(): array
-    {
-        if (!$this->structureTypeMap) {
-            $types = $this->storage->getStructureTypes();
-
-            $this->structureTypeMap = [];
-
-            foreach ($types as $type) {
-                $this->structureTypeMap[$type->getName()] = $type;
-            }
-        }
-
-        return $this->structureTypeMap;
     }
 
     /**
