@@ -35,10 +35,6 @@
 * Fix not being able to use the same namespace multiple times in a file.
 * HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types). This means you can use HTML next to markdown and the client side is now able to properly format it.
 * Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present.
-* The indexer will now try to determine default values for built-in functions and methods from their documentation from the website.
-  * This is always a best effort, but better than having no information at all.
-  * PHP's reflection does not offer a way to retrieve default values for built-in functions and methods (it only works for user functions and methods).
-  * (A JSON copy of the documentation is part of the package, so no actual internet connection is required.)
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
 * Fixed errors being generated whilst trying to deduce the type of anonymous classes.
 * Errors will no longer be thrown when a class implements the same interface twice, uses the same trait twice, or an interface extends the same interface twice.
@@ -50,8 +46,10 @@
 * Anonymous namespaces supplied by the `NamespaceList` command will now always have `null` as name instead of an empty string for explicitly anonymous namespaces and `null` for implicitly anonymous namespaces, as they are both the same.
 * The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name.
 * `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency.
-* Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed. These provide more accurate return type information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`) and reduce the maintenance burden of having two separate indexing procedures.
-  * As a result, `isBuiltin` was removed for classlikes, global functions and global constants. This could previously be used for features such as code navigation since there was no physical file for the built-in items. Clients can now remove conditional code checking for this property as bulit-in items are indexed like any other code.
+* Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed.
+  * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
+  * This reduces the maintenance burden of having two separate indexing procedures and lowers the test surface.
+  * `isBuiltin` was removed for classlikes, global functions and global constants. This could previously be used for features such as code navigation since there was no physical file for the built-in items. Clients can now remove conditional code checking for this property as bulit-in items are indexed like any other code.
 * `declaringStructure.name` was renamed to `declaringStructure.fqcn` for consistency.
 * `isPublic`, `isProtected` and `isPrivate` will no longer be returned for global constants as they are only relevant for class constants.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
