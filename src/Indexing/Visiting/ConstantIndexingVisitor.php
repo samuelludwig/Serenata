@@ -173,8 +173,8 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             $defaultValue,
             $documentation['deprecated'],
             !empty($docComment),
-            $shortDescription,
-            $documentation['descriptions']['long'],
+            $shortDescription ? $shortDescription : null,
+            $documentation['descriptions']['long'] ? $documentation['descriptions']['long'] : null,
             $varDocumentation ? $varDocumentation['description'] : null,
             $types
         );

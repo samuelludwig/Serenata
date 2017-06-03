@@ -46,6 +46,7 @@
 * Anonymous namespaces supplied by the `NamespaceList` command will now always have `null` as name instead of an empty string for explicitly anonymous namespaces and `null` for implicitly anonymous namespaces, as they are both the same.
 * The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name.
 * `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency.
+* Fixed the short, long or type description for constants being an empty string instead of null when not present.
 * Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed.
   * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
   * This reduces the maintenance burden of having two separate indexing procedures and lowers the test surface.
