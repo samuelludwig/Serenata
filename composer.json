@@ -17,9 +17,9 @@
         "evenement/evenement": "2.0.*",
         "nikic/php-parser": "dev-master#b2c6497d632b952ad9a53f3ad10e6dc7ae50e41e",
         "react/socket": "0.7.*",
-        "symfony/yaml": "3.2.*",
-        "symfony/config": "3.2.*",
-        "symfony/dependency-injection": "3.2.*",
+        "symfony/yaml": "3.3.*",
+        "symfony/config": "3.3.*",
+        "symfony/dependency-injection": "3.3.*",
         "ramsey/uuid": "3.6.*",
         "jetbrains/phpstorm-stubs": "dev-master"
     },
