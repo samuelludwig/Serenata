@@ -5,5 +5,5 @@ namespace N {
 }
 
 namespace {
-
+    use N\A;
 }
