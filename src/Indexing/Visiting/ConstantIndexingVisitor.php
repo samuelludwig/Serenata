@@ -124,8 +124,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseConstantNode(Node\Const_ $node, Node\Stmt\Const_ $const): void
     {
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
-
         $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
@@ -154,6 +152,8 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             if (!empty($varDocumentation['description'])) {
                 $shortDescription = $varDocumentation['description'];
             }
+
+            $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
 
             $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
         } elseif ($node->value) {
