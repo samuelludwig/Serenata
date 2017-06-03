@@ -21,9 +21,9 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Visitor that traverses a set of nodes, indexing global functions in the process.
+ * Visitor that traverses a set of nodes, indexing (global) functions in the process.
  */
-final class GlobalFunctionIndexingVisitor extends NodeVisitorAbstract
+final class FunctionIndexingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface

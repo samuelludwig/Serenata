@@ -13,9 +13,9 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Visitor that traverses a set of nodes, indexing global defines in the process.
+ * Visitor that traverses a set of nodes, indexing defines in the process.
  */
-final class GlobalDefineIndexingVisitor extends NodeVisitorAbstract
+final class DefineIndexingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var StorageInterface

@@ -20,9 +20,9 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Visitor that traverses a set of nodes, indexing global constants in the process.
+ * Visitor that traverses a set of nodes, indexing (global) constants in the process.
  */
-final class GlobalConstantIndexingVisitor extends NodeVisitorAbstract
+final class ConstantIndexingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var StorageInterface

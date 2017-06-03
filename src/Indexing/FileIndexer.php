@@ -189,7 +189,7 @@ class FileIndexer implements FileIndexerInterface
         $visitors = [
             new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code),
 
-            new Visiting\GlobalConstantIndexingVisitor(
+            new Visiting\ConstantIndexingVisitor(
                 $this->storage,
                 $this->docblockParser,
                 $this->structureAwareNameResolverFactory,
@@ -200,7 +200,7 @@ class FileIndexer implements FileIndexerInterface
                 $filePath
             ),
 
-            new Visiting\GlobalDefineIndexingVisitor(
+            new Visiting\DefineIndexingVisitor(
                 $this->storage,
                 $this->nodeTypeDeducer,
                 $file,
@@ -208,7 +208,7 @@ class FileIndexer implements FileIndexerInterface
                 $filePath
             ),
 
-            new Visiting\GlobalFunctionIndexingVisitor(
+            new Visiting\FunctionIndexingVisitor(
                 $this->structureAwareNameResolverFactory,
                 $this->storage,
                 $this->docblockParser,
