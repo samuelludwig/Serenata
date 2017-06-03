@@ -24,7 +24,7 @@
         "jetbrains/phpstorm-stubs": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "6.1.*",
+        "phpunit/phpunit": "6.2.*",
         "symfony/var-dumper": "3.3.*"
     },
     "autoload": {
