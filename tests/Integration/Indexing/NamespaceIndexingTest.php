@@ -11,9 +11,9 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testIsCorrectlyIndexed(): void
+    public function testPermanentStartNamespace(): void
     {
-        $path = $this->getPathFor('Namespace.phpt');
+        $path = $this->getPathFor('PermanentStartNamespace.phpt');
 
         $this->indexTestFile($this->container, $path);
 
@@ -21,25 +21,57 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        $this->assertCount(3, $namespaces);
+        $this->assertCount(1, $namespaces);
 
         $this->assertEquals(0, $namespaces[0]->getStartLine());
         $this->assertEquals(2, $namespaces[0]->getEndLine());
         $this->assertEquals(null, $namespaces[0]->getName());
         $this->assertEquals($path, $namespaces[0]->getFile()->getPath());
         $this->assertEmpty($namespaces[0]->getImports());
+    }
+
+    /**
+     * @return void
+     */
+    public function testNormalNamespace(): void
+    {
+        $path = $this->getPathFor('NormalNamespace.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $file = $this->container->get('storage')->findFileByPath($path);
+
+        $namespaces = $file->getNamespaces();
+
+        $this->assertCount(2, $namespaces);
 
         $this->assertEquals(3, $namespaces[1]->getStartLine());
         $this->assertEquals(6, $namespaces[1]->getEndLine());
         $this->assertEquals('N', $namespaces[1]->getName());
         $this->assertEquals($path, $namespaces[1]->getFile()->getPath());
         $this->assertEmpty($namespaces[1]->getImports());
+    }
 
-        $this->assertEquals(7, $namespaces[2]->getStartLine());
-        $this->assertEquals(10, $namespaces[2]->getEndLine());
-        $this->assertEquals(null, $namespaces[2]->getName());
-        $this->assertEquals($path, $namespaces[2]->getFile()->getPath());
-        $this->assertCount(1, $namespaces[2]->getImports());
+    /**
+     * @return void
+     */
+    public function testAnonymousNamespace(): void
+    {
+        $path = $this->getPathFor('AnonymousNamespace.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $file = $this->container->get('storage')->findFileByPath($path);
+
+        $namespaces = $file->getNamespaces();
+
+        $this->assertCount(2, $namespaces);
+
+        $this->assertEquals(3, $namespaces[1]->getStartLine());
+        $this->assertEquals(6, $namespaces[1]->getEndLine());
+        $this->assertEquals(null, $namespaces[1]->getName());
+        $this->assertEquals($path, $namespaces[1]->getFile()->getPath());
+        $this->assertCount(1, $namespaces[1]->getImports());
     }
 
     /**
@@ -63,7 +95,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
             $this->assertEquals(null, $file->getNamespaces()[1]->getName());
         };
 
-        $path = $this->getPathFor('Namespace.phpt');
+        $path = $this->getPathFor('NamespaceChanges.phpt');
 
         $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
