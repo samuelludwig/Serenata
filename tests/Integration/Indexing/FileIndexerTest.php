@@ -13,6 +13,32 @@ class FileIndexerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testNamespaceChangesArePickedUpOnReindex(): void
+    {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(2, $file->getNamespaces());
+            $this->assertEquals('N', $file->getNamespaces()[1]->getName());
+
+            return str_replace('namespace N', 'namespace ', $source);
+        };
+
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+            $file = $container->get('storage')->findFileByPath($path);
+
+            $this->assertCount(2, $file->getNamespaces());
+            $this->assertEquals(null, $file->getNamespaces()[1]->getName());
+        };
+
+        $path = $this->getPathFor('NamespaceChanges.phpt');
+
+        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+    }
+
+    /**
+     * @return void
+     */
     public function testImportChangesArePickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
