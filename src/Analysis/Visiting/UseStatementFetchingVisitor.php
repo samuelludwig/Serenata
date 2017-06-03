@@ -5,7 +5,6 @@ namespace PhpIntegrator\Analysis\Visiting;
 use DomainException;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
