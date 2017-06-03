@@ -13,34 +13,6 @@ class FileIndexerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testImportChangesArePickedUpOnReindex(): void
-    {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
-
-            $this->assertCount(3, $file->getNamespaces());
-            $this->assertCount(1, $file->getNamespaces()[2]->getImports());
-            $this->assertEquals('N\A', $file->getNamespaces()[2]->getImports()[0]->getName());
-
-            return str_replace('N\A', 'N\B', $source);
-        };
-
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
-
-            $this->assertCount(3, $file->getNamespaces());
-            $this->assertCount(1, $file->getNamespaces()[2]->getImports());
-            $this->assertEquals('N\B', $file->getNamespaces()[2]->getImports()[0]->getName());
-        };
-
-        $path = $this->getPathFor('ImportChanges.phpt');
-
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
-    }
-
-    /**
-     * @return void
-     */
     public function testStaticMethodTypes(): void
     {
         $container = $this->index('StaticMethodTypes.phpt');
