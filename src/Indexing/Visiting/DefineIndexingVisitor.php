@@ -107,7 +107,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         );
 
         if ($node->args[1]) {
-            $typeList = $this->nodeTypeDeducer->deduce($node->args[1], $this->filePath, $defaultValue, 0);
+            $typeList = $this->nodeTypeDeducer->deduce($node->args[1]->value, $this->filePath, $defaultValue, 0);
 
             $types = array_map(function (string $type) {
                 return new Structures\TypeInfo($type, $type);
