@@ -47,7 +47,7 @@
 * The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name.
 * `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency.
 * Fixed the type of defines not being properly deduced from their value.
-* Fixed the short, long or type description for constants being an empty string instead of null when not present.
+* Fixed the short, long and type description for constants being an empty string instead of `null` when not present.
 * Fixed the short, long and return description for functions being an empty string instead of `null` when not present.
 * Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed.
   * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
