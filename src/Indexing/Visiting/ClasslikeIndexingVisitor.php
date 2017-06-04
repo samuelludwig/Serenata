@@ -666,7 +666,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['short'],
             $documentation['descriptions']['long'],
             $documentation['return']['description'],
-            $localType,
+            $resolvedType,
             $this->structure,
             $accessModifier ? $accessModifierMap[$accessModifier] : null,
             false,

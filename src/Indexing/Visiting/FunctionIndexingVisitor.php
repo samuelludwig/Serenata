@@ -170,7 +170,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
             $documentation['return']['description'] ?: null,
-            $localType,
+            $resolvedType,
             !empty($docComment),
             $throws,
             $returnTypes
