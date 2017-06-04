@@ -156,15 +156,188 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         $this->assertEquals('when something goes wrong.', $function->getThrows()[1]['description']);
     }
 
-    // TODO: Test parameter type resolving in type hint
-    // TODO: Test parameter type resolving in docblock
-    // TODO: Test parameters with type hints
-    // TODO: Test parameters with default values
-    // TODO: Test parameters with explicit nullability
-    // TODO: Test parameters with implicit nullability
-    // TODO: Test reference parameters
-    // TODO: Test variadic parameters
-    // TODO: Test docblock parameter type > parameter type hint
+    /**
+     * @return void
+     */
+    public function testFunctionSimpleParameters(): void
+    {
+        $function = $this->indexFunction('FunctionSimpleParameters.phpt');
+
+        $this->assertCount(2, $function->getParameters());
+
+        $parameter = $function->getParameters()[0];
+
+        $this->assertEquals($function, $parameter->getFunction());
+        $this->assertEquals('a', $parameter->getName());
+        $this->assertNull($parameter->getTypeHint());
+        $this->assertEmpty($parameter->getTypes());
+        $this->assertNull($parameter->getDescription());
+        $this->assertNull($parameter->getDefaultValue());
+        $this->assertFalse($parameter->getIsNullable());
+        $this->assertFalse($parameter->getIsReference());
+        $this->assertFalse($parameter->getIsOptional());
+        $this->assertFalse($parameter->getIsVariadic());
+
+        $parameter = $function->getParameters()[1];
+
+        $this->assertEquals($function, $parameter->getFunction());
+        $this->assertEquals('b', $parameter->getName());
+        $this->assertNull($parameter->getTypeHint());
+        $this->assertEmpty($parameter->getTypes());
+        $this->assertNull($parameter->getDescription());
+        $this->assertNull($parameter->getDefaultValue());
+        $this->assertFalse($parameter->getIsNullable());
+        $this->assertFalse($parameter->getIsReference());
+        $this->assertFalse($parameter->getIsOptional());
+        $this->assertFalse($parameter->getIsVariadic());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterTypeHint(): void
+    {
+        $function = $this->indexFunction('FunctionParameterTypeHint.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypeHint());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterTypeHintIsResolved(): void
+    {
+        $function = $this->indexFunction('FunctionParameterTypeHintIsResolved.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('A', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('\N\A', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        $this->assertEquals('\N\A', $function->getParameters()[0]->getTypeHint());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterDocblockType(): void
+    {
+        $function = $this->indexFunction('FunctionParameterDocblockType.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterDocblockTypeIsResolved(): void
+    {
+        $function = $this->indexFunction('FunctionParameterDocblockTypeIsResolved.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('A', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('\N\A', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterDocblockTypeGetsPrecedenceOverTypeHint(): void
+    {
+        $function = $this->indexFunction('FunctionParameterDocblockTypePrecedenceOverTypeHint.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterDefaultValue(): void
+    {
+        $function = $this->indexFunction('FunctionParameterDefaultValue.phpt');
+
+        $this->assertEquals('5', $function->getParameters()[0]->getDefaultValue());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterDefaultValueTypeDeduction(): void
+    {
+        $function = $this->indexFunction('FunctionParameterDefaultValueTypeDeduction.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterTypeHintGetsPrecedenceOverDefaultValueTypeDeduction(): void
+    {
+        $function = $this->indexFunction('FunctionParameterTypeHintGetsPrecedenceOverDefaultValueTypeDeduction.phpt');
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterExplicitNullability(): void
+    {
+        $function = $this->indexFunction('FunctionParameterExplicitNullability.phpt');
+
+        $this->assertTrue($function->getParameters()[0]->getIsNullable());
+
+        $this->assertCount(2, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('null', $function->getParameters()[0]->getTypes()[1]->getType());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionParameterImplicitNullability(): void
+    {
+        $function = $this->indexFunction('FunctionParameterImplicitNullability.phpt');
+
+        $this->assertTrue($function->getParameters()[0]->getIsNullable());
+
+        $this->assertCount(2, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
+        $this->assertEquals('null', $function->getParameters()[0]->getTypes()[1]->getType());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionReferenceParameter(): void
+    {
+        $function = $this->indexFunction('FunctionReferenceParameter.phpt');
+
+        $this->assertTrue($function->getParameters()[0]->getIsReference());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionVariadicParameter(): void
+    {
+        $function = $this->indexFunction('FunctionVariadicParameter.phpt');
+
+        $this->assertTrue($function->getParameters()[0]->getIsVariadic());
+
+        $this->assertCount(1, $function->getParameters()[0]->getTypes());
+        $this->assertEquals('int[]', $function->getParameters()[0]->getTypes()[0]->getType());
+    }
 
     /**
      * @return void
