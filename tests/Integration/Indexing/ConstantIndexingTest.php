@@ -15,11 +15,11 @@ class ConstantIndexingTest extends AbstractIntegrationTest
      */
     public function testSimpleConstant(): void
     {
-        $constant = $this->indexConstant('NormalConstant.phpt');
+        $constant = $this->indexConstant('SimpleConstant.phpt');
 
         $this->assertEquals('CONSTANT', $constant->getName());
         $this->assertEquals('\CONSTANT', $constant->getFqcn());
-        $this->assertEquals($this->getPathFor('NormalConstant.phpt'), $constant->getFile()->getPath());
+        $this->assertEquals($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getPath());
         $this->assertEquals(3, $constant->getStartLine());
         $this->assertEquals(3, $constant->getEndLine());
         $this->assertEquals("'test'", $constant->getDefaultValue());
