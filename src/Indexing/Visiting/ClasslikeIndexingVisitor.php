@@ -740,7 +740,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $parameter = new Structures\MethodParameter(
                 $method,
                 $param->var->name,
-                $localType,
+                $resolvedType,
                 $types,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,

@@ -630,7 +630,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'         => 'foo',
-                'typeHint'     => 'Foo',
+                'typeHint'     => '\A\Foo',
                 'description'  => null,
                 'defaultValue' => null,
                 'isNullable'   => false,
@@ -678,7 +678,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'         => 'foo',
-                'typeHint'     => 'Foo',
+                'typeHint'     => '\A\Foo',
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isNullable'   => true,
@@ -732,7 +732,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'         => 'foo',
-                'typeHint'     => 'Foo',
+                'typeHint'     => '\A\Foo',
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isNullable'   => true,
@@ -813,7 +813,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'         => 'foo',
-                'typeHint'     => 'Foo',
+                'typeHint'     => '\A\Foo',
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isNullable'   => true,
@@ -867,7 +867,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'         => 'foo',
-                'typeHint'     => 'Foo',
+                'typeHint'     => '\A\Foo',
                 'defaultValue' => 'null',
                 'description'  => null,
                 'isNullable'   => true,
@@ -1086,7 +1086,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'         => 'foo',
-                'typeHint'     => 'Foo',
+                'typeHint'     => '\A\Foo',
                 'defaultValue' => 'null',
                 'description'  => null,
                 'isNullable'   => true,
@@ -2171,7 +2171,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             'name'         => 'param',
-            'typeHint'     => 'DateTime',
+            'typeHint'     => '\DateTime',
             'types'        => [
                 [
                     'type'         => 'DateTime',

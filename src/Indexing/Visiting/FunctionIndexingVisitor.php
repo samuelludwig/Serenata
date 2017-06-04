@@ -238,7 +238,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $parameter = new Structures\FunctionParameter(
                 $function,
                 $param->var->name,
-                $localType,
+                $resolvedType,
                 $types,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
