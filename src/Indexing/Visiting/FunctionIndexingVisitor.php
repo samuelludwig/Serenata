@@ -4,6 +4,8 @@ namespace PhpIntegrator\Indexing\Visiting;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
@@ -45,6 +47,11 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     private $typeAnalyzer;
 
     /**
+     * @var NodeTypeDeducerInterface
+     */
+    private $nodeTypeDeducer;
+
+    /**
      * @var Structures\File
      */
     private $file;
@@ -64,6 +71,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      * @param StorageInterface                           $storage
      * @param DocblockParser                             $docblockParser
      * @param TypeAnalyzer                               $typeAnalyzer
+     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
      * @param Structures\File                            $file
      * @param string                                     $code
      * @param string                                     $filePath
@@ -73,6 +81,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         StorageInterface $storage,
         DocblockParser $docblockParser,
         TypeAnalyzer $typeAnalyzer,
+        NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
         string $code,
         string $filePath
@@ -81,6 +90,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
         $this->code = $code;
         $this->filePath = $filePath;
@@ -233,6 +243,12 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                 if ($isNullable) {
                     $types[] = new Structures\TypeInfo('null', 'null');
                 }
+            } elseif ($param->default !== null) {
+                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->filePath, $defaultValue, 0);
+
+                $types = array_map(function (string $type) {
+                    return new Structures\TypeInfo($type, $type);
+                }, $typeList);
             }
 
             $parameter = new Structures\FunctionParameter(

@@ -332,7 +332,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'isReference'  => true,
                     'isVariadic'   => false,
                     'isOptional'   => true,
-                    'types'        => []
+                    'types'        => [
+                        [
+                            'type'         => 'bool',
+                            'fqcn'         => 'bool',
+                            'resolvedType' => 'bool'
+                        ]
+                    ]
                 ],
 
                 [

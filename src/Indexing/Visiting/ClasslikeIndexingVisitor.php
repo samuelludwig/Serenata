@@ -735,6 +735,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 if ($isNullable) {
                     $types[] = new Structures\TypeInfo('null', 'null');
                 }
+            } elseif ($param->default !== null) {
+                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->filePath, $defaultValue, 0);
+
+                $types = array_map(function (string $type) {
+                    return new Structures\TypeInfo($type, $type);
+                }, $typeList);
             }
 
             $parameter = new Structures\MethodParameter(

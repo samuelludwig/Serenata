@@ -47,6 +47,7 @@
 * The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name.
 * `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency.
 * Fixed the type of defines not being properly deduced from their value.
+* Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted).
 * The return type hint for functions and methods and type hints for parameters will now always be an FQCN in the case of non-scalar types.
   * The non-resolved type provided no context and could be ambiguous.
   * If the type needs to be relative to local imports, you can always localize the type using the appropriate command.
