@@ -18,11 +18,6 @@ abstract class ConstantLike
     protected $name;
 
     /**
-     * @var string|null
-     */
-    protected $fqcn;
-
-    /**
      * @var File
      */
     protected $file;
@@ -86,14 +81,6 @@ abstract class ConstantLike
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getFqcn(): ?string
-    {
-        return $this->fqcn;
     }
 
     /**

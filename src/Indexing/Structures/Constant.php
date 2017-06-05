@@ -10,8 +10,13 @@ use Ramsey\Uuid\Uuid;
 class Constant extends ConstantLike
 {
     /**
+     * @var string
+     */
+    protected $fqcn;
+
+    /**
      * @param string              $name
-     * @param string|null         $fqcn
+     * @param string              $fqcn
      * @param File                $file
      * @param int                 $startLine
      * @param int                 $endLine
@@ -25,7 +30,7 @@ class Constant extends ConstantLike
      */
     public function __construct(
         string $name,
-        ?string $fqcn,
+        string $fqcn,
         File $file,
         int $startLine,
         int $endLine,
@@ -50,5 +55,13 @@ class Constant extends ConstantLike
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
         $this->types = $types;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFqcn(): string
+    {
+        return $this->fqcn;
     }
 }

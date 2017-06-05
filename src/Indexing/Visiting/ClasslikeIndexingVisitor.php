@@ -839,7 +839,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $constant = new Structures\ClassConstant(
             $node->name->name,
-            null,
             $this->file,
             $node->getLine(),
             $node->getAttribute('endLine'),
@@ -998,7 +997,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $constant = new Structures\ClassConstant(
             'class',
-            null,
             $this->file,
             $structure->getStartLine(),
             $structure->getStartLine(),

@@ -16,9 +16,8 @@ class ConstantConverter extends AbstractConverter
      */
     public function convert(Structures\ConstantLike $constant): array
     {
-        return [
+        $data = [
             'name'              => $constant->getName(),
-            'fqcn'              => $constant->getFqcn(),
             'startLine'         => $constant->getStartLine(),
             'endLine'           => $constant->getEndLine(),
             'defaultValue'      => $constant->getDefaultValue(),
@@ -35,5 +34,11 @@ class ConstantConverter extends AbstractConverter
 
             'types'             => $this->convertTypes($constant->getTypes())
         ];
+
+        if ($constant instanceof Structures\Constant) {
+            $data['fqcn'] = $constant->getFqcn();
+        }
+
+        return $data;
     }
 }

@@ -65,6 +65,7 @@
 * `parents`, `directParents` and `directChildren` will no longer be returned for traits as they are only relevant for classes and interfaces.
 * `traits` and `directTraits` will no longer be returned for interfaces as they are only relevant for classes and traits.
 * `isPublic`, `isProtected` and `isPrivate` will no longer be returned for global constants as they are only relevant for class constants.
+* `fqcn` will no longer be returned for class constants as it is only relevant for global constants.
 * Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
 
 ```php

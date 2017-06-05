@@ -21,7 +21,6 @@ class ClassConstant extends ConstantLike
 
     /**
      * @param string              $name
-     * @param string|null         $fqcn
      * @param File                $file
      * @param int                 $startLine
      * @param int                 $endLine
@@ -37,7 +36,6 @@ class ClassConstant extends ConstantLike
      */
     public function __construct(
         string $name,
-        ?string $fqcn,
         File $file,
         int $startLine,
         int $endLine,
@@ -53,7 +51,6 @@ class ClassConstant extends ConstantLike
     ) {
         $this->id = (string) Uuid::uuid4();
         $this->name = $name;
-        $this->fqcn = $fqcn;
         $this->file = $file;
         $this->startLine = $startLine;
         $this->endLine = $endLine;

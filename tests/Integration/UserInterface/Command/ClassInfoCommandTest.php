@@ -57,7 +57,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'constants'          => [
                 'class' => [
                     'name'               => 'class',
-                    'fqcn'               => null,
                     'startLine'          => 10,
                     'endLine'            => 10,
                     'defaultValue'       => 'A\SimpleClass',
@@ -442,7 +441,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertEquals($output['constants']['TEST_CONSTANT'], [
             'name'               => 'TEST_CONSTANT',
-            'fqcn'              => null,
             'startLine'          => 14,
             'endLine'            => 14,
             'defaultValue'       => '5',
