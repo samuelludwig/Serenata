@@ -291,7 +291,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertEquals([
             'name'               => 'testMethod',
-            'fqcn'               => null,
             'startLine'          => 19,
             'endLine'            => 22,
             'filename'           => $this->getPathFor($fileName),

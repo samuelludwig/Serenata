@@ -660,7 +660,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $method = new Structures\Method(
             $node->name->name,
-            null,
             $this->file,
             $node->getLine(),
             $node->getAttribute('endLine'),
@@ -921,7 +920,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $method = new Structures\Method(
             $rawData['name'],
-            null,
             $this->file,
             $filePosition->getPosition()->getLine(),
             $filePosition->getPosition()->getLine(),

@@ -12,8 +12,13 @@ use Ramsey\Uuid\Uuid;
 class Function_ extends FunctionLike
 {
     /**
+     * @var string
+     */
+    protected $fqcn;
+
+    /**
      * @param string              $name
-     * @param string|null         $fqcn
+     * @param string              $fqcn
      * @param File                $file
      * @param int                 $startLine
      * @param int                 $endLine
@@ -28,7 +33,7 @@ class Function_ extends FunctionLike
      */
     public function __construct(
         string $name,
-        ?string $fqcn,
+        string $fqcn,
         File $file,
         int $startLine,
         int $endLine,
@@ -57,5 +62,13 @@ class Function_ extends FunctionLike
         $this->returnTypes = $returnTypes;
 
         $this->parameters = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function getFqcn(): string
+    {
+        return $this->fqcn;
     }
 }

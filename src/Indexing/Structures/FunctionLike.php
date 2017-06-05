@@ -18,11 +18,6 @@ abstract class FunctionLike
     protected $name;
 
     /**
-     * @var string|null
-     */
-    protected $fqcn;
-
-    /**
      * @var File
      */
     protected $file;
@@ -96,14 +91,6 @@ abstract class FunctionLike
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getFqcn(): ?string
-    {
-        return $this->fqcn;
     }
 
     /**

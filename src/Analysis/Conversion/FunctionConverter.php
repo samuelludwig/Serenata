@@ -41,9 +41,8 @@ class FunctionConverter extends AbstractConverter
             ];
         }
 
-        return [
+        $data = [
             'name'              => $function->getName(),
-            'fqcn'              => $function->getFqcn(),
             'startLine'         => $function->getStartLine(),
             'endLine'           => $function->getEndLine(),
             'filename'          => $function->getFile()->getPath(),
@@ -61,5 +60,11 @@ class FunctionConverter extends AbstractConverter
             'returnTypeHint'    => $function->getReturnTypeHint(),
             'returnTypes'       => $this->convertTypes($function->getReturnTypes())
         ];
+
+        if ($function instanceof Structures\Function_) {
+            $data['fqcn'] = $function->getFqcn();
+        }
+
+        return $data;
     }
 }
