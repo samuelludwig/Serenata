@@ -6,6 +6,8 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\Structures;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Converts raw property data from the index to more useful data.
  */
@@ -25,9 +27,9 @@ class PropertyConverter extends AbstractConverter
             'endLine'            => $property->getEndLine(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
-            'isPublic'           => $property->getAccessModifier()->getName() === 'public',
-            'isProtected'        => $property->getAccessModifier()->getName() === 'protected',
-            'isPrivate'          => $property->getAccessModifier()->getName() === 'private',
+            'isPublic'           => $property->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,
+            'isProtected'        => $property->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_,
+            'isPrivate'          => $property->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_,
             'isStatic'           => $property->getIsStatic(),
             'isDeprecated'       => $property->getIsDeprecated(),
             'hasDocblock'        => $property->getHasDocblock(),

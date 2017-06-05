@@ -15,6 +15,8 @@ use PhpIntegrator\Common\FilePosition;
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
@@ -298,7 +300,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $this->indexMagicProperty(
                 $propertyData,
                 $structure,
-                $accessModifierMap['public'],
+                $accessModifierMap[AccessModifierNameValue::PUBLIC_],
                 $filePosition
             );
         }
@@ -311,7 +313,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $this->indexMagicMethod(
                 $methodData,
                 $structure,
-                $accessModifierMap['public'],
+                $accessModifierMap[AccessModifierNameValue::PUBLIC_],
                 $filePosition
             );
         }
@@ -459,11 +461,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $accessModifier = null;
 
                 if ($adaptation->newModifier === 1) {
-                    $accessModifier = 'public';
+                    $accessModifier = AccessModifierNameValue::PUBLIC_;
                 } elseif ($adaptation->newModifier === 2) {
-                    $accessModifier = 'protected';
+                    $accessModifier = AccessModifierNameValue::PROTECTED_;
                 } elseif ($adaptation->newModifier === 4) {
-                    $accessModifier = 'private';
+                    $accessModifier = AccessModifierNameValue::PRIVATE_;
                 }
 
                 $traitAlias = new Structures\ClassTraitAlias(
@@ -550,11 +552,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = null;
 
             if ($node->isPublic()) {
-                $accessModifier = 'public';
+                $accessModifier = AccessModifierNameValue::PUBLIC_;
             } elseif ($node->isProtected()) {
-                $accessModifier = 'protected';
+                $accessModifier = AccessModifierNameValue::PROTECTED_;
             } elseif ($node->isPrivate()) {
-                $accessModifier = 'private';
+                $accessModifier = AccessModifierNameValue::PRIVATE_;
             }
 
             $property = new Structures\Property(
@@ -649,11 +651,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $accessModifier = null;
 
         if ($node->isPublic()) {
-            $accessModifier = 'public';
+            $accessModifier = AccessModifierNameValue::PUBLIC_;
         } elseif ($node->isProtected()) {
-            $accessModifier = 'protected';
+            $accessModifier = AccessModifierNameValue::PROTECTED_;
         } elseif ($node->isPrivate()) {
-            $accessModifier = 'private';
+            $accessModifier = AccessModifierNameValue::PRIVATE_;
         }
 
         $method = new Structures\Method(
@@ -830,11 +832,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $accessModifier = null;
 
         if ($classConst->isPublic()) {
-            $accessModifier = 'public';
+            $accessModifier = AccessModifierNameValue::PUBLIC_;
         } elseif ($classConst->isProtected()) {
-            $accessModifier = 'protected';
+            $accessModifier = AccessModifierNameValue::PROTECTED_;
         } elseif ($classConst->isPrivate()) {
-            $accessModifier = 'private';
+            $accessModifier = AccessModifierNameValue::PRIVATE_;
         }
 
         $constant = new Structures\ClassConstant(
@@ -1008,7 +1010,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             null,
             [new Structures\TypeInfo('string', 'string')],
             $structure,
-            $this->getAccessModifierMap()['public']
+            $this->getAccessModifierMap()[AccessModifierNameValue::PUBLIC_]
         );
 
         $this->storage->persist($constant);

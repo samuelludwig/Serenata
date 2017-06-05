@@ -4,6 +4,8 @@ namespace PhpIntegrator\Tests\Integration\Tooltips;
 
 use PhpIntegrator\Indexing\Structures;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -31,7 +33,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
         $this->assertEquals('string', $constant->getTypes()[0]->getType());
         $this->assertEquals('string', $constant->getTypes()[0]->getFqcn());
         $this->assertEquals('string', $constant->getTypes()[0]->getFqcn());
-        $this->assertEquals('public', $constant->getAccessModifier()->getName());
+        $this->assertEquals(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -113,7 +115,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ImplicitlyPublicConstant.phpt');
 
-        $this->assertEquals('public', $constant->getAccessModifier()->getName());
+        $this->assertEquals(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -123,7 +125,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ExplicitlyPublicConstant.phpt');
 
-        $this->assertEquals('public', $constant->getAccessModifier()->getName());
+        $this->assertEquals(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -133,7 +135,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ProtectedConstant.phpt');
 
-        $this->assertEquals('protected', $constant->getAccessModifier()->getName());
+        $this->assertEquals(AccessModifierNameValue::PROTECTED_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -143,7 +145,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('PrivateConstant.phpt');
 
-        $this->assertEquals('private', $constant->getAccessModifier()->getName());
+        $this->assertEquals(AccessModifierNameValue::PRIVATE_, $constant->getAccessModifier()->getName());
     }
 
     /**

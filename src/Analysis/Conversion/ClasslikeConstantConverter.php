@@ -6,6 +6,8 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\Structures;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Converts raw class constant data from the index to more useful data.
  */
@@ -22,9 +24,9 @@ class ClasslikeConstantConverter extends ConstantConverter
         $data = parent::convert($constant);
 
         return array_merge($data, [
-            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
-            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
-            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'private' : false,
+            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_ : true,
+            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_ : false,
+            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_ : false,
 
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],

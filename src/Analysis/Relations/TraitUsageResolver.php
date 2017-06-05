@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Relations;
 
 use ArrayObject;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Deals with resolving trait usage for classlikes.
  */
@@ -34,9 +36,9 @@ class TraitUsageResolver extends AbstractResolver
                     ($traitAlias->getTraitFqcn() === null  || $traitAlias->getTraitFqcn() === $trait['fqcn'])
                 ) {
                     $method['name']        = $traitAlias->getAlias() ?: $method['name'];
-                    $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === 'public');
-                    $method['isProtected'] = ($traitAlias->getAccessModifier()->getName() === 'protected');
-                    $method['isPrivate']   = ($traitAlias->getAccessModifier()->getName() === 'private');
+                    $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_);
+                    $method['isProtected'] = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_);
+                    $method['isPrivate']   = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_);
                 }
             }
 
