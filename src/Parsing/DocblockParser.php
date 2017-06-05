@@ -688,14 +688,14 @@ class DocblockParser
             foreach ($tags[$tagName] as $tag) {
                 list($staticKeyword, $type, $variableName, $description) = $this->filterParameterTag($tag, 4);
 
-                if (!$type || !$variableName) {
-                    continue;
-                }
-
                 // Normally, this tag consists of three parts. However, PHPStorm uses an extended syntax that allows
                 // putting the keyword 'static' as first part of the tag to indicate that the property is indeed static.
                 if ($staticKeyword !== 'static') {
                     list($type, $variableName, $description) = $this->filterParameterTag($tag, 3);
+                }
+
+                if (!$type || !$variableName) {
+                    continue;
                 }
 
                 $properties[$this->sanitizeText($variableName)] = [
