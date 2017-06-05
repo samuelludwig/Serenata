@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Relations;
 
 use ArrayObject;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 
 /**
@@ -12,10 +14,10 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 class TraitUsageResolver extends AbstractResolver
 {
     /**
-     * @param ArrayObject                           $trait
-     * @param ArrayObject                           $class
-     * @param Structures\StructureTraitAlias[]      $traitAliases
-     * @param Structures\StructureTraitPrecedence[] $traitPrecedences
+     * @param ArrayObject                       $trait
+     * @param ArrayObject                       $class
+     * @param Structures\ClassTraitAlias[]      $traitAliases
+     * @param Structures\ClassTraitPrecedence[] $traitPrecedences
      *
      * @return void
      */
