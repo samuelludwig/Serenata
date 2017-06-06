@@ -34,7 +34,6 @@ class PropertyIndexingTest extends AbstractIntegrationTest
         $this->assertCount(1, $property->getTypes());
         $this->assertEquals('string', $property->getTypes()[0]->getType());
         $this->assertEquals('string', $property->getTypes()[0]->getFqcn());
-        $this->assertEquals('string', $property->getTypes()[0]->getFqcn());
         $this->assertEquals(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
     }
 
