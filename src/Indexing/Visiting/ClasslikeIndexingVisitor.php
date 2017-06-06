@@ -1018,7 +1018,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param string       $typeSpecification
      * @param FilePosition $filePosition
      *
-     * @return array[]
+     * @return Structures\TypeInfo[]
      */
     protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
     {
