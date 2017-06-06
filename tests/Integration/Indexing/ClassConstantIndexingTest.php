@@ -39,6 +39,41 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testClassKeywordConstant(): void
+    {
+        $path = $this->getPathFor('ClassKeywordConstant.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+        $this->assertCount(1, $classes);
+        $this->assertCount(1, $classes[0]->getConstants());
+
+        $constant = $classes[0]->getConstants()[0];
+
+        $this->assertEquals($classes[0], $constant->getStructure());
+
+        $this->assertEquals('class', $constant->getName());
+        $this->assertEquals($this->getPathFor('ClassKeywordConstant.phpt'), $constant->getFile()->getPath());
+        $this->assertEquals(3, $constant->getStartLine());
+        $this->assertEquals(3, $constant->getEndLine());
+        $this->assertEquals("'Test'", $constant->getDefaultValue());
+        $this->assertFalse($constant->getIsDeprecated());
+        $this->assertFalse($constant->getHasDocblock());
+        $this->assertEquals('PHP built-in class constant that evaluates to the FQCN.', $constant->getShortDescription());
+        $this->assertNull($constant->getLongDescription());
+        $this->assertNull($constant->getTypeDescription());
+        $this->assertCount(1, $constant->getTypes());
+        $this->assertEquals('string', $constant->getTypes()[0]->getType());
+        $this->assertEquals('string', $constant->getTypes()[0]->getFqcn());
+        $this->assertEquals('string', $constant->getTypes()[0]->getFqcn());
+        $this->assertEquals(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
+    }
+
+    /**
+     * @return void
+     */
     public function testDeprecatedConstant(): void
     {
         $constant = $this->indexConstant('DeprecatedConstant.phpt');
