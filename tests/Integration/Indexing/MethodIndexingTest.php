@@ -363,6 +363,149 @@ class MethodIndexingTest extends AbstractIntegrationTest
         $method = $this->indexMethod('MagicMethod.phpt');
 
         $this->assertTrue($method->getIsMagic());
+        $this->assertFalse($method->getIsStatic());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodWithReturnType(): void
+    {
+        $method = $this->indexMethod('MagicMethodWithReturnType.phpt');
+
+        $this->assertCount(1, $method->getReturnTypes());
+        $this->assertEquals('int', $method->getReturnTypes()[0]->getType());
+        $this->assertEquals('int', $method->getReturnTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodReturnTypeIsResolved(): void
+    {
+        $method = $this->indexMethod('MagicMethodReturnTypeIsResolved.phpt');
+
+        $this->assertCount(1, $method->getReturnTypes());
+        $this->assertEquals('A', $method->getReturnTypes()[0]->getType());
+        $this->assertEquals('\N\A', $method->getReturnTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodWithDescription(): void
+    {
+        $method = $this->indexMethod('MagicMethodWithDescription.phpt');
+
+        $this->assertEquals('A summary.', $method->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodOmittingReturnType(): void
+    {
+        $method = $this->indexMethod('MagicMethodOmittingReturnType.phpt');
+
+        $this->assertCount(1, $method->getReturnTypes());
+        $this->assertEquals('void', $method->getReturnTypes()[0]->getType());
+        $this->assertEquals('void', $method->getReturnTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodWithDescriptionWithoutReturnType(): void
+    {
+        $method = $this->indexMethod('MagicMethodWithDescriptionWithoutReturnType.phpt');
+
+        $this->assertEquals('A summary.', $method->getShortDescription());
+
+        $this->assertCount(1, $method->getReturnTypes());
+        $this->assertEquals('void', $method->getReturnTypes()[0]->getType());
+        $this->assertEquals('void', $method->getReturnTypes()[0]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testStaticMagicMethodWithReturnType(): void
+    {
+        $method = $this->indexMethod('StaticMagicMethodWithReturnType.phpt');
+
+        $this->assertTrue($method->getIsStatic());
+    }
+
+    /**
+     * @return void
+     */
+    public function testStaticMagicMethodWithoutReturnType(): void
+    {
+        $method = $this->indexMethod('StaticMagicMethodWithoutReturnType.phpt');
+
+        $this->assertTrue($method->getIsStatic());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodWithRequiredParameter(): void
+    {
+        $method = $this->indexMethod('MagicMethodWithRequiredParameter.phpt');
+
+        $this->assertCount(1, $method->getParameters());
+
+        $parameter = $method->getParameters()[0];
+
+        $this->assertEquals($method, $parameter->getMethod());
+        $this->assertEquals('a', $parameter->getName());
+        $this->assertNull($parameter->getTypeHint());
+        $this->assertEmpty($parameter->getTypes());
+        $this->assertNull($parameter->getDescription());
+        $this->assertNull($parameter->getDefaultValue());
+        $this->assertFalse($parameter->getIsNullable());
+        $this->assertFalse($parameter->getIsReference());
+        $this->assertFalse($parameter->getIsOptional());
+        $this->assertFalse($parameter->getIsVariadic());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodWithOptionalParameter(): void
+    {
+        $method = $this->indexMethod('MagicMethodWithOptionalParameter.phpt');
+
+        $this->assertCount(1, $method->getParameters());
+
+        $parameter = $method->getParameters()[0];
+
+        $this->assertEquals($method, $parameter->getMethod());
+        $this->assertEquals('a', $parameter->getName());
+        $this->assertNull($parameter->getTypeHint());
+        $this->assertEmpty($parameter->getTypes());
+        $this->assertNull($parameter->getDescription());
+        $this->assertNull($parameter->getDefaultValue());
+        $this->assertFalse($parameter->getIsNullable());
+        $this->assertFalse($parameter->getIsReference());
+        $this->assertTrue($parameter->getIsOptional());
+        $this->assertFalse($parameter->getIsVariadic());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMagicMethodParameterTypeIsResolved(): void
+    {
+        $method = $this->indexMethod('MagicMethodParameterTypeIsResolved.phpt');
+
+        $this->assertCount(1, $method->getParameters());
+
+        $parameter = $method->getParameters()[0];
+
+        $this->assertCount(1, $parameter->getTypes());
+        $this->assertEquals('A', $parameter->getTypes()[0]->getType());
+        $this->assertEquals('\N\A', $parameter->getTypes()[0]->getFqcn());
     }
 
     /**
