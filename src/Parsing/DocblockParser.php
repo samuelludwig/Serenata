@@ -580,13 +580,7 @@ class DocblockParser
                             $type = 'void';
                             $methodSignature = $match[3];
                             $description = null;
-                        } elseif (mb_strpos($match[2], '(') != false) {
-                            // The return type was omitted, e.g. '@method foo() My description.', in which case the
-                            // method returns 'void'.
-                            $type = 'void';
-                            $methodSignature = $match[2];
-                            $description = $match[3];
-                        } else {
+                        } elseif (mb_strpos($match[2], '(') === false) {
                             // The description was omitted.
                             $type = $match[2];
                             $methodSignature = $match[3];
@@ -616,21 +610,10 @@ class DocblockParser
                                 $parameterName = $match[2];
                                 $defaultValue = $match[3];
                             } elseif ($partCount == 3) {
-                                if (!empty($match[1]) && $match[1][0] == '$') {
-                                    $parameterType = null;
-                                    $parameterName = $match[1];
-                                    $defaultValue = $match[2];
-                                } else {
-                                    $parameterType = $match[1] ?: null;
-                                    $parameterName = $match[2];
-                                    $defaultValue = null;
-                                }
-                            } /*elseif ($partCount == 2) {
-                                // NOTE: Caught by $partCount == 3 (the type will be an empty string).
-                                $parameterType = null;
-                                $parameterName = $match[1];
+                                $parameterType = $match[1] ?: null;
+                                $parameterName = $match[2];
                                 $defaultValue = null;
-                            } */
+                            }
 
                             $data = [
                                 'type'         => $parameterType,
