@@ -1000,7 +1000,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $this->file,
             $structure->getStartLine(),
             $structure->getStartLine(),
-            mb_substr($structure->getFqcn(), 1),
+            '\'' . mb_substr($structure->getFqcn(), 1) . '\'',
             false,
             false,
             'PHP built-in class constant that evaluates to the FCQN.',

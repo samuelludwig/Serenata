@@ -59,7 +59,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'name'               => 'class',
                     'startLine'          => 10,
                     'endLine'            => 10,
-                    'defaultValue'       => 'A\SimpleClass',
+                    'defaultValue'       => '\'A\SimpleClass\'',
                     'filename'           => $this->getPathFor($fileName),
                     'isPublic'           => true,
                     'isProtected'        => false,
