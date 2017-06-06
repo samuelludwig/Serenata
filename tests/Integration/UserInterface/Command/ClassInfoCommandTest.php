@@ -69,7 +69,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'hasDocblock'        => false,
                     'hasDocumentation'   => false,
 
-                    'shortDescription'   => 'PHP built-in class constant that evaluates to the FCQN.',
+                    'shortDescription'   => 'PHP built-in class constant that evaluates to the FQCN.',
                     'longDescription'    => null,
                     'typeDescription'    => null,
 

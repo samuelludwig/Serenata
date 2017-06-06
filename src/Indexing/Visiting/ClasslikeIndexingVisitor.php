@@ -1003,7 +1003,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             '\'' . mb_substr($structure->getFqcn(), 1) . '\'',
             false,
             false,
-            'PHP built-in class constant that evaluates to the FCQN.',
+            'PHP built-in class constant that evaluates to the FQCN.',
             null,
             null,
             [new Structures\TypeInfo('string', 'string')],
