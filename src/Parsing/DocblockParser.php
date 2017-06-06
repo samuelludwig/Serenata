@@ -572,7 +572,7 @@ class DocblockParser
                     $partCount = count($match);
 
                     if ($partCount == 5) {
-                        $type = $match[2];
+                        $type = $match[2] ?: 'void';
                         $methodSignature = $match[3];
                         $description = $match[4];
                     } else if ($partCount == 4) {
