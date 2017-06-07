@@ -84,9 +84,45 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
         $this->assertTrue($structure->getHasDocblock());
     }
 
-    // TODO: Test interface parents
-    // TODO: Test interface children
-    // TODO: Test interface implementors
+    /**
+     * @return void
+     */
+    public function testInterfaceParentChildRelationship(): void
+    {
+        $path = $this->getPathFor('InterfaceParentChildRelationship.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Interface_::class)->findAll();
+
+        $this->assertCount(3, $entities);
+
+        $this->assertEmpty($entities[0]->getParentFqcns());
+        $this->assertCount(2, $entities[0]->getChildFqcns());
+        $this->assertEquals($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
+        $this->assertEquals($entities[2]->getFqcn(), $entities[0]->getChildFqcns()[1]);
+
+        $this->assertCount(1, $entities[1]->getParentFqcns());
+        $this->assertEquals($entities[0]->getFqcn(), $entities[1]->getParentFqcns()[0]);
+        $this->assertCount(1, $entities[1]->getChildFqcns());
+        $this->assertEquals($entities[2]->getFqcn(), $entities[1]->getChildFqcns()[0]);
+
+        $this->assertCount(2, $entities[2]->getParentFqcns());
+        $this->assertEquals($entities[0]->getFqcn(), $entities[2]->getParentFqcns()[0]);
+        $this->assertEquals($entities[1]->getFqcn(), $entities[2]->getParentFqcns()[1]);
+        $this->assertEmpty($entities[2]->getChildFqcns());
+    }
+
+    /**
+     * @return void
+     */
+    public function testInterfaceImplementor(): void
+    {
+        $structure = $this->indexInterface('InterfaceImplementor.phpt');
+
+        $this->assertCount(1, $structure->getImplementorFqcns());
+        $this->assertEquals('\C', $structure->getImplementorFqcns()[0]);
+    }
 
     /**
      * @return void
