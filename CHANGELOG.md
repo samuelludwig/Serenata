@@ -52,6 +52,7 @@
   * The non-resolved type provided no context and could be ambiguous.
   * If the type needs to be relative to local imports, you can always localize the type using the appropriate command.
     * In the case of the atom-refactoring package, this will fix the issue where stubbing an interface method would get the return type hint wrong in the stub, because it was attempting to localize a type that wasn't fully qualified in the first place (at least if the original interface method also didn't use an FQCN).
+* Fixed the short and long description for classlikes being an empty string instead of `null` when not present.
 * Fixed the short, long and type description for global and class constants being an empty string instead of `null` when not present.
 * Fixed the short, long and type description for properties being an empty string instead of `null` when not present.
 * Fixed the short, long and return description for functions and methods being an empty string instead of `null` when not present.

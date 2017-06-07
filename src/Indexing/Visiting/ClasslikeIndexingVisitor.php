@@ -241,8 +241,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $this->file,
                 $node->getLine(),
                 $node->getAttribute('endLine'),
-                $documentation['descriptions']['short'],
-                $documentation['descriptions']['long'],
+                $documentation['descriptions']['short'] ?: null,
+                $documentation['descriptions']['long'] ?: null,
                 $node->isAbstract(),
                 $node->isFinal(),
                 $documentation['annotation'],
@@ -257,8 +257,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $this->file,
                 $node->getLine(),
                 $node->getAttribute('endLine'),
-                $documentation['descriptions']['short'],
-                $documentation['descriptions']['long'],
+                $documentation['descriptions']['short'] ?: null,
+                $documentation['descriptions']['long'] ?: null,
                 $documentation['deprecated'],
                 !empty($docComment)
             );
@@ -269,8 +269,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $this->file,
                 $node->getLine(),
                 $node->getAttribute('endLine'),
-                $documentation['descriptions']['short'],
-                $documentation['descriptions']['long'],
+                $documentation['descriptions']['short'] ?: null,
+                $documentation['descriptions']['long'] ?: null,
                 $documentation['deprecated'],
                 !empty($docComment)
             );
