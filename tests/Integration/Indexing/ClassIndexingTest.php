@@ -8,14 +8,14 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class StructureIndexingTest extends AbstractIntegrationTest
+class ClassIndexingTest extends AbstractIntegrationTest
 {
     /**
      * @return void
      */
     public function testSimpleClass(): void
     {
-        $structure = $this->indexStructure('SimpleClass.phpt');
+        $structure = $this->indexClass('SimpleClass.phpt');
 
         $this->assertTrue($structure instanceof Structures\Class_);
         $this->assertEquals('Test', $structure->getName());
@@ -41,57 +41,6 @@ class StructureIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($structure->getTraitPrecedences());
     }
 
-    /**
-     * @return void
-     */
-    public function testSimpleInterface(): void
-    {
-        $structure = $this->indexStructure('SimpleInterface.phpt');
-
-        $this->assertTrue($structure instanceof Structures\Interface_);
-        $this->assertEquals('Test', $structure->getName());
-        $this->assertEquals('\Test', $structure->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleInterface.phpt'), $structure->getFile()->getPath());
-        $this->assertEquals(3, $structure->getStartLine());
-        $this->assertEquals(6, $structure->getEndLine());
-        $this->assertNull($structure->getShortDescription());
-        $this->assertNull($structure->getLongDescription());
-        $this->assertFalse($structure->getIsDeprecated());
-        $this->assertFalse($structure->getHasDocblock());
-        $this->assertCount(1, $structure->getConstants());
-        $this->assertEmpty($structure->getProperties());
-        $this->assertEmpty($structure->getMethods());
-        $this->assertEmpty($structure->getParentFqcns());
-        $this->assertEmpty($structure->getChildFqcns());
-        $this->assertEmpty($structure->getImplementorFqcns());
-    }
-
-    /**
-     * @return void
-     */
-    public function testSimpleTrait(): void
-    {
-        $structure = $this->indexStructure('SimpleTrait.phpt');
-
-        $this->assertTrue($structure instanceof Structures\Trait_);
-        $this->assertEquals('Test', $structure->getName());
-        $this->assertEquals('\Test', $structure->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getPath());
-        $this->assertEquals(3, $structure->getStartLine());
-        $this->assertEquals(6, $structure->getEndLine());
-        $this->assertNull($structure->getShortDescription());
-        $this->assertNull($structure->getLongDescription());
-        $this->assertFalse($structure->getIsDeprecated());
-        $this->assertFalse($structure->getHasDocblock());
-        $this->assertCount(1, $structure->getConstants());
-        $this->assertEmpty($structure->getProperties());
-        $this->assertEmpty($structure->getMethods());
-        $this->assertEmpty($structure->getTraitFqcns());
-        $this->assertEmpty($structure->getTraitUserFqcns());
-        $this->assertEmpty($structure->getTraitAliases());
-        $this->assertEmpty($structure->getTraitPrecedences());
-    }
-
     // TODO: Test class namespace
     // TODO: Test class short description
     // TODO: Test class long description
@@ -106,25 +55,6 @@ class StructureIndexingTest extends AbstractIntegrationTest
     // TODO: Test class traits
     // TODO: Test class trait aliases
     // TODO: Test class trait precedences
-
-    // TODO: Test interface namespace
-    // TODO: Test interface short description
-    // TODO: Test interface long description
-    // TODO: Test interface deprecated
-    // TODO: Test interface has docblock
-    // TODO: Test interface parents
-    // TODO: Test interface children
-    // TODO: Test interface implementors
-
-    // TODO: Test trait namespace
-    // TODO: Test trait short description
-    // TODO: Test trait long description
-    // TODO: Test trait deprecated
-    // TODO: Test trait has docblock
-    // TODO: Test trait traits
-    // TODO: Test trait trait users
-    // TODO: Test trait trait predecences
-    // TODO: Test trait trait aliases
 
     /**
      * @return void
@@ -161,19 +91,19 @@ class StructureIndexingTest extends AbstractIntegrationTest
     /**
      * @param string $file
      *
-     * @return Structures\Structure
+     * @return Structures\Class_
      */
-    protected function indexStructure(string $file): Structures\Structure
+    protected function indexClass(string $file): Structures\Class_
     {
         $path = $this->getPathFor($file);
 
         $this->indexTestFile($this->container, $path);
 
-        $classes = $this->container->get('managerRegistry')->getRepository(Structures\Structure::class)->findAll();
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        $this->assertCount(1, $classes);
+        $this->assertCount(1, $entities);
 
-        return $classes[0];
+        return $entities[0];
     }
 
     /**
@@ -183,6 +113,6 @@ class StructureIndexingTest extends AbstractIntegrationTest
      */
     protected function getPathFor(string $file): string
     {
-        return __DIR__ . '/StructureIndexingTest/' . $file;
+        return __DIR__ . '/ClassIndexingTest/' . $file;
     }
 }
