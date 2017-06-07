@@ -17,7 +17,6 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('SimpleClass.phpt');
 
-        $this->assertTrue($structure instanceof Structures\Class_);
         $this->assertEquals('Test', $structure->getName());
         $this->assertEquals('\Test', $structure->getFqcn());
         $this->assertEquals($this->getPathFor('SimpleClass.phpt'), $structure->getFile()->getPath());
@@ -41,11 +40,56 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($structure->getTraitPrecedences());
     }
 
-    // TODO: Test class namespace
-    // TODO: Test class short description
-    // TODO: Test class long description
-    // TODO: Test class deprecated
-    // TODO: Test class has docblock
+    /**
+     * @return void
+     */
+    public function testClassNamespace(): void
+    {
+        $structure = $this->indexClass('ClassNamespace.phpt');
+
+        $this->assertEquals('\N\Test', $structure->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassShortDescription(): void
+    {
+        $structure = $this->indexClass('ClassShortDescription.phpt');
+
+        $this->assertEquals('A summary.', $structure->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassLongDescription(): void
+    {
+        $structure = $this->indexClass('ClassLongDescription.phpt');
+
+        $this->assertEquals('A long description.', $structure->getLongDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeprecatedClass(): void
+    {
+        $structure = $this->indexClass('DeprecatedClass.phpt');
+
+        $this->assertTrue($structure->getIsDeprecated());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassWithDocblock(): void
+    {
+        $structure = $this->indexClass('ClassWithDocblock.phpt');
+
+        $this->assertTrue($structure->getHasDocblock());
+    }
+
     // TODO: Test class is abstract
     // TODO: Test class is final
     // TODO: Test class is annotation

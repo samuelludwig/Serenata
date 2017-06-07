@@ -35,11 +35,56 @@ class TraitIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($structure->getTraitPrecedences());
     }
 
-    // TODO: Test trait namespace
-    // TODO: Test trait short description
-    // TODO: Test trait long description
-    // TODO: Test trait deprecated
-    // TODO: Test trait has docblock
+    /**
+     * @return void
+     */
+    public function testTraitNamespace(): void
+    {
+        $structure = $this->indexTrait('TraitNamespace.phpt');
+
+        $this->assertEquals('\N\Test', $structure->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitShortDescription(): void
+    {
+        $structure = $this->indexTrait('TraitShortDescription.phpt');
+
+        $this->assertEquals('A summary.', $structure->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitLongDescription(): void
+    {
+        $structure = $this->indexTrait('TraitLongDescription.phpt');
+
+        $this->assertEquals('A long description.', $structure->getLongDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeprecatedTrait(): void
+    {
+        $structure = $this->indexTrait('DeprecatedTrait.phpt');
+
+        $this->assertTrue($structure->getIsDeprecated());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitWithDocblock(): void
+    {
+        $structure = $this->indexTrait('TraitWithDocblock.phpt');
+
+        $this->assertTrue($structure->getHasDocblock());
+    }
+
     // TODO: Test trait traits
     // TODO: Test trait trait users
     // TODO: Test trait trait predecences

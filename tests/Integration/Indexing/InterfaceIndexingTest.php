@@ -34,11 +34,56 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($structure->getImplementorFqcns());
     }
 
-    // TODO: Test interface namespace
-    // TODO: Test interface short description
-    // TODO: Test interface long description
-    // TODO: Test interface deprecated
-    // TODO: Test interface has docblock
+    /**
+     * @return void
+     */
+    public function testInterfaceNamespace(): void
+    {
+        $structure = $this->indexInterface('InterfaceNamespace.phpt');
+
+        $this->assertEquals('\N\Test', $structure->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testInterfaceShortDescription(): void
+    {
+        $structure = $this->indexInterface('InterfaceShortDescription.phpt');
+
+        $this->assertEquals('A summary.', $structure->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testInterfaceLongDescription(): void
+    {
+        $structure = $this->indexInterface('InterfaceLongDescription.phpt');
+
+        $this->assertEquals('A long description.', $structure->getLongDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeprecatedInterface(): void
+    {
+        $structure = $this->indexInterface('DeprecatedInterface.phpt');
+
+        $this->assertTrue($structure->getIsDeprecated());
+    }
+
+    /**
+     * @return void
+     */
+    public function testInterfaceWithDocblock(): void
+    {
+        $structure = $this->indexInterface('InterfaceWithDocblock.phpt');
+
+        $this->assertTrue($structure->getHasDocblock());
+    }
+
     // TODO: Test interface parents
     // TODO: Test interface children
     // TODO: Test interface implementors
