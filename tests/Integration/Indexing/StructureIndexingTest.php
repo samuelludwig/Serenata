@@ -92,6 +92,40 @@ class StructureIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($structure->getTraitPrecedences());
     }
 
+    // TODO: Test class namespace
+    // TODO: Test class short description
+    // TODO: Test class long description
+    // TODO: Test class deprecated
+    // TODO: Test class has docblock
+    // TODO: Test class is abstract
+    // TODO: Test class is final
+    // TODO: Test class is annotation
+    // TODO: Test class parent
+    // TODO: Test class children
+    // TODO: Test class interfaces
+    // TODO: Test class traits
+    // TODO: Test class trait aliases
+    // TODO: Test class trait precedences
+
+    // TODO: Test interface namespace
+    // TODO: Test interface short description
+    // TODO: Test interface long description
+    // TODO: Test interface deprecated
+    // TODO: Test interface has docblock
+    // TODO: Test interface parents
+    // TODO: Test interface children
+    // TODO: Test interface implementors
+
+    // TODO: Test trait namespace
+    // TODO: Test trait short description
+    // TODO: Test trait long description
+    // TODO: Test trait deprecated
+    // TODO: Test trait has docblock
+    // TODO: Test trait traits
+    // TODO: Test trait trait users
+    // TODO: Test trait trait predecences
+    // TODO: Test trait trait aliases
+
     /**
      * @return void
      */
