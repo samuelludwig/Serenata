@@ -17,7 +17,6 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('SimpleInterface.phpt');
 
-        $this->assertTrue($structure instanceof Structures\Interface_);
         $this->assertEquals('Test', $structure->getName());
         $this->assertEquals('\Test', $structure->getFqcn());
         $this->assertEquals($this->getPathFor('SimpleInterface.phpt'), $structure->getFile()->getPath());

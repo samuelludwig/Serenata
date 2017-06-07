@@ -17,7 +17,6 @@ class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('SimpleTrait.phpt');
 
-        $this->assertTrue($structure instanceof Structures\Trait_);
         $this->assertEquals('Test', $structure->getName());
         $this->assertEquals('\Test', $structure->getFqcn());
         $this->assertEquals($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getPath());
