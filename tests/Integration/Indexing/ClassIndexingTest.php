@@ -90,11 +90,54 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $this->assertTrue($structure->getHasDocblock());
     }
 
-    // TODO: Test class is abstract
-    // TODO: Test class is final
-    // TODO: Test class is annotation
-    // TODO: Test class parent
-    // TODO: Test class children
+    /**
+     * @return void
+     */
+    public function testAbstractClass(): void
+    {
+        $structure = $this->indexClass('AbstractClass.phpt');
+
+        $this->assertTrue($structure->getIsAbstract());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFinalClass(): void
+    {
+        $structure = $this->indexClass('FinalClass.phpt');
+
+        $this->assertTrue($structure->getIsFinal());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAnnotationClass(): void
+    {
+        $structure = $this->indexClass('AnnotationClass.phpt');
+
+        $this->assertTrue($structure->getIsAnnotation());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassParentChildRelationship(): void
+    {
+        $path = $this->getPathFor('ClassParentChildRelationship.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+        $this->assertCount(2, $entities);
+
+        $this->assertCount(1, $entities[0]->getChildFqcns());
+        $this->assertEquals($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
+        $this->assertEquals($entities[0]->getFqcn(), $entities[1]->getParentFqcn());
+    }
+
     // TODO: Test class interfaces
     // TODO: Test class traits
     // TODO: Test class trait aliases
