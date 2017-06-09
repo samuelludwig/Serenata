@@ -74,7 +74,7 @@ class ClassTraitAlias
     /**
      * @return Class_
      */
-    public function getClass_(): Class_
+    public function getClass(): Class_
     {
         return $this->class;
     }
