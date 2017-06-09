@@ -85,10 +85,112 @@ class TraitIndexingTest extends AbstractIntegrationTest
         $this->assertTrue($structure->getHasDocblock());
     }
 
-    // TODO: Test trait traits
+
     // TODO: Test trait trait users
-    // TODO: Test trait trait predecences
-    // TODO: Test trait trait aliases
+
+
+    /**
+     * @return void
+     */
+    public function testTraitTrait(): void
+    {
+        $path = $this->getPathFor('TraitTrait.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
+
+        $this->assertCount(3, $entities);
+
+        $structure = $entities[2];
+
+        $this->assertCount(2, $structure->getTraitFqcns());
+        $this->assertEquals('\A', $structure->getTraitFqcns()[0]);
+        $this->assertEquals('\B', $structure->getTraitFqcns()[1]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitAlias(): void
+    {
+        $path = $this->getPathFor('TraitTraitAlias.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
+
+        $this->assertCount(2, $entities);
+
+        $structure = $entities[1];
+
+        $this->assertCount(1, $structure->getTraitAliases());
+        $this->assertEquals($structure, $structure->getTraitAliases()[0]->getTrait());
+        $this->assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
+        $this->assertNull($structure->getTraitAliases()[0]->getAccessModifier());
+        $this->assertEquals('foo', $structure->getTraitAliases()[0]->getName());
+        $this->assertEquals('bar', $structure->getTraitAliases()[0]->getAlias());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitAliasWithTraitName(): void
+    {
+        $path = $this->getPathFor('TraitTraitAliasWithTraitName.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
+
+        $this->assertCount(2, $entities);
+
+        $structure = $entities[1];
+
+        $this->assertCount(1, $structure->getTraitAliases());
+        $this->assertEquals('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitAliasWithAccessModifier(): void
+    {
+        $path = $this->getPathFor('TraitTraitAliasWithAccessModifier.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
+
+        $this->assertCount(2, $entities);
+
+        $structure = $entities[1];
+
+        $this->assertCount(1, $structure->getTraitAliases());
+        $this->assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
+        $this->assertEquals('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitPrecedence(): void
+    {
+        $path = $this->getPathFor('TraitTraitPrecedence.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
+
+        $this->assertCount(3, $entities);
+
+        $structure = $entities[2];
+
+        $this->assertCount(1, $structure->getTraitPrecedences());
+        $this->assertEquals($structure, $structure->getTraitPrecedences()[0]->getTrait());
+        $this->assertEquals('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
+        $this->assertEquals('foo', $structure->getTraitPrecedences()[0]->getName());
+    }
 
     /**
      * @return void
