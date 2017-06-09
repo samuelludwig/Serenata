@@ -5,44 +5,44 @@ namespace PhpIntegrator\Indexing\Structures;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Represents an aliased trait method in a class.
+ * Represents an aliased trait method in a trait.
  */
-class ClassTraitAlias extends StructureTraitAlias
+class TraitTraitAlias extends StructureTraitAlias
 {
     /**
-     * @var Class_
+     * @var Trait_
      */
-    private $class;
+    private $trait;
 
     /**
-     * @param Class_           $class
+     * @param Trait_              $trait
      * @param string|null         $traitFqcn
      * @param AccessModifier|null $accessModifier
      * @param string              $name
      * @param string|null         $alias
      */
     public function __construct(
-        Class_ $class,
+        Trait_ $trait,
         ?string $traitFqcn,
         ?AccessModifier $accessModifier,
         string $name,
         ?string $alias
     ) {
         $this->id = (string) Uuid::uuid4();
-        $this->class = $class;
+        $this->trait = $trait;
         $this->traitFqcn = $traitFqcn;
         $this->accessModifier = $accessModifier;
         $this->name = $name;
         $this->alias = $alias;
 
-        $class->addTraitAlias($this);
+        $trait->addTraitAlias($this);
     }
 
     /**
-     * @return Class_
+     * @return Trait_
      */
-    public function getClass(): Class_
+    public function getTrait(): Trait_
     {
-        return $this->class;
+        return $this->trait;
     }
 }

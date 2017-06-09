@@ -7,27 +7,12 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents trait method precedence in a class.
  */
-class ClassTraitPrecedence
+class ClassTraitPrecedence extends StructureTraitPrecedence
 {
-    /**
-     * @var string
-     */
-    private $id;
-
     /**
      * @var Class_
      */
     private $class;
-
-    /**
-     * @var string
-     */
-    private $traitFqcn;
-
-    /**
-     * @var string
-     */
-    private $name;
 
     /**
      * @param Class_ $class
@@ -45,34 +30,10 @@ class ClassTraitPrecedence
     }
 
     /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
      * @return Class_
      */
     public function getClass(): Class_
     {
         return $this->class;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTraitFqcn(): string
-    {
-        return $this->traitFqcn;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

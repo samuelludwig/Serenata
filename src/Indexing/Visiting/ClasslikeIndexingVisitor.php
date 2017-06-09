@@ -468,24 +468,46 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $accessModifier = AccessModifierNameValue::PRIVATE_;
                 }
 
-                $traitAlias = new Structures\ClassTraitAlias(
-                    $structure,
-                    $traitFqcn,
-                    $accessModifier ? $accessModifierMap[$accessModifier] : null,
-                    $adaptation->method,
-                    $adaptation->newName
-                );
+                if ($structure instanceof Structures\Class_) {
+                    $traitAlias = new Structures\ClassTraitAlias(
+                        $structure,
+                        $traitFqcn,
+                        $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                        $adaptation->method,
+                        $adaptation->newName
+                    );
+                } elseif ($structure instanceof Structures\Trait_) {
+                    $traitAlias = new Structures\TraitTraitAlias(
+                        $structure,
+                        $traitFqcn,
+                        $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                        $adaptation->method,
+                        $adaptation->newName
+                    );
+                } else {
+                    continue; // Can't add trait aliases in any other structure type.
+                }
 
                 $this->storage->persist($traitAlias);
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                $traitPrecedence = new Structures\ClassTraitPrecedence(
-                    $structure,
-                    $traitFqcn,
-                    $adaptation->method
-                );
+                if ($structure instanceof Structures\Class_) {
+                    $traitPrecedence = new Structures\ClassTraitPrecedence(
+                        $structure,
+                        $traitFqcn,
+                        $adaptation->method
+                    );
+                } elseif ($structure instanceof Structures\Trait_) {
+                    $traitPrecedence = new Structures\TraitTraitPrecedence(
+                        $structure,
+                        $traitFqcn,
+                        $adaptation->method
+                    );
+                } else {
+                    continue; // Can't add trait precedences in any other structure type.
+                }
 
                 $this->storage->persist($traitPrecedence);
             }

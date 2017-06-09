@@ -158,7 +158,7 @@ class Trait_ extends Structure
     }
 
     /**
-     * @return ClassTraitAlias[]
+     * @return TraitTraitAlias[]
      */
     public function getTraitAliases(): array
     {
@@ -166,17 +166,17 @@ class Trait_ extends Structure
     }
 
     /**
-     * @param ClassTraitAlias $structureTraitAlias
+     * @param TraitTraitAlias $structureTraitAlias
      *
      * @return void
      */
-    public function addTraitAlias(ClassTraitAlias $structureTraitAlias): void
+    public function addTraitAlias(TraitTraitAlias $structureTraitAlias): void
     {
         $this->traitAliases->add($structureTraitAlias);
     }
 
     /**
-     * @return ClassTraitPrecedence[]
+     * @return TraitTraitPrecedence[]
      */
     public function getTraitPrecedences(): array
     {
@@ -184,11 +184,11 @@ class Trait_ extends Structure
     }
 
     /**
-     * @param ClassTraitPrecedence $structureTraitPrecedence
+     * @param TraitTraitPrecedence $structureTraitPrecedence
      *
      * @return void
      */
-    public function addTraitPrecedence(ClassTraitPrecedence $structureTraitPrecedence): void
+    public function addTraitPrecedence(TraitTraitPrecedence $structureTraitPrecedence): void
     {
         $this->traitPrecedences->add($structureTraitPrecedence);
     }
