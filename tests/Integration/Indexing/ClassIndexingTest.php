@@ -138,10 +138,79 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $this->assertEquals($entities[0]->getFqcn(), $entities[1]->getParentFqcn());
     }
 
-    // TODO: Test class interfaces
-    // TODO: Test class traits
-    // TODO: Test class trait aliases
-    // TODO: Test class trait precedences
+    /**
+     * @return void
+     */
+    public function testClassInterface(): void
+    {
+        $structure = $this->indexClass('ClassInterface.phpt');
+
+        $this->assertCount(1, $structure->getInterfaceFqcns());
+        $this->assertEquals('\I', $structure->getInterfaceFqcns()[0]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassTrait(): void
+    {
+        $structure = $this->indexClass('ClassTrait.phpt');
+
+        $this->assertCount(2, $structure->getTraitFqcns());
+        $this->assertEquals('\A', $structure->getTraitFqcns()[0]);
+        $this->assertEquals('\B', $structure->getTraitFqcns()[1]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassTraitAlias(): void
+    {
+        $structure = $this->indexClass('ClassTraitAlias.phpt');
+
+        $this->assertCount(1, $structure->getTraitAliases());
+        $this->assertEquals($structure, $structure->getTraitAliases()[0]->getClass());
+        $this->assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
+        $this->assertNull($structure->getTraitAliases()[0]->getAccessModifier());
+        $this->assertEquals('foo', $structure->getTraitAliases()[0]->getName());
+        $this->assertEquals('bar', $structure->getTraitAliases()[0]->getAlias());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassTraitAliasWithTraitName(): void
+    {
+        $structure = $this->indexClass('ClassTraitAliasWithTraitName.phpt');
+
+        $this->assertCount(1, $structure->getTraitAliases());
+        $this->assertEquals('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassTraitAliasWithAccessModifier(): void
+    {
+        $structure = $this->indexClass('ClassTraitAliasWithAccessModifier.phpt');
+
+        $this->assertCount(1, $structure->getTraitAliases());
+        $this->assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
+        $this->assertEquals('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassTraitPrecedence(): void
+    {
+        $structure = $this->indexClass('ClassTraitPrecedence.phpt');
+
+        $this->assertCount(1, $structure->getTraitPrecedences());
+        $this->assertEquals($structure, $structure->getTraitPrecedences()[0]->getClass());
+        $this->assertEquals('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
+        $this->assertEquals('foo', $structure->getTraitPrecedences()[0]->getName());
+    }
 
     /**
      * @return void
