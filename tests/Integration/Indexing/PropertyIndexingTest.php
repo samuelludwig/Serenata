@@ -70,6 +70,16 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testMagicStaticProperty(): void
+    {
+        $property = $this->indexProperty('MagicStaticProperty.phpt');
+
+        $this->assertTrue($property->getIsStatic());
+    }
+
+    /**
+     * @return void
+     */
     public function testMagicPropertyWithDescription(): void
     {
         $property = $this->indexProperty('MagicPropertyWithDescription.phpt');
