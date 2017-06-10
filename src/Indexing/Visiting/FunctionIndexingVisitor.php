@@ -161,13 +161,11 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition);
             $typeData = array_shift($typeData);
 
-            $throwsData = [
-                'type'        => $typeData->getType(),
-                'full_type'   => $typeData->getFqcn(),
-                'description' => $throw['description'] ?: null
-            ];
-
-            $throws[] = $throwsData;
+            $throws[] = new Structures\ThrowsInfo(
+                $typeData->getType(),
+                $typeData->getFqcn(),
+                $throw['description'] ?: null
+            );
         }
 
         $function = new Structures\Function_(

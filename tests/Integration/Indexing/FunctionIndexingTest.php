@@ -147,13 +147,13 @@ class FunctionIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(2, $function->getThrows());
 
-        $this->assertEquals('A', $function->getThrows()[0]['type']);
-        $this->assertEquals('\N\A', $function->getThrows()[0]['full_type']);
-        $this->assertNull($function->getThrows()[0]['description']);
+        $this->assertEquals('A', $function->getThrows()[0]->getType());
+        $this->assertEquals('\N\A', $function->getThrows()[0]->getFqcn());
+        $this->assertNull($function->getThrows()[0]->getDescription());
 
-        $this->assertEquals('\Exception', $function->getThrows()[1]['type']);
-        $this->assertEquals('\Exception', $function->getThrows()[1]['full_type']);
-        $this->assertEquals('when something goes wrong.', $function->getThrows()[1]['description']);
+        $this->assertEquals('\Exception', $function->getThrows()[1]->getType());
+        $this->assertEquals('\Exception', $function->getThrows()[1]->getFqcn());
+        $this->assertEquals('when something goes wrong.', $function->getThrows()[1]->getDescription());
     }
 
     /**

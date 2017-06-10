@@ -143,13 +143,13 @@ class MethodIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(2, $method->getThrows());
 
-        $this->assertEquals('A', $method->getThrows()[0]['type']);
-        $this->assertEquals('\N\A', $method->getThrows()[0]['full_type']);
-        $this->assertNull($method->getThrows()[0]['description']);
+        $this->assertEquals('A', $method->getThrows()[0]->getType());
+        $this->assertEquals('\N\A', $method->getThrows()[0]->getFqcn());
+        $this->assertNull($method->getThrows()[0]->getDescription());
 
-        $this->assertEquals('\Exception', $method->getThrows()[1]['type']);
-        $this->assertEquals('\Exception', $method->getThrows()[1]['full_type']);
-        $this->assertEquals('when something goes wrong.', $method->getThrows()[1]['description']);
+        $this->assertEquals('\Exception', $method->getThrows()[1]->getType());
+        $this->assertEquals('\Exception', $method->getThrows()[1]->getFqcn());
+        $this->assertEquals('when something goes wrong.', $method->getThrows()[1]->getDescription());
     }
 
     /**

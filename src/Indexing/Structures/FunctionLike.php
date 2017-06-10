@@ -63,7 +63,7 @@ abstract class FunctionLike
     protected $hasDocblock;
 
     /**
-     * @var array[]
+     * @var ThrowsInfo[]
      */
     protected $throws;
 
@@ -166,7 +166,7 @@ abstract class FunctionLike
     }
 
     /**
-     * @return array[]
+     * @return ThrowsInfo[]
      */
     public function getThrows(): array
     {

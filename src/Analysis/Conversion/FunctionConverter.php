@@ -36,8 +36,8 @@ class FunctionConverter extends AbstractConverter
 
         foreach ($function->getThrows() as $throws) {
             $throwsAssoc[] = [
-                'type'        => $throws['type'],
-                'description' => $throws['description']
+                'type'        => $throws->getType(),
+                'description' => $throws->getDescription()
             ];
         }
 
