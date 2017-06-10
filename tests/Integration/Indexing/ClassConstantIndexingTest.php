@@ -124,6 +124,16 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testConstantTypeDescriptionTakesPrecedenceOverSummary(): void
+    {
+        $property = $this->indexConstant('ConstantTypeDescriptionTakesPrecedenceOverSummary.phpt');
+
+        $this->assertEquals('This is a type description.', $property->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
     public function testConstantTypeIsFetchedFromDocblockAndGetsPrecedenceOverDefaultValueType(): void
     {
         $constant = $this->indexConstant('ConstantTypeFromDocblock.phpt');
