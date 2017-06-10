@@ -269,6 +269,26 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCompoundPropertyPropagatesLongDescriptionToAllProperties(): void
+    {
+        $path = $this->getPathFor('CompoundPropertyPropagatesDescriptionsToAllProperties.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+        $this->assertCount(1, $classes);
+        $this->assertCount(2, $classes[0]->getProperties());
+
+        $this->assertEquals('A summary.', $classes[0]->getProperties()[0]->getShortDescription());
+        $this->assertEquals('A long description.', $classes[0]->getProperties()[0]->getLongDescription());
+        $this->assertEquals('A summary.', $classes[0]->getProperties()[1]->getShortDescription());
+        $this->assertEquals('A long description.', $classes[0]->getProperties()[1]->getLongDescription());
+    }
+
+    /**
+     * @return void
+     */
     public function testCompoundPropertyDistinguishesTypesFromDocblockBasedOnName(): void
     {
         $path = $this->getPathFor('CompoundPropertyDistinguishesTypesFromDocblockBasedOnName.phpt');
