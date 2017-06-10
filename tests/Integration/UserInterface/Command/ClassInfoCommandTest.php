@@ -108,30 +108,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testAnnotationClassIsCorrectlyPickedUp(): void
-    {
-        $fileName = 'AnnotationClass.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\AnnotationClass');
-
-        $this->assertTrue($output['isAnnotation']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testFinalClassIsCorrectlyPickedUp(): void
-    {
-        $fileName = 'FinalClass.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\FinalClass');
-
-        $this->assertTrue($output['isFinal']);
-    }
-
-    /**
-     * @return void
-     */
     public function testDataIsCorrectForClassProperties(): void
     {
         $fileName = 'ClassProperty.phpt';
@@ -189,95 +165,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLineMember'   => 14
             ]
         ], $output['properties']['testProperty']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testPropertyDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary(): void
-    {
-        $fileName = 'ClassPropertyDescriptionPrecedence.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEquals('This is a description after the var tag.', $output['properties']['testProperty']['shortDescription']);
-        $this->assertEquals('This is a long description.', $output['properties']['testProperty']['longDescription']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testCompoundClassPropertyStatementsHaveTheirDocblocksAnalyzedCorrectly(): void
-    {
-        $fileName = 'CompoundClassPropertyStatement.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEquals('A description of the first property.', $output['properties']['testProperty1']['shortDescription']);
-        $this->assertEquals('This is a long description.', $output['properties']['testProperty1']['longDescription']);
-
-        $this->assertEquals([
-            [
-                'type'         => 'Foo1',
-                'fqcn'         => '\A\Foo1',
-                'resolvedType' => '\A\Foo1'
-            ]
-        ], $output['properties']['testProperty1']['types']);
-
-        $this->assertEquals('A description of the second property.', $output['properties']['testProperty2']['shortDescription']);
-        $this->assertEquals('This is a long description.', $output['properties']['testProperty2']['longDescription']);
-
-        $this->assertEquals([
-            [
-                'type'         => 'Foo2',
-                'fqcn'         => '\A\Foo2',
-                'resolvedType' => '\A\Foo2'
-            ]
-        ], $output['properties']['testProperty2']['types']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testPropertyTypeDeductionFallsBackToUsingItsDefaultValue(): void
-    {
-        $fileName = 'ClassPropertyDefaultValue.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEquals([
-            [
-                'type'         => 'string',
-                'fqcn'         => 'string',
-                'resolvedType' => 'string'
-            ]
-        ], $output['properties']['testProperty']['types']);
-
-        $this->assertEquals([
-            [
-                'type'         => 'null',
-                'fqcn'         => 'null',
-                'resolvedType' => 'null'
-            ]
-        ], $output['properties']['testPropertyWithNull']['types']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testConstantTypeDeductionFallsBackToUsingItsDefaultValue(): void
-    {
-        $fileName = 'ClassConstantDefaultValue.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEquals([
-            [
-                'type'         => 'array',
-                'fqcn'         => 'array',
-                'resolvedType' => 'array'
-            ]
-        ], $output['constants']['TEST_CONSTANT']['types']);
     }
 
     /**
@@ -420,18 +307,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testFinalMethodIsCorrectlyPickedUp(): void
-    {
-        $fileName = 'FinalClassMethod.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertTrue($output['methods']['finalMethod']['isFinal']);
-    }
-
-    /**
-     * @return void
-     */
     public function testDataIsCorrectForClassConstants(): void
     {
         $fileName = 'ClassConstant.phpt';
@@ -488,19 +363,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLineMember'   => 14
             ]
         ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testConstantDescriptionAfterVarTagTakesPrecedenceOverDocblockSummary(): void
-    {
-        $fileName = 'ClassConstantDescriptionPrecedence.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEquals('This is a description after the var tag.', $output['constants']['TEST_CONSTANT']['shortDescription']);
-        $this->assertEquals('This is a long description.', $output['constants']['TEST_CONSTANT']['longDescription']);
     }
 
     /**
@@ -1223,22 +1085,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testMethodParameterTypesFallBackToDocblock(): void
-    {
-        $fileName = 'MethodParameterDocblockFallBack.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-        $parameters = $output['methods']['testMethod']['parameters'];
-
-        $this->assertEquals('\DateTime', $parameters[0]['types'][0]['type']);
-        $this->assertEquals('bool', $parameters[1]['types'][0]['type']);
-        $this->assertEquals('mixed', $parameters[2]['types'][0]['type']);
-        $this->assertEquals('\Traversable[]', $parameters[3]['types'][0]['type']);
-    }
-
-    /**
-     * @return void
-     */
     public function testMethodParameterTypeIsCorrectlyDeducedIfParameterIsVariadic(): void
     {
         $fileName = 'MethodVariadicParameter.phpt';
@@ -1247,246 +1093,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $parameters = $output['methods']['testMethod']['parameters'];
 
         $this->assertEquals('\stdClass[]', $parameters[0]['types'][0]['type']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testMagicClassPropertiesArePickedUpCorrectly(): void
-    {
-        $fileName = 'MagicClassProperties.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $data = $output['properties']['prop1'];
-
-        $this->assertEquals($data['name'], 'prop1');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], false);
-
-        $this->assertEquals($data['shortDescription'], 'Description 1.');
-        $this->assertEquals($data['longDescription'], '');
-        $this->assertEquals($data['typeDescription'], null);
-
-        $this->assertEquals($data['types'], [
-            [
-                'type'         => 'Type1',
-                'fqcn'         => '\A\Type1',
-                'resolvedType' => '\A\Type1'
-            ]
-        ]);
-
-        $data = $output['properties']['prop2'];
-
-        $this->assertEquals($data['name'], 'prop2');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], false);
-
-        $this->assertEquals($data['shortDescription'], 'Description 2.');
-        $this->assertEquals($data['longDescription'], '');
-
-        $this->assertEquals($data['types'], [
-            [
-                'type'         => 'Type2',
-                'fqcn'         => '\A\Type2',
-                'resolvedType' => '\A\Type2'
-            ]
-        ]);
-
-        $data = $output['properties']['prop3'];
-
-        $this->assertEquals($data['name'], 'prop3');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], false);
-
-        $this->assertEquals($data['shortDescription'], 'Description 3.');
-        $this->assertEquals($data['longDescription'], '');
-
-        $this->assertEquals($data['types'], [
-            [
-                'type'         => 'Type3',
-                'fqcn'         => '\A\Type3',
-                'resolvedType' => '\A\Type3'
-            ]
-        ]);
-
-        $data = $output['properties']['prop4'];
-
-        $this->assertEquals($data['name'], 'prop4');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], true);
-
-        $this->assertEquals($data['shortDescription'], 'Description 4.');
-        $this->assertEquals($data['longDescription'], '');
-
-        $this->assertEquals($data['types'], [
-            [
-                'type'         => 'Type4',
-                'fqcn'         => '\A\Type4',
-                'resolvedType' => '\A\Type4'
-            ]
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testMagicClassMethodsArePickedUpCorrectly(): void
-    {
-        $fileName = 'MagicClassMethods.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $data = $output['methods']['magicFoo'];
-
-        $this->assertEquals($data['name'], 'magicFoo');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], false);
-        $this->assertNull($data['returnTypeHint']);
-
-        $this->assertEquals($data['parameters'], []);
-
-        $this->assertNull($data['shortDescription']);
-        $this->assertNull($data['longDescription']);
-        $this->assertNull($data['returnDescription']);
-
-        $this->assertEquals($data['returnTypes'], [
-            [
-                'type'         => 'void',
-                'fqcn'         => 'void',
-                'resolvedType' => 'void'
-            ]
-        ]);
-
-        $data = $output['methods']['someMethod'];
-
-        $this->assertEquals($data['name'], 'someMethod');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], false);
-        $this->assertNull($data['returnTypeHint']);
-
-        $this->assertEquals($data['parameters'], [
-            [
-                'name'         => 'a',
-                'typeHint'     => null,
-                'description'  => null,
-                'defaultValue' => null,
-                'isNullable'   => false,
-                'isReference'  => false,
-                'isVariadic'   => false,
-                'isOptional'   => false,
-                'types'        => []
-            ],
-
-            [
-                'name'         => 'b',
-                'typeHint'     => null,
-                'description'  => null,
-                'defaultValue' => null,
-                'isNullable'   => false,
-                'isReference'  => false,
-                'isVariadic'   => false,
-                'isOptional'   => false,
-                'types'        => []
-            ],
-
-            [
-                'name'         => 'c',
-                'typeHint'     => null,
-                'description'  => null,
-                'defaultValue' => null,
-                'isNullable'   => false,
-                'isReference'  => false,
-                'isVariadic'   => false,
-                'isOptional'   => true,
-                'types'        => [
-                    [
-                        'type'         => 'array',
-                        'fqcn'         => 'array',
-                        'resolvedType' => 'array'
-                    ]
-                ]
-            ],
-
-            [
-                'name'         => 'd',
-                'typeHint'     => null,
-                'description'  => null,
-                'defaultValue' => null,
-                'isNullable'   => false,
-                'isReference'  => false,
-                'isVariadic'   => false,
-                'isOptional'   => true,
-                'types'        => [
-                    [
-                        'type'         => 'Type',
-                        'fqcn'         => '\A\Type',
-                        'resolvedType' => '\A\Type'
-                    ]
-                ]
-            ]
-        ]);
-
-        $this->assertEquals($data['shortDescription'], 'Description of method Test second line.');
-        $this->assertEquals($data['longDescription'], '');
-        $this->assertNull($data['returnDescription']);
-
-        $this->assertEquals($data['returnTypes'], [
-            [
-                'type'         => 'TestClass',
-                'fqcn'         => '\A\TestClass',
-                'resolvedType' => '\A\TestClass'
-            ]
-        ]);
-
-        $data = $output['methods']['magicFooStatic'];
-
-        $this->assertEquals($data['name'], 'magicFooStatic');
-        $this->assertEquals($data['isMagic'], true);
-        $this->assertEquals($data['startLine'], 11);
-        $this->assertEquals($data['endLine'], 11);
-        $this->assertEquals($data['hasDocblock'], false);
-        $this->assertEquals($data['hasDocumentation'], false);
-        $this->assertEquals($data['isStatic'], true);
-        $this->assertNull($data['returnTypeHint']);
-
-        $this->assertEquals($data['parameters'], []);
-
-        $this->assertNull($data['shortDescription']);
-        $this->assertNull($data['longDescription']);
-        $this->assertNull($data['returnDescription']);
-
-        $this->assertEquals($data['returnTypes'], [
-            [
-                'type'         => 'void',
-                'fqcn'         => 'void',
-                'resolvedType' => 'void'
-            ]
-        ]);
     }
 
     /**
@@ -2089,47 +1695,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testMethodDocblockParameterTypesGetPrecedenceOverTypeHints(): void
-    {
-        $fileName = 'ClassMethodPrecedence.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEquals('string[]', $output['methods']['testMethod']['parameters'][0]['types'][0]['type']);
-        $this->assertEquals('string[]', $output['methods']['testMethod']['parameters'][0]['types'][0]['fqcn']);
-        $this->assertEquals('string', $output['methods']['testMethod']['parameters'][1]['types'][0]['type']);
-        $this->assertEquals('string', $output['methods']['testMethod']['parameters'][1]['types'][0]['fqcn']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testItemsWithoutDocblockAndDefaultValueHaveNoTypes(): void
-    {
-        $fileName = 'ClassMethodNoDocblock.phpt';
-
-        $output = $this->getClassInfo($fileName, 'A\TestClass');
-
-        $this->assertEmpty($output['methods']['testMethod']['parameters'][0]['types']);
-        $this->assertEmpty($output['methods']['testMethod']['returnTypes']);
-        $this->assertEmpty($output['properties']['testProperty']['types']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testCorrectlyFindsClassesInNamelessNamespace(): void
-    {
-        $fileName = 'ClassNamelessNamespace.phpt';
-
-        $output = $this->getClassInfo($fileName, 'TestClass');
-
-        $this->assertEquals('\TestClass', $output['fqcn']);
-    }
-
-    /**
-     * @return void
-     */
     public function testSkipsInterfaceImplementedTwice(): void
     {
         $fileName = 'InterfaceImplementedTwice.phpt';
@@ -2166,63 +1731,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testExplicitlyNullableParameter(): void
-    {
-        $fileName = 'ExplicitlyNullableParameter.phpt';
-
-        $output = $this->getClassInfo($fileName, '\A\TestClass');
-
-        $this->assertEquals([
-            'name'         => 'param',
-            'typeHint'     => '\DateTime',
-            'types'        => [
-                [
-                    'type'         => 'DateTime',
-                    'fqcn'         => '\DateTime',
-                    'resolvedType' => '\DateTime'
-                ],
-                [
-                    'type'         => 'null',
-                    'fqcn'         => 'null',
-                    'resolvedType' => 'null'
-                ]
-            ],
-            'description'  => null,
-            'defaultValue' => null,
-            'isNullable'   => true,
-            'isReference'  => false,
-            'isVariadic'   => false,
-            'isOptional'   => false
-        ], $output['methods']['foo']['parameters'][0]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testExplicitlyNullableReturnType(): void
-    {
-        $fileName = 'ExplicitlyNullableReturnType.phpt';
-
-        $output = $this->getClassInfo($fileName, '\A\TestClass');
-
-        $this->assertEquals([
-            [
-                'type'         => '\DateTime',
-                'fqcn'         => '\DateTime',
-                'resolvedType' => '\DateTime'
-            ],
-
-            [
-                'type'         => 'null',
-                'fqcn'         => 'null',
-                'resolvedType' => 'null'
-            ]
-        ], $output['methods']['foo']['returnTypes']);
-    }
-
-    /**
-     * @return void
-     */
     public function testUnresolvedReturnType(): void
     {
         $fileName = 'UnresolvedReturnType.phpt';
@@ -2236,32 +1744,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'resolvedType' => '\DateTime'
             ]
         ], $output['methods']['foo']['returnTypes']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testClassConstantVisibility(): void
-    {
-        $fileName = 'ClassConstantVisbility.phpt';
-
-        $output = $this->getClassInfo($fileName, '\A\TestClass');
-
-        $this->assertTrue($output['constants']['IMPLICITLY_PUBLIC_CONSTANT']['isPublic']);
-        $this->assertFalse($output['constants']['IMPLICITLY_PUBLIC_CONSTANT']['isProtected']);
-        $this->assertFalse($output['constants']['IMPLICITLY_PUBLIC_CONSTANT']['isPrivate']);
-
-        $this->assertTrue($output['constants']['PUBLIC_CONSTANT']['isPublic']);
-        $this->assertFalse($output['constants']['PUBLIC_CONSTANT']['isProtected']);
-        $this->assertFalse($output['constants']['PUBLIC_CONSTANT']['isPrivate']);
-
-        $this->assertFalse($output['constants']['PROTECTED_CONSTANT']['isPublic']);
-        $this->assertTrue($output['constants']['PROTECTED_CONSTANT']['isProtected']);
-        $this->assertFalse($output['constants']['PROTECTED_CONSTANT']['isPrivate']);
-
-        $this->assertFalse($output['constants']['PRIVATE_CONSTANT']['isPublic']);
-        $this->assertFalse($output['constants']['PRIVATE_CONSTANT']['isProtected']);
-        $this->assertTrue($output['constants']['PRIVATE_CONSTANT']['isPrivate']);
     }
 
     /**
