@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\ClassInfoCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class ClassInfoCommandTest extends AbstractIntegrationTest
