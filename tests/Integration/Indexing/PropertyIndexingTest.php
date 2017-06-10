@@ -161,6 +161,16 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testPropertyTypeDescriptionTakesPrecedenceOverSummary(): void
+    {
+        $property = $this->indexProperty('PropertyTypeDescriptionTakesPrecedenceOverSummary.phpt');
+
+        $this->assertEquals('This is a type description.', $property->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
     public function testPropertyTypeIsFetchedFromDocblockAndGetsPrecedenceOverDefaultValueType(): void
     {
         $property = $this->indexProperty('PropertyTypeFromDocblock.phpt');
