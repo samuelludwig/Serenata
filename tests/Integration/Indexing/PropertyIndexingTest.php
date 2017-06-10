@@ -231,7 +231,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCompoundPropertyPropagatesACcessModifierToAllProperties(): void
+    public function testCompoundPropertyPropagatesAccessModifierToAllProperties(): void
     {
         $path = $this->getPathFor('CompoundPropertyPropagatesAccessModifierToAllProperties.phpt');
 
