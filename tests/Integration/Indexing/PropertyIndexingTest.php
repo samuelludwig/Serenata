@@ -302,9 +302,13 @@ class PropertyIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(1, $classes[0]->getProperties()[0]->getTypes());
         $this->assertEquals('string', $classes[0]->getProperties()[0]->getTypes()[0]->getType());
+        $this->assertEquals('First description.', $classes[0]->getProperties()[0]->getTypeDescription());
+        $this->assertEquals('First description.', $classes[0]->getProperties()[0]->getShortDescription());
 
         $this->assertCount(1, $classes[0]->getProperties()[1]->getTypes());
         $this->assertEquals('int', $classes[0]->getProperties()[1]->getTypes()[0]->getType());
+        $this->assertEquals('Second description.', $classes[0]->getProperties()[1]->getTypeDescription());
+        $this->assertEquals('Second description.', $classes[0]->getProperties()[1]->getShortDescription());
     }
 
     /**
