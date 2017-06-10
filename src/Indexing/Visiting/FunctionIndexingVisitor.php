@@ -102,7 +102,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Function_) {
-            $this->parseFunctionNode($node);
+            $this->indexFunction($node);
         }
     }
 
@@ -111,7 +111,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseFunctionNode(Node\Stmt\Function_ $node): void
+    protected function indexFunction(Node\Stmt\Function_ $node): void
     {
         $localType = null;
         $resolvedType = null;
