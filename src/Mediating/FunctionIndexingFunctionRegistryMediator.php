@@ -61,12 +61,4 @@ class FunctionIndexingFunctionRegistryMediator
             $this->functionListRegistry->remove($this->functionConverter->convert($function));
         });
     }
-
-    /**
-     * @return void
-     */
-    protected function clearCache(): void
-    {
-        $this->functionListRegistry->clearCache();
-    }
 }
