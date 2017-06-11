@@ -8,7 +8,22 @@
     <entity name="PhpIntegrator\Indexing\Structures\Trait_" change-tracking-policy="DEFERRED_EXPLICIT">
         <!-- These can't be join tables as the associations may not disappear if the other end is removed, otherwise -->
         <!-- we'd need to traverse the entire class list to update items when a missing structure is added. -->
+        <field name="traitFqcns"     type="array" nullable="false" />
         <field name="traitUserFqcns" type="array" nullable="false" />
+
+        <one-to-many field="traitAliases" target-entity="PhpIntegrator\Indexing\Structures\TraitTraitAlias" mapped-by="trait">
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>traitTraitAliases</region>
+            </cache>
+        </one-to-many>
+
+        <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\TraitTraitPrecedence" mapped-by="trait">
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>traitTraitPrecedences</region>
+            </cache>
+        </one-to-many>
     </entity>
 
 </doctrine-mapping>
