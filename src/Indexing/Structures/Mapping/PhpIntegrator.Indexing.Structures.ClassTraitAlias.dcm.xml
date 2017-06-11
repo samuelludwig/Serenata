@@ -12,6 +12,15 @@
         <field name="alias"     type="string"  nullable="true"  length="255" />
         <field name="traitFqcn" type="string"  nullable="true"  length="255" />
 
+        <many-to-one field="class" target-entity="PhpIntegrator\Indexing\Structures\Class_" inversed-by="traitAliases">
+            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
+
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>classTraitAliasClass</region>
+            </cache>
+        </many-to-one>
+
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="true" />
 
