@@ -332,7 +332,7 @@ class ClasslikeInfoBuilder
 
             try {
                 $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlike['fqcn']);
-            } catch (UnexpectedValueException $e) {
+            } catch (UnexpectedValueException|CircularDependencyException $e) {
                 continue;
             }
 
@@ -369,7 +369,7 @@ class ClasslikeInfoBuilder
 
             try {
                 $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlike['fqcn']);
-            } catch (UnexpectedValueException $e) {
+            } catch (UnexpectedValueException|CircularDependencyException $e) {
                 continue;
             }
 
@@ -395,7 +395,7 @@ class ClasslikeInfoBuilder
 
             try {
                 $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlike['fqcn']);
-            } catch (UnexpectedValueException $e) {
+            } catch (UnexpectedValueException|CircularDependencyException $e) {
                 continue;
             }
 
