@@ -10,7 +10,7 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
     /**
      * @return void
      */
-    public function testAllFromStubs(): void
+    public function testFetchAllColdFromStubs(): void
     {
         $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
         $dummyDatabasePath = $this->getOutputDirectory() . '/test-global-functions-stubs.sqlite';
