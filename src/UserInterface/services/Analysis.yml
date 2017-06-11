@@ -81,6 +81,9 @@ services:
     methodConverter:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
 
+    namespaceConverter:
+        class: PhpIntegrator\Analysis\Conversion\NamespaceConverter
+
     fileStructureListProvider.instance:
         alias: structureListProvider.doctrineBackend
 
@@ -91,6 +94,9 @@ services:
 
     fileStructureListProvider:
         alias: fileStructureListProvider.cachingDecorator
+
+    fileNamespaceListProvider:
+        alias: namespaceListProvider.doctrineBackend
 
     filePositionClasslikeDeterminer:
         class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
@@ -195,6 +201,20 @@ services:
 
     structureListProvider:
         alias: structureListProvider.registry
+
+    namespaceListProvider.doctrineBackend:
+        class: PhpIntegrator\Analysis\DoctrineNamespaceListProvider
+        arguments:
+            - '@namespaceConverter'
+            - '@managerRegistry'
+
+    namespaceListProvider.registry:
+        class: PhpIntegrator\Analysis\NamespaceListRegistry
+        arguments:
+            - '@namespaceListProvider.doctrineBackend'
+
+    namespaceListProvider:
+        alias: namespaceListProvider.registry
 
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder

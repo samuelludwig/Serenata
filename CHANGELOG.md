@@ -56,6 +56,7 @@
 * Fixed the short, long and type description for global and class constants being an empty string instead of `null` when not present.
 * Fixed the short, long and type description for properties being an empty string instead of `null` when not present.
 * Fixed the short, long and return description for functions and methods being an empty string instead of `null` when not present.
+* Namespaces provided by the namespace list command will now also include the path to the file that they are present in.
 * Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed.
   * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
   * This reduces the maintenance burden of having two separate indexing procedures and lowers the test surface.

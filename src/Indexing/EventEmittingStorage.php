@@ -15,7 +15,12 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     /**
      * @var string
      */
-    public const EVENT_NAMESPACE_INSERTED = 'namespaceInserted';
+    public const EVENT_NAMESPACE_UPDATED = 'namespaceUpdated';
+
+    /**
+     * @var string
+     */
+    public const EVENT_NAMESPACE_REMOVED = 'namespaceRemoved';
 
     /**
      * @var string
@@ -113,7 +118,7 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
         $this->delegate->persist($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(self::EVENT_NAMESPACE_INSERTED);
+            $this->emit(self::EVENT_NAMESPACE_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\FileNamespaceImport) {
             $this->emit(self::EVENT_IMPORT_INSERTED);
         } elseif ($entity instanceof Structures\Constant) {
@@ -134,7 +139,9 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     {
         $this->delegate->delete($entity);
 
-        if ($entity instanceof Structures\Constant) {
+        if ($entity instanceof Structures\FileNamespace) {
+            $this->emit(self::EVENT_NAMESPACE_REMOVED, [$entity]);
+        } elseif ($entity instanceof Structures\Constant) {
             $this->emit(self::EVENT_CONSTANT_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Function_) {
             $this->emit(self::EVENT_FUNCTION_REMOVED, [$entity]);

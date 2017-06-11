@@ -202,4 +202,16 @@ class File
     {
         $this->namespaces->add($namespace);
     }
+
+    /**
+     * @param FileNamespace $namespace
+     */
+    public function removeNamespace(FileNamespace $namespace): void
+    {
+        if (!$this->namespaces->contains($namespace)) {
+            throw new OutOfRangeException('Can not remove namespace from file that isn\'t even part of file');
+        }
+
+        $this->namespaces->removeElement($namespace);
+    }
 }

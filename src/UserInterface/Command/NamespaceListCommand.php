@@ -4,8 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
+use PhpIntegrator\Analysis\NamespaceListProviderInterface;
+use PhpIntegrator\Analysis\FileNamespaceListProviderInterface;
 
 /**
  * Command that shows a list of available namespace.
@@ -13,16 +13,25 @@ use PhpIntegrator\Indexing\ManagerRegistry;
 class NamespaceListCommand extends AbstractCommand
 {
     /**
-     * @var ManagerRegistry
+     * @var NamespaceListProviderInterface
      */
-    private $managerRegistry;
+    private $namespaceListProvider;
 
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @var FileNamespaceListProviderInterface
      */
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
-        $this->managerRegistry = $managerRegistry;
+    private $fileNamespaceListProvider;
+
+    /**
+     * @param NamespaceListProviderInterface     $namespaceListProvider
+     * @param FileNamespaceListProviderInterface $fileNamespaceListProvider
+     */
+    public function __construct(
+        NamespaceListProviderInterface $namespaceListProvider,
+        FileNamespaceListProviderInterface $fileNamespaceListProvider
+    ) {
+        $this->namespaceListProvider = $namespaceListProvider;
+        $this->fileNamespaceListProvider = $fileNamespaceListProvider;
     }
 
     /**
@@ -47,25 +56,9 @@ class NamespaceListCommand extends AbstractCommand
         $criteria = [];
 
         if ($file !== null) {
-            $fileEntity = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
-                'path' => $file
-            ]);
-
-            if ($fileEntity === null) {
-                throw new InvalidArgumentsException("File \"{$file}\" is not present in the index");
-            }
-
-            $criteria['file'] = $fileEntity;
+            return $this->fileNamespaceListProvider->getAllForFile($file);
         }
 
-        $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy($criteria);
-
-        return array_map(function (Structures\FileNamespace $namespace) {
-            return [
-                'name'      => $namespace->getName(),
-                'startLine' => $namespace->getStartLine(),
-                'endLine'   => $namespace->getEndLine()
-            ];
-        }, $namespaces);
+        return $this->namespaceListProvider->getAll();
     }
 }

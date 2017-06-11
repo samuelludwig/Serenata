@@ -32,12 +32,14 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'name'      => null,
+                'file'      => $path . 'NamespaceA.phpt',
                 'startLine' => 0,
                 'endLine'   => 2
             ],
 
             [
                 'name'      => 'NamespaceA',
+                'file'      => $path . 'NamespaceA.phpt',
                 'startLine' => 3,
                 'endLine'   => 9
             ]

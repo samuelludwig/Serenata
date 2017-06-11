@@ -93,4 +93,5 @@ services:
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
         arguments:
-            - '@managerRegistry'
+            - '@namespaceListProvider'
+            - '@fileNamespaceListProvider'

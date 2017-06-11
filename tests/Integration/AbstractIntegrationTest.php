@@ -103,6 +103,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $container->get('functionListProvider.registry')->reset();
         $container->get('constantListProvider.registry')->reset();
         $container->get('structureListProvider.registry')->reset();
+        $container->get('namespaceListProvider.registry')->reset();
 
 
 

@@ -23,7 +23,7 @@ services:
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:PhpIntegrator\Indexing\EventEmittingStorage::EVENT_NAMESPACE_INSERTED
+            - !php/const:PhpIntegrator\Indexing\EventEmittingStorage::EVENT_NAMESPACE_UPDATED
 
     cacheClearingEventMediator3:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
@@ -51,4 +51,11 @@ services:
         arguments:
             - '@structureListProvider.registry'
             - '@classlikeConverter'
+            - '@storage.eventEmittingStorage'
+
+    namespaceIndexingNamespaceRegistryMediator:
+        class: PhpIntegrator\Mediating\NamespaceIndexingNamespaceRegistryMediator
+        arguments:
+            - '@namespaceListProvider.registry'
+            - '@namespaceConverter'
             - '@storage.eventEmittingStorage'

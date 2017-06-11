@@ -48,6 +48,12 @@ class UseStatementIndexingVisitor implements NodeVisitor
      */
     public function beforeTraverse(array $nodes)
     {
+        foreach ($this->file->getNamespaces() as $namespace) {
+            $this->file->removeNamespace($namespace);
+
+            $this->storage->delete($namespace);
+        }
+
         $this->useStatementFetchingVisitor->beforeTraverse($nodes);
     }
 
