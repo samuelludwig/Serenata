@@ -12,7 +12,7 @@ class FileStructureListProviderCachingDecorator implements FileStructureListProv
     /**
      * @var FileStructureListProviderInterface
      */
-    private $StructureClassListProviderInterface;
+    private $structureClassListProviderInterface;
 
     /**
      * @var array
@@ -20,11 +20,11 @@ class FileStructureListProviderCachingDecorator implements FileStructureListProv
     private $cache;
 
     /**
-     * @param FileStructureListProviderInterface $StructureClassListProviderInterface
+     * @param FileStructureListProviderInterface $structureClassListProviderInterface
      */
-    public function __construct(FileStructureListProviderInterface $StructureClassListProviderInterface)
+    public function __construct(FileStructureListProviderInterface $structureClassListProviderInterface)
     {
-        $this->fileStructureListProviderInterface = $StructureClassListProviderInterface;
+        $this->fileStructureListProviderInterface = $structureClassListProviderInterface;
     }
 
     /**
