@@ -139,9 +139,7 @@ class ClasslikeInfoBuilder
     protected function getCheckedClasslikeInfo(string $fqcn, string $originFqcn): ArrayObject
     {
         if (in_array($fqcn, $this->resolutionStack)) {
-            throw new CircularDependencyException(
-                "Circular dependency detected from {$originFqcn} to {$fqcn}!"
-            );
+            throw new CircularDependencyException("Circular dependency detected from {$originFqcn} to {$fqcn}!");
         }
 
         $this->resolutionStack[] = $fqcn;
