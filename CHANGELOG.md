@@ -54,6 +54,7 @@
     * In the case of the atom-refactoring package, this will fix the issue where stubbing an interface method would get the return type hint wrong in the stub, because it was attempting to localize a type that wasn't fully qualified in the first place (at least if the original interface method also didn't use an FQCN).
 * Fixed the short and long description for classlikes being an empty string instead of `null` when not present.
 * Fixed the short, long and type description for global and class constants being an empty string instead of `null` when not present.
+* When a circular dependency exception occurs, requests for the culprit class should now continue working, albeit without the duplicate information.
 * Fixed the short, long and type description for properties being an empty string instead of `null` when not present.
 * Fixed the short, long and return description for functions and methods being an empty string instead of `null` when not present.
 * Various lists containing large data, such as the constant, function, structure and namespace list were previously rebuilt every time a command to fetch them was invoked. These are now internally maintained in a registry to avoid the this expensive operation from happening again every time.
