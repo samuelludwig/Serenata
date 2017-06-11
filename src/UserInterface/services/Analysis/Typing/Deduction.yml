@@ -83,7 +83,7 @@ services:
         arguments:
             - '@typeAnalyzer'
             - '@classlikeInfoBuilder'
-            - '@fileClassListProvider'
+            - '@fileStructureListProvider'
             - '@structureAwareNameResolverFactory'
 
     funcCallNodeTypeDeducer:

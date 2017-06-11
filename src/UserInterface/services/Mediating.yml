@@ -9,7 +9,7 @@ services:
                 - '@classlikeExistenceChecker'
                 - '@globalFunctionExistenceChecker'
                 - '@globalConstantExistenceChecker'
-                - '@fileClassListProvider.cachingDecorator'
+                - '@fileStructureListProvider.cachingDecorator'
 
     cacheClearingEventMediator1:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator

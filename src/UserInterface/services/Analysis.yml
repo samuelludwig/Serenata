@@ -81,21 +81,21 @@ services:
     methodConverter:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
 
-    fileClassListProvider.instance:
-        alias: classListProvider
+    fileStructureListProvider.instance:
+        alias: structureListProvider
 
-    fileClassListProvider.cachingDecorator:
-        class: PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator
+    fileStructureListProvider.cachingDecorator:
+        class: PhpIntegrator\Analysis\Typing\FileStructureListProviderCachingDecorator
         arguments:
-            - '@fileClassListProvider.instance'
+            - '@fileStructureListProvider.instance'
 
-    fileClassListProvider:
-        alias: fileClassListProvider.cachingDecorator
+    fileStructureListProvider:
+        alias: fileStructureListProvider.cachingDecorator
 
     filePositionClasslikeDeterminer:
         class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
         arguments:
-            - '@fileClassListProvider'
+            - '@fileStructureListProvider'
 
     inheritanceResolver:
         class: PhpIntegrator\Analysis\Relations\InheritanceResolver
@@ -182,14 +182,14 @@ services:
     constantListProvider:
         alias: constantListProvider.registry
 
-    classListProvider.doctrineBackend:
-        class: PhpIntegrator\Analysis\DoctrineClassListProvider
+    structureListProvider.doctrineBackend:
+        class: PhpIntegrator\Analysis\DoctrineStructureListProvider
         arguments:
             - '@classlikeConverter'
             - '@managerRegistry'
 
-    classListProvider:
-        alias: classListProvider.doctrineBackend
+    StructureListProvider:
+        alias: structureListProvider.doctrineBackend
 
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder

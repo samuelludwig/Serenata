@@ -7,7 +7,7 @@ use UnexpectedValueException;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
@@ -35,9 +35,9 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $classlikeInfoBuilder;
 
     /**
-     * @var FileClassListProviderInterface
+     * @var FileStructureListProviderInterface
      */
-    private $fileClassListProvider;
+    private $fileStructureListProvider;
 
     /**
      * @var StructureAwareNameResolverFactoryInterface
@@ -47,18 +47,18 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
-     * @param FileClassListProviderInterface             $fileClassListProvider
+     * @param FileStructureListProviderInterface             $fileStructureListProvider
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         TypeAnalyzer $typeAnalyzer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
-        FileClassListProviderInterface $fileClassListProvider,
+        FileStructureListProviderInterface $fileStructureListProvider,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-        $this->fileClassListProvider = $fileClassListProvider;
+        $this->fileStructureListProvider = $fileStructureListProvider;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
@@ -147,7 +147,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function findCurrentClassAtLine(string $file, string $source, int $line): ?string
     {
-        $classes = $this->fileClassListProvider->getAllForFile($file);
+        $classes = $this->fileStructureListProvider->getAllForFile($file);
 
         foreach ($classes as $fqcn => $class) {
             if ($line >= $class['startLine'] && $line <= $class['endLine']) {

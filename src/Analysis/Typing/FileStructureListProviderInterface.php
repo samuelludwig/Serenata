@@ -5,9 +5,9 @@ namespace PhpIntegrator\Analysis\Typing;
 use RuntimeException;
 
 /**
- * Interface for classes that can retrieve a class list for a specific file.
+ * Interface for classes that can retrieve a structure list, possibly for a specific file.
  */
-interface FileClassListProviderInterface
+interface FileStructureListProviderInterface
 {
     /**
      * @throws RuntimeException

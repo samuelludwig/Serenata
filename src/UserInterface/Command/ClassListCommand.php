@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
@@ -12,16 +12,16 @@ use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
 class ClassListCommand extends AbstractCommand
 {
     /**
-     * @var FileClassListProviderInterface
+     * @var FileStructureListProviderInterface
      */
-    private $fileClassListProvider;
+    private $fileStructureListProvider;
 
     /**
-     * @param FileClassListProviderInterface $fileClassListProvider
+     * @param FileStructureListProviderInterface $fileStructureListProvider
      */
-    public function __construct(FileClassListProviderInterface $fileClassListProvider)
+    public function __construct(FileStructureListProviderInterface $fileStructureListProvider)
     {
-        $this->fileClassListProvider = $fileClassListProvider;
+        $this->fileStructureListProvider = $fileStructureListProvider;
     }
 
     /**
@@ -32,9 +32,9 @@ class ClassListCommand extends AbstractCommand
         $file = isset($arguments['file']) ? $arguments['file'] : null;
 
         if ($file !== null) {
-            return $this->fileClassListProvider->getAllForFile($file);
+            return $this->fileStructureListProvider->getAllForFile($file);
         }
 
-        return $this->fileClassListProvider->getAll();
+        return $this->fileStructureListProvider->getAll();
     }
 }

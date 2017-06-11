@@ -8,15 +8,15 @@ use Doctrine\DBAL\Exception\DriverException;
 
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 
-use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
 /**
- * Retrieves a list of available classes via Doctrine.
+ * Retrieves a list of available structures via Doctrine.
  */
-class DoctrineClassListProvider implements FileClassListProviderInterface
+class DoctrineStructureListProvider implements FileStructureListProviderInterface
 {
     /**
      * @var ClasslikeConverter

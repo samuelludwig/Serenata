@@ -4,20 +4,20 @@ namespace PhpIntegrator\Tests\Integration\Analysis;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class ClassListProviderTest extends AbstractIntegrationTest
+class StructureListProviderTest extends AbstractIntegrationTest
 {
     /**
      * @return void
      */
     public function testRetrievesAllClasses(): void
     {
-        $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
-        $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
+        $path = __DIR__ . '/StructureListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/StructureListProviderTest/' . 'FooBarClasses.phpt';
 
         $this->indexTestFile($this->container, $path);
         $this->indexTestFile($this->container, $secondPath);
 
-        $provider = $this->container->get('classListProvider');
+        $provider = $this->container->get('structureListProvider');
 
         $output = $provider->getAll();
 
@@ -33,13 +33,13 @@ class ClassListProviderTest extends AbstractIntegrationTest
      */
     public function testShowsOnlyClassesForRequestedFile(): void
     {
-        $path = __DIR__ . '/ClassListProviderTest/' . 'ClassList.phpt';
-        $secondPath = __DIR__ . '/ClassListProviderTest/' . 'FooBarClasses.phpt';
+        $path = __DIR__ . '/StructureListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/StructureListProviderTest/' . 'FooBarClasses.phpt';
 
         $this->indexTestFile($this->container, $path);
         $this->indexTestFile($this->container, $secondPath);
 
-        $provider = $this->container->get('classListProvider');
+        $provider = $this->container->get('structureListProvider');
 
         $output = $provider->getAllForFile($path);
 
