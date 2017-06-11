@@ -242,7 +242,7 @@ class FileIndexer implements FileIndexerInterface
                 $filePath
             ),
 
-            new Visiting\MetaFileIndexingVisitor(
+            new Visiting\MetaStaticMethodTypeIndexingVisitor(
                 $this->storage,
                 $file
             )

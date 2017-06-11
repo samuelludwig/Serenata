@@ -13,9 +13,9 @@ use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 /**
- * Visitor that traverses a set of nodes, indexing data as meta file data in the process.
+ * Visitor that traverses a set of nodes, indexing data as meta static method type data in the process.
  */
-class MetaFileIndexingVisitor extends NodeVisitorAbstract
+class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var StorageInterface
