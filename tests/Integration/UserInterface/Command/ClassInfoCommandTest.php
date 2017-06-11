@@ -1755,39 +1755,33 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
-     *
      * @return void
      */
-    public function testThrowsExceptionOnCircularDependencyWithClassExtendingItself(): void
+    public function testCircularDependencyWithClassExtendingItselfDoesNotLoop(): void
     {
         $fileName = 'CircularDependencyExtends.phpt';
 
-        $output = $this->getClassInfo($fileName, 'A\C');
+        $this->assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
-     *
      * @return void
      */
-    public function testThrowsExceptionOnCircularDependencyWithClassImplementingItself(): void
+    public function testCircularDependencyWithClassImplementingItselfDoesNotLoop(): void
     {
         $fileName = 'CircularDependencyImplements.phpt';
 
-        $output = $this->getClassInfo($fileName, 'A\C');
+        $this->assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
-     * @expectedException \PhpIntegrator\Analysis\CircularDependencyException
-     *
      * @return void
      */
-    public function testThrowsExceptionOnCircularDependencyWithClassUsingItselfAsTrait(): void
+    public function testCircularDependencyWithClassUsingItselfAsTraitDoesNotLoop(): void
     {
         $fileName = 'CircularDependencyUses.phpt';
 
-        $output = $this->getClassInfo($fileName, 'A\C');
+        $this->assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
