@@ -122,6 +122,8 @@ class Class_ extends Structure
         $this->methods = new ArrayCollection();
 
         $this->setParent($parent);
+
+        $file->addStructure($this);
     }
 
     /**
