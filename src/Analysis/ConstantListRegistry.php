@@ -10,12 +10,12 @@ use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
 /**
- * Registry that maintains a list of (global) functions.
+ * Registry that maintains a list of (global) constants.
  */
-final class FunctionListRegistry implements FunctionListProviderInterface
+final class ConstantListRegistry implements ConstantListProviderInterface
 {
     /**
-     * @var FunctionListProviderInterface
+     * @var ConstantListProviderInterface
      */
     private $delegate;
 
@@ -25,9 +25,9 @@ final class FunctionListRegistry implements FunctionListProviderInterface
     private $registry;
 
     /**
-     * @param FunctionListProviderInterface $delegate
+     * @param ConstantListProviderInterface $delegate
      */
-    public function __construct(FunctionListProviderInterface $delegate)
+    public function __construct(ConstantListProviderInterface $delegate)
     {
         $this->delegate = $delegate;
     }

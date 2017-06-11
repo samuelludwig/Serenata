@@ -97,6 +97,18 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
+    public function beforeTraverse(array $nodes)
+    {
+        foreach ($this->file->getConstants() as $constant) {
+            $this->file->removeConstant($constant);
+
+            $this->storage->delete($constant);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Const_) {

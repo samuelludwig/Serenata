@@ -174,8 +174,13 @@ services:
             - '@constantConverter'
             - '@managerRegistry'
 
+    constantListProvider.registry:
+        class: PhpIntegrator\Analysis\ConstantListRegistry
+        arguments:
+            - '@constantListProvider.doctrineBackend'
+
     constantListProvider:
-        alias: constantListProvider.doctrineBackend
+        alias: constantListProvider.registry
 
     classListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineClassListProvider

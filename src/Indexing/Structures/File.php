@@ -32,6 +32,11 @@ class File
     /**
      * @var ArrayCollection
      */
+    private $constants;
+
+    /**
+     * @var ArrayCollection
+     */
     private $functions;
 
     /**
@@ -51,6 +56,7 @@ class File
         $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);
 
+        $this->constants = new ArrayCollection();
         $this->functions = new ArrayCollection();
     }
 
@@ -87,6 +93,34 @@ class File
     {
         $this->indexedOn = $indexedOn;
         return $this;
+    }
+
+    /**
+     * @return Constant[]
+     */
+    public function getConstants(): array
+    {
+        return $this->constants->toArray();
+    }
+
+    /**
+     * @param Constant $constant
+     */
+    public function addConstant(Constant $constant): void
+    {
+        $this->constants->add($constant);
+    }
+
+    /**
+     * @param Constant $constant
+     */
+    public function removeConstant(Constant $constant): void
+    {
+        if (!$this->constants->contains($constant)) {
+            throw new OutOfRangeException('Can not remove function from file that isn\'t even part of file');
+        }
+
+        $this->constants->removeElement($constant);
     }
 
     /**

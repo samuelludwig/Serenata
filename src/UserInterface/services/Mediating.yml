@@ -32,6 +32,13 @@ services:
             - '@storage'
             - !php/const:PhpIntegrator\Indexing\EventEmittingStorage::EVENT_IMPORT_INSERTED
 
+    constantIndexingConstantRegistryMediator:
+        class: PhpIntegrator\Mediating\ConstantIndexingConstantRegistryMediator
+        arguments:
+            - '@constantListProvider.registry'
+            - '@constantConverter'
+            - '@storage.eventEmittingStorage'
+
     functionIndexingFunctionRegistryMediator:
         class: PhpIntegrator\Mediating\FunctionIndexingFunctionRegistryMediator
         arguments:

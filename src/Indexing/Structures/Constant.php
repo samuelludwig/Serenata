@@ -55,6 +55,8 @@ class Constant extends ConstantLike
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
         $this->types = $types;
+
+        $file->addConstant($this);
     }
 
     /**
