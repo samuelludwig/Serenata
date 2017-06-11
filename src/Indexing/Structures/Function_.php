@@ -62,6 +62,8 @@ class Function_ extends FunctionLike
         $this->returnTypes = $returnTypes;
 
         $this->parameters = new ArrayCollection();
+
+        $file->addFunction($this);
     }
 
     /**

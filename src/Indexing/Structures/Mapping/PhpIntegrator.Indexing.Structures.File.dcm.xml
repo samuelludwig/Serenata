@@ -12,16 +12,23 @@
         <field name="indexedOn" type="datetime" nullable="false" />
 
         <one-to-many field="namespaces" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace" mapped-by="file">
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileNamespaces</region>
-            </cache>
+            </cache> -->
         </one-to-many>
 
-        <cache>
+        <one-to-many field="functions" target-entity="PhpIntegrator\Indexing\Structures\Function_" mapped-by="file">
+            <!-- <cache>
+                <usage>READ_ONLY</usage>
+                <region>fileFunctions</region>
+            </cache> -->
+        </one-to-many>
+
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>file</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

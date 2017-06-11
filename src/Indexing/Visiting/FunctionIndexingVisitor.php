@@ -99,6 +99,18 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
+    public function beforeTraverse(array $nodes)
+    {
+        foreach ($this->file->getFunctions() as $function) {
+            $this->file->removeFunction($function);
+
+            $this->storage->delete($function);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function enterNode(Node $node)
     {
         if ($node instanceof Node\Stmt\Function_) {

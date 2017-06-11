@@ -31,3 +31,10 @@ services:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
             - !php/const:PhpIntegrator\Indexing\EventEmittingStorage::EVENT_IMPORT_INSERTED
+
+    functionIndexingFunctionRegistryMediator:
+        class: PhpIntegrator\Mediating\FunctionIndexingFunctionRegistryMediator
+        arguments:
+            - '@functionListProvider.registry'
+            - '@functionConverter'
+            - '@storage.eventEmittingStorage'

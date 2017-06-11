@@ -23,6 +23,16 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     public const EVENT_IMPORT_INSERTED = 'importInserted';
 
     /**
+     * @var string
+     */
+    public const EVENT_FUNCTION_UPDATED = 'functionUpdated';
+
+    /**
+     * @var string
+     */
+    public const EVENT_FUNCTION_REMOVED = 'functionRemoved';
+
+    /**
      * @var StorageInterface
      */
     private $delegate;
@@ -86,6 +96,10 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
             $this->emit(self::EVENT_NAMESPACE_INSERTED);
         } elseif ($entity instanceof Structures\FileNamespaceImport) {
             $this->emit(self::EVENT_IMPORT_INSERTED);
+        } elseif ($entity instanceof Structures\Function_) {
+            $this->emit(self::EVENT_FUNCTION_UPDATED, [$entity]);
+        } elseif ($entity instanceof Structures\FunctionParameter) {
+            $this->emit(self::EVENT_FUNCTION_UPDATED, [$entity->getFunction()]);
         }
     }
 
@@ -95,6 +109,10 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     public function delete($entity): void
     {
         $this->delegate->delete($entity);
+
+        if ($entity instanceof Structures\Function_) {
+            $this->emit(self::EVENT_FUNCTION_REMOVED, [$entity]);
+        }
     }
 
     /**

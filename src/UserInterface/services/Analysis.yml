@@ -160,8 +160,13 @@ services:
             - '@functionConverter'
             - '@managerRegistry'
 
+    functionListProvider.registry:
+        class: PhpIntegrator\Analysis\FunctionListRegistry
+        arguments:
+            - '@functionListProvider.doctrineBackend'
+
     functionListProvider:
-        alias: functionListProvider.doctrineBackend
+        alias: functionListProvider.registry
 
     constantListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineConstantListProvider

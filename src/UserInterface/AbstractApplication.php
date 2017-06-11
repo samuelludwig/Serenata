@@ -110,6 +110,7 @@ abstract class AbstractApplication
         $container->get('cacheClearingEventMediator1');
         $container->get('cacheClearingEventMediator2');
         $container->get('cacheClearingEventMediator3');
+        $container->get('functionIndexingFunctionRegistryMediator');
     }
 
     /**

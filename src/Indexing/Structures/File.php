@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Indexing\Structures;
 
 use DateTime;
+use OutOfRangeException;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -31,6 +32,11 @@ class File
     /**
      * @var ArrayCollection
      */
+    private $functions;
+
+    /**
+     * @var ArrayCollection
+     */
     private $namespaces;
 
     /**
@@ -44,6 +50,8 @@ class File
         $this->path = $path;
         $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);
+
+        $this->functions = new ArrayCollection();
     }
 
     /**
@@ -68,6 +76,45 @@ class File
     public function getIndexedOn(): DateTime
     {
         return $this->indexedOn;
+    }
+
+    /**
+     * @param DateTime $indexedOn
+     *
+     * @return static
+     */
+    public function setIndexedOn(DateTime $indexedOn)
+    {
+        $this->indexedOn = $indexedOn;
+        return $this;
+    }
+
+    /**
+     * @return Function_[]
+     */
+    public function getFunctions(): array
+    {
+        return $this->functions->toArray();
+    }
+
+    /**
+     * @param Function_ $function
+     */
+    public function addFunction(Function_ $function): void
+    {
+        $this->functions->add($function);
+    }
+
+    /**
+     * @param Function_ $function
+     */
+    public function removeFunction(Function_ $function): void
+    {
+        if (!$this->functions->contains($function)) {
+            throw new OutOfRangeException('Can not remove function from file that isn\'t even part of file');
+        }
+
+        $this->functions->removeElement($function);
     }
 
     /**
