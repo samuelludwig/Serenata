@@ -12,8 +12,6 @@ interface FileStructureListProviderInterface
     /**
      * @throws RuntimeException
      *
-     * @throws RuntimeException
-     *
      * @return array
      */
     public function getAll(): array;
