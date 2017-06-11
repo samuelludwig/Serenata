@@ -2,13 +2,6 @@
 
 namespace PhpIntegrator\Analysis;
 
-use RuntimeException;
-
-use Doctrine\DBAL\Exception\DriverException;
-
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
-
 /**
  * Registry that maintains a list of (global) constants.
  */
