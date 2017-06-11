@@ -47,7 +47,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
-     * @param FileStructureListProviderInterface             $fileStructureListProvider
+     * @param FileStructureListProviderInterface         $fileStructureListProvider
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
