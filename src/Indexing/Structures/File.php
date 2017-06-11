@@ -50,6 +50,11 @@ class File
     private $namespaces;
 
     /**
+     * @var ArrayCollection
+     */
+    private $metaStaticMethodTypes;
+
+    /**
      * @param string          $path
      * @param DateTime        $indexedOn
      * @param FileNamespace[] $namespaces
@@ -64,6 +69,7 @@ class File
         $this->constants = new ArrayCollection();
         $this->functions = new ArrayCollection();
         $this->structures = new ArrayCollection();
+        $this->metaStaticMethodTypes = new ArrayCollection();
     }
 
     /**
@@ -213,5 +219,37 @@ class File
         }
 
         $this->namespaces->removeElement($namespace);
+    }
+
+    /**
+     * @return MetaStaticMethodType[]
+     */
+    public function getMetaStaticMethodTypes(): array
+    {
+        return array_values($this->metaStaticMethodTypes->toArray());
+    }
+
+    /**
+     * @param MetaStaticMethodType $metaStaticMethodType
+     *
+     * @return void
+     */
+    public function addMetaStaticMethodType(MetaStaticMethodType $metaStaticMethodType): void
+    {
+        $this->metaStaticMethodTypes->add($metaStaticMethodType);
+    }
+
+    /**
+     * @param MetaStaticMethodType $metaStaticMethodType
+     */
+    public function removeMetaStaticMethodType(MetaStaticMethodType $metaStaticMethodType): void
+    {
+        if (!$this->metaStaticMethodTypes->contains($metaStaticMethodType)) {
+            throw new OutOfRangeException(
+                'Can not remove meta static method type from file that isn\'t even part of file'
+            );
+        }
+
+        $this->metaStaticMethodTypes->removeElement($metaStaticMethodType);
     }
 }

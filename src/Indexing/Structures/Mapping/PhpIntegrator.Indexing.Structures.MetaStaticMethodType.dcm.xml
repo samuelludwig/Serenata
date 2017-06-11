@@ -15,7 +15,7 @@
         <field name="valueNodeType"    type="string"  nullable="false"  length="255" />
         <field name="returnType"       type="string"  nullable="false"  length="255" />
 
-        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
+        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="metaStaticMethodTypes">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
             <cache>

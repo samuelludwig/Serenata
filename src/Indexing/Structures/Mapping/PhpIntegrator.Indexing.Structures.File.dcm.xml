@@ -39,6 +39,13 @@
             </cache> -->
         </one-to-many>
 
+        <one-to-many field="metaStaticMethodTypes" target-entity="PhpIntegrator\Indexing\Structures\MetaStaticMethodType" mapped-by="file">
+            <!-- <cache>
+                <usage>READ_ONLY</usage>
+                <region>fileMetaStaticMethodTypes</region>
+            </cache> -->
+        </one-to-many>
+
         <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>file</region>

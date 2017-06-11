@@ -40,6 +40,18 @@ class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
+    public function beforeTraverse(array $nodes)
+    {
+        foreach ($this->file->getMetaStaticMethodTypes() as $metaStaticMethodType) {
+            $this->file->removeMetaStaticMethodType($metaStaticMethodType);
+
+            $this->storage->delete($metaStaticMethodType);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function enterNode(Node $node)
     {
         $namespaceName = $node->getAttribute('namespace');
