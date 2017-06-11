@@ -25,7 +25,7 @@
         <field name="isDeprecated"       type="boolean" nullable="false" />
         <field name="hasDocblock"        type="boolean" nullable="false" />
 
-        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
+        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="structures">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
             <cache>

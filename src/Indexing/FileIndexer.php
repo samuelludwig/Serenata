@@ -118,16 +118,28 @@ class FileIndexer implements FileIndexerInterface
 
         $file = $this->storage->findFileByPath($filePath);
 
-        if ($file !== null) {
-            $this->storage->delete($file);
-
-            // TODO: Rewrite indexing to update the file instead of delete it in its entirety later on. Flushing to remove
-            // should then be obsolete.
-            $this->storage->commitTransaction();
-            $this->storage->beginTransaction();
+        if ($file === null) {
+            $file = new Structures\File($filePath, new DateTime(), []);
+        } else {
+            $file->setIndexedOn(new DateTime());
         }
 
-        $file = new Structures\File($filePath, new DateTime(), []);
+
+
+
+        // if ($file !== null) {
+        //     $this->storage->delete($file);
+        //
+        //     // TODO: Rewrite indexing to update the file instead of delete it in its entirety later on. Flushing to remove
+        //     // should then be obsolete.
+        //     $this->storage->commitTransaction();
+        //     $this->storage->beginTransaction();
+        // }
+        //
+        // $file = new Structures\File($filePath, new DateTime(), []);
+
+
+
 
         $this->storage->persist($file);
 
