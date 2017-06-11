@@ -106,7 +106,7 @@ class File
      */
     public function getConstants(): array
     {
-        return $this->constants->toArray();
+        return array_values($this->constants->toArray());
     }
 
     /**
@@ -134,7 +134,7 @@ class File
      */
     public function getFunctions(): array
     {
-        return $this->functions->toArray();
+        return array_values($this->functions->toArray());
     }
 
     /**
@@ -162,7 +162,7 @@ class File
      */
     public function getStructures(): array
     {
-        return $this->structures->toArray();
+        return array_values($this->structures->toArray());
     }
 
     /**
@@ -190,7 +190,7 @@ class File
      */
     public function getNamespaces(): array
     {
-        return $this->namespaces->toArray();
+        return array_values($this->namespaces->toArray());
     }
 
     /**
