@@ -71,6 +71,8 @@ class Interface_ extends Structure
         $this->constants = new ArrayCollection();
         $this->properties = new ArrayCollection();
         $this->methods = new ArrayCollection();
+
+        $file->addStructure($this);
     }
 
     /**
