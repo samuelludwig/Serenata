@@ -120,6 +120,7 @@ class ClasslikeInfoBuilder
      * @param string $fqcn
      *
      * @throws UnexpectedValueException
+     * @throws CircularDependencyException
      *
      * @return array
      */
@@ -133,6 +134,8 @@ class ClasslikeInfoBuilder
     /**
      * @param string $fqcn
      * @param string $originFqcn
+     *
+     * @throws CircularDependencyException
      *
      * @return ArrayObject
      */
