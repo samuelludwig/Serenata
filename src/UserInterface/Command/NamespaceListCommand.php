@@ -7,8 +7,6 @@ use ArrayAccess;
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
-use PhpIntegrator\Utility\NamespaceData;
-
 /**
  * Command that shows a list of available namespace.
  */
