@@ -79,7 +79,7 @@ class Class_ extends Structure
      * @param bool          $isAnnotation
      * @param bool          $isDeprecated
      * @param bool          $hasDocblock
-     * @param Class_|null   $parentFqcn
+     * @param Class_|null   $parent
      */
     public function __construct(
         string $name,
