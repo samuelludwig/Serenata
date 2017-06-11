@@ -188,7 +188,7 @@ services:
             - '@classlikeConverter'
             - '@managerRegistry'
 
-    StructureListProvider:
+    structureListProvider:
         alias: structureListProvider.doctrineBackend
 
     classlikeInfoBuilder:
