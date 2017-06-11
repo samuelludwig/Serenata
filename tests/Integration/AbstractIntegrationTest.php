@@ -102,6 +102,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         // TODO: This needs to happen automatically when the connection changes.
         $container->get('functionListProvider.registry')->reset();
         $container->get('constantListProvider.registry')->reset();
+        $container->get('structureListProvider.registry')->reset();
 
 
 

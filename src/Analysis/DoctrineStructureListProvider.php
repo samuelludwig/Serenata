@@ -16,7 +16,7 @@ use PhpIntegrator\Indexing\ManagerRegistry;
 /**
  * Retrieves a list of available structures via Doctrine.
  */
-class DoctrineStructureListProvider implements FileStructureListProviderInterface
+class DoctrineStructureListProvider implements FileStructureListProviderInterface, StructureListProviderInterface
 {
     /**
      * @var ClasslikeConverter

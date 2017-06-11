@@ -35,6 +35,7 @@ services:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
         arguments:
             - '@structureListProvider'
+            - '@fileStructureListProvider.instance'
 
     classInfoCommand:
         class: PhpIntegrator\UserInterface\Command\ClassInfoCommand

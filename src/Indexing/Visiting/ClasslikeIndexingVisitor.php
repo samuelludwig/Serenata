@@ -183,6 +183,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->structuresFound = new SplObjectStorage();;
         $this->relationsStorage = new SplObjectStorage();
         $this->traitUseStorage = new SplObjectStorage();
+
+        foreach ($this->file->getStructures() as $structure) {
+            $this->file->removeStructure($structure);
+
+            $this->storage->delete($structure);
+        }
     }
 
     /**

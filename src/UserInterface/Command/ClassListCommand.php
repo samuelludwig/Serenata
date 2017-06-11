@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
+use PhpIntegrator\Analysis\StructureListProviderInterface;
+
 use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
 /**
@@ -12,15 +14,24 @@ use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 class ClassListCommand extends AbstractCommand
 {
     /**
+     * @var StructureListProviderInterface
+     */
+    private $structureListProvider;
+
+    /**
      * @var FileStructureListProviderInterface
      */
     private $fileStructureListProvider;
 
     /**
+     * @param StructureListProviderInterface     $structureListProvider
      * @param FileStructureListProviderInterface $fileStructureListProvider
      */
-    public function __construct(FileStructureListProviderInterface $fileStructureListProvider)
-    {
+    public function __construct(
+        StructureListProviderInterface $structureListProvider,
+        FileStructureListProviderInterface $fileStructureListProvider
+    ) {
+        $this->structureListProvider = $structureListProvider;
         $this->fileStructureListProvider = $fileStructureListProvider;
     }
 
@@ -35,6 +46,6 @@ class ClassListCommand extends AbstractCommand
             return $this->fileStructureListProvider->getAllForFile($file);
         }
 
-        return $this->fileStructureListProvider->getAll();
+        return $this->structureListProvider->getAll();
     }
 }

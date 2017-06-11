@@ -30,18 +30,6 @@ class FileStructureListProviderCachingDecorator implements FileStructureListProv
     /**
      * @inheritDoc
      */
-    public function getAll(): array
-    {
-        if (!isset($this->cache[null])) {
-            $this->cache[null] = $this->fileStructureListProviderInterface->getAll();
-        }
-
-        return $this->cache[null];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getAllForFile(string $filePath): array
     {
         if (!isset($this->cache[$filePath])) {

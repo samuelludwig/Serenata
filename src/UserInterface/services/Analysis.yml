@@ -82,7 +82,7 @@ services:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
 
     fileStructureListProvider.instance:
-        alias: structureListProvider
+        alias: structureListProvider.doctrineBackend
 
     fileStructureListProvider.cachingDecorator:
         class: PhpIntegrator\Analysis\Typing\FileStructureListProviderCachingDecorator
@@ -188,8 +188,13 @@ services:
             - '@classlikeConverter'
             - '@managerRegistry'
 
+    structureListProvider.registry:
+        class: PhpIntegrator\Analysis\StructureListRegistry
+        arguments:
+            - '@structureListProvider.doctrineBackend'
+
     structureListProvider:
-        alias: structureListProvider.doctrineBackend
+        alias: structureListProvider.registry
 
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder

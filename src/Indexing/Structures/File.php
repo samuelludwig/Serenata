@@ -42,6 +42,11 @@ class File
     /**
      * @var ArrayCollection
      */
+    private $structures;
+
+    /**
+     * @var ArrayCollection
+     */
     private $namespaces;
 
     /**
@@ -58,6 +63,7 @@ class File
 
         $this->constants = new ArrayCollection();
         $this->functions = new ArrayCollection();
+        $this->structures = new ArrayCollection();
     }
 
     /**
@@ -149,6 +155,34 @@ class File
         }
 
         $this->functions->removeElement($function);
+    }
+
+    /**
+     * @return Structure[]
+     */
+    public function getStructures(): array
+    {
+        return $this->structures->toArray();
+    }
+
+    /**
+     * @param Structure $structure
+     */
+    public function addStructure(Structure $structure): void
+    {
+        $this->structures->add($structure);
+    }
+
+    /**
+     * @param Structure $structure
+     */
+    public function removeStructure(Structure $structure): void
+    {
+        if (!$this->structures->contains($structure)) {
+            throw new OutOfRangeException('Can not remove structure from file that isn\'t even part of file');
+        }
+
+        $this->structures->removeElement($structure);
     }
 
     /**

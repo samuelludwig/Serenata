@@ -32,6 +32,13 @@
             </cache> -->
         </one-to-many>
 
+        <one-to-many field="structures" target-entity="PhpIntegrator\Indexing\Structures\Structure" mapped-by="file">
+            <!-- <cache>
+                <usage>READ_ONLY</usage>
+                <region>fileFunctions</region>
+            </cache> -->
+        </one-to-many>
+
         <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>file</region>
