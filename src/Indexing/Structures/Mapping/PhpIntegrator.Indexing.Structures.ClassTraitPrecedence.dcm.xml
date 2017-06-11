@@ -11,6 +11,15 @@
         <field name="name"      type="string"  nullable="false" length="255" />
         <field name="traitFqcn" type="string"  nullable="false"  length="255" />
 
+        <many-to-one field="class" target-entity="PhpIntegrator\Indexing\Structures\Class_" inversed-by="traitPrecedences">
+            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
+
+            <cache>
+                <usage>READ_ONLY</usage>
+                <region>classTraitPrecedenceClass</region>
+            </cache>
+        </many-to-one>
+
         <cache>
             <usage>READ_ONLY</usage>
             <region>classTraitPrecedence</region>
