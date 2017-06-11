@@ -112,7 +112,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     protected function parseConstantStatementNode(Node\Stmt\Const_ $node): void
     {
         foreach ($node->consts as $const) {
-            $this->parseConstantNode($const, $node);
+            $this->indexConstant($const, $node);
         }
     }
 
@@ -122,7 +122,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseConstantNode(Node\Const_ $node, Node\Stmt\Const_ $const): void
+    protected function indexConstant(Node\Const_ $node, Node\Stmt\Const_ $const): void
     {
         $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
 
