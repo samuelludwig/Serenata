@@ -63,6 +63,7 @@ services:
     localizeTypeCommand:
         class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
         arguments:
+            - '@storage'
             - '@positionalNameLocalizerFactory'
 
     lintCommand:
