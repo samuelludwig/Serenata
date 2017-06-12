@@ -19,7 +19,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -44,7 +44,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -69,7 +69,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -94,7 +94,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -119,7 +119,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -149,7 +149,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
     public function testChangesArePickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
+            $file = $container->get('storage')->getFileByPath($path);
 
             $this->assertCount(1, $file->getNamespaces());
             $this->assertCount(1, $file->getNamespaces()[0]->getImports());
@@ -159,7 +159,7 @@ class ImportIndexingTest extends AbstractIntegrationTest
         };
 
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
+            $file = $container->get('storage')->getFileByPath($path);
 
             $this->assertCount(1, $file->getNamespaces());
             $this->assertCount(1, $file->getNamespaces()[0]->getImports());

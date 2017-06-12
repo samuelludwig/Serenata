@@ -116,12 +116,11 @@ class FileIndexer implements FileIndexerInterface
 
         $this->storage->beginTransaction();
 
-        $file = $this->storage->findFileByPath($filePath);
-
-        if ($file === null) {
-            $file = new Structures\File($filePath, new DateTime(), []);
-        } else {
+        try {
+            $file = $this->storage->getFileByPath($filePath);
             $file->setIndexedOn(new DateTime());
+        } catch (FileNotFoundStorageException $e) {
+            $file = new Structures\File($filePath, new DateTime(), []);
         }
 
         $this->storage->persist($file);

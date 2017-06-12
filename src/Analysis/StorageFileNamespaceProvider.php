@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis;
 
-use LogicException;
-
 use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
@@ -37,13 +35,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
      */
     public function provide(string $file): array
     {
-        $fileEntity = $this->storage->findFileByPath($file);
-
-        if ($fileEntity === null) {
-            throw new LogicException("Can't provide data for file \"{$file}\" because it wasn't indexed");
-        }
-
-        return $this->mapNamespaces($fileEntity->getNamespaces());
+        return $this->mapNamespaces($this->storage->getFileByPath($file)->getNamespaces());
     }
 
     /**

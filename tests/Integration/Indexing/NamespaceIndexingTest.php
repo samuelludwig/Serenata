@@ -17,7 +17,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -39,7 +39,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -61,7 +61,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->findFileByPath($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -80,7 +80,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
     public function testChangesArePickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
+            $file = $container->get('storage')->getFileByPath($path);
 
             $this->assertCount(3, $file->getNamespaces());
             $this->assertEquals('N', $file->getNamespaces()[1]->getName());
@@ -89,7 +89,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         };
 
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->findFileByPath($path);
+            $file = $container->get('storage')->getFileByPath($path);
 
             $this->assertCount(3, $file->getNamespaces());
             $this->assertEquals(null, $file->getNamespaces()[1]->getName());

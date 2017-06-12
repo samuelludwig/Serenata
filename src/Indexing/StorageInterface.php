@@ -35,10 +35,11 @@ interface StorageInterface
      * @param string $path
      *
      * @throws StorageException
+     * @throws FileNotFoundStorageException
      *
-     * @return Structures\File|null
+     * @return Structures\File
      */
-    public function findFileByPath(string $path): ?Structures\File;
+    public function getFileByPath(string $path): Structures\File;
 
     /**
      * @param object $entity

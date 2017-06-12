@@ -97,9 +97,9 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     /**
      * @inheritDoc
      */
-    public function findFileByPath(string $path): ?Structures\File
+    public function getFileByPath(string $path): Structures\File
     {
-        return $this->delegate->findFileByPath($path);
+        return $this->delegate->getFileByPath($path);
     }
 
     /**
