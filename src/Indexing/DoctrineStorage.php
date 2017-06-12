@@ -59,20 +59,6 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     /**
      * @inheritDoc
      */
-    public function getStructureTypes(): array
-    {
-        try {
-            return $this->managerRegistry->getRepository(Structures\StructureType::class)->findAll();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
-        }
-
-        throw new LogicException('Should never be reached');
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findStructureByFqcn(string $fqcn): ?Structures\Structure
     {
         try {

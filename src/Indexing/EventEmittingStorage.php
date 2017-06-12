@@ -89,14 +89,6 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     /**
      * @inheritDoc
      */
-    public function getStructureTypes(): array
-    {
-        return $this->delegate->getStructureTypes();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findStructureByFqcn(string $fqcn): ?Structures\Structure
     {
         return $this->delegate->findStructureByFqcn($fqcn);

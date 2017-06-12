@@ -22,13 +22,6 @@ interface StorageInterface
      */
     public function getAccessModifiers(): array;
 
-     /**
-      * @throws StorageException
-      *
-      * @return Structures\StructureType[]
-      */
-    public function getStructureTypes(): array;
-
     /**
      * @param string $fqcn
      *
