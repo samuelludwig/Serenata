@@ -44,9 +44,7 @@ class ClassInfoCommand extends AbstractCommand
             );
         }
 
-        $result = $this->getClassInfo($arguments['name']);
-
-        return $result;
+        return $this->getClassInfo($arguments['name']);
     }
 
     /**
