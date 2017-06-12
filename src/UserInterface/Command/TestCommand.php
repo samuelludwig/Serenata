@@ -30,9 +30,7 @@ class TestCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        $success = $this->test();
-
-        return $success;
+        return $this->test();
     }
 
     /**
