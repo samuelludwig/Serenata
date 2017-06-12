@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Linting;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Utility\SourceCodeHelpers;
 
 use PhpParser\Error;
@@ -85,13 +87,13 @@ class Linter
     }
 
     /**
-     * @param string          $file
+     * @param Structures\File $file
      * @param string          $code
      * @param LintingSettings $settings
      *
      * @return array
      */
-    public function lint(string $file, string $code, LintingSettings $settings): array
+    public function lint(Structures\File $file, string $code, LintingSettings $settings): array
     {
         // Parse the file to fetch the information we need.
         $nodes = [];
@@ -125,7 +127,7 @@ class Linter
         }
 
         $traverser = new NodeTraverser();
-        $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
+        $analyzers = $this->getAnalyzersForRequest($file->getPath(), $code, $settings);
 
         foreach ($analyzers as $analyzer) {
             foreach ($analyzer->getVisitors() as $visitor) {

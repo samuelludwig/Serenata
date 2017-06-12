@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
+use PhpIntegrator\Indexing\StorageInterface;
+
 use PhpIntegrator\Linting\Linter;
 use PhpIntegrator\Linting\LintingSettings;
 
@@ -15,6 +17,11 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class LintCommand extends AbstractCommand
 {
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * @var SourceCodeStreamReader
      */
     private $sourceCodeStreamReader;
@@ -25,11 +32,16 @@ class LintCommand extends AbstractCommand
     private $linter;
 
     /**
+     * @param StorageInterface       $storage
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      * @param Linter                 $linter
      */
-    public function __construct(SourceCodeStreamReader $sourceCodeStreamReader, Linter $linter)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        Linter $linter
+    ) {
+        $this->storage = $storage;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->linter = $linter;
     }
@@ -61,7 +73,11 @@ class LintCommand extends AbstractCommand
             !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
         );
 
-        $output = $this->linter->lint($arguments['file'], $code, $settings);
+        $output = $this->linter->lint(
+            $this->storage->getFileByPath($arguments['file']),
+            $code,
+            $settings
+        );
 
         return $output;
     }

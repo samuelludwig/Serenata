@@ -651,14 +651,14 @@ class LinterTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $file
+     * @param string $filePath
      * @param bool   $indexingMayFail
      *
      * @return array
      */
-    protected function lintFile(string $file, bool $indexingMayFail = false): array
+    protected function lintFile(string $filePath, bool $indexingMayFail = false): array
     {
-        $path = __DIR__ . '/LinterTest/' . $file;
+        $path = __DIR__ . '/LinterTest/' . $filePath;
 
         $this->indexTestFile($this->container, $path, $indexingMayFail);
 
@@ -674,6 +674,10 @@ class LinterTest extends AbstractIntegrationTest
             true
         );
 
-        return $linter->lint($path, file_get_contents($path), $settings);
+        return $linter->lint(
+            $this->container->get('storage')->getFileByPath($path),
+            file_get_contents($path),
+            $settings
+        );
     }
 }

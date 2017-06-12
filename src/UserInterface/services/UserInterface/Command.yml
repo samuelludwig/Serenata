@@ -69,6 +69,7 @@ services:
     lintCommand:
         class: PhpIntegrator\UserInterface\Command\LintCommand
         arguments:
+            - '@storage'
             - '@sourceCodeStreamReader'
             - '@linter'
 
