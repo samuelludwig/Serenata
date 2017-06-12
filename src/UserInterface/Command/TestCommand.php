@@ -5,7 +5,6 @@ namespace PhpIntegrator\UserInterface\Command;
 use ArrayAccess;
 
 use PhpIntegrator\Indexing\StorageVersionChecker;
-use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 /**
  * Command that tests a project to see if it is in a properly usable state.
