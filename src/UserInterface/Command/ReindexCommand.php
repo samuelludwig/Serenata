@@ -44,14 +44,12 @@ class ReindexCommand extends AbstractCommand
             }
         }
 
-        $success = $this->indexer->reindex(
+        return $this->indexer->reindex(
             $paths,
             $useStdin,
             isset($arguments['stream-progress']),
             isset($arguments['exclude']) ? $arguments['exclude'] : [],
             isset($arguments['extension']) ? $arguments['extension'] : []
         );
-
-        return $success;
     }
 }
