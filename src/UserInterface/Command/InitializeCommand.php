@@ -27,7 +27,7 @@ class InitializeCommand extends AbstractCommand
     private $managerRegistry;
 
     /**
-     * @var ProjectIndexer
+     * @var Indexer
      */
     private $indexer;
 
