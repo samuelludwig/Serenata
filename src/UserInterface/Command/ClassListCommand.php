@@ -40,7 +40,7 @@ class ClassListCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        $file = isset($arguments['file']) ? $arguments['file'] : null;
+        $file = $arguments['file'] ?? null;
 
         if ($file !== null) {
             return $this->fileStructureListProvider->getAllForFile($file);
