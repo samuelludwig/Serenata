@@ -88,6 +88,7 @@ services:
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
         arguments:
+            - '@storage'
             - '@signatureHelpRetriever'
             - '@sourceCodeStreamReader'
 

@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
+use PhpIntegrator\Indexing\StorageInterface;
+
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -15,6 +17,11 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class SignatureHelpCommand extends AbstractCommand
 {
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * @var SignatureHelpRetriever
      */
     private $signatureHelpRetriever;
@@ -25,13 +32,16 @@ class SignatureHelpCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @param StorageInterface       $storage
      * @param SignatureHelpRetriever $signatureHelpRetriever
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
     public function __construct(
+        StorageInterface $storage,
         SignatureHelpRetriever $signatureHelpRetriever,
         SourceCodeStreamReader $sourceCodeStreamReader
     ) {
+        $this->storage = $storage;
         $this->signatureHelpRetriever = $signatureHelpRetriever;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
@@ -59,6 +69,10 @@ class SignatureHelpCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->signatureHelpRetriever->get($arguments['file'], $code, $offset);
+        return $this->signatureHelpRetriever->get(
+            $this->storage->getFileByPath($arguments['file']),
+            $code,
+            $offset
+        );
     }
 }

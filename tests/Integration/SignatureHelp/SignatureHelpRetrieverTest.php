@@ -334,7 +334,9 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
 
-        return $this->container->get('signatureHelpRetriever')->get($path, $code, $position);
+        $file = $this->container->get('storage')->getFileByPath($path);
+
+        return $this->container->get('signatureHelpRetriever')->get($file, $code, $position);
     }
 
     /**

@@ -10,6 +10,8 @@ use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Parsing\ParserTokenHelper;
 
 use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
@@ -73,9 +75,9 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param int    $position
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $position
      *
      * @throws UnexpectedValueException when there is no signature help to be retrieved for the location.
      * @throws UnexpectedValueException when a node type is encountered that this method doesn't know how to handle.
@@ -83,7 +85,7 @@ class SignatureHelpRetriever
      * @return SignatureHelp
      */
     public function get(
-        string $file,
+        Structures\File $file,
         string $code,
         int $position
     ): SignatureHelp {
@@ -93,7 +95,7 @@ class SignatureHelpRetriever
             $nodes = $this->getNodesFromCode($code);
             $node = $this->getNodeAt($nodes, $position);
 
-            return $this->getSignatureHelpForNode($node, $file, $code, $position);
+            return $this->getSignatureHelpForNode($node, $file->getPath(), $code, $position);
         // } catch (UnexpectedValueException $e) {
         //     return null;
         // }
