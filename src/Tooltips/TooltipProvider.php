@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -111,13 +113,13 @@ class TooltipProvider
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param int    $position The position to analyze and show the tooltip for (byte offset).
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $position The position to analyze and show the tooltip for (byte offset).
      *
      * @return TooltipResult|null
      */
-    public function get(string $file, string $code, int $position): ?TooltipResult
+    public function get(Structures\File $file, string $code, int $position): ?TooltipResult
     {
         $nodes = [];
 
@@ -125,7 +127,7 @@ class TooltipProvider
             $nodes = $this->getNodesFromCode($code);
             $node = $this->getNodeAt($nodes, $position);
 
-            $contents = $this->getTooltipForNode($node, $file, $code);
+            $contents = $this->getTooltipForNode($node, $file->getPath(), $code);
 
             return new TooltipResult($contents);
         } catch (UnexpectedValueException $e) {

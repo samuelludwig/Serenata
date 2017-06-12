@@ -28,6 +28,7 @@ services:
     tooltipCommand:
         class: PhpIntegrator\UserInterface\Command\TooltipCommand
         arguments:
+            - '@storage'
             - '@tooltipProvider'
             - '@sourceCodeStreamReader'
 

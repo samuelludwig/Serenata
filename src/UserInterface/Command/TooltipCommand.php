@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
+use PhpIntegrator\Indexing\StorageInterface;
+
 use PhpIntegrator\Tooltips\TooltipProvider;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -15,6 +17,11 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 class TooltipCommand extends AbstractCommand
 {
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * @var TooltipProvider
      */
     private $tooltipProvider;
@@ -25,11 +32,16 @@ class TooltipCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @param StorageInterface       $storage
      * @param TooltipProvider        $tooltipProvider
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
-    public function __construct(TooltipProvider $tooltipProvider, SourceCodeStreamReader $sourceCodeStreamReader)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        TooltipProvider $tooltipProvider,
+        SourceCodeStreamReader $sourceCodeStreamReader
+    ) {
+        $this->storage = $storage;
         $this->tooltipProvider = $tooltipProvider;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
@@ -57,6 +69,10 @@ class TooltipCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->tooltipProvider->get($arguments['file'], $code, $offset);
+        return $this->tooltipProvider->get(
+            $this->storage->getFileByPath($arguments['file']),
+            $code,
+            $offset
+        );
     }
 }
