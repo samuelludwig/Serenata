@@ -73,12 +73,10 @@ class LintCommand extends AbstractCommand
             !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
         );
 
-        $output = $this->linter->lint(
+        return $this->linter->lint(
             $this->storage->getFileByPath($arguments['file']),
             $code,
             $settings
         );
-
-        return $output;
     }
 }
