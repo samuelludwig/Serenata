@@ -9,6 +9,8 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\StorageInterface;
+
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 /**
@@ -17,15 +19,24 @@ use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryIn
 class ResolveTypeCommand extends AbstractCommand
 {
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * @var StructureAwareNameResolverFactoryInterface
      */
     private $structureAwareNameResolverFactory;
 
     /**
+     * @param StorageInterface                           $storage
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
-    public function __construct(StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+    ) {
+        $this->storage = $storage;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
@@ -56,15 +67,15 @@ class ResolveTypeCommand extends AbstractCommand
      * Resolves the type.
      *
      * @param string $name
-     * @param string $file
+     * @param string $filePath
      * @param int    $line
-     * @param string $kind A constant from {@see UseStatementKind}.
+     * @param string $kind     A constant from {@see UseStatementKind}.
      *
      * @throws InvalidArgumentsException
      *
      * @return string|null
      */
-    public function resolveType(string $name, string $file, int $line, string $kind): ?string
+    public function resolveType(string $name, string $filePath, int $line, string $kind): ?string
     {
         $recognizedKinds = [
             UseStatementKind::TYPE_CLASSLIKE,
@@ -76,7 +87,9 @@ class ResolveTypeCommand extends AbstractCommand
             throw new InvalidArgumentsException('Unknown kind specified!');
         }
 
-        $filePosition = new FilePosition($file, new Position($line, 0));
+        $file = $this->storage->getFileByPath($filePath);
+
+        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
 
         return $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition, $kind);
     }

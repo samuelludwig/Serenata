@@ -57,6 +57,7 @@ services:
     resolveTypeCommand:
         class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
         arguments:
+            - '@storage'
             - '@structureAwareNameResolverFactory'
 
     localizeTypeCommand:
