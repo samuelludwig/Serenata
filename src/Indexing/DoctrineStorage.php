@@ -86,7 +86,7 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
         }
 
         if ($file === null) {
-            throw new FileNotFoundStorageException("Could not find file {$path} in index");
+            throw new FileNotFoundStorageException("Could not find file \"{$path}\" in index");
         }
 
         return $file;
