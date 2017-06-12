@@ -7,11 +7,18 @@ use ArrayAccess;
 use PhpIntegrator\Analysis\NamespaceListProviderInterface;
 use PhpIntegrator\Analysis\FileNamespaceListProviderInterface;
 
+use PhpIntegrator\Indexing\StorageInterface;
+
 /**
  * Command that shows a list of available namespace.
  */
 class NamespaceListCommand extends AbstractCommand
 {
+    /**
+     * @var StorageInterface
+     */
+    private $storage;
+
     /**
      * @var NamespaceListProviderInterface
      */
@@ -23,13 +30,16 @@ class NamespaceListCommand extends AbstractCommand
     private $fileNamespaceListProvider;
 
     /**
+     * @param StorageInterface                   $storage
      * @param NamespaceListProviderInterface     $namespaceListProvider
      * @param FileNamespaceListProviderInterface $fileNamespaceListProvider
      */
     public function __construct(
+        StorageInterface $storage,
         NamespaceListProviderInterface $namespaceListProvider,
         FileNamespaceListProviderInterface $fileNamespaceListProvider
     ) {
+        $this->storage = $storage;
         $this->namespaceListProvider = $namespaceListProvider;
         $this->fileNamespaceListProvider = $fileNamespaceListProvider;
     }
@@ -47,15 +57,17 @@ class NamespaceListCommand extends AbstractCommand
     }
 
     /**
-     * @param string|null $file
+     * @param string|null $filePath
      *
      * @return array
      */
-    public function getNamespaceList(?string $file = null): array
+    public function getNamespaceList(?string $filePath = null): array
     {
         $criteria = [];
 
-        if ($file !== null) {
+        if ($filePath !== null) {
+            $file = $this->storage->getFileByPath($filePath);
+
             return $this->fileNamespaceListProvider->getAllForFile($file);
         }
 

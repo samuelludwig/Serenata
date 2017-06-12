@@ -96,5 +96,6 @@ services:
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
         arguments:
+            - '@storage'
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'

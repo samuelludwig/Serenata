@@ -55,16 +55,12 @@ class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterfac
     /**
      * @inheritDoc
      */
-    public function getAllForFile(string $file): array
+    public function getAllForFile(Structures\File $file): array
     {
         try {
-            $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->createQueryBuilder('entity')
-                ->select('entity')
-                ->innerJoin('entity.file', 'file')
-                ->andWhere('file.path = :path')
-                ->setParameter('path', $file)
-                ->getQuery()
-                ->execute();
+            $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy([
+                'file' => $file
+            ]);
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
