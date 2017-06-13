@@ -1058,7 +1058,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    public function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
+    protected function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
     {
         $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
         $metaFilePath = __DIR__ . '/DeduceTypesCommandTest/' . $metaFile;
