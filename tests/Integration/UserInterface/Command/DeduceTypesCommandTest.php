@@ -11,49 +11,6 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 class DeduceTypesCommandTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param string $metaFile
-     * @param string $expression
-     *
-     * @return array
-     */
-    public function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
-    {
-        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
-        $metaFilePath = __DIR__ . '/DeduceTypesCommandTest/' . $metaFile;
-
-        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
-
-        $this->indexTestFile($this->container, $metaFilePath);
-        $this->indexTestFile($this->container, $path);
-
-        $command = $this->container->get('deduceTypesCommand');
-
-        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
-        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
-        $reflectionMethod->setAccessible(true);
-
-        $file = $this->container->get('storage')->getFileByPath($path);
-
-        return $reflectionMethod->invoke($command, $file, file_get_contents($path), $expression, $markerOffset, false);
-    }
-
-    /**
-     * @param string $path
-     * @param string $marker
-     *
-     * @return int
-     */
-    protected function getMarkerOffset(string $path, string $marker): int
-    {
-        $testFileContents = @file_get_contents($path);
-
-        $markerOffset = mb_strpos($testFileContents, $marker);
-
-        return $markerOffset;
-    }
-
-    /**
      * @return void
      */
     public function testCorrectlyAnalyzesTypeOverrideAnnotations(): void
@@ -1092,5 +1049,48 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         $file = $this->container->get('storage')->getFileByPath($path);
 
         return $reflectionMethod->invoke($command, $file, file_get_contents($path), $expression, $markerOffset, $ignoreLastElement);
+    }
+
+    /**
+     * @param string $file
+     * @param string $metaFile
+     * @param string $expression
+     *
+     * @return array
+     */
+    public function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
+    {
+        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
+        $metaFilePath = __DIR__ . '/DeduceTypesCommandTest/' . $metaFile;
+
+        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
+
+        $this->indexTestFile($this->container, $metaFilePath);
+        $this->indexTestFile($this->container, $path);
+
+        $command = $this->container->get('deduceTypesCommand');
+
+        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
+        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
+        $reflectionMethod->setAccessible(true);
+
+        $file = $this->container->get('storage')->getFileByPath($path);
+
+        return $reflectionMethod->invoke($command, $file, file_get_contents($path), $expression, $markerOffset, false);
+    }
+
+    /**
+     * @param string $path
+     * @param string $marker
+     *
+     * @return int
+     */
+    protected function getMarkerOffset(string $path, string $marker): int
+    {
+        $testFileContents = @file_get_contents($path);
+
+        $markerOffset = mb_strpos($testFileContents, $marker);
+
+        return $markerOffset;
     }
 }
