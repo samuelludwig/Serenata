@@ -21,6 +21,7 @@
   * This command operates similarly, but provides full information over the available signatures instead of just information about the invocation, leaving the caller to handle further type determination and handling.
 * Fix the linter not complaining about missing ampersand signs for reference parameters in docblocks (https://gitlab.com/php-integrator/core/issues/32).
 * `SemanticLint` has been renamed to just `Lint`, as it also lints syntax errors.
+* Requests for files that are not in the index will now be properly denied where applicable instead of resulting in a logic exception being thrown.
 * Linting will no longer return an associative array of all kinds of problems. Instead, it will return a list of error and warning messages, returned by the requested analyzers.
   * The list will include the message and the range (offsets) it applies in. Other data, including the line number, is no longer included.
 * Data related to `throws` is now returned as an array of arrays, each with a `type` and a `description` key instead of an associative array mapping the former to the latter.
