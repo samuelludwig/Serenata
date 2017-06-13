@@ -565,7 +565,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             } elseif ($property->default) {
                 $typeList = $this->nodeTypeDeducer->deduce(
                     $property->default,
-                    $this->filePath,
+                    $this->file,
                     $defaultValue,
                     0
                 );
@@ -763,7 +763,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $types[] = new Structures\TypeInfo('null', 'null');
                 }
             } elseif ($param->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->filePath, $defaultValue, 0);
+                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $defaultValue, 0);
 
                 $types = array_map(function (string $type) {
                     return new Structures\TypeInfo($type, $type);
@@ -842,7 +842,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         } elseif ($node->value) {
             $typeList = $this->nodeTypeDeducer->deduce(
                 $node->value,
-                $this->filePath,
+                $this->file,
                 $defaultValue,
                 0
             );

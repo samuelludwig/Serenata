@@ -12,6 +12,8 @@ use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
@@ -65,7 +67,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Name) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -75,14 +77,14 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param Node\Name $node
-     * @param string    $file
-     * @param string    $code
-     * @param int       $offset
+     * @param Node\Name       $node
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromNameNode(Node\Name $node, string $file, string $code, int $offset): array
+    protected function deduceTypesFromNameNode(Node\Name $node, Structures\File $file, string $code, int $offset): array
     {
         $nameString = NodeHelpers::fetchClassName($node);
 
@@ -115,7 +117,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
         $filePosition = new FilePosition(
-            $file,
+            $file->getPath(),
             new Position($line, 0)
         );
 
@@ -125,13 +127,13 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param string $file
-     * @param string $source
-     * @param int    $offset
+     * @param Structures\File $file
+     * @param string          $source
+     * @param int             $offset
      *
      * @return string|null
      */
-    protected function findCurrentClassAt(string $file, string $source, int $offset): ?string
+    protected function findCurrentClassAt(Structures\File $file, string $source, int $offset): ?string
     {
         $line = SourceCodeHelpers::calculateLineByOffset($source, $offset);
 
@@ -139,13 +141,13 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param string $file
-     * @param string $source
-     * @param int    $line
+     * @param Structures\File $file
+     * @param string          $source
+     * @param int             $line
      *
      * @return string|null
      */
-    protected function findCurrentClassAtLine(string $file, string $source, int $line): ?string
+    protected function findCurrentClassAtLine(Structures\File $file, string $source, int $line): ?string
     {
         $classes = $this->fileStructureListProvider->getAllForFile($file);
 

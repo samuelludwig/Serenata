@@ -254,7 +254,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                     $types[] = new Structures\TypeInfo('null', 'null');
                 }
             } elseif ($param->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->filePath, $defaultValue, 0);
+                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $defaultValue, 0);
 
                 $types = array_map(function (string $type) {
                     return new Structures\TypeInfo($type, $type);

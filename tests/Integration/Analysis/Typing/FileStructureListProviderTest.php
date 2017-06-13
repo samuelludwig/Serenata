@@ -19,7 +19,9 @@ class FileStructureListProviderTest extends AbstractIntegrationTest
 
         $provider = $this->container->get('fileStructureListProvider');
 
-        $output = $provider->getAllForFile($path);
+        $file = $this->container->get('storage')->getFileByPath($path);
+
+        $output = $provider->getAllForFile($file);
 
         $this->assertEquals(2, count($output));
         $this->assertArrayHasKey('\A\FirstClass', $output);

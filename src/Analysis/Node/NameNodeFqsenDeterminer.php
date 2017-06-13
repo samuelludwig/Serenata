@@ -7,6 +7,8 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Utility\NodeHelpers;
@@ -32,15 +34,15 @@ class NameNodeFqsenDeterminer
     }
 
     /**
-     * @param Node\Name $node
-     * @param string    $file
-     * @param int       $line
+     * @param Node\Name       $node
+     * @param Structures\File $file
+     * @param int             $line
      *
      * @return string
      */
-    public function determine(Node\Name $node, string $file, int $line): string
+    public function determine(Node\Name $node, Structures\File $file, int $line): string
     {
-        $filePosition = new FilePosition($file, new Position($line, 0));
+        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
 
         $fileTypeResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 

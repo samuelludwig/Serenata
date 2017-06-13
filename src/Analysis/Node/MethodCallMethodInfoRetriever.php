@@ -9,6 +9,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -41,7 +43,7 @@ class MethodCallMethodInfoRetriever
 
     /**
      * @param Node\Expr\MethodCall|Node\Expr\StaticCall|Node\Expr\New_ $node
-     * @param string                                                   $file
+     * @param Structures\File                                          $file
      * @param string                                                   $code
      * @param int                                                      $offset
      *
@@ -50,7 +52,7 @@ class MethodCallMethodInfoRetriever
      *
      * @return array[]
      */
-    public function retrieve(Node\Expr $node, string $file, string $code, int $offset): array
+    public function retrieve(Node\Expr $node, Structures\File $file, string $code, int $offset): array
     {
         if (
             !$node instanceof Node\Expr\MethodCall &&

@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -27,7 +29,7 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\Variable) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -38,7 +40,7 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\Variable $node
-     * @param string             $file
+     * @param Structures\File    $file
      * @param string             $code
      * @param int                $offset
      *
@@ -46,7 +48,7 @@ class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromVariableNode(
         Node\Expr\Variable $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {

@@ -95,7 +95,7 @@ class SignatureHelpRetriever
             $nodes = $this->getNodesFromCode($code);
             $node = $this->getNodeAt($nodes, $position);
 
-            return $this->getSignatureHelpForNode($node, $file->getPath(), $code, $position);
+            return $this->getSignatureHelpForNode($node, $file, $code, $position);
         // } catch (UnexpectedValueException $e) {
         //     return null;
         // }
@@ -127,16 +127,16 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
-     * @param int    $position
+     * @param Node            $node
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $position
      *
      * @throws UnexpectedValueException
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelpForNode(Node $node, string $file, string $code, int $position): SignatureHelp
+    protected function getSignatureHelpForNode(Node $node, Structures\File $file, string $code, int $position): SignatureHelp
     {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
@@ -275,11 +275,11 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node   $node
-     * @param int    $argumentIndex
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param Node            $node
+     * @param int             $argumentIndex
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @throws UnexpectedValueException
      *
@@ -288,7 +288,7 @@ class SignatureHelpRetriever
     protected function generateResponseFor(
         Node $node,
         int $argumentIndex,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): SignatureHelp {

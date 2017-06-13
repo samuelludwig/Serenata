@@ -9,6 +9,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -38,7 +40,7 @@ class PropertyFetchPropertyInfoRetriever
 
     /**
      * @param Node\Expr\PropertyFetch|Node\Expr\StaticPropertyFetch $node
-     * @param string                                                $file
+     * @param Structures\File                                       $file
      * @param string                                                $code
      * @param int                                                   $offset
      *
@@ -47,7 +49,7 @@ class PropertyFetchPropertyInfoRetriever
      *
      * @return array[]
      */
-    public function retrieve(Node\Expr $node, string $file, string $code, int $offset): array
+    public function retrieve(Node\Expr $node, Structures\File $file, string $code, int $offset): array
     {
         if ($node->name instanceof Node\Expr) {
             // Can't currently deduce type of an expression such as "$this->{$foo}";

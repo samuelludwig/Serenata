@@ -8,6 +8,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -46,15 +48,15 @@ class NameNodeTooltipGenerator
     }
 
     /**
-     * @param Node\Name $node
-     * @param string    $file
-     * @param int       $line
+     * @param Node\Name       $node
+     * @param Structures\File $file
+     * @param int             $line
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
      * @return string
      */
-    public function generate(Node\Name $node, string $file, int $line): string
+    public function generate(Node\Name $node, Structures\File $file, int $line): string
     {
         $fqsen = $this->nameNodeFqsenDeterminer->determine($node, $file, $line);
 

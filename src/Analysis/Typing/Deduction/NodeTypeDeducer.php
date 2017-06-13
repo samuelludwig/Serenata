@@ -6,6 +6,8 @@ use DomainException;
 
 use PhpIntegrator\Parsing;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -209,7 +211,7 @@ class NodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         $typeDeducer = null;
 

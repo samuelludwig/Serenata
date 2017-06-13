@@ -127,7 +127,7 @@ class TooltipProvider
             $nodes = $this->getNodesFromCode($code);
             $node = $this->getNodeAt($nodes, $position);
 
-            $contents = $this->getTooltipForNode($node, $file->getPath(), $code);
+            $contents = $this->getTooltipForNode($node, $file, $code);
 
             return new TooltipResult($contents);
         } catch (UnexpectedValueException $e) {
@@ -169,15 +169,15 @@ class TooltipProvider
     }
 
     /**
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
+     * @param Node            $node
+     * @param Structures\File $file
+     * @param string          $code
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    protected function getTooltipForNode(Node $node, string $file, string $code): string
+    protected function getTooltipForNode(Node $node, Structures\File $file, string $code): string
     {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node);
@@ -220,7 +220,7 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\MethodCall $node
-     * @param string               $file
+     * @param Structures\File      $file
      * @param string               $code
      * @param int                  $offset
      *
@@ -230,7 +230,7 @@ class TooltipProvider
      */
     protected function getTooltipForMethodCallNode(
         Node\Expr\MethodCall $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): string {
@@ -239,7 +239,7 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\StaticCall $node
-     * @param string               $file
+     * @param Structures\File      $file
      * @param string               $code
      * @param int                  $offset
      *
@@ -249,7 +249,7 @@ class TooltipProvider
      */
     protected function getTooltipForStaticMethodCallNode(
         Node\Expr\StaticCall $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): string {
@@ -258,7 +258,7 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\PropertyFetch $node
-     * @param string                  $file
+     * @param Structures\File         $file
      * @param string                  $code
      * @param int                     $offset
      *
@@ -268,7 +268,7 @@ class TooltipProvider
      */
     protected function getTooltipForPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): string {
@@ -277,7 +277,7 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\StaticPropertyFetch $node
-     * @param string                        $file
+     * @param Structures\File               $file
      * @param string                        $code
      * @param int                           $offset
      *
@@ -287,7 +287,7 @@ class TooltipProvider
      */
     protected function getTooltipForStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): string {
@@ -308,7 +308,7 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param string                    $file
+     * @param Structures\File           $file
      * @param string                    $code
      *
      * @throws UnexpectedValueException
@@ -317,7 +317,7 @@ class TooltipProvider
      */
     protected function getTooltipForClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
-        string $file,
+        Structures\File $file,
         string $code
     ): string {
         return $this->classConstFetchNodeTooltipGenerator->generate($node, $file, $code);
@@ -325,14 +325,14 @@ class TooltipProvider
 
     /**
      * @param Node\Stmt\UseUse $node
-     * @param string           $file
+     * @param Structures\File  $file
      * @param int              $line
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, string $file, int $line): string
+    protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
     {
         // Use statements are always fully qualified, they aren't resolved.
         $nameNode = new Node\Name\FullyQualified($node->name->toString());
@@ -354,27 +354,27 @@ class TooltipProvider
 
     /**
      * @param Node\Stmt\ClassMethod $node
-     * @param string                $filePath
+     * @param Structures\File       $file
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    protected function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, string $filePath): string
+    protected function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, Structures\File $file): string
     {
-        return $this->classMethodNodeTooltipGenerator->generate($node, $filePath);
+        return $this->classMethodNodeTooltipGenerator->generate($node, $file);
     }
 
     /**
-     * @param Node\Name $node
-     * @param string    $file
-     * @param int       $line
+     * @param Node\Name       $node
+     * @param Structures\File $file
+     * @param int             $line
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    protected function getTooltipForNameNode(Node\Name $node, string $file, int $line): string
+    protected function getTooltipForNameNode(Node\Name $node, Structures\File $file, int $line): string
     {
         return $this->nameNodeTooltipGenerator->generate($node, $file, $line);
     }

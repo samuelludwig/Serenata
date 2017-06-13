@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -27,7 +29,7 @@ class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$this->nodeTypeDeducer) {
             throw new UnexpectedValueException('No node type deducer to delegate to configured!');

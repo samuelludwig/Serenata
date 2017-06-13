@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -14,7 +16,7 @@ class ClassLikeNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Stmt\ClassLike) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));

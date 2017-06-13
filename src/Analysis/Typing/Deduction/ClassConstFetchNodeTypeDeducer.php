@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -38,7 +40,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\ClassConstFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -49,7 +51,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param string                    $file
+     * @param Structures\File           $file
      * @param string                    $code
      * @param int                       $offset
      *
@@ -57,7 +59,7 @@ class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {

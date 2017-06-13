@@ -35,6 +35,7 @@ services:
     classListCommand:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
         arguments:
+            - '@storage'
             - '@structureListProvider'
             - '@fileStructureListProvider.instance'
 
@@ -83,6 +84,7 @@ services:
     deduceTypesCommand:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
         arguments:
+            - '@storage'
             - '@nodeTypeDeducer'
             - '@lastExpressionParser'
             - '@sourceCodeStreamReader'

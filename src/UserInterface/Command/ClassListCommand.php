@@ -8,11 +8,18 @@ use PhpIntegrator\Analysis\StructureListProviderInterface;
 
 use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
+use PhpIntegrator\Indexing\StorageInterface;
+
 /**
  * Command that shows a list of available classes, interfaces and traits.
  */
 class ClassListCommand extends AbstractCommand
 {
+    /**
+     * @var StorageInterface
+     */
+    private $storage;
+
     /**
      * @var StructureListProviderInterface
      */
@@ -24,13 +31,16 @@ class ClassListCommand extends AbstractCommand
     private $fileStructureListProvider;
 
     /**
+     * @param StorageInterface                   $storage
      * @param StructureListProviderInterface     $structureListProvider
      * @param FileStructureListProviderInterface $fileStructureListProvider
      */
     public function __construct(
+        StorageInterface $storage,
         StructureListProviderInterface $structureListProvider,
         FileStructureListProviderInterface $fileStructureListProvider
     ) {
+        $this->storage = $storage;
         $this->structureListProvider = $structureListProvider;
         $this->fileStructureListProvider = $fileStructureListProvider;
     }
@@ -40,9 +50,11 @@ class ClassListCommand extends AbstractCommand
      */
     public function execute(ArrayAccess $arguments)
     {
-        $file = $arguments['file'] ?? null;
+        $filePath = $arguments['file'] ?? null;
 
-        if ($file !== null) {
+        if ($filePath !== null) {
+            $file = $this->storage->getFileByPath($filePath);
+
             return $this->fileStructureListProvider->getAllForFile($file);
         }
 

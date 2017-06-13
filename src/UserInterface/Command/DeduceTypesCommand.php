@@ -9,6 +9,9 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
+use PhpIntegrator\Indexing\StorageInterface;
+
 use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
 use PhpIntegrator\Parsing\LastExpressionParser;
@@ -25,6 +28,11 @@ use PhpParser\NodeVisitorAbstract;
  */
 class DeduceTypesCommand extends AbstractCommand
 {
+    /**
+     * @var StorageInterface
+     */
+    private $storage;
+
     /**
      * @var NodeTypeDeducerInterface
      */
@@ -46,17 +54,20 @@ class DeduceTypesCommand extends AbstractCommand
     private $positionalNamespaceDeterminer;
 
     /**
+     * @param StorageInterface                       $storage
      * @param NodeTypeDeducerInterface               $nodeTypeDeducer
      * @param LastExpressionParser                   $lastExpressionParser
      * @param SourceCodeStreamReader                 $sourceCodeStreamReader
      * @param PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
      */
     public function __construct(
+        StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         LastExpressionParser $lastExpressionParser,
         SourceCodeStreamReader $sourceCodeStreamReader,
         PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
     ) {
+        $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
@@ -92,8 +103,10 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
+        $file = $this->storage->getFileByPath($arguments['file']);
+
         return $this->deduceTypesFromExpression(
-            $arguments['file'],
+            $file,
             $code,
             $codeWithExpression,
             $offset,
@@ -102,16 +115,16 @@ class DeduceTypesCommand extends AbstractCommand
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param string $expression
-     * @param int    $offset
-     * @param bool   $ignoreLastElement
+     * @param Structures\File $file
+     * @param string          $code
+     * @param string          $expression
+     * @param int             $offset
+     * @param bool            $ignoreLastElement
      *
      * @return string[]
      */
     protected function deduceTypesFromExpression(
-        string $file,
+        Structures\File $file,
         string $code,
         string $expression,
         int $offset,
@@ -152,14 +165,14 @@ class DeduceTypesCommand extends AbstractCommand
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param Node   $node
-     * @param int    $offset
+     * @param Structures\File $file
+     * @param string          $code
+     * @param Node            $node
+     * @param int             $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromNode(string $file, string $code, Node $node, int $offset): array
+    protected function deduceTypesFromNode(Structures\File $file, string $code, Node $node, int $offset): array
     {
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
@@ -171,18 +184,18 @@ class DeduceTypesCommand extends AbstractCommand
     }
 
     /**
-     * @param Node   $node
-     * @param string $filePath
-     * @param int    $line
+     * @param Node            $node
+     * @param Structures\File $file
+     * @param int             $line
      *
      * @return void
      */
-    protected function attachRelevantNamespaceToNode(Node $node, string $filePath, int $line): void
+    protected function attachRelevantNamespaceToNode(Node $node, Structures\File $file, int $line): void
     {
         $namespace = null;
         $namespaceNode = null;
 
-        $filePosition = new FilePosition($filePath, new Position($line, 0));
+        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
 
         $namespace = $this->positionalNamespaceDeterminer->determine($filePosition);
 

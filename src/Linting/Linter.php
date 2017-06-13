@@ -127,7 +127,7 @@ class Linter
         }
 
         $traverser = new NodeTraverser();
-        $analyzers = $this->getAnalyzersForRequest($file->getPath(), $code, $settings);
+        $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
 
         foreach ($analyzers as $analyzer) {
             foreach ($analyzer->getVisitors() as $visitor) {
@@ -156,19 +156,19 @@ class Linter
     }
 
     /**
-     * @param string          $file
+     * @param Structures\File $file
      * @param string          $code
      * @param LintingSettings $settings
      *
      * @return AnalyzerInterface[]
      */
-    protected function getAnalyzersForRequest(string $file, string $code, LintingSettings $settings): array
+    protected function getAnalyzersForRequest(Structures\File $file, string $code, LintingSettings $settings): array
     {
         /** @var AnalyzerInterface[] $analyzers */
         $analyzers = [];
 
         if ($settings->getLintUnknownClasses()) {
-            $analyzers[] = $this->unknownClassAnalyzerFactory->create($file);
+            $analyzers[] = $this->unknownClassAnalyzerFactory->create($file->getPath());
         }
 
         if ($settings->getLintUnknownMembers()) {
@@ -180,7 +180,7 @@ class Linter
         }
 
         if ($settings->getLintDocblockCorrectness()) {
-            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file, $code);
+            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file->getPath(), $code);
         }
 
         if ($settings->getLintUnknownGlobalConstants()) {

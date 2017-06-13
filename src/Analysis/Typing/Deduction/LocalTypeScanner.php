@@ -12,6 +12,8 @@ use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
@@ -96,16 +98,16 @@ class LocalTypeScanner
      * This can be used to deduce the type of local variables, class properties, ... that are influenced by local
      * assignments, if statements, ...
      *
-     * @param string     $file
-     * @param string     $code
-     * @param string     $expression
-     * @param int        $offset
-     * @param string[]   $defaultTypes
+     * @param Structures\File $file
+     * @param string          $code
+     * @param string          $expression
+     * @param int             $offset
+     * @param string[]        $defaultTypes
      *
      * @return string[]
      */
     public function getLocalExpressionTypes(
-        string $file,
+        Structures\File $file,
         string $code,
         string $expression,
         int $offset,
@@ -134,7 +136,7 @@ class LocalTypeScanner
      *
      * @param ExpressionTypeInfoMap $expressionTypeInfoMap
      * @param string                $expression
-     * @param string                $file
+     * @param Structures\File       $file
      * @param int                   $line
      * @param string                $code
      * @param int                   $offset
@@ -145,7 +147,7 @@ class LocalTypeScanner
     protected function getResolvedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
-        string $file,
+        Structures\File $file,
         int $line,
         string $code,
         int $offset,
@@ -162,7 +164,7 @@ class LocalTypeScanner
                 $expressionTypeInfo->getBestTypeOverrideMatchLine() :
                 $line;
 
-            $filePosition = new FilePosition($file, new Position($typeLine, 0));
+            $filePosition = new FilePosition($file->getPath(), new Position($typeLine, 0));
 
             $resolvedTypes[] = $this->structureAwareNameResolverFacotry->create($filePosition)->resolve(
                 $type,
@@ -179,7 +181,7 @@ class LocalTypeScanner
      *
      * @param ExpressionTypeInfoMap $expressionTypeInfoMap
      * @param string                $expression
-     * @param string                $file
+     * @param Structures\File       $file
      * @param string                $code
      * @param int                   $offset
      * @param string[]              $defaultTypes
@@ -189,7 +191,7 @@ class LocalTypeScanner
     protected function getUnreferencedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset,
         array $defaultTypes = []
@@ -220,13 +222,13 @@ class LocalTypeScanner
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromSelf(string $file, string $code, int $offset): array
+    protected function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
     {
         $dummyNode = new Parsing\Node\Keyword\Self_();
 
@@ -234,13 +236,13 @@ class LocalTypeScanner
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromStatic(string $file, string $code, int $offset): array
+    protected function deduceTypesFromStatic(Structures\File $file, string $code, int $offset): array
     {
         $dummyNode = new Parsing\Node\Keyword\Static_();
 
@@ -250,7 +252,7 @@ class LocalTypeScanner
     /**
      * @param ExpressionTypeInfo $expressionTypeInfo
      * @param string             $expression
-     * @param string             $file
+     * @param Structures\File    $file
      * @param string             $code
      * @param int                $offset
      * @param string[]           $defaultTypes
@@ -260,7 +262,7 @@ class LocalTypeScanner
     protected function getTypes(
         ExpressionTypeInfo $expressionTypeInfo,
         string $expression,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset,
         array $defaultTypes = []
@@ -279,18 +281,18 @@ class LocalTypeScanner
     }
 
     /**
-     * @param string $expression
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param string          $expression
+     * @param Node            $node
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @return string[]
      */
     protected function getTypesForBestMatchNode(
         string $expression,
         Node $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {
@@ -306,7 +308,7 @@ class LocalTypeScanner
     /**
      * @param Node\FunctionLike $node
      * @param string            $parameterName
-     * @param string            $file
+     * @param Structures\File   $file
      * @param string            $code
      * @param int               $offset
      *
@@ -315,7 +317,7 @@ class LocalTypeScanner
     protected function deduceTypesFromFunctionLikeParameter(
         Node\FunctionLike $node,
         string $parameterName,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {

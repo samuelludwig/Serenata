@@ -62,16 +62,12 @@ class DoctrineStructureListProvider implements FileStructureListProviderInterfac
     /**
      * @inheritDoc
      */
-    public function getAllForFile(string $file): array
+    public function getAllForFile(Structures\File $file): array
     {
         try {
-            $items = $this->managerRegistry->getRepository(Structures\Structure::class)->createQueryBuilder('entity')
-                ->select('entity')
-                ->innerJoin('entity.file', 'file')
-                ->andWhere('file.path = :path')
-                ->setParameter('path', $file)
-                ->getQuery()
-                ->execute();
+            $items = $this->managerRegistry->getRepository(Structures\Structure::class)->findBy([
+                'file' => $file
+            ]);
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }

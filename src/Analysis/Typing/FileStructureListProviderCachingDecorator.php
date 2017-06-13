@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
  /**
   * Decorator for classes implementing {@see FileStructureListProviderInterface} that performs caching.
   */
@@ -30,10 +32,12 @@ class FileStructureListProviderCachingDecorator implements FileStructureListProv
     /**
      * @inheritDoc
      */
-    public function getAllForFile(string $filePath): array
+    public function getAllForFile(Structures\File $file): array
     {
+        $filePath = $file->getPath();
+
         if (!isset($this->cache[$filePath])) {
-            $this->cache[$filePath] = $this->fileStructureListProviderInterface->getAllForFile($filePath);
+            $this->cache[$filePath] = $this->fileStructureListProviderInterface->getAllForFile($file);
         }
 
         return $this->cache[$filePath];

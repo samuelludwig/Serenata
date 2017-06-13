@@ -10,6 +10,8 @@ use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Analysis\Visiting\MemberUsageFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Looks for unknown member names.
  */
@@ -24,14 +26,14 @@ class UnknownMemberAnalyzer implements AnalyzerInterface
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
      * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
      * @param TypeAnalyzer             $typeAnalyzer
-     * @param string                   $file
+     * @param Structures\File          $file
      * @param string                   $code
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
-        string $file,
+        Structures\File $file,
         string $code
     ) {
         $this->methodUsageFetchingVisitor = new MemberUsageFetchingVisitor(

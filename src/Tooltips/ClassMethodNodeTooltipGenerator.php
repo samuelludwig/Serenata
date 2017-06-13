@@ -10,6 +10,8 @@ use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
 
 use PhpIntegrator\Common\Position;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -49,14 +51,14 @@ class ClassMethodNodeTooltipGenerator
 
     /**
      * @param Node\Stmt\ClassMethod $node
-     * @param string                $filePath
+     * @param Structures\File       $file
      *
      * @throws UnexpectedValueException when the method was not found.
      * @throws UnexpectedValueException when no class was found at the location of the node.
      *
      * @return string
      */
-    public function generate(Node\Stmt\ClassMethod $node, string $filePath): string
+    public function generate(Node\Stmt\ClassMethod $node, Structures\File $file): string
     {
         $startLine = $node->getAttribute('startLine');
 
@@ -66,7 +68,7 @@ class ClassMethodNodeTooltipGenerator
 
         $position = new Position($startLine, 0);
 
-        $fqcn = $this->filePositionClasslikeDeterminer->determine($position, $filePath);
+        $fqcn = $this->filePositionClasslikeDeterminer->determine($position, $file);
 
         if ($fqcn === null) {
             throw new UnexpectedValueException('No class found at location of method call node');
