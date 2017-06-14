@@ -1,4 +1,6 @@
 ## 3.0.0
+NOTE: The changelog for this version is mostly just a bin containing all changes since the last version and will be properly formatted before the release.
+
 * At least PHP 7.1 is now required to run.
 * Updated dependencies.
 * PHP 7.1 is now supported (https://gitlab.com/php-integrator/core/issues/40).
