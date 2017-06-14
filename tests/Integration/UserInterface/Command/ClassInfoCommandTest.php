@@ -1214,6 +1214,34 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testTraitAliasWithoutAccessModifier(): void
+    {
+        $fileName = 'TraitAliasWithoutAccessModifier.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertFalse($output['methods']['test1']['isPublic']);
+        $this->assertTrue($output['methods']['test1']['isProtected']);
+        $this->assertFalse($output['methods']['test1']['isPrivate']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitAliasWithAccessModifier(): void
+    {
+        $fileName = 'TraitAliasWithAccessModifier.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestClass');
+
+        $this->assertFalse($output['methods']['test1']['isPublic']);
+        $this->assertFalse($output['methods']['test1']['isProtected']);
+        $this->assertTrue($output['methods']['test1']['isPrivate']);
+    }
+
+    /**
+     * @return void
+     */
     public function testMethodOverrideDataIsCorrectWhenClassHasMethodThatIsAlsoDefinedByOneOfItsOwnTraits(): void
     {
         $fileName = 'ClassOverridesOwnTraitMethod.phpt';
