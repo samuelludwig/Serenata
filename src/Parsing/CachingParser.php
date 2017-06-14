@@ -29,6 +29,11 @@ class CachingParser implements Parser
     private $lastCacheKey = null;
 
     /**
+     * @var ErrorHandler\Collecting
+     */
+    private $errorHandler = null;
+
+    /**
      * @param Parser $proxiedObject
      */
     public function __construct(Parser $proxiedObject)
@@ -41,18 +46,38 @@ class CachingParser implements Parser
      */
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
+        if (!$errorHandler instanceof ErrorHandler\Collecting) {
+            // Throwing error handlers need to throw on every call, if we cache the result, throws won't happen anymore
+            // and behavior changes. With a collecting handler, we can reproduce the previous errors each time.
+            return $this->proxiedObject->parse($code, $errorHandler);
+        }
+
         $cacheKey = md5($code);
 
-        if ($errorHandler !== null) {
-            $cacheKey .= spl_object_hash($errorHandler);
+        if ($cacheKey === $this->lastCacheKey && $this->cache !== null) {
+            $this->copyCollectedErrorsTo($errorHandler);
+
+            return $this->cache;
         }
 
-        if ($cacheKey !== $this->lastCacheKey || $this->cache === null) {
-            $this->cache = $this->proxiedObject->parse($code, $errorHandler);
-        }
-
+        $this->errorHandler = new ErrorHandler\Collecting();
+        $this->cache = $this->proxiedObject->parse($code, $this->errorHandler);
         $this->lastCacheKey = $cacheKey;
 
+        $this->copyCollectedErrorsTo($errorHandler);
+
         return $this->cache;
+    }
+
+    /**
+     * @param ErrorHandler\Collecting $errorHandler
+     */
+    protected function copyCollectedErrorsTo(ErrorHandler\Collecting $errorHandler): void
+    {
+        $errorHandler->clearErrors();
+
+        foreach ($this->errorHandler->getErrors() as $error) {
+            $errorHandler->handleError($error);
+        }
     }
 }
