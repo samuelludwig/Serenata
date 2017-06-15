@@ -169,7 +169,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
 
             $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
         } elseif ($node->value) {
-            $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $defaultValue, 0);
+            $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $this->code, 0);
 
             $types = array_map(function (string $type) {
                 return new Structures\TypeInfo($type, $type);

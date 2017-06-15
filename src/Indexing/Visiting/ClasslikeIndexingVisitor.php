@@ -563,12 +563,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
             } elseif ($property->default) {
-                $typeList = $this->nodeTypeDeducer->deduce(
-                    $property->default,
-                    $this->file,
-                    $defaultValue,
-                    0
-                );
+                $typeList = $this->nodeTypeDeducer->deduce($property->default, $this->file, $this->code, 0);
 
                 $types = array_map(function (string $type) {
                     return new Structures\TypeInfo($type, $type);
@@ -763,7 +758,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $types[] = new Structures\TypeInfo('null', 'null');
                 }
             } elseif ($param->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $defaultValue, 0);
+                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $this->code, 0);
 
                 $types = array_map(function (string $type) {
                     return new Structures\TypeInfo($type, $type);
@@ -840,12 +835,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
         } elseif ($node->value) {
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $node->value,
-                $this->file,
-                $defaultValue,
-                0
-            );
+            $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $this->code, 0);
 
             $types = array_map(function (string $type) {
                 return new Structures\TypeInfo($type, $type);
