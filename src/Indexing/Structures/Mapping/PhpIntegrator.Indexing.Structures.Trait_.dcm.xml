@@ -12,17 +12,17 @@
         <field name="traitUserFqcns" type="array" nullable="false" />
 
         <one-to-many field="traitAliases" target-entity="PhpIntegrator\Indexing\Structures\TraitTraitAlias" mapped-by="trait">
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>traitTraitAliases</region>
-            </cache>
+            </cache> -->
         </one-to-many>
 
         <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\TraitTraitPrecedence" mapped-by="trait">
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>traitTraitPrecedences</region>
-            </cache>
+            </cache> -->
         </one-to-many>
     </entity>
 

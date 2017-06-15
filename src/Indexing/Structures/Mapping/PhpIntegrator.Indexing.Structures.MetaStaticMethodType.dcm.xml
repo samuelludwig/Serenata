@@ -18,16 +18,16 @@
         <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="metaStaticMethodTypes">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>metaStaticMethodTypeFile</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>metaStaticMethodType</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

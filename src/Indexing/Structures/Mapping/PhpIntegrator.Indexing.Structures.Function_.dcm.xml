@@ -28,10 +28,10 @@
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>function</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

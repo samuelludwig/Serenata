@@ -14,16 +14,16 @@
         <many-to-one field="trait" target-entity="PhpIntegrator\Indexing\Structures\Trait_" inversed-by="traitPrecedences">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>traitTraitPrecedenceClass</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>traitTraitPrecedence</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

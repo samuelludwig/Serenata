@@ -18,17 +18,17 @@
         <field name="traitFqcns"         type="array"   nullable="false" />
 
         <one-to-many field="traitAliases" target-entity="PhpIntegrator\Indexing\Structures\ClassTraitAlias" mapped-by="class">
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classTraitAliases</region>
-            </cache>
+            </cache> -->
         </one-to-many>
 
         <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\ClassTraitPrecedence" mapped-by="class">
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classTraitPrecedences</region>
-            </cache>
+            </cache> -->
         </one-to-many>
     </entity>
 

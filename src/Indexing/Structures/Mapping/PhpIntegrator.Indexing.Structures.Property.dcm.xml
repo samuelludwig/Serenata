@@ -24,19 +24,19 @@
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="properties">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>propertyStructure</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="true" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>propertyAccessModifier</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
         <cache>

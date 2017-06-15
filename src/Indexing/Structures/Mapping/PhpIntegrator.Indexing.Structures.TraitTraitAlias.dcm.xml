@@ -15,25 +15,25 @@
         <many-to-one field="trait" target-entity="PhpIntegrator\Indexing\Structures\Trait_" inversed-by="traitAliases">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>traitTraitAliasClass</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="true" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>traitTraitAliasAccessModifier</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>traitTraitAlias</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

@@ -39,10 +39,10 @@
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="false" />
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>method</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

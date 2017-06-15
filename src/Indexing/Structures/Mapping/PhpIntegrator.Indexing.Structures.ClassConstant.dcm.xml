@@ -22,34 +22,34 @@
         <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classConstantFile</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="constants">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classConstantStructure</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
         <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classConstantAccessModifier</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>classConstant</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>
