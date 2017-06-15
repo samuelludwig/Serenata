@@ -69,9 +69,7 @@ class AvailableVariablesCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        $result = $this->getAvailableVariables($code, $offset);
-
-        return $result;
+        return $this->getAvailableVariables($code, $offset);
      }
 
     /**
