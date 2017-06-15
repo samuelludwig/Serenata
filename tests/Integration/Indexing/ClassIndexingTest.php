@@ -245,6 +245,38 @@ class ClassIndexingTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testParentChangeIsPickedUpOnReindex(): void
+    {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+            $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+            $this->assertCount(3, $structures);
+
+            $structure = $structures[2];
+
+            $this->assertEquals('\Parent1', $structure->getParentFqcn());
+
+            return str_replace('Parent1', 'Parent2 ', $source);
+        };
+
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+            $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+            $this->assertCount(3, $structures);
+
+            $structure = $structures[2];
+
+            $this->assertEquals('\Parent2', $structure->getParentFqcn());
+        };
+
+        $path = $this->getPathFor('ClassParentChange.phpt');
+
+        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+    }
+
+    /**
      * @param string $file
      *
      * @return Structures\Class_
