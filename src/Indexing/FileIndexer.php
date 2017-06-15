@@ -4,6 +4,7 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
+use LogicException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -136,7 +137,13 @@ class FileIndexer implements FileIndexerInterface
         } catch (Exception $e) {
             $this->storage->rollbackTransaction();
 
-            throw $e;
+            throw new LogicException(
+                'Could not index file due to an internal exception. This likely means an exception should be caught ' .
+                'at a deeper level (if it is acceptable) or there is a bug. The file is "' . $filePath . '" and the ' .
+                'exact exception message: "' . $e->getMessage() . '"',
+                0,
+                $e
+            );
         }
     }
 
