@@ -12,6 +12,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\Config\FileLocator;
 
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -82,7 +83,11 @@ abstract class AbstractApplication
 
         $container
             ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)
-            ->setArguments([$this->getStdinStream()]);
+            ->setArguments([
+                new Reference('fileSourceCodeFileReader.fileReaderFactory'),
+                new Reference('fileSourceCodeFileReader.streamReaderFactory'),
+                $this->getStdinStream()
+            ]);
 
         $container
             ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)

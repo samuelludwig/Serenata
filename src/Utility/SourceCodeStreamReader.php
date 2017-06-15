@@ -4,29 +4,43 @@ namespace PhpIntegrator\Utility;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeReaderException;
+use PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory;
+use PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory;
+
 /**
  * Deals with reading (not analyzing or parsing) source code.
  */
 class SourceCodeStreamReader
 {
     /**
+     * @var FileSourceCodeFileReaderFactory
+     */
+    private $fileSourceCodeFileReaderFactory;
+
+    /**
+     * @var FileSourceCodeStreamReaderFactory
+     */
+    private $fileSourceCodeStreamReaderFactory;
+
+    /**
      * @var resource|null
      */
     private $stdinStream;
 
     /**
-     * @var bool
+     * @param FileSourceCodeFileReaderFactory   $fileSourceCodeFileReaderFactory
+     * @param FileSourceCodeStreamReaderFactory $fileSourceCodeStreamReaderFactory
+     * @param resource|null                     $stdinStream
      */
-    private $autoConvertToUtf8;
-
-    /**
-     * @param resource|null $stdinStream
-     * @param bool          $autoConvertToUtf8
-     */
-    public function __construct($stdinStream = null, bool $autoConvertToUtf8 = true)
-    {
+    public function __construct(
+        FileSourceCodeFileReaderFactory $fileSourceCodeFileReaderFactory,
+        FileSourceCodeStreamReaderFactory $fileSourceCodeStreamReaderFactory,
+        $stdinStream
+    ) {
+        $this->fileSourceCodeFileReaderFactory = $fileSourceCodeFileReaderFactory;
+        $this->fileSourceCodeStreamReaderFactory = $fileSourceCodeStreamReaderFactory;
         $this->stdinStream = $stdinStream;
-        $this->autoConvertToUtf8 = $autoConvertToUtf8;
     }
 
     /**
@@ -49,45 +63,22 @@ class SourceCodeStreamReader
     }
 
     /**
-     * @return bool
-     */
-    public function getAutoConvertToUtf8(): bool
-    {
-        return $this->autoConvertToUtf8;
-    }
-
-    /**
-     * @param bool $autoConvertToUtf8
-     *
-     * @return static
-     */
-    public function setAutoConvertToUtf8(bool $autoConvertToUtf8)
-    {
-        $this->autoConvertToUtf8 = $autoConvertToUtf8;
-        return $this;
-    }
-
-    /**
      * Reads source code from STDIN. Note that this call is blocking as long as there is no input!
+     *
+     * @throws FileSourceCodeReaderException
      *
      * @return string
      */
     public function getSourceCodeFromStdin(): string
     {
-        $stream = $this->stdinStream;
-        $stream = $stream ?: STDIN;
-
-        $code = stream_get_contents($stream);
-
-        $code = $this->convertEncodingIfNecessary($code);
-
-        return $code;
+        return $this->fileSourceCodeStreamReaderFactory->create($this->getStdinStream())->read();
     }
 
     /**
      * @param string|null $file
      *
      * @throws UnexpectedValueException if the file doesn't exist or it is unreadable.
+     * @throws FileSourceCodeReaderException
      *
      * @return string
      */
@@ -97,48 +88,6 @@ class SourceCodeStreamReader
             throw new UnexpectedValueException("The file {$file} does not exist!");
         }
 
-        $code = @file_get_contents($file);
-
-        if ($code === false || $code === null) {
-            throw new UnexpectedValueException("The file {$file} could not be read, it may be protected!");
-        }
-
-        $code = $this->convertEncodingIfNecessary($code);
-
-        return $code;
-    }
-
-    /**
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function convertEncodingIfNecessary(string $code): string
-    {
-        if ($this->autoConvertToUtf8) {
-            return $this->convertEncodingToUtf8($code);
-        }
-
-        return $code;
-    }
-
-    /**
-     * @param string $code
-     *
-     * @return string
-     */
-    protected function convertEncodingToUtf8(string $code): string
-    {
-        $encoding = mb_detect_encoding($code, null, true);
-
-        if (!$encoding) {
-            $encoding = 'ASCII';
-        }
-
-        if (!in_array($encoding, ['UTF-8', 'ASCII'], true)) {
-            $code = mb_convert_encoding($code, 'UTF-8', $encoding);
-        }
-
-        return $code;
+        return $this->fileSourceCodeFileReaderFactory->create($file)->read();
     }
 }

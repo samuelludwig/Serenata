@@ -185,7 +185,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
             $stream = tmpfile();
 
-            $sourceCodeStreamReader = new SourceCodeStreamReader($stream);
+            $sourceCodeStreamReader = new SourceCodeStreamReader(
+                $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
+                $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
+                $stream
+            );
 
             $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
 
