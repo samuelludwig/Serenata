@@ -215,7 +215,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testChangesArePickedUpOnReindex(): void
+    public function testRenameChangeIsPickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
@@ -239,7 +239,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
             $this->assertEquals('Test2', $structure->getName());
         };
 
-        $path = $this->getPathFor('ClassChanges.phpt');
+        $path = $this->getPathFor('ClassRenameChange.phpt');
 
         $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
