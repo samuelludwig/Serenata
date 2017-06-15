@@ -17,6 +17,7 @@ NOTE: The changelog for this version is mostly just a bin containing all changes
 * It is now possible to disable linting missing documentation separately from linting docblock correctness.
 * Fix disabling unknown global constant linting having no effect.
 * Fix trait aliases without an explicit access modifier causing the original access modifier to get lost.
+* Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well.
 * Fix the linter complaining about type mismatches in docblocks when the qualifications of the types are different (https://gitlab.com/php-integrator/core/issues/89).
 * Some docblock linter warnings have been promoted to errors (https://gitlab.com/php-integrator/core/issues/33).
 * A new command to provide tooltips has been added.

@@ -2,7 +2,9 @@
 
 namespace PhpIntegrator\UserInterface;
 
+use Ds;
 use React;
+use Throwable;
 use ArrayObject;
 use RuntimeException;
 use UnexpectedValueException;
@@ -131,11 +133,62 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
                 'line'      => $e->getLine(),
                 'file'      => $e->getFile(),
-                'backtrace' => $e->getTraceAsString()
+                'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
             ]);
         }
 
         return new JsonRpcResponse($request->getId(), $result, $error);
+    }
+
+    /**
+     * @param Throwable $throwable
+     *
+     * @return string
+     */
+    protected function getCompleteBacktraceFromThrowable(Throwable $throwable): string
+    {
+        $counter = 1;
+
+        $reducer = function (string $carry, Throwable $item) use (&$counter): string {
+            if (!empty($carry)) {
+                $carry .= "\n \n";
+            }
+
+            $carry .= "→ Message {$counter}\n";
+            $carry .= $item->getMessage() . "\n \n";
+
+            $carry .= "→ Location {$counter}\n";
+            $carry .= $item->getFile() . ':' . $item->getLine() . "\n \n";
+
+            $carry .= "→ Backtrace {$counter}\n";
+            $carry .= $item->getTraceAsString();
+
+            ++$counter;
+
+            return $carry;
+        };
+
+        return $this->getThrowableVector($throwable)->reduce($reducer, '');
+    }
+
+    /**
+     * @param Throwable $throwable
+     *
+     * @return Ds\Vector
+     */
+    protected function getThrowableVector(Throwable $throwable): Ds\Vector
+    {
+        $vector = new Ds\Vector();
+
+        $item = $throwable;
+
+        while ($item) {
+            $vector[] = $item;
+
+            $item = $item->getPrevious();
+        }
+
+        return $vector;
     }
 
     /**
