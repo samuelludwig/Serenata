@@ -180,7 +180,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         // Test once without clearing the entities from the manager and test once after removing the entities from the
         // entity manager. This way we ensure that everything works when the entities are already loaded into memory as
         // well as when they are not (and loaded from the database instead).
-        for ($i = 0; $i < 1; ++$i) {
+        for ($i = 0; $i <= 1; ++$i) {
             $container = $this->createTestContainer();
 
             $stream = tmpfile();

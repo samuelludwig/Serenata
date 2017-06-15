@@ -202,6 +202,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $node = $this->relationsStorage[$structure];
 
             $this->processClassLikeRelations($node, $structure);
+
+            $this->storage->persist($structure);
         }
 
         foreach ($this->traitUseStorage as $structure) {
@@ -210,6 +212,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             foreach ($nodes as $node) {
                 $this->processTraitUseNode($node, $structure);
             }
+
+            $this->storage->persist($structure);
         }
     }
 
