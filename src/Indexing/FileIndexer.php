@@ -127,7 +127,7 @@ class FileIndexer implements FileIndexerInterface
         $this->storage->persist($file);
 
         try {
-            $traverser = $this->runTraverser($nodes, $filePath, $code, $file);
+            $traverser = $this->runTraverser($nodes, $code, $file);
 
             $this->storage->commitTransaction();
         } catch (Error $e) {
@@ -149,15 +149,14 @@ class FileIndexer implements FileIndexerInterface
 
     /**
      * @param array           $nodes
-     * @param string          $filePath
      * @param string          $code
      * @param Structures\File $file
      *
      * @return void
      */
-    protected function runTraverser(array $nodes, string $filePath, string $code, Structures\File $file): void
+    protected function runTraverser(array $nodes, string $code, Structures\File $file): void
     {
-        $visitors = $this->getVisitorsForFile($filePath, $code, $file);
+        $visitors = $this->getVisitorsForFile($code, $file);
 
         $useStatementIndexingVisitor = array_shift($visitors);
 
@@ -179,13 +178,12 @@ class FileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param string          $filePath
      * @param string          $code
      * @param Structures\File $file
      *
      * @return array
      */
-    protected function getVisitorsForFile(string $filePath, string $code, Structures\File $file): array
+    protected function getVisitorsForFile(string $code, Structures\File $file): array
     {
         $visitors = [
             new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code),
@@ -197,16 +195,14 @@ class FileIndexer implements FileIndexerInterface
                 $this->typeAnalyzer,
                 $this->nodeTypeDeducer,
                 $file,
-                $code,
-                $filePath
+                $code
             ),
 
             new Visiting\DefineIndexingVisitor(
                 $this->storage,
                 $this->nodeTypeDeducer,
                 $file,
-                $code,
-                $filePath
+                $code
             ),
 
             new Visiting\FunctionIndexingVisitor(
@@ -216,8 +212,7 @@ class FileIndexer implements FileIndexerInterface
                 $this->typeAnalyzer,
                 $this->nodeTypeDeducer,
                 $file,
-                $code,
-                $filePath
+                $code
             ),
 
             new Visiting\ClasslikeIndexingVisitor(
@@ -227,8 +222,7 @@ class FileIndexer implements FileIndexerInterface
                 $this->nodeTypeDeducer,
                 $this->structureAwareNameResolverFactory,
                 $file,
-                $code,
-                $filePath
+                $code
             ),
 
             new Visiting\MetaStaticMethodTypeIndexingVisitor(

@@ -62,11 +62,6 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param StorageInterface                           $storage
      * @param DocblockParser                             $docblockParser
@@ -74,7 +69,6 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
      * @param Structures\File                            $file
      * @param string                                     $code
-     * @param string                                     $filePath
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
@@ -83,8 +77,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
-        string $code,
-        string $filePath
+        string $code
     ) {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->storage = $storage;
@@ -93,7 +86,6 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
         $this->code = $code;
-        $this->filePath = $filePath;
     }
 
     /**
@@ -143,7 +135,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::THROWS,

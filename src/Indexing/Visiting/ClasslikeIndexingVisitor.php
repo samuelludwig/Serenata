@@ -78,11 +78,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
      * @var Structures\Structure
      */
     private $structure;
@@ -124,7 +119,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param Structures\File                            $file
      * @param string                                     $code
-     * @param string                                     $filePath
      */
     public function __construct(
         StorageInterface $storage,
@@ -133,8 +127,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         NodeTypeDeducerInterface $nodeTypeDeducer,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         Structures\File $file,
-        string $code,
-        string $filePath
+        string $code
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -143,7 +136,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->file = $file;
         $this->code = $code;
-        $this->filePath = $filePath;
     }
 
     /**
@@ -301,7 +293,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['propertiesWriteOnly']
         );
 
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         foreach ($magicProperties as $propertyName => $propertyData) {
             // Use the same line as the class definition, it matters for e.g. type resolution.
@@ -531,7 +523,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         foreach ($node->props as $property) {
             $defaultValue = $property->default ?
@@ -631,7 +623,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $resolvedType = $nodeType->name;
         }
 
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         $isReturnTypeNullable = ($node->getReturnType() instanceof Node\NullableType);
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
@@ -806,7 +798,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseClassConstantNode(Node\Const_ $node, Node\Stmt\ClassConst $classConst): void
     {
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         $docComment = $classConst->getDocComment() ? $classConst->getDocComment()->getText() : null;
 

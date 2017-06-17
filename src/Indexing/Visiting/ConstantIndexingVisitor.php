@@ -60,11 +60,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
      * @param StorageInterface                           $storage
      * @param DocblockParser                             $docblockParser
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
@@ -72,7 +67,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
      * @param Structures\File                            $file
      * @param string                                     $code
-     * @param string                                     $filePath
      */
     public function __construct(
         StorageInterface $storage,
@@ -81,8 +75,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
-        string $code,
-        string $filePath
+        string $code
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
@@ -91,7 +84,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
         $this->code = $code;
-        $this->filePath = $filePath;
     }
 
     /**

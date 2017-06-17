@@ -38,29 +38,21 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var string
-     */
-    private $filePath;
-
-    /**
      * @param StorageInterface         $storage
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
      * @param Structures\File          $file
      * @param string                   $code
-     * @param string                   $filePath
      */
     public function __construct(
         StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
-        string $code,
-        string $filePath
+        string $code
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
         $this->code = $code;
-        $this->filePath = $filePath;
     }
 
     /**
