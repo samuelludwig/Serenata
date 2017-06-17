@@ -160,11 +160,15 @@ class ProjectIndexer
      */
     public function pruneRemovedFiles(): void
     {
+        $this->storage->beginTransaction();
+
         foreach ($this->getFileModifiedMap() as $fileName => $file) {
             if (!file_exists($fileName)) {
                 $this->storage->delete($file);
             }
         }
+
+        $this->storage->commitTransaction();
     }
 
     /**
