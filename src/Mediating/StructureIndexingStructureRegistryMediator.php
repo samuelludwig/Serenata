@@ -9,7 +9,7 @@ use PhpIntegrator\Analysis\StructureListRegistry;
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 
 use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\EventEmittingStorage;
+use PhpIntegrator\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the structure registry when structure indexing events happen.
@@ -53,11 +53,11 @@ class StructureIndexingStructureRegistryMediator
      */
     protected function setup(): void
     {
-        $this->eventEmitter->on(EventEmittingStorage::EVENT_STRUCTURE_UPDATED, function (Structures\Structure $structure) {
+        $this->eventEmitter->on(IndexingEventName::EVENT_STRUCTURE_UPDATED, function (Structures\Structure $structure) {
             $this->structureListRegistry->add($this->classlikeConverter->convert($structure));
         });
 
-        $this->eventEmitter->on(EventEmittingStorage::EVENT_STRUCTURE_REMOVED, function (Structures\Structure $structure) {
+        $this->eventEmitter->on(IndexingEventName::EVENT_STRUCTURE_REMOVED, function (Structures\Structure $structure) {
             $this->structureListRegistry->remove($this->classlikeConverter->convert($structure));
         });
     }

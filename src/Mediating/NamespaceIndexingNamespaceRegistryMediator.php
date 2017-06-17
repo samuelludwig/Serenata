@@ -9,7 +9,7 @@ use PhpIntegrator\Analysis\NamespaceListRegistry;
 use PhpIntegrator\Analysis\Conversion\NamespaceConverter;
 
 use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\EventEmittingStorage;
+use PhpIntegrator\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the namespace registry when namespace indexing events happen.
@@ -53,11 +53,11 @@ class NamespaceIndexingNamespaceRegistryMediator
      */
     protected function setup(): void
     {
-        $this->eventEmitter->on(EventEmittingStorage::EVENT_NAMESPACE_UPDATED, function (Structures\FileNamespace $namespace) {
+        $this->eventEmitter->on(IndexingEventName::EVENT_NAMESPACE_UPDATED, function (Structures\FileNamespace $namespace) {
             $this->namespaceListRegistry->add($this->namespaceConverter->convert($namespace));
         });
 
-        $this->eventEmitter->on(EventEmittingStorage::EVENT_NAMESPACE_REMOVED, function (Structures\FileNamespace $namespace) {
+        $this->eventEmitter->on(IndexingEventName::EVENT_NAMESPACE_REMOVED, function (Structures\FileNamespace $namespace) {
             $this->namespaceListRegistry->remove($this->namespaceConverter->convert($namespace));
         });
     }

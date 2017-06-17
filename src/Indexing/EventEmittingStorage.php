@@ -13,51 +13,6 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     use EventEmitterTrait;
 
     /**
-     * @var string
-     */
-    public const EVENT_NAMESPACE_UPDATED = 'namespaceUpdated';
-
-    /**
-     * @var string
-     */
-    public const EVENT_NAMESPACE_REMOVED = 'namespaceRemoved';
-
-    /**
-     * @var string
-     */
-    public const EVENT_IMPORT_INSERTED = 'importInserted';
-
-    /**
-     * @var string
-     */
-    public const EVENT_CONSTANT_UPDATED = 'constantUpdated';
-
-    /**
-     * @var string
-     */
-    public const EVENT_CONSTANT_REMOVED = 'constantRemoved';
-
-    /**
-     * @var string
-     */
-    public const EVENT_FUNCTION_UPDATED = 'functionUpdated';
-
-    /**
-     * @var string
-     */
-    public const EVENT_FUNCTION_REMOVED = 'functionRemoved';
-
-    /**
-     * @var string
-     */
-    public const EVENT_STRUCTURE_UPDATED = 'structureUpdated';
-
-    /**
-     * @var string
-     */
-    public const EVENT_STRUCTURE_REMOVED = 'structureRemoved';
-
-    /**
      * @var StorageInterface
      */
     private $delegate;
@@ -110,17 +65,17 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
         $this->delegate->persist($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(self::EVENT_NAMESPACE_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_NAMESPACE_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\FileNamespaceImport) {
-            $this->emit(self::EVENT_IMPORT_INSERTED);
+            $this->emit(IndexingEventName::EVENT_IMPORT_INSERTED);
         } elseif ($entity instanceof Structures\Constant) {
-            $this->emit(self::EVENT_CONSTANT_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_CONSTANT_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\Function_) {
-            $this->emit(self::EVENT_FUNCTION_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_FUNCTION_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\FunctionParameter) {
-            $this->emit(self::EVENT_FUNCTION_UPDATED, [$entity->getFunction()]);
+            $this->emit(IndexingEventName::EVENT_FUNCTION_UPDATED, [$entity->getFunction()]);
         } elseif ($entity instanceof Structures\Structure) {
-            $this->emit(self::EVENT_STRUCTURE_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_STRUCTURE_UPDATED, [$entity]);
         }
     }
 
@@ -132,13 +87,13 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
         $this->delegate->delete($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(self::EVENT_NAMESPACE_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_NAMESPACE_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Constant) {
-            $this->emit(self::EVENT_CONSTANT_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_CONSTANT_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Function_) {
-            $this->emit(self::EVENT_FUNCTION_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_FUNCTION_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Structure) {
-            $this->emit(self::EVENT_STRUCTURE_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::EVENT_STRUCTURE_REMOVED, [$entity]);
         }
     }
 

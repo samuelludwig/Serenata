@@ -9,7 +9,7 @@ use PhpIntegrator\Analysis\FunctionListRegistry;
 use PhpIntegrator\Analysis\Conversion\FunctionConverter;
 
 use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\EventEmittingStorage;
+use PhpIntegrator\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the function registry when function indexing events happen.
@@ -53,11 +53,11 @@ class FunctionIndexingFunctionRegistryMediator
      */
     protected function setup(): void
     {
-        $this->eventEmitter->on(EventEmittingStorage::EVENT_FUNCTION_UPDATED, function (Structures\Function_ $function) {
+        $this->eventEmitter->on(IndexingEventName::EVENT_FUNCTION_UPDATED, function (Structures\Function_ $function) {
             $this->functionListRegistry->add($this->functionConverter->convert($function));
         });
 
-        $this->eventEmitter->on(EventEmittingStorage::EVENT_FUNCTION_REMOVED, function (Structures\Function_ $function) {
+        $this->eventEmitter->on(IndexingEventName::EVENT_FUNCTION_REMOVED, function (Structures\Function_ $function) {
             $this->functionListRegistry->remove($this->functionConverter->convert($function));
         });
     }
