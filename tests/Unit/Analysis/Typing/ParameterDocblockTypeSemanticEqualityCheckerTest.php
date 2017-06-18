@@ -6,8 +6,6 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolver;
-
 use PhpIntegrator\DocblockTypeParser;
 
 use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
