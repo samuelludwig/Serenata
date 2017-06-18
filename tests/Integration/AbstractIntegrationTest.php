@@ -97,17 +97,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
         $container->get('cache')->deleteAll();
 
-
-
-        // TODO: This needs to happen automatically when the connection changes.
-        $container->get('functionListProvider.registry')->reset();
-        $container->get('constantListProvider.registry')->reset();
-        $container->get('structureListProvider.registry')->reset();
-        $container->get('namespaceListProvider.registry')->reset();
-
-
-
-
         $success = $container->get('initializeCommand')->initialize(false);
 
         $this->assertTrue($success);

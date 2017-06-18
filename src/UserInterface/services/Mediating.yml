@@ -59,3 +59,27 @@ services:
             - '@namespaceListProvider.registry'
             - '@namespaceConverter'
             - '@storage.eventEmittingStorage'
+
+    workspaceEventConstantRegistryMediator:
+        class: PhpIntegrator\Mediating\WorkspaceEventConstantRegistryMediator
+        arguments:
+            - '@constantListProvider.registry'
+            - '@managerRegistry'
+
+    workspaceEventFunctionRegistryMediator:
+        class: PhpIntegrator\Mediating\WorkspaceEventFunctionRegistryMediator
+        arguments:
+            - '@functionListProvider.registry'
+            - '@managerRegistry'
+
+    workspaceEventStructureRegistryMediator:
+        class: PhpIntegrator\Mediating\WorkspaceEventStructureRegistryMediator
+        arguments:
+            - '@structureListProvider.registry'
+            - '@managerRegistry'
+
+    workspaceEventNamespaceRegistryMediator:
+        class: PhpIntegrator\Mediating\WorkspaceEventNamespaceRegistryMediator
+        arguments:
+            - '@namespaceListProvider.registry'
+            - '@managerRegistry'

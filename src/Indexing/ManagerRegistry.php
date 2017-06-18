@@ -16,12 +16,16 @@ use Doctrine\ORM\EntityManager;
 
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
+use Evenement\EventEmitterTrait;
+use Evenement\EventEmitterInterface;
 
 /**
  * Handles indexation of PHP code.
  */
-class ManagerRegistry extends AbstractManagerRegistry
+class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInterface
 {
+    use EventEmitterTrait;
+
     /**
      * @var SqliteConnectionFactory
      */
@@ -167,6 +171,8 @@ class ManagerRegistry extends AbstractManagerRegistry
         $this->databasePath = $databasePath;
 
         $this->resetService('defaultConnection');
+
+        $this->emit(WorkspaceEventName::CHANGED, [$databasePath]);
     }
 
     /**

@@ -119,6 +119,11 @@ abstract class AbstractApplication
         $container->get('constantIndexingConstantRegistryMediator');
         $container->get('structureIndexingStructureRegistryMediator');
         $container->get('namespaceIndexingNamespaceRegistryMediator');
+
+        $container->get('workspaceEventConstantRegistryMediator');
+        $container->get('workspaceEventFunctionRegistryMediator');
+        $container->get('workspaceEventStructureRegistryMediator');
+        $container->get('workspaceEventNamespaceRegistryMediator');
     }
 
     /**
