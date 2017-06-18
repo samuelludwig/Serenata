@@ -23,14 +23,14 @@ services:
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:PhpIntegrator\Indexing\IndexingEventName::EVENT_NAMESPACE_UPDATED
+            - !php/const:PhpIntegrator\Indexing\IndexingEventName::NAMESPACE_UPDATED
 
     cacheClearingEventMediator3:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:PhpIntegrator\Indexing\IndexingEventName::EVENT_IMPORT_INSERTED
+            - !php/const:PhpIntegrator\Indexing\IndexingEventName::IMPORT_INSERTED
 
     constantIndexingConstantRegistryMediator:
         class: PhpIntegrator\Mediating\ConstantIndexingConstantRegistryMediator

@@ -10,45 +10,45 @@ class IndexingEventName
     /**
      * @var string
      */
-    public const EVENT_NAMESPACE_UPDATED = 'namespaceUpdated';
+    public const NAMESPACE_UPDATED = 'namespaceUpdated';
 
     /**
      * @var string
      */
-    public const EVENT_NAMESPACE_REMOVED = 'namespaceRemoved';
+    public const NAMESPACE_REMOVED = 'namespaceRemoved';
 
     /**
      * @var string
      */
-    public const EVENT_IMPORT_INSERTED = 'importInserted';
+    public const IMPORT_INSERTED = 'importInserted';
 
     /**
      * @var string
      */
-    public const EVENT_CONSTANT_UPDATED = 'constantUpdated';
+    public const CONSTANT_UPDATED = 'constantUpdated';
 
     /**
      * @var string
      */
-    public const EVENT_CONSTANT_REMOVED = 'constantRemoved';
+    public const CONSTANT_REMOVED = 'constantRemoved';
 
     /**
      * @var string
      */
-    public const EVENT_FUNCTION_UPDATED = 'functionUpdated';
+    public const FUNCTION_UPDATED = 'functionUpdated';
 
     /**
      * @var string
      */
-    public const EVENT_FUNCTION_REMOVED = 'functionRemoved';
+    public const FUNCTION_REMOVED = 'functionRemoved';
 
     /**
      * @var string
      */
-    public const EVENT_STRUCTURE_UPDATED = 'structureUpdated';
+    public const STRUCTURE_UPDATED = 'structureUpdated';
 
     /**
      * @var string
      */
-    public const EVENT_STRUCTURE_REMOVED = 'structureRemoved';
+    public const STRUCTURE_REMOVED = 'structureRemoved';
 }

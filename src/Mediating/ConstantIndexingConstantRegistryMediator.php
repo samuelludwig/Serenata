@@ -53,11 +53,11 @@ class ConstantIndexingConstantRegistryMediator
      */
     protected function setup(): void
     {
-        $this->eventEmitter->on(IndexingEventName::EVENT_CONSTANT_UPDATED, function (Structures\Constant $constant) {
+        $this->eventEmitter->on(IndexingEventName::CONSTANT_UPDATED, function (Structures\Constant $constant) {
             $this->constantListRegistry->add($this->constantConverter->convert($constant));
         });
 
-        $this->eventEmitter->on(IndexingEventName::EVENT_CONSTANT_REMOVED, function (Structures\Constant $constant) {
+        $this->eventEmitter->on(IndexingEventName::CONSTANT_REMOVED, function (Structures\Constant $constant) {
             $this->constantListRegistry->remove($this->constantConverter->convert($constant));
         });
     }

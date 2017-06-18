@@ -53,11 +53,11 @@ class StructureIndexingStructureRegistryMediator
      */
     protected function setup(): void
     {
-        $this->eventEmitter->on(IndexingEventName::EVENT_STRUCTURE_UPDATED, function (Structures\Structure $structure) {
+        $this->eventEmitter->on(IndexingEventName::STRUCTURE_UPDATED, function (Structures\Structure $structure) {
             $this->structureListRegistry->add($this->classlikeConverter->convert($structure));
         });
 
-        $this->eventEmitter->on(IndexingEventName::EVENT_STRUCTURE_REMOVED, function (Structures\Structure $structure) {
+        $this->eventEmitter->on(IndexingEventName::STRUCTURE_REMOVED, function (Structures\Structure $structure) {
             $this->structureListRegistry->remove($this->classlikeConverter->convert($structure));
         });
     }

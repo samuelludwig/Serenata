@@ -65,17 +65,17 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
         $this->delegate->persist($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(IndexingEventName::EVENT_NAMESPACE_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::NAMESPACE_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\FileNamespaceImport) {
-            $this->emit(IndexingEventName::EVENT_IMPORT_INSERTED);
+            $this->emit(IndexingEventName::IMPORT_INSERTED);
         } elseif ($entity instanceof Structures\Constant) {
-            $this->emit(IndexingEventName::EVENT_CONSTANT_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::CONSTANT_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\Function_) {
-            $this->emit(IndexingEventName::EVENT_FUNCTION_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\FunctionParameter) {
-            $this->emit(IndexingEventName::EVENT_FUNCTION_UPDATED, [$entity->getFunction()]);
+            $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity->getFunction()]);
         } elseif ($entity instanceof Structures\Structure) {
-            $this->emit(IndexingEventName::EVENT_STRUCTURE_UPDATED, [$entity]);
+            $this->emit(IndexingEventName::STRUCTURE_UPDATED, [$entity]);
         }
     }
 
@@ -87,13 +87,13 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
         $this->delegate->delete($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(IndexingEventName::EVENT_NAMESPACE_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::NAMESPACE_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Constant) {
-            $this->emit(IndexingEventName::EVENT_CONSTANT_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::CONSTANT_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Function_) {
-            $this->emit(IndexingEventName::EVENT_FUNCTION_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::FUNCTION_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Structure) {
-            $this->emit(IndexingEventName::EVENT_STRUCTURE_REMOVED, [$entity]);
+            $this->emit(IndexingEventName::STRUCTURE_REMOVED, [$entity]);
         }
     }
 
