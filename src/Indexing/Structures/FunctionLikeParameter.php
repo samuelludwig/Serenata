@@ -40,11 +40,6 @@ abstract class FunctionLikeParameter
     /**
      * @var bool
      */
-    protected $isNullable;
-
-    /**
-     * @var bool
-     */
     protected $isReference;
 
     /**
@@ -103,14 +98,6 @@ abstract class FunctionLikeParameter
     public function getDefaultValue(): ?string
     {
         return $this->defaultValue;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsNullable(): bool
-    {
-        return $this->isNullable;
     }
 
     /**

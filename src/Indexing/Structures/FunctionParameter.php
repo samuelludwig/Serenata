@@ -21,7 +21,6 @@ class FunctionParameter extends FunctionLikeParameter
      * @param TypeInfo[]  $types
      * @param string|null $description
      * @param string|null $defaultValue
-     * @param bool        $isNullable
      * @param bool        $isReference
      * @param bool        $isOptional
      * @param bool        $isVariadic
@@ -33,7 +32,6 @@ class FunctionParameter extends FunctionLikeParameter
         array $types,
         ?string $description,
         ?string $defaultValue,
-        bool $isNullable,
         bool $isReference,
         bool $isOptional,
         bool $isVariadic
@@ -45,7 +43,6 @@ class FunctionParameter extends FunctionLikeParameter
         $this->types = $types;
         $this->description = $description;
         $this->defaultValue = $defaultValue;
-        $this->isNullable = $isNullable;
         $this->isReference = $isReference;
         $this->isOptional = $isOptional;
         $this->isVariadic = $isVariadic;

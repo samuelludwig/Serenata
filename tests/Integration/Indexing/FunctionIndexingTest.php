@@ -108,6 +108,21 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testFunctionExplicitlyNullableReturnTypeHint(): void
+    {
+        $function = $this->indexFunction('FunctionExplicitlyNullableReturnTypeHint.phpt');
+
+        $this->assertEquals('?string', $function->getReturnTypeHint());
+        $this->assertCount(2, $function->getReturnTypes());
+        $this->assertEquals('string', $function->getReturnTypes()[0]->getType());
+        $this->assertEquals('string', $function->getReturnTypes()[0]->getFqcn());
+        $this->assertEquals('null', $function->getReturnTypes()[1]->getType());
+        $this->assertEquals('null', $function->getReturnTypes()[1]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
     public function testFunctionFqcnIsInCurrentNamespace(): void
     {
         $function = $this->indexFunction('FunctionFqcnInNamespace.phpt');
@@ -173,7 +188,6 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($parameter->getTypes());
         $this->assertNull($parameter->getDescription());
         $this->assertNull($parameter->getDefaultValue());
-        $this->assertFalse($parameter->getIsNullable());
         $this->assertFalse($parameter->getIsReference());
         $this->assertFalse($parameter->getIsOptional());
         $this->assertFalse($parameter->getIsVariadic());
@@ -186,7 +200,6 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($parameter->getTypes());
         $this->assertNull($parameter->getDescription());
         $this->assertNull($parameter->getDefaultValue());
-        $this->assertFalse($parameter->getIsNullable());
         $this->assertFalse($parameter->getIsReference());
         $this->assertFalse($parameter->getIsOptional());
         $this->assertFalse($parameter->getIsVariadic());
@@ -295,7 +308,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterExplicitNullability.phpt');
 
-        $this->assertTrue($function->getParameters()[0]->getIsNullable());
+        $this->assertEquals('?int', $function->getParameters()[0]->getTypeHint());
 
         $this->assertCount(2, $function->getParameters()[0]->getTypes());
         $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());
@@ -309,7 +322,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterImplicitNullability.phpt');
 
-        $this->assertTrue($function->getParameters()[0]->getIsNullable());
+        $this->assertEquals('int', $function->getParameters()[0]->getTypeHint());
 
         $this->assertCount(2, $function->getParameters()[0]->getTypes());
         $this->assertEquals('int', $function->getParameters()[0]->getTypes()[0]->getType());

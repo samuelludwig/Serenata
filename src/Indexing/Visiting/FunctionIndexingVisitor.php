@@ -119,18 +119,22 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     {
         $localType = null;
         $resolvedType = null;
+        $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
             $nodeType = $nodeType->type;
+            $returnTypeHint = '?';
         }
 
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
+            $returnTypeHint .= $resolvedType;
         } elseif ($nodeType instanceof Node\Identifier) {
             $localType = $nodeType->name;
             $resolvedType = $nodeType->name;
+            $returnTypeHint .= $resolvedType;
         }
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
@@ -182,7 +186,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
             $documentation['return']['description'] ?: null,
-            $resolvedType,
+            $returnTypeHint,
             !empty($docComment),
             $throws,
             $returnTypes
@@ -191,6 +195,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         $this->storage->persist($function);
 
         foreach ($node->getParams() as $param) {
+            $typeHint = null;
             $localType = null;
             $resolvedType = null;
 
@@ -198,14 +203,17 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             if ($typeNode instanceof Node\NullableType) {
                 $typeNode = $typeNode->type;
+                $typeHint = '?';
             }
 
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
+                $typeHint .= $resolvedType;
             } elseif ($typeNode instanceof Node\Identifier) {
                 $localType = $typeNode->name;
                 $resolvedType = $typeNode->name;
+                $typeHint .= $resolvedType;
             }
 
             $isNullable = (
@@ -256,11 +264,10 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $parameter = new Structures\FunctionParameter(
                 $function,
                 $param->var->name,
-                $resolvedType,
+                $typeHint,
                 $types,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
-                $isNullable,
                 $param->byRef,
                 !!$param->default,
                 $param->variadic

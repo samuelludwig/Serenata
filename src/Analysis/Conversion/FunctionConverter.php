@@ -25,7 +25,6 @@ class FunctionConverter extends AbstractConverter
                 'types'        => $this->convertTypes($parameter->getTypes()),
                 'description'  => $parameter->getDescription(),
                 'defaultValue' => $parameter->getDefaultValue(),
-                'isNullable'   => $parameter->getIsNullable(),
                 'isReference'  => $parameter->getIsReference(),
                 'isVariadic'   => $parameter->getIsVariadic(),
                 'isOptional'   => $parameter->getIsOptional()

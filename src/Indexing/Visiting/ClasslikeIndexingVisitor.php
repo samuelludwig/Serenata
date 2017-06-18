@@ -609,18 +609,22 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $localType = null;
         $resolvedType = null;
+        $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
             $nodeType = $nodeType->type;
+            $returnTypeHint = '?';
         }
 
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
+            $returnTypeHint .= $resolvedType;
         } elseif ($nodeType instanceof Node\Identifier) {
             $localType = $nodeType->name;
             $resolvedType = $nodeType->name;
+            $returnTypeHint .= $resolvedType;
         }
 
         $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
@@ -684,7 +688,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
             $documentation['return']['description'] ?: null,
-            $resolvedType,
+            $returnTypeHint,
             $this->structure,
             $accessModifier ? $accessModifierMap[$accessModifier] : null,
             false,
@@ -699,6 +703,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->storage->persist($method);
 
         foreach ($node->getParams() as $param) {
+            $typeHint = null;
             $localType = null;
             $resolvedType = null;
 
@@ -706,14 +711,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             if ($typeNode instanceof Node\NullableType) {
                 $typeNode = $typeNode->type;
+                $typeHint = '?';
             }
 
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
+                $typeHint .= $resolvedType;
             } elseif ($typeNode instanceof Node\Identifier) {
                 $localType = $typeNode->name;
                 $resolvedType = $typeNode->name;
+                $typeHint .= $resolvedType;
             }
 
             $isNullable = (
@@ -764,11 +772,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $parameter = new Structures\MethodParameter(
                 $method,
                 $param->var->name,
-                $resolvedType,
+                $typeHint,
                 $types,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
-                $isNullable,
                 $param->byRef,
                 !!$param->default,
                 $param->variadic
@@ -969,7 +976,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 null,
                 false,
                 false,
-                false,
                 false
             );
 
@@ -990,7 +996,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types,
                 null,
                 null,
-                false,
                 false,
                 true,
                 false

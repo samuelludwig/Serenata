@@ -114,6 +114,21 @@ class MethodIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testMethodExplicitlyNullableReturnTypeHint(): void
+    {
+        $method = $this->indexMethod('MethodExplicitlyNullableReturnTypeHint.phpt');
+
+        $this->assertEquals('?string', $method->getReturnTypeHint());
+        $this->assertCount(2, $method->getReturnTypes());
+        $this->assertEquals('string', $method->getReturnTypes()[0]->getType());
+        $this->assertEquals('string', $method->getReturnTypes()[0]->getFqcn());
+        $this->assertEquals('null', $method->getReturnTypes()[1]->getType());
+        $this->assertEquals('null', $method->getReturnTypes()[1]->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
     public function testMethodReturnTypeInDocblockIsResolved(): void
     {
         $method = $this->indexMethod('MethodReturnTypeInDocblockIsResolved.phpt');
@@ -169,7 +184,6 @@ class MethodIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($parameter->getTypes());
         $this->assertNull($parameter->getDescription());
         $this->assertNull($parameter->getDefaultValue());
-        $this->assertFalse($parameter->getIsNullable());
         $this->assertFalse($parameter->getIsReference());
         $this->assertFalse($parameter->getIsOptional());
         $this->assertFalse($parameter->getIsVariadic());
@@ -182,7 +196,6 @@ class MethodIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($parameter->getTypes());
         $this->assertNull($parameter->getDescription());
         $this->assertNull($parameter->getDefaultValue());
-        $this->assertFalse($parameter->getIsNullable());
         $this->assertFalse($parameter->getIsReference());
         $this->assertFalse($parameter->getIsOptional());
         $this->assertFalse($parameter->getIsVariadic());
@@ -289,9 +302,9 @@ class MethodIndexingTest extends AbstractIntegrationTest
      */
     public function testMethodParameterExplicitNullability(): void
     {
-        $method = $this->indexMethod('MethodParameterExplicitNullability.phpt');
+        $method = $this->indexMethod('MethodParameterExplicitNullability.phpt');;
 
-        $this->assertTrue($method->getParameters()[0]->getIsNullable());
+        $this->assertEquals('?int', $method->getParameters()[0]->getTypeHint());
 
         $this->assertCount(2, $method->getParameters()[0]->getTypes());
         $this->assertEquals('int', $method->getParameters()[0]->getTypes()[0]->getType());
@@ -305,7 +318,7 @@ class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterImplicitNullability.phpt');
 
-        $this->assertTrue($method->getParameters()[0]->getIsNullable());
+        $this->assertEquals('int', $method->getParameters()[0]->getTypeHint());
 
         $this->assertCount(2, $method->getParameters()[0]->getTypes());
         $this->assertEquals('int', $method->getParameters()[0]->getTypes()[0]->getType());
@@ -463,7 +476,6 @@ class MethodIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($parameter->getTypes());
         $this->assertNull($parameter->getDescription());
         $this->assertNull($parameter->getDefaultValue());
-        $this->assertFalse($parameter->getIsNullable());
         $this->assertFalse($parameter->getIsReference());
         $this->assertFalse($parameter->getIsOptional());
         $this->assertFalse($parameter->getIsVariadic());
@@ -486,7 +498,6 @@ class MethodIndexingTest extends AbstractIntegrationTest
         $this->assertEmpty($parameter->getTypes());
         $this->assertNull($parameter->getDescription());
         $this->assertNull($parameter->getDefaultValue());
-        $this->assertFalse($parameter->getIsNullable());
         $this->assertFalse($parameter->getIsReference());
         $this->assertTrue($parameter->getIsOptional());
         $this->assertFalse($parameter->getIsVariadic());
