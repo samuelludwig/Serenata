@@ -44,7 +44,7 @@ NOTE: The changelog for this version is mostly just a bin containing all changes
   * This was inconsistent with return type information for functions and methods (it also didn't have an `isNullable`).
   * It didn't properly take docblock information into account, so it was actually more of an "is type hint nullable".
   * Whether or not a type is nullable, taking all factors into account (the type hint, a default value of `null`, the docblock types), can already be deduced from the actual type list (`null` will be present in it).
-  * whether the type hint should be nullable, which can be important when overriding methods, where the signatures must match, is now no longer something the client needs to worry about as the `typeHint` property will now include a PHP 7.1 question mark if the original type hint also included one.
+  * Whether the type hint should be nullable, which can be important when overriding methods, where the signatures must match, is now no longer something the client needs to worry about as the `typeHint` property will now include a PHP 7.1 question mark if the original type hint also included one.
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
 * Fixed errors being generated whilst trying to deduce the type of anonymous classes.
 * Errors will no longer be thrown when a class implements the same interface twice, uses the same trait twice, or an interface extends the same interface twice.
