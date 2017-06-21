@@ -4,7 +4,6 @@
   * Code that is analyzed can still be anything from PHP 5.2 all the way up to 7.1.
 * [PHP 7.1 is now properly supported](https://gitlab.com/php-integrator/core/issues/40)
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
-* Linting, signature help (call tips) and tooltips can now be provided by the core instead of clients needing to implement it manually via commands `Lint`, `SignatureHelp` and `Tooltip`, respectively
 * [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
   * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it
 *  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
