@@ -57,7 +57,7 @@ $serviceLocator->get('someService')-> // Autocompletion for App\SomeService
 ### Linting
 * [Some docblock warnings have been promoted to errors](https://gitlab.com/php-integrator/core/issues/33)
 * [Complain about missing ampersand signs for reference parameters in docblocks](https://gitlab.com/php-integrator/core/issues/32)
-* [Don't complain about type mismatches in docblocks when the qualifications of the types are different]((https://gitlab.com/php-integrator/core/issues/89)
+* [Don't complain about type mismatches in docblocks when the qualifications of the types are different](https://gitlab.com/php-integrator/core/issues/89)
 * [For docblock parameters, specializations of the type hint are now allowed to narrow down class types](https://gitlab.com/php-integrator/core/issues/35)
 
 ```php
