@@ -4,6 +4,7 @@
   * Code that is analyzed can still be anything from PHP 5.2 all the way up to 7.1.
 * [PHP 7.1 is now properly supported](https://gitlab.com/php-integrator/core/issues/40)
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
+* [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked, substantially improving their performance](https://gitlab.com/php-integrator/core/issues/122)
 * [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
   * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it
 *  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
@@ -111,7 +112,6 @@ function foo(C $c) {}
 
 ### Various enhancements
 * Updated dependencies
-* [Various lists containing large data, such as the constant, function, structure and namespace list were previously rebuilt every time a command to fetch them was invoked. These are now internally maintained in a registry to avoid the this expensive operation from happening again every time](https://gitlab.com/php-integrator/core/issues/122)
 * Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted)
 * Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well
 * Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else
