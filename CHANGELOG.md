@@ -4,7 +4,8 @@
   * Code that is analyzed can still be anything from PHP 5.2 all the way up to 7.1.
 * [PHP 7.1 is now properly supported](https://gitlab.com/php-integrator/core/issues/40)
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
-* [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked, substantially improving their performance](https://gitlab.com/php-integrator/core/issues/122)
+* [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked](https://gitlab.com/php-integrator/core/issues/122)
+  * This is primarily used by the autocompletion Atom package, which will receive from an improvement in response times and minor hiccups from this.
 * [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
   * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it
 *  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
