@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
+use PhpIntegrator\Indexing\FileNotFoundStorageException;
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class NamespaceListCommandTest extends AbstractIntegrationTest
@@ -44,5 +45,17 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
                 'endLine'   => 9
             ]
         ], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenFileIsNotInIndex(): void
+    {
+        $command = $this->container->get('namespaceListCommand');
+
+        $this->expectException(FileNotFoundStorageException::class);
+
+        $command->getNamespaceList('DoesNotExist.phpt');
     }
 }

@@ -4,6 +4,7 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
+use PhpIntegrator\Indexing\FileNotFoundStorageException;
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class LocalizeTypeCommandTest extends AbstractIntegrationTest
@@ -48,5 +49,17 @@ class LocalizeTypeCommandTest extends AbstractIntegrationTest
         $this->assertEquals('\C\D\Test', $command->localizeType('\C\D\Test', $path, 13, UseStatementKind::TYPE_CONSTANT));
         $this->assertEquals('\SOME_CONSTANT', $command->localizeType('\SOME_CONSTANT', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
         $this->assertEquals('\some_function', $command->localizeType('\some_function', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenFileIsNotInIndex(): void
+    {
+        $command = $this->container->get('localizeTypeCommand');
+
+        $this->expectException(FileNotFoundStorageException::class);
+
+        $command->localizeType('A', 'DoesNotExist.phpt', 1, UseStatementKind::TYPE_CLASSLIKE);
     }
 }

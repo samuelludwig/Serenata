@@ -103,15 +103,34 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
-        $file = $this->storage->getFileByPath($arguments['file']);
-
-        return $this->deduceTypesFromExpression(
-            $file,
+        return $this->deduceTypes(
+            $arguments['file'],
             $code,
             $codeWithExpression,
             $offset,
             isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
         );
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $code
+     * @param string $codeWithExpression
+     * @param int    $offset
+     * @param bool   $ignoreLastElement
+     *
+     * @return array
+     */
+    public function deduceTypes(
+        string $filePath,
+        string $code,
+        string $codeWithExpression,
+        int $offset,
+        bool $ignoreLastElement
+    ): array {
+        $file = $this->storage->getFileByPath($filePath);
+
+        return $this->deduceTypesFromExpression($file, $code, $codeWithExpression, $offset, $ignoreLastElement);
     }
 
     /**

@@ -4,6 +4,8 @@ namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
 use ReflectionClass;
 
+use PhpIntegrator\Indexing\FileNotFoundStorageException;
+
 use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
@@ -1023,6 +1025,18 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         );
 
         $this->assertEquals(['\B\Bar'], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenFileIsNotInIndex(): void
+    {
+        $command = $this->container->get('deduceTypesCommand');
+
+        $this->expectException(FileNotFoundStorageException::class);
+
+        $command->deduceTypes('DoesNotExist.phpt', 'Code', 'CodeWithExpression', 1, false);
     }
 
     /**
