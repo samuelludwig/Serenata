@@ -73,10 +73,18 @@ class LintCommand extends AbstractCommand
             !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
         );
 
-        return $this->linter->lint(
-            $this->storage->getFileByPath($arguments['file']),
-            $code,
-            $settings
-        );
+        return $this->lint($arguments['file'], $code, $settings);
+    }
+
+    /**
+     * @param string          $filePath
+     * @param string          $code
+     * @param LintingSettings $settings
+     *
+     * @return array
+     */
+    public function lint(string $filePath, string $code, LintingSettings $settings): array
+    {
+        return $this->linter->lint($this->storage->getFileByPath($filePath), $code, $settings);
     }
 }
