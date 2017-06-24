@@ -6,6 +6,7 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
+use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -69,10 +70,18 @@ class SignatureHelpCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->signatureHelpRetriever->get(
-            $this->storage->getFileByPath($arguments['file']),
-            $code,
-            $offset
-        );
+        return $this->signatureHelp($arguments['file'], $code, $offset);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $code
+     * @param int    $offset
+     *
+     * @return SignatureHelp
+     */
+    public function signatureHelp(string $filePath, string $code, int $offset): SignatureHelp
+    {
+        return $this->signatureHelpRetriever->get($this->storage->getFileByPath($filePath), $code, $offset);
     }
 }
