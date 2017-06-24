@@ -338,7 +338,7 @@ class SignatureHelpRetriever
 
         $signature = new SignatureInformation($name, $documentation, $parameters);
 
-        return new SignatureHelp([$signature], 0,$argumentIndex);
+        return new SignatureHelp([$signature], 0, $argumentIndex);
     }
 
     /**
