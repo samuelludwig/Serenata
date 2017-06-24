@@ -52,12 +52,26 @@ class ClassListCommand extends AbstractCommand
     {
         $filePath = $arguments['file'] ?? null;
 
-        if ($filePath !== null) {
-            $file = $this->storage->getFileByPath($filePath);
+        return ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll();
+    }
 
-            return $this->fileStructureListProvider->getAllForFile($file);
-        }
-
+    /**
+     * @return array
+     */
+    public function getAll(): array
+    {
         return $this->structureListProvider->getAll();
+    }
+
+    /**
+     * @param string $filePath
+     *
+     * @return array
+     */
+    public function getAllForFilePath(string $filePath): array
+    {
+        $file = $this->storage->getFileByPath($filePath);
+
+        return $this->fileStructureListProvider->getAllForFile($file);
     }
 }
