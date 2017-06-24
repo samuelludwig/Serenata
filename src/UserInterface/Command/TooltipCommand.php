@@ -6,6 +6,7 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
+use PhpIntegrator\Tooltips\TooltipResult;
 use PhpIntegrator\Tooltips\TooltipProvider;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
@@ -69,10 +70,18 @@ class TooltipCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->tooltipProvider->get(
-            $this->storage->getFileByPath($arguments['file']),
-            $code,
-            $offset
-        );
+        return $this->getTooltip($arguments['file'], $code, $offset);
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $code
+     * @param int    $offset
+     *
+     * @return TooltipResult|null
+     */
+    public function getTooltip(string $filePath, string $code, int $offset): ?TooltipResult
+    {
+        return $this->tooltipProvider->get($this->storage->getFileByPath($filePath), $code, $offset);
     }
 }
