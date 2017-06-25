@@ -1153,9 +1153,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testTraitUsageIsCorrectlyProcessed(): void
+    public function testClassTraitUsageIsCorrectlyProcessed(): void
     {
-        $fileName = 'TraitUsage.phpt';
+        $fileName = 'ClassTraitUsage.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1205,9 +1205,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testTraitAliasWithoutAccessModifier(): void
+    public function testClassTraitAliasWithoutAccessModifier(): void
     {
-        $fileName = 'TraitAliasWithoutAccessModifier.phpt';
+        $fileName = 'ClassTraitAliasWithoutAccessModifier.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1219,9 +1219,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testTraitAliasWithAccessModifier(): void
+    public function testClassTraitAliasWithAccessModifier(): void
     {
-        $fileName = 'TraitAliasWithAccessModifier.phpt';
+        $fileName = 'ClassTraitAliasWithAccessModifier.phpt';
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
@@ -1262,6 +1262,93 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
         $this->assertEquals('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+
+        $this->assertEmpty($output['methods']['someMethod']['implementations']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitUsageIsCorrectlyProcessed(): void
+    {
+        $fileName = 'TraitTraitUsage.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestTrait');
+
+        $this->assertEquals(['\A\FirstTrait', '\A\SecondTrait'], $output['traits']);
+        $this->assertEquals(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
+
+        $this->assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
+        $this->assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+
+        $this->assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
+        $this->assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
+
+        // Do a couple of sanity checks.
+        $this->assertEquals('\A\TestTrait', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
+
+        $this->assertEquals('\A\TestTrait', $output['methods']['test1']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
+
+        $this->assertEquals('\A\TestTrait', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
+
+        // Test the 'as' keyword for renaming trait method.
+        $this->assertThat($output['methods'], $this->arrayHasKey('test1'));
+        $this->assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+
+        $this->assertTrue($output['methods']['test1']['isPrivate']);
+
+        $this->assertEquals('\A\TestTrait', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
+
+        $this->assertEquals('\A\TestTrait', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitAliasWithoutAccessModifier(): void
+    {
+        $fileName = 'TraitTraitAliasWithoutAccessModifier.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestTrait');
+
+        $this->assertFalse($output['methods']['test1']['isPublic']);
+        $this->assertTrue($output['methods']['test1']['isProtected']);
+        $this->assertFalse($output['methods']['test1']['isPrivate']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTraitTraitAliasWithAccessModifier(): void
+    {
+        $fileName = 'TraitTraitAliasWithAccessModifier.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestTrait');
+
+        $this->assertFalse($output['methods']['test1']['isPublic']);
+        $this->assertFalse($output['methods']['test1']['isProtected']);
+        $this->assertTrue($output['methods']['test1']['isPrivate']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMethodOverrideDataIsCorrectWhenTraitHasMethodThatIsAlsoDefinedByOneOfItsOwnTraits(): void
+    {
+        $fileName = 'TraitOverridesOwnTraitMethod.phpt';
+
+        $output = $this->getClassInfo($fileName, 'A\TestTrait');
+
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+
+        $this->assertEquals('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        $this->assertEquals('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
         $this->assertEmpty($output['methods']['someMethod']['implementations']);
     }
