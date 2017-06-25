@@ -1119,7 +1119,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     /**
      * @param PositionalNameResolverInterface $structureAwareNameResolverMock
      *
-     * @return StructureAwareNameResolver
+     * @return StructureAwareNameResolverFactoryInterface
      */
     protected function mockStructureAwareNameResolverFactory(
         PositionalNameResolverInterface $structureAwareNameResolverMock
