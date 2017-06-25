@@ -20,11 +20,6 @@ trait FirstTrait
     {
 
     }
-
-    protected function overriddenInChild()
-    {
-
-    }
 }
 
 trait SecondTrait
@@ -48,10 +43,5 @@ trait TestTrait
         test as private test1;
         SecondTrait::testAmbiguous insteadof testAmbiguous;
         FirstTrait::testAmbiguousAsWell insteadof testAmbiguousAsWell;
-    }
-
-    protected function overriddenInChild()
-    {
-
     }
 }

@@ -1291,9 +1291,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $this->assertEquals('\A\TestTrait', $output['methods']['test1']['declaringClass']['fqcn']);
         $this->assertEquals('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
-        $this->assertEquals('\A\TestTrait', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
-        $this->assertEquals('\A\TestTrait', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
-
         // Test the 'as' keyword for renaming trait method.
         $this->assertThat($output['methods'], $this->arrayHasKey('test1'));
         $this->assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
