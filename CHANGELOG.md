@@ -7,7 +7,7 @@
 * [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked](https://gitlab.com/php-integrator/core/issues/122)
   * This is primarily used by the autocompletion Atom package, which will benefit from an improvement in response times and minor hiccups.
 * [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
-  * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it
+  * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it.
 *  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
   * Reflection in combination with PHP documentation data is no longer used to index built-in items.
   * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
