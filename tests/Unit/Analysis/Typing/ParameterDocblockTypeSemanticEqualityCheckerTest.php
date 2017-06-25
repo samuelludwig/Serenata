@@ -228,10 +228,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\A',
+                    'fqcn'       => '\A',
                     'parents'    => [],
                     'interfaces' => []
                 ]
@@ -270,10 +270,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\B',
+                    'fqcn'       => '\B',
                     'parents'    => ['\A'],
                     'interfaces' => []
                 ]
@@ -312,10 +312,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\B',
+                    'fqcn'       => '\B',
                     'parents'    => [],
                     'interfaces' => ['\A']
                 ]
@@ -354,18 +354,18 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\B',
+                    'fqcn'       => '\B',
                     'parents'    => ['\A'],
                     'interfaces' => []
                 ],
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\C',
+                    'fqcn'       => '\C',
                     'parents'    => [],
                     'interfaces' => ['\A']
                 ]
@@ -407,10 +407,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\A',
+                    'fqcn'       => '\A',
                     'parents'    => [],
                     'interfaces' => []
                 ]
@@ -451,10 +451,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\A'
+                    'fqcn'       => '\A'
                 ],
                 [
-                    'name'       => '\A',
+                    'fqcn'       => '\A',
                     'parents'    => [],
                     'interfaces' => []
                 ]
@@ -493,10 +493,10 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($resolver),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'name'       => '\B\A'
+                    'fqcn'       => '\B\A'
                 ],
                 [
-                    'name'       => '\B\A',
+                    'fqcn'       => '\B\A',
                     'parents'    => [],
                     'interfaces' => []
                 ]

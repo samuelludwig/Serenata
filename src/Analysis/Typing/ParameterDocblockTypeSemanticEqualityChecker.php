@@ -296,9 +296,9 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return false;
         }
 
-        if (in_array($typeClassInfo['name'], $docblockTypeClassInfo['parents'], true)) {
+        if (in_array($typeClassInfo['fqcn'], $docblockTypeClassInfo['parents'], true)) {
             return true;
-        } elseif (in_array($typeClassInfo['name'], $docblockTypeClassInfo['interfaces'], true)) {
+        } elseif (in_array($typeClassInfo['fqcn'], $docblockTypeClassInfo['interfaces'], true)) {
             return true;
         }
 
