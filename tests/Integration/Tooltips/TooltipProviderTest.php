@@ -107,7 +107,7 @@ Hello!
      */
     public function testClassConstFetch(): void
     {
-        $this->performTooltipTest('ClassConstFetch.phpt', 106, 115, "This is a summary.\n\n# Type\n*int*");
+        $this->performTooltipTest('ClassConstFetch.phpt', 108, 115, "This is a summary.\n\n# Type\n*int*");
     }
 
     /**
@@ -297,7 +297,7 @@ Class');
      */
     public function testFunctionDefinition(): void
     {
-        $this->performTooltipTest('FunctionDefinition.phpt', 37, 56, 'This is a summary.
+        $this->performTooltipTest('FunctionDefinition.phpt', 46, 49, 'This is a summary.
 
 # Returns
 *void*');
@@ -308,7 +308,7 @@ Class');
      */
     public function testClassMethodDefinition(): void
     {
-        $this->performTooltipTest('ClassMethodDefinition.phpt', 63, 97, 'This is a summary.
+        $this->performTooltipTest('ClassMethodDefinition.phpt', 79, 82, 'This is a summary.
 
 # Returns
 *void*');
@@ -319,7 +319,7 @@ Class');
      */
     public function testMethodCall(): void
     {
-        $this->performTooltipTest('MethodCall.phpt', 111, 118, 'This is a summary.
+        $this->performTooltipTest('MethodCall.phpt', 113, 116, 'This is a summary.
 
 # Returns
 *void*');
@@ -330,7 +330,7 @@ Class');
      */
     public function testStaticMethodCall(): void
     {
-        $this->performTooltipTest('StaticMethodCall.phpt', 103, 110, 'This is a summary.
+        $this->performTooltipTest('StaticMethodCall.phpt', 105, 108, 'This is a summary.
 
 # Returns
 *void*');
@@ -341,7 +341,7 @@ Class');
      */
     public function testPropertyFetchContainsAllSections(): void
     {
-        $this->performTooltipTest('PropertyFetchAllSections.phpt', 191, 196, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('PropertyFetchAllSections.phpt', 193, 196, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -356,7 +356,7 @@ Hello!
      */
     public function testStaticPropertyFetch(): void
     {
-        $this->performTooltipTest('StaticPropertyFetch.phpt', 88, 94, 'This is a summary.
+        $this->performTooltipTest('StaticPropertyFetch.phpt', 90, 94, 'This is a summary.
 
 # Type
 (Not known)');
@@ -367,7 +367,7 @@ Hello!
      */
     public function testFunctionDefinitionRangeIsConfinedToBeforeFirstStatement(): void
     {
-        $this->performTooltipTest('FunctionDefinitionWithStatement.phpt', 37, 58, 'This is a summary.
+        $this->performTooltipTest('FunctionDefinitionWithStatement.phpt', 46, 49, 'This is a summary.
 
 # Returns
 *void*');
@@ -380,7 +380,7 @@ Hello!
     {
         $fileName = 'FunctionDefinitionWithParameter.phpt';
 
-        $this->performTooltipTest($fileName, 37, 55, 'This is a summary.
+        $this->performTooltipTest($fileName, 46, 49, 'This is a summary.
 
 # Parameters
    |   |   ' . '
@@ -402,7 +402,7 @@ Hello!
      */
     public function testFunctionDefinitionRangeIsConfinedToNonScalarReturnType(): void
     {
-        $this->performTooltipTest('FunctionDefinitionWithReturnType.phpt', 37, 53, 'This is a summary.
+        $this->performTooltipTest('FunctionDefinitionWithReturnType.phpt', 46, 49, 'This is a summary.
 
 # Returns
 *void*');

@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Tooltips;
 
+use LogicException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
@@ -165,7 +166,7 @@ class TooltipProvider
             return $nearestInterestingNode;
         }
 
-        return ($node instanceof Node\Name) ? $node : $nearestInterestingNode;
+        return ($node instanceof Node\Name || $node instanceof Node\Identifier) ? $node : $nearestInterestingNode;
     }
 
     /**
@@ -181,26 +182,54 @@ class TooltipProvider
     {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node);
-        } elseif ($node instanceof Node\Expr\MethodCall) {
-            return $this->getTooltipForMethodCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
-        } elseif ($node instanceof Node\Expr\StaticCall) {
-            return $this->getTooltipForStaticMethodCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
-        } elseif ($node instanceof Node\Expr\PropertyFetch) {
-            return $this->getTooltipForPropertyFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
-        } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
-            return $this->getTooltipForStaticPropertyFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->getTooltipForConstFetchNode($node);
-        } elseif ($node instanceof Node\Expr\ClassConstFetch) {
-            return $this->getTooltipForClassConstFetchNode($node, $file, $code);
         } elseif ($node instanceof Node\Stmt\UseUse) {
             return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
-        } elseif ($node instanceof Node\Stmt\Function_) {
-            return $this->getTooltipForFunctionNode($node);
-        } elseif ($node instanceof Node\Stmt\ClassMethod) {
-            return $this->getTooltipForClassMethodNode($node, $file);
         } elseif ($node instanceof Node\Name) {
             return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
+        } elseif ($node instanceof Node\Identifier) {
+            $parentNode = $node->getAttribute('parent', false);
+
+            if ($parentNode === false) {
+                throw new LogicException('No parent metadata attached to node');
+            }
+
+            if ($parentNode instanceof Node\Stmt\Function_) {
+                return $this->getTooltipForFunctionNode($parentNode);
+            } elseif ($parentNode instanceof Node\Stmt\ClassMethod) {
+                return $this->getTooltipForClassMethodNode($parentNode, $file);
+            } elseif ($parentNode instanceof Node\Expr\ClassConstFetch) {
+                return $this->getTooltipForClassConstFetchNode($parentNode, $file, $code);
+            } elseif ($parentNode instanceof Node\Expr\PropertyFetch) {
+                return $this->getTooltipForPropertyFetchNode(
+                    $parentNode,
+                    $file,
+                    $code,
+                    $parentNode->getAttribute('startFilePos')
+                );
+            } elseif ($parentNode instanceof Node\Expr\StaticPropertyFetch) {
+                return $this->getTooltipForStaticPropertyFetchNode(
+                    $parentNode,
+                    $file,
+                    $code,
+                    $parentNode->getAttribute('startFilePos')
+                );
+            } elseif ($parentNode instanceof Node\Expr\MethodCall) {
+                return $this->getTooltipForMethodCallNode(
+                    $parentNode,
+                    $file,
+                    $code,
+                    $parentNode->getAttribute('startFilePos')
+                );
+            } elseif ($parentNode instanceof Node\Expr\StaticCall) {
+                return $this->getTooltipForStaticMethodCallNode(
+                    $parentNode,
+                    $file,
+                    $code,
+                    $parentNode->getAttribute('startFilePos')
+                );
+            }
         }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
