@@ -225,6 +225,18 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testArgumentIndexIsNullForFunctionCallFunctionWithoutArguments(): void
+    {
+        $result = $this->getSignatureHelp('FunctionCallFunctionWithoutArguments.phpt', 48);
+
+        $this->assertCount(1, $result->getSignatures());
+        $this->assertEmpty($result->getSignatures()[0]->getParameters());
+        $this->assertNull($result->getActiveParameter());
+    }
+
+    /**
+     * @return void
+     */
     public function testArgumentIndexIsCorrectWithVariadicParameters(): void
     {
         $result = $this->getSignatureHelp('VariadicParameter.phpt', 217);
@@ -268,6 +280,16 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallFailsWhenArgumentIsOutOfBounds(): void
     {
         $result = $this->getSignatureHelp('FunctionCallTooManyArguments.phpt', 113);
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     *
+     * @return void
+     */
+    public function testFunctionCallFailsWhenTrailingCommaIsPresentThatWouldBeFollowedByOutOfBoundsArgument(): void
+    {
+        $result = $this->getSignatureHelp('TrailingCommaIsPresentThatWouldBeFollowedByOutOfBoundsArgument.phpt', 97);
     }
 
     /**
@@ -401,16 +423,16 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $fileName
-     * @param int    $start
-     * @param int    $end
-     * @param int    $activeParameter
+     * @param string   $fileName
+     * @param int      $start
+     * @param int      $end
+     * @param int|null $activeParameter
      */
     protected function assertSignatureHelpActiveParameterEquals(
         string $fileName,
         int $start,
         int $end,
-        int $activeParameter
+        ?int $activeParameter
     ): void {
         $i = $start;
 

@@ -326,6 +326,8 @@ class SignatureHelpRetriever
      * @param array $functionInfo
      * @param int   $argumentIndex
      *
+     * @throws UnexpectedValueException
+     *
      * @return SignatureHelp
      */
     protected function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
@@ -345,17 +347,26 @@ class SignatureHelpRetriever
      * @param array $functionInfo
      * @param int   $argumentIndex
      *
-     * @return int
+     * @throws UnexpectedValueException
+     *
+     * @return int|null
      */
-    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): int
+    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): ?int
     {
         $parameterCount = count($functionInfo['parameters']);
 
-        if ($argumentIndex >= $parameterCount &&
-            $parameterCount > 0 &&
-            $functionInfo['parameters'][$parameterCount - 1]['isVariadic']
-        ) {
-            return $parameterCount - 1;
+        if ($argumentIndex >= $parameterCount) {
+            if ($argumentIndex === 0 && $parameterCount === 0) {
+                // First "argument" here isn't actually an argument, so we return null as index so we can still show
+                // signature help for functions without arguments.
+                return null;
+            } elseif ($parameterCount > 0 && $functionInfo['parameters'][$parameterCount - 1]['isVariadic']) {
+                return $parameterCount - 1;
+            } else {
+                throw new UnexpectedValueException(
+                    "Argument index {$argumentIndex} is out of bounds, only {$parameterCount} parameters supported"
+                );
+            }
         }
 
         return $argumentIndex;
