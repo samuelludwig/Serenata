@@ -87,6 +87,7 @@ function foo(C $c) {}
 ```
 
 * [Processing more complex docblock types, such as compound types containing multiple array specializations and null, has substantially improved and should complain less about valid combinations](https://gitlab.com/php-integrator/core/issues/11)
+* Linting messages for classlikes, functions and methods will now be properly shown over their name instead of on the first character of their definition
 * Disabling unknown global constant linting now works again
 * For docblock parameters, compound types containing class types will now be resolved properly (previously, only a single type was resolved)
 * It is now possible to disable linting missing documentation separately from linting docblock correctness

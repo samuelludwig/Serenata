@@ -438,8 +438,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Documentation for method is missing.',
-                'start'   => 448,
-                'end'     => 449
+                'start'   => 467,
+                'end'     => 477
             ],
 
             [
@@ -456,14 +456,14 @@ class LinterTest extends AbstractIntegrationTest
 
             [
                 'message' => 'Documentation for classlike is missing.',
-                'start'   => 496,
-                'end'     => 497
+                'start'   => 502,
+                'end'     => 522
             ],
 
             [
                 'message' => 'Documentation for function is missing.',
-                'start'   => 21,
-                'end'     => 22
+                'start'   => 30,
+                'end'     => 43
             ]
         ], $output['warnings']);
     }
@@ -478,8 +478,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Function docblock is missing @param tag for ‘$param2’.',
-                'start'   => 182,
-                'end'     => 183
+                'start'   => 191,
+                'end'     => 222
             ]
         ], $output['errors']);
     }
@@ -530,8 +530,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Function docblock has incorrect @param type for ‘$param1’.',
-                'start'   => 334,
-                'end'     => 335
+                'start'   => 343,
+                'end'     => 381
             ]
         ], $output['errors']);
     }
@@ -546,8 +546,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Function docblock has incorrect @param type for ‘$param1’.',
-                'start'   => 65,
-                'end'     => 66
+                'start'   => 74,
+                'end'     => 112
             ]
         ], $output['errors']);
     }
@@ -574,8 +574,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Function docblock contains superfluous @param tags for: ‘$extra1, $extra2’.',
-                'start'   => 256,
-                'end'     => 257
+                'start'   => 265,
+                'end'     => 294
             ]
         ], $output['errors']);
     }
@@ -612,8 +612,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Classlike docblock contains deprecated @category tag.',
-                'start'   => 47,
-                'end'     => 48
+                'start'   => 53,
+                'end'     => 54
             ]
         ], $output['warnings']);
     }
@@ -628,8 +628,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' => 'Classlike docblock contains deprecated @subpackage tag.',
-                'start'   => 49,
-                'end'     => 50
+                'start'   => 55,
+                'end'     => 56
             ]
         ], $output['warnings']);
     }
@@ -644,8 +644,8 @@ class LinterTest extends AbstractIntegrationTest
         $this->assertEquals([
             [
                 'message' =>  'Classlike docblock contains deprecated @link tag. Use @see instead.',
-                'start'   => 63,
-                'end'     => 64
+                'start'   => 69,
+                'end'     => 70
             ]
         ], $output['warnings']);
     }
