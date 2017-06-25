@@ -100,6 +100,13 @@ function foo(C $c) {}
   * Instead of `Docblock for constant FOO is missing @var tag`, the message will now read `Constant docblock is missing @var tag`.
   * This also increases readability, as markdown is no longer used (since it is not allowed by the language server protocol nor supported by Atom's linter v2 anymore).
 
+### Various enhancements
+* Updated dependencies
+* Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted)
+* Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well
+* Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else
+* Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance
+
 ### Various bugfixes
 * [Fix incorrect type deduction for global functions without leading slash](https://github.com/php-integrator/atom-base/issues/284)
 * [Deducing the type of anonymous classes no longer generates errors](https://gitlab.com/php-integrator/core/issues/106)
@@ -111,13 +118,6 @@ function foo(C $c) {}
 * Fixed trait aliases without an explicit access modifier causing the original access modifier getting lost
 * The docblock parser will no longer trip over leading and trailing bars around compound types (e.g. `@param string| $test` will become `@param string $test`)
 * The variable defined in a `catch` block wasn't always being returned in the variable list
-
-### Various enhancements
-* Updated dependencies
-* Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted)
-* Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well
-* Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else
-* Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance
 
 ### Structural changes (mostly relevant to clients)
 * [A new command `Tooltips` to provide tooltips has been added](https://gitlab.com/php-integrator/core/issues/86)
