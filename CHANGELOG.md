@@ -102,6 +102,7 @@ function foo(C $c) {}
 
 ### Various enhancements
 * Updated dependencies
+* Traits using other traits is now supported
 * Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted)
 * Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well
 * Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else
