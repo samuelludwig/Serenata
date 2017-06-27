@@ -27,16 +27,16 @@ class GlobalFunctionsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-     public function execute(ArrayAccess $arguments)
-     {
-         return $this->getGlobalFunctions();
-     }
+    public function execute(ArrayAccess $arguments)
+    {
+        return $this->getGlobalFunctions();
+    }
 
      /**
       * @return array
       */
-     public function getGlobalFunctions(): array
-     {
-         return $this->functionListProvider->getAll();
-     }
+    public function getGlobalFunctions(): array
+    {
+        return $this->functionListProvider->getAll();
+    }
 }
