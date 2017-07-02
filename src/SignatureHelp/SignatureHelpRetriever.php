@@ -150,10 +150,7 @@ class SignatureHelpRetriever
             throw new UnexpectedValueException('No node supporting signature help found at location ' . $position);
         }
 
-        $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
-            $node,
-            Node\Arg::class
-        );
+        $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Arg::class);
 
         if ($argumentNode && $argumentNode->getAttribute('parent') !== $invocationNode) {
             // Usually the invocationNode will be the parent, but in case we're on the name of a nested function call,
