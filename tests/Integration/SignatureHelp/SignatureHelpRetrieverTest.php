@@ -88,6 +88,44 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         $this->assertSignatureHelpActiveParameterEquals($fileName, 144, 144, 1);
     }
 
+    // /**
+    //  * @return void
+    //  */
+    // public function testFunctionCallDoesNotWorkWhenInsideClosureArgumentBody(): void
+    // {
+    //     $expectedSignaturesResult = [
+    //         new SignatureInformation('test', null, [
+    //             new ParameterInformation('\Closure $a', null)
+    //         ])
+    //     ];
+    //
+    //     $fileName = 'FunctionCallClosureArgumentBody.phpt';
+    //
+    //     $this->assertSignatureHelpSignaturesEquals($fileName, 80, 94, $expectedSignaturesResult);
+    //
+    //     $hadException = false;
+    //
+    //     try {
+    //         $this->assertSignatureHelpSignaturesEquals($fileName, 95, 95, $expectedSignaturesResult);
+    //     } catch (UnexpectedValueException $e) {
+    //         $hadException = true;
+    //     }
+    //
+    //     $this->assertTrue($hadException, 'Signature help should not trigger inside the body of closure arguments');
+    //
+    //     $hadException = false;
+    //
+    //     try {
+    //         $this->assertSignatureHelpSignaturesEquals($fileName, 101, 101, $expectedSignaturesResult);
+    //     } catch (UnexpectedValueException $e) {
+    //         $hadException = true;
+    //     }
+    //
+    //     $this->assertTrue($hadException, 'Signature help should not trigger inside the body of closure arguments');
+    //
+    //     $this->assertSignatureHelpSignaturesEquals($fileName, 102, 102, $expectedSignaturesResult);
+    // }
+
     /**
      * @return void
      */
