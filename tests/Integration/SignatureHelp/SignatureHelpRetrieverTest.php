@@ -143,10 +143,10 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'NestedFunctionCall.phpt';
 
-        $this->assertSignatureHelpSignaturesEquals($fileName, 127, 130, $expectedSignaturesResult);
-        $this->assertSignatureHelpSignaturesEquals($fileName, 131, 131, $expectedNestedSignaturesResult);
-        $this->assertSignatureHelpSignaturesEquals($fileName, 132, 132, $expectedSignaturesResult);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 127, 132, 0);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 127, 131, $expectedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 133, 134, $expectedNestedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 135, 136, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 127, 136, 0);
     }
 
     /**
@@ -187,10 +187,10 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'NestedMethodCall.phpt';
 
-        $this->assertSignatureHelpSignaturesEquals($fileName, 221, 231, $expectedSignaturesResult);
-        $this->assertSignatureHelpSignaturesEquals($fileName, 232, 232, $expectedNestedSignaturesResult);
-        $this->assertSignatureHelpSignaturesEquals($fileName, 233, 233, $expectedSignaturesResult);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 221, 233, 0);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 221, 232, $expectedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 233, 235, $expectedNestedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 236, 237, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 221, 237, 0);
     }
 
     /**
@@ -254,10 +254,10 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'NestedConstructor.phpt';
 
-        $this->assertSignatureHelpSignaturesEquals($fileName, 219, 239, $expectedSignaturesResult);
-        $this->assertSignatureHelpSignaturesEquals($fileName, 240, 241, $expectedNestedSignaturesResult);
-        $this->assertSignatureHelpSignaturesEquals($fileName, 242, 251, $expectedSignaturesResult);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 219, 251, 0);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 219, 227, $expectedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 228, 231, $expectedNestedSignaturesResult);
+        $this->assertSignatureHelpSignaturesEquals($fileName, 232, 233, $expectedSignaturesResult);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 219, 233, 0);
     }
 
     /**
