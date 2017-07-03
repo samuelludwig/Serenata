@@ -78,8 +78,6 @@ class ClassConstFetchNodeTooltipGenerator
             $tooltips[] = $this->constantTooltipGenerator->generate($constantInfo);
         }
 
-        // die(\Symfony\Component\VarDumper\VarDumper::dump(['location' => __FILE__ . ':' . __LINE__, 'var' => $tooltips]));
-
         if (empty($tooltips)) {
             throw new UnexpectedValueException('Could not determine any tooltips for the class constant');
         }
