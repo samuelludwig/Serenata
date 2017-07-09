@@ -1,3 +1,6 @@
+## 3.0.1
+* Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things).
+
 ## 3.0.0
 ### Major changes
 * [PHP 7.1 is now required to _run_ the core](https://gitlab.com/php-integrator/core/issues/81)

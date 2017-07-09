@@ -81,7 +81,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\Class_) {
             if ($node->isAnonymous()) {
                 // Ticket #45 - Skip PHP 7 anonymous classes.
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return;
             }
 
             $this->parseClassNode($node);
