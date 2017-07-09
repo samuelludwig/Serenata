@@ -986,6 +986,21 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testAnonymousClass(): void
+    {
+        $result = $this->deduceTypesFromExpression(
+            'AnonymousClass.phpt',
+            '$test'
+        );
+
+        $this->assertEquals([
+            '\\(anonymous_427f548311b91663c6b3a43f7f250cb3_19)'
+        ], $result);
+    }
+
+    /**
+     * @return void
+     */
     public function testVariableInCatchBlockWithMultipleExceptionTypeHintsHasMultipleTypes(): void
     {
         $result = $this->deduceTypesFromExpression(

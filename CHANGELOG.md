@@ -1,3 +1,7 @@
+## 3.1.0
+### Major Changes
+* [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
+
 ## 3.0.1
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things).
 

@@ -24,7 +24,6 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -152,11 +151,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\ClassConst) {
             $this->parseClassConstantStatementNode($node);
         } elseif ($node instanceof Node\Stmt\Class_) {
-            if ($node->isAnonymous()) {
-                // Ticket #45 - Skip PHP 7 anonymous classes.
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-            }
-
             $this->parseClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\Interface_) {
             $this->parseClasslikeNode($node);
@@ -217,7 +211,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     protected function parseClasslikeNode(Node\Stmt\ClassLike $node): void
     {
         if (!isset($node->namespacedName)) {
-            return;
+            // return;
         }
 
         $this->traitsUsed = [];
@@ -232,14 +226,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY,
             DocblockParser::PROPERTY_READ,
             DocblockParser::PROPERTY_WRITE
-        ], $node->name->name);
+        ], '');
 
         $structure = null;
 
         if ($node instanceof Node\Stmt\Class_) {
+            $fqcn = null;
+            $classlikeName = null;
+
+            if ($node instanceof Node\Stmt\Class_ && $node->isAnonymous()) {
+                $fqcn = NodeHelpers::getFqcnForAnonymousClassNode($node, $this->file->getPath());
+                $classlikeName = mb_substr($fqcn, 1);
+            } else {
+                $fqcn = '\\' . $node->namespacedName->toString();
+                $classlikeName = $node->name->name;
+            }
+
             $structure = new Structures\Class_(
-                $node->name->name,
-                '\\' . $node->namespacedName->toString(),
+                $classlikeName,
+                $fqcn,
                 $this->file,
                 $node->getLine(),
                 $node->getAttribute('endLine'),

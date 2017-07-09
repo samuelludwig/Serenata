@@ -123,6 +123,17 @@ class ClassIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testAnonymousClass(): void
+    {
+        $structure = $this->indexClass('AnonymousClass.phpt');
+
+        $this->assertEquals('(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getName());
+        $this->assertEquals('\\(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getFqcn());
+    }
+
+    /**
+     * @return void
+     */
     public function testClassParentChildRelationship(): void
     {
         $path = $this->getPathFor('ClassParentChildRelationship.phpt');
