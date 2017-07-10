@@ -11,6 +11,20 @@ class ClassListCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testSimpleClass(): void
+    {
+        $path = $this->getPathFor('SimpleClass.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $command = $this->container->get('classListCommand');
+
+        $this->assertArrayHasKey('\N\SimpleClass', $command->getAll());
+    }
+
+    /**
+     * @return void
+     */
     public function testThrowsExceptionWhenFileIsNotInIndex(): void
     {
         $command = $this->container->get('classListCommand');
@@ -18,5 +32,15 @@ class ClassListCommandTest extends AbstractIntegrationTest
         $this->expectException(FileNotFoundStorageException::class);
 
         $command->getAllForFilePath('DoesNotExist.phpt');
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor(string $file): string
+    {
+        return __DIR__ . '/ClassListCommandTest/' . $file;
     }
 }
