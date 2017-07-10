@@ -1,4 +1,4 @@
-## 3.0.1
+## 3.0.1 (Unreleased)
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things).
 
 ## 3.0.0
