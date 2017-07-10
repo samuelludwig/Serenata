@@ -165,6 +165,9 @@ function foo(C $c) {}
 * `fqcn` will no longer be returned for class constants as it is only relevant for global constants
 * `fqcn` will no longer be returned for methods (class functions) as it is only relevant for global functions
 
+## 2.1.7
+* Lock php-parser at 3.0.5 to avoid recent PHP 7 requirement in its master due to Composer limitation.
+
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).
 * Fix this snippet of code causing php-parser to generate a fatal error:
