@@ -234,7 +234,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $fqcn = null;
             $classlikeName = null;
 
-            if ($node instanceof Node\Stmt\Class_ && $node->isAnonymous()) {
+            if ($node->isAnonymous()) {
                 $fqcn = NodeHelpers::getFqcnForAnonymousClassNode($node, $this->file->getPath());
                 $classlikeName = mb_substr($fqcn, 1);
             } else {
