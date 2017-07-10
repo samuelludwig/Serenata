@@ -14,6 +14,11 @@ class Class_ extends Structure
     /**
      * @var bool
      */
+    private $isAnonymous;
+
+    /**
+     * @var bool
+     */
     private $isAbstract;
 
     /**
@@ -74,6 +79,7 @@ class Class_ extends Structure
      * @param int           $endLine
      * @param string|null   $shortDescription
      * @param string|null   $longDescription
+     * @param bool          $isAnonymous
      * @param bool          $isAbstract
      * @param bool          $isFinal
      * @param bool          $isAnnotation
@@ -89,6 +95,7 @@ class Class_ extends Structure
         int $endLine,
         string $shortDescription = null,
         string $longDescription = null,
+        bool $isAnonymous,
         bool $isAbstract,
         bool $isFinal,
         bool $isAnnotation,
@@ -104,6 +111,7 @@ class Class_ extends Structure
         $this->endLine = $endLine;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
+        $this->isAnonymous = $isAnonymous;
         $this->isAbstract = $isAbstract;
         $this->isFinal = $isFinal;
         $this->isAnnotation = $isAnnotation;
@@ -124,6 +132,14 @@ class Class_ extends Structure
         $this->setParent($parent);
 
         $file->addStructure($this);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAnonymous(): bool
+    {
+        return $this->isAnonymous;
     }
 
     /**

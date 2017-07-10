@@ -250,6 +250,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $node->getAttribute('endLine'),
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
+                $node->isAnonymous(),
                 $node->isAbstract(),
                 $node->isFinal(),
                 $documentation['annotation'],

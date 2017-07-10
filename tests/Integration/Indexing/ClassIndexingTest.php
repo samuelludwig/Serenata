@@ -129,6 +129,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
 
         $this->assertEquals('(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getName());
         $this->assertEquals('\\(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getFqcn());
+        $this->assertTrue($structure->getIsAnonymous());
     }
 
     /**
