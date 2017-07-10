@@ -31,6 +31,7 @@ class ClasslikeConverter extends AbstractConverter
         ];
 
         if ($structure instanceof Structures\Class_) {
+            $data['isAnonymous']  = $structure->getIsAnonymous();
             $data['isAbstract']   = $structure->getIsAbstract();
             $data['isFinal']      = $structure->getIsFinal();
             $data['isAnnotation'] = $structure->getIsAnnotation();
