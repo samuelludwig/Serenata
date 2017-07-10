@@ -43,20 +43,13 @@ class DoctrineStructureListProvider implements FileStructureListProviderInterfac
      */
     public function getAll(): array
     {
-        $items = [];
-        $result = [];
-
         try {
             $items = $this->managerRegistry->getRepository(Structures\Structure::class)->findAll();
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        foreach ($items as $element) {
-            $result[$element->getFqcn()] = $this->classlikeConverter->convert($element);
-        }
-
-        return $result;
+        return $this->mapStructures($items);
     }
 
     /**
@@ -72,9 +65,19 @@ class DoctrineStructureListProvider implements FileStructureListProviderInterfac
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
+        return $this->mapStructures($items);
+    }
+
+    /**
+     * @param array $structures
+     *
+     * @return array
+     */
+    protected function mapStructures(array $structures): array
+    {
         $result = [];
 
-        foreach ($items as $element) {
+        foreach ($structures as $element) {
             $result[$element->getFqcn()] = $this->classlikeConverter->convert($element);
         }
 
