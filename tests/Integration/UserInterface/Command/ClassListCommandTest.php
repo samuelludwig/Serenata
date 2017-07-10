@@ -25,6 +25,20 @@ class ClassListCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    // public function testAnonymousClassIsExcluded(): void
+    // {
+    //     $path = $this->getPathFor('AnonymousClassIsExcluded.phpt');
+    //
+    //     $this->indexTestFile($this->container, $path);
+    //
+    //     $command = $this->container->get('classListCommand');
+    //
+    //     $this->assertEmpty($command->getAll());
+    // }
+
+    /**
+     * @return void
+     */
     public function testThrowsExceptionWhenFileIsNotInIndex(): void
     {
         $command = $this->container->get('classListCommand');
