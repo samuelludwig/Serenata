@@ -66,10 +66,15 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAnonymousClassNode(): void
     {
-        $node = new Node\Stmt\Class_(null);
+        $node = new Node\Stmt\Class_(null, [], [
+            'startFilePos' => 9
+        ]);
 
-        $file = new Structures\File('', new DateTime(), []);
+        $file = new Structures\File('/test/path', new DateTime(), []);
 
-        $this->assertEquals([], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        $this->assertEquals(
+            ['\(anonymous_a19f6c462322bef8d3cad086eca0e32a_9)'],
+            $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0)
+        );
     }
 }

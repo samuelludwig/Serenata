@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Indexing\Structures;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 use PhpParser\Node;
 
 /**
@@ -22,18 +24,19 @@ class ClassLikeNodeTypeDeducer extends AbstractNodeTypeDeducer
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
         }
 
-        return $this->deduceTypesFromClassLikeNode($node);
+        return $this->deduceTypesFromClassLikeNode($node, $file);
     }
 
     /**
      * @param Node\Stmt\ClassLike $node
+     * @param Structures\File     $file
      *
      * @return string[]
      */
-    protected function deduceTypesFromClassLikeNode(Node\Stmt\ClassLike $node): array
+    protected function deduceTypesFromClassLikeNode(Node\Stmt\ClassLike $node, Structures\File $file): array
     {
         if ($node->name === null) {
-            return [];
+            return [NodeHelpers::getFqcnForAnonymousClassNode($node, $file->getPath())];
         }
 
         return [(string) $node->name];

@@ -5,6 +5,8 @@ namespace PhpIntegrator\Indexing\Visiting;
 use DomainException;
 use SplObjectStorage;
 
+use Ds\Stack;
+
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -24,7 +26,6 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -78,9 +79,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var Structures\Structure
+     * @var Stack Stack<Structures\Structure>
      */
-    private $structure;
+    private $structureStack;
 
     /**
      * @var string[]
@@ -152,16 +153,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\ClassConst) {
             $this->parseClassConstantStatementNode($node);
         } elseif ($node instanceof Node\Stmt\Class_) {
-            if ($node->isAnonymous()) {
-                // Ticket #45 - Skip PHP 7 anonymous classes.
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-            }
-
-            $this->parseClasslikeNode($node);
+            $this->processEnterClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\Interface_) {
-            $this->parseClasslikeNode($node);
+            $this->processEnterClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\Trait_) {
-            $this->parseClasslikeNode($node);
+            $this->processEnterClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->parseTraitUseNode($node);
         }
@@ -170,8 +166,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
+    public function leaveNode(\PhpParser\Node $node)
+    {
+        $value = parent::leaveNode($node);
+
+        if ($node instanceof Node\Stmt\Class_) {
+            $this->processLeaveClasslikeNode($node);
+        } elseif ($node instanceof Node\Stmt\Interface_) {
+            $this->processLeaveClasslikeNode($node);
+        } elseif ($node instanceof Node\Stmt\Trait_) {
+            $this->processLeaveClasslikeNode($node);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function beforeTraverse(array $nodes)
     {
+        $this->structureStack = new Stack();
         $this->structuresFound = new SplObjectStorage();;
         $this->relationsStorage = new SplObjectStorage();
         $this->traitUseStorage = new SplObjectStorage();
@@ -214,10 +227,32 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): void
+    protected function processEnterClasslikeNode(Node\Stmt\ClassLike $node): void
+    {
+        $structure = $this->parseClasslikeNode($node);
+
+        $this->structureStack->push($structure);
+    }
+
+    /**
+     * @param Node\Stmt\ClassLike $node
+     *
+     * @return void
+     */
+    protected function processLeaveClasslikeNode(Node\Stmt\ClassLike $node): void
+    {
+        $this->structureStack->pop();
+    }
+
+    /**
+     * @param Node\Stmt\ClassLike $node
+     *
+     * @return Structures\Structure
+     */
+    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): Structures\Structure
     {
         if (!isset($node->namespacedName)) {
-            return;
+            // return;
         }
 
         $this->traitsUsed = [];
@@ -232,19 +267,31 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY,
             DocblockParser::PROPERTY_READ,
             DocblockParser::PROPERTY_WRITE
-        ], $node->name->name);
+        ], '');
 
         $structure = null;
 
         if ($node instanceof Node\Stmt\Class_) {
+            $fqcn = null;
+            $classlikeName = null;
+
+            if ($node->isAnonymous()) {
+                $fqcn = NodeHelpers::getFqcnForAnonymousClassNode($node, $this->file->getPath());
+                $classlikeName = mb_substr($fqcn, 1);
+            } else {
+                $fqcn = '\\' . $node->namespacedName->toString();
+                $classlikeName = $node->name->name;
+            }
+
             $structure = new Structures\Class_(
-                $node->name->name,
-                '\\' . $node->namespacedName->toString(),
+                $classlikeName,
+                $fqcn,
                 $this->file,
                 $node->getLine(),
                 $node->getAttribute('endLine'),
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
+                $node->isAnonymous(),
                 $node->isAbstract(),
                 $node->isFinal(),
                 $documentation['annotation'],
@@ -322,7 +369,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $this->indexClassKeyword($structure);
 
-        $this->structure = $structure;
+        return $structure;
     }
 
     /**
@@ -334,13 +381,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $traitUses = [];
 
-        if ($this->traitUseStorage->contains($this->structure)) {
-            $traitUses = $this->traitUseStorage[$this->structure];
+        if ($this->traitUseStorage->contains($this->structureStack->peek())) {
+            $traitUses = $this->traitUseStorage[$this->structureStack->peek()];
         }
 
         $traitUses[] = $node;
 
-        $this->traitUseStorage->attach($this->structure, $traitUses);
+        $this->traitUseStorage->attach($this->structureStack->peek(), $traitUses);
     }
 
     /**
@@ -591,7 +638,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $varDocumentation ? $varDocumentation['description'] : null,
-                $this->structure,
+                $this->structureStack->peek(),
                 $accessModifierMap[$accessModifier],
                 $types
             );
@@ -689,7 +736,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['long'] ?: null,
             $documentation['return']['description'] ?: null,
             $returnTypeHint,
-            $this->structure,
+            $this->structureStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null,
             false,
             $node->isStatic(),
@@ -869,7 +916,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['long'] ?: null,
             $varDocumentation ? $varDocumentation['description'] : null,
             $types,
-            $this->structure,
+            $this->structureStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null
         );
 

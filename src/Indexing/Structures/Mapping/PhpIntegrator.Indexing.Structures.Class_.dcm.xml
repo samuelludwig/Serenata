@@ -6,6 +6,7 @@
 >
 
     <entity name="PhpIntegrator\Indexing\Structures\Class_" change-tracking-policy="DEFERRED_EXPLICIT">
+        <field name="isAnonymous"        type="boolean" nullable="false" />
         <field name="isAbstract"         type="boolean" nullable="false" />
         <field name="isFinal"            type="boolean" nullable="false" />
         <field name="isAnnotation"       type="boolean" nullable="false" />

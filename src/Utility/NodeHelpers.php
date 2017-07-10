@@ -12,6 +12,23 @@ use PhpParser\Node;
 class NodeHelpers
 {
     /**
+     * @param Node\Stmt\Class_ $node
+     * @param string           $filePath
+     *
+     * @return string
+     */
+    public static function getFqcnForAnonymousClassNode(Node\Stmt\Class_ $node, string $filePath): string
+    {
+        $startFilePos = $node->getAttribute('startFilePos');
+
+        if ($startFilePos === null) {
+            throw new LogicException('Anonymous class node must have "startFilePos" attribute set');
+        }
+
+        return '\\' . sprintf('(anonymous_%s_%s)', md5($filePath), $startFilePos);
+    }
+
+    /**
      * Takes a class name and turns it into its string representation.
      *
      * @param Node\Name $name

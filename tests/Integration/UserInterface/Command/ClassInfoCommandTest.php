@@ -35,6 +35,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'endLine'            => 13,
             'filename'           => $this->getPathFor($fileName),
             'type'               => 'class',
+            'isAnonymous'        => false,
             'isAbstract'         => false,
             'isFinal'            => false,
             'isDeprecated'       => false,

@@ -1,4 +1,12 @@
-## 3.0.1 (Unreleased)
+## 3.1.0
+### Major Changes
+* [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
+
+### Structural changes (mostly relevant to clients)
+* Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
+  * These classes will return a new `isAnonymous` field.
+
+## 3.0.1
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things).
 
 ## 3.0.0

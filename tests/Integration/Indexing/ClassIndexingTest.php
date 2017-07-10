@@ -123,6 +123,18 @@ class ClassIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testAnonymousClass(): void
+    {
+        $structure = $this->indexClass('AnonymousClass.phpt');
+
+        $this->assertEquals('(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getName());
+        $this->assertEquals('\\(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getFqcn());
+        $this->assertTrue($structure->getIsAnonymous());
+    }
+
+    /**
+     * @return void
+     */
     public function testClassParentChildRelationship(): void
     {
         $path = $this->getPathFor('ClassParentChildRelationship.phpt');
@@ -210,6 +222,38 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $this->assertEquals($structure, $structure->getTraitPrecedences()[0]->getClass());
         $this->assertEquals('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
         $this->assertEquals('foo', $structure->getTraitPrecedences()[0]->getName());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassIsCorrectlyContinuedAfterAnonymousClassStops(): void
+    {
+        $path = $this->getPathFor('ClassIsCorrectlyContinuedAfterAnonymousClassStops.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+        $this->assertCount(4, $structures);
+
+        $testClass = $structures[2];
+
+        $this->assertEquals('Test', $testClass->getName());
+        $this->assertCount(2, $testClass->getMethods());
+        $this->assertEquals('method1', $testClass->getMethods()[0]->getName());
+        $this->assertEquals('method2', $testClass->getMethods()[1]->getName());
+        $this->assertEquals('\N\Parent1', $testClass->getParentFqcn());
+        $this->assertEquals(['\N\Trait1'], $testClass->getTraitFqcns());
+        $this->assertEquals(['\N\Interface1'], $testClass->getInterfaceFqcns());
+
+        $anonymousClass = $structures[3];
+
+        $this->assertCount(1, $anonymousClass->getMethods());
+        $this->assertEquals('anonMethod', $anonymousClass->getMethods()[0]->getName());
+        $this->assertEquals('\N\Parent2', $anonymousClass->getParentFqcn());
+        $this->assertEquals(['\N\Trait2'], $anonymousClass->getTraitFqcns());
+        $this->assertEquals(['\N\Interface2'], $anonymousClass->getInterfaceFqcns());
     }
 
     /**

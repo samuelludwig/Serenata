@@ -1,0 +1,5 @@
+<?php
+
+$test = new class {
+
+}
