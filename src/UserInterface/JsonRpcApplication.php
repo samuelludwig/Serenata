@@ -9,6 +9,8 @@ use ArrayObject;
 use RuntimeException;
 use UnexpectedValueException;
 
+use Ds\Queue;
+
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
@@ -16,6 +18,7 @@ use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\SocketServer;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\RequestParsingException;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
@@ -31,6 +34,16 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  */
 class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHandlerInterface
 {
+    /**
+     * @var LoopInterface
+     */
+    private $loop;
+
+    /**
+     * @var Queue
+     */
+    private $queue;
+
     /**
      * A stream that is used to read and write STDIN data from.
      *
@@ -52,13 +65,13 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
 
+        $this->queue = new Queue();
         $this->stdinStream = fopen('php://memory', 'w+');
 
-        /** @var LoopInterface $loop */
-        $loop = React\EventLoop\Factory::create();
+        $this->loop = React\EventLoop\Factory::create();
 
         try {
-            $this->setupRequestHandlingSocketServer($loop, $requestHandlingPort);
+            $this->setupRequestHandlingSocketServer($this->loop, $requestHandlingPort);
         } catch (RuntimeException $e) {
             fwrite(STDERR, 'Socket already in use!');
             fclose($this->stdinStream);
@@ -69,11 +82,23 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $this->instantiateRequiredServices($this->getContainer());
 
-        $loop->run();
+        $this->loop->run();
 
         fclose($this->stdinStream);
 
         return 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
+    {
+        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
+
+        $this->loop->nextTick(function () {
+            $this->processQueueItem();
+        });
     }
 
     /**
@@ -110,11 +135,27 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @inheritDoc
+     * @return void
      */
-    public function handle(
+    protected function processQueueItem(): void
+    {
+        /** @var JsonRpcQueueItem $queueItem */
+        $queueItem = $this->queue->pop();
+
+        $response = $this->processRequest($queueItem->getRequest(), $queueItem->getJsonRpcResponseSender());
+
+        $queueItem->getJsonRpcResponseSender()->send($response);
+    }
+
+    /**
+     * @param JsonRpcRequest                 $request
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     *
+     * @return JsonRpcResponse
+     */
+    protected function processRequest(
         JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender
     ): JsonRpcResponse {
         $error = null;
         $result = null;

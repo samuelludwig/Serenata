@@ -150,9 +150,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
                 }
 
                 if ($jsonRpcRequest !== null) {
-                    $jsonRpcResponse = $this->getJsonRpcResponseForJsonRpcRequest($jsonRpcRequest);
-
-                    $this->send($jsonRpcResponse);
+                    $this->jsonRpcRequestHandler->handle($jsonRpcRequest, $this);
                 } else {
                     trigger_error(
                         'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
@@ -169,16 +167,6 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
         if (strlen($data) > 0) {
             $this->processData($data);
         }
-    }
-
-    /**
-     * @param JsonRpcRequest $request
-     *
-     * @return JsonRpcResponse
-     */
-    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request): JsonRpcResponse
-    {
-        return $this->jsonRpcRequestHandler->handle($request, $this);
     }
 
     /**
