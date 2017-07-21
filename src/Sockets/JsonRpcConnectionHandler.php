@@ -193,6 +193,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 
         $this->writeRawResponse($responseContent, $force);
     }
+
     /**
      * @param JsonRpcResponse $response
      *
