@@ -114,6 +114,13 @@ class ProjectIndexer
             unset($fileModifiedMap[$filePath]);
         }
 
+		// Expand home path on unix systems
+		array_walk($items, function(&$item){
+			if (substr($item,0,1) === '~' && isset($_SERVER['HOME'])) {
+				$item = substr_replace($item, $_SERVER['HOME'], 0, 1);
+			}
+		});
+
         $iterator = new Iterating\MultiRecursivePathIterator($items);
         $iterator = new Iterating\ExtensionFilterIterator($iterator, $extensionsToIndex);
         $iterator = new Iterating\ExclusionFilterIterator($iterator, $excludedPaths);

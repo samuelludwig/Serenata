@@ -27,9 +27,6 @@ class MultiRecursivePathIterator extends AppendIterator
         $fileInfoIterators = [];
 
         foreach ($paths as $path) {
-            if (substr($path,0,2) === '~/' && isset($_SERVER['HOME'])) {
-				$path = substr_replace($path, $_SERVER['HOME'], 0, 1);
-			}
             $fileInfo = new SplFileInfo($path);
 
             if ($fileInfo->isDir()) {
