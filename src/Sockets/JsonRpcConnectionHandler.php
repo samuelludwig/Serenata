@@ -141,24 +141,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             $this->request['bytesRead'] += $bytesRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
-                $jsonRpcRequest = null;
-
-                try {
-                    $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
-                } catch (UnexpectedValueException $e) {
-                    $jsonRpcRequest = null;
-                }
-
-                if ($jsonRpcRequest !== null) {
-                    $this->jsonRpcRequestHandler->handle($jsonRpcRequest, $this);
-                } else {
-                    trigger_error(
-                        'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
-                        E_USER_WARNING
-                    );
-                }
-
-                $this->resetRequestState();
+                $this->processRequest();
             }
         }
 
@@ -167,6 +150,31 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
         if (strlen($data) > 0) {
             $this->processData($data);
         }
+    }
+
+    /**
+     *
+     */
+    protected function processRequest(): void
+    {
+        $jsonRpcRequest = null;
+
+        try {
+            $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
+        } catch (UnexpectedValueException $e) {
+            $jsonRpcRequest = null;
+        }
+
+        if ($jsonRpcRequest !== null) {
+            $this->jsonRpcRequestHandler->handle($jsonRpcRequest, $this);
+        } else {
+            trigger_error(
+                'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
+                E_USER_WARNING
+            );
+        }
+
+        $this->resetRequestState();
     }
 
     /**
@@ -185,7 +193,6 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 
         $this->writeRawResponse($responseContent, $force);
     }
-
     /**
      * @param JsonRpcResponse $response
      *
