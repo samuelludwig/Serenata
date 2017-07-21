@@ -14,6 +14,8 @@ use PhpParser\NodeVisitorAbstract;
 
 /**
  * Visitor that traverses a set of nodes, indexing data as meta static method type data in the process.
+ *
+ * @see https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata
  */
 class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
 {
