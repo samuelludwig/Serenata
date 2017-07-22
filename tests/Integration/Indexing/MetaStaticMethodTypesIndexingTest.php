@@ -2,6 +2,10 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
+use MongoDB\Driver\Exception\UnexpectedValueException;
+
+use PhpIntegrator\Indexing\Structures\MetaStaticMethodType;
+
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 use PhpParser\Node;
@@ -68,6 +72,118 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
         $path = $this->getPathFor('StaticMethodTypeChanges.phpt');
 
         $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsIfStaticMethodTypesIsNotArray(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesIsNotArray.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesItemIsNotArray(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesItemIsNotArray.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesItemKeyIsNotString(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesItemKeyIsNotString.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesItemKeywordIsNotInstanceof(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesItemKeywordIsNotInstanceof.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesItemValueIsNotName(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesItemValueIsNotName.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesKeyClassIsNotName(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesKeyClassIsNotName.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesKeyIsNotStaticMethodCall(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesKeyIsNotStaticMethodCall.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsStaticMethodTypesKeyMethodNameIsNotIdentifier(): void
+    {
+        $path = $this->getPathFor('StaticMethodTypesKeyMethodNameIsNotIdentifier.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
+
+        $this->assertCount(0, $types);
     }
 
     /**

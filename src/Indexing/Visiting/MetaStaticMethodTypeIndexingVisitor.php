@@ -60,8 +60,12 @@ class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        if ($node instanceof Node\Expr\Assign) {
-            $this->enterAssignNode($node);
+        try {
+            if ($node instanceof Node\Expr\Assign) {
+                $this->enterAssignNode($node);
+            }
+        } catch (UnexpectedValueException $e) {
+            return;
         }
     }
 
@@ -89,7 +93,7 @@ class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
     protected function enterStaticMethodTypesAssignNode(Node\Expr\Assign $node): void
     {
         if (!$node->expr instanceof Node\Expr\Array_) {
-            throw new UnexpectedValueException('$STATIC_METHOD_TYPES be an array');
+            throw new UnexpectedValueException('$STATIC_METHOD_TYPES must be an array');
         }
 
         foreach ($node->expr->items as $item) {
