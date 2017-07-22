@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
-use MongoDB\Driver\Exception\UnexpectedValueException;
-
 use PhpIntegrator\Indexing\Structures\MetaStaticMethodType;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
