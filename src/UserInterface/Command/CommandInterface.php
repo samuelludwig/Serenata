@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Interface for commands.
@@ -12,11 +12,11 @@ interface CommandInterface
     /**
      * Executes the command.
      *
-     * @param ArrayAccess $arguments
+     * @param JsonRpcRequest $request
      *
      * @throws InvalidArgumentsException
      *
      * @return mixed
      */
-    public function execute(ArrayAccess $arguments);
+    public function execute(JsonRpcRequest $request);
 }

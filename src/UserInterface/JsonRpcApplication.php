@@ -260,7 +260,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $command = $this->getCommandByMethod($request->getMethod());
 
-        $result = $command->execute(new ArrayObject($params));
+        $result = $command->execute($request);
 
         return $result;
     }

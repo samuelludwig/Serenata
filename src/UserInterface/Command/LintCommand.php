@@ -2,12 +2,12 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpIntegrator\Linting\Linter;
 use PhpIntegrator\Linting\LintingSettings;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -49,8 +49,10 @@ class LintCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A file name is required for this command.');
         }

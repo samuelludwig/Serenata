@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that shows a list of global functions.
@@ -27,7 +27,7 @@ class GlobalFunctionsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
         return $this->getGlobalFunctions();
     }

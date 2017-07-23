@@ -2,13 +2,13 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\StructureListProviderInterface;
 
 use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
@@ -48,8 +48,10 @@ class ClassListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         $filePath = $arguments['file'] ?? null;
 
         return ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll();
