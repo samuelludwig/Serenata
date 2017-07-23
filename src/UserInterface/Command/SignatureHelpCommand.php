@@ -2,12 +2,12 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -50,8 +50,10 @@ class SignatureHelpCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {

@@ -114,6 +114,8 @@ class ProjectIndexer
             unset($fileModifiedMap[$filePath]);
         }
 
+        $items = $this->expandHomePaths($items);
+
         $iterator = new Iterating\MultiRecursivePathIterator($items);
         $iterator = new Iterating\ExtensionFilterIterator($iterator, $extensionsToIndex);
         $iterator = new Iterating\ExclusionFilterIterator($iterator, $excludedPaths);
@@ -151,6 +153,24 @@ class ProjectIndexer
 
             $this->sendProgress(++$i, $totalItems);
         }
+    }
+
+    /**
+     * Expands home path (the tilde, or ~) on UNIX systems.
+     *
+     * @param string[] $items
+     *
+     * @return string[]
+     */
+    protected function expandHomePaths(array $items): array
+    {
+		array_walk($items, function(&$item) {
+			if (substr($item, 0, 1) === '~' && isset($_SERVER['HOME'])) {
+				$item = substr_replace($item, $_SERVER['HOME'], 0, 1);
+			}
+		});
+
+        return $items;
     }
 
     /**

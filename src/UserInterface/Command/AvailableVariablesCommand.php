@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\VariableScanner;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -47,8 +47,10 @@ class AvailableVariablesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }

@@ -5,7 +5,6 @@ namespace PhpIntegrator\UserInterface;
 use Ds;
 use React;
 use Throwable;
-use ArrayObject;
 use RuntimeException;
 use UnexpectedValueException;
 
@@ -256,13 +255,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $this->setDatabaseFile($params['database']);
         }
 
-        unset($params['stdinData'], $params['database']);
-
-        $command = $this->getCommandByMethod($request->getMethod());
-
-        $result = $command->execute(new ArrayObject($params));
-
-        return $result;
+        return $this->getCommandByMethod($request->getMethod())->execute($request);
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageInterface;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 use PhpIntegrator\Tooltips\TooltipResult;
 use PhpIntegrator\Tooltips\TooltipProvider;
@@ -50,8 +50,10 @@ class TooltipCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {

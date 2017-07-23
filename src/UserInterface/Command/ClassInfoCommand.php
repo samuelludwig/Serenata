@@ -2,11 +2,11 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that shows information about a class, interface or trait.
@@ -36,8 +36,10 @@ class ClassInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['name'])) {
             throw new InvalidArgumentsException(
                 'The fully qualified name of the structural element is required for this command.'

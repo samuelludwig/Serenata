@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageVersionChecker;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that tests a project to see if it is in a properly usable state.
@@ -27,7 +27,7 @@ class TestCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
         return $this->test();
     }

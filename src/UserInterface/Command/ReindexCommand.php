@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\Indexer;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that reindexes a file or folder.
@@ -27,8 +27,10 @@ class ReindexCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['source']) || empty($arguments['source'])) {
             throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');
         }

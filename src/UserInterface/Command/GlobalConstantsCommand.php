@@ -2,9 +2,9 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\ConstantListProviderInterface;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that shows a list of global constants.
@@ -27,7 +27,7 @@ class GlobalConstantsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
         return $this->getGlobalConstants();
     }

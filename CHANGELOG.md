@@ -2,12 +2,15 @@
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
 
+### Bugs Fixed
+* [Project paths containing the tilde representing the home folder will now be properly epanded](https://gitlab.com/php-integrator/core/merge_requests/72)
+
 ### Structural changes (mostly relevant to clients)
 * Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
   * These classes will return a new `isAnonymous` field.
 
 ## 3.0.1 (Unreleased)
-* Fix unsupported meta file static method types throwing an error instead of being skipped
+* [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
 
 ## 3.0.0

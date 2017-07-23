@@ -2,14 +2,14 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
 
 use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\SchemaInitializer;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 /**
  * Command that initializes a project.
@@ -57,11 +57,9 @@ class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
-        $success = $this->initialize();
-
-        return $success;
+        return $this->initialize();
     }
 
     /**

@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Common\Position;
@@ -15,6 +13,8 @@ use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
 use PhpIntegrator\Parsing\LastExpressionParser;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -77,8 +77,10 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcRequest $request)
     {
+        $arguments = $request->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {
