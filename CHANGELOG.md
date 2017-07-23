@@ -2,6 +2,9 @@
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
 
+### Bugs Fixed
+* [Project paths containing the tilde representing the home folder will now be properly epanded](https://gitlab.com/php-integrator/core/merge_requests/72)
+
 ### Structural changes (mostly relevant to clients)
 * Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
   * These classes will return a new `isAnonymous` field.
