@@ -1,5 +1,5 @@
 ## 3.0.1 (Unreleased)
-* Fix unsupported meta file static method types throwing an error instead of being skipped
+* [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
 
 ## 3.0.0
