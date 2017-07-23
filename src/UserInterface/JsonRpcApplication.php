@@ -5,7 +5,6 @@ namespace PhpIntegrator\UserInterface;
 use Ds;
 use React;
 use Throwable;
-use ArrayObject;
 use RuntimeException;
 use UnexpectedValueException;
 
