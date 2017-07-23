@@ -256,11 +256,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $this->setDatabaseFile($params['database']);
         }
 
-        $command = $this->getCommandByMethod($request->getMethod());
-
-        $result = $command->execute($request);
-
-        return $result;
+        return $this->getCommandByMethod($request->getMethod())->execute($request);
     }
 
     /**
