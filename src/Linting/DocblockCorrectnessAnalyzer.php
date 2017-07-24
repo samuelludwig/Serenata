@@ -339,7 +339,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         $result = $this->docblockParser->parse(
             $globalFunction['docComment'],
-            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE, DocblockParser::RETURN_VALUE],
             $globalFunction['name']
         );
 
@@ -374,6 +374,39 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
                 'start'   => $globalFunction['startPosName'],
                 'end'     => $globalFunction['endPosName']
             ];
+        }
+
+        if ($globalFunction['returnTypeHint'] && $result['return']) {
+            $isNullable = false;
+            $type = $globalFunction['returnTypeHint'];
+
+            if ($type !== null && mb_substr($type, 0, 1) === '?') {
+                $type = mb_substr($type, 1);
+                $isNullable = true;
+            }
+
+            $isTypeConformant = $this->parameterDocblockTypeSemanticEqualityChecker->isEqual(
+                [
+                    'type'        => $type,
+                    'isNullable'  => $isNullable,
+                    'isVariadic'  => false,
+                    'isReference' => false
+                ],
+                [
+                    'type'        => $result['return']['type'],
+                    'isReference' => false
+                ],
+                $this->file,
+                $globalFunction['startLine']
+            );
+
+            if (!$isTypeConformant) {
+                $issues[] = [
+                    'message' => "Function docblock @return is not equivalent to actual return type.",
+                    'start'   => $globalFunction['startPosName'],
+                    'end'     => $globalFunction['endPosName']
+                ];
+            }
         }
 
         return $issues;

@@ -567,6 +567,22 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testAnalyzesFunctionReturnTypes(): void
+    {
+        $output = $this->lintFile('DocblockCorrectnessReturnTypeMismatch.phpt');
+
+        $this->assertEquals([
+            [
+                'message' => 'Function docblock @return is not equivalent to actual return type.',
+                'start'   => 127,
+                'end'     => 165
+            ]
+        ], $output['errors']);
+    }
+
+    /**
+     * @return void
+     */
     public function testIdentifiesDocblockSuperfluousParameters(): void
     {
         $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');

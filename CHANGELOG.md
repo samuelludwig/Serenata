@@ -1,6 +1,7 @@
 ## 3.1.0
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
+* Function and method docblock `@return` tag types will now also be validated against the actual return type
 
 ### Bugs Fixed
 * [Project paths containing the tilde representing the home folder will now be properly epanded](https://gitlab.com/php-integrator/core/merge_requests/72)

@@ -367,18 +367,22 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $localType = null;
         $resolvedType = null;
+        $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
             $nodeType = $nodeType->type;
+            $returnTypeHint = '?';
         }
 
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
+            $returnTypeHint .= $resolvedType;
         } elseif ($nodeType instanceof Node\Identifier) {
             $localType = $nodeType->name;
             $resolvedType = $nodeType->name;
+            $returnTypeHint .= $resolvedType;
         }
 
         return [
@@ -389,6 +393,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
             'endPosName'           => $node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null,
             'returnType'           => $localType,
             'fullReturnType'       => $resolvedType,
+            'returnTypeHint'       => $returnTypeHint,
             'isReturnTypeNullable' => ($node->getReturnType() instanceof Node\NullableType),
             'parameters'           => $parameters,
             'docComment'           => $node->getDocComment() ? $node->getDocComment()->getText() : null
