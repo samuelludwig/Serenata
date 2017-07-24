@@ -90,6 +90,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             $this->getVarTagMissingErrors(),
             $this->getParameterMissingErrors(),
             $this->getParameterTypeMismatchErrors(),
+            $this->getReturnTypeMismatchErrors(),
             $this->getSuperfluousParameterErrors()
         );
     }
@@ -376,41 +377,127 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             ];
         }
 
-        if ($globalFunction['returnTypeHint'] && $result['return']) {
-            $isNullable = false;
-            $type = $globalFunction['returnTypeHint'];
-
-            if ($type !== null && mb_substr($type, 0, 1) === '?') {
-                $type = mb_substr($type, 1);
-                $isNullable = true;
-            }
-
-            $isTypeConformant = $this->parameterDocblockTypeSemanticEqualityChecker->isEqual(
-                [
-                    'type'        => $type,
-                    'isNullable'  => $isNullable,
-                    'isVariadic'  => false,
-                    'isReference' => false
-                ],
-                [
-                    'type'        => $result['return']['type'],
-                    'isReference' => false
-                ],
-                $this->file,
-                $globalFunction['startLine']
-            );
-
-            if (!$isTypeConformant) {
-                $issues[] = [
-                    'message' => "Function docblock @return is not equivalent to actual return type.",
-                    'start'   => $globalFunction['startPosName'],
-                    'end'     => $globalFunction['endPosName']
-                ];
-            }
-        }
-
         return $issues;
     }
+
+    /**
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
+            $errors = array_merge($errors, $this->getReturnTypeMismatchErrorsForStructure($structure));
+        }
+
+        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
+            $errors = array_merge($errors, $this->getReturnTypeMismatchErrorsForGlobalFunction($globalFunction));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     *
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrorsForStructure(array $structure): array
+    {
+        $errors = [];
+
+        foreach ($structure['methods'] as $method) {
+            $errors = array_merge($errors, $this->getReturnTypeMismatchErrorsForMethod($structure, $method));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $structure
+     * @param array $method
+     *
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrorsForMethod(array $structure, array $method): array
+    {
+        return $this->getReturnTypeMismatchErrorsForGlobalFunction($method);
+    }
+
+    /**
+     * @param array $globalFunction
+     *
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
+    {
+        if (!$globalFunction['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse(
+            $globalFunction['docComment'],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE, DocblockParser::RETURN_VALUE],
+            $globalFunction['name']
+        );
+
+        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+            return [];
+        }
+
+        if (!$globalFunction['returnTypeHint'] || !$result['return']) {
+            return [];
+        }
+
+        $isNullable = false;
+        $type = $globalFunction['returnTypeHint'];
+
+        if ($type !== null && mb_substr($type, 0, 1) === '?') {
+            $type = mb_substr($type, 1);
+            $isNullable = true;
+        }
+
+        $isTypeConformant = $this->parameterDocblockTypeSemanticEqualityChecker->isEqual(
+            [
+                'type'        => $type,
+                'isNullable'  => $isNullable,
+                'isVariadic'  => false,
+                'isReference' => false
+            ],
+            [
+                'type'        => $result['return']['type'],
+                'isReference' => false
+            ],
+            $this->file,
+            $globalFunction['startLine']
+        );
+
+        if ($isTypeConformant) {
+            return [];
+        }
+
+        return [
+            [
+                'message' => "Function docblock @return is not equivalent to actual return type.",
+                'start'   => $globalFunction['startPosName'],
+                'end'     => $globalFunction['endPosName']
+            ]
+        ];
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @return array
