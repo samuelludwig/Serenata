@@ -22,6 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * @var JsonRpcApplication
+     */
+    private static $application;
+
+    /**
      * @var ContainerBuilder
      */
     private static $testContainer;
@@ -108,14 +113,14 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function createTestContainer(): ContainerBuilder
     {
         if (!self::$testContainer) {
-            $application = $this->createApplication();
+            self::$application = $this->createApplication();
 
             // Loading the container from the YAML file is expensive and a large slowdown to testing. As we're testing
             // integration anyway, we can share this container. We only need to ensure state is not maintained between
             // creations, which is handled by prepareContainer.
-            self::$testContainer = $this->createContainer($application);
+            self::$testContainer = $this->createContainer(self::$application);
 
-            $this->instantiateRequiredServices($application, self::$testContainer);
+            $this->instantiateRequiredServices(self::$application, self::$testContainer);
         }
 
         $this->prepareContainer(self::$testContainer, false);
@@ -132,16 +137,32 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
-        $success = $container->get('indexer')->reindex(
+        $success = $container->get('indexer')->index(
             [$testPath],
-            false,
-            false,
+            ['php', 'phpt'],
             [],
-            ['php', 'phpt']
+            false
         );
+
+        $this->processOpenQueueItems();
 
         if (!$mayFail) {
             $this->assertTrue($success);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function processOpenQueueItems(): void
+    {
+        $refClass = new ReflectionClass(JsonRpcApplication::class);
+
+        $refMethod = $refClass->getMethod('processQueueItem');
+        $refMethod->setAccessible(true);
+
+        while (!$this->container->get('requestQueue')->isEmpty()) {
+            $refMethod->invoke(self::$application);
         }
     }
 
@@ -180,14 +201,21 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
                 $stream
             );
 
-            $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
+            $indexer = new Indexer(
+                $container->get('requestQueue'),
+                $container->get('fileIndexer'),
+                $container->get('directoryIndexRequestDemuxer'),
+                $container->get('indexFilePruner'),
+                $container->get('pathNormalizer'),
+                $sourceCodeStreamReader,
+                $container->get('directoryIndexableFileIteratorFactory')
+            );
 
-            $indexer->reindex(
+            $indexer->index(
                 [$path],
-                false,
-                false,
+                ['phpt'],
                 [],
-                ['phpt']
+                false
             );
 
             if ($i === 1) {
@@ -204,12 +232,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             fwrite($stream, $source);
             rewind($stream);
 
-            $indexer->reindex(
+            $indexer->index(
                 [$path],
-                true,
-                false,
+                ['phpt'],
                 [],
-                ['phpt']
+                true
             );
 
             if ($i === 1) {

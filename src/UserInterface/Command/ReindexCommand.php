@@ -36,7 +36,7 @@ class ReindexCommand extends AbstractCommand
         }
 
         $paths = $arguments['source'];
-        $useStdin = isset($arguments['stdin']);
+        $useStdin = $arguments['stdin'] ?? false;
 
         if ($useStdin) {
             if (count($paths) > 1) {
@@ -46,12 +46,14 @@ class ReindexCommand extends AbstractCommand
             }
         }
 
-        return $this->indexer->reindex(
+        $this->indexer->index(
             $paths,
+            $arguments['extension'] ?? [],
+            $arguments['exclude'] ?? [],
             $useStdin,
-            isset($arguments['stream-progress']),
-            isset($arguments['exclude']) ? $arguments['exclude'] : [],
-            isset($arguments['extension']) ? $arguments['extension'] : []
+            $request->getId()
         );
+
+        return true;
     }
 }

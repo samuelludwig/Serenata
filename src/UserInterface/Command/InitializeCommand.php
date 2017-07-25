@@ -74,12 +74,11 @@ class InitializeCommand extends AbstractCommand
         $this->schemaInitializer->initialize();
 
         if ($includeBuiltinItems) {
-            $this->indexer->reindex(
+            $this->indexer->index(
                 [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
-                false,
-                false,
+                ['php'],
                 [],
-                ['php']
+                false
             );
         }
 

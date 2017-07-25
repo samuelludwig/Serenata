@@ -8,9 +8,6 @@ use Throwable;
 use RuntimeException;
 use UnexpectedValueException;
 
-use Ds\Queue;
-
-use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 use PhpIntegrator\Sockets\JsonRpcError;
@@ -39,11 +36,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     private $loop;
 
     /**
-     * @var Queue
-     */
-    private $queue;
-
-    /**
      * A stream that is used to read and write STDIN data from.
      *
      * As there is no actual STDIN when working with sockets, this temporary stream is used to transparently replace
@@ -64,7 +56,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
 
-        $this->queue = new Queue();
         $this->stdinStream = fopen('php://memory', 'w+');
 
         $this->loop = React\EventLoop\Factory::create();
@@ -93,7 +84,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      */
     public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
     {
-        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
+        $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
         $this->loop->nextTick(function () {
             $this->processQueueItem();
@@ -139,28 +130,25 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     protected function processQueueItem(): void
     {
         /** @var JsonRpcQueueItem $queueItem */
-        $queueItem = $this->queue->pop();
+        $queueItem = $this->getContainer()->get('requestQueue')->pop();
 
-        $response = $this->processRequest($queueItem->getRequest(), $queueItem->getJsonRpcResponseSender());
+        $response = $this->processRequest($queueItem->getRequest());
 
         $queueItem->getJsonRpcResponseSender()->send($response);
     }
 
     /**
-     * @param JsonRpcRequest                 $request
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcRequest $request
      *
      * @return JsonRpcResponse
      */
-    protected function processRequest(
-        JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender
-    ): JsonRpcResponse {
+    protected function processRequest(JsonRpcRequest $request): JsonRpcResponse
+    {
         $error = null;
         $result = null;
 
         try {
-            $result = $this->handleRequest($request, $jsonRpcResponseSender);
+            $result = $this->handleRequest($request);
         } catch (RequestParsingException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (Command\InvalidArgumentsException $e) {
@@ -175,6 +163,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
                 'file'      => $e->getFile(),
                 'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
             ]);
+        }
+
+        if ($result instanceof JsonRpcResponse) {
+            return $result;
         }
 
         return new JsonRpcResponse($request->getId(), $result, $error);
@@ -232,18 +224,13 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @param JsonRpcRequest                      $request
-     * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
+     * @param JsonRpcRequest $request
      *
      * @return mixed
      */
-    protected function handleRequest(
-        JsonRpcRequest $request,
-        ?JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
-    ) {
+    protected function handleRequest(JsonRpcRequest $request)
+    {
         $params = $request->getParams();
-
-        $this->configureProgressStreamingCallback($request, $jsonRpcResponseSender);
 
         if (isset($params['stdinData'])) {
             ftruncate($this->stdinStream, 0);
@@ -275,55 +262,10 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @param JsonRpcRequest                      $request
-     * @param JsonRpcResponseSenderInterface|null $jsonRpcResponseSender
-     *
-     * @return void
-     */
-    protected function configureProgressStreamingCallback(
-        JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender = null
-    ): void {
-        $progressStreamingCallback = null;
-
-        if ($jsonRpcResponseSender) {
-            $progressStreamingCallback = $this->createProgressStreamingCallback($request, $jsonRpcResponseSender);
-        }
-
-        /** @var Indexer $indexer */
-        $indexer = $this->getContainer()->get('indexer');
-        $indexer->setProgressStreamingCallback($progressStreamingCallback);
-    }
-
-    /**
      * @inheritDoc
      */
     public function getStdinStream()
     {
         return $this->stdinStream;
-    }
-
-    /**
-     * @param JsonRpcRequest                 $request
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     *
-     * @return \Closure
-     */
-    public function createProgressStreamingCallback(
-        JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender
-    ): \Closure {
-        return function ($progress) use ($request, $jsonRpcResponseSender) {
-            $jsonRpcResponse = new JsonRpcResponse(null, [
-                'type'      => 'reindexProgressInformation',
-                'requestId' => $request->getId(),
-                'progress'  => $progress
-            ]);
-
-            // We may well be sending data to the connection as needed, but during this process we never end up back in
-            // the main loop, thus the writes are never actually performed by the React event loop. For this reason
-            // we force the write.
-            $jsonRpcResponseSender->send($jsonRpcResponse, true);
-        };
     }
 }

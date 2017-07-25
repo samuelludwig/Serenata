@@ -2,6 +2,9 @@ parameters:
 
 
 services:
+    requestQueue:
+        class: Ds\Queue
+
     sqliteConnectionFactory:
         class: PhpIntegrator\Indexing\SqliteConnectionFactory
 
@@ -37,6 +40,26 @@ services:
     storage:
         alias: storage.eventEmittingStorage
 
+    pathNormalizer:
+        class: PhpIntegrator\Indexing\PathNormalizer
+
+    directoryIndexableFileIteratorFactory:
+        class: PhpIntegrator\Indexing\DirectoryIndexableFileIteratorFactory
+        arguments:
+            - '@storage'
+            - '@pathNormalizer'
+
+    directoryIndexRequestDemuxer:
+        class: PhpIntegrator\Indexing\DirectoryIndexRequestDemuxer
+        arguments:
+            - '@requestQueue'
+            - '@directoryIndexableFileIteratorFactory'
+
+    indexFilePruner:
+        class: PhpIntegrator\Indexing\IndexFilePruner
+        arguments:
+            - '@storage'
+
     fileIndexer:
         class: PhpIntegrator\Indexing\FileIndexer
         arguments:
@@ -47,15 +70,13 @@ services:
             - '@parser'
             - '@structureAwareNameResolverFactory'
 
-    projectIndexer:
-        class: PhpIntegrator\Indexing\ProjectIndexer
-        arguments:
-            - '@storage'
-            - '@fileIndexer'
-            - '@sourceCodeStreamReader'
-
     indexer:
         class: PhpIntegrator\Indexing\Indexer
         arguments:
-            - '@projectIndexer'
+            - '@requestQueue'
+            - '@fileIndexer'
+            - '@directoryIndexRequestDemuxer'
+            - '@indexFilePruner'
+            - '@pathNormalizer'
             - '@sourceCodeStreamReader'
+            - '@directoryIndexableFileIteratorFactory'

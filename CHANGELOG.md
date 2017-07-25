@@ -2,6 +2,8 @@
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
+* [Folder indexing has been rewritten to be split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
+  * This is mostly refactoring to allow for future improvements, but this also included performance improvements
 
 ### Bugs Fixed
 * [Project paths containing the tilde representing the home folder will now be properly epanded](https://gitlab.com/php-integrator/core/merge_requests/72)
@@ -9,6 +11,8 @@
 ### Structural changes (mostly relevant to clients)
 * Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
   * These classes will return a new `isAnonymous` field.
+* The `reindex` command no longer takes a `stream-progress` argument (it will be silently ignored)
+  * Progress is now only streamed for folder index requests and is always on. If you don't want these notifications, you can simply ignore them.
 
 ## 3.0.1 (Unreleased)
 * [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)

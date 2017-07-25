@@ -28,7 +28,7 @@ class FilePruningTest extends AbstractIntegrationTest
 
         unlink($testFilePath);
 
-        $this->container->get('projectIndexer')->pruneRemovedFiles();
+        $this->container->get('indexFilePruner')->prune();
 
         $files = $this->container->get('storage')->getFiles();
 
