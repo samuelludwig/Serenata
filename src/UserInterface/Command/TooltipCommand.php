@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 use PhpIntegrator\Tooltips\TooltipResult;
 use PhpIntegrator\Tooltips\TooltipProvider;
@@ -50,7 +51,7 @@ class TooltipCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

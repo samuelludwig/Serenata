@@ -8,6 +8,7 @@ use PhpIntegrator\Linting\Linter;
 use PhpIntegrator\Linting\LintingSettings;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -49,7 +50,7 @@ class LintCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

@@ -9,6 +9,7 @@ use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
@@ -48,7 +49,7 @@ class ClassListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

@@ -3,6 +3,8 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Interface for commands.
@@ -16,7 +18,7 @@ interface CommandInterface
      *
      * @throws InvalidArgumentsException
      *
-     * @return mixed
+     * @return JsonRpcResponse|mixed
      */
-    public function execute(JsonRpcRequest $request);
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender);
 }

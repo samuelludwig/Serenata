@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 
 /**
@@ -15,7 +16,7 @@ class ReindexProgressCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

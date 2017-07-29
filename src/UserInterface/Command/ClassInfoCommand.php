@@ -7,6 +7,7 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that shows information about a class, interface or trait.
@@ -36,7 +37,7 @@ class ClassInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

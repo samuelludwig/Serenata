@@ -12,6 +12,7 @@ use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that makes a FQCN relative to local use statements in a file.
@@ -43,7 +44,7 @@ class LocalizeTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

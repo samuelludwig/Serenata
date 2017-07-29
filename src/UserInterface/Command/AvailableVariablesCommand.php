@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use PhpIntegrator\Analysis\VariableScanner;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -47,7 +48,7 @@ class AvailableVariablesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

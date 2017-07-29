@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use PhpIntegrator\Indexing\StorageVersionChecker;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that tests a project to see if it is in a properly usable state.
@@ -27,7 +28,7 @@ class TestCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         return $this->test();
     }

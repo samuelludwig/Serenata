@@ -8,6 +8,8 @@ use PhpIntegrator\Indexing\Indexer;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -84,17 +86,19 @@ class Indexer implements EventEmitterInterface
     }
 
     /**
-     * @param string[] $paths
-     * @param string[] $extensionsToIndex
-     * @param string[] $globsToExclude
-     * @param bool     $useStdin
-     * @param int|null $originatingRequestId
+     * @param string[]                       $paths
+     * @param string[]                       $extensionsToIndex
+     * @param string[]                       $globsToExclude
+     * @param bool                           $useStdin
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param int|null                       $originatingRequestId
      */
     public function index(
         array $paths,
         array $extensionsToIndex,
         array $globsToExclude,
         bool $useStdin,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         ?int $originatingRequestId = null
     ): bool {
         $paths = array_map(function (string $path) {
@@ -109,17 +113,17 @@ class Indexer implements EventEmitterInterface
             return !is_dir($path);
         });
 
-        $this->indexDirectories($directories, $extensionsToIndex, $globsToExclude, $originatingRequestId);
+        $this->indexDirectories(
+            $directories,
+            $extensionsToIndex,
+            $globsToExclude,
+            $jsonRpcResponseSender,
+            $originatingRequestId
+        );
 
         foreach ($files as $path) {
             $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
         }
-
-
-
-        // TODO: Extract method
-        // TODO: Can't push requests onto the queue, needs to be an actual value object pair (same for demuxer)
-
 
         // As a directory index request is demuxed into multiple file index requests, the response for the original
         // request may not be sent until all individual file index requests have been handled. This command will send
@@ -128,26 +132,34 @@ class Indexer implements EventEmitterInterface
             'response' => new JsonRpcResponse($originatingRequestId, true)
         ]);
 
-        $this->queue->push($delayedIndexFinishRequest);
+        $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));
 
         return true;
     }
 
     /**
-     * @param string[] $paths
-     * @param string[] $extensionsToIndex
-     * @param string[] $globsToExclude
-     * @param int|null $requestId
+     * @param string[]                       $paths
+     * @param string[]                       $extensionsToIndex
+     * @param string[]                       $globsToExclude
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param int|null                       $requestId
      */
     protected function indexDirectories(
         array $paths,
         array $extensionsToIndex,
         array $globsToExclude,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         ?int $requestId
     ): void {
-        $this->directoryIndexRequestDemuxer->index($paths, $extensionsToIndex, $globsToExclude, $requestId);
-
         $this->indexFilePruner->prune();
+
+        $this->directoryIndexRequestDemuxer->index(
+            $paths,
+            $extensionsToIndex,
+            $globsToExclude,
+            $jsonRpcResponseSender,
+            $requestId
+        );
     }
 
     /**

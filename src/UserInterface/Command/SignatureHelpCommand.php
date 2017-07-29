@@ -8,6 +8,7 @@ use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -50,7 +51,7 @@ class SignatureHelpCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

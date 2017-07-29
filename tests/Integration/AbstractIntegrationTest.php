@@ -7,6 +7,8 @@ use ReflectionClass;
 
 use PhpIntegrator\Indexing\Indexer;
 
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+
 use PhpIntegrator\UserInterface\JsonRpcApplication;
 use PhpIntegrator\UserInterface\AbstractApplication;
 
@@ -137,18 +139,36 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
-        $success = $container->get('indexer')->index(
+        $this->indexPathViaIndexer($container->get('indexer'), $testPath, false, $mayFail);
+    }
+
+    /**
+     * @param Indexer $indexer
+     * @param string  $testPath
+     * @param bool    $useStdin
+     * @param bool    $mayFail
+     *
+     * @return void
+     */
+    protected function indexPathViaIndexer(
+        Indexer $indexer,
+        string $testPath,
+        bool $useStdin,
+        bool $mayFail = false
+    ): void {
+        $success = $indexer->index(
             [$testPath],
             ['php', 'phpt'],
             [],
-            false
+            $useStdin,
+            $this->mockJsonRpcResponseSenderInterface()
         );
-
-        $this->processOpenQueueItems();
 
         if (!$mayFail) {
             $this->assertTrue($success);
         }
+
+        $this->processOpenQueueItems();
     }
 
     /**
@@ -211,12 +231,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
                 $container->get('directoryIndexableFileIteratorFactory')
             );
 
-            $indexer->index(
-                [$path],
-                ['phpt'],
-                [],
-                false
-            );
+            $this->indexPathViaIndexer($indexer, $path, false);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -232,12 +247,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             fwrite($stream, $source);
             rewind($stream);
 
-            $indexer->index(
-                [$path],
-                ['phpt'],
-                [],
-                true
-            );
+            $this->indexPathViaIndexer($indexer, $path, true);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -247,5 +257,15 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
             fclose($stream);
         }
+    }
+
+    /**
+     * @return JsonRpcResponseSenderInterface
+     */
+    protected function mockJsonRpcResponseSenderInterface(): JsonRpcResponseSenderInterface
+    {
+        return $this->getMockBuilder(JsonRpcResponseSenderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

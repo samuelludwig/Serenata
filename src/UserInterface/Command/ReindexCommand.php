@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use PhpIntegrator\Indexing\Indexer;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that reindexes a file or folder.
@@ -27,7 +28,7 @@ class ReindexCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 
@@ -51,6 +52,7 @@ class ReindexCommand extends AbstractCommand
             $arguments['extension'] ?? [],
             $arguments['exclude'] ?? [],
             $useStdin,
+            $jsonRpcResponseSender,
             $request->getId()
         );
 

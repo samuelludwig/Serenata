@@ -12,6 +12,7 @@ use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that resolves local types in a file.
@@ -43,7 +44,7 @@ class ResolveTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $arguments = $request->getParams() ?: [];
 

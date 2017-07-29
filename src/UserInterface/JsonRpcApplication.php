@@ -132,23 +132,26 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         /** @var JsonRpcQueueItem $queueItem */
         $queueItem = $this->getContainer()->get('requestQueue')->pop();
 
-        $response = $this->processRequest($queueItem->getRequest());
+        $response = $this->processRequest($queueItem->getRequest(), $queueItem->getJsonRpcResponseSender());
 
         $queueItem->getJsonRpcResponseSender()->send($response);
     }
 
     /**
-     * @param JsonRpcRequest $request
+     * @param JsonRpcRequest                 $request
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      *
      * @return JsonRpcResponse
      */
-    protected function processRequest(JsonRpcRequest $request): JsonRpcResponse
-    {
+    protected function processRequest(
+        JsonRpcRequest $request,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender
+    ): JsonRpcResponse {
         $error = null;
         $result = null;
 
         try {
-            $result = $this->handleRequest($request);
+            $result = $this->handleRequest($request, $jsonRpcResponseSender);
         } catch (RequestParsingException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (Command\InvalidArgumentsException $e) {
@@ -224,11 +227,12 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @param JsonRpcRequest $request
+     * @param JsonRpcRequest                 $request
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      *
-     * @return mixed
+     * @return JsonRpcResponse|mixed
      */
-    protected function handleRequest(JsonRpcRequest $request)
+    protected function handleRequest(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         $params = $request->getParams();
 
@@ -242,7 +246,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $this->setDatabaseFile($params['database']);
         }
 
-        return $this->getCommandByMethod($request->getMethod())->execute($request);
+        return $this->getCommandByMethod($request->getMethod())->execute($request, $jsonRpcResponseSender);
     }
 
     /**

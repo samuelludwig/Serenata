@@ -5,6 +5,7 @@ namespace PhpIntegrator\UserInterface\Command;
 use PhpIntegrator\Indexing\ProjectIndexer;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that vacuums a project.
@@ -29,7 +30,7 @@ class VacuumCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
     {
         return $this->vacuum();;
     }
