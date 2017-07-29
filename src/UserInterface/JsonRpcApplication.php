@@ -86,8 +86,21 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     {
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
+        $this->scheduleQueueProcessing();
+    }
+
+    /**
+     * @return void
+     */
+    protected function scheduleQueueProcessing(): void
+    {
         $this->loop->nextTick(function () {
             $this->processNextQueueItem();
+
+            if (!$this->getContainer()->get('requestQueue')->isEmpty()) {
+                // Ensure new requests queued by commands themselves are also handled.
+                $this->scheduleQueueProcessing();
+            }
         });
     }
 
