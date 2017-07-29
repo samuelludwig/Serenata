@@ -66,7 +66,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     {
         $refClass = new ReflectionClass(JsonRpcApplication::class);
 
-        $refMethod = $refClass->getMethod('createContainer');
+        $refMethod = $refClass->getMethod('getContainer');
         $refMethod->setAccessible(true);
 
         $container = $refMethod->invoke($application);
