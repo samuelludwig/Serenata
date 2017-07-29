@@ -4,8 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Tooltips\TooltipResult;
 use PhpIntegrator\Tooltips\TooltipProvider;
@@ -51,9 +51,9 @@ class TooltipCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
@@ -73,7 +73,10 @@ class TooltipCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->getTooltip($arguments['file'], $code, $offset);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getTooltip($arguments['file'], $code, $offset)
+        );
     }
 
     /**

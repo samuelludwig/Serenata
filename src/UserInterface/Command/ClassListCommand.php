@@ -8,8 +8,8 @@ use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
@@ -49,13 +49,16 @@ class ClassListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         $filePath = $arguments['file'] ?? null;
 
-        return ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll();
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll()
+        );
     }
 
     /**

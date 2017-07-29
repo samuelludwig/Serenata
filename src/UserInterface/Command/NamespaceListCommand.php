@@ -7,8 +7,8 @@ use PhpIntegrator\Analysis\FileNamespaceListProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available namespace.
@@ -48,11 +48,14 @@ class NamespaceListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        return $this->getNamespaceList($arguments['file'] ?? null);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getNamespaceList($arguments['file'] ?? null)
+        );
     }
 
     /**

@@ -9,8 +9,8 @@ use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\SchemaInitializer;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that initializes a project.
@@ -58,7 +58,7 @@ class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
         return $this->initialize();
     }
@@ -85,7 +85,7 @@ class InitializeCommand extends AbstractCommand
 
         $this->clearCache();
 
-        return true;
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), true);
     }
 
     /**

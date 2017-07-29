@@ -14,8 +14,8 @@ use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterf
 
 use PhpIntegrator\Parsing\LastExpressionParser;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -78,9 +78,9 @@ class DeduceTypesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
@@ -106,13 +106,15 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
-        return $this->deduceTypes(
+        $result = $this->deduceTypes(
             $arguments['file'],
             $code,
             $codeWithExpression,
             $offset,
             isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
         );
+
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
     }
 
     /**

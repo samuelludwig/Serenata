@@ -7,8 +7,8 @@ use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -51,9 +51,9 @@ class SignatureHelpCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
@@ -73,7 +73,10 @@ class SignatureHelpCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->signatureHelp($arguments['file'], $code, $offset);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->signatureHelp($arguments['file'], $code, $offset)
+        );
     }
 
     /**

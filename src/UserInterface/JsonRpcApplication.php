@@ -87,7 +87,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
         $this->loop->nextTick(function () {
-            $this->processQueueItem();
+            $this->processNextQueueItem();
         });
     }
 
@@ -127,31 +127,21 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     /**
      * @return void
      */
-    protected function processQueueItem(): void
+    protected function processNextQueueItem(): void
     {
-        /** @var JsonRpcQueueItem $queueItem */
-        $queueItem = $this->getContainer()->get('requestQueue')->pop();
-
-        $response = $this->processRequest($queueItem->getRequest(), $queueItem->getJsonRpcResponseSender());
-
-        $queueItem->getJsonRpcResponseSender()->send($response);
+        $this->processQueueItem($this->getContainer()->get('requestQueue')->pop());
     }
 
     /**
-     * @param JsonRpcRequest                 $request
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     *
-     * @return JsonRpcResponse
+     * @param JsonRpcQueueItem $queueItem
      */
-    protected function processRequest(
-        JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender
-    ): JsonRpcResponse {
+    protected function processQueueItem(JsonRpcQueueItem $queueItem): void
+    {
         $error = null;
-        $result = null;
+        $response = null;
 
         try {
-            $result = $this->handleRequest($request, $jsonRpcResponseSender);
+            $response = $this->handleQueueItem($queueItem);
         } catch (RequestParsingException $e) {
             $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
         } catch (Command\InvalidArgumentsException $e) {
@@ -168,11 +158,13 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             ]);
         }
 
-        if ($result instanceof JsonRpcResponse) {
-            return $result;
+        if (/*$response === null &&*/ $error !== null) {
+            $response = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
         }
 
-        return new JsonRpcResponse($request->getId(), $result, $error);
+        if ($response !== null) {
+            $queueItem->getJsonRpcResponseSender()->send($response);
+        }
     }
 
     /**
@@ -227,15 +219,15 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
-     * @param JsonRpcRequest                 $request
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcQueueItem $queueItem
      *
      * @return JsonRpcResponse|mixed
      */
-    protected function handleRequest(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
+    protected function handleQueueItem(JsonRpcQueueItem $queueItem)
     {
-        $params = $request->getParams();
+        $params = $queueItem->getRequest()->getParams();
 
+        // TODO: This should probably be handled by the commands proper at some point.
         if (isset($params['stdinData'])) {
             ftruncate($this->stdinStream, 0);
             fwrite($this->stdinStream, $params['stdinData']);
@@ -246,7 +238,7 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
             $this->setDatabaseFile($params['database']);
         }
 
-        return $this->getCommandByMethod($request->getMethod())->execute($request, $jsonRpcResponseSender);
+        return $this->getCommandByMethod($queueItem->getRequest()->getMethod())->execute($queueItem);
     }
 
     /**
