@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Indexing;
 
+use UnexpectedValueException;
+
 use Ds\Queue;
 
 use PhpIntegrator\Indexing\Indexer;
