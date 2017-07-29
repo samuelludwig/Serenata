@@ -60,7 +60,7 @@ class InitializeCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return $this->initialize();
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->initialize());
     }
 
     /**
@@ -85,7 +85,7 @@ class InitializeCommand extends AbstractCommand
 
         $this->clearCache();
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), true);
+        return true;
     }
 
     /**
