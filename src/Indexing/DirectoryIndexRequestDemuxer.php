@@ -79,7 +79,7 @@ class DirectoryIndexRequestDemuxer
         JsonRpcResponseSenderInterface $jsonRpcResponseSender
     ): void {
         $request = new JsonRpcRequest(null, 'reindex', [
-            'source'    => $fileInfo->getPathname(),
+            'source'    => [$fileInfo->getPathname()],
             'exclude'   => $globsToExclude,
             'extension' => $extensionsToIndex
         ]);
