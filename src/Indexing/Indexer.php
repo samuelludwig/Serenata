@@ -6,8 +6,6 @@ use UnexpectedValueException;
 
 use Ds\Queue;
 
-use PhpIntegrator\Indexing\Indexer;
-
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
