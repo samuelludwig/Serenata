@@ -15,6 +15,12 @@ services:
         arguments:
             - '@indexer'
 
+    reindexProgressCommand:
+        class: PhpIntegrator\UserInterface\Command\ReindexProgressCommand
+
+    echoResponseCommand:
+        class: PhpIntegrator\UserInterface\Command\EchoResponseCommand
+
     vacuumCommand:
         class: PhpIntegrator\UserInterface\Command\VacuumCommand
         arguments:
