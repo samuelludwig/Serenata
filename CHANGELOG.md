@@ -1,4 +1,4 @@
-## 3.1.0
+## 3.1.0 (Unreleased)
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
