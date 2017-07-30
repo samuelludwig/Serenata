@@ -41,16 +41,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     private $loop;
 
     /**
-     * A stream that is used to read and write STDIN data from.
-     *
-     * As there is no actual STDIN when working with sockets, this temporary stream is used to transparently replace
-     * it with another stream.
-     *
-     * @var resource|null
-     */
-    private $stdinStream;
-
-    /**
      * @return Timer
      */
     private $periodicTimer;
@@ -66,15 +56,12 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
 
         $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
 
-        $this->stdinStream = fopen('php://memory', 'w+');
-
         $this->loop = React\EventLoop\Factory::create();
 
         try {
             $this->setupRequestHandlingSocketServer($this->loop, $requestHandlingPort);
         } catch (RuntimeException $e) {
             fwrite(STDERR, 'Socket already in use!');
-            fclose($this->stdinStream);
             return 2;
         }
 
@@ -83,8 +70,6 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $this->instantiateRequiredServices($this->getContainer());
 
         $this->loop->run();
-
-        fclose($this->stdinStream);
 
         return 0;
     }
