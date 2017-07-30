@@ -63,21 +63,16 @@ class InitializeCommand extends AbstractCommand
     {
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->initialize(
-                $queueItem->getJsonRpcResponseSender(),
-                $queueItem->getRequest()->getId()
-            )
+            $this->initialize($queueItem->getJsonRpcResponseSender())
         );
     }
 
     /**
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param int|null                       $originatingRequestId
      * @param bool                           $includeBuiltinItems
      */
     public function initialize(
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
-        ?int $originatingRequestId = null,
         bool $includeBuiltinItems = true
     ): bool {
         $this->ensureIndexDatabaseDoesNotExist();
@@ -91,7 +86,7 @@ class InitializeCommand extends AbstractCommand
                 [],
                 false,
                 $jsonRpcResponseSender,
-                $originatingRequestId
+                null
             );
         }
 

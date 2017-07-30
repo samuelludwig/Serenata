@@ -20,7 +20,6 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
         $this->container->get('initializeCommand')->initialize(
             $this->mockJsonRpcResponseSenderInterface(),
-            null,
             false
         );
 
@@ -48,7 +47,6 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
         $this->container->get('initializeCommand')->initialize(
             $this->mockJsonRpcResponseSenderInterface(),
-            null,
             false
         );
 

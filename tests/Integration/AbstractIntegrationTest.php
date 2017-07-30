@@ -107,7 +107,6 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
         $success = $container->get('initializeCommand')->initialize(
             $this->mockJsonRpcResponseSenderInterface(),
-            null,
             false
         );
 
