@@ -60,16 +60,6 @@ class InitializeCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->initialize());
-    }
-
-    /**
-     * @param bool $includeBuiltinItems
-     *
-     * @return bool
-     */
-    public function initialize(bool $includeBuiltinItems = true): bool
-    {
         $this->ensureIndexDatabaseDoesNotExist();
 
         $this->schemaInitializer->initialize();
@@ -79,13 +69,15 @@ class InitializeCommand extends AbstractCommand
                 [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
                 ['php'],
                 [],
-                false
+                false,
+                $queueItem->getJsonRpcResponseSender(),
+                $queueItem->getRequest()->getId()
             );
         }
 
         $this->clearCache();
 
-        return true;
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), true);
     }
 
     /**
