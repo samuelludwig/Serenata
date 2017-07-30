@@ -71,9 +71,9 @@ class JsonRpcQueueItemProcessor
      *
      * @throws RequestParsingException
      *
-     * @return JsonRpcResponse|mixed
+     * @return JsonRpcResponse|null
      */
-    protected function handle(JsonRpcQueueItem $queueItem)
+    protected function handle(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
         $params = $queueItem->getRequest()->getParams();
 
