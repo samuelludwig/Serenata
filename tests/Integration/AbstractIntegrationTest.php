@@ -105,7 +105,11 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
         $container->get('cache')->deleteAll();
 
-        $success = $container->get('initializeCommand')->initialize(false);
+        $success = $container->get('initializeCommand')->initialize(
+            $this->mockJsonRpcResponseSenderInterface(),
+            null,
+            false
+        );
 
         $this->assertTrue($success);
     }

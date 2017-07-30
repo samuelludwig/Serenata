@@ -18,7 +18,11 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
         @unlink($dummyDatabasePath);
 
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
-        $this->container->get('initializeCommand')->initialize(false);
+        $this->container->get('initializeCommand')->initialize(
+            $this->mockJsonRpcResponseSenderInterface(),
+            null,
+            false
+        );
 
         $time = $this->time(function () use ($pathToIndex) {
             $this->indexPath($this->container, $pathToIndex);
@@ -41,7 +45,11 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
         @unlink($dummyDatabasePath);
 
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
-        $this->container->get('initializeCommand')->initialize(false);
+        $this->container->get('initializeCommand')->initialize(
+            $this->mockJsonRpcResponseSenderInterface(),
+            null,
+            false
+        );
 
         $time = $this->time(function () use ($pathToIndex) {
             $this->indexPath($this->container, $pathToIndex);

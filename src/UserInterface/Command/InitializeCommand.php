@@ -11,6 +11,7 @@ use PhpIntegrator\Indexing\SchemaInitializer;
 
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that initializes a project.
@@ -60,6 +61,25 @@ class InitializeCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->initialize(
+                $queueItem->getJsonRpcResponseSender(),
+                $queueItem->getRequest()->getId()
+            )
+        );
+    }
+
+    /**
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param int|null                       $originatingRequestId
+     * @param bool                           $includeBuiltinItems
+     */
+    public function initialize(
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        ?int $originatingRequestId = null,
+        bool $includeBuiltinItems = true
+    ): bool {
         $this->ensureIndexDatabaseDoesNotExist();
 
         $this->schemaInitializer->initialize();
@@ -70,14 +90,14 @@ class InitializeCommand extends AbstractCommand
                 ['php'],
                 [],
                 false,
-                $queueItem->getJsonRpcResponseSender(),
-                $queueItem->getRequest()->getId()
+                $jsonRpcResponseSender,
+                $originatingRequestId
             );
         }
 
         $this->clearCache();
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), true);
+        return true;
     }
 
     /**

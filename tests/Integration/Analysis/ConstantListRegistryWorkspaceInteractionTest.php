@@ -25,7 +25,11 @@ class ConstantListRegistryWorkspaceInteractionTest extends AbstractIntegrationTe
         $this->assertCount(1, $registry->getAll());
 
         $this->container->get('managerRegistry')->setDatabasePath(':memory:');
-        $this->container->get('initializeCommand')->initialize(false);
+        $this->container->get('initializeCommand')->initialize(
+            $this->mockJsonRpcResponseSenderInterface(),
+            null,
+            false
+        );
 
         $this->assertEmpty($registry->getAll());
     }
