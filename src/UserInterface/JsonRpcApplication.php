@@ -8,18 +8,20 @@ use Throwable;
 use RuntimeException;
 use UnexpectedValueException;
 
-use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\SocketServer;
+use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
 use PhpIntegrator\Sockets\JsonRpcErrorCode;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 use PhpIntegrator\Sockets\RequestParsingException;
-use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\EventLoop\LoopInterface;
+
+use React\EventLoop\Timer\Timer;
 
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
@@ -28,6 +30,11 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  */
 class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHandlerInterface
 {
+    /**
+     * @var float
+     */
+    private const REQUEST_HANDLE_FREQUENCY_SECONDS = 0.001;
+
     /**
      * @var LoopInterface
      */
@@ -42,6 +49,11 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      * @var resource|null
      */
     private $stdinStream;
+
+    /**
+     * @return Timer
+     */
+    private $periodicTimer;
 
     /**
      * @inheritDoc
@@ -82,30 +94,50 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      */
     public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
     {
-        $wasEmpty = $this->getContainer()->get('requestQueue')->isEmpty();
-
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
-        if ($wasEmpty) {
-            // If the queue is not empty, it will reschedule itself until it is empty, so no need to do that here.
-            $this->scheduleQueueProcessing();
-        }
+        $this->ensurePeriodicTimerIsInstalled();
     }
 
     /**
      * @return void
      */
-    protected function scheduleQueueProcessing(): void
+    protected function ensurePeriodicTimerIsInstalled(): void
     {
-        $this->loop->nextTick(function () {
+        if ($this->periodicTimer !== null) {
+            return;
+        }
+
+        $this->installPeriodicTimer();
+    }
+
+
+    /**
+     * @return void
+     */
+    protected function installPeriodicTimer(): void
+    {
+        $this->periodicTimer = $this->loop->addPeriodicTimer(self::REQUEST_HANDLE_FREQUENCY_SECONDS, function () {
             $this->processNextQueueItem();
 
-            if (!$this->getContainer()->get('requestQueue')->isEmpty()) {
-                // Ensure new requests queued by commands themselves are also handled.
-                $this->scheduleQueueProcessing();
+            if ($this->getContainer()->get('requestQueue')->isEmpty()) {
+                $this->uninstallPeriodicTimer();
             }
         });
     }
+
+    /**
+     * @return void
+     */
+    protected function uninstallPeriodicTimer(): void
+    {
+        $this->loop->cancelTimer($this->periodicTimer);
+        $this->periodicTimer = null;
+    }
+
+
+
+
 
     /**
      * @return void
