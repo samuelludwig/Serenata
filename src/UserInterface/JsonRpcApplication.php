@@ -82,9 +82,14 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
      */
     public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
     {
+        $wasEmpty = $this->getContainer()->get('requestQueue')->isEmpty();
+
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
-        $this->scheduleQueueProcessing();
+        if ($wasEmpty) {
+            // If the queue is not empty, it will reschedule itself until it is empty, so no need to do that here.
+            $this->scheduleQueueProcessing();
+        }
     }
 
     /**
