@@ -7,6 +7,7 @@ use SplFileInfo;
 use Ds\Queue;
 
 use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
@@ -99,11 +100,14 @@ class DirectoryIndexRequestDemuxer
         int $total,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender
     ): void {
-        $request = new JsonRpcRequest(null, 'reindexProgress', [
-            'requestId' => $originatingRequestId,
-            'index'     => $index,
-            'total'     => $total,
-            'progress'  => ($index / $total) * 100
+        $request = new JsonRpcRequest(null, 'echoResponse', [
+            'response' => new JsonRpcResponse(null, [
+                'type'      => 'reindexProgressInformation',
+                'requestId' => $originatingRequestId,
+                'index'     => $index,
+                'total'     => $total,
+                'progress'  => ($index / $total) * 100
+            ])
         ]);
 
         $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
