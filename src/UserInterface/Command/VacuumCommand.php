@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use PhpIntegrator\Indexing\ProjectIndexer;
+use PhpIntegrator\Indexing\IndexFilePruner;
 
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
@@ -15,16 +15,16 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 class VacuumCommand extends AbstractCommand
 {
     /**
-     * @var ProjectIndexer
+     * @var IndexFilePruner
      */
-    private $projectIndexer;
+    private $indexFilePruner;
 
     /**
-     * @param ProjectIndexer $projectIndexer
+     * @param IndexFilePruner $indexFilePruner
      */
-    public function __construct(ProjectIndexer $projectIndexer)
+    public function __construct(IndexFilePruner $indexFilePruner)
     {
-        $this->projectIndexer = $projectIndexer;
+        $this->indexFilePruner = $indexFilePruner;
     }
 
     /**
@@ -40,7 +40,7 @@ class VacuumCommand extends AbstractCommand
      */
     public function vacuum(): bool
     {
-        $this->projectIndexer->pruneRemovedFiles();
+        $this->indexFilePruner->prune();
 
         return true;
     }

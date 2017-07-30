@@ -24,7 +24,7 @@ services:
     vacuumCommand:
         class: PhpIntegrator\UserInterface\Command\VacuumCommand
         arguments:
-            - '@projectIndexer'
+            - '@indexFilePruner'
 
     testCommand:
         class: PhpIntegrator\UserInterface\Command\TestCommand
