@@ -1,0 +1,8 @@
+parameters:
+
+
+services:
+    jsonRpcQueueItemProcessor:
+        class: PhpIntegrator\Sockets\JsonRpcQueueItemProcessor
+        arguments:
+            - '@service_container'

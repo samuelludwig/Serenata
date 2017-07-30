@@ -12,6 +12,7 @@ use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\UserInterface\JsonRpcApplication;
 use PhpIntegrator\UserInterface\AbstractApplication;
 
+use PhpIntegrator\Utility\TmpFileStream;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -178,7 +179,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     {
         $refClass = new ReflectionClass(JsonRpcApplication::class);
 
-        $refMethod = $refClass->getMethod('processQueueItem');
+        $refMethod = $refClass->getMethod('processNextQueueItem');
         $refMethod->setAccessible(true);
 
         while (!$this->container->get('requestQueue')->isEmpty()) {
@@ -213,7 +214,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         for ($i = 0; $i <= 1; ++$i) {
             $container = $this->createTestContainer();
 
-            $stream = tmpfile();
+            $stream = new TmpFileStream();
 
             $sourceCodeStreamReader = new SourceCodeStreamReader(
                 $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
@@ -244,8 +245,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
                 $container->get('managerRegistry')->getManager()->clear();
             }
 
-            fwrite($stream, $source);
-            rewind($stream);
+            $stream->set($source);
 
             $this->indexPathViaIndexer($indexer, $path, true);
 
@@ -255,7 +255,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
             $afterReindex($container, $path, $source);
 
-            fclose($stream);
+            $stream->close();
         }
     }
 

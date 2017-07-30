@@ -8,8 +8,6 @@ use Throwable;
 use RuntimeException;
 use UnexpectedValueException;
 
-use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
-
 use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\SocketServer;
 use PhpIntegrator\Sockets\JsonRpcRequest;
@@ -105,6 +103,16 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
     }
 
     /**
+     * @return void
+     */
+    protected function processNextQueueItem(): void
+    {
+        $this->getContainer()->get('jsonRpcQueueItemProcessor')->process(
+            $this->getContainer()->get('requestQueue')->pop()
+        );
+    }
+
+    /**
      * @param array $options
      *
      * @throws UnexpectedValueException
@@ -135,146 +143,5 @@ class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHa
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
         $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
-    }
-
-    /**
-     * @return void
-     */
-    protected function processNextQueueItem(): void
-    {
-        $this->processQueueItem($this->getContainer()->get('requestQueue')->pop());
-    }
-
-    /**
-     * @param JsonRpcQueueItem $queueItem
-     */
-    protected function processQueueItem(JsonRpcQueueItem $queueItem): void
-    {
-        $error = null;
-        $response = null;
-
-        try {
-            $response = $this->handleQueueItem($queueItem);
-        } catch (RequestParsingException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-        } catch (Command\InvalidArgumentsException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-        } catch (IncorrectDatabaseVersionException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
-        } catch (\RuntimeException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
-        } catch (\Throwable $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line'      => $e->getLine(),
-                'file'      => $e->getFile(),
-                'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
-            ]);
-        }
-
-        if (/*$response === null &&*/ $error !== null) {
-            $response = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
-        }
-
-        if ($response !== null) {
-            $queueItem->getJsonRpcResponseSender()->send($response);
-        }
-    }
-
-    /**
-     * @param Throwable $throwable
-     *
-     * @return string
-     */
-    protected function getCompleteBacktraceFromThrowable(Throwable $throwable): string
-    {
-        $counter = 1;
-
-        $reducer = function (string $carry, Throwable $item) use (&$counter): string {
-            if (!empty($carry)) {
-                $carry .= "\n \n";
-            }
-
-            $carry .= "→ Message {$counter}\n";
-            $carry .= $item->getMessage() . "\n \n";
-
-            $carry .= "→ Location {$counter}\n";
-            $carry .= $item->getFile() . ':' . $item->getLine() . "\n \n";
-
-            $carry .= "→ Backtrace {$counter}\n";
-            $carry .= $item->getTraceAsString();
-
-            ++$counter;
-
-            return $carry;
-        };
-
-        return $this->getThrowableVector($throwable)->reduce($reducer, '');
-    }
-
-    /**
-     * @param Throwable $throwable
-     *
-     * @return Ds\Vector
-     */
-    protected function getThrowableVector(Throwable $throwable): Ds\Vector
-    {
-        $vector = new Ds\Vector();
-
-        $item = $throwable;
-
-        while ($item) {
-            $vector[] = $item;
-
-            $item = $item->getPrevious();
-        }
-
-        return $vector;
-    }
-
-    /**
-     * @param JsonRpcQueueItem $queueItem
-     *
-     * @return JsonRpcResponse|mixed
-     */
-    protected function handleQueueItem(JsonRpcQueueItem $queueItem)
-    {
-        $params = $queueItem->getRequest()->getParams();
-
-        // TODO: This should probably be handled by the commands proper at some point.
-        if (isset($params['stdinData'])) {
-            ftruncate($this->stdinStream, 0);
-            fwrite($this->stdinStream, $params['stdinData']);
-            rewind($this->stdinStream);
-        }
-
-        if (isset($params['database'])) {
-            $this->setDatabaseFile($params['database']);
-        }
-
-        return $this->getCommandByMethod($queueItem->getRequest()->getMethod())->execute($queueItem);
-    }
-
-    /**
-     * @param string $method
-     *
-     * @return Command\CommandInterface
-     */
-    protected function getCommandByMethod(string $method): Command\CommandInterface
-    {
-        try {
-            return $this->getContainer()->get($method . 'Command');
-        } catch (ServiceNotFoundException $e) {
-            throw new RequestParsingException('Method "' . $method . '" was not found');
-        }
-
-        return null; // Never reached.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getStdinStream()
-    {
-        return $this->stdinStream;
     }
 }
