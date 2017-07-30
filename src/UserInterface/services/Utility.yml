@@ -1,0 +1,13 @@
+parameters:
+
+
+services:
+    sourceCodeStreamReader:
+        class: PhpIntegrator\Utility\SourceCodeStreamReader
+        arguments:
+            - '@fileSourceCodeFileReader.fileReaderFactory'
+            - '@fileSourceCodeFileReader.streamReaderFactory'
+            - '@stdinStream'
+
+    stdinStream:
+        class: PhpIntegrator\Utility\StdinStream

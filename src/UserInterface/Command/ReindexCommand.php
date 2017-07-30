@@ -4,7 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Indexing\Indexer;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that reindexes a file or folder.
@@ -27,16 +28,16 @@ class ReindexCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['source']) || empty($arguments['source'])) {
             throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');
         }
 
         $paths = $arguments['source'];
-        $useStdin = isset($arguments['stdin']);
+        $useStdin = $arguments['stdin'] ?? false;
 
         if ($useStdin) {
             if (count($paths) > 1) {
@@ -46,12 +47,15 @@ class ReindexCommand extends AbstractCommand
             }
         }
 
-        return $this->indexer->reindex(
+        $this->indexer->index(
             $paths,
+            $arguments['extension'] ?? [],
+            $arguments['exclude'] ?? [],
             $useStdin,
-            isset($arguments['stream-progress']),
-            isset($arguments['exclude']) ? $arguments['exclude'] : [],
-            isset($arguments['extension']) ? $arguments['extension'] : []
+            $queueItem->getJsonRpcResponseSender(),
+            $queueItem->getRequest()->getId()
         );
+
+        return null; // Don't finish request, the indexer sends the response at a later time.
     }
 }

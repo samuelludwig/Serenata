@@ -6,8 +6,10 @@ imports:
     - { resource: Parsing.yml }
     - { resource: PrettyPrinting.yml }
     - { resource: SignatureHelp.yml }
+    - { resource: Sockets.yml }
     - { resource: Tooltips.yml }
     - { resource: UserInterface.yml }
+    - { resource: Utility.yml }
 
 parameters:
 

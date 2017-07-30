@@ -9,7 +9,9 @@ use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\SchemaInitializer;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that initializes a project.
@@ -57,29 +59,34 @@ class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return $this->initialize();
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->initialize($queueItem->getJsonRpcResponseSender())
+        );
     }
 
     /**
-     * @param bool $includeBuiltinItems
-     *
-     * @return bool
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param bool                           $includeBuiltinItems
      */
-    public function initialize(bool $includeBuiltinItems = true): bool
-    {
+    public function initialize(
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        bool $includeBuiltinItems = true
+    ): bool {
         $this->ensureIndexDatabaseDoesNotExist();
 
         $this->schemaInitializer->initialize();
 
         if ($includeBuiltinItems) {
-            $this->indexer->reindex(
+            $this->indexer->index(
                 [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
-                false,
-                false,
+                ['php'],
                 [],
-                ['php']
+                false,
+                $jsonRpcResponseSender,
+                null
             );
         }
 

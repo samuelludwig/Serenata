@@ -7,7 +7,8 @@ use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Linting\Linter;
 use PhpIntegrator\Linting\LintingSettings;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -49,9 +50,9 @@ class LintCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $request->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A file name is required for this command.');
@@ -75,7 +76,10 @@ class LintCommand extends AbstractCommand
             !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
         );
 
-        return $this->lint($arguments['file'], $code, $settings);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->lint($arguments['file'], $code, $settings)
+        );
     }
 
     /**

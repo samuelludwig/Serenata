@@ -24,42 +24,23 @@ class SourceCodeStreamReader
     private $fileSourceCodeStreamReaderFactory;
 
     /**
-     * @var resource|null
+     * @var StreamInterface
      */
     private $stdinStream;
 
     /**
      * @param FileSourceCodeFileReaderFactory   $fileSourceCodeFileReaderFactory
      * @param FileSourceCodeStreamReaderFactory $fileSourceCodeStreamReaderFactory
-     * @param resource|null                     $stdinStream
+     * @param StreamInterface                   $stdinStream
      */
     public function __construct(
         FileSourceCodeFileReaderFactory $fileSourceCodeFileReaderFactory,
         FileSourceCodeStreamReaderFactory $fileSourceCodeStreamReaderFactory,
-        $stdinStream
+        StreamInterface $stdinStream
     ) {
         $this->fileSourceCodeFileReaderFactory = $fileSourceCodeFileReaderFactory;
         $this->fileSourceCodeStreamReaderFactory = $fileSourceCodeStreamReaderFactory;
         $this->stdinStream = $stdinStream;
-    }
-
-    /**
-     * @return resource|null
-     */
-    public function getStdinStream()
-    {
-        return $this->stdinStream;
-    }
-
-    /**
-     * @param resource|null $stdinStream
-     *
-     * @return static
-     */
-    public function setStdinStream($stdinStream)
-    {
-        $this->stdinStream = $stdinStream;
-        return $this;
     }
 
     /**
@@ -71,7 +52,7 @@ class SourceCodeStreamReader
      */
     public function getSourceCodeFromStdin(): string
     {
-        return $this->fileSourceCodeStreamReaderFactory->create($this->getStdinStream())->read();
+        return $this->fileSourceCodeStreamReaderFactory->create($this->stdinStream->getHandle())->read();
     }
 
     /**

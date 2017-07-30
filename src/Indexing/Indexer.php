@@ -2,34 +2,51 @@
 
 namespace PhpIntegrator\Indexing;
 
-use LogicException;
+use UnexpectedValueException;
+
+use Ds\Queue;
+
+use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+
+use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Utility\SourceCodeStreamReader;
-
 /**
- * Handles indexation of PHP code.
+ * Indexes directories and files.
  */
 class Indexer implements EventEmitterInterface
 {
     use EventEmitterTrait;
 
     /**
-     * @var string
+     * @var Queue
      */
-    public const INDEXING_FAILED_EVENT = 'indexingFailed';
+    private $queue;
 
     /**
-     * @var string
+     * @var FileIndexer
      */
-    public const INDEXING_SUCCEEDED_EVENT = 'indexingSucceeded';
+    private $fileIndexer;
 
     /**
-     * @var ProjectIndexer
+     * @var DirectoryIndexRequestDemuxer
      */
-    private $projectIndexer;
+    private $directoryIndexRequestDemuxer;
+
+    /**
+     * @var IndexFilePruner
+     */
+    private $indexFilePruner;
+
+    /**
+     * @var PathNormalizer
+     */
+    private $pathNormalizer;
 
     /**
      * @var SourceCodeStreamReader
@@ -37,78 +54,167 @@ class Indexer implements EventEmitterInterface
     private $sourceCodeStreamReader;
 
     /**
-     * @var callable|null
+     * @var DirectoryIndexableFileIteratorFactory
      */
-    private $progressStreamingCallback;
+    private $directoryIndexableFileIteratorFactory;
 
     /**
-     * @param ProjectIndexer         $projectIndexer
-     * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param Queue                                 $queue
+     * @param FileIndexer                           $fileIndexer
+     * @param DirectoryIndexRequestDemuxer          $directoryIndexRequestDemuxer
+     * @param IndexFilePruner                       $indexFilePruner
+     * @param PathNormalizer                        $pathNormalizer
+     * @param SourceCodeStreamReader                $sourceCodeStreamReader
+     * @param DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
      */
-    public function __construct(ProjectIndexer $projectIndexer, SourceCodeStreamReader $sourceCodeStreamReader)
-    {
-        $this->projectIndexer = $projectIndexer;
+    public function __construct(
+        Queue $queue,
+        FileIndexer $fileIndexer,
+        DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
+        IndexFilePruner $indexFilePruner,
+        PathNormalizer $pathNormalizer,
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
+    ) {
+        $this->queue = $queue;
+        $this->fileIndexer = $fileIndexer;
+        $this->directoryIndexRequestDemuxer = $directoryIndexRequestDemuxer;
+        $this->indexFilePruner = $indexFilePruner;
+        $this->pathNormalizer = $pathNormalizer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->directoryIndexableFileIteratorFactory = $directoryIndexableFileIteratorFactory;
     }
 
     /**
-     * @param string[] $paths
-     * @param bool     $useStdin
-     * @param bool     $doStreamProgress
-     * @param string[] $excludedPaths
-     * @param string[] $extensionsToIndex
-     *
-     * @return bool Whether indexing succeeded or not.
+     * @param string[]                       $paths
+     * @param string[]                       $extensionsToIndex
+     * @param string[]                       $globsToExclude
+     * @param bool                           $useStdin
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param int|null                       $originatingRequestId
      */
-    public function reindex(
+    public function index(
         array $paths,
+        array $extensionsToIndex,
+        array $globsToExclude,
         bool $useStdin,
-        bool $doStreamProgress,
-        array $excludedPaths = [],
-        array $extensionsToIndex = ['php']
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        ?int $originatingRequestId = null
     ): bool {
-        if ($doStreamProgress && !$this->getProgressStreamingCallback()) {
-            throw new LogicException('No progress streaming callback configured whilst streaming was requestd!');
+        $paths = array_map(function (string $path) {
+            return $this->pathNormalizer->normalize($path);
+        }, $paths);
+
+        $directories = array_filter($paths, function (string $path) {
+            return is_dir($path);
+        });
+
+        $files = array_filter($paths, function (string $path) {
+            return !is_dir($path);
+        });
+
+        $this->indexDirectories(
+            $directories,
+            $extensionsToIndex,
+            $globsToExclude,
+            $jsonRpcResponseSender,
+            $originatingRequestId
+        );
+
+        foreach ($files as $path) {
+            $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
         }
 
-        $this->projectIndexer
-            ->setProgressStreamingCallback($doStreamProgress ? $this->getProgressStreamingCallback() : null);
+        if ($originatingRequestId !== null) {
+            // As a directory index request is demuxed into multiple file index requests, the response for the original
+            // request may not be sent until all individual file index requests have been handled. This command will
+            // send that "finish" response when executed.
+            //
+            // This request will not be queued for file reindex requests that are the result of the demuxing as those
+            // don't have an originating request ID.
+            $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoResponse', [
+                'response' => new JsonRpcResponse($originatingRequestId, true)
+            ]);
 
-        $sourceOverrideMap = [];
-
-        if ($useStdin) {
-            $sourceOverrideMap[$paths[0]] = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
+            $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));
         }
-
-        try {
-            $this->projectIndexer->index($paths, $extensionsToIndex, $excludedPaths, $sourceOverrideMap);
-        } catch (IndexingFailedException $e) {
-            $this->emit(self::INDEXING_FAILED_EVENT);
-
-            return false;
-        }
-
-        $this->emit(self::INDEXING_SUCCEEDED_EVENT);
 
         return true;
     }
 
     /**
-     * @return callable|null
+     * @param string[]                       $paths
+     * @param string[]                       $extensionsToIndex
+     * @param string[]                       $globsToExclude
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param int|null                       $requestId
      */
-    public function getProgressStreamingCallback(): ?callable
-    {
-        return $this->progressStreamingCallback;
+    protected function indexDirectories(
+        array $paths,
+        array $extensionsToIndex,
+        array $globsToExclude,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        ?int $requestId
+    ): void {
+        $this->indexFilePruner->prune();
+
+        $this->directoryIndexRequestDemuxer->index(
+            $paths,
+            $extensionsToIndex,
+            $globsToExclude,
+            $jsonRpcResponseSender,
+            $requestId
+        );
     }
 
     /**
-     * @param callable|null $progressStreamingCallback
+     * @param string   $path
+     * @param string[] $extensionsToIndex
+     * @param string[] $globsToExclude
+     * @param bool     $useStdin
      *
-     * @return static
+     * @return bool
      */
-    public function setProgressStreamingCallback(?callable $progressStreamingCallback)
+    protected function indexFile(string $path, array $extensionsToIndex, array $globsToExclude, bool $useStdin): bool
     {
-        $this->progressStreamingCallback = $progressStreamingCallback;
-        return $this;
+        if (!$this->isFileAllowed($path, $extensionsToIndex, $globsToExclude)) {
+            return false;
+        } else if ($useStdin) {
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
+        } else {
+            try {
+                $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($path);
+            } catch (UnexpectedValueException $e) {
+                return false; // Skip files that we can't read.
+            }
+        }
+
+        if ($code === null) {
+            return false;
+        }
+
+        try {
+            $this->fileIndexer->index($path, $code);
+        } catch (IndexingFailedException $e) {
+            return false;
+        }
+
+        $this->emit(IndexingEventName::INDEXING_SUCCEEDED_EVENT);
+
+        return true;
+    }
+
+    /**
+     * @param string   $path
+     * @param string[] $extensionsToIndex
+     * @param string[] $globsToExclude
+     *
+     * @return bool
+     */
+    protected function isFileAllowed(string $path, array $extensionsToIndex, array $globsToExclude): bool
+    {
+        $iterator = new IndexableFileIterator([$path], $extensionsToIndex, $globsToExclude);
+
+        return !empty(iterator_to_array($iterator));
     }
 }

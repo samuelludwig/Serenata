@@ -51,4 +51,9 @@ class IndexingEventName
      * @var string
      */
     public const STRUCTURE_REMOVED = 'structureRemoved';
+
+    /**
+     * @var string
+     */
+    public const INDEXING_SUCCEEDED_EVENT = 'indexingSucceeded';
 }

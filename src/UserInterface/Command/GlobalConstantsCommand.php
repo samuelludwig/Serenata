@@ -4,7 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Analysis\ConstantListProviderInterface;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of global constants.
@@ -27,9 +28,9 @@ class GlobalConstantsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcRequest $request)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return $this->getGlobalConstants();
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getGlobalConstants());
     }
 
     /**
