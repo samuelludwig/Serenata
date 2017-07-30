@@ -92,6 +92,8 @@ class Indexer implements EventEmitterInterface
      * @param bool                           $useStdin
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param int|null                       $originatingRequestId
+     *
+     * @return bool
      */
     public function index(
         array $paths,
