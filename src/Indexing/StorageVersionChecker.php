@@ -4,8 +4,6 @@ namespace PhpIntegrator\Indexing;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-use Doctrine\ORM\Tools\SchemaTool;
-
 /**
  * Handles storage version checks.
  */
