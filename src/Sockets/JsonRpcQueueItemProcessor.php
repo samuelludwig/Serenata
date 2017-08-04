@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Sockets;
 
 use Throwable;
-use RuntimeException;
 
 use Ds\Vector;
 
