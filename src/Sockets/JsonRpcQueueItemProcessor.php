@@ -6,6 +6,9 @@ use Throwable;
 
 use Ds\Vector;
 
+use PhpIntegrator\Analysis\ClearableCacheInterface;
+
+use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 use PhpIntegrator\UserInterface\Command;
