@@ -54,11 +54,14 @@ class DirectoryIndexRequestDemuxer
     ): void {
         $iterator = $this->directoryIndexableFileIteratorFactory->create($paths, $extensionsToIndex, $globsToExclude);
 
-        $totalItems = iterator_count($iterator);
+        // Convert to array early so we don't walk through the iterators (and perform disk access) twice.
+        $items = iterator_to_array($iterator);
+
+        $totalItems = count($items);
 
         $i = 1;
 
-        foreach ($iterator as $fileInfo) {
+        foreach ($items as $fileInfo) {
             $this->queueIndexRequest($fileInfo, $extensionsToIndex, $globsToExclude, $jsonRpcResponseSender);
 
             if ($originatingRequestId !== null) {

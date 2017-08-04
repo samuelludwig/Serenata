@@ -6,6 +6,7 @@
   * This is mostly refactoring to allow for future improvements, but this also included performance improvements
 
 ### Bugs Fixed
+* [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
 * [Project paths containing the tilde representing the home folder will now be properly expanded](https://gitlab.com/php-integrator/core/merge_requests/72)
 
 ### Structural changes (mostly relevant to clients)
