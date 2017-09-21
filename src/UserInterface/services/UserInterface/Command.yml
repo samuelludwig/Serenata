@@ -106,3 +106,10 @@ services:
             - '@storage'
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'
+
+    gotoDefinitionCommand:
+        class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand
+        arguments:
+            - '@storage'
+            - '@definitionLocator'
+            - '@sourceCodeStreamReader'

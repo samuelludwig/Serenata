@@ -1,5 +1,6 @@
 imports:
     - { resource: Analysis.yml }
+    - { resource: GotoDefinition.yml }
     - { resource: Indexing.yml }
     - { resource: Linting.yml }
     - { resource: Mediating.yml }

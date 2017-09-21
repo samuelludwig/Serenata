@@ -1,0 +1,15 @@
+parameters:
+
+
+services:
+    definitionLocator:
+        class: PhpIntegrator\GotoDefinition\DefinitionLocator
+        arguments:
+            - '@parser'
+            - '@funcCallNodeDefinitionLocator'
+
+    funcCallNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
+        arguments:
+            - '@functionNameNodeFqsenDeterminer'
+            - '@functionListProvider'
