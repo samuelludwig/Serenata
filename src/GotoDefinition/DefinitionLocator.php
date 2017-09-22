@@ -30,13 +30,23 @@ class DefinitionLocator
     private $funcCallNodeDefinitionLocator;
 
     /**
-     * @param Parser                        $parser
-     * @param FuncCallNodeDefinitionLocator $funcCallNodeDefinitionLocator
+     * @var MethodCallNodeDefinitionLocator
      */
-    public function __construct(Parser $parser, FuncCallNodeDefinitionLocator $funcCallNodeDefinitionLocator)
-    {
+    private $methodCallNodeDefinitionLocator;
+
+    /**
+     * @param Parser                          $parser
+     * @param FuncCallNodeDefinitionLocator   $funcCallNodeDefinitionLocator
+     * @param MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator
+     */
+    public function __construct(
+        Parser $parser,
+        FuncCallNodeDefinitionLocator $funcCallNodeDefinitionLocator,
+        MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator
+    ) {
         $this->parser = $parser;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
+        $this->methodCallNodeDefinitionLocator = $methodCallNodeDefinitionLocator;
     }
 
     /**
@@ -115,14 +125,14 @@ class DefinitionLocator
             return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Name) {
             return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
-        } elseif ($node instanceof Node\Identifier) {
+        } */elseif ($node instanceof Node\Identifier) {
             $parentNode = $node->getAttribute('parent', false);
 
             if ($parentNode === false) {
                 throw new LogicException('No parent metadata attached to node');
             }
 
-            if ($parentNode instanceof Node\Stmt\Function_) {
+            /*if ($parentNode instanceof Node\Stmt\Function_) {
                 return $this->getTooltipForFunctionNode($parentNode);
             } elseif ($parentNode instanceof Node\Stmt\ClassMethod) {
                 return $this->getTooltipForClassMethodNode($parentNode, $file);
@@ -142,22 +152,22 @@ class DefinitionLocator
                     $code,
                     $parentNode->getAttribute('startFilePos')
                 );
-            } elseif ($parentNode instanceof Node\Expr\MethodCall) {
-                return $this->getTooltipForMethodCallNode(
+            } else*/if ($parentNode instanceof Node\Expr\MethodCall) {
+                return $this->locateDefinitionOfMethodCallNode(
                     $parentNode,
                     $file,
                     $code,
                     $parentNode->getAttribute('startFilePos')
                 );
-            } elseif ($parentNode instanceof Node\Expr\StaticCall) {
+            } /*elseif ($parentNode instanceof Node\Expr\StaticCall) {
                 return $this->getTooltipForStaticMethodCallNode(
                     $parentNode,
                     $file,
                     $code,
                     $parentNode->getAttribute('startFilePos')
                 );
-            }
-        }*/
+            }*/
+        }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
     }
@@ -174,25 +184,25 @@ class DefinitionLocator
         return $this->funcCallNodeDefinitionLocator->locate($node);
     }
 
-    // /**
-    //  * @param Node\Expr\MethodCall $node
-    //  * @param Structures\File      $file
-    //  * @param string               $code
-    //  * @param int                  $offset
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForMethodCallNode(
-    //     Node\Expr\MethodCall $node,
-    //     Structures\File $file,
-    //     string $code,
-    //     int $offset
-    // ): string {
-    //     return $this->methodCallNodeTooltipGenerator->generate($node, $file, $code, $offset);
-    // }
-    //
+    /**
+     * @param Node\Expr\MethodCall $node
+     * @param Structures\File      $file
+     * @param string               $code
+     * @param int                  $offset
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return GotoDefinitionResult
+     */
+    protected function locateDefinitionOfMethodCallNode(
+        Node\Expr\MethodCall $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
+        return $this->methodCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
+    }
+
     // /**
     //  * @param Node\Expr\StaticCall $node
     //  * @param Structures\File      $file

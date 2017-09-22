@@ -7,9 +7,15 @@ services:
         arguments:
             - '@parser'
             - '@funcCallNodeDefinitionLocator'
+            - '@methodCallNodeDefinitionLocator'
 
     funcCallNodeDefinitionLocator:
         class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
         arguments:
             - '@functionNameNodeFqsenDeterminer'
             - '@functionListProvider'
+
+    methodCallNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\MethodCallNodeDefinitionLocator
+        arguments:
+            - '@methodCallMethodInfoRetriever'

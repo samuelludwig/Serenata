@@ -25,14 +25,21 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testMethodCall(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testMethodCall(): void
+    {
+        $fileName = 'MethodCall.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            76,
+            79,
+            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
@@ -223,6 +230,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->locateDefinition($fileName, $i);
 
+            $this->assertNotNull($result, 'Failed locating definition at offset ' . $i);
             $this->assertSame($gotoDefinitionResult->getUri(), $result->getUri());
             $this->assertSame($gotoDefinitionResult->getOffset(), $result->getOffset());
 
