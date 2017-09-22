@@ -19,9 +19,9 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
 
         $this->assertGotoDefinitionResultEquals(
             $fileName,
-            174,
-            178,
-            new GotoDefinitionResult($this->getPathFor($fileName), 12)
+            43,
+            48,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
         );
     }
 
