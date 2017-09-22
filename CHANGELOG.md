@@ -4,6 +4,8 @@
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
 * [Folder indexing has been rewritten to be split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
   * This is mostly refactoring to allow for future improvements, but this also included performance improvements
+* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
+  * This is currently still a rudimentary version that only supports functions and method calls.
 
 ### Bugs Fixed
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
