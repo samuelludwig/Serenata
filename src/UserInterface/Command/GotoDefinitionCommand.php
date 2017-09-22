@@ -7,8 +7,6 @@ use PhpIntegrator\GotoDefinition\GotoDefinitionResult;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
-use PhpIntegrator\SignatureHelp\SignatureHelp;
-
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
