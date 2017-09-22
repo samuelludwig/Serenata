@@ -15,16 +15,16 @@ class GotoDefinitionResult
     /**
      * @var int
      */
-    private $offset;
+    private $line;
 
     /**
      * @param string $uri
-     * @param int    $offset
+     * @param int    $line
      */
-    public function __construct(string $uri, int $offset)
+    public function __construct(string $uri, int $line)
     {
         $this->uri = $uri;
-        $this->offset = $offset;
+        $this->line = $line;
     }
 
     /**
@@ -38,8 +38,8 @@ class GotoDefinitionResult
     /**
      * @return int
      */
-    public function getOffset(): int
+    public function getLine(): int
     {
-        return $this->offset;
+        return $this->line;
     }
 }

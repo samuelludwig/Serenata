@@ -232,7 +232,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
 
             $this->assertNotNull($result, 'Failed locating definition at offset ' . $i);
             $this->assertSame($gotoDefinitionResult->getUri(), $result->getUri());
-            $this->assertSame($gotoDefinitionResult->getOffset(), $result->getOffset());
+            $this->assertSame($gotoDefinitionResult->getLine(), $result->getLine());
 
             ++$i;
         }
@@ -251,7 +251,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $resultBeforeRange === null ||
             ($gotException === false && (
                 $resultBeforeRange->getUri() !== $gotoDefinitionResult->getUri() ||
-                $resultBeforeRange->getOffset() !== $gotoDefinitionResult->getOffset()
+                $resultBeforeRange->getLine() !== $gotoDefinitionResult->getLine()
             )),
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
@@ -269,7 +269,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $resultAfterRange == null ||
             ($gotException === false && (
                 $resultAfterRange->getUri() !== $gotoDefinitionResult->getUri() ||
-                $resultAfterRange->getOffset() !== $gotoDefinitionResult->getOffset()
+                $resultAfterRange->getLine() !== $gotoDefinitionResult->getLine()
             )),
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );
