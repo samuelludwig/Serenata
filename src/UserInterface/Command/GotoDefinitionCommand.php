@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\GotoDefinition\DefinitionLocator;
+use PhpIntegrator\GotoDefinition\GotoDefinitionResult;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
@@ -86,9 +87,9 @@ class GotoDefinitionCommand extends AbstractCommand
      * @param string $code
      * @param int    $offset
      *
-     * @return SignatureHelp
+     * @return GotoDefinitionResult|null
      */
-    public function gotoDefinition(string $filePath, string $code, int $offset): SignatureHelp
+    public function gotoDefinition(string $filePath, string $code, int $offset): ?GotoDefinitionResult
     {
         return $this->definitionLocator->locate($this->storage->getFileByPath($filePath), $code, $offset);
     }
