@@ -2,10 +2,12 @@
 
 namespace PhpIntegrator\GotoDefinition;
 
+use JsonSerializable;
+
 /**
  * The result of a goto definition request.
  */
-class GotoDefinitionResult
+class GotoDefinitionResult implements JsonSerializable
 {
     /**
      * @var string
@@ -41,5 +43,16 @@ class GotoDefinitionResult
     public function getLine(): int
     {
         return $this->line;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'uri'  => $this->getUri(),
+            'line' => $this->getLine()
+        ];
     }
 }
