@@ -35,18 +35,26 @@ class DefinitionLocator
     private $methodCallNodeDefinitionLocator;
 
     /**
+     * @var ConstFetchNodeDefinitionLocator
+     */
+    private $constFetchNodeDefinitionLocator;
+
+    /**
      * @param Parser                          $parser
      * @param FuncCallNodeDefinitionLocator   $funcCallNodeDefinitionLocator
      * @param MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator
+     * @param ConstFetchNodeDefinitionLocator $constFetchNodeDefinitionLocator
      */
     public function __construct(
         Parser $parser,
         FuncCallNodeDefinitionLocator $funcCallNodeDefinitionLocator,
-        MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator
+        MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator,
+        ConstFetchNodeDefinitionLocator $constFetchNodeDefinitionLocator
     ) {
         $this->parser = $parser;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
         $this->methodCallNodeDefinitionLocator = $methodCallNodeDefinitionLocator;
+        $this->constFetchNodeDefinitionLocator = $constFetchNodeDefinitionLocator;
     }
 
     /**
@@ -119,9 +127,9 @@ class DefinitionLocator
     ): GotoDefinitionResult {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->locateDefinitionOfFuncCallNode($node);
-        } /*elseif ($node instanceof Node\Expr\ConstFetch) {
-            return $this->getTooltipForConstFetchNode($node);
-        } elseif ($node instanceof Node\Stmt\UseUse) {
+        } elseif ($node instanceof Node\Expr\ConstFetch) {
+            return $this->locateDefinitionOfConstFetchNode($node);
+        } /*elseif ($node instanceof Node\Stmt\UseUse) {
             return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Name) {
             return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
@@ -259,19 +267,19 @@ class DefinitionLocator
     // ): string {
     //     return $this->staticPropertyFetchNodeTooltipGenerator->generate($node, $file, $code, $offset);
     // }
-    //
-    // /**
-    //  * @param Node\Expr\ConstFetch $node
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
-    // {
-    //     return $this->constFetchNodeTooltipGenerator->generate($node);
-    // }
-    //
+
+    /**
+     * @param Node\Expr\ConstFetch $node
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return GotoDefinitionResult
+     */
+    protected function locateDefinitionOfConstFetchNode(Node\Expr\ConstFetch $node): GotoDefinitionResult
+    {
+        return $this->constFetchNodeDefinitionLocator->generate($node);
+    }
+
     // /**
     //  * @param Node\Expr\ClassConstFetch $node
     //  * @param Structures\File           $file

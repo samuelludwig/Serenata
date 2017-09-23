@@ -40,14 +40,21 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testConstant(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testConstant(): void
+    {
+        $fileName = 'Constant.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            45,
+            47,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
