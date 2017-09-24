@@ -116,7 +116,7 @@ class ClassConstFetchNodeTooltipGenerator
      * @param string $classType
      * @param string $name
      *
-     * @return array
+     * @return array|null
      */
     protected function fetchClassConstantInfo(string $classType, string $name): ?array
     {
