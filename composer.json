@@ -22,7 +22,7 @@
         "symfony/dependency-injection": "^3.3",
         "ramsey/uuid": "^3.6",
         "jetbrains/phpstorm-stubs": "dev-master",
-        "php-ds/php-ds": "^1.1"
+        "php-ds/php-ds": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.2",
