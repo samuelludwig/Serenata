@@ -45,25 +45,33 @@ class DefinitionLocator
     private $classConstFetchNodeDefinitionLocator;
 
     /**
+     * @var NameNodeDefinitionLocator
+     */
+    private $nameNodeDefinitionLocator;
+
+    /**
      * @param Parser                               $parser
      * @param FuncCallNodeDefinitionLocator        $funcCallNodeDefinitionLocator
      * @param MethodCallNodeDefinitionLocator      $methodCallNodeDefinitionLocator
      * @param ConstFetchNodeDefinitionLocator      $constFetchNodeDefinitionLocator
      * @param ClassConstFetchNodeDefinitionLocator $classConstFetchNodeDefinitionLocator
+     * @param NameNodeDefinitionLocator            $nameNodeDefinitionLocator
      */
     public function __construct(
         Parser $parser,
         FuncCallNodeDefinitionLocator $funcCallNodeDefinitionLocator,
         MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator,
         ConstFetchNodeDefinitionLocator $constFetchNodeDefinitionLocator,
-        ClassConstFetchNodeDefinitionLocator $classConstFetchNodeDefinitionLocator
+        ClassConstFetchNodeDefinitionLocator $classConstFetchNodeDefinitionLocator,
+        NameNodeDefinitionLocator $nameNodeDefinitionLocator
     ) {
         $this->parser = $parser;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
         $this->methodCallNodeDefinitionLocator = $methodCallNodeDefinitionLocator;
         $this->constFetchNodeDefinitionLocator = $constFetchNodeDefinitionLocator;
         $this->classConstFetchNodeDefinitionLocator = $classConstFetchNodeDefinitionLocator;
-    }
+        $this->nameNodeDefinitionLocator = $nameNodeDefinitionLocator;
+}
 
     /**
      * @param Structures\File $file
@@ -137,11 +145,11 @@ class DefinitionLocator
             return $this->locateDefinitionOfFuncCallNode($node);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->locateDefinitionOfConstFetchNode($node);
-        } /*elseif ($node instanceof Node\Stmt\UseUse) {
-            return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
+        } elseif ($node instanceof Node\Stmt\UseUse) {
+            return $this->locateDefinitionOfUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Name) {
-            return $this->getTooltipForNameNode($node, $file, $node->getAttribute('startLine'));
-        } */elseif ($node instanceof Node\Identifier) {
+            return $this->locateDefinitionOfNameNode($node, $file, $node->getAttribute('startLine'));
+        } elseif ($node instanceof Node\Identifier) {
             $parentNode = $node->getAttribute('parent', false);
 
             if ($parentNode === false) {
@@ -305,23 +313,26 @@ class DefinitionLocator
         return $this->classConstFetchNodeDefinitionLocator->locate($node, $file, $code);
     }
 
-    // /**
-    //  * @param Node\Stmt\UseUse $node
-    //  * @param Structures\File  $file
-    //  * @param int              $line
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
-    // {
-    //     // Use statements are always fully qualified, they aren't resolved.
-    //     $nameNode = new Node\Name\FullyQualified($node->name->toString());
-    //
-    //     return $this->nameNodeTooltipGenerator->generate($nameNode, $file, $line);
-    // }
-    //
+    /**
+     * @param Node\Stmt\UseUse $node
+     * @param Structures\File  $file
+     * @param int              $line
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return GotoDefinitionResult
+     */
+    protected function locateDefinitionOfUseUseNode(
+        Node\Stmt\UseUse $node,
+        Structures\File $file,
+        int $line
+    ): GotoDefinitionResult {
+        // Use statements are always fully qualified, they aren't resolved.
+        $nameNode = new Node\Name\FullyQualified($node->name->toString());
+
+        return $this->nameNodeDefinitionLocator->locate($nameNode, $file, $line);
+    }
+
     // /**
     //  * @param Node\Stmt\Function_ $node
     //  *
@@ -346,20 +357,23 @@ class DefinitionLocator
     // {
     //     return $this->classMethodNodeTooltipGenerator->generate($node, $file);
     // }
-    //
-    // /**
-    //  * @param Node\Name       $node
-    //  * @param Structures\File $file
-    //  * @param int             $line
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForNameNode(Node\Name $node, Structures\File $file, int $line): string
-    // {
-    //     return $this->nameNodeTooltipGenerator->generate($node, $file, $line);
-    // }
+
+    /**
+     * @param Node\Name       $node
+     * @param Structures\File $file
+     * @param int             $line
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return GotoDefinitionResult
+     */
+    protected function locateDefinitionOfNameNode(
+        Node\Name $node,
+        Structures\File $file,
+        int $line
+    ): GotoDefinitionResult {
+        return $this->nameNodeDefinitionLocator->locate($node, $file, $line);
+    }
 
     /**
      * @param string $code

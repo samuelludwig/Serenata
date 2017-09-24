@@ -70,14 +70,21 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassConstantClass(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testClassInClassConstant(): void
+    {
+        $fileName = 'ClassInClassConstant.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            68,
+            68,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
@@ -85,15 +92,22 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     // {
     //     // TODO
     // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testStaticMethodCallClass(): void
-    // {
-    //     // TODO
-    // }
-    //
+
+    /**
+     * @return void
+     */
+    public function testClassInStaticMethodCall(): void
+    {
+        $fileName = 'ClassInStaticMethodCall.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            96,
+            96,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
@@ -109,71 +123,127 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     // {
     //     // TODO
     // }
-    //
+
+    /**
+     * @return void
+     */
+    public function testClassInStaticPropertyFetch(): void
+    {
+        $fileName = 'testClassInStaticPropertyFetch.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            60,
+            60,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassInUseStatement(): void
+    {
+        $fileName = 'ClassInUseStatement.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            77,
+            79,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
-    // public function testStaticPropertyFetchClass(): void
+    // public function testClassInGroupedUseStatement(): void
     // {
-    //     // TODO
-    // }
+    //     $fileName = 'ClassInGroupedUseStatement.phpt';
     //
-    // /**
-    //  * @return void
-    //  */
-    // public function testUseStatementClass(): void
-    // {
-    //     // TODO
+    //     $this->assertGotoDefinitionResultEquals(
+    //         $fileName,
+    //         93,
+    //         93,
+    //         new GotoDefinitionResult($this->getPathFor($fileName), 5)
+    //     );
     // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testGroupedUseStatementClass(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testImplementsClass(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testExtendsClass(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testTraitUseClass(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testTraitUseInsteadofClass(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testTraitUseAliasClass(): void
-    // {
-    //     // TODO
-    // }
-    //
+
+    /**
+     * @return void
+     */
+    public function testClassInImplements(): void
+    {
+        $fileName = 'ClassInImplements.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            56,
+            56,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassInExtends(): void
+    {
+        $fileName = 'ClassInExtends.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            49,
+            49,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassInTraitUse(): void
+    {
+        $fileName = 'ClassInTraitUse.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            51,
+            51,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassInTraitPrecedence(): void
+    {
+        $fileName = 'ClassInTraitPrecedence.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            131,
+            131,
+            new GotoDefinitionResult($this->getPathFor($fileName), 3)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassInTraitAlias(): void
+    {
+        $fileName = 'ClassInTraitAlias.phpt';
+
+        $this->assertGotoDefinitionResultEquals(
+            $fileName,
+            84,
+            84,
+            new GotoDefinitionResult($this->getPathFor($fileName), 3)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
