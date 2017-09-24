@@ -19,12 +19,12 @@ class GlobalFunctionsCommandTest extends AbstractIntegrationTest
 
         $output = $command->getGlobalFunctions();
 
-        $this->assertThat($output, $this->arrayHasKey('\A\firstFunction'));
-        $this->assertSame($output['\A\firstFunction']['name'], 'firstFunction');
-        $this->assertSame($output['\A\firstFunction']['fqcn'], '\A\firstFunction');
-        $this->assertThat($output, $this->arrayHasKey('\A\secondFunction'));
-        $this->assertSame($output['\A\secondFunction']['name'], 'secondFunction');
-        $this->assertSame($output['\A\secondFunction']['fqcn'], '\A\secondFunction');
-        $this->assertThat($output, $this->logicalNot($this->arrayHasKey('shouldNotShowUp')));
+        static::assertThat($output, $this->arrayHasKey('\A\firstFunction'));
+        static::assertSame($output['\A\firstFunction']['name'], 'firstFunction');
+        static::assertSame($output['\A\firstFunction']['fqcn'], '\A\firstFunction');
+        static::assertThat($output, $this->arrayHasKey('\A\secondFunction'));
+        static::assertSame($output['\A\secondFunction']['name'], 'secondFunction');
+        static::assertSame($output['\A\secondFunction']['fqcn'], '\A\secondFunction');
+        static::assertThat($output, $this->logicalNot($this->arrayHasKey('shouldNotShowUp')));
     }
 }

@@ -15,7 +15,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('GlobalScope.phpt');
 
-        $this->assertSame([
+        static::assertSame([
             '$var3' => ['name' => '$var3', 'type' => null],
             '$var2' => ['name' => '$var2', 'type' => null],
             '$var1' => ['name' => '$var1', 'type' => null]
@@ -29,7 +29,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('FunctionScope.phpt');
 
-        $this->assertSame([
+        static::assertSame([
             '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
             '$param1'  => ['name' => '$param1',  'type' => null]
@@ -43,7 +43,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('ClassMethodScope.phpt');
 
-        $this->assertSame([
+        static::assertSame([
             '$this'    => ['name' => '$this',    'type' => null],
             '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
@@ -58,7 +58,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('ClosureScope.phpt');
 
-        $this->assertSame([
+        static::assertSame([
             '$this'         => ['name' => '$this',         'type' => null],
             '$test'         => ['name' => '$test',         'type' => null],
             '$something'    => ['name' => '$something',    'type' => null],
@@ -96,7 +96,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
                 $list[$variableName] = ['name' => $variableName, 'type' => null];
             }
 
-            $this->assertSame(
+            static::assertSame(
                 $list,
                 $command->getAvailableVariables(file_get_contents($fullPath), $markerOffsets[$markerNumber])
             );

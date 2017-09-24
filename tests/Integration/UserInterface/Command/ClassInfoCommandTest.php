@@ -13,7 +13,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $fileName = 'SimpleClass.phpt';
 
-        $this->assertSame(
+        static::assertSame(
             $this->getClassInfo($fileName, 'A\SimpleClass'),
             $this->getClassInfo($fileName, '\A\SimpleClass')
         );
@@ -28,7 +28,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\SimpleClass');
 
-        $this->assertSame([
+        static::assertSame([
             'name'               => 'SimpleClass',
             'fqcn'               => '\A\SimpleClass',
             'startLine'          => 10,
@@ -113,7 +113,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame([
+        static::assertSame([
             'name'               => 'testProperty',
             'startLine'          => 14,
             'endLine'            => 14,
@@ -175,7 +175,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame([
+        static::assertSame([
             'name'               => 'testMethod',
             'startLine'          => 19,
             'endLine'            => 22,
@@ -310,7 +310,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame([
+        static::assertSame([
             'name'               => 'TEST_CONSTANT',
             'startLine'          => 14,
             'endLine'            => 14,
@@ -373,10 +373,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $parentClassOutput = $this->getClassInfo($fileName, 'A\ParentClass');
         $anotherChildClassOutput = $this->getClassInfo($fileName, 'A\AnotherChildClass');
 
-        $this->assertSame('This is the summary.', $childClassOutput['shortDescription']);
-        $this->assertSame('This is a long description.', $childClassOutput['longDescription']);
+        static::assertSame('This is the summary.', $childClassOutput['shortDescription']);
+        static::assertSame('This is a long description.', $childClassOutput['longDescription']);
 
-        $this->assertSame(
+        static::assertSame(
             'Pre. ' . $parentClassOutput['longDescription'] . ' Post.',
             $anotherChildClassOutput['longDescription']
         );
@@ -405,33 +405,33 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         ];
 
         foreach ($keysToTestForEquality as $key) {
-            $this->assertSame(
+            static::assertSame(
                 $childClassOutput['methods']['basicDocblockInheritanceTraitTest'][$key],
                 $traitOutput['methods']['basicDocblockInheritanceTraitTest'][$key]
             );
 
-            $this->assertSame(
+            static::assertSame(
                 $childClassOutput['methods']['basicDocblockInheritanceInterfaceTest'][$key],
                 $interfaceOutput['methods']['basicDocblockInheritanceInterfaceTest'][$key]
             );
 
-            $this->assertSame(
+            static::assertSame(
                 $childClassOutput['methods']['basicDocblockInheritanceBaseClassTest'][$key],
                 $parentClassOutput['methods']['basicDocblockInheritanceBaseClassTest'][$key]
             );
         }
 
-        $this->assertSame(
+        static::assertSame(
             'Pre. ' . $parentClassOutput['methods']['inheritDocBaseClassTest']['longDescription'] . ' Post.',
             $childClassOutput['methods']['inheritDocBaseClassTest']['longDescription']
         );
 
-        $this->assertSame(
+        static::assertSame(
             'Pre. ' . $interfaceOutput['methods']['inheritDocInterfaceTest']['longDescription'] . ' Post.',
             $childClassOutput['methods']['inheritDocInterfaceTest']['longDescription']
         );
 
-        $this->assertSame(
+        static::assertSame(
             'Pre. ' . $traitOutput['methods']['inheritDocTraitTest']['longDescription'] . ' Post.',
             $childClassOutput['methods']['inheritDocTraitTest']['longDescription']
         );
@@ -458,23 +458,23 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         ];
 
         foreach ($keysToTestForEquality as $key) {
-            $this->assertSame(
+            static::assertSame(
                 $childClassOutput['properties']['basicDocblockInheritanceTraitTest'][$key],
                 $traitOutput['properties']['basicDocblockInheritanceTraitTest'][$key]
             );
 
-            $this->assertSame(
+            static::assertSame(
                 $childClassOutput['properties']['basicDocblockInheritanceBaseClassTest'][$key],
                 $parentClassOutput['properties']['basicDocblockInheritanceBaseClassTest'][$key]
             );
         }
 
-        $this->assertSame(
+        static::assertSame(
             $childClassOutput['properties']['inheritDocBaseClassTest']['longDescription'],
             'Pre. ' . $parentClassOutput['properties']['inheritDocBaseClassTest']['longDescription'] . ' Post.'
         );
 
-        $this->assertSame(
+        static::assertSame(
             $childClassOutput['properties']['inheritDocTraitTest']['longDescription'],
             'Pre. ' . $traitOutput['properties']['inheritDocTraitTest']['longDescription'] . ' Post.'
         );
@@ -489,7 +489,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -509,7 +509,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['__construct']['parameters']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -533,10 +533,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false
         ], $output['methods']['__construct']['override']);
 
-        $this->assertSame(55, $output['methods']['__construct']['startLine']);
-        $this->assertSame(58, $output['methods']['__construct']['endLine']);
+        static::assertSame(55, $output['methods']['__construct']['startLine']);
+        static::assertSame(58, $output['methods']['__construct']['endLine']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -562,7 +562,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['parentTraitMethod']['parameters']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -586,10 +586,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false
         ], $output['methods']['parentTraitMethod']['override']);
 
-        $this->assertSame(65, $output['methods']['parentTraitMethod']['startLine']);
-        $this->assertSame(68, $output['methods']['parentTraitMethod']['endLine']);
+        static::assertSame(65, $output['methods']['parentTraitMethod']['startLine']);
+        static::assertSame(68, $output['methods']['parentTraitMethod']['endLine']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -616,7 +616,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['parentMethod']['parameters']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -640,10 +640,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false
         ], $output['methods']['parentMethod']['override']);
 
-        $this->assertSame(70, $output['methods']['parentMethod']['startLine']);
-        $this->assertSame(73, $output['methods']['parentMethod']['endLine']);
+        static::assertSame(70, $output['methods']['parentMethod']['startLine']);
+        static::assertSame(73, $output['methods']['parentMethod']['endLine']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -667,10 +667,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false
         ], $output['methods']['ancestorMethod']['override']);
 
-        $this->assertSame(60, $output['methods']['ancestorMethod']['startLine']);
-        $this->assertSame(63, $output['methods']['ancestorMethod']['endLine']);
+        static::assertSame(60, $output['methods']['ancestorMethod']['startLine']);
+        static::assertSame(63, $output['methods']['ancestorMethod']['endLine']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -697,7 +697,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['traitMethod']['parameters']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\TestTrait',
                 'filename'  =>  $this->getPathFor($fileName),
@@ -721,10 +721,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false
         ], $output['methods']['traitMethod']['override']);
 
-        $this->assertSame(75, $output['methods']['traitMethod']['startLine']);
-        $this->assertSame(78, $output['methods']['traitMethod']['endLine']);
+        static::assertSame(75, $output['methods']['traitMethod']['startLine']);
+        static::assertSame(78, $output['methods']['traitMethod']['endLine']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -751,7 +751,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['abstractMethod']['parameters']);
 
-        $this->assertSame($output['methods']['abstractMethod']['override']['wasAbstract'], true);
+        static::assertSame($output['methods']['abstractMethod']['override']['wasAbstract'], true);
     }
 
     /**
@@ -763,7 +763,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  =>  $this->getPathFor($fileName),
@@ -787,10 +787,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['interfaceMethod']['override']);
 
-        $this->assertEmpty($output['methods']['interfaceMethod']['implementations']);
+        static::assertEmpty($output['methods']['interfaceMethod']['implementations']);
 
-        $this->assertSame(20, $output['methods']['interfaceMethod']['startLine']);
-        $this->assertSame(23, $output['methods']['interfaceMethod']['endLine']);
+        static::assertSame(20, $output['methods']['interfaceMethod']['startLine']);
+        static::assertSame(23, $output['methods']['interfaceMethod']['endLine']);
     }
 
     /**
@@ -802,7 +802,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
@@ -827,7 +827,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['interfaceMethod']['implementations']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  =>  $this->getPathFor($fileName),
@@ -851,8 +851,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'wasAbstract' => false
         ], $output['methods']['interfaceMethod']['override']);
 
-        $this->assertSame(20, $output['methods']['interfaceMethod']['startLine']);
-        $this->assertSame(23, $output['methods']['interfaceMethod']['endLine']);
+        static::assertSame(20, $output['methods']['interfaceMethod']['startLine']);
+        static::assertSame(23, $output['methods']['interfaceMethod']['endLine']);
     }
 
     /**
@@ -864,7 +864,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -887,7 +887,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'endLine'   => 12
         ], $output['properties']['parentTraitProperty']['override']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -910,7 +910,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'endLine'   => 19
         ], $output['properties']['parentProperty']['override']);
 
-        $this->assertSame([
+        static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
@@ -943,7 +943,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -969,7 +969,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['parentInterfaceMethod']['parameters']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentClass',
@@ -994,8 +994,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['parentInterfaceMethod']['implementations']);
 
-        $this->assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1007,7 +1007,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentInterface',
@@ -1032,10 +1032,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['interfaceParentMethod']['implementations']);
 
-        $this->assertNull($output['methods']['interfaceParentMethod']['override']);
+        static::assertNull($output['methods']['interfaceParentMethod']['override']);
 
-        $this->assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1047,7 +1047,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
@@ -1072,8 +1072,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['interfaceMethod']['implementations']);
 
-        $this->assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1086,7 +1086,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         $output = $this->getClassInfo($fileName, 'A\TestClass');
         $parameters = $output['methods']['testMethod']['parameters'];
 
-        $this->assertSame('\stdClass[]', $parameters[0]['types'][0]['type']);
+        static::assertSame('\stdClass[]', $parameters[0]['types'][0]['type']);
     }
 
     /**
@@ -1098,31 +1098,31 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        $this->assertSame($output['parents'], ['\A\BaseClass', '\A\AncestorClass']);
-        $this->assertSame($output['directParents'], ['\A\BaseClass']);
+        static::assertSame($output['parents'], ['\A\BaseClass', '\A\AncestorClass']);
+        static::assertSame($output['directParents'], ['\A\BaseClass']);
 
-        $this->assertThat($output['constants'], $this->arrayHasKey('INHERITED_CONSTANT'));
-        $this->assertThat($output['constants'], $this->arrayHasKey('CHILD_CONSTANT'));
+        static::assertThat($output['constants'], $this->arrayHasKey('INHERITED_CONSTANT'));
+        static::assertThat($output['constants'], $this->arrayHasKey('CHILD_CONSTANT'));
 
-        $this->assertThat($output['properties'], $this->arrayHasKey('inheritedProperty'));
-        $this->assertThat($output['properties'], $this->arrayHasKey('childProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('inheritedProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('childProperty'));
 
-        $this->assertThat($output['methods'], $this->arrayHasKey('inheritedMethod'));
-        $this->assertThat($output['methods'], $this->arrayHasKey('childMethod'));
+        static::assertThat($output['methods'], $this->arrayHasKey('inheritedMethod'));
+        static::assertThat($output['methods'], $this->arrayHasKey('childMethod'));
 
         // Do a couple of sanity checks.
-        $this->assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['fqcn']);
-        $this->assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringClass']['fqcn']);
-        $this->assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringClass']['fqcn']);
 
-        $this->assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringStructure']['fqcn']);
-        $this->assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringStructure']['fqcn']);
-        $this->assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringStructure']['fqcn']);
 
         $output = $this->getClassInfo($fileName, 'A\BaseClass');
 
-        $this->assertSame($output['directChildren'], ['\A\ChildClass']);
-        $this->assertSame($output['parents'], ['\A\AncestorClass']);
+        static::assertSame($output['directChildren'], ['\A\ChildClass']);
+        static::assertSame($output['parents'], ['\A\AncestorClass']);
     }
 
     /**
@@ -1134,25 +1134,25 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame(['\A\BaseInterface', '\A\FirstInterface', '\A\SecondInterface'], $output['interfaces']);
-        $this->assertSame(['\A\FirstInterface', '\A\SecondInterface'], $output['directInterfaces']);
+        static::assertSame(['\A\BaseInterface', '\A\FirstInterface', '\A\SecondInterface'], $output['interfaces']);
+        static::assertSame(['\A\FirstInterface', '\A\SecondInterface'], $output['directInterfaces']);
 
-        $this->assertThat($output['constants'], $this->arrayHasKey('FIRST_INTERFACE_CONSTANT'));
-        $this->assertThat($output['constants'], $this->arrayHasKey('SECOND_INTERFACE_CONSTANT'));
+        static::assertThat($output['constants'], $this->arrayHasKey('FIRST_INTERFACE_CONSTANT'));
+        static::assertThat($output['constants'], $this->arrayHasKey('SECOND_INTERFACE_CONSTANT'));
 
-        $this->assertThat($output['methods'], $this->arrayHasKey('methodFromFirstInterface'));
-        $this->assertThat($output['methods'], $this->arrayHasKey('methodFromSecondInterface'));
+        static::assertThat($output['methods'], $this->arrayHasKey('methodFromFirstInterface'));
+        static::assertThat($output['methods'], $this->arrayHasKey('methodFromSecondInterface'));
 
         // Do a couple of sanity checks.
-        $this->assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
+        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
+        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1164,47 +1164,47 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame(['\A\FirstTrait', '\A\SecondTrait', '\A\BaseTrait'], $output['traits']);
-        $this->assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
+        static::assertSame(['\A\FirstTrait', '\A\SecondTrait', '\A\BaseTrait'], $output['traits']);
+        static::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
 
-        $this->assertThat($output['properties'], $this->arrayHasKey('baseTraitProperty'));
-        $this->assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
-        $this->assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('baseTraitProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
 
-        $this->assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
-        $this->assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
-        $this->assertThat($output['methods'], $this->arrayHasKey('baseTraitMethod'));
+        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
+        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
+        static::assertThat($output['methods'], $this->arrayHasKey('baseTraitMethod'));
 
         // Do a couple of sanity checks.
-        $this->assertSame('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['fqcn']);
-        $this->assertSame('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestClass', $output['methods']['test1']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['test1']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
-        $this->assertThat($output['methods'], $this->arrayHasKey('test1'));
-        $this->assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+        static::assertThat($output['methods'], $this->arrayHasKey('test1'));
+        static::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
 
-        $this->assertTrue($output['methods']['test1']['isPrivate']);
+        static::assertTrue($output['methods']['test1']['isPrivate']);
 
-        $this->assertSame('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
-        $this->assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
+        static::assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1216,9 +1216,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertFalse($output['methods']['test1']['isPublic']);
-        $this->assertTrue($output['methods']['test1']['isProtected']);
-        $this->assertFalse($output['methods']['test1']['isPrivate']);
+        static::assertFalse($output['methods']['test1']['isPublic']);
+        static::assertTrue($output['methods']['test1']['isProtected']);
+        static::assertFalse($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1230,9 +1230,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertFalse($output['methods']['test1']['isPublic']);
-        $this->assertFalse($output['methods']['test1']['isProtected']);
-        $this->assertTrue($output['methods']['test1']['isPrivate']);
+        static::assertFalse($output['methods']['test1']['isPublic']);
+        static::assertFalse($output['methods']['test1']['isProtected']);
+        static::assertTrue($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1244,13 +1244,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementations']);
+        static::assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1262,13 +1262,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
-        $this->assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementations']);
+        static::assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1280,33 +1280,33 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        $this->assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['traits']);
-        $this->assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
+        static::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['traits']);
+        static::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
 
-        $this->assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
-        $this->assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
+        static::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
 
-        $this->assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
-        $this->assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
+        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
+        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
 
         // Do a couple of sanity checks.
-        $this->assertSame('\A\TestTrait', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestTrait', $output['methods']['test1']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['test1']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
-        $this->assertThat($output['methods'], $this->arrayHasKey('test1'));
-        $this->assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+        static::assertThat($output['methods'], $this->arrayHasKey('test1'));
+        static::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
 
-        $this->assertTrue($output['methods']['test1']['isPrivate']);
+        static::assertTrue($output['methods']['test1']['isPrivate']);
 
-        $this->assertSame('\A\TestTrait', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
-        $this->assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
+        static::assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestTrait', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1318,9 +1318,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        $this->assertFalse($output['methods']['test1']['isPublic']);
-        $this->assertTrue($output['methods']['test1']['isProtected']);
-        $this->assertFalse($output['methods']['test1']['isPrivate']);
+        static::assertFalse($output['methods']['test1']['isPublic']);
+        static::assertTrue($output['methods']['test1']['isProtected']);
+        static::assertFalse($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1332,9 +1332,9 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        $this->assertFalse($output['methods']['test1']['isPublic']);
-        $this->assertFalse($output['methods']['test1']['isProtected']);
-        $this->assertTrue($output['methods']['test1']['isPrivate']);
+        static::assertFalse($output['methods']['test1']['isPublic']);
+        static::assertFalse($output['methods']['test1']['isProtected']);
+        static::assertTrue($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1346,13 +1346,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
-        $this->assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        static::assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementations']);
+        static::assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1364,13 +1364,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestInterface');
 
-        $this->assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['fqcn']);
-        $this->assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['fqcn']);
+        static::assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['fqcn']);
+        static::assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['fqcn']);
 
-        $this->assertEmpty($output['methods']['interfaceMethod']['implementations']);
+        static::assertEmpty($output['methods']['interfaceMethod']['implementations']);
     }
 
     /**
@@ -1382,13 +1382,13 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['fqcn']);
+        static::assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['fqcn']);
 
-        $this->assertNull($output['methods']['someMethod']['override']);
+        static::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1400,12 +1400,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertEmpty($output['methods']['someMethod']['implementations']);
+        static::assertEmpty($output['methods']['someMethod']['implementations']);
 
-        $this->assertNull($output['methods']['someMethod']['override']);
+        static::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1417,8 +1417,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1430,10 +1430,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
@@ -1481,7 +1481,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['someMethod']['implementations']);
 
-        $this->assertNull($output['methods']['someMethod']['override']);
+        static::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1493,10 +1493,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
@@ -1544,7 +1544,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['someMethod']['implementations']);
 
-        $this->assertNull($output['methods']['someMethod']['override']);
+        static::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1556,10 +1556,10 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        $this->assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
@@ -1607,7 +1607,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['someMethod']['implementations']);
 
-        $this->assertNull($output['methods']['someMethod']['override']);
+        static::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1619,7 +1619,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\childClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1627,7 +1627,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['basePropSelf']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1635,7 +1635,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['basePropStatic']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1643,7 +1643,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['basePropThis']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1651,7 +1651,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['propSelf']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1659,7 +1659,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['propStatic']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1667,7 +1667,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['propThis']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1675,7 +1675,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodSelf']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1683,7 +1683,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodStatic']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1691,7 +1691,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodThis']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1699,7 +1699,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['methodSelf']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1707,7 +1707,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['methodStatic']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1715,7 +1715,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['methodThis']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'childClass',
                 'fqcn'         => '\A\childClass',
@@ -1723,7 +1723,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['methodOwnClassName']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1731,7 +1731,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodWithParameters']['parameters'][0]['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1739,7 +1739,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodWithParameters']['parameters'][1]['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1749,7 +1749,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ParentClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1757,7 +1757,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['basePropSelf']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1765,7 +1765,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['basePropStatic']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1773,7 +1773,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['properties']['basePropThis']['types']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
@@ -1781,7 +1781,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodSelf']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
@@ -1789,7 +1789,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             ]
         ], $output['methods']['baseMethodStatic']['returnTypes']);
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
@@ -1807,7 +1807,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestClass');
 
-        $this->assertSame(['\A\I'], $output['interfaces']);
+        static::assertSame(['\A\I'], $output['interfaces']);
     }
 
     /**
@@ -1819,7 +1819,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestClass');
 
-        $this->assertSame(['\A\T', '\A\T2'], $output['traits']);
+        static::assertSame(['\A\T', '\A\T2'], $output['traits']);
     }
 
     /**
@@ -1831,7 +1831,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestInterface');
 
-        $this->assertSame(['\A\I'], $output['parents']);
+        static::assertSame(['\A\I'], $output['parents']);
     }
 
     /**
@@ -1843,7 +1843,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestClass');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'         => 'DateTime',
                 'fqcn'         => '\DateTime',
@@ -1869,7 +1869,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $fileName = 'CircularDependencyExtends.phpt';
 
-        $this->assertNotNull($this->getClassInfo($fileName, 'A\C'));
+        static::assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
@@ -1879,7 +1879,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $fileName = 'CircularDependencyImplements.phpt';
 
-        $this->assertNotNull($this->getClassInfo($fileName, 'A\C'));
+        static::assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
@@ -1889,7 +1889,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     {
         $fileName = 'CircularDependencyUses.phpt';
 
-        $this->assertNotNull($this->getClassInfo($fileName, 'A\C'));
+        static::assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**

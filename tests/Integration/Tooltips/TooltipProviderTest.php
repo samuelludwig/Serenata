@@ -391,7 +391,7 @@ Hello!
 # Returns
 *void*');
 
-        $this->assertNull($this->getTooltip(
+        static::assertNull($this->getTooltip(
             $this->container->get('storage')->getFileByPath($this->getPathFor($fileName)),
             69
         ));
@@ -429,22 +429,22 @@ Hello!
         while ($i <= $end) {
             $result = $this->getTooltip($file, $i);
 
-            $this->assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
-            $this->assertNull($result->getRange());
-            $this->assertSame($contents, $result->getContents());
+            static::assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
+            static::assertNull($result->getRange());
+            static::assertSame($contents, $result->getContents());
 
             ++$i;
         }
 
         // Assert that the range doesn't extend longer than it should.
         $resultBeforeRange = $this->getTooltip($file, $start - 1);
-        $this->assertTrue(
+        static::assertTrue(
             $resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents,
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
 
         $resultAfterRange = $this->getTooltip($file, $end + 1);
-        $this->assertTrue(
+        static::assertTrue(
             $resultAfterRange === null || $resultAfterRange->getContents() !== $contents,
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );

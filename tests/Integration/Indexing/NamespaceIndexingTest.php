@@ -21,13 +21,13 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        $this->assertCount(1, $namespaces);
+        static::assertCount(1, $namespaces);
 
-        $this->assertSame(0, $namespaces[0]->getStartLine());
-        $this->assertSame(2, $namespaces[0]->getEndLine());
-        $this->assertSame(null, $namespaces[0]->getName());
-        $this->assertSame($path, $namespaces[0]->getFile()->getPath());
-        $this->assertEmpty($namespaces[0]->getImports());
+        static::assertSame(0, $namespaces[0]->getStartLine());
+        static::assertSame(2, $namespaces[0]->getEndLine());
+        static::assertSame(null, $namespaces[0]->getName());
+        static::assertSame($path, $namespaces[0]->getFile()->getPath());
+        static::assertEmpty($namespaces[0]->getImports());
     }
 
     /**
@@ -43,13 +43,13 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        $this->assertCount(2, $namespaces);
+        static::assertCount(2, $namespaces);
 
-        $this->assertSame(3, $namespaces[1]->getStartLine());
-        $this->assertSame(6, $namespaces[1]->getEndLine());
-        $this->assertSame('N', $namespaces[1]->getName());
-        $this->assertSame($path, $namespaces[1]->getFile()->getPath());
-        $this->assertEmpty($namespaces[1]->getImports());
+        static::assertSame(3, $namespaces[1]->getStartLine());
+        static::assertSame(6, $namespaces[1]->getEndLine());
+        static::assertSame('N', $namespaces[1]->getName());
+        static::assertSame($path, $namespaces[1]->getFile()->getPath());
+        static::assertEmpty($namespaces[1]->getImports());
     }
 
     /**
@@ -65,13 +65,13 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        $this->assertCount(2, $namespaces);
+        static::assertCount(2, $namespaces);
 
-        $this->assertSame(3, $namespaces[1]->getStartLine());
-        $this->assertSame(6, $namespaces[1]->getEndLine());
-        $this->assertSame(null, $namespaces[1]->getName());
-        $this->assertSame($path, $namespaces[1]->getFile()->getPath());
-        $this->assertCount(1, $namespaces[1]->getImports());
+        static::assertSame(3, $namespaces[1]->getStartLine());
+        static::assertSame(6, $namespaces[1]->getEndLine());
+        static::assertSame(null, $namespaces[1]->getName());
+        static::assertSame($path, $namespaces[1]->getFile()->getPath());
+        static::assertCount(1, $namespaces[1]->getImports());
     }
 
     /**
@@ -82,8 +82,8 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->getFileByPath($path);
 
-            $this->assertCount(3, $file->getNamespaces());
-            $this->assertSame('N', $file->getNamespaces()[1]->getName());
+            static::assertCount(3, $file->getNamespaces());
+            static::assertSame('N', $file->getNamespaces()[1]->getName());
 
             return str_replace('namespace N', 'namespace ', $source);
         };
@@ -91,13 +91,13 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->getFileByPath($path);
 
-            $this->assertCount(3, $file->getNamespaces());
-            $this->assertSame(null, $file->getNamespaces()[1]->getName());
+            static::assertCount(3, $file->getNamespaces());
+            static::assertSame(null, $file->getNamespaces()[1]->getName());
         };
 
         $path = $this->getPathFor('NamespaceChanges.phpt');
 
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

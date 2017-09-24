@@ -16,13 +16,13 @@ class ConstantListRegistryWorkspaceInteractionTest extends AbstractIntegrationTe
     {
         $registry = $this->container->get('constantListProvider.registry');
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
 
         $registry->add([
             'fqcn' => '\Test'
         ]);
 
-        $this->assertCount(1, $registry->getAll());
+        static::assertCount(1, $registry->getAll());
 
         $this->container->get('managerRegistry')->setDatabasePath(':memory:');
         $this->container->get('initializeCommand')->initialize(
@@ -30,6 +30,6 @@ class ConstantListRegistryWorkspaceInteractionTest extends AbstractIntegrationTe
             false
         );
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
     }
 }

@@ -17,7 +17,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'FunctionCall.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             43,
             48,
@@ -32,7 +32,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'MethodCall.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             76,
             79,
@@ -47,7 +47,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'Constant.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             45,
             47,
@@ -62,7 +62,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ConstantInClassConstant.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             71,
             73,
@@ -77,7 +77,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInClassConstant.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             68,
             68,
@@ -100,7 +100,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInStaticMethodCall.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             96,
             96,
@@ -131,7 +131,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'testClassInStaticPropertyFetch.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             60,
             60,
@@ -146,7 +146,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInUseStatement.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             77,
             79,
@@ -161,7 +161,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     // {
     //     $fileName = 'ClassInGroupedUseStatement.phpt';
     //
-    //     $this->assertGotoDefinitionResultEquals(
+    //     static::assertGotoDefinitionResultEquals(
     //         $fileName,
     //         93,
     //         93,
@@ -176,7 +176,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInImplements.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             56,
             56,
@@ -191,7 +191,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInExtends.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             49,
             49,
@@ -206,7 +206,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInTraitUse.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             51,
             51,
@@ -221,7 +221,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInTraitPrecedence.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             131,
             131,
@@ -236,7 +236,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInTraitAlias.phpt';
 
-        $this->assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResultEquals(
             $fileName,
             84,
             84,
@@ -314,9 +314,9 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->locateDefinition($fileName, $i);
 
-            $this->assertNotNull($result, 'Failed locating definition at offset ' . $i);
-            $this->assertSame($gotoDefinitionResult->getUri(), $result->getUri());
-            $this->assertSame($gotoDefinitionResult->getLine(), $result->getLine());
+            static::assertNotNull($result, 'Failed locating definition at offset ' . $i);
+            static::assertSame($gotoDefinitionResult->getUri(), $result->getUri());
+            static::assertSame($gotoDefinitionResult->getLine(), $result->getLine());
 
             ++$i;
         }
@@ -330,7 +330,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $gotException = true;
         }
 
-        $this->assertTrue(
+        static::assertTrue(
             $gotException === true ||
             $resultBeforeRange === null ||
             ($gotException === false && (
@@ -348,7 +348,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $gotException = true;
         }
 
-        $this->assertTrue(
+        static::assertTrue(
             $gotException === true ||
             $resultAfterRange == null ||
             ($gotException === false && (

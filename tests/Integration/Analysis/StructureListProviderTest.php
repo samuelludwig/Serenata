@@ -21,10 +21,10 @@ class StructureListProviderTest extends AbstractIntegrationTest
 
         $output = $provider->getAll();
 
-        $this->assertSame(4, count($output));
-        $this->assertArrayHasKey('\A\FirstClass', $output);
-        $this->assertArrayHasKey('\A\SecondClass', $output);
-        $this->assertArrayHasKey('\A\Foo', $output);
-        $this->assertArrayHasKey('\A\Bar', $output);
+        static::assertSame(4, count($output));
+        static::assertArrayHasKey('\A\FirstClass', $output);
+        static::assertArrayHasKey('\A\SecondClass', $output);
+        static::assertArrayHasKey('\A\Foo', $output);
+        static::assertArrayHasKey('\A\Bar', $output);
     }
 }

@@ -17,7 +17,7 @@ class FilePruningTest extends AbstractIntegrationTest
 
         file_put_contents($testFilePath, '<?php class A {}');
 
-        $this->assertTrue(file_exists($testFilePath), 'Could not create test file');
+        static::assertTrue(file_exists($testFilePath), 'Could not create test file');
 
         $this->indexPath($this->container, $path);
 
@@ -25,13 +25,13 @@ class FilePruningTest extends AbstractIntegrationTest
 
         unlink($testFilePath);
 
-        $this->assertCount(1, $files);
-        $this->assertSame($testFilePath, $files[0]->getPath());
+        static::assertCount(1, $files);
+        static::assertSame($testFilePath, $files[0]->getPath());
 
         $this->container->get('indexFilePruner')->prune();
 
         $files = $this->container->get('storage')->getFiles();
 
-        $this->assertEmpty($files);
+        static::assertEmpty($files);
     }
 }

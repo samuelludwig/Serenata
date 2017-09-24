@@ -13,23 +13,23 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getGlobalConstants('GlobalConstants.phpt');
 
-        $this->assertThat($output, $this->arrayHasKey('\DEFINE_CONSTANT'));
-        $this->assertSame($output['\DEFINE_CONSTANT']['name'], 'DEFINE_CONSTANT');
-        $this->assertSame($output['\DEFINE_CONSTANT']['fqcn'], '\DEFINE_CONSTANT');
+        static::assertThat($output, $this->arrayHasKey('\DEFINE_CONSTANT'));
+        static::assertSame($output['\DEFINE_CONSTANT']['name'], 'DEFINE_CONSTANT');
+        static::assertSame($output['\DEFINE_CONSTANT']['fqcn'], '\DEFINE_CONSTANT');
 
-        $this->assertThat($output, $this->arrayHasKey('\A\DEFINE_CONSTANT_NAMESPACED'));
-        $this->assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['name'], 'DEFINE_CONSTANT_NAMESPACED');
-        $this->assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['fqcn'], '\A\DEFINE_CONSTANT_NAMESPACED');
+        static::assertThat($output, $this->arrayHasKey('\A\DEFINE_CONSTANT_NAMESPACED'));
+        static::assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['name'], 'DEFINE_CONSTANT_NAMESPACED');
+        static::assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['fqcn'], '\A\DEFINE_CONSTANT_NAMESPACED');
 
-        $this->assertThat($output, $this->arrayHasKey('\A\FIRST_CONSTANT'));
-        $this->assertSame($output['\A\FIRST_CONSTANT']['name'], 'FIRST_CONSTANT');
-        $this->assertSame($output['\A\FIRST_CONSTANT']['fqcn'], '\A\FIRST_CONSTANT');
+        static::assertThat($output, $this->arrayHasKey('\A\FIRST_CONSTANT'));
+        static::assertSame($output['\A\FIRST_CONSTANT']['name'], 'FIRST_CONSTANT');
+        static::assertSame($output['\A\FIRST_CONSTANT']['fqcn'], '\A\FIRST_CONSTANT');
 
-        $this->assertThat($output, $this->arrayHasKey('\A\SECOND_CONSTANT'));
-        $this->assertSame($output['\A\SECOND_CONSTANT']['name'], 'SECOND_CONSTANT');
-        $this->assertSame($output['\A\SECOND_CONSTANT']['fqcn'], '\A\SECOND_CONSTANT');
+        static::assertThat($output, $this->arrayHasKey('\A\SECOND_CONSTANT'));
+        static::assertSame($output['\A\SECOND_CONSTANT']['name'], 'SECOND_CONSTANT');
+        static::assertSame($output['\A\SECOND_CONSTANT']['fqcn'], '\A\SECOND_CONSTANT');
 
-        $this->assertThat($output, $this->logicalNot($this->arrayHasKey('SHOULD_NOT_SHOW_UP')));
+        static::assertThat($output, $this->logicalNot($this->arrayHasKey('SHOULD_NOT_SHOW_UP')));
     }
 
     /**
@@ -39,7 +39,7 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getGlobalConstants('DefineWithExpression.phpt');
 
-        $this->assertSame('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
+        static::assertSame('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
     }
 
     /**
@@ -49,7 +49,7 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
     {
         $output = $this->getGlobalConstants('DefineWithIncompleteConstFetch.phpt');
 
-        $this->assertSame('\Test::', $output['\TEST_CONSTANT']['defaultValue']);
+        static::assertSame('\Test::', $output['\TEST_CONSTANT']['defaultValue']);
     }
 
     /**

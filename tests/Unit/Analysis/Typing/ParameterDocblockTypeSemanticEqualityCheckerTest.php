@@ -43,7 +43,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('int');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -76,7 +76,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('bool');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -112,7 +112,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('int');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -145,7 +145,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('int');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -178,7 +178,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\A');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -211,7 +211,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\B\A', '\B\A');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -253,7 +253,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\B');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -295,7 +295,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\B');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -337,7 +337,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\B');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -390,7 +390,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\B', '\C');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -434,7 +434,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\A');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -476,7 +476,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\A', '\A');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -520,7 +520,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('\B\A', '\B\A');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -555,7 +555,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -588,7 +588,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -624,7 +624,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -657,7 +657,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -693,7 +693,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -731,7 +731,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -771,7 +771,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -812,7 +812,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -853,7 +853,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -894,7 +894,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -935,7 +935,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -968,7 +968,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('int');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -1001,7 +1001,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('int');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -1039,7 +1039,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -1080,7 +1080,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('array');
-        $this->assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertTrue($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**
@@ -1113,7 +1113,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
         ];
 
         $resolver->method('resolve')->willReturn('Foo');
-        $this->assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
+        static::assertFalse($checker->isEqual($parameter, $docblockParameter, 'ignored', 1));
     }
 
     /**

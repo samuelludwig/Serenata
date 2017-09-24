@@ -26,7 +26,7 @@ class ConstNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
         $node = new Node\Name\FullyQualified('\A\B');
         $node->setAttribute('namespace', null);
 
-        $this->assertSame('\A\B', $determiner->determine($node));
+        static::assertSame('\A\B', $determiner->determine($node));
     }
 
     /**
@@ -47,7 +47,7 @@ class ConstNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
         $node = new Node\Name('A\B');
         $node->setAttribute('namespace', $namespaceNode);
 
-        $this->assertSame('\N\A\B', $determiner->determine($node));
+        static::assertSame('\N\A\B', $determiner->determine($node));
     }
 
     /**
@@ -68,7 +68,7 @@ class ConstNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
         $node = new Node\Name('A');
         $node->setAttribute('namespace', $namespaceNode);
 
-        $this->assertSame('\A', $determiner->determine($node));
+        static::assertSame('\A', $determiner->determine($node));
     }
 
     /**
@@ -89,6 +89,6 @@ class ConstNameNodeFqsenDeterminerTest extends \PHPUnit\Framework\TestCase
         $node = new Node\Name('A');
         $node->setAttribute('namespace', $namespaceNode);
 
-        $this->assertSame('\N\A', $determiner->determine($node));
+        static::assertSame('\N\A', $determiner->determine($node));
     }
 }

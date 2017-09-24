@@ -19,7 +19,7 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        $this->assertCount(1, $files);
+        static::assertCount(1, $files);
 
         $timestamp = $files[0]->getIndexedOn();
 
@@ -27,8 +27,8 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        $this->assertCount(1, $files);
-        $this->assertTrue($files[0]->getIndexedOn() > $timestamp);
+        static::assertCount(1, $files);
+        static::assertTrue($files[0]->getIndexedOn() > $timestamp);
     }
 
     /**

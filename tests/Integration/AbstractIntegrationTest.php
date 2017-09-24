@@ -110,7 +110,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
             false
         );
 
-        $this->assertTrue($success);
+        static::assertTrue($success);
     }
 
     /**
@@ -169,7 +169,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         );
 
         if (!$mayFail) {
-            $this->assertTrue($success);
+            static::assertTrue($success);
         }
 
         $this->processOpenQueueItems();

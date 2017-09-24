@@ -16,13 +16,13 @@ class FunctionListRegistryWorkspaceInteractionTest extends AbstractIntegrationTe
     {
         $registry = $this->container->get('functionListProvider.registry');
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
 
         $registry->add([
             'fqcn' => '\Test'
         ]);
 
-        $this->assertCount(1, $registry->getAll());
+        static::assertCount(1, $registry->getAll());
 
         $this->container->get('managerRegistry')->setDatabasePath(':memory:');
         $this->container->get('initializeCommand')->initialize(
@@ -30,6 +30,6 @@ class FunctionListRegistryWorkspaceInteractionTest extends AbstractIntegrationTe
             false
         );
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
     }
 }

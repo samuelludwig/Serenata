@@ -20,12 +20,12 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
 
         $registry = $this->container->get('structureListProvider.registry');
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
 
         $this->indexTestFile($this->container, $path);
 
-        $this->assertCount(1, $registry->getAll());
-        $this->assertArrayHasKey('\Test', $registry->getAll());
+        static::assertCount(1, $registry->getAll());
+        static::assertArrayHasKey('\Test', $registry->getAll());
     }
 
     /**
@@ -36,8 +36,8 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('structureListProvider.registry');
 
-            $this->assertCount(1, $registry->getAll());
-            $this->assertArrayHasKey('\Test', $registry->getAll());
+            static::assertCount(1, $registry->getAll());
+            static::assertArrayHasKey('\Test', $registry->getAll());
 
             return str_replace('class Test', '// class Test ', $source);
         };
@@ -45,12 +45,12 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('structureListProvider.registry');
 
-            $this->assertEmpty($registry->getAll());
+            static::assertEmpty($registry->getAll());
         };
 
         $path = $this->getPathFor('OldStructureIsRemoved.phpt');
 
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -61,9 +61,9 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('structureListProvider.registry');
 
-            $this->assertCount(1, $registry->getAll());
-            $this->assertArrayHasKey('\Test', $registry->getAll());
-            $this->assertFalse($registry->getAll()['\Test']['isFinal']);
+            static::assertCount(1, $registry->getAll());
+            static::assertArrayHasKey('\Test', $registry->getAll());
+            static::assertFalse($registry->getAll()['\Test']['isFinal']);
 
             return str_replace('class Test {}', 'final class Test {}', $source);
         };
@@ -71,14 +71,14 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('structureListProvider.registry');
 
-            $this->assertCount(1, $registry->getAll());
-            $this->assertArrayHasKey('\Test', $registry->getAll());
-            $this->assertTrue($registry->getAll()['\Test']['isFinal']);
+            static::assertCount(1, $registry->getAll());
+            static::assertArrayHasKey('\Test', $registry->getAll());
+            static::assertTrue($registry->getAll()['\Test']['isFinal']);
         };
 
         $path = $this->getPathFor('OldStructureIsRemoved.phpt');
 
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

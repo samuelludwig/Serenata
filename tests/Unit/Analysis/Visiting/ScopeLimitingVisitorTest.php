@@ -61,7 +61,7 @@ SOURCE;
 
         $stateAfter = serialize($nodes);
 
-        $this->assertTrue(
+        static::assertTrue(
             $stateBefore === $stateAfter,
             'Using a ScopeLimitingVisitor is destructive. If it alters the state of the nodes, it must also restore them on exit.'
         );

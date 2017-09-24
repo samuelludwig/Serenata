@@ -19,7 +19,7 @@ class ClassListCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('classListCommand');
 
-        $this->assertArrayHasKey('\N\SimpleClass', $command->getAll());
+        static::assertArrayHasKey('\N\SimpleClass', $command->getAll());
     }
 
     /**
@@ -33,7 +33,7 @@ class ClassListCommandTest extends AbstractIntegrationTest
     //
     //     $command = $this->container->get('classListCommand');
     //
-    //     $this->assertEmpty($command->getAll());
+    //     static::assertEmpty($command->getAll());
     // }
 
     /**

@@ -27,7 +27,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        $this->assertEquals([
+        static::assertEquals([
             '$foo' => [
                 'type'        => new StringDocblockType(),
                 'description' => 'Test description.',
@@ -49,7 +49,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        $this->assertEquals([
+        static::assertEquals([
             '$foo' => [
                 'type'        => new StringDocblockType(),
                 'description' => 'Test description with @ sign.',
@@ -69,7 +69,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      * @param string|null $someString Имя файла пат
      */', [DocblockParser::PARAM_TYPE], '');
 
-        $this->assertEquals([
+        static::assertEquals([
             '$someString' => [
                 'type'        => new CompoundDocblockType(
                     new StringDocblockType(),
@@ -97,7 +97,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::VAR_TYPE], 'someProperty');
 
-        $this->assertEquals([
+        static::assertEquals([
             '$someProperty' => [
                 'type'        => new IntDocblockType(),
                 'description' => ''
@@ -115,7 +115,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
             /** @var int Some description */
         ', [DocblockParser::VAR_TYPE], 'someProperty');
 
-        $this->assertEquals([
+        static::assertEquals([
             '$someProperty' => [
                 'type'        => new IntDocblockType(),
                 'description' => 'Some description'
@@ -135,7 +135,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::THROWS], '');
 
-        $this->assertSame([], $result['throws']);
+        static::assertSame([], $result['throws']);
     }
 
     /**
@@ -150,7 +150,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::THROWS], '');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'        => '\UnexpectedValueException',
                 'description' => 'Some description'
@@ -170,7 +170,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::THROWS], '');
 
-        $this->assertSame([
+        static::assertSame([
             [
                 'type'        => '\UnexpectedValueException',
                 'description' => null
@@ -190,7 +190,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::VAR_TYPE], '');
 
-        $this->assertSame([], $result['var']);
+        static::assertSame([], $result['var']);
     }
 
     /**
@@ -205,7 +205,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        $this->assertSame([], $result['params']);
+        static::assertSame([], $result['params']);
     }
 
     /**
@@ -220,7 +220,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        $this->assertSame([], $result['params']);
+        static::assertSame([], $result['params']);
     }
 
     /**
@@ -235,7 +235,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::RETURN_VALUE], '');
 
-        $this->assertNull($result['return']);
+        static::assertNull($result['return']);
     }
 
     /**

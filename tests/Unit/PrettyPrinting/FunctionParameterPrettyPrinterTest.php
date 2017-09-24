@@ -37,7 +37,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'types'        => []
         ]);
 
-        $this->assertSame('$test', $result);
+        static::assertSame('$test', $result);
     }
 
     /**
@@ -53,7 +53,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'types'        => []
         ]);
 
-        $this->assertSame('&$test', $result);
+        static::assertSame('&$test', $result);
     }
 
     /**
@@ -69,7 +69,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'types'        => []
         ]);
 
-        $this->assertSame('...$test', $result);
+        static::assertSame('...$test', $result);
     }
 
     /**
@@ -90,7 +90,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->assertSame('int $test', $result);
+        static::assertSame('int $test', $result);
     }
 
     /**
@@ -115,7 +115,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->assertSame('int|bool $test', $result);
+        static::assertSame('int|bool $test', $result);
     }
 
     /**
@@ -131,7 +131,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'types'        => []
         ]);
 
-        $this->assertSame('$test = null', $result);
+        static::assertSame('$test = null', $result);
     }
 
     /**
@@ -147,6 +147,6 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'types'        => []
         ]);
 
-        $this->assertSame('$test = 0', $result);
+        static::assertSame('$test = 0', $result);
     }
 }
