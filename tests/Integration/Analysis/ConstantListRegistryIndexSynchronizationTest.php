@@ -63,7 +63,7 @@ class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegrationTe
 
             $this->assertCount(1, $registry->getAll());
             $this->assertArrayHasKey('\TEST', $registry->getAll());
-            $this->assertEquals('1', $registry->getAll()['\TEST']['defaultValue']);
+            $this->assertSame('1', $registry->getAll()['\TEST']['defaultValue']);
 
             return str_replace('const TEST = 1', 'const TEST = 2', $source);
         };
@@ -73,7 +73,7 @@ class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegrationTe
 
             $this->assertCount(1, $registry->getAll());
             $this->assertArrayHasKey('\TEST', $registry->getAll());
-            $this->assertEquals('2', $registry->getAll()['\TEST']['defaultValue']);
+            $this->assertSame('2', $registry->getAll()['\TEST']['defaultValue']);
         };
 
         $path = $this->getPathFor('OldConstantIsRemoved.phpt');

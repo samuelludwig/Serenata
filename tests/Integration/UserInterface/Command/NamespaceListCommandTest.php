@@ -30,7 +30,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
 
         $this->assertCount(2, $output);
 
-        $this->assertEquals([
+        $this->assertSame([
             [
                 'name'      => null,
                 'file'      => $path . 'NamespaceA.phpt',

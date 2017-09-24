@@ -431,7 +431,7 @@ Hello!
 
             $this->assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
             $this->assertNull($result->getRange());
-            $this->assertEquals($contents, $result->getContents());
+            $this->assertSame($contents, $result->getContents());
 
             ++$i;
         }

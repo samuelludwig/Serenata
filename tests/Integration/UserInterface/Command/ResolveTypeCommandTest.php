@@ -20,17 +20,17 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\C', $command->resolveType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\A\C', $command->resolveType('C', $path, 5, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\B\C', $command->resolveType('C', $path, 10, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\B\DateTime', $command->resolveType('DateTime', $path, 10, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\DateTime', $command->resolveType('DateTime', $path, 11, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\DateTime', $command->resolveType('DateTime', $path, 12, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\C\D\Test', $command->resolveType('D\Test', $path, 13, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\DateTime', $command->resolveType('DateTime', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\DateTime', $command->resolveType('DateTime', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CONSTANT));
-        $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_FUNCTION));
+        $this->assertSame('\C', $command->resolveType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\A\C', $command->resolveType('C', $path, 5, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\B\C', $command->resolveType('C', $path, 10, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\B\DateTime', $command->resolveType('DateTime', $path, 10, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\DateTime', $command->resolveType('DateTime', $path, 11, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\DateTime', $command->resolveType('DateTime', $path, 12, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\C\D\Test', $command->resolveType('D\Test', $path, 13, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\DateTime', $command->resolveType('DateTime', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\DateTime', $command->resolveType('DateTime', $path, 18, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CONSTANT));
+        $this->assertSame('\A\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_FUNCTION));
     }
 
     /**
@@ -44,7 +44,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 2, UseStatementKind::TYPE_CONSTANT));
+        $this->assertSame('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 2, UseStatementKind::TYPE_CONSTANT));
     }
 
     /**
@@ -58,7 +58,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\SOME_ROOT_CONSTANT', $command->resolveType('SOME_ROOT_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
+        $this->assertSame('\SOME_ROOT_CONSTANT', $command->resolveType('SOME_ROOT_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
     }
 
     /**
@@ -72,7 +72,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
+        $this->assertSame('\A\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 6, UseStatementKind::TYPE_CONSTANT));
     }
 
     /**
@@ -86,7 +86,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 2, UseStatementKind::TYPE_FUNCTION));
+        $this->assertSame('\some_function', $command->resolveType('some_function', $path, 2, UseStatementKind::TYPE_FUNCTION));
     }
 
     /**
@@ -100,7 +100,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\some_root_function', $command->resolveType('some_root_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
+        $this->assertSame('\some_root_function', $command->resolveType('some_root_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
     }
 
     /**
@@ -114,7 +114,7 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\A\some_function', $command->resolveType('some_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
+        $this->assertSame('\A\some_function', $command->resolveType('some_function', $path, 6, UseStatementKind::TYPE_FUNCTION));
     }
 
     /**
@@ -128,8 +128,8 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        $this->assertEquals('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
-        $this->assertEquals('\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\SOME_CONSTANT', $command->resolveType('SOME_CONSTANT', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
+        $this->assertSame('\some_function', $command->resolveType('some_function', $path, 20, UseStatementKind::TYPE_CLASSLIKE));
     }
 
     /**

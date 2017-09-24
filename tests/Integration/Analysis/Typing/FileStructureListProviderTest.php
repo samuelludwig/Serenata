@@ -23,7 +23,7 @@ class FileStructureListProviderTest extends AbstractIntegrationTest
 
         $output = $provider->getAllForFile($file);
 
-        $this->assertEquals(2, count($output));
+        $this->assertSame(2, count($output));
         $this->assertArrayHasKey('\A\FirstClass', $output);
         $this->assertArrayHasKey('\A\SecondClass', $output);
         $this->assertArrayNotHasKey('\A\Foo', $output);

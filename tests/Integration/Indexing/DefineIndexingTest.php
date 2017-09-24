@@ -17,20 +17,20 @@ class DefineIndexingTest extends AbstractIntegrationTest
     {
         $define = $this->indexDefine('SimpleDefine.phpt');
 
-        $this->assertEquals('DEFINE', $define->getName());
-        $this->assertEquals('\DEFINE', $define->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleDefine.phpt'), $define->getFile()->getPath());
-        $this->assertEquals(3, $define->getStartLine());
-        $this->assertEquals(3, $define->getEndLine());
-        $this->assertEquals("'VALUE'", $define->getDefaultValue());
+        $this->assertSame('DEFINE', $define->getName());
+        $this->assertSame('\DEFINE', $define->getFqcn());
+        $this->assertSame($this->getPathFor('SimpleDefine.phpt'), $define->getFile()->getPath());
+        $this->assertSame(3, $define->getStartLine());
+        $this->assertSame(3, $define->getEndLine());
+        $this->assertSame("'VALUE'", $define->getDefaultValue());
         $this->assertFalse($define->getIsDeprecated());
         $this->assertFalse($define->getHasDocblock());
         $this->assertNull($define->getShortDescription());
         $this->assertNull($define->getLongDescription());
         $this->assertNull($define->getTypeDescription());
         $this->assertCount(1, $define->getTypes());
-        $this->assertEquals('string', $define->getTypes()[0]->getType());
-        $this->assertEquals('string', $define->getTypes()[0]->getFqcn());
+        $this->assertSame('string', $define->getTypes()[0]->getType());
+        $this->assertSame('string', $define->getTypes()[0]->getFqcn());
     }
 
     /**
@@ -40,7 +40,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexDefine('DefineFqcnWithNamespace.phpt');
 
-        $this->assertEquals('\N\DEFINE', $constant->getFqcn());
+        $this->assertSame('\N\DEFINE', $constant->getFqcn());
     }
 
     /**
@@ -52,7 +52,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
             $constants = $this->container->get('managerRegistry')->getRepository(Structures\Constant::class)->findAll();
 
             $this->assertCount(1, $constants);
-            $this->assertEquals('\DEFINE', $constants[0]->getFqcn());
+            $this->assertSame('\DEFINE', $constants[0]->getFqcn());
 
             return str_replace('DEFINE', 'DEFINE2', $source);
         };
@@ -61,7 +61,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
             $constants = $this->container->get('managerRegistry')->getRepository(Structures\Constant::class)->findAll();
 
             $this->assertCount(1, $constants);
-            $this->assertEquals('\DEFINE2', $constants[0]->getFqcn());
+            $this->assertSame('\DEFINE2', $constants[0]->getFqcn());
         };
 
         $path = $this->getPathFor('DefineChanges.phpt');

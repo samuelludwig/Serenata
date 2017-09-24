@@ -17,11 +17,11 @@ class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('SimpleTrait.phpt');
 
-        $this->assertEquals('Test', $structure->getName());
-        $this->assertEquals('\Test', $structure->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getPath());
-        $this->assertEquals(3, $structure->getStartLine());
-        $this->assertEquals(6, $structure->getEndLine());
+        $this->assertSame('Test', $structure->getName());
+        $this->assertSame('\Test', $structure->getFqcn());
+        $this->assertSame($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getPath());
+        $this->assertSame(3, $structure->getStartLine());
+        $this->assertSame(6, $structure->getEndLine());
         $this->assertNull($structure->getShortDescription());
         $this->assertNull($structure->getLongDescription());
         $this->assertFalse($structure->getIsDeprecated());
@@ -42,7 +42,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitNamespace.phpt');
 
-        $this->assertEquals('\N\Test', $structure->getFqcn());
+        $this->assertSame('\N\Test', $structure->getFqcn());
     }
 
     /**
@@ -52,7 +52,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitShortDescription.phpt');
 
-        $this->assertEquals('A summary.', $structure->getShortDescription());
+        $this->assertSame('A summary.', $structure->getShortDescription());
     }
 
     /**
@@ -62,7 +62,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitLongDescription.phpt');
 
-        $this->assertEquals('A long description.', $structure->getLongDescription());
+        $this->assertSame('A long description.', $structure->getLongDescription());
     }
 
     /**
@@ -105,8 +105,8 @@ class TraitIndexingTest extends AbstractIntegrationTest
         $structure = $entities[2];
 
         $this->assertCount(2, $structure->getTraitFqcns());
-        $this->assertEquals('\A', $structure->getTraitFqcns()[0]);
-        $this->assertEquals('\B', $structure->getTraitFqcns()[1]);
+        $this->assertSame('\A', $structure->getTraitFqcns()[0]);
+        $this->assertSame('\B', $structure->getTraitFqcns()[1]);
     }
 
     /**
@@ -125,11 +125,11 @@ class TraitIndexingTest extends AbstractIntegrationTest
         $structure = $entities[1];
 
         $this->assertCount(1, $structure->getTraitAliases());
-        $this->assertEquals($structure, $structure->getTraitAliases()[0]->getTrait());
+        $this->assertSame($structure, $structure->getTraitAliases()[0]->getTrait());
         $this->assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
         $this->assertNull($structure->getTraitAliases()[0]->getAccessModifier());
-        $this->assertEquals('foo', $structure->getTraitAliases()[0]->getName());
-        $this->assertEquals('bar', $structure->getTraitAliases()[0]->getAlias());
+        $this->assertSame('foo', $structure->getTraitAliases()[0]->getName());
+        $this->assertSame('bar', $structure->getTraitAliases()[0]->getAlias());
     }
 
     /**
@@ -148,7 +148,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
         $structure = $entities[1];
 
         $this->assertCount(1, $structure->getTraitAliases());
-        $this->assertEquals('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
+        $this->assertSame('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
     }
 
     /**
@@ -168,7 +168,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(1, $structure->getTraitAliases());
         $this->assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
-        $this->assertEquals('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
+        $this->assertSame('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
     }
 
     /**
@@ -187,9 +187,9 @@ class TraitIndexingTest extends AbstractIntegrationTest
         $structure = $entities[2];
 
         $this->assertCount(1, $structure->getTraitPrecedences());
-        $this->assertEquals($structure, $structure->getTraitPrecedences()[0]->getTrait());
-        $this->assertEquals('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
-        $this->assertEquals('foo', $structure->getTraitPrecedences()[0]->getName());
+        $this->assertSame($structure, $structure->getTraitPrecedences()[0]->getTrait());
+        $this->assertSame('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
+        $this->assertSame('foo', $structure->getTraitPrecedences()[0]->getName());
     }
 
     /**
@@ -204,7 +204,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
 
             $structure = $structures[0];
 
-            $this->assertEquals('Test', $structure->getName());
+            $this->assertSame('Test', $structure->getName());
 
             return str_replace('Test', 'Test2 ', $source);
         };
@@ -216,7 +216,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
 
             $structure = $structures[0];
 
-            $this->assertEquals('Test2', $structure->getName());
+            $this->assertSame('Test2', $structure->getName());
         };
 
         $path = $this->getPathFor('TraitChanges.phpt');

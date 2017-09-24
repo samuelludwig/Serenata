@@ -25,15 +25,15 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(2, $types);
 
-        $this->assertEquals(0, $types[0]->getArgumentIndex());
-        $this->assertEquals('bar', $types[0]->getValue());
-        $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-        $this->assertEquals('\B\Bar', $types[0]->getReturnType());
+        $this->assertSame(0, $types[0]->getArgumentIndex());
+        $this->assertSame('bar', $types[0]->getValue());
+        $this->assertSame(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+        $this->assertSame('\B\Bar', $types[0]->getReturnType());
 
-        $this->assertEquals(0, $types[1]->getArgumentIndex());
-        $this->assertEquals('car', $types[1]->getValue());
-        $this->assertEquals(Node\Scalar\String_::class, $types[1]->getValueNodeType());
-        $this->assertEquals('\B\Car', $types[1]->getReturnType());
+        $this->assertSame(0, $types[1]->getArgumentIndex());
+        $this->assertSame('car', $types[1]->getValue());
+        $this->assertSame(Node\Scalar\String_::class, $types[1]->getValueNodeType());
+        $this->assertSame('\B\Car', $types[1]->getReturnType());
     }
 
     /**
@@ -46,10 +46,10 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
             $this->assertCount(1, $types);
 
-            $this->assertEquals(0, $types[0]->getArgumentIndex());
-            $this->assertEquals('bar', $types[0]->getValue());
-            $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-            $this->assertEquals('\A\Bar', $types[0]->getReturnType());
+            $this->assertSame(0, $types[0]->getArgumentIndex());
+            $this->assertSame('bar', $types[0]->getValue());
+            $this->assertSame(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+            $this->assertSame('\A\Bar', $types[0]->getReturnType());
 
             return str_replace('\A\\', '\B\\', $source);
         };
@@ -61,10 +61,10 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
             $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\B\Foo', 'get');
             $this->assertCount(1, $types);
 
-            $this->assertEquals(0, $types[0]->getArgumentIndex());
-            $this->assertEquals('bar', $types[0]->getValue());
-            $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-            $this->assertEquals('\B\Bar', $types[0]->getReturnType());
+            $this->assertSame(0, $types[0]->getArgumentIndex());
+            $this->assertSame('bar', $types[0]->getValue());
+            $this->assertSame(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+            $this->assertSame('\B\Bar', $types[0]->getReturnType());
         };
 
         $path = $this->getPathFor('StaticMethodTypeChanges.phpt');

@@ -23,10 +23,10 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(1, $namespaces);
 
-        $this->assertEquals(0, $namespaces[0]->getStartLine());
-        $this->assertEquals(2, $namespaces[0]->getEndLine());
-        $this->assertEquals(null, $namespaces[0]->getName());
-        $this->assertEquals($path, $namespaces[0]->getFile()->getPath());
+        $this->assertSame(0, $namespaces[0]->getStartLine());
+        $this->assertSame(2, $namespaces[0]->getEndLine());
+        $this->assertSame(null, $namespaces[0]->getName());
+        $this->assertSame($path, $namespaces[0]->getFile()->getPath());
         $this->assertEmpty($namespaces[0]->getImports());
     }
 
@@ -45,10 +45,10 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(2, $namespaces);
 
-        $this->assertEquals(3, $namespaces[1]->getStartLine());
-        $this->assertEquals(6, $namespaces[1]->getEndLine());
-        $this->assertEquals('N', $namespaces[1]->getName());
-        $this->assertEquals($path, $namespaces[1]->getFile()->getPath());
+        $this->assertSame(3, $namespaces[1]->getStartLine());
+        $this->assertSame(6, $namespaces[1]->getEndLine());
+        $this->assertSame('N', $namespaces[1]->getName());
+        $this->assertSame($path, $namespaces[1]->getFile()->getPath());
         $this->assertEmpty($namespaces[1]->getImports());
     }
 
@@ -67,10 +67,10 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->assertCount(2, $namespaces);
 
-        $this->assertEquals(3, $namespaces[1]->getStartLine());
-        $this->assertEquals(6, $namespaces[1]->getEndLine());
-        $this->assertEquals(null, $namespaces[1]->getName());
-        $this->assertEquals($path, $namespaces[1]->getFile()->getPath());
+        $this->assertSame(3, $namespaces[1]->getStartLine());
+        $this->assertSame(6, $namespaces[1]->getEndLine());
+        $this->assertSame(null, $namespaces[1]->getName());
+        $this->assertSame($path, $namespaces[1]->getFile()->getPath());
         $this->assertCount(1, $namespaces[1]->getImports());
     }
 
@@ -83,7 +83,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
             $file = $container->get('storage')->getFileByPath($path);
 
             $this->assertCount(3, $file->getNamespaces());
-            $this->assertEquals('N', $file->getNamespaces()[1]->getName());
+            $this->assertSame('N', $file->getNamespaces()[1]->getName());
 
             return str_replace('namespace N', 'namespace ', $source);
         };
@@ -92,7 +92,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
             $file = $container->get('storage')->getFileByPath($path);
 
             $this->assertCount(3, $file->getNamespaces());
-            $this->assertEquals(null, $file->getNamespaces()[1]->getName());
+            $this->assertSame(null, $file->getNamespaces()[1]->getName());
         };
 
         $path = $this->getPathFor('NamespaceChanges.phpt');

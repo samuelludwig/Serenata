@@ -17,20 +17,20 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('SimpleConstant.phpt');
 
-        $this->assertEquals('CONSTANT', $constant->getName());
-        $this->assertEquals('\CONSTANT', $constant->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getPath());
-        $this->assertEquals(3, $constant->getStartLine());
-        $this->assertEquals(3, $constant->getEndLine());
-        $this->assertEquals("'test'", $constant->getDefaultValue());
+        $this->assertSame('CONSTANT', $constant->getName());
+        $this->assertSame('\CONSTANT', $constant->getFqcn());
+        $this->assertSame($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getPath());
+        $this->assertSame(3, $constant->getStartLine());
+        $this->assertSame(3, $constant->getEndLine());
+        $this->assertSame("'test'", $constant->getDefaultValue());
         $this->assertFalse($constant->getIsDeprecated());
         $this->assertFalse($constant->getHasDocblock());
         $this->assertNull($constant->getShortDescription());
         $this->assertNull($constant->getLongDescription());
         $this->assertNull($constant->getTypeDescription());
         $this->assertCount(1, $constant->getTypes());
-        $this->assertEquals('string', $constant->getTypes()[0]->getType());
-        $this->assertEquals('string', $constant->getTypes()[0]->getFqcn());
+        $this->assertSame('string', $constant->getTypes()[0]->getType());
+        $this->assertSame('string', $constant->getTypes()[0]->getFqcn());
     }
 
     /**
@@ -50,7 +50,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantShortDescription.phpt');
 
-        $this->assertEquals('This is a summary.', $constant->getShortDescription());
+        $this->assertSame('This is a summary.', $constant->getShortDescription());
     }
 
     /**
@@ -60,7 +60,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantLongDescription.phpt');
 
-        $this->assertEquals('This is a long description.', $constant->getLongDescription());
+        $this->assertSame('This is a long description.', $constant->getLongDescription());
     }
 
     /**
@@ -70,7 +70,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeDescription.phpt');
 
-        $this->assertEquals('This is a type description.', $constant->getTypeDescription());
+        $this->assertSame('This is a type description.', $constant->getTypeDescription());
     }
 
     /**
@@ -80,7 +80,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeDescriptionAsSummary.phpt');
 
-        $this->assertEquals('This is a type description.', $constant->getShortDescription());
+        $this->assertSame('This is a type description.', $constant->getShortDescription());
     }
 
     /**
@@ -90,7 +90,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexConstant('ConstantTypeDescriptionTakesPrecedenceOverSummary.phpt');
 
-        $this->assertEquals('This is a type description.', $property->getShortDescription());
+        $this->assertSame('This is a type description.', $property->getShortDescription());
     }
 
     /**
@@ -100,8 +100,8 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeFromDocblock.phpt');
 
-        $this->assertEquals('int', $constant->getTypes()[0]->getType());
-        $this->assertEquals('int', $constant->getTypes()[0]->getFqcn());
+        $this->assertSame('int', $constant->getTypes()[0]->getType());
+        $this->assertSame('int', $constant->getTypes()[0]->getFqcn());
     }
 
     /**
@@ -111,7 +111,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantFqcnInNamespace.phpt');
 
-        $this->assertEquals('\A\CONSTANT', $constant->getFqcn());
+        $this->assertSame('\A\CONSTANT', $constant->getFqcn());
     }
 
     /**
@@ -121,8 +121,8 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeInDocblockIsResolved.phpt');
 
-        $this->assertEquals('A', $constant->getTypes()[0]->getType());
-        $this->assertEquals('\N\A', $constant->getTypes()[0]->getFqcn());
+        $this->assertSame('A', $constant->getTypes()[0]->getType());
+        $this->assertSame('\N\A', $constant->getTypes()[0]->getFqcn());
     }
 
     /**
@@ -134,7 +134,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
             $constants = $this->container->get('managerRegistry')->getRepository(Structures\Constant::class)->findAll();
 
             $this->assertCount(1, $constants);
-            $this->assertEquals('\CONSTANT', $constants[0]->getFqcn());
+            $this->assertSame('\CONSTANT', $constants[0]->getFqcn());
 
             return str_replace('CONSTANT', 'CONSTANT2 ', $source);
         };
@@ -143,7 +143,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
             $constants = $this->container->get('managerRegistry')->getRepository(Structures\Constant::class)->findAll();
 
             $this->assertCount(1, $constants);
-            $this->assertEquals('\CONSTANT2', $constants[0]->getFqcn());
+            $this->assertSame('\CONSTANT2', $constants[0]->getFqcn());
         };
 
         $path = $this->getPathFor('ConstantChanges.phpt');

@@ -34,7 +34,7 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        $this->assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
     }
 
     /**
@@ -46,7 +46,7 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        $this->assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
     }
 
     /**
@@ -58,7 +58,7 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        $this->assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
     }
 
     /**
@@ -72,7 +72,7 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $file = new Structures\File('/test/path', new DateTime(), []);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['\(anonymous_a19f6c462322bef8d3cad086eca0e32a_9)'],
             $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0)
         );

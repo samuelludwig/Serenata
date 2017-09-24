@@ -146,7 +146,9 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         $this->assertSignatureHelpSignaturesEquals($fileName, 127, 131, $expectedSignaturesResult);
         $this->assertSignatureHelpSignaturesEquals($fileName, 133, 134, $expectedNestedSignaturesResult);
         $this->assertSignatureHelpSignaturesEquals($fileName, 135, 136, $expectedSignaturesResult);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 127, 136, 0);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 127, 131, 0);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 132, 134, null);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 135, 136, 0);
     }
 
     /**
@@ -190,7 +192,9 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         $this->assertSignatureHelpSignaturesEquals($fileName, 221, 232, $expectedSignaturesResult);
         $this->assertSignatureHelpSignaturesEquals($fileName, 233, 235, $expectedNestedSignaturesResult);
         $this->assertSignatureHelpSignaturesEquals($fileName, 236, 237, $expectedSignaturesResult);
-        $this->assertSignatureHelpActiveParameterEquals($fileName, 221, 237, 0);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 221, 232, 0);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 233, 235, null);
+        $this->assertSignatureHelpActiveParameterEquals($fileName, 236, 237, 0);
     }
 
     /**
@@ -281,13 +285,13 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $this->assertCount(1, $result->getSignatures());
         $this->assertCount(2, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals(1, $result->getActiveParameter());
+        $this->assertSame(1, $result->getActiveParameter());
 
         $result = $this->getSignatureHelp('VariadicParameter.phpt', 220);
 
         $this->assertCount(1, $result->getSignatures());
         $this->assertCount(2, $result->getSignatures()[0]->getParameters());
-        $this->assertEquals(1, $result->getActiveParameter());
+        $this->assertSame(1, $result->getActiveParameter());
     }
 
     /**
@@ -426,7 +430,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->getSignatureHelp($fileName, $i);
 
-            $this->assertEquals(0, $result->getActiveSignature());
+            $this->assertSame(0, $result->getActiveSignature());
             $this->assertEquals($signatures, $result->getSignatures());
 
             ++$i;
@@ -477,7 +481,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->getSignatureHelp($fileName, $i);
 
-            $this->assertEquals($activeParameter, $result->getActiveParameter());
+            $this->assertSame($activeParameter, $result->getActiveParameter());
 
             ++$i;
         }

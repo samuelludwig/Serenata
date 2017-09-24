@@ -25,7 +25,7 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         $this->indexTestFile($this->container, $path);
 
         $this->assertCount(2, $registry->getAll());
-        $this->assertEquals('Test', $registry->getAll()[1]['name']);
+        $this->assertSame('Test', $registry->getAll()[1]['name']);
     }
 
     /**
@@ -37,7 +37,7 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
             $registry = $this->container->get('namespaceListProvider.registry');
 
             $this->assertCount(2, $registry->getAll());
-            $this->assertEquals('Test', $registry->getAll()[1]['name']);
+            $this->assertSame('Test', $registry->getAll()[1]['name']);
 
             return str_replace('namespace Test', '// namespace Test ', $source);
         };
@@ -62,8 +62,8 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
             $registry = $this->container->get('namespaceListProvider.registry');
 
             $this->assertCount(2, $registry->getAll());
-            $this->assertEquals('Test', $registry->getAll()[1]['name']);
-            $this->assertEquals(4, $registry->getAll()[1]['endLine']);
+            $this->assertSame('Test', $registry->getAll()[1]['name']);
+            $this->assertSame(4, $registry->getAll()[1]['endLine']);
 
             return str_replace('namespace Test;', "namespace Test;\n\n", $source);
         };
@@ -72,8 +72,8 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
             $registry = $this->container->get('namespaceListProvider.registry');
 
             $this->assertCount(2, $registry->getAll());
-            $this->assertEquals('Test', $registry->getAll()[1]['name']);
-            $this->assertEquals(6, $registry->getAll()[1]['endLine']);
+            $this->assertSame('Test', $registry->getAll()[1]['name']);
+            $this->assertSame(6, $registry->getAll()[1]['endLine']);
         };
 
         $path = $this->getPathFor('OldNamespaceIsRemoved.phpt');

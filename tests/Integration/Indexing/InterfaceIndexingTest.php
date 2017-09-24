@@ -17,11 +17,11 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('SimpleInterface.phpt');
 
-        $this->assertEquals('Test', $structure->getName());
-        $this->assertEquals('\Test', $structure->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleInterface.phpt'), $structure->getFile()->getPath());
-        $this->assertEquals(3, $structure->getStartLine());
-        $this->assertEquals(6, $structure->getEndLine());
+        $this->assertSame('Test', $structure->getName());
+        $this->assertSame('\Test', $structure->getFqcn());
+        $this->assertSame($this->getPathFor('SimpleInterface.phpt'), $structure->getFile()->getPath());
+        $this->assertSame(3, $structure->getStartLine());
+        $this->assertSame(6, $structure->getEndLine());
         $this->assertNull($structure->getShortDescription());
         $this->assertNull($structure->getLongDescription());
         $this->assertFalse($structure->getIsDeprecated());
@@ -41,7 +41,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceNamespace.phpt');
 
-        $this->assertEquals('\N\Test', $structure->getFqcn());
+        $this->assertSame('\N\Test', $structure->getFqcn());
     }
 
     /**
@@ -51,7 +51,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceShortDescription.phpt');
 
-        $this->assertEquals('A summary.', $structure->getShortDescription());
+        $this->assertSame('A summary.', $structure->getShortDescription());
     }
 
     /**
@@ -61,7 +61,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceLongDescription.phpt');
 
-        $this->assertEquals('A long description.', $structure->getLongDescription());
+        $this->assertSame('A long description.', $structure->getLongDescription());
     }
 
     /**
@@ -99,17 +99,17 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
 
         $this->assertEmpty($entities[0]->getParentFqcns());
         $this->assertCount(2, $entities[0]->getChildFqcns());
-        $this->assertEquals($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
-        $this->assertEquals($entities[2]->getFqcn(), $entities[0]->getChildFqcns()[1]);
+        $this->assertSame($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
+        $this->assertSame($entities[2]->getFqcn(), $entities[0]->getChildFqcns()[1]);
 
         $this->assertCount(1, $entities[1]->getParentFqcns());
-        $this->assertEquals($entities[0]->getFqcn(), $entities[1]->getParentFqcns()[0]);
+        $this->assertSame($entities[0]->getFqcn(), $entities[1]->getParentFqcns()[0]);
         $this->assertCount(1, $entities[1]->getChildFqcns());
-        $this->assertEquals($entities[2]->getFqcn(), $entities[1]->getChildFqcns()[0]);
+        $this->assertSame($entities[2]->getFqcn(), $entities[1]->getChildFqcns()[0]);
 
         $this->assertCount(2, $entities[2]->getParentFqcns());
-        $this->assertEquals($entities[0]->getFqcn(), $entities[2]->getParentFqcns()[0]);
-        $this->assertEquals($entities[1]->getFqcn(), $entities[2]->getParentFqcns()[1]);
+        $this->assertSame($entities[0]->getFqcn(), $entities[2]->getParentFqcns()[0]);
+        $this->assertSame($entities[1]->getFqcn(), $entities[2]->getParentFqcns()[1]);
         $this->assertEmpty($entities[2]->getChildFqcns());
     }
 
@@ -121,7 +121,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
         $structure = $this->indexInterface('InterfaceImplementor.phpt');
 
         $this->assertCount(1, $structure->getImplementorFqcns());
-        $this->assertEquals('\C', $structure->getImplementorFqcns()[0]);
+        $this->assertSame('\C', $structure->getImplementorFqcns()[0]);
     }
 
     /**
@@ -136,7 +136,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
 
             $structure = $structures[0];
 
-            $this->assertEquals('Test', $structure->getName());
+            $this->assertSame('Test', $structure->getName());
 
             return str_replace('Test', 'Test2 ', $source);
         };
@@ -148,7 +148,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
 
             $structure = $structures[0];
 
-            $this->assertEquals('Test2', $structure->getName());
+            $this->assertSame('Test2', $structure->getName());
         };
 
         $path = $this->getPathFor('InterfaceChanges.phpt');

@@ -71,7 +71,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\ConstFetch::class, $result->expr);
-        $this->assertEquals('array_walk', $result->expr->name->toString());
+        $this->assertSame('array_walk', $result->expr->name->toString());
     }
 
     /**
@@ -93,8 +93,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
-        $this->assertEquals('Bar', $result->expr->class->toString());
-        $this->assertEquals('testProperty', $result->expr->name);
+        $this->assertSame('Bar', $result->expr->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('testProperty', $result->expr->name->name);
     }
 
     /**
@@ -116,8 +117,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\StaticCall::class, $result->expr);
-        $this->assertEquals('NamespaceTest\Bar', $result->expr->class->toString());
-        $this->assertEquals('staticmethod', $result->expr->name);
+        $this->assertSame('NamespaceTest\Bar', $result->expr->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('staticmethod', $result->expr->name->name);
     }
 
     /**
@@ -139,8 +141,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('someProperty', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('someProperty', $result->expr->name->name);
     }
 
     /**
@@ -162,8 +165,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('someProperty', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('someProperty', $result->expr->name->name);
     }
 
     /**
@@ -186,9 +190,12 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
-        $this->assertEquals('self', $result->expr->var->class);
-        $this->assertEquals('someProperty', $result->expr->var->name);
-        $this->assertEquals('test', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('self', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        $this->assertSame('someProperty', $result->expr->var->name->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -211,9 +218,12 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
-        $this->assertEquals('parent', $result->expr->var->class);
-        $this->assertEquals('someProperty', $result->expr->var->name);
-        $this->assertEquals('test', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('parent', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        $this->assertSame('someProperty', $result->expr->var->name->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -236,9 +246,12 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
-        $this->assertEquals('static', $result->expr->var->class);
-        $this->assertEquals('someProperty', $result->expr->var->name);
-        $this->assertEquals('test', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('static', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        $this->assertSame('someProperty', $result->expr->var->name->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -256,8 +269,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        $this->assertEquals('c', $result->expr->var->name);
-        $this->assertEquals('foo', $result->expr->name);
+        $this->assertSame('c', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('foo', $result->expr->name->name);
     }
 
     /**
@@ -275,8 +289,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        $this->assertEquals('d', $result->expr->var->name);
-        $this->assertEquals('bar', $result->expr->name);
+        $this->assertSame('d', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('bar', $result->expr->name->name);
     }
 
     /**
@@ -294,8 +309,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        $this->assertEquals('c', $result->expr->var->name);
-        $this->assertEquals('bar', $result->expr->name);
+        $this->assertSame('c', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('bar', $result->expr->name->name);
     }
 
     /**
@@ -313,7 +329,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        $this->assertEquals('.:', $result->expr->value);
+        $this->assertSame('.:', $result->expr->value);
     }
 
     /**
@@ -338,9 +354,10 @@ SOURCE;
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var);
         $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->var);
         $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->name);
-        $this->assertEquals('this', $result->expr->var->var->name);
-        $this->assertEquals('foo', $result->expr->var->name->name);
-        $this->assertEquals('test', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->var->name);
+        $this->assertSame('foo', $result->expr->var->name->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -358,8 +375,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('test', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -380,8 +398,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('', $result->expr->name->name);
     }
 
     /**
@@ -399,8 +418,9 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('', $result->expr->name->name);
     }
 
     /**
@@ -423,8 +443,10 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        $this->assertEquals('Foo\Bar', $result->expr->var->class);
-        $this->assertEquals('doFoo', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('Foo\Bar', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -444,8 +466,10 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        $this->assertEquals('Foo\Bar', $result->expr->var->class);
-        $this->assertEquals('doFoo', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('Foo\Bar', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -465,8 +489,10 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        $this->assertEquals('Foo\Bar', $result->expr->var->class);
-        $this->assertEquals('doFoo', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('Foo\Bar', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -485,8 +511,10 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        $this->assertEquals('Foo\Bar', $result->expr->var->class);
-        $this->assertEquals('doFoo', $result->expr->name);
+        $this->assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        $this->assertSame('Foo\Bar', $result->expr->var->class->toString());
+        $this->assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        $this->assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -539,11 +567,11 @@ SOURCE;
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var->var);
-        $this->assertEquals('testChaining', $result->expr->var->name);
-        $this->assertEquals('testChaining', $result->expr->var->var->name);
-        $this->assertEquals('testChaining', $result->expr->var->var->var->name);
-        $this->assertEquals('testChaining', $result->expr->var->var->var->var->name);
-        $this->assertEquals('testChai', $result->expr->name);
+        $this->assertSame('testChaining', $result->expr->var->name->name);
+        $this->assertSame('testChaining', $result->expr->var->var->name->name);
+        $this->assertSame('testChaining', $result->expr->var->var->var->name->name);
+        $this->assertSame('testChaining', $result->expr->var->var->var->var->name->name);
+        $this->assertSame('testChai', $result->expr->name->name);
     }
 
     /**
@@ -561,8 +589,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -581,19 +609,19 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[0]);
-        $this->assertEquals('((', $result->expr->parts[0]->value);
+        $this->assertSame('((', $result->expr->parts[0]->value);
         $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[1]);
-        $this->assertEquals('version', $result->expr->parts[1]->name);
+        $this->assertSame('version', $result->expr->parts[1]->name);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
-        $this->assertEquals('{0} * 10000) + (', $result->expr->parts[2]->value);
+        $this->assertSame('{0} * 10000) + (', $result->expr->parts[2]->value);
         $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[3]);
-        $this->assertEquals('version', $result->expr->parts[3]->name);
+        $this->assertSame('version', $result->expr->parts[3]->name);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[4]);
-        $this->assertEquals('{2} * 100) + ', $result->expr->parts[4]->value);
+        $this->assertSame('{2} * 100) + ', $result->expr->parts[4]->value);
         $this->assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[5]);
-        $this->assertEquals('version', $result->expr->parts[5]->name);
+        $this->assertSame('version', $result->expr->parts[5]->name);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[6]);
-        $this->assertEquals('{4}', $result->expr->parts[6]->value);
+        $this->assertSame('{4}', $result->expr->parts[6]->value);
     }
 
     /**
@@ -612,8 +640,8 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
-        $this->assertEquals('test', $result->expr->parts[0]->var->name);
-        $this->assertEquals('foo', $result->expr->parts[0]->name);
+        $this->assertSame('test', $result->expr->parts[0]->var->name);
+        $this->assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
     /**
@@ -632,8 +660,8 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
-        $this->assertEquals('test', $result->expr->parts[0]->var->name);
-        $this->assertEquals('foo', $result->expr->parts[0]->name);
+        $this->assertSame('test', $result->expr->parts[0]->var->name);
+        $this->assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
     /**
@@ -652,8 +680,8 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr->parts[0]);
-        $this->assertEquals('test', $result->expr->parts[0]->var->name);
-        $this->assertEquals('foo', $result->expr->parts[0]->name);
+        $this->assertSame('test', $result->expr->parts[0]->var->name);
+        $this->assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
     /**
@@ -671,7 +699,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        $this->assertEquals('{$a->asd()[0]}', $result->expr->value);
+        $this->assertSame('{$a->asd()[0]}', $result->expr->value);
     }
 
     /**
@@ -691,7 +719,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        $this->assertEquals('TEST', $result->expr->value);
+        $this->assertSame('TEST', $result->expr->value);
     }
 
     /**
@@ -711,7 +739,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        $this->assertEquals('TEST', $result->expr->value);
+        $this->assertSame('TEST', $result->expr->value);
     }
 
     /**
@@ -735,14 +763,14 @@ SOURCE;
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[0]);
-        $this->assertEquals('EOF: ', $result->expr->parts[0]->value);
+        $this->assertSame('EOF: ', $result->expr->parts[0]->value);
         $this->assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[1]);
         $this->assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->expr->parts[1]->var);
-        $this->assertEquals('foo', $result->expr->parts[1]->var->var->name);
-        $this->assertEquals(2, $result->expr->parts[1]->var->dim->value);
-        $this->assertEquals('bar', $result->expr->parts[1]->name);
+        $this->assertSame('foo', $result->expr->parts[1]->var->var->name);
+        $this->assertSame(2, $result->expr->parts[1]->var->dim->value);
+        $this->assertSame('bar', $result->expr->parts[1]->name->name);
         $this->assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
-        $this->assertEquals(" some_text\n\nThis is / some text.\n", $result->expr->parts[2]->value);
+        $this->assertSame(" some_text\n\nThis is / some text.\n", $result->expr->parts[2]->value);
     }
 
     /**
@@ -764,8 +792,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -783,8 +811,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
-        $this->assertEquals('Test', $result->expr->class->toString());
-        $this->assertEquals('class', $result->expr->name);
+        $this->assertSame('Test', $result->expr->class->toString());
+        $this->assertSame('class', $result->expr->name->name);
     }
 
     /**
@@ -802,8 +830,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -821,8 +849,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -840,8 +868,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -859,8 +887,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -878,8 +906,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -897,8 +925,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -916,8 +944,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -935,8 +963,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -954,8 +982,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -973,8 +1001,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -992,8 +1020,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1011,8 +1039,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1030,8 +1058,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1049,7 +1077,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Scalar\LNumber::class, $result->expr);
-        $this->assertEquals(0, $result->expr->value);
+        $this->assertSame(0, $result->expr->value);
     }
 
     /**
@@ -1067,8 +1095,8 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1086,7 +1114,7 @@ SOURCE;
 
         $this->assertInstanceOf(Node\Stmt\Expression::class, $result);
         $this->assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        $this->assertEquals('this', $result->expr->var->name);
-        $this->assertEquals('one', $result->expr->name);
+        $this->assertSame('this', $result->expr->var->name);
+        $this->assertSame('one', $result->expr->name->name);
     }
 }

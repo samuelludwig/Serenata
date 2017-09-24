@@ -26,7 +26,7 @@ class FilePruningTest extends AbstractIntegrationTest
         unlink($testFilePath);
 
         $this->assertCount(1, $files);
-        $this->assertEquals($testFilePath, $files[0]->getPath());
+        $this->assertSame($testFilePath, $files[0]->getPath());
 
         $this->container->get('indexFilePruner')->prune();
 

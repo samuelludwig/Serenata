@@ -21,7 +21,7 @@ class StructureListProviderTest extends AbstractIntegrationTest
 
         $output = $provider->getAll();
 
-        $this->assertEquals(4, count($output));
+        $this->assertSame(4, count($output));
         $this->assertArrayHasKey('\A\FirstClass', $output);
         $this->assertArrayHasKey('\A\SecondClass', $output);
         $this->assertArrayHasKey('\A\Foo', $output);
