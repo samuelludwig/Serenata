@@ -9,6 +9,7 @@ services:
             - '@funcCallNodeDefinitionLocator'
             - '@methodCallNodeDefinitionLocator'
             - '@constFetchNodeDefinitionLocator'
+            - '@classConstFetchNodeDefinitionLocator'
 
     funcCallNodeDefinitionLocator:
         class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
@@ -26,3 +27,9 @@ services:
         arguments:
             - '@constFetchNodeFqsenDeterminer'
             - '@constantListProvider'
+
+    classConstFetchNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\ClassConstFetchNodeDefinitionLocator
+        arguments:
+            - '@nodeTypeDeducer'
+            - '@classlikeInfoBuilder'
