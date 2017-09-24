@@ -12,7 +12,6 @@
         "php-integrator/name-qualification-utilities": "~0.1.0",
         "php-integrator/docblock-type-parser": "~0.2.0",
         "doctrine/cache": "^1.6",
-        "doctrine/dbal": "^2.5",
         "doctrine/orm": "^2.5",
         "evenement/evenement": "^2.0",
         "nikic/php-parser": "dev-master#b2c6497d632b952ad9a53f3ad10e6dc7ae50e41e",
