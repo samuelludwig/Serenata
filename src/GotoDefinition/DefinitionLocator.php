@@ -156,11 +156,7 @@ class DefinitionLocator
                 throw new LogicException('No parent metadata attached to node');
             }
 
-            /*if ($parentNode instanceof Node\Stmt\Function_) {
-                return $this->getTooltipForFunctionNode($parentNode);
-            } elseif ($parentNode instanceof Node\Stmt\ClassMethod) {
-                return $this->getTooltipForClassMethodNode($parentNode, $file);
-            } else*/if ($parentNode instanceof Node\Expr\ClassConstFetch) {
+            if ($parentNode instanceof Node\Expr\ClassConstFetch) {
                 return $this->locateDefinitionOfClassConstFetchNode($parentNode, $file, $code);
             } /*elseif ($parentNode instanceof Node\Expr\PropertyFetch) {
                 return $this->getTooltipForPropertyFetchNode(
@@ -332,31 +328,6 @@ class DefinitionLocator
 
         return $this->nameNodeDefinitionLocator->locate($nameNode, $file, $line);
     }
-
-    // /**
-    //  * @param Node\Stmt\Function_ $node
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
-    // {
-    //     return $this->functionNodeTooltipGenerator->generate($node);
-    // }
-    //
-    // /**
-    //  * @param Node\Stmt\ClassMethod $node
-    //  * @param Structures\File       $file
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, Structures\File $file): string
-    // {
-    //     return $this->classMethodNodeTooltipGenerator->generate($node, $file);
-    // }
 
     /**
      * @param Node\Name       $node
