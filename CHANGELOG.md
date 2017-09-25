@@ -12,6 +12,7 @@
 * [Project paths containing the tilde representing the home folder will now be properly expanded](https://gitlab.com/php-integrator/core/merge_requests/72)
 
 ### Structural changes (mostly relevant to clients)
+* Properties now also return a `filename` property, which was missing before
 * Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
   * These classes will return a new `isAnonymous` field.
 * The `reindex` command no longer takes a `stream-progress` argument (it will be silently ignored)

@@ -117,6 +117,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'name'               => 'testProperty',
             'startLine'          => 14,
             'endLine'            => 14,
+            'filename'           => $this->getPathFor($fileName),
             'defaultValue'       => "'test'",
             'isMagic'            => false,
             'isPublic'           => false,

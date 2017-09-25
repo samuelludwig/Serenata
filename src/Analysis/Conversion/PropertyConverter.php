@@ -25,6 +25,7 @@ class PropertyConverter extends AbstractConverter
             'name'               => $property->getName(),
             'startLine'          => $property->getStartLine(),
             'endLine'            => $property->getEndLine(),
+            'filename'           => $property->getFile()->getPath(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
             'isPublic'           => $property->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,
