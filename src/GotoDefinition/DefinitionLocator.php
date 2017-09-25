@@ -55,6 +55,11 @@ class DefinitionLocator
     private $staticMethodCallNodeDefinitionLocator;
 
     /**
+     * @var PropertyFetchDefinitionLocator
+     */
+    private $propertyFetchDefinitionLocator;
+
+    /**
      * @param Parser                                $parser
      * @param FuncCallNodeDefinitionLocator         $funcCallNodeDefinitionLocator
      * @param MethodCallNodeDefinitionLocator       $methodCallNodeDefinitionLocator
@@ -62,6 +67,7 @@ class DefinitionLocator
      * @param ClassConstFetchNodeDefinitionLocator  $classConstFetchNodeDefinitionLocator
      * @param NameNodeDefinitionLocator             $nameNodeDefinitionLocator
      * @param StaticMethodCallNodeDefinitionLocator $staticMethodCallNodeDefinitionLocator
+     * @param PropertyFetchDefinitionLocator             $propertyFetchDefinitionLocator
      */
     public function __construct(
         Parser $parser,
@@ -70,7 +76,8 @@ class DefinitionLocator
         ConstFetchNodeDefinitionLocator $constFetchNodeDefinitionLocator,
         ClassConstFetchNodeDefinitionLocator $classConstFetchNodeDefinitionLocator,
         NameNodeDefinitionLocator $nameNodeDefinitionLocator,
-        StaticMethodCallNodeDefinitionLocator $staticMethodCallNodeDefinitionLocator
+        StaticMethodCallNodeDefinitionLocator $staticMethodCallNodeDefinitionLocator,
+        PropertyFetchDefinitionLocator $propertyFetchDefinitionLocator
     ) {
         $this->parser = $parser;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
@@ -79,6 +86,7 @@ class DefinitionLocator
         $this->classConstFetchNodeDefinitionLocator = $classConstFetchNodeDefinitionLocator;
         $this->nameNodeDefinitionLocator = $nameNodeDefinitionLocator;
         $this->staticMethodCallNodeDefinitionLocator = $staticMethodCallNodeDefinitionLocator;
+        $this->propertyFetchDefinitionLocator = $propertyFetchDefinitionLocator;
     }
 
     /**
@@ -166,14 +174,14 @@ class DefinitionLocator
 
             if ($parentNode instanceof Node\Expr\ClassConstFetch) {
                 return $this->locateDefinitionOfClassConstFetchNode($parentNode, $file, $code);
-            } /*elseif ($parentNode instanceof Node\Expr\PropertyFetch) {
-                return $this->getTooltipForPropertyFetchNode(
+            } elseif ($parentNode instanceof Node\Expr\PropertyFetch) {
+                return $this->locateDefinitionOfPropertyFetchNode(
                     $parentNode,
                     $file,
                     $code,
                     $parentNode->getAttribute('startFilePos')
                 );
-            } elseif ($parentNode instanceof Node\Expr\StaticPropertyFetch) {
+            } /*elseif ($parentNode instanceof Node\Expr\StaticPropertyFetch) {
                 return $this->getTooltipForStaticPropertyFetchNode(
                     $parentNode,
                     $file,
@@ -250,25 +258,25 @@ class DefinitionLocator
         return $this->staticMethodCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
     }
 
-    // /**
-    //  * @param Node\Expr\PropertyFetch $node
-    //  * @param Structures\File         $file
-    //  * @param string                  $code
-    //  * @param int                     $offset
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForPropertyFetchNode(
-    //     Node\Expr\PropertyFetch $node,
-    //     Structures\File $file,
-    //     string $code,
-    //     int $offset
-    // ): string {
-    //     return $this->propertyFetchNodeTooltipGenerator->generate($node, $file, $code, $offset);
-    // }
-    //
+    /**
+     * @param Node\Expr\PropertyFetch $node
+     * @param Structures\File         $file
+     * @param string                  $code
+     * @param int                     $offset
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return GotoDefinitionResult
+     */
+    protected function locateDefinitionOfPropertyFetchNode(
+        Node\Expr\PropertyFetch $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
+        return $this->propertyFetchDefinitionLocator->locate($node, $file, $code, $offset);
+    }
+
     // /**
     //  * @param Node\Expr\StaticPropertyFetch $node
     //  * @param Structures\File               $file

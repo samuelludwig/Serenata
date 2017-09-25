@@ -115,14 +115,21 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testPropertyFetch(): void
-    // {
-    //     // TODO
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testPropertyFetch(): void
+    {
+        $fileName = 'Property.phpt';
+
+        static::assertGotoDefinitionResultEquals(
+            $fileName,
+            105,
+            107,
+            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+        );
+    }
+
     // /**
     //  * @return void
     //  */

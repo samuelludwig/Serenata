@@ -12,6 +12,7 @@ services:
             - '@classConstFetchNodeDefinitionLocator'
             - '@nameNodeDefinitionLocator'
             - '@staticMethodCallNodeDefinitionLocator'
+            - '@propertyFetchDefinitionLocator'
 
     funcCallNodeDefinitionLocator:
         class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
@@ -46,3 +47,8 @@ services:
         class: PhpIntegrator\GotoDefinition\StaticMethodCallNodeDefinitionLocator
         arguments:
             - '@methodCallMethodInfoRetriever'
+
+    propertyFetchDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\PropertyFetchDefinitionLocator
+        arguments:
+            - '@propertyFetchPropertyInfoRetriever'
