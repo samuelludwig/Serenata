@@ -21,6 +21,10 @@
         <field name="typeDescription"    type="text"       nullable="true"  length="15000" />
         <field name="types"              type="array"      nullable="false" />
 
+        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
+            <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
+        </many-to-one>
+
         <many-to-one field="structure" target-entity="PhpIntegrator\Indexing\Structures\Structure" inversed-by="properties">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
