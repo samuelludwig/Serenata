@@ -85,13 +85,20 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testStaticMethodCallMethod(): void
-    // {
-    //     // TODO
-    // }
+    /**
+     * @return void
+     */
+    public function testStaticMethodCallMethod(): void
+    {
+        $fileName = 'StaticMethodCall.phpt';
+
+        static::assertGotoDefinitionResultEquals(
+            $fileName,
+            79,
+            82,
+            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+        );
+    }
 
     /**
      * @return void

@@ -50,12 +50,18 @@ class DefinitionLocator
     private $nameNodeDefinitionLocator;
 
     /**
-     * @param Parser                               $parser
-     * @param FuncCallNodeDefinitionLocator        $funcCallNodeDefinitionLocator
-     * @param MethodCallNodeDefinitionLocator      $methodCallNodeDefinitionLocator
-     * @param ConstFetchNodeDefinitionLocator      $constFetchNodeDefinitionLocator
-     * @param ClassConstFetchNodeDefinitionLocator $classConstFetchNodeDefinitionLocator
-     * @param NameNodeDefinitionLocator            $nameNodeDefinitionLocator
+     * @var StaticMethodCallNodeDefinitionLocator
+     */
+    private $staticMethodCallNodeDefinitionLocator;
+
+    /**
+     * @param Parser                                $parser
+     * @param FuncCallNodeDefinitionLocator         $funcCallNodeDefinitionLocator
+     * @param MethodCallNodeDefinitionLocator       $methodCallNodeDefinitionLocator
+     * @param ConstFetchNodeDefinitionLocator       $constFetchNodeDefinitionLocator
+     * @param ClassConstFetchNodeDefinitionLocator  $classConstFetchNodeDefinitionLocator
+     * @param NameNodeDefinitionLocator             $nameNodeDefinitionLocator
+     * @param StaticMethodCallNodeDefinitionLocator $staticMethodCallNodeDefinitionLocator
      */
     public function __construct(
         Parser $parser,
@@ -63,7 +69,8 @@ class DefinitionLocator
         MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator,
         ConstFetchNodeDefinitionLocator $constFetchNodeDefinitionLocator,
         ClassConstFetchNodeDefinitionLocator $classConstFetchNodeDefinitionLocator,
-        NameNodeDefinitionLocator $nameNodeDefinitionLocator
+        NameNodeDefinitionLocator $nameNodeDefinitionLocator,
+        StaticMethodCallNodeDefinitionLocator $staticMethodCallNodeDefinitionLocator
     ) {
         $this->parser = $parser;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
@@ -71,7 +78,8 @@ class DefinitionLocator
         $this->constFetchNodeDefinitionLocator = $constFetchNodeDefinitionLocator;
         $this->classConstFetchNodeDefinitionLocator = $classConstFetchNodeDefinitionLocator;
         $this->nameNodeDefinitionLocator = $nameNodeDefinitionLocator;
-}
+        $this->staticMethodCallNodeDefinitionLocator = $staticMethodCallNodeDefinitionLocator;
+    }
 
     /**
      * @param Structures\File $file
@@ -179,14 +187,14 @@ class DefinitionLocator
                     $code,
                     $parentNode->getAttribute('startFilePos')
                 );
-            } /*elseif ($parentNode instanceof Node\Expr\StaticCall) {
-                return $this->getTooltipForStaticMethodCallNode(
+            } elseif ($parentNode instanceof Node\Expr\StaticCall) {
+                return $this->locateDefinitionOfStaticMethodCallNode(
                     $parentNode,
                     $file,
                     $code,
                     $parentNode->getAttribute('startFilePos')
                 );
-            }*/
+            }
         }
 
         throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
@@ -223,25 +231,25 @@ class DefinitionLocator
         return $this->methodCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
     }
 
-    // /**
-    //  * @param Node\Expr\StaticCall $node
-    //  * @param Structures\File      $file
-    //  * @param string               $code
-    //  * @param int                  $offset
-    //  *
-    //  * @throws UnexpectedValueException
-    //  *
-    //  * @return string
-    //  */
-    // protected function getTooltipForStaticMethodCallNode(
-    //     Node\Expr\StaticCall $node,
-    //     Structures\File $file,
-    //     string $code,
-    //     int $offset
-    // ): string {
-    //     return $this->staticMethodCallNodeTooltipGenerator->generate($node, $file, $code, $offset);
-    // }
-    //
+    /**
+     * @param Node\Expr\StaticCall $node
+     * @param Structures\File      $file
+     * @param string               $code
+     * @param int                  $offset
+     *
+     * @throws UnexpectedValueException
+     *
+     * @return GotoDefinitionResult
+     */
+    protected function locateDefinitionOfStaticMethodCallNode(
+        Node\Expr\StaticCall $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
+        return $this->staticMethodCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
+    }
+
     // /**
     //  * @param Node\Expr\PropertyFetch $node
     //  * @param Structures\File         $file
