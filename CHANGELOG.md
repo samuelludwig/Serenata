@@ -3,6 +3,7 @@
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
 * [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
   * Only classes inside comments are currently not supported yet.
+  * This moves us one step closer to becoming a language server in the long run.
 * [Indexing performance has been improved by around 10% for large files](https://gitlab.com/php-integrator/core/issues/139)
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
 * [Folder indexing has been rewritten to be split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
