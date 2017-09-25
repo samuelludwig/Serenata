@@ -5,12 +5,12 @@
   * Only classes inside comments are currently not supported yet.
   * This moves us one step closer to becoming a language server in the long run.
 * [Indexing performance has been improved by around 10% for large files](https://gitlab.com/php-integrator/core/issues/139)
-* Function and method docblock `@return` tag types will now also be validated against the actual return type
 * [Folder indexing has been rewritten to be split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
 * This is mostly refactoring to allow for future improvements, but this also included performance improvements
 
 ### Bugs Fixed
 * [Project paths containing the tilde representing the home folder will now be properly expanded](https://gitlab.com/php-integrator/core/merge_requests/72)
+* Function and method docblock `@return` tag types will now also be validated against the actual return type
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
 
 ### Structural changes (mostly relevant to clients)
