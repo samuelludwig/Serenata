@@ -6,6 +6,7 @@
   * This is mostly refactoring to allow for future improvements, but this also included performance improvements
 * [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
   * Only classes inside comments are currently not supported yet.
+* [Indexing performance has been improved by around 10% for large files](https://gitlab.com/php-integrator/core/issues/139)
 
 ### Bugs Fixed
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)

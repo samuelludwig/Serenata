@@ -165,6 +165,8 @@ class FileIndexer implements FileIndexerInterface
         // performance worse, because of the constant flushing and entity changes due to the end lines being
         // recalculated, than just traversing twice.
         $traverser = new NodeTraverser();
+        $traverser->addVisitor(new Visiting\ClassLikeBodySkippingVisitor());
+        $traverser->addVisitor(new Visiting\FunctionLikeBodySkippingVisitor());
         $traverser->addVisitor($useStatementIndexingVisitor);
         $traverser->traverse($nodes);
 
