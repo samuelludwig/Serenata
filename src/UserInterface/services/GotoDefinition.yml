@@ -13,6 +13,7 @@ services:
             - '@nameNodeDefinitionLocator'
             - '@staticMethodCallNodeDefinitionLocator'
             - '@propertyFetchDefinitionLocator'
+            - '@staticPropertyFetchNodeDefinitionLocator'
 
     funcCallNodeDefinitionLocator:
         class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
@@ -50,5 +51,10 @@ services:
 
     propertyFetchDefinitionLocator:
         class: PhpIntegrator\GotoDefinition\PropertyFetchDefinitionLocator
+        arguments:
+            - '@propertyFetchPropertyInfoRetriever'
+
+    staticPropertyFetchNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\StaticPropertyFetchNodeDefinitionLocator
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
