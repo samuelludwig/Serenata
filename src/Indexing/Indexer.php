@@ -115,15 +115,13 @@ class Indexer implements EventEmitterInterface
             return !is_dir($path);
         });
 
-        if (!empty($directories)) {
-            $this->indexDirectories(
-                $directories,
-                $extensionsToIndex,
-                $globsToExclude,
-                $jsonRpcResponseSender,
-                $originatingRequestId
-            );
-        }
+        $this->indexDirectories(
+            $directories,
+            $extensionsToIndex,
+            $globsToExclude,
+            $jsonRpcResponseSender,
+            $originatingRequestId
+        );
 
         foreach ($files as $path) {
             $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
@@ -162,6 +160,10 @@ class Indexer implements EventEmitterInterface
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         ?int $requestId
     ): void {
+        if (empty($paths)) {
+            return; // Optimization that skips expensive operations during demuxing, which stack.
+        }
+
         $this->directoryIndexRequestDemuxer->index(
             $paths,
             $extensionsToIndex,
