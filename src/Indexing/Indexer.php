@@ -115,13 +115,15 @@ class Indexer implements EventEmitterInterface
             return !is_dir($path);
         });
 
-        $this->indexDirectories(
-            $directories,
-            $extensionsToIndex,
-            $globsToExclude,
-            $jsonRpcResponseSender,
-            $originatingRequestId
-        );
+        if (!empty($directories)) {
+            $this->indexDirectories(
+                $directories,
+                $extensionsToIndex,
+                $globsToExclude,
+                $jsonRpcResponseSender,
+                $originatingRequestId
+            );
+        }
 
         foreach ($files as $path) {
             $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
