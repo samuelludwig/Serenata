@@ -127,23 +127,25 @@ class Indexer implements EventEmitterInterface
             $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
         }
 
-        if ($originatingRequestId !== null) {
-            if (!empty($directories)) {
-                $this->indexFilePruner->prune();
-            }
-
-            // As a directory index request is demuxed into multiple file index requests, the response for the original
-            // request may not be sent until all individual file index requests have been handled. This command will
-            // send that "finish" response when executed.
-            //
-            // This request will not be queued for file reindex requests that are the result of the demuxing as those
-            // don't have an originating request ID.
-            $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoResponse', [
-                'response' => new JsonRpcResponse($originatingRequestId, true)
-            ]);
-
-            $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));
+        if ($originatingRequestId === null) {
+            return true;
         }
+
+        if (!empty($directories)) {
+            $this->indexFilePruner->prune();
+        }
+
+        // As a directory index request is demuxed into multiple file index requests, the response for the original
+        // request may not be sent until all individual file index requests have been handled. This command will
+        // send that "finish" response when executed.
+        //
+        // This request will not be queued for file reindex requests that are the result of the demuxing as those
+        // don't have an originating request ID.
+        $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoResponse', [
+            'response' => new JsonRpcResponse($originatingRequestId, true)
+        ]);
+
+        $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));
 
         return true;
     }
