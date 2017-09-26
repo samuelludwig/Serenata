@@ -128,6 +128,8 @@ class Indexer implements EventEmitterInterface
         }
 
         if ($originatingRequestId !== null) {
+            $this->indexFilePruner->prune();
+
             // As a directory index request is demuxed into multiple file index requests, the response for the original
             // request may not be sent until all individual file index requests have been handled. This command will
             // send that "finish" response when executed.
@@ -158,8 +160,6 @@ class Indexer implements EventEmitterInterface
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         ?int $requestId
     ): void {
-        $this->indexFilePruner->prune();
-
         $this->directoryIndexRequestDemuxer->index(
             $paths,
             $extensionsToIndex,
