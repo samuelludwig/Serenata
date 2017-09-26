@@ -357,7 +357,7 @@ class DefinitionLocator
         $nameNode = new Node\Name\FullyQualified($node->name->toString());
 
         if ($parentNode instanceof Node\Stmt\GroupUse) {
-            $nameNode = Node\Name::concat($parentNode->prefix, $nameNode);
+            $nameNode = new Node\Name\FullyQualified(Node\Name::concat($parentNode->prefix, $nameNode));
         }
 
         return $this->nameNodeDefinitionLocator->locate($nameNode, $file, $line);
