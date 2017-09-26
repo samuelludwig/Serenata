@@ -128,7 +128,9 @@ class Indexer implements EventEmitterInterface
         }
 
         if ($originatingRequestId !== null) {
-            $this->indexFilePruner->prune();
+            if (!empty($directories)) {
+                $this->indexFilePruner->prune();
+            }
 
             // As a directory index request is demuxed into multiple file index requests, the response for the original
             // request may not be sent until all individual file index requests have been handled. This command will
