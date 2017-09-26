@@ -211,6 +211,20 @@ Class');
     /**
      * @return void
      */
+    public function testClassNameInGroupedUseImport(): void
+    {
+        $this->performTooltipTest('ClassNameGroupedUseImport.phpt', 91, 91, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
+    /**
+     * @return void
+     */
     public function testClassNameInImplementsClause(): void
     {
         $this->performTooltipTest('ClassNameImplements.phpt', 82, 82, 'This is a summary.
