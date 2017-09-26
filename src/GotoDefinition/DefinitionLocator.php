@@ -347,8 +347,18 @@ class DefinitionLocator
         Structures\File $file,
         int $line
     ): GotoDefinitionResult {
+        $parentNode = $node->getAttribute('parent', false);
+
+        if ($parentNode === false) {
+            throw new LogicException('Parent node data is required in metadata');
+        }
+
         // Use statements are always fully qualified, they aren't resolved.
         $nameNode = new Node\Name\FullyQualified($node->name->toString());
+
+        if ($parentNode instanceof Node\Stmt\GroupUse) {
+            $nameNode = Node\Name::concat($parentNode->prefix, $nameNode);
+        }
 
         return $this->nameNodeDefinitionLocator->locate($nameNode, $file, $line);
     }

@@ -175,20 +175,20 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testClassInGroupedUseStatement(): void
-    // {
-    //     $fileName = 'ClassInGroupedUseStatement.phpt';
-    //
-    //     static::assertGotoDefinitionResultEquals(
-    //         $fileName,
-    //         93,
-    //         93,
-    //         new GotoDefinitionResult($this->getPathFor($fileName), 5)
-    //     );
-    // }
+    /**
+     * @return void
+     */
+    public function testClassInGroupedUseStatement(): void
+    {
+        $fileName = 'ClassInGroupedUseStatement.phpt';
+
+        static::assertGotoDefinitionResultEquals(
+            $fileName,
+            93,
+            93,
+            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+        );
+    }
 
     /**
      * @return void
