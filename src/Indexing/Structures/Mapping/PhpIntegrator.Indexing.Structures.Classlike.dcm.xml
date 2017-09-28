@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\Structure" change-tracking-policy="DEFERRED_EXPLICIT" inheritance-type="SINGLE_TABLE">
+    <entity name="PhpIntegrator\Indexing\Structures\Classlike" change-tracking-policy="DEFERRED_EXPLICIT" inheritance-type="SINGLE_TABLE">
         <discriminator-column name="type" type="string" length="255" />
 
         <discriminator-map>
@@ -25,39 +25,39 @@
         <field name="isDeprecated"       type="boolean" nullable="false" />
         <field name="hasDocblock"        type="boolean" nullable="false" />
 
-        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="structures">
+        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="classlikes">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
             <!-- <cache>
                 <usage>READ_ONLY</usage>
-                <region>structureFile</region>
+                <region>classlikeFile</region>
             </cache> -->
         </many-to-one>
 
-        <one-to-many field="constants" target-entity="PhpIntegrator\Indexing\Structures\ClassConstant" mapped-by="structure">
+        <one-to-many field="constants" target-entity="PhpIntegrator\Indexing\Structures\ClassConstant" mapped-by="classlike">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
-                <region>structureConstants</region>
+                <region>classlikeConstants</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="properties" target-entity="PhpIntegrator\Indexing\Structures\Property" mapped-by="structure">
+        <one-to-many field="properties" target-entity="PhpIntegrator\Indexing\Structures\Property" mapped-by="classlike">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
-                <region>structureProperties</region>
+                <region>classlikeProperties</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Method" mapped-by="structure">
+        <one-to-many field="methods" target-entity="PhpIntegrator\Indexing\Structures\Method" mapped-by="classlike">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
-                <region>structureMethods</region>
+                <region>classlikeMethods</region>
             </cache> -->
         </one-to-many>
 
         <!-- <cache>
             <usage>READ_ONLY</usage>
-            <region>structure</region>
+            <region>classlike</region>
         </cache> -->
     </entity>
 

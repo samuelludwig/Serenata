@@ -10,9 +10,9 @@ use Ramsey\Uuid\Uuid;
 class ClassConstant extends ConstantLike
 {
     /**
-     * @var Structure
+     * @var Classlike
      */
-    private $structure;
+    private $classlike;
 
     /**
      * @var AccessModifier
@@ -31,7 +31,7 @@ class ClassConstant extends ConstantLike
      * @param string|null         $longDescription
      * @param string|null         $typeDescription
      * @param TypeInfo[]          $types
-     * @param Structure           $structure
+     * @param Classlike           $classlike
      * @param AccessModifier      $accessModifier
      */
     public function __construct(
@@ -46,7 +46,7 @@ class ClassConstant extends ConstantLike
         ?string $longDescription,
         ?string $typeDescription,
         array $types,
-        Structure $structure,
+        Classlike $classlike,
         AccessModifier $accessModifier
     ) {
         $this->id = (string) Uuid::uuid4();
@@ -61,18 +61,18 @@ class ClassConstant extends ConstantLike
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
         $this->types = $types;
-        $this->structure = $structure;
+        $this->classlike = $classlike;
         $this->accessModifier = $accessModifier;
 
-        $structure->addConstant($this);
+        $classlike->addConstant($this);
     }
 
     /**
-     * @return Structure
+     * @return Classlike
      */
-    public function getStructure(): Structure
+    public function getClasslike(): Classlike
     {
-        return $this->structure;
+        return $this->classlike;
     }
 
     /**

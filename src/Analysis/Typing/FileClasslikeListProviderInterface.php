@@ -7,9 +7,9 @@ use RuntimeException;
 use PhpIntegrator\Indexing\Structures;
 
 /**
- * Interface for classes that can retrieve a structure list for a specific file.
+ * Interface for classes that can retrieve a classlike list for a specific file.
  */
-interface FileStructureListProviderInterface
+interface FileClasslikeListProviderInterface
 {
     /**
      * @param Structures\File $file

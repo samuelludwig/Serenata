@@ -7,14 +7,14 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 /**
  * Contains tests that test whether the registry properly interacts with workspace changes.
  */
-class StructureListRegistryWorkspaceInteractionTest extends AbstractIntegrationTest
+class ClasslikeListRegistryWorkspaceInteractionTest extends AbstractIntegrationTest
 {
     /**
      * @return void
      */
     public function testRegistryIsClearedWhenWorkspaceChanges(): void
     {
-        $registry = $this->container->get('structureListProvider.registry');
+        $registry = $this->container->get('classlikeListProvider.registry');
 
         static::assertEmpty($registry->getAll());
 

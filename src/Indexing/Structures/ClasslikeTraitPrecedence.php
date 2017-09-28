@@ -3,9 +3,9 @@
 namespace PhpIntegrator\Indexing\Structures;
 
 /**
- * Base class for trait method precedences in structures.
+ * Base class for trait method precedences in a classlike.
  */
-abstract class StructureTraitPrecedence
+abstract class ClasslikeTraitPrecedence
 {
     /**
      * @var string

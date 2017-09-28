@@ -59,10 +59,10 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     /**
      * @inheritDoc
      */
-    public function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    public function findStructureByFqcn(string $fqcn): ?Structures\Classlike
     {
         try {
-            return $this->managerRegistry->getRepository(Structures\Structure::class)->findOneBy([
+            return $this->managerRegistry->getRepository(Structures\Classlike::class)->findOneBy([
                 'fqcn' => $fqcn
             ]);
         } catch (DriverException $e) {

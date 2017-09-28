@@ -19,7 +19,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var array
      */
-    private $structures = [];
+    private $classlikes = [];
 
     /**
      * @var array
@@ -117,7 +117,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
-        $this->structures[$fqcn] = [
+        $this->classlikes[$fqcn] = [
             'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'class',
@@ -158,7 +158,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
-        $this->structures[$fqcn] = [
+        $this->classlikes[$fqcn] = [
             'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'interface',
@@ -190,7 +190,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
-        $this->structures[$fqcn] = [
+        $this->classlikes[$fqcn] = [
             'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'trait',
@@ -215,13 +215,13 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->traits as $traitName) {
-            $this->structures[$fqcn]['traits'][] =
+            $this->classlikes[$fqcn]['traits'][] =
                 NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
         }
 
         foreach ($node->adaptations as $adaptation) {
             if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
-                $this->structures[$fqcn]['traitAliases'][] = [
+                $this->classlikes[$fqcn]['traitAliases'][] = [
                     'name'                       => $adaptation->method,
                     'alias'                      => $adaptation->newName,
                     'trait'                      => $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null,
@@ -231,7 +231,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
                     'isInheritingAccessModifier' => ($adaptation->newModifier === null)
                 ];
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
-                $this->structures[$fqcn]['traitPrecedences'][] = [
+                $this->classlikes[$fqcn]['traitPrecedences'][] = [
                     'name'  => $adaptation->method,
                     'trait' => NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'))
                 ];
@@ -249,7 +249,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->props as $property) {
-            $this->structures[$fqcn]['properties'][$property->name->name] = [
+            $this->classlikes[$fqcn]['properties'][$property->name->name] = [
                 'name'             => $property->name->name,
                 'startLine'        => $property->getLine(),
                 'endLine'          => $property->getAttribute('endLine'),
@@ -304,7 +304,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
-        $this->structures[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
+        $this->classlikes[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
             'isPublic'       => $node->isPublic(),
             'isPrivate'      => $node->isPrivate(),
             'isProtected'    => $node->isProtected(),
@@ -410,7 +410,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->consts as $const) {
-            $this->structures[$fqcn]['constants'][$const->name->name] = [
+            $this->classlikes[$fqcn]['constants'][$const->name->name] = [
                 'name'             => $const->name->name,
                 'startLine'        => $const->getLine(),
                 'endLine'          => $const->getAttribute('endLine'),
@@ -518,9 +518,9 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return array
      */
-    public function getStructures(): array
+    public function getClasslikes(): array
     {
-        return $this->structures;
+        return $this->classlikes;
     }
 
     /**

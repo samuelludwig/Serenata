@@ -5,9 +5,9 @@ namespace PhpIntegrator\Indexing\Structures;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Represents a structure or classlike.
+ * Represents a classlike.
  */
-abstract class Structure
+abstract class Classlike
 {
     /**
      * @var string

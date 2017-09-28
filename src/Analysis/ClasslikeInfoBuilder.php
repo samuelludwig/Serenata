@@ -163,26 +163,26 @@ class ClasslikeInfoBuilder
      */
     protected function getUncheckedClasslikeInfo(string $fqcn): ArrayObject
     {
-        $structure = $this->storage->findStructureByFqcn($fqcn);
+        $classlike = $this->storage->findStructureByFqcn($fqcn);
 
-        if (!$structure) {
+        if (!$classlike) {
             throw new UnexpectedValueException('The structural element "' . $fqcn . '" was not found!');
         }
 
-        return $this->fetchFlatClasslikeInfo($structure);
+        return $this->fetchFlatClasslikeInfo($classlike);
     }
 
     /**
      * Builds information about a classlike in a flat structure, meaning it doesn't resolve any inheritance or interface
      * implementations. Instead, it will only list members and data directly relevant to the classlike.
      *
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return ArrayObject
      */
-    protected function fetchFlatClasslikeInfo(Structures\Structure $structure): ArrayObject
+    protected function fetchFlatClasslikeInfo(Structures\Classlike $classlike): ArrayObject
     {
-        $classlike = new ArrayObject($this->classlikeConverter->convert($structure) + [
+        $classlikeInfo = new ArrayObject($this->classlikeConverter->convert($classlike) + [
             'parents'            => [],
             'interfaces'         => [],
             'traits'             => [],
@@ -199,207 +199,207 @@ class ClasslikeInfoBuilder
             'methods'            => []
         ]);
 
-        $this->buildDirectChildrenInfo($classlike, $structure);
-        $this->buildDirectImplementorsInfo($classlike, $structure);
-        $this->buildTraitUsersInfo($classlike, $structure);
-        $this->buildConstantsInfo($classlike, $structure);
-        $this->buildPropertiesInfo($classlike, $structure);
-        $this->buildMethodsInfo($classlike, $structure);
-        $this->buildTraitsInfo($classlike, $structure);
+        $this->buildDirectChildrenInfo($classlikeInfo, $classlike);
+        $this->buildDirectImplementorsInfo($classlikeInfo, $classlike);
+        $this->buildTraitUsersInfo($classlikeInfo, $classlike);
+        $this->buildConstantsInfo($classlikeInfo, $classlike);
+        $this->buildPropertiesInfo($classlikeInfo, $classlike);
+        $this->buildMethodsInfo($classlikeInfo, $classlike);
+        $this->buildTraitsInfo($classlikeInfo, $classlike);
 
-        $this->resolveNormalTypes($classlike);
-        $this->resolveSelfTypesTo($classlike, $classlike['fqcn']);
+        $this->resolveNormalTypes($classlikeInfo);
+        $this->resolveSelfTypesTo($classlikeInfo, $classlikeInfo['fqcn']);
 
-        $this->buildParentsInfo($classlike, $structure);
-        $this->buildInterfacesInfo($classlike, $structure);
+        $this->buildParentsInfo($classlikeInfo, $classlike);
+        $this->buildInterfacesInfo($classlikeInfo, $classlike);
 
-        $this->resolveStaticTypesTo($classlike, $classlike['fqcn']);
+        $this->resolveStaticTypesTo($classlikeInfo, $classlikeInfo['fqcn']);
 
-        return $classlike;
+        return $classlikeInfo;
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildDirectChildrenInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildDirectChildrenInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        if (!$structure instanceof Structures\Class_ && !$structure instanceof Structures\Interface_) {
+        if (!$classlike instanceof Structures\Class_ && !$classlike instanceof Structures\Interface_) {
             return;
         }
 
-        foreach ($structure->getChildFqcns() as $childFqcn) {
-            $classlike['directChildren'][] = $childFqcn;
+        foreach ($classlike->getChildFqcns() as $childFqcn) {
+            $classlikeInfo['directChildren'][] = $childFqcn;
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildDirectImplementorsInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildDirectImplementorsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        if (!$structure instanceof Structures\Interface_) {
+        if (!$classlike instanceof Structures\Interface_) {
             return;
         }
 
-        foreach ($structure->getImplementorFqcns() as $implementorFqcn) {
-            $classlike['directImplementors'][] = $implementorFqcn;
+        foreach ($classlike->getImplementorFqcns() as $implementorFqcn) {
+            $classlikeInfo['directImplementors'][] = $implementorFqcn;
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildTraitUsersInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildTraitUsersInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        if (!$structure instanceof Structures\Trait_) {
+        if (!$classlike instanceof Structures\Trait_) {
             return;
         }
 
-        foreach ($structure->getTraitUserFqcns() as $traitUserFqcn) {
-            $classlike['directTraitUsers'][] = $traitUserFqcn;
+        foreach ($classlike->getTraitUserFqcns() as $traitUserFqcn) {
+            $classlikeInfo['directTraitUsers'][] = $traitUserFqcn;
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildConstantsInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildConstantsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        foreach ($structure->getConstants() as $constant) {
-            $classlike['constants'][$constant->getName()] = $this->classlikeConstantConverter->convertForClass(
+        foreach ($classlike->getConstants() as $constant) {
+            $classlikeInfo['constants'][$constant->getName()] = $this->classlikeConstantConverter->convertForClass(
                 $constant,
-                $classlike
+                $classlikeInfo
             );
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildPropertiesInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildPropertiesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        foreach ($structure->getProperties() as $property) {
-            $classlike['properties'][$property->getName()] = $this->propertyConverter->convertForClass(
+        foreach ($classlike->getProperties() as $property) {
+            $classlikeInfo['properties'][$property->getName()] = $this->propertyConverter->convertForClass(
                 $property,
-                $classlike
+                $classlikeInfo
             );
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildMethodsInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildMethodsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        foreach ($structure->getMethods() as $method) {
-            $classlike['methods'][$method->getName()] = $this->methodConverter->convertForClass($method, $classlike);
+        foreach ($classlike->getMethods() as $method) {
+            $classlikeInfo['methods'][$method->getName()] = $this->methodConverter->convertForClass($method, $classlikeInfo);
         }
     }
 
     /**
-     * @param ArrayObject         $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject         $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildTraitsInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildTraitsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        if (!$structure instanceof Structures\Class_ && !$structure instanceof Structures\Trait_) {
+        if (!$classlike instanceof Structures\Class_ && !$classlike instanceof Structures\Trait_) {
             return;
         }
 
-        foreach ($structure->getTraitFqcns() as $traitFqcn) {
-            $classlike['traits'][] = $traitFqcn;
-            $classlike['directTraits'][] = $traitFqcn;
+        foreach ($classlike->getTraitFqcns() as $traitFqcn) {
+            $classlikeInfo['traits'][] = $traitFqcn;
+            $classlikeInfo['directTraits'][] = $traitFqcn;
 
             try {
-                $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlike['fqcn']);
+                $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlikeInfo['fqcn']);
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 continue;
             }
 
             $this->traitUsageResolver->resolveUseOf(
                 $traitInfo,
-                $classlike,
-                $structure->getTraitAliases(),
-                $structure->getTraitPrecedences()
+                $classlikeInfo,
+                $classlike->getTraitAliases(),
+                $classlike->getTraitPrecedences()
             );
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildParentsInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildParentsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         $parentFqcns = [];
 
-        if (!$structure instanceof Structures\Class_ && !$structure instanceof Structures\Interface_) {
+        if (!$classlike instanceof Structures\Class_ && !$classlike instanceof Structures\Interface_) {
             return;
-        } elseif ($structure instanceof Structures\Class_) {
-            $parentFqcns = array_filter([$structure->getParentFqcn()]);
+        } elseif ($classlike instanceof Structures\Class_) {
+            $parentFqcns = array_filter([$classlike->getParentFqcn()]);
         } else {
-            $parentFqcns = $structure->getParentFqcns();
+            $parentFqcns = $classlike->getParentFqcns();
         }
 
         foreach ($parentFqcns as $parentFqcn) {
-            $classlike['parents'][] = $parentFqcn;
-            $classlike['directParents'][] = $parentFqcn;
+            $classlikeInfo['parents'][] = $parentFqcn;
+            $classlikeInfo['directParents'][] = $parentFqcn;
 
             try {
-                $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlike['fqcn']);
+                $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlikeInfo['fqcn']);
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 continue;
             }
 
-            $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlike);
+            $this->inheritanceResolver->resolveInheritanceOf($parentInfo, $classlikeInfo);
         }
     }
 
     /**
-     * @param ArrayObject          $classlike
-     * @param Structures\Structure $structure
+     * @param ArrayObject          $classlikeInfo
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function buildInterfacesInfo(ArrayObject $classlike, Structures\Structure $structure): void
+    protected function buildInterfacesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
-        if (!$structure instanceof Structures\Class_) {
+        if (!$classlike instanceof Structures\Class_) {
             return;
         }
 
-        foreach ($structure->getInterfaceFqcns() as $interfaceFqcn) {
-            $classlike['interfaces'][] = $interfaceFqcn;
-            $classlike['directInterfaces'][] = $interfaceFqcn;
+        foreach ($classlike->getInterfaceFqcns() as $interfaceFqcn) {
+            $classlikeInfo['interfaces'][] = $interfaceFqcn;
+            $classlikeInfo['directInterfaces'][] = $interfaceFqcn;
 
             try {
-                $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlike['fqcn']);
+                $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlikeInfo['fqcn']);
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 continue;
             }
 
-            $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlike);
+            $this->interfaceImplementationResolver->resolveImplementationOf($interfaceInfo, $classlikeInfo);
         }
     }
 

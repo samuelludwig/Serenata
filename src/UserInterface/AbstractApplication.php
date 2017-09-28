@@ -107,12 +107,12 @@ abstract class AbstractApplication
         $container->get('cacheClearingEventMediator3');
         $container->get('functionIndexingFunctionRegistryMediator');
         $container->get('constantIndexingConstantRegistryMediator');
-        $container->get('structureIndexingStructureRegistryMediator');
+        $container->get('classlikeIndexingStructureRegistryMediator');
         $container->get('namespaceIndexingNamespaceRegistryMediator');
 
         $container->get('workspaceEventConstantRegistryMediator');
         $container->get('workspaceEventFunctionRegistryMediator');
-        $container->get('workspaceEventStructureRegistryMediator');
+        $container->get('workspaceEventClasslikeRegistryMediator');
         $container->get('workspaceEventNamespaceRegistryMediator');
     }
 

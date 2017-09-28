@@ -3,12 +3,12 @@
 namespace PhpIntegrator\Analysis;
 
 /**
- * Registry that maintains a list of structures.
+ * Registry that maintains a list of classlikes.
  */
-final class StructureListRegistry implements StructureListProviderInterface
+final class ClasslikeListRegistry implements ClasslikeListProviderInterface
 {
     /**
-     * @var StructureListProviderInterface
+     * @var ClasslikeListProviderInterface
      */
     private $delegate;
 
@@ -18,9 +18,9 @@ final class StructureListRegistry implements StructureListProviderInterface
     private $registry;
 
     /**
-     * @param StructureListProviderInterface $delegate
+     * @param ClasslikeListProviderInterface $delegate
      */
-    public function __construct(StructureListProviderInterface $delegate)
+    public function __construct(ClasslikeListProviderInterface $delegate)
     {
         $this->delegate = $delegate;
     }
@@ -32,24 +32,24 @@ final class StructureListRegistry implements StructureListProviderInterface
      }
 
      /**
-      * @param array $structure
+      * @param array $classlike
       */
-     public function add(array $structure): void
+     public function add(array $classlike): void
      {
          $this->initializeRegistryIfNecessary();
 
-         $this->registry[$structure['fqcn']] = $structure;
+         $this->registry[$classlike['fqcn']] = $classlike;
      }
 
      /**
-      * @param array $structure
+      * @param array $classlike
       */
-     public function remove(array $structure): void
+     public function remove(array $classlike): void
      {
          $this->initializeRegistryIfNecessary();
 
-         if (isset($this->registry[$structure['fqcn']])) {
-             unset($this->registry[$structure['fqcn']]);
+         if (isset($this->registry[$classlike['fqcn']])) {
+             unset($this->registry[$classlike['fqcn']]);
          }
      }
 

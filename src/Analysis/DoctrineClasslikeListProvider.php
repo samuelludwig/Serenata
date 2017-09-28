@@ -8,15 +8,15 @@ use Doctrine\DBAL\Exception\DriverException;
 
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 
-use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
 /**
- * Retrieves a list of available structures via Doctrine.
+ * Retrieves a list of available classlikes via Doctrine.
  */
-class DoctrineStructureListProvider implements FileStructureListProviderInterface, StructureListProviderInterface
+class DoctrineClasslikeListProvider implements FileClasslikeListProviderInterface, ClasslikeListProviderInterface
 {
     /**
      * @var ClasslikeConverter
@@ -44,12 +44,12 @@ class DoctrineStructureListProvider implements FileStructureListProviderInterfac
     public function getAll(): array
     {
         try {
-            $items = $this->managerRegistry->getRepository(Structures\Structure::class)->findAll();
+            $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findAll();
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        return $this->mapStructures($items);
+        return $this->mapClasslikes($items);
     }
 
     /**
@@ -58,26 +58,26 @@ class DoctrineStructureListProvider implements FileStructureListProviderInterfac
     public function getAllForFile(Structures\File $file): array
     {
         try {
-            $items = $this->managerRegistry->getRepository(Structures\Structure::class)->findBy([
+            $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findBy([
                 'file' => $file
             ]);
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        return $this->mapStructures($items);
+        return $this->mapClasslikes($items);
     }
 
     /**
-     * @param array $structures
+     * @param array $classlikes
      *
      * @return array
      */
-    protected function mapStructures(array $structures): array
+    protected function mapClasslikes(array $classlikes): array
     {
         $result = [];
 
-        foreach ($structures as $element) {
+        foreach ($classlikes as $element) {
             $result[$element->getFqcn()] = $this->classlikeConverter->convert($element);
         }
 

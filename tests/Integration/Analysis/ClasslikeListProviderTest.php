@@ -4,20 +4,20 @@ namespace PhpIntegrator\Tests\Integration\Analysis;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class StructureListProviderTest extends AbstractIntegrationTest
+class ClasslikeListProviderTest extends AbstractIntegrationTest
 {
     /**
      * @return void
      */
     public function testRetrievesAllClasses(): void
     {
-        $path = __DIR__ . '/StructureListProviderTest/' . 'ClassList.phpt';
-        $secondPath = __DIR__ . '/StructureListProviderTest/' . 'FooBarClasses.phpt';
+        $path = __DIR__ . '/ClasslikeListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/ClasslikeListProviderTest/' . 'FooBarClasses.phpt';
 
         $this->indexTestFile($this->container, $path);
         $this->indexTestFile($this->container, $secondPath);
 
-        $provider = $this->container->get('structureListProvider');
+        $provider = $this->container->get('classlikeListProvider');
 
         $output = $provider->getAll();
 

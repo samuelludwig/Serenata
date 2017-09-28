@@ -12,7 +12,7 @@ use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
 /**
- * Retrieves a list of available structures via Doctrine.
+ * Retrieves a list of available classlikes via Doctrine.
  */
 class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterface, NamespaceListProviderInterface
 {

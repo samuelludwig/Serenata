@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents trait method precedence in a trait.
  */
-class TraitTraitPrecedence extends StructureTraitPrecedence
+class TraitTraitPrecedence extends ClasslikeTraitPrecedence
 {
     /**
      * @var Trait_

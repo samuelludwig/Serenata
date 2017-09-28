@@ -363,7 +363,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
 
         $property = $classes[0]->getProperties()[0];
 
-        static::assertSame($classes[0], $property->getStructure());
+        static::assertSame($classes[0], $property->getClasslike());
 
         return $property;
     }

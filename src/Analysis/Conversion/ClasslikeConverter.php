@@ -10,31 +10,31 @@ use PhpIntegrator\Indexing\Structures;
 class ClasslikeConverter extends AbstractConverter
 {
     /**
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return array
      */
-    public function convert(Structures\Structure $structure): array
+    public function convert(Structures\Classlike $classlike): array
     {
         $data = [
-            'name'               => $structure->getName(),
-            'fqcn'               => $structure->getFqcn(),
-            'startLine'          => $structure->getStartLine(),
-            'endLine'            => $structure->getEndLine(),
-            'filename'           => $structure->getFile()->getPath(),
-            'type'               => $structure->getTypeName(),
-            'isDeprecated'       => $structure->getIsDeprecated(),
-            'hasDocblock'        => $structure->getHasDocblock(),
-            'hasDocumentation'   => $structure->getHasDocblock(),
-            'shortDescription'   => $structure->getShortDescription(),
-            'longDescription'    => $structure->getLongDescription()
+            'name'               => $classlike->getName(),
+            'fqcn'               => $classlike->getFqcn(),
+            'startLine'          => $classlike->getStartLine(),
+            'endLine'            => $classlike->getEndLine(),
+            'filename'           => $classlike->getFile()->getPath(),
+            'type'               => $classlike->getTypeName(),
+            'isDeprecated'       => $classlike->getIsDeprecated(),
+            'hasDocblock'        => $classlike->getHasDocblock(),
+            'hasDocumentation'   => $classlike->getHasDocblock(),
+            'shortDescription'   => $classlike->getShortDescription(),
+            'longDescription'    => $classlike->getLongDescription()
         ];
 
-        if ($structure instanceof Structures\Class_) {
-            $data['isAnonymous']  = $structure->getIsAnonymous();
-            $data['isAbstract']   = $structure->getIsAbstract();
-            $data['isFinal']      = $structure->getIsFinal();
-            $data['isAnnotation'] = $structure->getIsAnnotation();
+        if ($classlike instanceof Structures\Class_) {
+            $data['isAnonymous']  = $classlike->getIsAnonymous();
+            $data['isAbstract']   = $classlike->getIsAbstract();
+            $data['isFinal']      = $classlike->getIsFinal();
+            $data['isAnnotation'] = $classlike->getIsAnnotation();
         }
 
         return $data;

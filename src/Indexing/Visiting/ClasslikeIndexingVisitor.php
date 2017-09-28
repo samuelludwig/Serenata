@@ -64,11 +64,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $accessModifierMap;
 
     /**
-     * @var array
-     */
-    private $structureTypeMap;
-
-    /**
      * @var Structures\File
      */
     private $file;
@@ -79,9 +74,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var Stack Stack<Structures\Structure>
+     * @var Stack Stack<Structures\Classlike>
      */
-    private $structureStack;
+    private $classlikeStack;
 
     /**
      * @var string[]
@@ -89,10 +84,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $traitsUsed = [];
 
     /**
-     * Stores structures that were found during the traversal.
+     * Stores classlikes that were found during the traversal.
      *
-     * Whilst traversing, structures found first may be referencing structures found later and the other way around.
-     * Because changes are not flushed during traversal, fetching these structures may not work if they are located
+     * Whilst traversing, classlikes found first may be referencing classlikes found later and the other way around.
+     * Because changes are not flushed during traversal, fetching these classlikes may not work if they are located
      * in the same file.
      *
      * We could also flush the changes constantly, but this hurts performance and not fetching information we already
@@ -100,7 +95,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @var SplObjectStorage
      */
-    private $structuresFound;
+    private $classlikesFound;
 
     /**
      * @var SplObjectStorage
@@ -184,15 +179,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes)
     {
-        $this->structureStack = new Stack();
-        $this->structuresFound = new SplObjectStorage();;
+        $this->classlikeStack = new Stack();
+        $this->classlikesFound = new SplObjectStorage();;
         $this->relationsStorage = new SplObjectStorage();
         $this->traitUseStorage = new SplObjectStorage();
 
-        foreach ($this->file->getStructures() as $structure) {
-            $this->file->removeStructure($structure);
+        foreach ($this->file->getClasslikes() as $classlike) {
+            $this->file->removeClasslike($classlike);
 
-            $this->storage->delete($structure);
+            $this->storage->delete($classlike);
         }
     }
 
@@ -203,22 +198,22 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         // Index relations after traversal as, in PHP, a child class can be defined before a parent class in a single
         // file. When walking the tree and indexing the child, the parent may not yet have been indexed.
-        foreach ($this->relationsStorage as $structure) {
-            $node = $this->relationsStorage[$structure];
+        foreach ($this->relationsStorage as $classlike) {
+            $node = $this->relationsStorage[$classlike];
 
-            $this->processClassLikeRelations($node, $structure);
+            $this->processClassLikeRelations($node, $classlike);
 
-            $this->storage->persist($structure);
+            $this->storage->persist($classlike);
         }
 
-        foreach ($this->traitUseStorage as $structure) {
-            $nodes = $this->traitUseStorage[$structure];
+        foreach ($this->traitUseStorage as $classlike) {
+            $nodes = $this->traitUseStorage[$classlike];
 
             foreach ($nodes as $node) {
-                $this->processTraitUseNode($node, $structure);
+                $this->processTraitUseNode($node, $classlike);
             }
 
-            $this->storage->persist($structure);
+            $this->storage->persist($classlike);
         }
     }
 
@@ -229,9 +224,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function processEnterClasslikeNode(Node\Stmt\ClassLike $node): void
     {
-        $structure = $this->parseClasslikeNode($node);
-
-        $this->structureStack->push($structure);
+        $this->classlikeStack->push($this->parseClasslikeNode($node));
     }
 
     /**
@@ -241,15 +234,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function processLeaveClasslikeNode(Node\Stmt\ClassLike $node): void
     {
-        $this->structureStack->pop();
+        $this->classlikeStack->pop();
     }
 
     /**
      * @param Node\Stmt\ClassLike $node
      *
-     * @return Structures\Structure
+     * @return Structures\Classlike
      */
-    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): Structures\Structure
+    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): Structures\Classlike
     {
         if (!isset($node->namespacedName)) {
             // return;
@@ -269,7 +262,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY_WRITE
         ], '');
 
-        $structure = null;
+        $classlike = null;
 
         if ($node instanceof Node\Stmt\Class_) {
             $fqcn = null;
@@ -283,7 +276,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $classlikeName = $node->name->name;
             }
 
-            $structure = new Structures\Class_(
+            $classlike = new Structures\Class_(
                 $classlikeName,
                 $fqcn,
                 $this->file,
@@ -300,7 +293,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 null
             );
         } elseif ($node instanceof Node\Stmt\Interface_) {
-            $structure = new Structures\Interface_(
+            $classlike = new Structures\Interface_(
                 $node->name->name,
                 '\\' . $node->namespacedName->toString(),
                 $this->file,
@@ -312,7 +305,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 !empty($docComment)
             );
         } elseif ($node instanceof Node\Stmt\Trait_) {
-            $structure = new Structures\Trait_(
+            $classlike = new Structures\Trait_(
                 $node->name->name,
                 '\\' . $node->namespacedName->toString(),
                 $this->file,
@@ -325,13 +318,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             );
         }
 
-        $this->storage->persist($structure);
+        $this->storage->persist($classlike);
 
-        $this->structuresFound->attach($structure, $structure->getFqcn());
+        $this->classlikesFound->attach($classlike, $classlike->getFqcn());
 
         $accessModifierMap = $this->getAccessModifierMap();
 
-        $this->relationsStorage->attach($structure, $node);
+        $this->relationsStorage->attach($classlike, $node);
 
         // Index magic properties.
         $magicProperties = array_merge(
@@ -348,7 +341,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->indexMagicProperty(
                 $propertyData,
-                $structure,
+                $classlike,
                 $accessModifierMap[AccessModifierNameValue::PUBLIC_],
                 $filePosition
             );
@@ -361,15 +354,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->indexMagicMethod(
                 $methodData,
-                $structure,
+                $classlike,
                 $accessModifierMap[AccessModifierNameValue::PUBLIC_],
                 $filePosition
             );
         }
 
-        $this->indexClassKeyword($structure);
+        $this->indexClassKeyword($classlike);
 
-        return $structure;
+        return $classlike;
     }
 
     /**
@@ -381,31 +374,31 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $traitUses = [];
 
-        if ($this->traitUseStorage->contains($this->structureStack->peek())) {
-            $traitUses = $this->traitUseStorage[$this->structureStack->peek()];
+        if ($this->traitUseStorage->contains($this->classlikeStack->peek())) {
+            $traitUses = $this->traitUseStorage[$this->classlikeStack->peek()];
         }
 
         $traitUses[] = $node;
 
-        $this->traitUseStorage->attach($this->structureStack->peek(), $traitUses);
+        $this->traitUseStorage->attach($this->classlikeStack->peek(), $traitUses);
     }
 
     /**
      * @param Node\Stmt\ClassLike  $node
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Structure $structure): void
+    protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Classlike $classlike): void
     {
-        if ($structure instanceof Structures\Class_) {
-            $this->processClassRelations($node, $structure);
-        } elseif ($structure instanceof Structures\Interface_) {
-            $this->processInterfaceRelations($node, $structure);
-        } elseif ($structure instanceof Structures\Trait_) {
+        if ($classlike instanceof Structures\Class_) {
+            $this->processClassRelations($node, $classlike);
+        } elseif ($classlike instanceof Structures\Interface_) {
+            $this->processInterfaceRelations($node, $classlike);
+        } elseif ($classlike instanceof Structures\Trait_) {
             // Traits can't have relations.
         } else {
-            throw new DomainException("Don't know how to handle structure of type " . get_class($structure));
+            throw new DomainException("Don't know how to handle classlike of type " . get_class($classlike));
         }
     }
 
@@ -475,11 +468,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Stmt\TraitUse   $node
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Structure $structure): void
+    protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Classlike $classlike): void
     {
         foreach ($node->traits as $traitName) {
             $traitFqcn = NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
@@ -494,9 +487,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $linkEntity = $this->findStructureByFqcn($traitFqcn);
 
             if ($linkEntity && $linkEntity instanceof Structures\Trait_) {
-                $structure->addTrait($linkEntity);
+                $classlike->addTrait($linkEntity);
             } else {
-                $structure->addTraitFqcn($traitFqcn);
+                $classlike->addTraitFqcn($traitFqcn);
             }
         }
 
@@ -517,24 +510,24 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $accessModifier = AccessModifierNameValue::PRIVATE_;
                 }
 
-                if ($structure instanceof Structures\Class_) {
+                if ($classlike instanceof Structures\Class_) {
                     $traitAlias = new Structures\ClassTraitAlias(
-                        $structure,
+                        $classlike,
                         $traitFqcn,
                         $accessModifier ? $accessModifierMap[$accessModifier] : null,
                         $adaptation->method,
                         $adaptation->newName
                     );
-                } elseif ($structure instanceof Structures\Trait_) {
+                } elseif ($classlike instanceof Structures\Trait_) {
                     $traitAlias = new Structures\TraitTraitAlias(
-                        $structure,
+                        $classlike,
                         $traitFqcn,
                         $accessModifier ? $accessModifierMap[$accessModifier] : null,
                         $adaptation->method,
                         $adaptation->newName
                     );
                 } else {
-                    continue; // Can't add trait aliases in any other structure type.
+                    continue; // Can't add trait aliases in any other classlike type.
                 }
 
                 $this->storage->persist($traitAlias);
@@ -542,20 +535,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                if ($structure instanceof Structures\Class_) {
+                if ($classlike instanceof Structures\Class_) {
                     $traitPrecedence = new Structures\ClassTraitPrecedence(
-                        $structure,
+                        $classlike,
                         $traitFqcn,
                         $adaptation->method
                     );
-                } elseif ($structure instanceof Structures\Trait_) {
+                } elseif ($classlike instanceof Structures\Trait_) {
                     $traitPrecedence = new Structures\TraitTraitPrecedence(
-                        $structure,
+                        $classlike,
                         $traitFqcn,
                         $adaptation->method
                     );
                 } else {
-                    continue; // Can't add trait precedences in any other structure type.
+                    continue; // Can't add trait precedences in any other classlike type.
                 }
 
                 $this->storage->persist($traitPrecedence);
@@ -638,7 +631,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $varDocumentation ? $varDocumentation['description'] : null,
-                $this->structureStack->peek(),
+                $this->classlikeStack->peek(),
                 $accessModifierMap[$accessModifier],
                 $types
             );
@@ -736,7 +729,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['long'] ?: null,
             $documentation['return']['description'] ?: null,
             $returnTypeHint,
-            $this->structureStack->peek(),
+            $this->classlikeStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null,
             false,
             $node->isStatic(),
@@ -916,7 +909,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['long'] ?: null,
             $varDocumentation ? $varDocumentation['description'] : null,
             $types,
-            $this->structureStack->peek(),
+            $this->classlikeStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null
         );
 
@@ -925,7 +918,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param array                     $rawData
-     * @param Structures\Structure      $structure
+     * @param Structures\Classlike      $classlike
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
      *
@@ -933,7 +926,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexMagicProperty(
         array $rawData,
-        Structures\Structure $structure,
+        Structures\Classlike $classlike,
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
@@ -956,7 +949,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $rawData['description'] ?: null,
             null,
             null,
-            $structure,
+            $classlike,
             $accessModifier,
             $types
         );
@@ -966,7 +959,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param array                     $rawData
-     * @param Structures\Structure      $structure
+     * @param Structures\Classlike      $classlike
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
      *
@@ -974,7 +967,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexMagicMethod(
         array $rawData,
-        Structures\Structure $structure,
+        Structures\Classlike $classlike,
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
@@ -994,7 +987,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             null,
             null,
             null,
-            $structure,
+            $classlike,
             $accessModifier,
             true,
             $rawData['isStatic'],
@@ -1053,25 +1046,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function indexClassKeyword(Structures\Structure $structure): void
+    protected function indexClassKeyword(Structures\Classlike $classlike): void
     {
         $constant = new Structures\ClassConstant(
             'class',
             $this->file,
-            $structure->getStartLine(),
-            $structure->getStartLine(),
-            '\'' . mb_substr($structure->getFqcn(), 1) . '\'',
+            $classlike->getStartLine(),
+            $classlike->getStartLine(),
+            '\'' . mb_substr($classlike->getFqcn(), 1) . '\'',
             false,
             false,
             'PHP built-in class constant that evaluates to the FQCN.',
             null,
             null,
             [new Structures\TypeInfo('string', 'string')],
-            $structure,
+            $classlike,
             $this->getAccessModifierMap()[AccessModifierNameValue::PUBLIC_]
         );
 
@@ -1131,15 +1124,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @param string $fqcn
      *
-     * @return Structures\Structure|null
+     * @return Structures\Classlike|null
      */
-    protected function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    protected function findStructureByFqcn(string $fqcn): ?Structures\Classlike
     {
-        foreach ($this->structuresFound as $structure) {
-            $foundFqcn = $this->structuresFound[$structure];
+        foreach ($this->classlikesFound as $classlike) {
+            $foundFqcn = $this->classlikesFound[$classlike];
 
             if ($fqcn === $foundFqcn) {
-                return $structure;
+                return $classlike;
             }
         }
 

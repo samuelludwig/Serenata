@@ -13,7 +13,7 @@ use PhpIntegrator\Indexing\Structures;
 use PhpParser\Node;
 
 /**
- * Locates the definition of structures represented by {@see Node\Name} nodes.
+ * Locates the definition of classlikes represented by {@see Node\Name} nodes.
  */
 class NameNodeDefinitionLocator
 {

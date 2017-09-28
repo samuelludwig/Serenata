@@ -9,7 +9,7 @@ services:
                 - '@classlikeExistenceChecker'
                 - '@globalFunctionExistenceChecker'
                 - '@globalConstantExistenceChecker'
-                - '@fileStructureListProvider.cachingDecorator'
+                - '@fileClasslikeListProvider.cachingDecorator'
 
     cacheClearingEventMediator1:
         class: PhpIntegrator\Mediating\CacheClearingEventMediator
@@ -46,10 +46,10 @@ services:
             - '@functionConverter'
             - '@storage.eventEmittingStorage'
 
-    structureIndexingStructureRegistryMediator:
-        class: PhpIntegrator\Mediating\StructureIndexingStructureRegistryMediator
+    classlikeIndexingStructureRegistryMediator:
+        class: PhpIntegrator\Mediating\ClasslikeIndexingStructureRegistryMediator
         arguments:
-            - '@structureListProvider.registry'
+            - '@classlikeListProvider.registry'
             - '@classlikeConverter'
             - '@storage.eventEmittingStorage'
 
@@ -72,10 +72,10 @@ services:
             - '@functionListProvider.registry'
             - '@managerRegistry'
 
-    workspaceEventStructureRegistryMediator:
+    workspaceEventClasslikeRegistryMediator:
         class: PhpIntegrator\Mediating\WorkspaceEventStructureRegistryMediator
         arguments:
-            - '@structureListProvider.registry'
+            - '@classlikeListProvider.registry'
             - '@managerRegistry'
 
     workspaceEventNamespaceRegistryMediator:

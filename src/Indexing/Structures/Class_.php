@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a class.
  */
-class Class_ extends Structure
+class Class_ extends Classlike
 {
     /**
      * @var bool
@@ -131,7 +131,7 @@ class Class_ extends Structure
 
         $this->setParent($parent);
 
-        $file->addStructure($this);
+        $file->addClasslike($this);
     }
 
     /**
@@ -307,13 +307,13 @@ class Class_ extends Structure
     }
 
     /**
-     * @param ClassTraitAlias $structureTraitAlias
+     * @param ClassTraitAlias $classlikeTraitAlias
      *
      * @return void
      */
-    public function addTraitAlias(ClassTraitAlias $structureTraitAlias): void
+    public function addTraitAlias(ClassTraitAlias $classlikeTraitAlias): void
     {
-        $this->traitAliases->add($structureTraitAlias);
+        $this->traitAliases->add($classlikeTraitAlias);
     }
 
     /**
@@ -325,13 +325,13 @@ class Class_ extends Structure
     }
 
     /**
-     * @param ClassTraitPrecedence $structureTraitPrecedence
+     * @param ClassTraitPrecedence $classlikeTraitPrecedence
      *
      * @return void
      */
-    public function addTraitPrecedence(ClassTraitPrecedence $structureTraitPrecedence): void
+    public function addTraitPrecedence(ClassTraitPrecedence $classlikeTraitPrecedence): void
     {
-        $this->traitPrecedences->add($structureTraitPrecedence);
+        $this->traitPrecedences->add($classlikeTraitPrecedence);
     }
 
     /**
@@ -339,6 +339,6 @@ class Class_ extends Structure
      */
     public function getTypeName(): string
     {
-        return StructureTypeNameValue::CLASS_;
+        return ClasslikeTypeNameValue::CLASS_;
     }
 }

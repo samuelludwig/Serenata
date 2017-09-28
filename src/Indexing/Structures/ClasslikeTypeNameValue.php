@@ -3,9 +3,9 @@
 namespace PhpIntegrator\Indexing\Structures;
 
 /**
- * Enumeration of structure type name values.
+ * Enumeration of classlike type name values.
  */
-class StructureTypeNameValue
+class ClasslikeTypeNameValue
 {
     /**
      * @var string

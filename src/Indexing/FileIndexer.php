@@ -65,11 +65,6 @@ class FileIndexer implements FileIndexerInterface
     private $accessModifierMap;
 
     /**
-     * @var array
-     */
-    private $structureTypeMap;
-
-    /**
      * @var StructureAwareNameResolverFactoryInterface
      */
     private $structureAwareNameResolverFactory;

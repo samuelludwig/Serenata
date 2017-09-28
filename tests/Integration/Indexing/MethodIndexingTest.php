@@ -621,7 +621,7 @@ class MethodIndexingTest extends AbstractIntegrationTest
 
         $method = $classes[0]->getMethods()[0];
 
-        static::assertSame($classes[0], $method->getStructure());
+        static::assertSame($classes[0], $method->getClasslike());
 
         return $method;
     }

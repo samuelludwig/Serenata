@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Contains tests that test whether the registry remains up to date (synchronized) when the state of the index changes.
  */
-class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationTest
+class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegrationTest
 {
     /**
      * @return void
@@ -18,7 +18,7 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
     {
         $path = $this->getPathFor('NewStructureIsSynchronized.phpt');
 
-        $registry = $this->container->get('structureListProvider.registry');
+        $registry = $this->container->get('classlikeListProvider.registry');
 
         static::assertEmpty($registry->getAll());
 
@@ -34,7 +34,7 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
     public function testOldStructureIsRemoved(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $registry = $this->container->get('structureListProvider.registry');
+            $registry = $this->container->get('classlikeListProvider.registry');
 
             static::assertCount(1, $registry->getAll());
             static::assertArrayHasKey('\Test', $registry->getAll());
@@ -43,7 +43,7 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         };
 
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $registry = $this->container->get('structureListProvider.registry');
+            $registry = $this->container->get('classlikeListProvider.registry');
 
             static::assertEmpty($registry->getAll());
         };
@@ -59,7 +59,7 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
     public function testExistingStructureIsUpdated(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $registry = $this->container->get('structureListProvider.registry');
+            $registry = $this->container->get('classlikeListProvider.registry');
 
             static::assertCount(1, $registry->getAll());
             static::assertArrayHasKey('\Test', $registry->getAll());
@@ -69,7 +69,7 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
         };
 
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $registry = $this->container->get('structureListProvider.registry');
+            $registry = $this->container->get('classlikeListProvider.registry');
 
             static::assertCount(1, $registry->getAll());
             static::assertArrayHasKey('\Test', $registry->getAll());
@@ -88,6 +88,6 @@ class StructureListRegistryIndexSynchronizationTest extends AbstractIntegrationT
      */
     protected function getPathFor(string $file): string
     {
-        return __DIR__ . '/StructureListRegistryIndexSynchronizationTest/' . $file;
+        return __DIR__ . '/ClasslikeListRegistryIndexSynchronizationTest/' . $file;
     }
 }

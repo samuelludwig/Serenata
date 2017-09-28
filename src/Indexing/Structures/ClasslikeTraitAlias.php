@@ -3,9 +3,9 @@
 namespace PhpIntegrator\Indexing\Structures;
 
 /**
- * Base class for aliased trait methods in a structure.
+ * Base class for aliased trait methods in a classlike.
  */
-abstract class StructureTraitAlias
+abstract class ClasslikeTraitAlias
 {
     /**
      * @var string

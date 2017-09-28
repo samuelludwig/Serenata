@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis;
 
-use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use PhpIntegrator\Common\Position;
 
@@ -14,16 +14,16 @@ use PhpIntegrator\Indexing\Structures;
 class FilePositionClasslikeDeterminer
 {
     /**
-     * @var FileStructureListProviderInterface
+     * @var FileClasslikeListProviderInterface
      */
-    private $fileStructureListProvider;
+    private $fileClasslikeListProvider;
 
     /**
-     * @param FileStructureListProviderInterface $fileStructureListProvider
+     * @param FileClasslikeListProviderInterface $fileClasslikeListProvider
      */
-    public function __construct(FileStructureListProviderInterface $fileStructureListProvider)
+    public function __construct(FileClasslikeListProviderInterface $fileClasslikeListProvider)
     {
-        $this->fileStructureListProvider = $fileStructureListProvider;
+        $this->fileClasslikeListProvider = $fileClasslikeListProvider;
     }
 
     /**
@@ -34,7 +34,7 @@ class FilePositionClasslikeDeterminer
      */
      public function determine(Position $position, Structures\File $file): ?string
      {
-         $classesInFile = $this->fileStructureListProvider->getAllForFile($file);
+         $classesInFile = $this->fileClasslikeListProvider->getAllForFile($file);
 
          foreach ($classesInFile as $fqcn => $classInfo) {
              if ($position->getLine() >= $classInfo['startLine'] && $position->getLine() <= $classInfo['endLine']) {

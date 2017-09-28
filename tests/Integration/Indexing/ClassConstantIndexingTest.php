@@ -52,7 +52,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
 
         $constant = $classes[0]->getConstants()[0];
 
-        static::assertSame($classes[0], $constant->getStructure());
+        static::assertSame($classes[0], $constant->getClasslike());
 
         static::assertSame('class', $constant->getName());
         static::assertSame($this->getPathFor('ClassKeywordConstant.phpt'), $constant->getFile()->getPath());
@@ -245,7 +245,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
 
         $constant = $classes[0]->getConstants()[1];
 
-        static::assertSame($classes[0], $constant->getStructure());
+        static::assertSame($classes[0], $constant->getClasslike());
 
         return $constant;
     }

@@ -27,9 +27,9 @@ interface StorageInterface
      *
      * @throws StorageException
      *
-     * @return Structures\Structure|null
+     * @return Structures\Classlike|null
      */
-    public function findStructureByFqcn(string $fqcn): ?Structures\Structure;
+    public function findStructureByFqcn(string $fqcn): ?Structures\Classlike;
 
     /**
      * @param string $path

@@ -5,9 +5,9 @@ namespace PhpIntegrator\Analysis;
 use RuntimeException;
 
 /**
- * Retrieves a list of structures.
+ * Retrieves a list of classlikes.
  */
-interface StructureListProviderInterface
+interface ClasslikeListProviderInterface
 {
      /**
       * @throws RuntimeException

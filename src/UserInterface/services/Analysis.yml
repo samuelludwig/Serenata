@@ -84,16 +84,16 @@ services:
     namespaceConverter:
         class: PhpIntegrator\Analysis\Conversion\NamespaceConverter
 
-    fileStructureListProvider.instance:
-        alias: structureListProvider.doctrineBackend
+    fileClasslikeListProvider.instance:
+        alias: classlikeListProvider.doctrineBackend
 
-    fileStructureListProvider.cachingDecorator:
-        class: PhpIntegrator\Analysis\Typing\FileStructureListProviderCachingDecorator
+    fileClasslikeListProvider.cachingDecorator:
+        class: PhpIntegrator\Analysis\Typing\FileClasslikeListProviderCachingDecorator
         arguments:
-            - '@fileStructureListProvider.instance'
+            - '@fileClasslikeListProvider.instance'
 
-    fileStructureListProvider:
-        alias: fileStructureListProvider.cachingDecorator
+    fileClasslikeListProvider:
+        alias: fileClasslikeListProvider.cachingDecorator
 
     fileNamespaceListProvider:
         alias: namespaceListProvider.doctrineBackend
@@ -101,7 +101,7 @@ services:
     filePositionClasslikeDeterminer:
         class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
         arguments:
-            - '@fileStructureListProvider'
+            - '@fileClasslikeListProvider'
 
     inheritanceResolver:
         class: PhpIntegrator\Analysis\Relations\InheritanceResolver
@@ -188,19 +188,19 @@ services:
     constantListProvider:
         alias: constantListProvider.registry
 
-    structureListProvider.doctrineBackend:
-        class: PhpIntegrator\Analysis\DoctrineStructureListProvider
+    classlikeListProvider.doctrineBackend:
+        class: PhpIntegrator\Analysis\DoctrineClasslikeListProvider
         arguments:
             - '@classlikeConverter'
             - '@managerRegistry'
 
-    structureListProvider.registry:
-        class: PhpIntegrator\Analysis\StructureListRegistry
+    classlikeListProvider.registry:
+        class: PhpIntegrator\Analysis\ClasslikeListRegistry
         arguments:
-            - '@structureListProvider.doctrineBackend'
+            - '@classlikeListProvider.doctrineBackend'
 
-    structureListProvider:
-        alias: structureListProvider.registry
+    classlikeListProvider:
+        alias: classlikeListProvider.registry
 
     namespaceListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineNamespaceListProvider

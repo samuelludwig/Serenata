@@ -4,7 +4,7 @@ namespace PhpIntegrator\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\StructureListRegistry;
+use PhpIntegrator\Analysis\ClasslikeListRegistry;
 
 use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
 
@@ -12,14 +12,14 @@ use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\IndexingEventName;
 
 /**
- * Mediator that updates the structure registry when structure indexing events happen.
+ * Mediator that updates the classlike registry when classlike indexing events happen.
  */
-class StructureIndexingStructureRegistryMediator
+class ClasslikeIndexingStructureRegistryMediator
 {
     /**
-     * @var StructureListRegistry
+     * @var ClasslikeListRegistry
      */
-    private $structureListRegistry;
+    private $classlikeListRegistry;
 
     /**
      * @var ClasslikeConverter
@@ -32,16 +32,16 @@ class StructureIndexingStructureRegistryMediator
     private $eventEmitter;
 
     /**
-     * @param StructureListRegistry $structureListRegistry
+     * @param ClasslikeListRegistry $classlikeListRegistry
      * @param ClasslikeConverter    $classlikeConverter
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
-        StructureListRegistry $structureListRegistry,
+        ClasslikeListRegistry $classlikeListRegistry,
         ClasslikeConverter $classlikeConverter,
         EventEmitterInterface $eventEmitter
     ) {
-        $this->structureListRegistry = $structureListRegistry;
+        $this->classlikeListRegistry = $classlikeListRegistry;
         $this->classlikeConverter = $classlikeConverter;
         $this->eventEmitter = $eventEmitter;
 
@@ -53,12 +53,12 @@ class StructureIndexingStructureRegistryMediator
      */
     protected function setup(): void
     {
-        $this->eventEmitter->on(IndexingEventName::STRUCTURE_UPDATED, function (Structures\Structure $structure) {
-            $this->structureListRegistry->add($this->classlikeConverter->convert($structure));
+        $this->eventEmitter->on(IndexingEventName::CLASSLIKE_UPDATED, function (Structures\Classlike $classlike) {
+            $this->classlikeListRegistry->add($this->classlikeConverter->convert($classlike));
         });
 
-        $this->eventEmitter->on(IndexingEventName::STRUCTURE_REMOVED, function (Structures\Structure $structure) {
-            $this->structureListRegistry->remove($this->classlikeConverter->convert($structure));
+        $this->eventEmitter->on(IndexingEventName::CLASSLIKE_REMOVED, function (Structures\Classlike $classlike) {
+            $this->classlikeListRegistry->remove($this->classlikeConverter->convert($classlike));
         });
     }
 }

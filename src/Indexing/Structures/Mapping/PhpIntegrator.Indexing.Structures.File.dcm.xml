@@ -25,7 +25,7 @@
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="structures" target-entity="PhpIntegrator\Indexing\Structures\Structure" mapped-by="file">
+        <one-to-many field="classlikes" target-entity="PhpIntegrator\Indexing\Structures\Classlike" mapped-by="file">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileFunctions</region>

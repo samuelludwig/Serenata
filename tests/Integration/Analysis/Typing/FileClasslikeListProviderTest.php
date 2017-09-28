@@ -4,20 +4,20 @@ namespace PhpIntegrator\Tests\Integration\Analysis\Typing;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class FileStructureListProviderTest extends AbstractIntegrationTest
+class FileClasslikeListProviderTest extends AbstractIntegrationTest
 {
     /**
      * @return void
      */
     public function testShowsOnlyClassesForRequestedFile(): void
     {
-        $path = __DIR__ . '/FileStructureListProviderTest/' . 'ClassList.phpt';
-        $secondPath = __DIR__ . '/FileStructureListProviderTest/' . 'FooBarClasses.phpt';
+        $path = __DIR__ . '/FileClasslikeListProviderTest/' . 'ClassList.phpt';
+        $secondPath = __DIR__ . '/FileClasslikeListProviderTest/' . 'FooBarClasses.phpt';
 
         $this->indexTestFile($this->container, $path);
         $this->indexTestFile($this->container, $secondPath);
 
-        $provider = $this->container->get('fileStructureListProvider');
+        $provider = $this->container->get('fileClasslikeListProvider');
 
         $file = $this->container->get('storage')->getFileByPath($path);
 

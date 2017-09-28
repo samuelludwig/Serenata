@@ -44,7 +44,7 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
     /**
      * @inheritDoc
      */
-    public function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    public function findStructureByFqcn(string $fqcn): ?Structures\Classlike
     {
         return $this->delegate->findStructureByFqcn($fqcn);
     }
@@ -74,8 +74,8 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
             $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity]);
         } elseif ($entity instanceof Structures\FunctionParameter) {
             $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity->getFunction()]);
-        } elseif ($entity instanceof Structures\Structure) {
-            $this->emit(IndexingEventName::STRUCTURE_UPDATED, [$entity]);
+        } elseif ($entity instanceof Structures\Classlike) {
+            $this->emit(IndexingEventName::CLASSLIKE_UPDATED, [$entity]);
         }
     }
 
@@ -92,8 +92,8 @@ class EventEmittingStorage implements StorageInterface, EventEmitterInterface
             $this->emit(IndexingEventName::CONSTANT_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Function_) {
             $this->emit(IndexingEventName::FUNCTION_REMOVED, [$entity]);
-        } elseif ($entity instanceof Structures\Structure) {
-            $this->emit(IndexingEventName::STRUCTURE_REMOVED, [$entity]);
+        } elseif ($entity instanceof Structures\Classlike) {
+            $this->emit(IndexingEventName::CLASSLIKE_REMOVED, [$entity]);
         }
     }
 
