@@ -2,7 +2,6 @@
 
 namespace PhpIntegrator\Indexing\Structures;
 
-
 /**
  * Base class for aliased trait methods in a structure.
  */
