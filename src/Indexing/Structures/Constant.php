@@ -12,7 +12,7 @@ class Constant extends ConstantLike
     /**
      * @var string
      */
-    protected $fqcn;
+    private $fqcn;
 
     /**
      * @param string              $name

@@ -14,7 +14,7 @@ class Function_ extends FunctionLike
     /**
      * @var string
      */
-    protected $fqcn;
+    private $fqcn;
 
     /**
      * @param string              $name
