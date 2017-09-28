@@ -10,7 +10,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
  *
  * This command should not be invoked from outside the server.
  */
-class EchoResponseCommand extends AbstractCommand
+final class EchoResponseCommand extends AbstractCommand
 {
     /**
      * @inheritDoc

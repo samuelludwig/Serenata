@@ -24,7 +24,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Name} node.
  */
-class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var TypeAnalyzer

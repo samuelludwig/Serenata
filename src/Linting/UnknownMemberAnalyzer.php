@@ -15,7 +15,7 @@ use PhpIntegrator\Indexing\Structures;
 /**
  * Looks for unknown member names.
  */
-class UnknownMemberAnalyzer implements AnalyzerInterface
+final class UnknownMemberAnalyzer implements AnalyzerInterface
 {
     /**
      * @var MemberUsageFetchingVisitor

@@ -27,7 +27,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
  */
-class DeduceTypesCommand extends AbstractCommand
+final class DeduceTypesCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

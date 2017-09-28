@@ -30,7 +30,7 @@ use PhpParser\NodeTraverser;
  * The index keeps track of 'outlines' that are confined to a single file. It in itself does not do anything
  * "intelligent" such as automatically inheriting docblocks from overridden methods.
  */
-class FileIndexer implements FileIndexerInterface
+final class FileIndexer implements FileIndexerInterface
 {
     /**
      * The storage to use for index data.

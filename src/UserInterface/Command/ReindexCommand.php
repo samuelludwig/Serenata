@@ -10,7 +10,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that reindexes a file or folder.
  */
-class ReindexCommand extends AbstractCommand
+final class ReindexCommand extends AbstractCommand
 {
     /**
      * @var Indexer

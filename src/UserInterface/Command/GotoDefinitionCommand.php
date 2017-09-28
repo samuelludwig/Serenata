@@ -16,7 +16,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 /**
  * Allows navigating to the definition of a structural element by returning the location of its definition.
  */
-class GotoDefinitionCommand extends AbstractCommand
+final class GotoDefinitionCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

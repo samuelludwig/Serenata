@@ -8,7 +8,7 @@ use FilterIterator;
 /**
  * Filters out {@see \SplFileInfo} values that match the exclusion patterns.
  */
-class ExclusionFilterIterator extends FilterIterator
+final class ExclusionFilterIterator extends FilterIterator
 {
     /**
      * @var string[]

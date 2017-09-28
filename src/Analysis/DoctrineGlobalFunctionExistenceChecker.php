@@ -10,7 +10,7 @@ use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 /**
  * Checks if a function exists via Doctrine.
  */
-class DoctrineGlobalFunctionExistenceChecker implements FunctionPresenceIndicatorInterface
+final class DoctrineGlobalFunctionExistenceChecker implements FunctionPresenceIndicatorInterface
 {
     /**
      * @var ManagerRegistry

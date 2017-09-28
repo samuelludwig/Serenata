@@ -7,7 +7,7 @@ use PhpIntegrator\Indexing\Structures;
 /**
  * Converts raw classlike data from the index to more useful data.
  */
-class ClasslikeConverter extends AbstractConverter
+final class ClasslikeConverter extends AbstractConverter
 {
     /**
      * @param Structures\Classlike $classlike

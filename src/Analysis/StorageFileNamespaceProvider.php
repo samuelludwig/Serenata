@@ -15,7 +15,7 @@ use PhpIntegrator\NameQualificationUtilities\FileNamespaceProviderInterface;
 /**
  * Provides a list of namespaces and imports for a file based on data provided by a storage provider.
  */
-class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
+final class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
 {
     /**
      * @var StorageInterface

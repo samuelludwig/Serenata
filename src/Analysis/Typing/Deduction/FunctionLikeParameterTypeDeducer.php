@@ -17,7 +17,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a parameter of a {@see Node\FunctionLike} node.
  */
-class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
+final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

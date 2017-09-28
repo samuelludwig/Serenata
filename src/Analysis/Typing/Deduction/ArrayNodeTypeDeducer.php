@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\Array_} node.
  */
-class ArrayNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ArrayNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @inheritDoc

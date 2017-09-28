@@ -16,7 +16,7 @@ use PhpParser\ErrorHandler;
 /**
  * Command that shows information about the scopes at a specific position in a file.
  */
-class AvailableVariablesCommand extends AbstractCommand
+final class AvailableVariablesCommand extends AbstractCommand
 {
     use ParserAwareTrait;
 

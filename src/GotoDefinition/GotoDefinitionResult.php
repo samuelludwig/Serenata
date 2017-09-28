@@ -7,7 +7,7 @@ use JsonSerializable;
 /**
  * The result of a goto definition request.
  */
-class GotoDefinitionResult implements JsonSerializable
+final class GotoDefinitionResult implements JsonSerializable
 {
     /**
      * @var string

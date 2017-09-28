@@ -14,7 +14,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that shows a list of available classes, interfaces and traits.
  */
-class ClassListCommand extends AbstractCommand
+final class ClassListCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

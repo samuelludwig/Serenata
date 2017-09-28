@@ -13,7 +13,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Stmt\ClassLike} node.
  */
-class ClassLikeNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ClassLikeNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @inheritDoc

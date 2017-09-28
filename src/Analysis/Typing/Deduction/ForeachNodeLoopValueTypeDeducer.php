@@ -13,7 +13,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of the loop value of a {@see Node\Stmt\Foreach_} node.
  */
-class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
+final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

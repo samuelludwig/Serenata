@@ -7,7 +7,7 @@ use IteratorIterator;
 /**
  * Iterator that iterates all indexable files in a directory.
  */
-class DirectoryIndexableFileIterator extends IteratorIterator
+final class DirectoryIndexableFileIterator extends IteratorIterator
 {
     /**
      * @param Structures\File $filesInIndex

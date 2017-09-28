@@ -14,7 +14,7 @@ use PhpIntegrator\Parsing\DocblockParser;
 /**
  * Analyzes the correctness of docblocks.
  */
-class DocblockCorrectnessAnalyzer implements AnalyzerInterface
+final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 {
     /**
      * @var string

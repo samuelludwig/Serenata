@@ -10,7 +10,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that shows a list of global functions.
  */
-class GlobalFunctionsCommand extends AbstractCommand
+final class GlobalFunctionsCommand extends AbstractCommand
 {
     /**
      * @var FunctionListProviderInterface

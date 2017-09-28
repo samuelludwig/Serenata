@@ -17,7 +17,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that makes a FQCN relative to local use statements in a file.
  */
-class LocalizeTypeCommand extends AbstractCommand
+final class LocalizeTypeCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

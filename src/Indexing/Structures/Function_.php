@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a (global) function.
  */
-class Function_ extends FunctionLike
+final class Function_ extends FunctionLike
 {
     /**
      * @var string

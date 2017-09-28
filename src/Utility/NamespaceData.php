@@ -9,7 +9,7 @@ use JsonSerializable;
  *
  * This is a value object and immutable.
  */
-class NamespaceData implements JsonSerializable
+final class NamespaceData implements JsonSerializable
 {
     /**
      * @var string|null

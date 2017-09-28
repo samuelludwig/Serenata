@@ -10,7 +10,7 @@ use UnexpectedValueException;
  *
  * Value object.
  */
-class JsonRpcRequest implements JsonSerializable
+final class JsonRpcRequest implements JsonSerializable
 {
     /**
      * @var string

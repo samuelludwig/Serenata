@@ -16,7 +16,7 @@ use PhpIntegrator\Indexing\ManagerRegistry;
 /**
  * Retrieves a list of available classlikes via Doctrine.
  */
-class DoctrineClasslikeListProvider implements FileClasslikeListProviderInterface, ClasslikeListProviderInterface
+final class DoctrineClasslikeListProvider implements FileClasslikeListProviderInterface, ClasslikeListProviderInterface
 {
     /**
      * @var ClasslikeConverter

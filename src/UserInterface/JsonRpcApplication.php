@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /**
  * Application extension that can handle JSON-RPC requests.
  */
-class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHandlerInterface
+final class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHandlerInterface
 {
     /**
      * @var float

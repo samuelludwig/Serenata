@@ -12,7 +12,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that shows information about a class, interface or trait.
  */
-class ClassInfoCommand extends AbstractCommand
+final class ClassInfoCommand extends AbstractCommand
 {
     /**
      * @var TypeAnalyzer

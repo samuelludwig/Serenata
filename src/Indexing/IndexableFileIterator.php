@@ -7,7 +7,7 @@ use IteratorIterator;
 /**
  * Iterator that iterates all indexable files for a path.
  */
-class IndexableFileIterator extends IteratorIterator
+final class IndexableFileIterator extends IteratorIterator
 {
     /**
      * @param string[] $paths

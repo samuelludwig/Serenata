@@ -17,7 +17,7 @@ use PhpParser\NodeVisitorAbstract;
  *
  * @see https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata
  */
-class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
+final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var StorageInterface

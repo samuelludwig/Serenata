@@ -16,7 +16,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 /**
  * Command that fetches tooltip information for a specific location.
  */
-class TooltipCommand extends AbstractCommand
+final class TooltipCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

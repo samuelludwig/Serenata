@@ -7,7 +7,7 @@ use ArrayObject;
 /**
  * Deals with resolving inheritance for classlikes.
  */
-class InheritanceResolver extends AbstractResolver
+final class InheritanceResolver extends AbstractResolver
 {
     /**
      * @param ArrayObject $parent

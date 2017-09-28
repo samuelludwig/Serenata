@@ -21,7 +21,7 @@ use PhpIntegrator\Parsing\DocblockParser;
 /**
  * Looks for unknown class names.
  */
-class UnknownClassAnalyzer implements AnalyzerInterface
+final class UnknownClassAnalyzer implements AnalyzerInterface
 {
     /**
      * @var ClassUsageFetchingVisitor

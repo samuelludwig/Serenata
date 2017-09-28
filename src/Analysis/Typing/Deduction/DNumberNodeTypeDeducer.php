@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Scalar\DNumber} node.
  */
-class DNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class DNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @inheritDoc

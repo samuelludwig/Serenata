@@ -11,7 +11,7 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 /**
  * Deals with resolving trait usage for classlikes.
  */
-class TraitUsageResolver extends AbstractResolver
+final class TraitUsageResolver extends AbstractResolver
 {
     /**
      * @param ArrayObject                       $trait

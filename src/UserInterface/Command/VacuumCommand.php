@@ -12,7 +12,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
  *
  * Vacuuming includes cleaning up the index, i.e. removing files that no longer exist.
  */
-class VacuumCommand extends AbstractCommand
+final class VacuumCommand extends AbstractCommand
 {
     /**
      * @var IndexFilePruner

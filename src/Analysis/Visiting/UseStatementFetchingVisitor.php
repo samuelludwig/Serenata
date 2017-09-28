@@ -10,7 +10,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Node visitor that fetches namespaces and their use statements.
  */
-class UseStatementFetchingVisitor extends NodeVisitorAbstract
+final class UseStatementFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array

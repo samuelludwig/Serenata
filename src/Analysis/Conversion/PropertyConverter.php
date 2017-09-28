@@ -11,7 +11,7 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 /**
  * Converts raw property data from the index to more useful data.
  */
-class PropertyConverter extends AbstractConverter
+final class PropertyConverter extends AbstractConverter
 {
     /**
      * @param Structures\Property $property

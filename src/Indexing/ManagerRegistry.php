@@ -22,7 +22,7 @@ use Evenement\EventEmitterInterface;
 /**
  * Handles indexation of PHP code.
  */
-class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInterface
+final class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInterface
 {
     use EventEmitterTrait;
 

@@ -17,7 +17,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that resolves local types in a file.
  */
-class ResolveTypeCommand extends AbstractCommand
+final class ResolveTypeCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

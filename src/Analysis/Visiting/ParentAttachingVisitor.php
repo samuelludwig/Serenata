@@ -10,7 +10,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Visitor that attaches the parent of a node to the node proper.
  */
-class ParentAttachingVisitor extends NodeVisitorAbstract
+final class ParentAttachingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var SplStack

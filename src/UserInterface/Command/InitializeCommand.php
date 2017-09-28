@@ -16,7 +16,7 @@ use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 /**
  * Command that initializes a project.
  */
-class InitializeCommand extends AbstractCommand
+final class InitializeCommand extends AbstractCommand
 {
     /**
      * @var SchemaInitializer

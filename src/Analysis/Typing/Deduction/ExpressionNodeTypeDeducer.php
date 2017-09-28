@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Stmt\Expression} node.
  */
-class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

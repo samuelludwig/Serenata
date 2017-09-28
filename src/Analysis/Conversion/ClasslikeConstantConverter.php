@@ -11,7 +11,7 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 /**
  * Converts raw class constant data from the index to more useful data.
  */
-class ClasslikeConstantConverter extends ConstantConverter
+final class ClasslikeConstantConverter extends ConstantConverter
 {
     /**
      * @param Structures\ClassConstant $constant

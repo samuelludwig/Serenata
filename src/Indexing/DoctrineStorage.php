@@ -13,7 +13,7 @@ use PhpIntegrator\Analysis\MetadataProviderInterface;
 /**
  * Storage backend that uses Doctrine.
  */
-class DoctrineStorage implements StorageInterface, MetadataProviderInterface
+final class DoctrineStorage implements StorageInterface, MetadataProviderInterface
 {
     /**
      * @var ManagerRegistry

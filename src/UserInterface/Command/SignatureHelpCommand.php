@@ -16,7 +16,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 /**
  * Allows fetching signature help (call tips) for a method or function call.
  */
-class SignatureHelpCommand extends AbstractCommand
+final class SignatureHelpCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

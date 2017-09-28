@@ -13,7 +13,7 @@ use PhpParser\NodeVisitor;
 /**
  * Visitor that traverses a set of nodes and indexes use statements and namespaces in the process.
  */
-class UseStatementIndexingVisitor implements NodeVisitor
+final class UseStatementIndexingVisitor implements NodeVisitor
 {
     /**
      * @var StorageInterface

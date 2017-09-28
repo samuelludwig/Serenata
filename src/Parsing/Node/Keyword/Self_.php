@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 /**
  * Represents the self keyword.
  */
-class Self_ extends Expr
+final class Self_ extends Expr
 {
     /**
      * @inheritDoc

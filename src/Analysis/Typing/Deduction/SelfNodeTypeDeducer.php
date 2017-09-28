@@ -13,7 +13,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Parsing\Node\Keyword\Self_} node.
  */
-class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

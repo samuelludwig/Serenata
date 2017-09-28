@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a class constant.
  */
-class ClassConstant extends ConstantLike
+final class ClassConstant extends ConstantLike
 {
     /**
      * @var Classlike

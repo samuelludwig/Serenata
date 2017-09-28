@@ -11,7 +11,7 @@ use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 /**
  * Looks for unknown global function names (i.e. used during calls).
  */
-class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
+final class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
 {
     /**
      * @var GlobalFunctionUsageFetchingVisitor

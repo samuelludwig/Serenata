@@ -13,7 +13,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ArrayDimFetch} node.
  */
-class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var TypeAnalyzer

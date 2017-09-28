@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 /**
  * Represents the parent keyword.
  */
-class Parent_ extends Expr
+final class Parent_ extends Expr
 {
     /**
      * @inheritDoc

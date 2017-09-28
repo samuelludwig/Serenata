@@ -15,7 +15,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 /**
  * Command that lints a file for various problems.
  */
-class LintCommand extends AbstractCommand
+final class LintCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

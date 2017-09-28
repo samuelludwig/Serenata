@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\Variable} node.
  */
-class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var LocalTypeScanner

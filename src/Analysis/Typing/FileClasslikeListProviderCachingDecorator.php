@@ -9,7 +9,7 @@ use PhpIntegrator\Indexing\Structures;
  /**
   * Decorator for classes implementing {@see FileClasslikeListProviderInterface} that performs caching.
   */
-class FileClasslikeListProviderCachingDecorator implements FileClasslikeListProviderInterface, ClearableCacheInterface
+final class FileClasslikeListProviderCachingDecorator implements FileClasslikeListProviderInterface, ClearableCacheInterface
 {
     /**
      * @var FileClasslikeListProviderInterface

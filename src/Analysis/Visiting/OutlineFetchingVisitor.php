@@ -14,7 +14,7 @@ use PhpParser\NodeVisitorAbstract;
  * Node visitor that fetches the outline of a file, creating a list of structural elements (classes, interfaces, ...)
  * with their direct methods, properties, constants, and so on.
  */
-class OutlineFetchingVisitor extends NodeVisitorAbstract
+final class OutlineFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array

@@ -10,7 +10,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that shows a list of global constants.
  */
-class GlobalConstantsCommand extends AbstractCommand
+final class GlobalConstantsCommand extends AbstractCommand
 {
     /**
      * @var ConstantListProviderInterface

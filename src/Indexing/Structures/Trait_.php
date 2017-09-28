@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a trait.
  */
-class Trait_ extends Classlike
+final class Trait_ extends Classlike
 {
     /**
      * @var string[]

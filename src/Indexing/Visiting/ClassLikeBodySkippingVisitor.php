@@ -11,7 +11,7 @@ use PhpParser\NodeTraverser;
  *
  * This can be used to improve performance or to simplify logic of other visitors.
  */
-class ClassLikeBodySkippingVisitor implements NodeVisitor
+final class ClassLikeBodySkippingVisitor implements NodeVisitor
 {
     /**
      * @inheritDoc

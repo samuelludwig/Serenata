@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 /**
  * Represents the static keyword.
  */
-class Static_ extends Expr
+final class Static_ extends Expr
 {
     /**
      * @inheritDoc

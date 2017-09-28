@@ -19,7 +19,7 @@ use Evenement\EventEmitterInterface;
 /**
  * Indexes directories and files.
  */
-class Indexer implements EventEmitterInterface
+final class Indexer implements EventEmitterInterface
 {
     use EventEmitterTrait;
 

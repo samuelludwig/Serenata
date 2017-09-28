@@ -13,7 +13,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that shows a list of available namespace.
  */
-class NamespaceListCommand extends AbstractCommand
+final class NamespaceListCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

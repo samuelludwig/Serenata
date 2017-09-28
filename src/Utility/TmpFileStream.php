@@ -7,7 +7,7 @@ use RuntimeException;
 /**
  * Represents a stream to a temporary file.
  */
-class TmpFileStream extends AbstractResourceStream
+final class TmpFileStream extends AbstractResourceStream
 {
     /**
      * @inheritDoc

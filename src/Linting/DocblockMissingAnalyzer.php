@@ -11,7 +11,7 @@ use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 /**
  * Analyzes code to search for missing docblocks.
  */
-class DocblockMissingAnalyzer implements AnalyzerInterface
+final class DocblockMissingAnalyzer implements AnalyzerInterface
 {
     /**
      * @var OutlineFetchingVisitor

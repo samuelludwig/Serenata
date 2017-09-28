@@ -8,7 +8,7 @@ use PhpIntegrator\Indexing\ManagerRegistry;
 /**
  * Checks if a classlike exists via Doctrine.
  */
-class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface
+final class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface
 {
     /**
      * @var ManagerRegistry

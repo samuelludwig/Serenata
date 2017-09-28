@@ -9,7 +9,7 @@ use PhpIntegrator\DocblockTypeParser\SpecialDocblockTypeString;
 /**
  * Provides functionality for analyzing type names.
  */
-class TypeAnalyzer implements TypeNormalizerInterface
+final class TypeAnalyzer implements TypeNormalizerInterface
 {
     /**
      * @var string

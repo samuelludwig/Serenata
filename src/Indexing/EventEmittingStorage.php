@@ -8,7 +8,7 @@ use Evenement\EventEmitterInterface;
 /**
  * Delegates storage to another object and emits events.
  */
-class EventEmittingStorage implements StorageInterface, EventEmitterInterface
+final class EventEmittingStorage implements StorageInterface, EventEmitterInterface
 {
     use EventEmitterTrait;
 

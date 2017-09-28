@@ -14,7 +14,7 @@ use PhpIntegrator\Indexing\ManagerRegistry;
 /**
  * Retrieves a list of available classlikes via Doctrine.
  */
-class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterface, NamespaceListProviderInterface
+final class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterface, NamespaceListProviderInterface
 {
     /**
      * @var NamespaceConverter

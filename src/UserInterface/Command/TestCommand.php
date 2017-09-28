@@ -10,7 +10,7 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 /**
  * Command that tests a project to see if it is in a properly usable state.
  */
-class TestCommand extends AbstractCommand
+final class TestCommand extends AbstractCommand
 {
     /**
      * @var StorageVersionChecker

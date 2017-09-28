@@ -10,7 +10,7 @@ use PhpIntegrator\Indexing\Structures;
 /**
  * Filters out {@see \SplFileInfo} values that haven't been modified since a preconfigured time.
  */
-class ModificationTimeFilterIterator extends FilterIterator
+final class ModificationTimeFilterIterator extends FilterIterator
 {
     /**
      * @var Structures\File[]

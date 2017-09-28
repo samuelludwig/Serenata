@@ -11,7 +11,7 @@ use PhpParser\ErrorHandler;
  * Only the last parsed result is retained. If different code is passed, the cache will miss and a new parse call will
  * occur.
  */
-class CachingParser implements Parser
+final class CachingParser implements Parser
 {
     /**
      * @var Parser

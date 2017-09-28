@@ -14,7 +14,7 @@ use PhpParser\PrettyPrinterAbstract;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\PropertyFetch} node.
  */
-class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var PropertyFetchPropertyInfoRetriever

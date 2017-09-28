@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node} object by delegating it to another (configurable) object.
  */
-class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface|null

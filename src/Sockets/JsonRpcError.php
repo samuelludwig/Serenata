@@ -9,7 +9,7 @@ use JsonSerializable;
  *
  * Value object.
  */
-class JsonRpcError implements JsonSerializable
+final class JsonRpcError implements JsonSerializable
 {
     /**
      * @var int

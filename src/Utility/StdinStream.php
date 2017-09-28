@@ -7,7 +7,7 @@ use RuntimeException;
 /**
  * Represents the STDIN stream.
  */
-class StdinStream extends AbstractResourceStream
+final class StdinStream extends AbstractResourceStream
 {
     /**
      * @inheritDoc
