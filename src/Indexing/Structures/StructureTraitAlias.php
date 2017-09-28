@@ -32,7 +32,6 @@ abstract class StructureTraitAlias
      */
     protected $alias;
 
-
     /**
      * @return string
      */
