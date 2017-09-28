@@ -265,30 +265,6 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testCommentClassAfterVarTag(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testCommentClassAfterParamTag(): void
-    // {
-    //     // TODO
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testCommentClassAfterReturnTag(): void
-    // {
-    //     // TODO
-    // }
-
     /**
      * @param string $file
      * @param int    $position
