@@ -14,7 +14,7 @@
         "doctrine/cache": "^1.7",
         "doctrine/orm": "^2.5",
         "evenement/evenement": "^2.0",
-        "nikic/php-parser": "dev-master#b2c6497d632b952ad9a53f3ad10e6dc7ae50e41e",
+        "nikic/php-parser": "dev-master#df334eacaa962391a5352c6988d4cdaee5d6b44a",
         "react/socket": "^0.8",
         "symfony/yaml": "^3.3",
         "symfony/config": "^3.3",
