@@ -15,6 +15,7 @@
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
+* Some edge case bugs with name (type) resolution were resolved by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
 
 ### Structural changes (mostly relevant to clients)
 * Properties now also return a `filename` property, which was missing before

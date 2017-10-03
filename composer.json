@@ -9,7 +9,7 @@
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
         "php-integrator/common": "^0.1",
-        "php-integrator/name-qualification-utilities": "^0.1",
+        "php-integrator/name-qualification-utilities": "^0.2",
         "php-integrator/docblock-type-parser": "^0.2",
         "doctrine/cache": "^1.7",
         "doctrine/orm": "^2.5",
