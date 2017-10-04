@@ -13,6 +13,7 @@
 * [Using a trait in an interface will no longer crash the server](https://gitlab.com/php-integrator/core/issues/133)
 * [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)
 * [Project paths containing the tilde representing the home folder will now be properly expanded](https://gitlab.com/php-integrator/core/merge_requests/72)
+* [Variable expressions in method calls will no longer cause a crash whilst trying to deduce the type of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
