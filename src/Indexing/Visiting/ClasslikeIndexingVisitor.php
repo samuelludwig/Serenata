@@ -474,6 +474,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Classlike $classlike): void
     {
+        if ($classlike instanceof Structures\Interface_) {
+            return; // Nope, interfaces can't use traits.
+        }
+
         foreach ($node->traits as $traitName) {
             $traitFqcn = NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
             $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);

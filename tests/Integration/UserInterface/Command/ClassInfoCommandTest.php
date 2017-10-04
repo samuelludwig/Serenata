@@ -1894,6 +1894,16 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testInterfaceIncorrectlyUsingTraitDoesNotCrash(): void
+    {
+        $fileName = 'InterfaceIncorrectlyUsesTrait.phpt';
+
+        static::assertNotNull($this->getClassInfo($fileName, 'A\I'));
+    }
+
+    /**
      * @param string $file
      * @param string $fqcn
      *
