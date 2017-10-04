@@ -1045,6 +1045,19 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testMetaStaticMethodTypesDoesNotTryToResolveDynamicMethodCall(): void
+    {
+        $result = $this->deduceTypesFromExpression(
+            'MetaStaticMethodTypesDoesNotTryToResolveDynamicMethodCall.phpt',
+            '$var'
+        );
+
+        static::assertSame([], $result);
+    }
+
+    /**
+     * @return void
+     */
     public function testThrowsExceptionWhenFileIsNotInIndex(): void
     {
         $command = $this->container->get('deduceTypesCommand');

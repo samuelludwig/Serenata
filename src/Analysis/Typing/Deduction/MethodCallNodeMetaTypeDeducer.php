@@ -75,6 +75,10 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
         $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name;
 
+        if (!$methodName instanceof Node\Identifier) {
+            return [];
+        }
+
         $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 
         $staticTypes = [];
