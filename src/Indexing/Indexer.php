@@ -29,7 +29,7 @@ final class Indexer implements EventEmitterInterface
     private $queue;
 
     /**
-     * @var FileIndexer
+     * @var FileIndexerInterface
      */
     private $fileIndexer;
 
@@ -60,7 +60,7 @@ final class Indexer implements EventEmitterInterface
 
     /**
      * @param Queue                                 $queue
-     * @param FileIndexer                           $fileIndexer
+     * @param FileIndexerInterface                  $fileIndexer
      * @param DirectoryIndexRequestDemuxer          $directoryIndexRequestDemuxer
      * @param IndexFilePruner                       $indexFilePruner
      * @param PathNormalizer                        $pathNormalizer
@@ -69,7 +69,7 @@ final class Indexer implements EventEmitterInterface
      */
     public function __construct(
         Queue $queue,
-        FileIndexer $fileIndexer,
+        FileIndexerInterface $fileIndexer,
         DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
         IndexFilePruner $indexFilePruner,
         PathNormalizer $pathNormalizer,
