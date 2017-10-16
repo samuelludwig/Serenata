@@ -73,7 +73,7 @@ class File
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId(): string
     {
