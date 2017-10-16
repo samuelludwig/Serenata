@@ -157,7 +157,7 @@ final class Indexer implements EventEmitterInterface
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param int|null                       $requestId
      */
-    protected function indexDirectories(
+    private function indexDirectories(
         array $paths,
         array $extensionsToIndex,
         array $globsToExclude,
@@ -185,7 +185,7 @@ final class Indexer implements EventEmitterInterface
      *
      * @return bool
      */
-    protected function indexFile(string $path, array $extensionsToIndex, array $globsToExclude, bool $useStdin): bool
+    private function indexFile(string $path, array $extensionsToIndex, array $globsToExclude, bool $useStdin): bool
     {
         if (!$this->isFileAllowed($path, $extensionsToIndex, $globsToExclude)) {
             return false;
@@ -221,7 +221,7 @@ final class Indexer implements EventEmitterInterface
      *
      * @return bool
      */
-    protected function isFileAllowed(string $path, array $extensionsToIndex, array $globsToExclude): bool
+    private function isFileAllowed(string $path, array $extensionsToIndex, array $globsToExclude): bool
     {
         $iterator = new IndexableFileIterator([$path], $extensionsToIndex, $globsToExclude);
 
