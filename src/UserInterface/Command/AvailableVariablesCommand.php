@@ -73,7 +73,7 @@ final class AvailableVariablesCommand extends AbstractCommand
         }
 
         return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAvailableVariables($code, $offset));
-     }
+    }
 
     /**
      * @param string $code
@@ -81,12 +81,12 @@ final class AvailableVariablesCommand extends AbstractCommand
      *
      * @return array
      */
-     public function getAvailableVariables(string $code, int $offset): array
-     {
-         $handler = new ErrorHandler\Collecting();
+    public function getAvailableVariables(string $code, int $offset): array
+    {
+        $handler = new ErrorHandler\Collecting();
 
-         $nodes = $this->parse($code, $handler);
+        $nodes = $this->parse($code, $handler);
 
-         return $this->variableScanner->getAvailableVariables($nodes, $offset);
-     }
+        return $this->variableScanner->getAvailableVariables($nodes, $offset);
+    }
 }
