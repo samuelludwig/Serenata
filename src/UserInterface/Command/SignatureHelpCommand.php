@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
@@ -34,18 +35,26 @@ final class SignatureHelpCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
      * @param SignatureHelpRetriever $signatureHelpRetriever
      * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         SignatureHelpRetriever $signatureHelpRetriever,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->signatureHelpRetriever = $signatureHelpRetriever;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -88,6 +97,15 @@ final class SignatureHelpCommand extends AbstractCommand
      */
     public function signatureHelp(string $filePath, string $code, int $offset): SignatureHelp
     {
-        return $this->signatureHelpRetriever->get($this->storage->getFileByPath($filePath), $code, $offset);
+        $file = $this->storage->getFileByPath($filePath);
+
+        // TODO: At the time of writing I could no longer reproduce the issue. If I can reproduce it in the future and
+        // come back to this branch, the same needs to be implemented for all other commands; they also need to index
+        // STDIN immediately. For some commands this will mean that a file path is now required, and the clients will
+        // always need to send a file (BC break). In the long term, this could also mean that individual index events
+        // are no longer required. See also https://gitlab.com/php-integrator/core/issues/126
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->signatureHelpRetriever->get($file, $code, $offset);
     }
 }

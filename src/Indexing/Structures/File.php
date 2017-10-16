@@ -25,6 +25,11 @@ class File
     private $path;
 
     /**
+     * @var string|null
+     */
+    private $lastIndexedSourceHash;
+
+    /**
      * @var DateTime
      */
     private $indexedOn;
@@ -63,6 +68,7 @@ class File
     {
         $this->id = (string) Uuid::uuid4();
         $this->path = $path;
+        $this->lastIndexedSourceHash = null;
         $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);
 
@@ -78,6 +84,25 @@ class File
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastIndexedSourceHash(): ?string
+    {
+        return $this->lastIndexedSourceHash;
+    }
+
+    /**
+     * @param string|null $lastIndexedSourceHash
+     *
+     * @return static
+     */
+    public function setLastIndexedSourceHash(?string $lastIndexedSourceHash)
+    {
+        $this->lastIndexedSourceHash = $lastIndexedSourceHash;
+        return $this;
     }
 
     /**

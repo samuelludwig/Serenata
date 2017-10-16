@@ -4,6 +4,8 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Analysis\VariableScanner;
 
+use PhpIntegrator\Indexing\FileIndexerInterface;
+
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
@@ -31,18 +33,26 @@ final class AvailableVariablesCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param VariableScanner        $variableScanner
-     * @param Parser                 $parser
      * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
+     * @param Parser                 $parser
      */
     public function __construct(
         VariableScanner $variableScanner,
-        Parser $parser,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileIndexerInterface $fileIndexer,
+        Parser $parser
     ) {
         $this->variableScanner = $variableScanner;
-        $this->parser = $parser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileIndexer = $fileIndexer;
+        $this->parser = $parser;
     }
 
     /**
@@ -52,7 +62,9 @@ final class AvailableVariablesCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['offset'])) {
+        if (!isset($arguments['file'])) {
+            throw new InvalidArgumentsException('A --file must be supplied!');
+        } elseif (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }
 
@@ -62,8 +74,6 @@ final class AvailableVariablesCommand extends AbstractCommand
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } elseif (isset($arguments['file']) && $arguments['file']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
-        } else {
-            throw new InvalidArgumentsException('Either a --file file must be supplied or --stdin must be passed!');
         }
 
         $offset = $arguments['offset'];
@@ -72,18 +82,25 @@ final class AvailableVariablesCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAvailableVariables($code, $offset));
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAvailableVariables(
+            $arguments['file'],
+            $code,
+            $offset
+        ));
     }
 
     /**
+     * @param string $filePath
      * @param string $code
      * @param int    $offset
      *
      * @return array
      */
-    public function getAvailableVariables(string $code, int $offset): array
+    public function getAvailableVariables(string $filePath, string $code, int $offset): array
     {
         $handler = new ErrorHandler\Collecting();
+
+        $this->fileIndexer->index($filePath, $code);
 
         $nodes = $this->parse($code, $handler);
 

@@ -98,7 +98,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
 
             static::assertSame(
                 $list,
-                $command->getAvailableVariables(file_get_contents($fullPath), $markerOffsets[$markerNumber])
+                $command->getAvailableVariables($fullPath, file_get_contents($fullPath), $markerOffsets[$markerNumber])
             );
         };
 
@@ -173,7 +173,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
-        return $command->getAvailableVariables(file_get_contents($path), $markerOffset);
+        return $command->getAvailableVariables($path, file_get_contents($path), $markerOffset);
     }
 
     /**

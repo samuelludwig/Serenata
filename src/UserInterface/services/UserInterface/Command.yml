@@ -81,8 +81,9 @@ services:
         class: PhpIntegrator\UserInterface\Command\AvailableVariablesCommand
         arguments:
             - '@variableScanner'
-            - '@parser'
             - '@sourceCodeStreamReader'
+            - '@updateEnforcingIndexer'
+            - '@parser'
 
     deduceTypesCommand:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
@@ -99,6 +100,7 @@ services:
             - '@storage'
             - '@signatureHelpRetriever'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'
 
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
