@@ -189,7 +189,7 @@ final class Indexer implements EventEmitterInterface
     {
         if (!$this->isFileAllowed($path, $extensionsToIndex, $globsToExclude)) {
             return false;
-        } else if ($useStdin) {
+        } elseif ($useStdin) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
             try {
