@@ -192,7 +192,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
                 throw new AssertionError($throwable->getMessage(), 0, $throwable);
             }
 
-            throw new StorageException($e->getMessage(), 0, $throwable);
+            throw new StorageException($throwable->getMessage(), 0, $throwable);
         }
 
         throw $throwable;
