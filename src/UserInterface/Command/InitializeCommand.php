@@ -100,10 +100,24 @@ final class InitializeCommand extends AbstractCommand
      */
     protected function ensureIndexDatabaseDoesNotExist(): void
     {
-        if (file_exists($this->managerRegistry->getDatabasePath())) {
-            $this->managerRegistry->ensureConnectionClosed();
+        $this->managerRegistry->ensureConnectionClosed();
 
-            unlink($this->managerRegistry->getDatabasePath());
+        $databasePath = $this->managerRegistry->getDatabasePath();
+
+        if (empty($databasePath)) {
+            return;
+        }
+
+        if (file_exists($databasePath)) {
+            unlink($databasePath);
+        }
+
+        if (file_exists($databasePath . '-shm')) {
+            unlink($databasePath . '-shm');
+        }
+
+        if (file_exists($databasePath . '-wal')) {
+            unlink($databasePath . '-wal');
         }
     }
 
