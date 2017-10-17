@@ -134,7 +134,10 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
             // Entity manager depends on connection, cascade reset.
             $this->resetService('defaultEntityManager');
         } elseif ($name === 'defaultEntityManager') {
-            $this->entityManager = null;
+            if ($this->entityManager !== null) {
+                $this->entityManager->close();
+                $this->entityManager = null;
+            }
         }
     }
 
