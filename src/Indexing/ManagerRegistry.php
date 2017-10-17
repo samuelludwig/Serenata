@@ -106,7 +106,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
      */
     protected function getEntityManagerInstance(): EntityManager
     {
-        if ($this->entityManager === null) {
+        if ($this->entityManager === null || !$this->entityManager->isOpen()) {
             $regionConfig = new RegionsConfiguration();
             $cacheFactory = new DefaultCacheFactory($regionConfig, $this->cache);
 
