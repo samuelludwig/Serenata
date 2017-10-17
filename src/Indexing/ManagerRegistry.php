@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManager;
 
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
+
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
