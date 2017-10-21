@@ -34,6 +34,7 @@ services:
             - '@storage'
             - '@tooltipProvider'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'
 
     classListCommand:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
@@ -76,6 +77,7 @@ services:
             - '@storage'
             - '@sourceCodeStreamReader'
             - '@linter'
+            - '@fileIndexer'
 
     availableVariablesCommand:
         class: PhpIntegrator\UserInterface\Command\AvailableVariablesCommand
@@ -84,6 +86,7 @@ services:
             - '@sourceCodeStreamReader'
             - '@updateEnforcingIndexer'
             - '@parser'
+            - '@fileIndexer'
 
     deduceTypesCommand:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
@@ -93,6 +96,7 @@ services:
             - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
             - '@positionalNamespaceDeterminer'
+            - '@fileIndexer'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
@@ -115,3 +119,4 @@ services:
             - '@storage'
             - '@definitionLocator'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'

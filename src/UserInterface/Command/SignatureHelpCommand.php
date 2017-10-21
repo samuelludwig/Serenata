@@ -99,11 +99,6 @@ final class SignatureHelpCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        // TODO: At the time of writing I could no longer reproduce the issue. If I can reproduce it in the future and
-        // come back to this branch, the same needs to be implemented for all other commands; they also need to index
-        // STDIN immediately. For some commands this will mean that a file path is now required, and the clients will
-        // always need to send a file (BC break). In the long term, this could also mean that individual index events
-        // are no longer required. See also https://gitlab.com/php-integrator/core/issues/126
         $this->fileIndexer->index($filePath, $code);
 
         return $this->signatureHelpRetriever->get($file, $code, $offset);

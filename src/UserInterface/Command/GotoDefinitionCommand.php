@@ -6,6 +6,7 @@ use PhpIntegrator\GotoDefinition\DefinitionLocator;
 use PhpIntegrator\GotoDefinition\GotoDefinitionResult;
 
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
@@ -34,18 +35,26 @@ final class GotoDefinitionCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
-     * @param DefinitionLocator $definitionLocator
+     * @param DefinitionLocator      $definitionLocator
      * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         DefinitionLocator $definitionLocator,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->definitionLocator = $definitionLocator;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -88,6 +97,10 @@ final class GotoDefinitionCommand extends AbstractCommand
      */
     public function gotoDefinition(string $filePath, string $code, int $offset): ?GotoDefinitionResult
     {
-        return $this->definitionLocator->locate($this->storage->getFileByPath($filePath), $code, $offset);
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->definitionLocator->locate($file, $code, $offset);
     }
 }

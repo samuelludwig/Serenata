@@ -9,6 +9,7 @@ use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
@@ -55,24 +56,32 @@ final class DeduceTypesCommand extends AbstractCommand
     private $positionalNamespaceDeterminer;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface                       $storage
      * @param NodeTypeDeducerInterface               $nodeTypeDeducer
      * @param LastExpressionParser                   $lastExpressionParser
      * @param SourceCodeStreamReader                 $sourceCodeStreamReader
      * @param PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
+     * @param FileIndexerInterface                   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         LastExpressionParser $lastExpressionParser,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
+        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->positionalNamespaceDeterminer = $positionalNamespaceDeterminer;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -134,6 +143,8 @@ final class DeduceTypesCommand extends AbstractCommand
         bool $ignoreLastElement
     ): array {
         $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
 
         return $this->deduceTypesFromExpression($file, $code, $codeWithExpression, $offset, $ignoreLastElement);
     }

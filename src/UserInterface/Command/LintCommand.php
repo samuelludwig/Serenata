@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\Linting\Linter;
 use PhpIntegrator\Linting\LintingSettings;
@@ -33,18 +34,26 @@ final class LintCommand extends AbstractCommand
     private $linter;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      * @param Linter                 $linter
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        Linter $linter
+        Linter $linter,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->linter = $linter;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -91,6 +100,10 @@ final class LintCommand extends AbstractCommand
      */
     public function lint(string $filePath, string $code, LintingSettings $settings): array
     {
-        return $this->linter->lint($this->storage->getFileByPath($filePath), $code, $settings);
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->linter->lint($file, $code, $settings);
     }
 }

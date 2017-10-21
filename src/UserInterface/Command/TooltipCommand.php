@@ -3,6 +3,7 @@
 namespace PhpIntegrator\UserInterface\Command;
 
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
@@ -34,18 +35,26 @@ final class TooltipCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
      * @param TooltipProvider        $tooltipProvider
      * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         TooltipProvider $tooltipProvider,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->tooltipProvider = $tooltipProvider;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -88,6 +97,10 @@ final class TooltipCommand extends AbstractCommand
      */
     public function getTooltip(string $filePath, string $code, int $offset): ?TooltipResult
     {
-        return $this->tooltipProvider->get($this->storage->getFileByPath($filePath), $code, $offset);
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->tooltipProvider->get($file, $code, $offset);
     }
 }
