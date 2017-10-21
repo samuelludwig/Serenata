@@ -18,6 +18,10 @@
 * Function and method docblock `@return` tag types will now also be validated against the actual return type
 * Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
 * Some edge case bugs with name (type) resolution were resolved by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
+* The core will now attempt to reestablish connection when the entity manager closes due to a database error
+* [Disk I/O errors and errors due to locked databases will now propagate as fatal error, as they currently can't be recovered from and to warn the user about internal failures](https://github.com/php-integrator/atom-base/issues/278)
+* [Fix initialize command failing to reinitialize when database was locked or I/O errors occurred](https://github.com/php-integrator/atom-base/issues/278)
+  * This happened in spite of the original database connection being closed and the database itself completely being removed due to the WAL and SHM files lingering. This apparantly causes sqlite to try and use them as state for the new database when the schema was first initialized on it afterwards. This in turn resulted in never being able to break the chain of errors without removing all the database files manually.
 
 ### Structural changes (mostly relevant to clients)
 * Properties now also return a `filename` property, which was missing before

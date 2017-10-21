@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManager;
 
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
+
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
@@ -105,7 +106,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
      */
     protected function getEntityManagerInstance(): EntityManager
     {
-        if ($this->entityManager === null) {
+        if ($this->entityManager === null || !$this->entityManager->isOpen()) {
             $regionConfig = new RegionsConfiguration();
             $cacheFactory = new DefaultCacheFactory($regionConfig, $this->cache);
 
@@ -133,7 +134,10 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
             // Entity manager depends on connection, cascade reset.
             $this->resetService('defaultEntityManager');
         } elseif ($name === 'defaultEntityManager') {
-            $this->entityManager = null;
+            if ($this->entityManager !== null) {
+                $this->entityManager->close();
+                $this->entityManager = null;
+            }
         }
     }
 
