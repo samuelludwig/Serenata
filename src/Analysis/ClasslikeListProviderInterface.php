@@ -9,10 +9,10 @@ use RuntimeException;
  */
 interface ClasslikeListProviderInterface
 {
-     /**
-      * @throws RuntimeException
-      *
-      * @return array[]
-      */
-     public function getAll(): array;
+    /**
+     * @throws RuntimeException
+     *
+     * @return array[]
+     */
+    public function getAll(): array;
 }
