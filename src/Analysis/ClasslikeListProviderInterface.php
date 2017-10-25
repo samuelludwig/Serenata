@@ -12,7 +12,7 @@ interface ClasslikeListProviderInterface
     /**
      * @throws RuntimeException
      *
-     * @return array[]
+     * @return array array<string, array> mapping FQCN's to classlikes.
      */
     public function getAll(): array;
 }
