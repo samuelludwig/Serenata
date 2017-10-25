@@ -11,12 +11,12 @@ use PhpIntegrator\Indexing\Structures;
  */
 interface FileNamespaceListProviderInterface
 {
-     /**
-      * @param Structures\File $file
-      *
-      * @throws RuntimeException
-      *
-      * @return array[]
-      */
-     public function getAllForFile(Structures\File $file): array;
+    /**
+     * @param Structures\File $file
+     *
+     * @throws RuntimeException
+     *
+     * @return array[]
+     */
+    public function getAllForFile(Structures\File $file): array;
 }
