@@ -11,10 +11,10 @@ use PhpIntegrator\Analysis\Conversion\FunctionConverter;
  */
 interface ConstantListProviderInterface
 {
-     /**
-      * @throws RuntimeException
-      *
-      * @return array[]
-      */
-     public function getAll(): array;
+    /**
+     * @throws RuntimeException
+     *
+     * @return array[]
+     */
+    public function getAll(): array;
 }
