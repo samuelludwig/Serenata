@@ -12,7 +12,7 @@ interface FunctionListProviderInterface
     /**
      * @throws RuntimeException
      *
-     * @return array[]
+     * @return array array<string, array> mapping FQCN's to functions.
      */
     public function getAll(): array;
 }
