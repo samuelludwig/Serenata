@@ -9,10 +9,10 @@ use RuntimeException;
  */
 interface FunctionListProviderInterface
 {
-     /**
-      * @throws RuntimeException
-      *
-      * @return array[]
-      */
-     public function getAll(): array;
+    /**
+     * @throws RuntimeException
+     *
+     * @return array[]
+     */
+    public function getAll(): array;
 }
