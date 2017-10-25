@@ -19,6 +19,7 @@ class NamespaceListRegistryWorkspaceInteractionTest extends AbstractIntegrationT
         static::assertEmpty($registry->getAll());
 
         $registry->add([
+            'id'   => 'foo',
             'fqcn' => '\Test'
         ]);
 

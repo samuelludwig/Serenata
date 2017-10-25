@@ -17,6 +17,7 @@ final class NamespaceConverter extends AbstractConverter
     public function convert(Structures\FileNamespace $namespace): array
     {
         return [
+            'id'        => $namespace->getId(),
             'name'      => $namespace->getName(),
             'file'      => $namespace->getFile()->getPath(),
             'startLine' => $namespace->getStartLine(),

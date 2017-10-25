@@ -38,13 +38,7 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     {
         $this->initializeRegistryIfNecessary();
 
-        $index = array_search($namespace, $this->registry, true);
-
-        if ($index !== false) {
-            $this->registry[$index] = $namespace;
-        } else {
-            $this->registry[] = $namespace;
-        }
+        $this->registry[$namespace['id']] = $namespace;
     }
 
     /**
@@ -54,13 +48,8 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     {
         $this->initializeRegistryIfNecessary();
 
-        $index = array_search($namespace, $this->registry, true);
-
-        if ($index !== false) {
-            unset($this->registry[$index]);
-
-            // Ensure integral indices remain sequential.
-            $this->registry = array_values($this->registry);
+        if (isset($this->registry[$namespace['id']])) {
+            unset($this->registry[$namespace['id']]);
         }
     }
 

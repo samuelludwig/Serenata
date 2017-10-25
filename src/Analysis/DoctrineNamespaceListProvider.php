@@ -47,9 +47,7 @@ final class DoctrineNamespaceListProvider implements FileNamespaceListProviderIn
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        return array_map(function (Structures\FileNamespace $namespace) {
-            return $this->namespaceConverter->convert($namespace);
-        }, $namespaces);
+        return $this->mapNamespaces($namespaces);
     }
 
     /**
@@ -65,8 +63,22 @@ final class DoctrineNamespaceListProvider implements FileNamespaceListProviderIn
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        return array_map(function (Structures\FileNamespace $namespace) {
-            return $this->namespaceConverter->convert($namespace);
-        }, $namespaces);
+        return $this->mapNamespaces($namespaces);
+    }
+
+    /**
+     * @param array $namespaces
+     *
+     * @return array
+     */
+    protected function mapNamespaces(array $namespaces): array
+    {
+        $result = [];
+
+        foreach ($namespaces as $element) {
+            $result[$element->getId()] = $this->namespaceConverter->convert($element);
+        }
+
+        return $result;
     }
 }
