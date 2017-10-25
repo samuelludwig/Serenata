@@ -45,7 +45,7 @@ final class DoctrineFunctionListProvider implements FunctionListProviderInterfac
         $result = [];
 
         try {
-            $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();;
+            $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
