@@ -12,7 +12,7 @@ interface ConstantListProviderInterface
     /**
      * @throws RuntimeException
      *
-     * @return array[]
+     * @return array array<string, array> mapping FQCN's to constants.
      */
     public function getAll(): array;
 }
