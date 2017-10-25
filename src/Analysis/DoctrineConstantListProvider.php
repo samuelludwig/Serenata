@@ -43,7 +43,7 @@ final class DoctrineConstantListProvider implements ConstantListProviderInterfac
         $constants = [];
 
         try {
-            $items = $this->managerRegistry->getRepository(Structures\Constant::class)->findAll();;
+            $items = $this->managerRegistry->getRepository(Structures\Constant::class)->findAll();
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
