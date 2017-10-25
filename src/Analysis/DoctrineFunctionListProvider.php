@@ -36,7 +36,9 @@ final class DoctrineFunctionListProvider implements FunctionListProviderInterfac
         $this->managerRegistry = $managerRegistry;
     }
 
-     /// @inherited
+     /**
+      * @inheritDoc
+      */
      public function getAll(): array
      {
          $items = [];
