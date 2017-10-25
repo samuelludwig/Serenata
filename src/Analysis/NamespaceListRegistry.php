@@ -25,7 +25,9 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
         $this->delegate = $delegate;
     }
 
-    /// @inherited
+    /**
+     * @inheritDoc
+     */
     public function getAll(): array
     {
         return $this->getRegistry();

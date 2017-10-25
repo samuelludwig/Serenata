@@ -25,7 +25,9 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
         $this->delegate = $delegate;
     }
 
-    /// @inherited
+    /**
+     * @inheritDoc
+     */
     public function getAll(): array
     {
         return $this->getRegistry();

@@ -36,7 +36,9 @@ final class DoctrineConstantListProvider implements ConstantListProviderInterfac
         $this->managerRegistry = $managerRegistry;
     }
 
-    /// @inherited
+    /**
+     * @inheritDoc
+     */
     public function getAll(): array
     {
         $items = [];

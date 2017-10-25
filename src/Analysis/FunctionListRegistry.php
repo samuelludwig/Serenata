@@ -25,7 +25,9 @@ final class FunctionListRegistry implements FunctionListProviderInterface
         $this->delegate = $delegate;
     }
 
-     /// @inherited
+    /**
+     * @inheritDoc
+     */
      public function getAll(): array
      {
          return $this->getRegistry();

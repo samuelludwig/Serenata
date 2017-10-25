@@ -25,7 +25,9 @@ final class ConstantListRegistry implements ConstantListProviderInterface
         $this->delegate = $delegate;
     }
 
-     /// @inherited
+    /**
+     * @inheritDoc
+     */
      public function getAll(): array
      {
          return $this->getRegistry();
