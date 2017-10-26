@@ -16,7 +16,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\FuncCall} node.
  */
-class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var ManagerRegistry
@@ -51,13 +51,13 @@ class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\FuncCall) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
         }
 
-        return $this->deduceTypesFromFuncCallNode($node, $file, $code, $offset);
+        return $this->deduceTypesFromFuncCallNode($node);
     }
 
     /**

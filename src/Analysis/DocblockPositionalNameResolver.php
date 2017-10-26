@@ -15,7 +15,7 @@ use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
  * This class is also usable as a regular (non-docblock) type resolver as docblock names are a superset of standard
  * names. The additional functionality is decorated on top of the standard resolution process.
  */
-class DocblockPositionalNameResolver implements PositionalNameResolverInterface
+final class DocblockPositionalNameResolver implements PositionalNameResolverInterface
 {
     /**
      * @var PositionalNameResolverInterface

@@ -1,6 +1,7 @@
 imports:
     - { resource: Typing/Deduction.yml }
     - { resource: Typing/Localization.yml }
+    - { resource: SourceCodeReading/SourceCodeReading.yml }
 
 parameters:
 

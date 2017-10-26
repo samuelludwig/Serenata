@@ -9,7 +9,7 @@ use PhpParser\NodeVisitor\NameResolver;
 /**
  * Node visitor that fetches usages of (global) constants.
  */
-class GlobalConstantUsageFetchingVisitor extends NameResolver
+final class GlobalConstantUsageFetchingVisitor extends NameResolver
 {
     /**
      * @var Node\Expr\ConstFetch[]

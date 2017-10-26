@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
+use PhpIntegrator\Indexing\FileNotFoundStorageException;
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class NamespaceListCommandTest extends AbstractIntegrationTest
@@ -9,40 +10,70 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testNamespaceList(): void
+    public function testNamespaceListForAllFiles(): void
     {
         $path = __DIR__ . '/NamespaceListCommandTest/';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('namespaceListCommand');
+        $command = $this->container->get('namespaceListCommand');
 
         $output = $command->getNamespaceList();
 
-        $this->assertCount(4, $output);
-        $this->assertArrayHasKey('name', $output[1]);
-        $this->assertSame('NamespaceA', $output[1]['name']);
-        $this->assertArrayHasKey('name', $output[3]);
-        $this->assertSame('NamespaceB', $output[3]['name']);
+        static::assertCount(4, $output);
+
+        array_shift($output);
+        $secondItem = array_shift($output);
+
+        static::assertArrayHasKey('name', $secondItem);
+        static::assertSame('NamespaceA', $secondItem['name']);
+
+        array_shift($output);
+        $fourthItem = array_shift($output);
+
+        static::assertArrayHasKey('name', $fourthItem);
+        static::assertSame('NamespaceB', $fourthItem['name']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testNamespaceListForSpecificFile(): void
+    {
+        $path = __DIR__ . '/NamespaceListCommandTest/';
+
+        $this->indexTestFile($this->container, $path);
+
+        $command = $this->container->get('namespaceListCommand');
 
         $output = $command->getNamespaceList($path . 'NamespaceA.phpt');
 
-        $this->assertCount(2, $output);
+        static::assertCount(2, $output);
 
-        $this->assertEquals([
-            [
-                'name'      => null,
-                'startLine' => 0,
-                'endLine'   => 2
-            ],
+        $firstItem = array_shift($output);
 
-            [
-                'name'      => 'NamespaceA',
-                'startLine' => 3,
-                'endLine'   => 9
-            ]
-        ], $output);
+        static::assertSame(null, $firstItem['name']);
+        static::assertSame($path . 'NamespaceA.phpt', $firstItem['file']);
+        static::assertSame(0, $firstItem['startLine']);
+        static::assertSame(2, $firstItem['endLine']);
+
+        $secondItem = array_shift($output);
+
+        static::assertSame('NamespaceA', $secondItem['name']);
+        static::assertSame($path . 'NamespaceA.phpt', $secondItem['file']);
+        static::assertSame(3, $secondItem['startLine']);
+        static::assertSame(9, $secondItem['endLine']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenFileIsNotInIndex(): void
+    {
+        $command = $this->container->get('namespaceListCommand');
+
+        $this->expectException(FileNotFoundStorageException::class);
+
+        $command->getNamespaceList('DoesNotExist.phpt');
     }
 }

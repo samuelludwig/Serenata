@@ -1,0 +1,60 @@
+parameters:
+
+
+services:
+    definitionLocator:
+        class: PhpIntegrator\GotoDefinition\DefinitionLocator
+        arguments:
+            - '@parser'
+            - '@funcCallNodeDefinitionLocator'
+            - '@methodCallNodeDefinitionLocator'
+            - '@constFetchNodeDefinitionLocator'
+            - '@classConstFetchNodeDefinitionLocator'
+            - '@nameNodeDefinitionLocator'
+            - '@staticMethodCallNodeDefinitionLocator'
+            - '@propertyFetchDefinitionLocator'
+            - '@staticPropertyFetchNodeDefinitionLocator'
+
+    funcCallNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
+        arguments:
+            - '@functionNameNodeFqsenDeterminer'
+            - '@functionListProvider'
+
+    methodCallNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\MethodCallNodeDefinitionLocator
+        arguments:
+            - '@methodCallMethodInfoRetriever'
+
+    constFetchNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\ConstFetchNodeDefinitionLocator
+        arguments:
+            - '@constFetchNodeFqsenDeterminer'
+            - '@constantListProvider'
+
+    classConstFetchNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\ClassConstFetchNodeDefinitionLocator
+        arguments:
+            - '@nodeTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    nameNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\NameNodeDefinitionLocator
+        arguments:
+            - '@nameNodeFqsenDeterminer'
+            - '@ClasslikeInfoBuilder'
+
+    staticMethodCallNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\StaticMethodCallNodeDefinitionLocator
+        arguments:
+            - '@methodCallMethodInfoRetriever'
+
+    propertyFetchDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\PropertyFetchDefinitionLocator
+        arguments:
+            - '@propertyFetchPropertyInfoRetriever'
+
+    staticPropertyFetchNodeDefinitionLocator:
+        class: PhpIntegrator\GotoDefinition\StaticPropertyFetchNodeDefinitionLocator
+        arguments:
+            - '@propertyFetchPropertyInfoRetriever'

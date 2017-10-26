@@ -11,7 +11,7 @@ use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 /**
  * Looks for unknown global constant names.
  */
-class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
+final class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
 {
     /**
      * @var ConstantPresenceIndicatorInterface

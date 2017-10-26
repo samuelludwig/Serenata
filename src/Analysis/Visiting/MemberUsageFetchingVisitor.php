@@ -10,13 +10,15 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
 /**
  * Node visitor that fetches usages of member names.
  */
-class MemberUsageFetchingVisitor extends NodeVisitorAbstract
+final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var int
@@ -44,7 +46,7 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     private $lastNode = null;
 
     /**
-     * @var string
+     * @var Structures\File
      */
     private $file;
 
@@ -72,14 +74,14 @@ class MemberUsageFetchingVisitor extends NodeVisitorAbstract
      * @param NodeTypeDeducerInterface $nodeTypeDeducer
      * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
      * @param TypeAnalyzer             $typeAnalyzer
-     * @param string                   $file
+     * @param Structures\File          $file
      * @param string                   $code
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
-        string $file,
+        Structures\File $file,
         string $code
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;

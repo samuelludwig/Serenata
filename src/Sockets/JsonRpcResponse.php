@@ -9,7 +9,7 @@ use JsonSerializable;
  *
  * Value object.
  */
-class JsonRpcResponse implements JsonSerializable
+final class JsonRpcResponse implements JsonSerializable
 {
     /**
      * @var string

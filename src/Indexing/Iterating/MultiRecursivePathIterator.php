@@ -13,7 +13,7 @@ use RecursiveDirectoryIterator;
 /**
  * Recursively iterates over multiple paths.
  */
-class MultiRecursivePathIterator extends AppendIterator
+final class MultiRecursivePathIterator extends AppendIterator
 {
     /**
      * @param string[] $paths

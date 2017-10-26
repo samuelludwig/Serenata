@@ -17,8 +17,6 @@ class Foo
      */
     public function __construct($a)
     {
-        $test = new Foo(
-            new Bar(1)
-        );
+        $test = new Foo( new Bar( 1 ) );
     }
 }

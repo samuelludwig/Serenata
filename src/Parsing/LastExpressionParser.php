@@ -11,7 +11,7 @@ use PhpParser\ErrorHandler;
 /**
  * Parser that attempts to parse the last expression in a string of code.
  */
-class LastExpressionParser implements Parser
+final class LastExpressionParser implements Parser
 {
     /**
      * @var Parser

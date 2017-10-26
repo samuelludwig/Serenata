@@ -6,6 +6,8 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Doctrine\ORM\Tools\SchemaTool;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Initializes the database schema.
  */
@@ -14,7 +16,7 @@ class SchemaInitializer
     /**
      * @var int
      */
-    public const SCHEMA_VERSION = 2;
+    public const SCHEMA_VERSION = 15;
 
     /**
      * @var int
@@ -56,13 +58,9 @@ class SchemaInitializer
     {
         $entityManager = $this->managerRegistry->getManager();
 
-        $entityManager->persist(new Structures\StructureType('class'));
-        $entityManager->persist(new Structures\StructureType('trait'));
-        $entityManager->persist(new Structures\StructureType('interface'));
-
-        $entityManager->persist(new Structures\AccessModifier('public'));
-        $entityManager->persist(new Structures\AccessModifier('protected'));
-        $entityManager->persist(new Structures\AccessModifier('private'));
+        $entityManager->persist(new Structures\AccessModifier(AccessModifierNameValue::PUBLIC_));
+        $entityManager->persist(new Structures\AccessModifier(AccessModifierNameValue::PROTECTED_));
+        $entityManager->persist(new Structures\AccessModifier(AccessModifierNameValue::PRIVATE_));
 
         $entityManager->persist(new Structures\Setting(self::VERSION_SETTING_NAME, self::SCHEMA_VERSION));
 

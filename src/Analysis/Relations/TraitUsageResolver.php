@@ -4,16 +4,20 @@ namespace PhpIntegrator\Analysis\Relations;
 
 use ArrayObject;
 
+use PhpIntegrator\Indexing\Structures;
+
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Deals with resolving trait usage for classlikes.
  */
-class TraitUsageResolver extends AbstractResolver
+final class TraitUsageResolver extends AbstractResolver
 {
     /**
-     * @param ArrayObject                           $trait
-     * @param ArrayObject                           $class
-     * @param Structures\StructureTraitAlias[]      $traitAliases
-     * @param Structures\StructureTraitPrecedence[] $traitPrecedences
+     * @param ArrayObject                       $trait
+     * @param ArrayObject                       $class
+     * @param Structures\ClassTraitAlias[]      $traitAliases
+     * @param Structures\ClassTraitPrecedence[] $traitPrecedences
      *
      * @return void
      */
@@ -33,10 +37,13 @@ class TraitUsageResolver extends AbstractResolver
                 if ($traitAlias->getName() === $method['name'] &&
                     ($traitAlias->getTraitFqcn() === null  || $traitAlias->getTraitFqcn() === $trait['fqcn'])
                 ) {
-                    $method['name']        = $traitAlias->getAlias() ?: $method['name'];
-                    $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === 'public');
-                    $method['isProtected'] = ($traitAlias->getAccessModifier()->getName() === 'protected');
-                    $method['isPrivate']   = ($traitAlias->getAccessModifier()->getName() === 'private');
+                    $method['name'] = $traitAlias->getAlias() ?: $method['name'];
+
+                    if ($traitAlias->getAccessModifier()) {
+                        $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_);
+                        $method['isProtected'] = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_);
+                        $method['isPrivate']   = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_);
+                    }
                 }
             }
 

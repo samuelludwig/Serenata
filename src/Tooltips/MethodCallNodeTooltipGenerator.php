@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -37,7 +39,7 @@ class MethodCallNodeTooltipGenerator
 
     /**
      * @param Node\Expr\MethodCall $node
-     * @param string               $file
+     * @param Structures\File      $file
      * @param string               $code
      * @param int                  $offset
      *
@@ -45,7 +47,7 @@ class MethodCallNodeTooltipGenerator
      *
      * @return string
      */
-    public function generate(Node\Expr\MethodCall $node, string $file, string $code, int $offset): string
+    public function generate(Node\Expr\MethodCall $node, Structures\File $file, string $code, int $offset): string
     {
         $infoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $file, $code, $offset);
 

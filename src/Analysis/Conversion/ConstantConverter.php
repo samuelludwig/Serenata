@@ -10,24 +10,19 @@ use PhpIntegrator\Indexing\Structures;
 class ConstantConverter extends AbstractConverter
 {
     /**
-     * @param Structures\Constant $constant
+     * @param Structures\ConstantLike $constant
      *
      * @return array
      */
-    public function convert(Structures\Constant $constant): array
+    public function convert(Structures\ConstantLike $constant): array
     {
-        return [
+        $data = [
             'name'              => $constant->getName(),
-            'fqcn'              => $constant->getFqcn(),
-            'isBuiltin'         => $constant->getIsBuiltin(),
             'startLine'         => $constant->getStartLine(),
             'endLine'           => $constant->getEndLine(),
             'defaultValue'      => $constant->getDefaultValue(),
             'filename'          => $constant->getFile()->getPath(),
 
-            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'public' : true,
-            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'protected' : false,
-            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === 'private' : false,
             'isStatic'          => true,
             'isDeprecated'      => $constant->getIsDeprecated(),
             'hasDocblock'       => $constant->getHasDocblock(),
@@ -39,5 +34,11 @@ class ConstantConverter extends AbstractConverter
 
             'types'             => $this->convertTypes($constant->getTypes())
         ];
+
+        if ($constant instanceof Structures\Constant) {
+            $data['fqcn'] = $constant->getFqcn();
+        }
+
+        return $data;
     }
 }

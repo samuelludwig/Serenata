@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * Collections of clearable cache objects that simply delegates clear cache commands to its elements (aggregate).
  */
-class ClearableCacheCollection implements ClearableCacheInterface
+final class ClearableCacheCollection implements ClearableCacheInterface
 {
     /**
      * @var ClearableCacheInterface[]

@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -12,15 +14,15 @@ use PhpParser\Node;
 interface NodeTypeDeducerInterface
 {
     /**
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param Node            $node
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @throws UnexpectedValueException when a node of an unexpected type is encountered (i.e. the deducer can't handle
      *                                  the passed node type).
      *
      * @return string[]
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array;
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array;
 }

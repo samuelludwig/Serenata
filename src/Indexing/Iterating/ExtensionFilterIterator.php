@@ -8,7 +8,7 @@ use FilterIterator;
 /**
  * Filters out {@see \SplFileInfo} values that don't match any of the specified extensions.
  */
-class ExtensionFilterIterator extends FilterIterator
+final class ExtensionFilterIterator extends FilterIterator
 {
     /**
      * @var string[]

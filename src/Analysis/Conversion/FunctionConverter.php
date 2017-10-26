@@ -10,11 +10,11 @@ use PhpIntegrator\Indexing\Structures;
 class FunctionConverter extends AbstractConverter
 {
     /**
-     * @param Structures\Function_ $function
+     * @param Structures\FunctionLike $function
      *
      * @return array
      */
-    public function convert(Structures\Function_ $function): array
+    public function convert(Structures\FunctionLike $function): array
     {
         $parameters = [];
 
@@ -25,7 +25,6 @@ class FunctionConverter extends AbstractConverter
                 'types'        => $this->convertTypes($parameter->getTypes()),
                 'description'  => $parameter->getDescription(),
                 'defaultValue' => $parameter->getDefaultValue(),
-                'isNullable'   => $parameter->getIsNullable(),
                 'isReference'  => $parameter->getIsReference(),
                 'isVariadic'   => $parameter->getIsVariadic(),
                 'isOptional'   => $parameter->getIsOptional()
@@ -36,15 +35,13 @@ class FunctionConverter extends AbstractConverter
 
         foreach ($function->getThrows() as $throws) {
             $throwsAssoc[] = [
-                'type'        => $throws['type'],
-                'description' => $throws['description']
+                'type'        => $throws->getFqcn(),
+                'description' => $throws->getDescription()
             ];
         }
 
-        return [
+        $data = [
             'name'              => $function->getName(),
-            'fqcn'              => $function->getFqcn(),
-            'isBuiltin'         => $function->getIsBuiltin(),
             'startLine'         => $function->getStartLine(),
             'endLine'           => $function->getEndLine(),
             'filename'          => $function->getFile()->getPath(),
@@ -62,5 +59,11 @@ class FunctionConverter extends AbstractConverter
             'returnTypeHint'    => $function->getReturnTypeHint(),
             'returnTypes'       => $this->convertTypes($function->getReturnTypes())
         ];
+
+        if ($function instanceof Structures\Function_) {
+            $data['fqcn'] = $function->getFqcn();
+        }
+
+        return $data;
     }
 }

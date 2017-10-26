@@ -6,12 +6,14 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ArrayDimFetch} node.
  */
-class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var TypeAnalyzer
@@ -36,7 +38,7 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\ArrayDimFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -47,7 +49,7 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\ArrayDimFetch $node
-     * @param string                  $file
+     * @param Structures\File         $file
      * @param string                  $code
      * @param int                     $offset
      *
@@ -55,7 +57,7 @@ class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromArrayDimFetchNode(
         Node\Expr\ArrayDimFetch $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {

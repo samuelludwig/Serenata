@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Tests\Integration\Tooltips;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 use PhpIntegrator\Tooltips\TooltipResult;
@@ -9,76 +11,11 @@ use PhpIntegrator\Tooltips\TooltipResult;
 class TooltipProviderTest extends AbstractIntegrationTest
 {
     /**
-     * @param string $file
-     * @param int    $position
-     *
-     * @return TooltipResult|null
-     */
-    protected function getTooltip(string $file, int $position): ?TooltipResult
-    {
-        $path = $this->getPathFor($file);
-
-        $container = $this->createTestContainer();
-
-        $this->indexTestFile($container, $path);
-
-        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
-
-        return $container->get('tooltipProvider')->get($path, $code, $position);
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    protected function getPathFor(string $file): string
-    {
-        return __DIR__ . '/TooltipProviderTest/' . $file;
-    }
-
-    /**
-     * @param string $fileName
-     * @param int    $start
-     * @param int    $end
-     * @param string $contents
-     *
-     * @return void
-     */
-    protected function assertTooltipEquals(string $fileName, int $start, int $end, string $contents): void
-    {
-        $i = $start;
-
-        while ($i <= $end) {
-            $result = $this->getTooltip($fileName, $i);
-
-            $this->assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
-            $this->assertNull($result->getRange());
-            $this->assertEquals($result->getContents(), $contents);
-
-            ++$i;
-        }
-
-        // Assert that the range doesn't extend longer than it should.
-        $resultBeforeRange = $this->getTooltip($fileName, $start - 1);
-        $this->assertTrue(
-            $resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents,
-            "Range does not start exactly at position {$start}, but seems to continue before it"
-        );
-
-        $resultAfterRange = $this->getTooltip($fileName, $end + 1);
-        $this->assertTrue(
-            $resultAfterRange === null || $resultAfterRange->getContents() !== $contents,
-            "Range does not end exactly at position {$end}, but seems to continue after it"
-        );
-    }
-
-    /**
      * @return void
      */
     public function testFuncCallContainsAllSections(): void
     {
-        $this->assertTooltipEquals('FuncCallAllSections.phpt', 435, 440, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('FuncCallAllSections.phpt', 435, 440, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -107,7 +44,7 @@ Hello!
      */
     public function testUnqualifiedFunctionCall(): void
     {
-        $this->assertTooltipEquals('UnqualifiedFuncCall.phpt', 57, 62, "This is a summary.\n\n# Returns\n*void*");
+        $this->performTooltipTest('UnqualifiedFuncCall.phpt', 57, 62, "This is a summary.\n\n# Returns\n*void*");
     }
 
     /**
@@ -115,7 +52,7 @@ Hello!
      */
     public function testQualifiedFunctionCall(): void
     {
-        $this->assertTooltipEquals('QualifiedFuncCall.phpt', 87, 94, "This is a summary.\n\n# Returns\n*void*");
+        $this->performTooltipTest('QualifiedFuncCall.phpt', 87, 94, "This is a summary.\n\n# Returns\n*void*");
     }
 
     /**
@@ -123,7 +60,7 @@ Hello!
      */
     public function testFullyQualifiedFunctionCall(): void
     {
-        $this->assertTooltipEquals('FullyQualifiedFuncCall.phpt', 87, 97, "This is a summary.\n\n# Returns\n*void*");
+        $this->performTooltipTest('FullyQualifiedFuncCall.phpt', 87, 97, "This is a summary.\n\n# Returns\n*void*");
     }
 
     /**
@@ -131,7 +68,7 @@ Hello!
      */
     public function testConstFetchContainsAllSections(): void
     {
-        $this->assertTooltipEquals('ConstFetchAllSections.phpt', 134, 137, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('ConstFetchAllSections.phpt', 134, 137, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -146,7 +83,7 @@ Hello!
      */
     public function testUnqualifiedConstFetch(): void
     {
-        $this->assertTooltipEquals('UnqualifiedConstFetch.phpt', 59, 62, "This is a summary.\n\n# Type\n*int*");
+        $this->performTooltipTest('UnqualifiedConstFetch.phpt', 59, 62, "This is a summary.\n\n# Type\n*int*");
     }
 
     /**
@@ -154,7 +91,7 @@ Hello!
      */
     public function testQualifiedConstFetch(): void
     {
-        $this->assertTooltipEquals('QualifiedConstFetch.phpt', 89, 94, "This is a summary.\n\n# Type\n*int*");
+        $this->performTooltipTest('QualifiedConstFetch.phpt', 89, 94, "This is a summary.\n\n# Type\n*int*");
     }
 
     /**
@@ -162,7 +99,7 @@ Hello!
      */
     public function testFullyQualifiedConstFetch(): void
     {
-        $this->assertTooltipEquals('FullyQualifiedConstFetch.phpt', 89, 97, "This is a summary.\n\n# Type\n*int*");
+        $this->performTooltipTest('FullyQualifiedConstFetch.phpt', 89, 97, "This is a summary.\n\n# Type\n*int*");
     }
 
     /**
@@ -170,7 +107,7 @@ Hello!
      */
     public function testClassConstFetch(): void
     {
-        $this->assertTooltipEquals('ClassConstFetch.phpt', 106, 115, "This is a summary.\n\n# Type\n*int*");
+        $this->performTooltipTest('ClassConstFetch.phpt', 108, 115, "This is a summary.\n\n# Type\n*int*");
     }
 
     /**
@@ -178,7 +115,7 @@ Hello!
      */
     public function testClassNameContainsAllSections(): void
     {
-        $this->assertTooltipEquals('ClassNameAllSections.phpt', 316, 326, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('ClassNameAllSections.phpt', 316, 326, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -190,7 +127,7 @@ Hello!
 # Type
 Class');
 
-        $this->assertTooltipEquals('ClassNameAllSections.phpt', 340, 352, '(No documentation available)
+        $this->performTooltipTest('ClassNameAllSections.phpt', 340, 352, '(No documentation available)
 
 # Full Name
 *\A\AbstractClass*
@@ -198,7 +135,7 @@ Class');
 # Type
 Abstract class');
 
-        $this->assertTooltipEquals('ClassNameAllSections.phpt', 366, 376, '(No documentation available)
+        $this->performTooltipTest('ClassNameAllSections.phpt', 366, 376, '(No documentation available)
 
 # Full Name
 *\A\SimpleTrait*
@@ -206,7 +143,7 @@ Abstract class');
 # Type
 Trait');
 
-        $this->assertTooltipEquals('ClassNameAllSections.phpt', 390, 404, '(No documentation available)
+        $this->performTooltipTest('ClassNameAllSections.phpt', 390, 404, '(No documentation available)
 
 # Full Name
 *\A\SimpleInterface*
@@ -220,7 +157,7 @@ Interface');
      */
     public function testClassNameInClassConstFetch(): void
     {
-        $this->assertTooltipEquals('ClassNameClassConstFetch.phpt', 93, 93, 'This is a summary.
+        $this->performTooltipTest('ClassNameClassConstFetch.phpt', 93, 93, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -234,7 +171,7 @@ Class');
      */
     public function testClassNameInStaticMethodCall(): void
     {
-        $this->assertTooltipEquals('ClassNameStaticMethodCall.phpt', 106, 106, 'This is a summary.
+        $this->performTooltipTest('ClassNameStaticMethodCall.phpt', 106, 106, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -248,7 +185,7 @@ Class');
      */
     public function testClassNameInStaticPropertyFetch(): void
     {
-        $this->assertTooltipEquals('ClassNameStaticPropertyFetch.phpt', 86, 86, 'This is a summary.
+        $this->performTooltipTest('ClassNameStaticPropertyFetch.phpt', 86, 86, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -262,7 +199,21 @@ Class');
      */
     public function testClassNameInUseImport(): void
     {
-        $this->assertTooltipEquals('ClassNameUseImport.phpt', 83, 85, 'This is a summary.
+        $this->performTooltipTest('ClassNameUseImport.phpt', 83, 85, 'This is a summary.
+
+# Full Name
+*\A\B*
+
+# Type
+Class');
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassNameInGroupedUseImport(): void
+    {
+        $this->performTooltipTest('ClassNameGroupedUseImport.phpt', 91, 91, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -276,7 +227,7 @@ Class');
      */
     public function testClassNameInImplementsClause(): void
     {
-        $this->assertTooltipEquals('ClassNameImplements.phpt', 82, 82, 'This is a summary.
+        $this->performTooltipTest('ClassNameImplements.phpt', 82, 82, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -290,7 +241,7 @@ Class');
      */
     public function testClassNameInExtendsClause(): void
     {
-        $this->assertTooltipEquals('ClassNameExtends.phpt', 79, 79, 'This is a summary.
+        $this->performTooltipTest('ClassNameExtends.phpt', 79, 79, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -304,7 +255,7 @@ Class');
      */
     public function testClassNameInTraitUse(): void
     {
-        $this->assertTooltipEquals('ClassNameTraitUse.phpt', 81, 81, 'This is a summary.
+        $this->performTooltipTest('ClassNameTraitUse.phpt', 81, 81, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -318,7 +269,7 @@ Trait');
      */
     public function testClassNameInTraitAlias(): void
     {
-        $this->assertTooltipEquals('ClassNameTraitAlias.phpt', 123, 123, 'This is a summary.
+        $this->performTooltipTest('ClassNameTraitAlias.phpt', 123, 123, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -332,7 +283,7 @@ Trait');
      */
     public function testClassNameInTraitPrecedence(): void
     {
-        $this->assertTooltipEquals('ClassNameTraitPrecedence.phpt', 165, 165, 'This is a summary.
+        $this->performTooltipTest('ClassNameTraitPrecedence.phpt', 165, 165, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -346,7 +297,7 @@ Trait');
      */
     public function testClassNameAfterNewKeyword(): void
     {
-        $this->assertTooltipEquals('ClassNameNewKeyword.phpt', 72, 72, 'This is a summary.
+        $this->performTooltipTest('ClassNameNewKeyword.phpt', 72, 72, 'This is a summary.
 
 # Full Name
 *\A\B*
@@ -360,7 +311,7 @@ Class');
      */
     public function testFunctionDefinition(): void
     {
-        $this->assertTooltipEquals('FunctionDefinition.phpt', 37, 56, 'This is a summary.
+        $this->performTooltipTest('FunctionDefinition.phpt', 46, 49, 'This is a summary.
 
 # Returns
 *void*');
@@ -371,7 +322,7 @@ Class');
      */
     public function testClassMethodDefinition(): void
     {
-        $this->assertTooltipEquals('ClassMethodDefinition.phpt', 63, 97, 'This is a summary.
+        $this->performTooltipTest('ClassMethodDefinition.phpt', 79, 82, 'This is a summary.
 
 # Returns
 *void*');
@@ -382,7 +333,7 @@ Class');
      */
     public function testMethodCall(): void
     {
-        $this->assertTooltipEquals('MethodCall.phpt', 111, 118, 'This is a summary.
+        $this->performTooltipTest('MethodCall.phpt', 113, 116, 'This is a summary.
 
 # Returns
 *void*');
@@ -393,7 +344,7 @@ Class');
      */
     public function testStaticMethodCall(): void
     {
-        $this->assertTooltipEquals('StaticMethodCall.phpt', 103, 110, 'This is a summary.
+        $this->performTooltipTest('StaticMethodCall.phpt', 105, 108, 'This is a summary.
 
 # Returns
 *void*');
@@ -404,7 +355,7 @@ Class');
      */
     public function testPropertyFetchContainsAllSections(): void
     {
-        $this->assertTooltipEquals('PropertyFetchAllSections.phpt', 191, 196, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('PropertyFetchAllSections.phpt', 193, 196, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -419,7 +370,7 @@ Hello!
      */
     public function testStaticPropertyFetch(): void
     {
-        $this->assertTooltipEquals('StaticPropertyFetch.phpt', 88, 94, 'This is a summary.
+        $this->performTooltipTest('StaticPropertyFetch.phpt', 90, 94, 'This is a summary.
 
 # Type
 (Not known)');
@@ -430,7 +381,7 @@ Hello!
      */
     public function testFunctionDefinitionRangeIsConfinedToBeforeFirstStatement(): void
     {
-        $this->assertTooltipEquals('FunctionDefinitionWithStatement.phpt', 37, 58, 'This is a summary.
+        $this->performTooltipTest('FunctionDefinitionWithStatement.phpt', 46, 49, 'This is a summary.
 
 # Returns
 *void*');
@@ -443,7 +394,7 @@ Hello!
     {
         $fileName = 'FunctionDefinitionWithParameter.phpt';
 
-        $this->assertTooltipEquals($fileName, 37, 55, 'This is a summary.
+        $this->performTooltipTest($fileName, 46, 49, 'This is a summary.
 
 # Parameters
    |   |   ' . '
@@ -454,7 +405,10 @@ Hello!
 # Returns
 *void*');
 
-        $this->assertNull($this->getTooltip($fileName, 69));
+        static::assertNull($this->getTooltip(
+            $this->container->get('storage')->getFileByPath($this->getPathFor($fileName)),
+            69
+        ));
     }
 
     /**
@@ -462,9 +416,74 @@ Hello!
      */
     public function testFunctionDefinitionRangeIsConfinedToNonScalarReturnType(): void
     {
-        $this->assertTooltipEquals('FunctionDefinitionWithReturnType.phpt', 37, 53, 'This is a summary.
+        $this->performTooltipTest('FunctionDefinitionWithReturnType.phpt', 46, 49, 'This is a summary.
 
 # Returns
 *void*');
+    }
+
+    /**
+     * @param string $fileName
+     * @param int    $start
+     * @param int    $end
+     * @param string $contents
+     *
+     * @return void
+     */
+    protected function performTooltipTest(string $fileName, int $start, int $end, string $contents): void
+    {
+        $path = $this->getPathFor($fileName);
+
+        $this->indexTestFile($this->container, $path);
+
+        $file = $this->container->get('storage')->getFileByPath($path);
+
+        $i = $start;
+
+        while ($i <= $end) {
+            $result = $this->getTooltip($file, $i);
+
+            static::assertNotNull($result, "No tooltip was returned for location {$i} in {$fileName}");
+            static::assertNull($result->getRange());
+            static::assertSame($contents, $result->getContents());
+
+            ++$i;
+        }
+
+        // Assert that the range doesn't extend longer than it should.
+        $resultBeforeRange = $this->getTooltip($file, $start - 1);
+        static::assertTrue(
+            $resultBeforeRange === null || $resultBeforeRange->getContents() !== $contents,
+            "Range does not start exactly at position {$start}, but seems to continue before it"
+        );
+
+        $resultAfterRange = $this->getTooltip($file, $end + 1);
+        static::assertTrue(
+            $resultAfterRange === null || $resultAfterRange->getContents() !== $contents,
+            "Range does not end exactly at position {$end}, but seems to continue after it"
+        );
+    }
+
+    /**
+     * @param Structures\File $file
+     * @param int             $position
+     *
+     * @return TooltipResult|null
+     */
+    protected function getTooltip(Structures\File $file, int $position): ?TooltipResult
+    {
+        $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($file->getPath());
+
+        return $this->container->get('tooltipProvider')->get($file, $code, $position);
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    protected function getPathFor(string $file): string
+    {
+        return __DIR__ . '/TooltipProviderTest/' . $file;
     }
 }

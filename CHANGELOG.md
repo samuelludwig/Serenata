@@ -1,82 +1,52 @@
+## 3.1.0 (Unreleased)
+### Major Changes
+* [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
+* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
+  * Class names inside comments are currently no longer supported due to the implementation being hard, [but this may change in the future](https://gitlab.com/php-integrator/core/issues/141).
+  * This moves us one step closer to becoming a language server in the long run.
+* [Indexing performance has been improved in various ways, for both small and large files](https://gitlab.com/php-integrator/core/issues/139)
+* [Folder indexing has been rewritten to be split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
+  * This is mostly refactoring to allow for future improvements, but this also included performance improvements
+
+### Bugs Fixed
+* [Fix tooltips not working on grouped use statements](https://gitlab.com/php-integrator/core/issues/136)
+* [Using a trait in an interface will no longer crash the server](https://gitlab.com/php-integrator/core/issues/133)
+* [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)
+* [Project paths containing the tilde representing the home folder will now be properly expanded](https://gitlab.com/php-integrator/core/merge_requests/72)
+* [Variable expressions in method calls will no longer cause a crash whilst trying to deduce the type of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
+* [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
+* Function and method docblock `@return` tag types will now also be validated against the actual return type
+* Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
+* Some edge case bugs with name (type) resolution were resolved by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
+* The core will now attempt to reestablish connection when the entity manager closes due to a database error
+* [Disk I/O errors and errors due to locked databases will now propagate as fatal error, as they currently can't be recovered from and to warn the user about internal failures](https://github.com/php-integrator/atom-base/issues/278)
+* [Fix "Position out of bounds" logic exception sometimes occurring with requests containing new code that had not been explicitly indexed via the reindex command beforehand, e.g. for signature help](https://gitlab.com/php-integrator/core/issues/126)
+* [Fix initialize command failing to reinitialize when database was locked or I/O errors occurred](https://github.com/php-integrator/atom-base/issues/278)
+  * This happened in spite of the original database connection being closed and the database itself completely being removed due to the WAL and SHM files lingering. This apparantly causes sqlite to try and use them as state for the new database when the schema was first initialized on it afterwards. This in turn resulted in never being able to break the chain of errors without removing all the database files manually.
+
+### Structural changes (mostly relevant to clients)
+* Properties now also return a `filename` property, which was missing before
+* Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
+  * These classes will return a new `isAnonymous` field.
+* The `reindex` command no longer takes a `stream-progress` argument (it will be silently ignored)
+  * Progress is now only streamed for folder index requests and is always on. If you don't want these notifications, you can simply ignore them.
+
 ## 3.0.0
-* At least PHP 7.1 is now required to run.
-* Updated dependencies.
-* PHP 7.1 is now supported (https://gitlab.com/php-integrator/core/issues/40).
+### Major changes
+* [PHP 7.1 is now required to _run_ the core](https://gitlab.com/php-integrator/core/issues/81)
+  * Code that is analyzed can still be anything from PHP 5.2 all the way up to 7.1.
+* [PHP 7.1 is now properly supported](https://gitlab.com/php-integrator/core/issues/40)
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
-* The class list will now only provide fields directly relevant to the class.
-  * Most of the related data, such as methods and constants, were already being filtered out for performance reasons.
-  * In order to fetch more information about a class, such as its parents, you now have to manually fetch this using the class info command.
-* Linting will now report the fully qualified name of a global function that wasn't found (instead of just the local name).
-* Linting will now report the fully qualified name of a global constant that wasn't found (instead of just the local name).
-* Linting messages have become more concise, verbal baggage has been removed.
-  * Instead of `Docblock for constant FOO is missing @var tag`, the message will now read `Constant docblock is missing @var tag`.
-  * This also increases readability, as markdown is no longer used (since it is not allowed by the language server protocol nor supported by Atom's linter v2 anymore).
-  * Mentioning the name was redundant as the location of the linter message provides the necessary context.
-* It is now possible to disable linting missing documentation separately from linting docblock correctness.
-* Fix disabling unknown global constant linting having no effect.
-* Fix the linter complaining about type mismatches in docblocks when the qualifications of the types are different (https://gitlab.com/php-integrator/core/issues/89).
-* Some docblock linter warnings have been promoted to errors (https://gitlab.com/php-integrator/core/issues/33).
-* A new command to provide tooltips has been added.
-* The invocation info command has been reworked into the signature help command (call tips).
-  * This command operates similarly, but provides full information over the available signatures instead of just information about the invocation, leaving the caller to handle further type determination and handling.
-* Fix the linter not complaining about missing ampersand signs for reference parameters in docblocks (https://gitlab.com/php-integrator/core/issues/32).
-* `SemanticLint` has been renamed to just `Lint`, as it also lints syntax errors.
-* Linting will no longer return an associative array of all kinds of problems. Instead, it will return a list of error and warning messages, returned by the requested analyzers.
-  * The list will include the message and the range (offsets) it applies in. Other data, including the line number, is no longer included.
-* Data related to `throws` is now returned as an array of arrays, each with a `type` and a `description` key instead of an associative array mapping the former to the latter.
-  * This is recommended by [phpDocumentor](https://phpdoc.org/docs/latest/references/phpdoc/tags/throws.html).
-  * This allows the same exception type to be referenced multiple times to describe it being thrown in different situations.
-* When linting docblock parameters, compound types containing class types will now be resolved properly as well (previously, only a single type was resolved).
-* When linting docblock parameters, the linting of more complex types such as compound types containing multiple array specializations and null has substantially improved and should no longer complain about valid combinations of these.
-* The docblock parser will now strip invalid leading and trailing bars for compound types (e.g. `@param string| $test` becomes `@param string $test`).
-  * No one should actually be writing these, but it ensures other parts of the code base can assume that compound types actually contain multiple non-empty types.
-* Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else.
-* When linting docblock parameters, specializations of the type hint are now allowed to narrow down class types (https://gitlab.com/php-integrator/core/issues/35).
-* Fix not being able to use the same namespace multiple times in a file.
-* Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present.
-* The indexer will now try to determine default values for built-in functions and methods from their documentation from the website.
-  * This is always a best effort, but better than having no information at all.
-  * PHP's reflection does not offer a way to retrieve default values for built-in functions and methods (it only works for user functions and methods).
-  * (A JSON copy of the documentation is part of the package, so no actual internet connection is required.)
-* Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance.
-* Fixed errors being generated whilst trying to deduce the type of anonymous classes.
-* Errors will no longer be thrown when a class implements the same interface twice, uses the same trait twice, or an interface extends the same interface twice.
-* The `LocalizeType` command will no longer make any chances to names that aren't fully qualified, as they are already "local" as they are.
-* The variable defined in a `catch` block wasn't always being returned in the variable list.
-* Namespaces supplied by the `NamespaceList` command will now always have a start and end line (no more `null` for the last namespace).
-* The `class` keyword returned as constant will now have a file, start line and end line (which are the same as the class it belongs to). It will also have a default value which is equal to the class name without leading slash.
-* Anonymous namespaces supplied by the `NamespaceList` command will now always have `null` as name instead of an empty string for explicitly anonymous namespaces and `null` for implicitly anonymous namespaces, as they are both the same.
-* The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name.
-* `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency.
-* Reflection in combination with PHP documentation data is no longer used to index built-in items. Instead, PhpStorm's open source stubs are automatically indexed. These provide more accurate return type information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`) and reduce the maintenance burden of having two separate indexing procedures.
-* `declaringStructure.name` was renamed to `declaringStructure.fqcn` for consistency.
-* Fix incorrect type deduction for global functions without leading slash (https://github.com/php-integrator/atom-base/issues/284).
-
-```php
-<?php
-
-// For interfaces
-interface I {}
-class A implements I {}
-class B implements I {}
-
-/**
- * @param A|B $i <-- Ok, A and B both implement I and pass the type hint.
- */
-function foo(I $i) {}
-
-// For classes
-class C {}
-class A extends C {}
-class B extends C {}
-
-/**
- * @param A|B $c <-- Ok, A and B both extend C and pass the type hint.
- */
-function foo(C $c) {}
-```
-
-* Meta files are now supported in a very rudimentary way, they currently carry some restrictions (which may be lifted in the future):
+* [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked](https://gitlab.com/php-integrator/core/issues/122)
+  * This is primarily used by the autocompletion Atom package, which will benefit from an improvement in response times and fewer minor hiccups.
+* [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
+  * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it.
+*  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
+  * Reflection in combination with PHP documentation data is no longer used to index built-in items.
+  * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
+  * This reduces the maintenance burden of having two separate indexing procedures and lowers the test surface.
+  * `isBuiltin` was removed for classlikes, global functions and global constants. This could previously be used for features such as code navigation since there was no physical file for the built-in items. Clients can now remove conditional code checking for this property as bulit-in items are indexed like any other code.
+* [(PhpStorm) Meta files are now supported in a very rudimentary way, albeit with some restrictions (which may be lifted in the future)](https://gitlab.com/php-integrator/core/issues/10)
   * Only the `STATIC_METHOD_TYPES` setting is supported.
   * Only [the first version of the format](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata#PhpStormAdvancedMetadata-Deprecated:Legacymetadataformat(2016.1andearlier)) is supported, as this is likely the most widely used variant.
   * The settings must be located in a namespace called `PHPSTORM_META`. It is recommended to place it in a file called `.phpstorm.meta.php` for compatibility with PhpStorm, but in theory any PHP file can contain this namespace.
@@ -118,6 +88,115 @@ class ServiceLocator
 $serviceLocator = new ServiceLocator();
 $serviceLocator->get('someService')-> // Autocompletion for App\SomeService
 ```
+
+### Linting
+* [Some docblock warnings have been promoted to errors](https://gitlab.com/php-integrator/core/issues/33)
+* [Complain about missing ampersand signs for reference parameters in docblocks](https://gitlab.com/php-integrator/core/issues/32)
+* [Don't complain about type mismatches in docblocks when the qualifications of the types are different](https://gitlab.com/php-integrator/core/issues/89)
+* [For docblock parameters, specializations of the type hint are now allowed to narrow down class types](https://gitlab.com/php-integrator/core/issues/35)
+
+```php
+<?php
+
+// For interfaces
+interface I {}
+class A implements I {}
+class B implements I {}
+
+/**
+ * @param A|B $i <-- Ok, A and B both implement I and pass the type hint.
+ */
+function foo(I $i) {}
+
+// For classes
+class C {}
+class A extends C {}
+class B extends C {}
+
+/**
+ * @param A|B $c <-- Ok, A and B both extend C and pass the type hint.
+ */
+function foo(C $c) {}
+```
+
+* [Processing more complex docblock types, such as compound types containing multiple array specializations and null, has substantially improved and should complain less about valid combinations](https://gitlab.com/php-integrator/core/issues/11)
+* Linting messages for classlikes, functions and methods will now be properly shown over their name instead of on the first character of their definition
+* Disabling unknown global constant linting now works again
+* For docblock parameters, compound types containing class types will now be resolved properly (previously, only a single type was resolved)
+* It is now possible to disable linting missing documentation separately from linting docblock correctness
+* The fully qualified name of a global function that wasn't found (instead of just the local name)
+* The fully qualified name of a global constant that wasn't found (instead of just the local name)
+* Instead of an associative array, a flat list of error and warning messages will now be returned
+  * The list will include the message and the range (offsets) it applies in. Other data, including the line number, is no longer included.
+* Messages have become more concise and verbal baggage has been removed from them
+  * Mentioning the name was redundant as the location of the linter message provides the necessary context.
+  * Instead of `Docblock for constant FOO is missing @var tag`, the message will now read `Constant docblock is missing @var tag`.
+  * This also increases readability, as markdown is no longer used (since it is not allowed by the language server protocol nor supported by Atom's linter v2 anymore).
+
+### Various enhancements
+* Updated dependencies
+* Traits using other traits are now supported
+* Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted)
+* Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well
+* Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else
+* Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance
+
+### Various bugfixes
+* [Fix incorrect type deduction for global functions without leading slash](https://github.com/php-integrator/atom-base/issues/284)
+* [Deducing the type of anonymous classes no longer generates errors](https://gitlab.com/php-integrator/core/issues/106)
+* [Requests for files that are not in the index will now be properly denied where applicable instead of resulting in a logic exception being thrown](https://gitlab.com/php-integrator/core/issues/104)
+* [When a circular dependency or reference occurs, requests for the culprit class should now continue working, albeit without the duplicate information](https://gitlab.com/php-integrator/core/issues/79)
+* Fixed the type of defines not being properly deduced from their value
+* Fix not being able to use the same namespace multiple times in a file
+* Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present
+* Fixed trait aliases without an explicit access modifier causing the original access modifier getting lost
+* The docblock parser will no longer trip over leading and trailing bars around compound types (e.g. `@param string| $test` will become `@param string $test`)
+* The variable defined in a `catch` block wasn't always being returned in the variable list
+
+### Structural changes (mostly relevant to clients)
+* [A new command `Tooltips` to provide tooltips has been added](https://gitlab.com/php-integrator/core/issues/86)
+* [The invocation info command has been reworked into the `SignatureHelp` command (call tips)](https://gitlab.com/php-integrator/core/issues/92)
+  * This command operates in a similar fashion, but provides full information over the available signatures instead of just information about the invocation, leaving the caller to handle further type determination and handling.
+* `SemanticLint` has been renamed to just `Lint`, as it also lints syntax errors
+* The class list will now only provide fields directly relevant to the class.
+  * Most of the related data, such as methods and constants, were already being filtered out for performance reasons.
+  * In order to fetch more information about a class, such as its parents, you now have to manually fetch this using the class info command.
+* `isNullable` will no longer be returned for function and method parameters
+  * This was inconsistent with return type information for functions and methods (it also didn't have an `isNullable`).
+  * It didn't properly take docblock information into account, so it was actually more of an "is type hint nullable".
+  * Whether or not a type is nullable, taking all factors into account (the type hint, a default value of `null`, the docblock types), can already be deduced from the actual type list (`null` will be present in it).
+  * Whether the type hint should be nullable, which can be important when overriding methods, where the signatures must match, is now no longer something the client needs to worry about as the `typeHint` property will now include a PHP 7.1 question mark if the original type hint also included one.
+* Data related to `throws` is now returned as an array of arrays, each with a `type` and a `description` key instead of an associative array mapping the former to the latter
+  * This is recommended by [phpDocumentor](https://phpdoc.org/docs/latest/references/phpdoc/tags/throws.html).
+  * This allows the same exception type to be referenced multiple times to describe it being thrown in different situations.
+* The `LocalizeType` command will no longer make any chances to names that aren't fully qualified, as they are already "local" as they are
+* The `verbose` option for the `reindex` command was removed. It was a hidden feature and hasn't been used in quite some time (it was originally used for testing, but actual tests have replaced it)
+* Namespaces supplied by the `NamespaceList` command will now always have a start and end line (no more `null` for the last namespace)
+* The `class` keyword returned as constant will now have a file, start line and end line (which are the same as the class it belongs to). It will also have a default value which is equal to the class name without leading slash
+* Anonymous namespaces supplied by the `NamespaceList` command will now always have `null` as name instead of an empty string for explicitly anonymous namespaces and `null` for implicitly anonymous namespaces, as they are both the same
+* The `shortName` property for classlikes is now called `name`, the FQCN can now be found in `fqcn`. This is more logical than having `name` contain the FQCN and `shortName` contain the short name
+* `declaringClass.name` was renamed to `declaringClass.fqcn` for consistency
+* The return type hint for functions and methods and type hints for parameters will now always be an FQCN in the case of non-scalar types
+  * The non-resolved type provided no context and could be ambiguous.
+  * If the type needs to be relative to local imports, you can always localize the type using the appropriate command.
+    * In the case of the atom-refactoring package, this will fix the issue where stubbing an interface method would get the return type hint wrong in the stub, because it was attempting to localize a type that wasn't fully qualified in the first place (at least if the original interface method also didn't use an FQCN).
+* Fixed the short and long description for classlikes being an empty string instead of `null` when not present
+* Fixed the short, long and type description for global and class constants being an empty string instead of `null` when not present
+* Fixed the short, long and type description for properties being an empty string instead of `null` when not present
+* Fixed the short, long and return description for functions and methods being an empty string instead of `null` when not present
+* Namespaces provided by the namespace list command will now also include the path to the file that they are present in
+* `declaringStructure.name` was renamed to `declaringStructure.fqcn` for consistency
+* `isAbstract`, `isFinal`, `isAnnotation`, `interfaces` and `directInterfaces` will no longer be returned for interfaces and traits as they are only relevant for classes
+* `directImplementors` will no longer be returned for classes and traits as it is only relevant for interfaces
+* `directTraitUsers` will no longer be returned for classes and interfaces as it is only relevant for traits
+* `parents`, `directParents` and `directChildren` will no longer be returned for traits as they are only relevant for classes and interfaces
+* `traits` and `directTraits` will no longer be returned for interfaces as they are only relevant for classes and traits
+* `isPublic`, `isProtected` and `isPrivate` will no longer be returned for global constants as they are only relevant for class constants
+* `fqcn` will no longer be returned for class constants as it is only relevant for global constants
+* `fqcn` will no longer be returned for methods (class functions) as it is only relevant for global functions
+
+## 2.1.7
+* Lock php-parser at 3.0.5 to avoid recent PHP 7 requirement in its master due to Composer limitation.
 
 ## 2.1.6
 * Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).

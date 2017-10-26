@@ -11,7 +11,7 @@ use JsonSerializable;
  *
  * @see https://github.com/Microsoft/language-server-protocol/blob/164eb31bd49535dca046034602146f96bb17b56d/protocol.md#signature-help-request
  */
-class SignatureInformation implements JsonSerializable
+final class SignatureInformation implements JsonSerializable
 {
     /**
      * @var string

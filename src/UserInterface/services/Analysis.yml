@@ -9,7 +9,7 @@ services:
     fileNamespaceProvider.storageBackend:
         class: PhpIntegrator\Analysis\StorageFileNamespaceProvider
         arguments:
-            - '@doctrineStorage'
+            - '@storage'
 
     fileNamespaceProvider.cachingFileNamespaceProvider:
         class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
@@ -17,7 +17,7 @@ services:
             - '@fileNamespaceProvider.storageBackend'
 
     metadataProvider:
-        alias: doctrineStorage
+        alias: storage.doctrineStorage
 
     fileNamespaceProvider:
         alias: fileNamespaceProvider.cachingFileNamespaceProvider
@@ -82,21 +82,27 @@ services:
     methodConverter:
         class: PhpIntegrator\Analysis\Conversion\MethodConverter
 
-    fileClassListProvider.instance:
-        alias: doctrineClassListProvider
+    namespaceConverter:
+        class: PhpIntegrator\Analysis\Conversion\NamespaceConverter
 
-    fileClassListProvider.cachingDecorator:
-        class: PhpIntegrator\Analysis\Typing\FileClassListProviderCachingDecorator
+    fileClasslikeListProvider.instance:
+        alias: classlikeListProvider.doctrineBackend
+
+    fileClasslikeListProvider.cachingDecorator:
+        class: PhpIntegrator\Analysis\Typing\FileClasslikeListProviderCachingDecorator
         arguments:
-            - '@fileClassListProvider.instance'
+            - '@fileClasslikeListProvider.instance'
 
-    fileClassListProvider:
-        alias: fileClassListProvider.cachingDecorator
+    fileClasslikeListProvider:
+        alias: fileClasslikeListProvider.cachingDecorator
+
+    fileNamespaceListProvider:
+        alias: namespaceListProvider.doctrineBackend
 
     filePositionClasslikeDeterminer:
         class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
         arguments:
-            - '@fileClassListProvider'
+            - '@fileClasslikeListProvider'
 
     inheritanceResolver:
         class: PhpIntegrator\Analysis\Relations\InheritanceResolver
@@ -155,23 +161,61 @@ services:
     globalConstantExistenceChecker:
         alias: globalConstantExistenceChecker.arrayCachingDecorator
 
-    doctrineFunctionListProvider:
+    functionListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineFunctionListProvider
         arguments:
             - '@functionConverter'
             - '@managerRegistry'
 
-    doctrineConstantListProvider:
+    functionListProvider.registry:
+        class: PhpIntegrator\Analysis\FunctionListRegistry
+        arguments:
+            - '@functionListProvider.doctrineBackend'
+
+    functionListProvider:
+        alias: functionListProvider.registry
+
+    constantListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineConstantListProvider
         arguments:
             - '@constantConverter'
             - '@managerRegistry'
 
-    doctrineClassListProvider:
-        class: PhpIntegrator\Analysis\DoctrineClassListProvider
+    constantListProvider.registry:
+        class: PhpIntegrator\Analysis\ConstantListRegistry
+        arguments:
+            - '@constantListProvider.doctrineBackend'
+
+    constantListProvider:
+        alias: constantListProvider.registry
+
+    classlikeListProvider.doctrineBackend:
+        class: PhpIntegrator\Analysis\DoctrineClasslikeListProvider
         arguments:
             - '@classlikeConverter'
             - '@managerRegistry'
+
+    classlikeListProvider.registry:
+        class: PhpIntegrator\Analysis\ClasslikeListRegistry
+        arguments:
+            - '@classlikeListProvider.doctrineBackend'
+
+    classlikeListProvider:
+        alias: classlikeListProvider.registry
+
+    namespaceListProvider.doctrineBackend:
+        class: PhpIntegrator\Analysis\DoctrineNamespaceListProvider
+        arguments:
+            - '@namespaceConverter'
+            - '@managerRegistry'
+
+    namespaceListProvider.registry:
+        class: PhpIntegrator\Analysis\NamespaceListRegistry
+        arguments:
+            - '@namespaceListProvider.doctrineBackend'
+
+    namespaceListProvider:
+        alias: namespaceListProvider.registry
 
     classlikeInfoBuilder:
         class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
@@ -185,7 +229,7 @@ services:
             - '@inheritanceResolver'
             - '@interfaceImplementationResolver'
             - '@traitUsageResolver'
-            - '@doctrineStorage'
+            - '@storage'
             - '@typeAnalyzer'
 
     functionNameNodeFqsenDeterminer:
@@ -213,7 +257,7 @@ services:
         class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
             - '@functionNameNodeFqsenDeterminer'
-            - '@doctrineFunctionListProvider'
+            - '@functionListProvider'
 
     methodCallMethodInfoRetriever:
         class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever

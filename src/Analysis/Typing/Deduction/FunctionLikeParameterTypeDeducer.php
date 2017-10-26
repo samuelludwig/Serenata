@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Parsing\DocblockParser;
 
 use PhpIntegrator\Utility\NodeHelpers;
@@ -15,7 +17,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a parameter of a {@see Node\FunctionLike} node.
  */
-class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
+final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -55,7 +57,7 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Param) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -65,15 +67,19 @@ class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param Node\Param $node
-     * @param string     $file
-     * @param string     $code
-     * @param int        $offset
+     * @param Node\Param      $node
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromFunctionLikeParameterNode(Node\Param $node, string $file, string $code, int $offset): array
-    {
+    protected function deduceTypesFromFunctionLikeParameterNode(
+        Node\Param $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): array {
         if ($docBlock = $this->getFunctionDocblock()) {
             // Analyze the docblock's @param tags.
             $result = $this->docblockParser->parse((string) $docBlock, [

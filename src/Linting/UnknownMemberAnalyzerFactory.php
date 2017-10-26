@@ -8,6 +8,8 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 /**
  * Factory that produces instances of {@see UnknownMemberAnalyzer}.
  */
@@ -44,12 +46,12 @@ class UnknownMemberAnalyzerFactory
     }
 
     /**
-     * @param string $file
-     * @param string $code
+     * @param Structures\File $file
+     * @param string          $code
      *
      * @return UnknownMemberAnalyzer
      */
-    public function create(string $file, string $code): UnknownMemberAnalyzer
+    public function create(Structures\File $file, string $code): UnknownMemberAnalyzer
     {
         return new UnknownMemberAnalyzer(
             $this->nodeTypeDeducer,

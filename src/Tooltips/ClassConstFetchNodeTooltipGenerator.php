@@ -8,6 +8,8 @@ use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -47,7 +49,7 @@ class ClassConstFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param string                    $file
+     * @param Structures\File           $file
      * @param string                    $code
      *
      * @throws UnexpectedValueException when the constant name is not a string (i.e. an error node).
@@ -56,7 +58,7 @@ class ClassConstFetchNodeTooltipGenerator
      *
      * @return string
      */
-    public function generate(Node\Expr\ClassConstFetch $node, string $file, string $code): string
+    public function generate(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): string
     {
         if (!$node->name instanceof Node\Identifier) {
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
@@ -76,8 +78,6 @@ class ClassConstFetchNodeTooltipGenerator
             $tooltips[] = $this->constantTooltipGenerator->generate($constantInfo);
         }
 
-        // die(\Symfony\Component\VarDumper\VarDumper::dump(['location' => __FILE__ . ':' . __LINE__, 'var' => $tooltips]));
-
         if (empty($tooltips)) {
             throw new UnexpectedValueException('Could not determine any tooltips for the class constant');
         }
@@ -88,14 +88,14 @@ class ClassConstFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param string                    $file
+     * @param Structures\File           $file
      * @param string                    $code
      *
      * @throws UnexpectedValueException
      *
      * @return array
      */
-    protected function getClassTypes(Node\Expr\ClassConstFetch $node, string $file, string $code): array
+    protected function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
     {
         $classTypes = [];
 
@@ -116,7 +116,7 @@ class ClassConstFetchNodeTooltipGenerator
      * @param string $classType
      * @param string $name
      *
-     * @return array
+     * @return array|null
      */
     protected function fetchClassConstantInfo(string $classType, string $name): ?array
     {

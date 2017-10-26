@@ -7,7 +7,7 @@ use RuntimeException;
 /**
  * Exception that indicates that indexing failed.
  */
-class IndexingFailedException extends RuntimeException
+final class IndexingFailedException extends RuntimeException
 {
 
 }

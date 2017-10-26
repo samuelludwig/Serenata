@@ -2,7 +2,10 @@
 
 namespace PhpIntegrator\Indexing\Visiting;
 
+use DomainException;
 use SplObjectStorage;
+
+use Ds\Stack;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -13,9 +16,9 @@ use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\IndexStorageItemEnum;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use PhpIntegrator\Parsing\DocblockParser;
@@ -23,7 +26,6 @@ use PhpIntegrator\Parsing\DocblockParser;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -62,11 +64,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $accessModifierMap;
 
     /**
-     * @var array
-     */
-    private $structureTypeMap;
-
-    /**
      * @var Structures\File
      */
     private $file;
@@ -77,14 +74,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @var string
+     * @var Stack Stack<Structures\Classlike>
      */
-    private $filePath;
-
-    /**
-     * @var Structure
-     */
-    private $structure;
+    private $classlikeStack;
 
     /**
      * @var string[]
@@ -92,10 +84,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $traitsUsed = [];
 
     /**
-     * Stores structures that were found during the traversal.
+     * Stores classlikes that were found during the traversal.
      *
-     * Whilst traversing, structures found first may be referencing structures found later and the other way around.
-     * Because changes are not flushed during traversal, fetching these structures may not work if they are located
+     * Whilst traversing, classlikes found first may be referencing classlikes found later and the other way around.
+     * Because changes are not flushed during traversal, fetching these classlikes may not work if they are located
      * in the same file.
      *
      * We could also flush the changes constantly, but this hurts performance and not fetching information we already
@@ -103,7 +95,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @var SplObjectStorage
      */
-    private $structuresFound;
+    private $classlikesFound;
 
     /**
      * @var SplObjectStorage
@@ -123,7 +115,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param Structures\File                            $file
      * @param string                                     $code
-     * @param string                                     $filePath
      */
     public function __construct(
         StorageInterface $storage,
@@ -132,8 +123,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         NodeTypeDeducerInterface $nodeTypeDeducer,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         Structures\File $file,
-        string $code,
-        string $filePath
+        string $code
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -142,7 +132,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->file = $file;
         $this->code = $code;
-        $this->filePath = $filePath;
     }
 
     /**
@@ -159,16 +148,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\ClassConst) {
             $this->parseClassConstantStatementNode($node);
         } elseif ($node instanceof Node\Stmt\Class_) {
-            if ($node->isAnonymous()) {
-                // Ticket #45 - Skip PHP 7 anonymous classes.
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-            }
-
-            $this->parseClasslikeNode($node);
+            $this->processEnterClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\Interface_) {
-            $this->parseClasslikeNode($node);
+            $this->processEnterClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\Trait_) {
-            $this->parseClasslikeNode($node);
+            $this->processEnterClasslikeNode($node);
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->parseTraitUseNode($node);
         }
@@ -177,11 +161,34 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
+    public function leaveNode(\PhpParser\Node $node)
+    {
+        $value = parent::leaveNode($node);
+
+        if ($node instanceof Node\Stmt\Class_) {
+            $this->processLeaveClasslikeNode($node);
+        } elseif ($node instanceof Node\Stmt\Interface_) {
+            $this->processLeaveClasslikeNode($node);
+        } elseif ($node instanceof Node\Stmt\Trait_) {
+            $this->processLeaveClasslikeNode($node);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function beforeTraverse(array $nodes)
     {
-        $this->structuresFound = new SplObjectStorage();;
+        $this->classlikeStack = new Stack();
+        $this->classlikesFound = new SplObjectStorage();;
         $this->relationsStorage = new SplObjectStorage();
         $this->traitUseStorage = new SplObjectStorage();
+
+        foreach ($this->file->getClasslikes() as $classlike) {
+            $this->file->removeClasslike($classlike);
+
+            $this->storage->delete($classlike);
+        }
     }
 
     /**
@@ -191,18 +198,22 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         // Index relations after traversal as, in PHP, a child class can be defined before a parent class in a single
         // file. When walking the tree and indexing the child, the parent may not yet have been indexed.
-        foreach ($this->relationsStorage as $structure) {
-            $node = $this->relationsStorage[$structure];
+        foreach ($this->relationsStorage as $classlike) {
+            $node = $this->relationsStorage[$classlike];
 
-            $this->processClassLikeRelations($node, $structure);
+            $this->processClassLikeRelations($node, $classlike);
+
+            $this->storage->persist($classlike);
         }
 
-        foreach ($this->traitUseStorage as $structure) {
-            $nodes = $this->traitUseStorage[$structure];
+        foreach ($this->traitUseStorage as $classlike) {
+            $nodes = $this->traitUseStorage[$classlike];
 
             foreach ($nodes as $node) {
-                $this->processTraitUseNode($node, $structure);
+                $this->processTraitUseNode($node, $classlike);
             }
+
+            $this->storage->persist($classlike);
         }
     }
 
@@ -211,15 +222,33 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): void
+    protected function processEnterClasslikeNode(Node\Stmt\ClassLike $node): void
+    {
+        $this->classlikeStack->push($this->parseClasslikeNode($node));
+    }
+
+    /**
+     * @param Node\Stmt\ClassLike $node
+     *
+     * @return void
+     */
+    protected function processLeaveClasslikeNode(Node\Stmt\ClassLike $node): void
+    {
+        $this->classlikeStack->pop();
+    }
+
+    /**
+     * @param Node\Stmt\ClassLike $node
+     *
+     * @return Structures\Classlike
+     */
+    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): Structures\Classlike
     {
         if (!isset($node->namespacedName)) {
-            return;
+            // return;
         }
 
         $this->traitsUsed = [];
-
-        $structureTypeMap = $this->getStructureTypeMap();
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
@@ -231,42 +260,71 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PROPERTY,
             DocblockParser::PROPERTY_READ,
             DocblockParser::PROPERTY_WRITE
-        ], $node->name->name);
+        ], '');
 
-        $structureType = null;
+        $classlike = null;
 
         if ($node instanceof Node\Stmt\Class_) {
-            $structureType = $structureTypeMap['class'];
+            $fqcn = null;
+            $classlikeName = null;
+
+            if ($node->isAnonymous()) {
+                $fqcn = NodeHelpers::getFqcnForAnonymousClassNode($node, $this->file->getPath());
+                $classlikeName = mb_substr($fqcn, 1);
+            } else {
+                $fqcn = '\\' . $node->namespacedName->toString();
+                $classlikeName = $node->name->name;
+            }
+
+            $classlike = new Structures\Class_(
+                $classlikeName,
+                $fqcn,
+                $this->file,
+                $node->getLine(),
+                $node->getAttribute('endLine'),
+                $documentation['descriptions']['short'] ?: null,
+                $documentation['descriptions']['long'] ?: null,
+                $node->isAnonymous(),
+                $node->isAbstract(),
+                $node->isFinal(),
+                $documentation['annotation'],
+                $documentation['deprecated'],
+                !empty($docComment),
+                null
+            );
         } elseif ($node instanceof Node\Stmt\Interface_) {
-            $structureType = $structureTypeMap['interface'];
+            $classlike = new Structures\Interface_(
+                $node->name->name,
+                '\\' . $node->namespacedName->toString(),
+                $this->file,
+                $node->getLine(),
+                $node->getAttribute('endLine'),
+                $documentation['descriptions']['short'] ?: null,
+                $documentation['descriptions']['long'] ?: null,
+                $documentation['deprecated'],
+                !empty($docComment)
+            );
         } elseif ($node instanceof Node\Stmt\Trait_) {
-            $structureType = $structureTypeMap['trait'];
+            $classlike = new Structures\Trait_(
+                $node->name->name,
+                '\\' . $node->namespacedName->toString(),
+                $this->file,
+                $node->getLine(),
+                $node->getAttribute('endLine'),
+                $documentation['descriptions']['short'] ?: null,
+                $documentation['descriptions']['long'] ?: null,
+                $documentation['deprecated'],
+                !empty($docComment)
+            );
         }
 
-        $structure = new Structures\Structure(
-            $node->name->name,
-            '\\' . $node->namespacedName->toString(),
-            $this->file,
-            $node->getLine(),
-            $node->getAttribute('endLine'),
-            $structureType,
-            $documentation['descriptions']['short'],
-            $documentation['descriptions']['long'],
-            false,
-            $node instanceof Node\Stmt\Class_ && $node->isAbstract(),
-            $node instanceof Node\Stmt\Class_ && $node->isFinal(),
-            $documentation['annotation'],
-            $documentation['deprecated'],
-            !empty($docComment)
-        );
+        $this->storage->persist($classlike);
 
-        $this->storage->persist($structure);
-
-        $this->structuresFound->attach($structure, $structure->getFqcn());
+        $this->classlikesFound->attach($classlike, $classlike->getFqcn());
 
         $accessModifierMap = $this->getAccessModifierMap();
 
-        $this->relationsStorage->attach($structure, $node);
+        $this->relationsStorage->attach($classlike, $node);
 
         // Index magic properties.
         $magicProperties = array_merge(
@@ -275,7 +333,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['propertiesWriteOnly']
         );
 
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         foreach ($magicProperties as $propertyName => $propertyData) {
             // Use the same line as the class definition, it matters for e.g. type resolution.
@@ -283,8 +341,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->indexMagicProperty(
                 $propertyData,
-                $structure,
-                $accessModifierMap['public'],
+                $classlike,
+                $accessModifierMap[AccessModifierNameValue::PUBLIC_],
                 $filePosition
             );
         }
@@ -296,15 +354,15 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->indexMagicMethod(
                 $methodData,
-                $structure,
-                $accessModifierMap['public'],
+                $classlike,
+                $accessModifierMap[AccessModifierNameValue::PUBLIC_],
                 $filePosition
             );
         }
 
-        $this->indexClassKeyword($structure);
+        $this->indexClassKeyword($classlike);
 
-        $this->structure = $structure;
+        return $classlike;
     }
 
     /**
@@ -316,80 +374,110 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $traitUses = [];
 
-        if ($this->traitUseStorage->contains($this->structure)) {
-            $traitUses = $this->traitUseStorage[$this->structure];
+        if ($this->traitUseStorage->contains($this->classlikeStack->peek())) {
+            $traitUses = $this->traitUseStorage[$this->classlikeStack->peek()];
         }
 
         $traitUses[] = $node;
 
-        $this->traitUseStorage->attach($this->structure, $traitUses);
+        $this->traitUseStorage->attach($this->classlikeStack->peek(), $traitUses);
     }
 
     /**
      * @param Node\Stmt\ClassLike  $node
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Structure $structure): void
+    protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Classlike $classlike): void
     {
-        if ($node instanceof Node\Stmt\Class_) {
-            if ($node->extends) {
-                $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
+        if ($classlike instanceof Structures\Class_) {
+            $this->processClassRelations($node, $classlike);
+        } elseif ($classlike instanceof Structures\Interface_) {
+            $this->processInterfaceRelations($node, $classlike);
+        } elseif ($classlike instanceof Structures\Trait_) {
+            // Traits can't have relations.
+        } else {
+            throw new DomainException("Don't know how to handle classlike of type " . get_class($classlike));
+        }
+    }
 
-                $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
+    /**
+     * @param Node\Stmt\Class_  $node
+     * @param Structures\Class_ $class
+     *
+     * @return void
+     */
+    protected function processClassRelations(Node\Stmt\Class_ $node, Structures\Class_ $class): void
+    {
+        if ($node->extends) {
+            $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
 
-                $linkEntity = $this->findStructureByFqcn($parentFqcn);
+            $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
 
-                if ($linkEntity) {
-                    $structure->addParent($linkEntity);
-                } else {
-                    $structure->addParentFqcn($parentFqcn);
-                }
+            $linkEntity = $this->findStructureByFqcn($parentFqcn);
+
+            if ($linkEntity && $linkEntity instanceof Structures\Class_) {
+                $class->setParent($linkEntity);
+            } else {
+                $class->setParentFqcn($parentFqcn);
             }
+        }
 
-            $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
-                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
+        $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
+            $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
-                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
-            }, $node->implements));
+            return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+        }, $node->implements));
 
-            foreach ($implementedFqcns as $implementedFqcn) {
-                $linkEntity = $this->findStructureByFqcn($implementedFqcn);
+        foreach ($implementedFqcns as $implementedFqcn) {
+            $linkEntity = $this->findStructureByFqcn($implementedFqcn);
 
-                if ($linkEntity) {
-                    $structure->addInterface($linkEntity);
-                } else {
-                    $structure->addInterfaceFqcn($implementedFqcn);
-                }
+            if ($linkEntity && $linkEntity instanceof Structures\Interface_) {
+                $class->addInterface($linkEntity);
+            } else {
+                $class->addInterfaceFqcn($implementedFqcn);
             }
-        } elseif ($node instanceof Node\Stmt\Interface_) {
-            $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
-                $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
+        }
+    }
 
-                return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
-            }, $node->extends));
+    /**
+     * @param Node\Stmt\Interface_  $node
+     * @param Structures\Interface_ $interface
+     *
+     * @return void
+     */
+    protected function processInterfaceRelations(Node\Stmt\Interface_ $node, Structures\Interface_ $interface): void
+    {
+        $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
+            $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
-            foreach ($extendedFqcns as $extendedFqcn) {
-                $linkEntity = $this->findStructureByFqcn($extendedFqcn);
+            return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
+        }, $node->extends));
 
-                if ($linkEntity) {
-                    $structure->addParent($linkEntity);
-                } else {
-                    $structure->addParentFqcn($extendedFqcn);
-                }
+        foreach ($extendedFqcns as $extendedFqcn) {
+            $linkEntity = $this->findStructureByFqcn($extendedFqcn);
+
+            if ($linkEntity && $linkEntity instanceof Structures\Interface_) {
+                $interface->addParent($linkEntity);
+            } else {
+                $interface->addParentFqcn($extendedFqcn);
             }
         }
     }
 
     /**
      * @param Node\Stmt\TraitUse   $node
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Structure $structure): void
+    protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Classlike $classlike): void
     {
+        if ($classlike instanceof Structures\Interface_) {
+            return; // Nope, interfaces can't use traits.
+        }
+
         foreach ($node->traits as $traitName) {
             $traitFqcn = NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
             $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
@@ -402,10 +490,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $linkEntity = $this->findStructureByFqcn($traitFqcn);
 
-            if ($linkEntity) {
-                $structure->addTrait($linkEntity);
+            if ($linkEntity && $linkEntity instanceof Structures\Trait_) {
+                $classlike->addTrait($linkEntity);
             } else {
-                $structure->addTraitFqcn($traitFqcn);
+                $classlike->addTraitFqcn($traitFqcn);
             }
         }
 
@@ -419,31 +507,53 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $accessModifier = null;
 
                 if ($adaptation->newModifier === 1) {
-                    $accessModifier = 'public';
+                    $accessModifier = AccessModifierNameValue::PUBLIC_;
                 } elseif ($adaptation->newModifier === 2) {
-                    $accessModifier = 'protected';
+                    $accessModifier = AccessModifierNameValue::PROTECTED_;
                 } elseif ($adaptation->newModifier === 4) {
-                    $accessModifier = 'private';
+                    $accessModifier = AccessModifierNameValue::PRIVATE_;
                 }
 
-                $traitAlias = new Structures\StructureTraitAlias(
-                    $structure,
-                    $traitFqcn,
-                    $accessModifier ? $accessModifierMap[$accessModifier] : null,
-                    $adaptation->method,
-                    $adaptation->newName
-                );
+                if ($classlike instanceof Structures\Class_) {
+                    $traitAlias = new Structures\ClassTraitAlias(
+                        $classlike,
+                        $traitFqcn,
+                        $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                        $adaptation->method,
+                        $adaptation->newName
+                    );
+                } elseif ($classlike instanceof Structures\Trait_) {
+                    $traitAlias = new Structures\TraitTraitAlias(
+                        $classlike,
+                        $traitFqcn,
+                        $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                        $adaptation->method,
+                        $adaptation->newName
+                    );
+                } else {
+                    continue; // Can't add trait aliases in any other classlike type.
+                }
 
                 $this->storage->persist($traitAlias);
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
-                $traitPrecedence = new Structures\StructureTraitPrecedence(
-                    $structure,
-                    $traitFqcn,
-                    $adaptation->method
-                );
+                if ($classlike instanceof Structures\Class_) {
+                    $traitPrecedence = new Structures\ClassTraitPrecedence(
+                        $classlike,
+                        $traitFqcn,
+                        $adaptation->method
+                    );
+                } elseif ($classlike instanceof Structures\Trait_) {
+                    $traitPrecedence = new Structures\TraitTraitPrecedence(
+                        $classlike,
+                        $traitFqcn,
+                        $adaptation->method
+                    );
+                } else {
+                    continue; // Can't add trait precedences in any other classlike type.
+                }
 
                 $this->storage->persist($traitPrecedence);
             }
@@ -457,7 +567,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         foreach ($node->props as $property) {
             $defaultValue = $property->default ?
@@ -493,12 +603,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
             } elseif ($property->default) {
-                $typeList = $this->nodeTypeDeducer->deduce(
-                    $property->default,
-                    $this->filePath,
-                    $defaultValue,
-                    0
-                );
+                $typeList = $this->nodeTypeDeducer->deduce($property->default, $this->file, $this->code, 0);
 
                 $types = array_map(function (string $type) {
                     return new Structures\TypeInfo($type, $type);
@@ -510,11 +615,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = null;
 
             if ($node->isPublic()) {
-                $accessModifier = 'public';
+                $accessModifier = AccessModifierNameValue::PUBLIC_;
             } elseif ($node->isProtected()) {
-                $accessModifier = 'protected';
+                $accessModifier = AccessModifierNameValue::PROTECTED_;
             } elseif ($node->isPrivate()) {
-                $accessModifier = 'private';
+                $accessModifier = AccessModifierNameValue::PRIVATE_;
             }
 
             $property = new Structures\Property(
@@ -527,10 +632,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 false,
                 $node->isStatic(),
                 !empty($docComment),
-                $shortDescription,
-                $documentation['descriptions']['long'],
+                $shortDescription ?: null,
+                $documentation['descriptions']['long'] ?: null,
                 $varDocumentation ? $varDocumentation['description'] : null,
-                $this->structure,
+                $this->classlikeStack->peek(),
                 $accessModifierMap[$accessModifier],
                 $types
             );
@@ -548,21 +653,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     {
         $localType = null;
         $resolvedType = null;
+        $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
             $nodeType = $nodeType->type;
+            $returnTypeHint = '?';
         }
 
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
+            $returnTypeHint .= $resolvedType;
         } elseif ($nodeType instanceof Node\Identifier) {
             $localType = $nodeType->name;
             $resolvedType = $nodeType->name;
+            $returnTypeHint .= $resolvedType;
         }
 
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         $isReturnTypeNullable = ($node->getReturnType() instanceof Node\NullableType);
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
@@ -595,13 +704,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition);
             $typeData = array_shift($typeData);
 
-            $throwsData = [
-                'type'        => $typeData->getType(),
-                'full_type'   => $typeData->getFqcn(),
-                'description' => $throw['description'] ?: null
-            ];
-
-            $throws[] = $throwsData;
+            $throws[] = new Structures\ThrowsInfo(
+                $typeData->getType(),
+                $typeData->getFqcn(),
+                $throw['description'] ?: null
+            );
         }
 
         $accessModifierMap = $this->getAccessModifierMap();
@@ -609,26 +716,24 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $accessModifier = null;
 
         if ($node->isPublic()) {
-            $accessModifier = 'public';
+            $accessModifier = AccessModifierNameValue::PUBLIC_;
         } elseif ($node->isProtected()) {
-            $accessModifier = 'protected';
+            $accessModifier = AccessModifierNameValue::PROTECTED_;
         } elseif ($node->isPrivate()) {
-            $accessModifier = 'private';
+            $accessModifier = AccessModifierNameValue::PRIVATE_;
         }
 
-        $function = new Structures\Function_(
+        $method = new Structures\Method(
             $node->name->name,
-            null,
             $this->file,
             $node->getLine(),
             $node->getAttribute('endLine'),
-            false,
             $documentation['deprecated'],
-            $documentation['descriptions']['short'],
-            $documentation['descriptions']['long'],
-            $documentation['return']['description'],
-            $localType,
-            $this->structure,
+            $documentation['descriptions']['short'] ?: null,
+            $documentation['descriptions']['long'] ?: null,
+            $documentation['return']['description'] ?: null,
+            $returnTypeHint,
+            $this->classlikeStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null,
             false,
             $node->isStatic(),
@@ -639,9 +744,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes
         );
 
-        $this->storage->persist($function);
+        $this->storage->persist($method);
 
         foreach ($node->getParams() as $param) {
+            $typeHint = null;
             $localType = null;
             $resolvedType = null;
 
@@ -649,14 +755,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             if ($typeNode instanceof Node\NullableType) {
                 $typeNode = $typeNode->type;
+                $typeHint = '?';
             }
 
             if ($typeNode instanceof Node\Name) {
                 $localType = NodeHelpers::fetchClassName($typeNode);
                 $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
+                $typeHint .= $resolvedType;
             } elseif ($typeNode instanceof Node\Identifier) {
                 $localType = $typeNode->name;
                 $resolvedType = $typeNode->name;
+                $typeHint .= $resolvedType;
             }
 
             $isNullable = (
@@ -696,16 +805,21 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 if ($isNullable) {
                     $types[] = new Structures\TypeInfo('null', 'null');
                 }
+            } elseif ($param->default !== null) {
+                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $this->code, 0);
+
+                $types = array_map(function (string $type) {
+                    return new Structures\TypeInfo($type, $type);
+                }, $typeList);
             }
 
-            $parameter = new Structures\FunctionParameter(
-                $function,
+            $parameter = new Structures\MethodParameter(
+                $method,
                 $param->var->name,
-                $localType,
+                $typeHint,
                 $types,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
-                $isNullable,
                 $param->byRef,
                 !!$param->default,
                 $param->variadic
@@ -735,7 +849,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function parseClassConstantNode(Node\Const_ $node, Node\Stmt\ClassConst $classConst): void
     {
-        $filePosition = new FilePosition($this->filePath, new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
         $docComment = $classConst->getDocComment() ? $classConst->getDocComment()->getText() : null;
 
@@ -768,12 +882,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
         } elseif ($node->value) {
-            $typeList = $this->nodeTypeDeducer->deduce(
-                $node->value,
-                $this->filePath,
-                $defaultValue,
-                0
-            );
+            $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $this->code, 0);
 
             $types = array_map(function (string $type) {
                 return new Structures\TypeInfo($type, $type);
@@ -785,28 +894,26 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $accessModifier = null;
 
         if ($classConst->isPublic()) {
-            $accessModifier = 'public';
+            $accessModifier = AccessModifierNameValue::PUBLIC_;
         } elseif ($classConst->isProtected()) {
-            $accessModifier = 'protected';
+            $accessModifier = AccessModifierNameValue::PROTECTED_;
         } elseif ($classConst->isPrivate()) {
-            $accessModifier = 'private';
+            $accessModifier = AccessModifierNameValue::PRIVATE_;
         }
 
-        $constant = new Structures\Constant(
+        $constant = new Structures\ClassConstant(
             $node->name->name,
-            null,
             $this->file,
             $node->getLine(),
             $node->getAttribute('endLine'),
             $defaultValue,
             $documentation['deprecated'] ? 1 : 0,
-            false,
             !empty($docComment),
-            $shortDescription,
-            $documentation['descriptions']['long'],
+            $shortDescription ?: null,
+            $documentation['descriptions']['long'] ?: null,
             $varDocumentation ? $varDocumentation['description'] : null,
             $types,
-            $this->structure,
+            $this->classlikeStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null
         );
 
@@ -815,7 +922,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param array                     $rawData
-     * @param Structures\Structure      $structure
+     * @param Structures\Classlike      $classlike
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
      *
@@ -823,7 +930,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexMagicProperty(
         array $rawData,
-        Structures\Structure $structure,
+        Structures\Classlike $classlike,
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
@@ -843,10 +950,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             true,
             $rawData['isStatic'],
             false,
-            $rawData['description'],
+            $rawData['description'] ?: null,
             null,
             null,
-            $structure,
+            $classlike,
             $accessModifier,
             $types
         );
@@ -856,7 +963,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param array                     $rawData
-     * @param Structures\Structure      $structure
+     * @param Structures\Classlike      $classlike
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
      *
@@ -864,7 +971,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     protected function indexMagicMethod(
         array $rawData,
-        Structures\Structure $structure,
+        Structures\Classlike $classlike,
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
@@ -874,19 +981,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes = $this->getTypeDataForTypeSpecification($rawData['type'], $filePosition);
         }
 
-        $function = new Structures\Function_(
+        $method = new Structures\Method(
             $rawData['name'],
-            null,
             $this->file,
             $filePosition->getPosition()->getLine(),
             $filePosition->getPosition()->getLine(),
-            false,
             false,
             $rawData['description'],
             null,
             null,
             null,
-            $structure,
+            $classlike,
             $accessModifier,
             true,
             $rawData['isStatic'],
@@ -897,7 +1002,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypes
         );
 
-        $this->storage->persist($function);
+        $this->storage->persist($method);
 
         foreach ($rawData['requiredParameters'] as $parameterName => $parameter) {
             $types = [];
@@ -906,14 +1011,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
             }
 
-            $parameter = new Structures\FunctionParameter(
-                $function,
+            $parameter = new Structures\MethodParameter(
+                $method,
                 mb_substr($parameterName, 1),
                 null,
                 $types,
                 null,
                 null,
-                false,
                 false,
                 false,
                 false
@@ -929,14 +1033,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
             }
 
-            $parameter = new Structures\FunctionParameter(
-                $function,
+            $parameter = new Structures\MethodParameter(
+                $method,
                 mb_substr($parameterName, 1),
                 null,
                 $types,
                 null,
                 null,
-                false,
                 false,
                 true,
                 false
@@ -947,28 +1050,26 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Structures\Structure $structure
+     * @param Structures\Classlike $classlike
      *
      * @return void
      */
-    protected function indexClassKeyword(Structures\Structure $structure): void
+    protected function indexClassKeyword(Structures\Classlike $classlike): void
     {
-        $constant = new Structures\Constant(
+        $constant = new Structures\ClassConstant(
             'class',
-            null,
             $this->file,
-            $structure->getStartLine(),
-            $structure->getStartLine(),
-            mb_substr($structure->getFqcn(), 1),
+            $classlike->getStartLine(),
+            $classlike->getStartLine(),
+            '\'' . mb_substr($classlike->getFqcn(), 1) . '\'',
             false,
-            true,
             false,
-            'PHP built-in class constant that evaluates to the FCQN.',
+            'PHP built-in class constant that evaluates to the FQCN.',
             null,
             null,
             [new Structures\TypeInfo('string', 'string')],
-            $structure,
-            $this->getAccessModifierMap()['public']
+            $classlike,
+            $this->getAccessModifierMap()[AccessModifierNameValue::PUBLIC_]
         );
 
         $this->storage->persist($constant);
@@ -978,7 +1079,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param string       $typeSpecification
      * @param FilePosition $filePosition
      *
-     * @return array[]
+     * @return Structures\TypeInfo[]
      */
     protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
     {
@@ -1025,35 +1126,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return array
-     */
-    protected function getStructureTypeMap(): array
-    {
-        if (!$this->structureTypeMap) {
-            $types = $this->storage->getStructureTypes();
-
-            $this->structureTypeMap = [];
-
-            foreach ($types as $type) {
-                $this->structureTypeMap[$type->getName()] = $type;
-            }
-        }
-
-        return $this->structureTypeMap;
-    }
-
-    /**
      * @param string $fqcn
      *
-     * @return Structures\Structure|null
+     * @return Structures\Classlike|null
      */
-    protected function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    protected function findStructureByFqcn(string $fqcn): ?Structures\Classlike
     {
-        foreach ($this->structuresFound as $structure) {
-            $foundFqcn = $this->structuresFound[$structure];
+        foreach ($this->classlikesFound as $classlike) {
+            $foundFqcn = $this->classlikesFound[$classlike];
 
             if ($fqcn === $foundFqcn) {
-                return $structure;
+                return $classlike;
             }
         }
 

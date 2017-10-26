@@ -9,11 +9,6 @@ interface JsonRpcResponseSenderInterface
 {
     /**
      * @param JsonRpcResponse $response
-     * @param bool            $force    Whether to force sending the response now. This can be useful when the sender
-     *                                  is part of a buffering or scheduling system to avoid delaying the send until
-     *                                  the next buffer full, timeout, tick, ...
-     *
-     * @return void
      */
-    public function send(JsonRpcResponse $response, bool $force = false): void;
+    public function send(JsonRpcResponse $response): void;
 }

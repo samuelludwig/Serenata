@@ -16,16 +16,16 @@
         <many-to-one field="namespace" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace" inversed-by="imports">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileNamespaceImportNamespace</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>fileNamespaceImport</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

@@ -13,7 +13,7 @@ use PhpIntegrator\Common\Range;
  *
  * @see https://github.com/Microsoft/language-server-protocol/blob/master/versions/protocol-2-x.md#hover-request
  */
-class TooltipResult implements JsonSerializable
+final class TooltipResult implements JsonSerializable
 {
     /**
      * The contents of the tooltip.

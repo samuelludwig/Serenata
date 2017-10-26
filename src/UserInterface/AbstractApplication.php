@@ -7,9 +7,6 @@ use PhpIntegrator\Analysis\ClearableCacheInterface;
 use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use PhpIntegrator\Indexing\ManagerRegistry;
-use PhpIntegrator\Indexing\CallbackStorageProxy;
-
-use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\Config\FileLocator;
 
@@ -83,10 +80,6 @@ abstract class AbstractApplication
         $container->set('application', $this);
 
         $container
-            ->register('sourceCodeStreamReader', SourceCodeStreamReader::class)
-            ->setArguments([$this->getStdinStream()]);
-
-        $container
             ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)
             ->setArguments([])
             ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $configurableDelegatingNodeTypeDeducer) use ($container) {
@@ -110,40 +103,21 @@ abstract class AbstractApplication
         // TODO: Need to refactor this at some point to have more select cache clearing and to not instantiate multiple
         // mediators.
         $container->get('cacheClearingEventMediator1');
-        // $container->get('cacheClearingEventMediator2');
-        // $container->get('cacheClearingEventMediator3');
+        $container->get('cacheClearingEventMediator2');
+        $container->get('cacheClearingEventMediator3');
+        $container->get('functionIndexingFunctionRegistryMediator');
+        $container->get('constantIndexingConstantRegistryMediator');
+        $container->get('classlikeIndexingStructureRegistryMediator');
+        $container->get('namespaceIndexingNamespaceRegistryMediator');
+
+        $container->get('workspaceEventConstantRegistryMediator');
+        $container->get('workspaceEventFunctionRegistryMediator');
+        $container->get('workspaceEventClasslikeRegistryMediator');
+        $container->get('workspaceEventNamespaceRegistryMediator');
     }
 
     /**
      * @return mixed
      */
     abstract public function run();
-
-    /**
-     * @return resource|null
-     */
-    abstract public function getStdinStream();
-
-    /**
-     * @param string $databaseFile
-     *
-     * @return static
-     */
-    public function setDatabaseFile(string $databaseFile)
-    {
-        /** @var ManagerRegistry $managerRegistry */
-        $managerRegistry = $this->getContainer()->get('managerRegistry');
-
-        if (!$managerRegistry->hasInitialDatabasePathConfigured() ||
-            $managerRegistry->getDatabasePath() !== $databaseFile
-        ) {
-            $managerRegistry->setDatabasePath($databaseFile);
-
-            /** @var ClearableCacheInterface $clearableCache */
-            $clearableCache = $this->getContainer()->get('cacheClearingEventMediator.clearableCache');
-            $clearableCache->clearCache();
-        }
-
-        return $this;
-    }
 }

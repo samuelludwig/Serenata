@@ -6,10 +6,12 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\Structures;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Converts raw property data from the index to more useful data.
  */
-class PropertyConverter extends AbstractConverter
+final class PropertyConverter extends AbstractConverter
 {
     /**
      * @param Structures\Property $property
@@ -23,11 +25,12 @@ class PropertyConverter extends AbstractConverter
             'name'               => $property->getName(),
             'startLine'          => $property->getStartLine(),
             'endLine'            => $property->getEndLine(),
+            'filename'           => $property->getFile()->getPath(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
-            'isPublic'           => $property->getAccessModifier()->getName() === 'public',
-            'isProtected'        => $property->getAccessModifier()->getName() === 'protected',
-            'isPrivate'          => $property->getAccessModifier()->getName() === 'private',
+            'isPublic'           => $property->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,
+            'isProtected'        => $property->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_,
+            'isPrivate'          => $property->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_,
             'isStatic'           => $property->getIsStatic(),
             'isDeprecated'       => $property->getIsDeprecated(),
             'hasDocblock'        => $property->getHasDocblock(),

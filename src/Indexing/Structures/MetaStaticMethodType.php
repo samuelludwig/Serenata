@@ -75,6 +75,8 @@ class MetaStaticMethodType
         $this->value = $value;
         $this->valueNodeType = $valueNodeType;
         $this->returnType = $returnType;
+
+        $file->addMetaStaticMethodType($this);
     }
 
     /**

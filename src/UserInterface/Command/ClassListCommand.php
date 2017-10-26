@@ -2,39 +2,82 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
+use PhpIntegrator\Analysis\ClasslikeListProviderInterface;
 
-use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
+
+use PhpIntegrator\Indexing\StorageInterface;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
  */
-class ClassListCommand extends AbstractCommand
+final class ClassListCommand extends AbstractCommand
 {
     /**
-     * @var FileClassListProviderInterface
+     * @var StorageInterface
      */
-    private $fileClassListProvider;
+    private $storage;
 
     /**
-     * @param FileClassListProviderInterface $fileClassListProvider
+     * @var ClasslikeListProviderInterface
      */
-    public function __construct(FileClassListProviderInterface $fileClassListProvider)
-    {
-        $this->fileClassListProvider = $fileClassListProvider;
+    private $classlikeListProvider;
+
+    /**
+     * @var FileClasslikeListProviderInterface
+     */
+    private $fileClasslikeListProvider;
+
+    /**
+     * @param StorageInterface                   $storage
+     * @param ClasslikeListProviderInterface     $classlikeListProvider
+     * @param FileClasslikeListProviderInterface $fileClasslikeListProvider
+     */
+    public function __construct(
+        StorageInterface $storage,
+        ClasslikeListProviderInterface $classlikeListProvider,
+        FileClasslikeListProviderInterface $fileClasslikeListProvider
+    ) {
+        $this->storage = $storage;
+        $this->classlikeListProvider = $classlikeListProvider;
+        $this->fileClasslikeListProvider = $fileClasslikeListProvider;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $file = isset($arguments['file']) ? $arguments['file'] : null;
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if ($file !== null) {
-            return $this->fileClassListProvider->getAllForFile($file);
-        }
+        $filePath = $arguments['file'] ?? null;
 
-        return $this->fileClassListProvider->getAll();
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getAll(): array
+    {
+        return $this->classlikeListProvider->getAll();
+    }
+
+    /**
+     * @param string $filePath
+     *
+     * @return array
+     */
+    public function getAllForFilePath(string $filePath): array
+    {
+        $file = $this->storage->getFileByPath($filePath);
+
+        return $this->fileClasslikeListProvider->getAllForFile($file);
     }
 }

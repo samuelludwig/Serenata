@@ -13,7 +13,6 @@
         <field name="types"        type="array"      nullable="false" />
         <field name="description"  type="text"       nullable="true"  length="15000" />
         <field name="defaultValue" type="string"     nullable="true"  length="255" />
-        <field name="isNullable"   type="boolean"    nullable="false" />
         <field name="isReference"  type="boolean"    nullable="false" />
         <field name="isOptional"   type="boolean"    nullable="false" />
         <field name="isVariadic"   type="boolean"    nullable="false" />
@@ -21,16 +20,16 @@
         <many-to-one field="function" target-entity="PhpIntegrator\Indexing\Structures\Function_" inversed-by="parameters">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
-            <cache>
+            <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>functionParameterFunction</region>
-            </cache>
+            </cache> -->
         </many-to-one>
 
-        <cache>
+        <!-- <cache>
             <usage>READ_ONLY</usage>
             <region>functionParameter</region>
-        </cache>
+        </cache> -->
     </entity>
 
 </doctrine-mapping>

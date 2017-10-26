@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class GlobalFunctionsCommandTest extends AbstractIntegrationTest
@@ -15,20 +13,18 @@ class GlobalFunctionsCommandTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/GlobalFunctionsCommandTest/' . 'GlobalFunctions.phpt';
 
-        $container = $this->createTestContainer();
+        $this->indexTestFile($this->container, $path);
 
-        $this->indexTestFile($container, $path);
-
-        $command = $container->get('globalFunctionsCommand');
+        $command = $this->container->get('globalFunctionsCommand');
 
         $output = $command->getGlobalFunctions();
 
-        $this->assertThat($output, $this->arrayHasKey('\A\firstFunction'));
-        $this->assertEquals($output['\A\firstFunction']['name'], 'firstFunction');
-        $this->assertEquals($output['\A\firstFunction']['fqcn'], '\A\firstFunction');
-        $this->assertThat($output, $this->arrayHasKey('\A\secondFunction'));
-        $this->assertEquals($output['\A\secondFunction']['name'], 'secondFunction');
-        $this->assertEquals($output['\A\secondFunction']['fqcn'], '\A\secondFunction');
-        $this->assertThat($output, $this->logicalNot($this->arrayHasKey('shouldNotShowUp')));
+        static::assertThat($output, $this->arrayHasKey('\A\firstFunction'));
+        static::assertSame($output['\A\firstFunction']['name'], 'firstFunction');
+        static::assertSame($output['\A\firstFunction']['fqcn'], '\A\firstFunction');
+        static::assertThat($output, $this->arrayHasKey('\A\secondFunction'));
+        static::assertSame($output['\A\secondFunction']['name'], 'secondFunction');
+        static::assertSame($output['\A\secondFunction']['fqcn'], '\A\secondFunction');
+        static::assertThat($output, $this->logicalNot($this->arrayHasKey('shouldNotShowUp')));
     }
 }

@@ -2,7 +2,11 @@
 
 namespace PhpIntegrator\Tests\Unit\Analysis\Typing\Deduction;
 
+use DateTime;
+
 use PhpIntegrator\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
+
+use PhpIntegrator\Indexing\Structures;
 
 use PhpParser\Node;
 
@@ -28,7 +32,9 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     {
         $node = new Node\Stmt\Class_('A');
 
-        $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, '', '', 0));
+        $file = new Structures\File('', new DateTime(), []);
+
+        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
     }
 
     /**
@@ -38,7 +44,9 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     {
         $node = new Node\Stmt\Interface_('A');
 
-        $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, '', '', 0));
+        $file = new Structures\File('', new DateTime(), []);
+
+        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
     }
 
     /**
@@ -48,7 +56,9 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     {
         $node = new Node\Stmt\Trait_('A');
 
-        $this->assertEquals(['A'], $this->classLikeNodeTypeDeducer->deduce($node, '', '', 0));
+        $file = new Structures\File('', new DateTime(), []);
+
+        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
     }
 
     /**
@@ -56,8 +66,15 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAnonymousClassNode(): void
     {
-        $node = new Node\Stmt\Class_(null);
+        $node = new Node\Stmt\Class_(null, [], [
+            'startFilePos' => 9
+        ]);
 
-        $this->assertEquals([], $this->classLikeNodeTypeDeducer->deduce($node, '', '', 0));
+        $file = new Structures\File('/test/path', new DateTime(), []);
+
+        static::assertSame(
+            ['\(anonymous_a19f6c462322bef8d3cad086eca0e32a_9)'],
+            $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0)
+        );
     }
 }

@@ -15,10 +15,13 @@ services:
         arguments:
             - '@indexer'
 
+    echoResponseCommand:
+        class: PhpIntegrator\UserInterface\Command\EchoResponseCommand
+
     vacuumCommand:
         class: PhpIntegrator\UserInterface\Command\VacuumCommand
         arguments:
-            - '@projectIndexer'
+            - '@indexFilePruner'
 
     testCommand:
         class: PhpIntegrator\UserInterface\Command\TestCommand
@@ -28,13 +31,17 @@ services:
     tooltipCommand:
         class: PhpIntegrator\UserInterface\Command\TooltipCommand
         arguments:
+            - '@storage'
             - '@tooltipProvider'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'
 
     classListCommand:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
         arguments:
-            - '@doctrineClassListProvider'
+            - '@storage'
+            - '@classlikeListProvider'
+            - '@fileClasslikeListProvider.instance'
 
     classInfoCommand:
         class: PhpIntegrator\UserInterface\Command\ClassInfoCommand
@@ -45,57 +52,77 @@ services:
     globalFunctionsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand
         arguments:
-            - '@doctrineFunctionListProvider'
+            - '@functionListProvider'
 
     globalConstantsCommand:
         class: PhpIntegrator\UserInterface\Command\GlobalConstantsCommand
         arguments:
-            - '@doctrineConstantListProvider'
+            - '@constantListProvider'
 
     resolveTypeCommand:
         class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
         arguments:
+            - '@storage'
             - '@structureAwareNameResolverFactory'
 
     localizeTypeCommand:
         class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
         arguments:
+            - '@storage'
             - '@positionalNameLocalizerFactory'
 
     lintCommand:
         class: PhpIntegrator\UserInterface\Command\LintCommand
         arguments:
+            - '@storage'
             - '@sourceCodeStreamReader'
             - '@linter'
+            - '@fileIndexer'
 
     availableVariablesCommand:
         class: PhpIntegrator\UserInterface\Command\AvailableVariablesCommand
         arguments:
             - '@variableScanner'
-            - '@parser'
             - '@sourceCodeStreamReader'
+            - '@updateEnforcingIndexer'
+            - '@parser'
+            - '@fileIndexer'
 
     deduceTypesCommand:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
         arguments:
+            - '@storage'
             - '@nodeTypeDeducer'
             - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
             - '@positionalNamespaceDeterminer'
+            - '@fileIndexer'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
         arguments:
+            - '@storage'
             - '@signatureHelpRetriever'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'
 
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
         arguments:
-            - '@managerRegistry'
+            - '@storage'
+            - '@namespaceListProvider'
+            - '@fileNamespaceListProvider'
 
     autocompleteCommand:
         class: PhpIntegrator\UserInterface\Command\AutocompleteCommand
         arguments:
             - '@autocompletionProvider'
             - '@sourceCodeStreamReader'
+
+    gotoDefinitionCommand:
+        class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand
+        arguments:
+            - '@storage'
+            - '@definitionLocator'
+            - '@sourceCodeStreamReader'
+            - '@fileIndexer'

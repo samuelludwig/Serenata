@@ -2,16 +2,17 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+
 /**
  * Command that shows information about a class, interface or trait.
  */
-class ClassInfoCommand extends AbstractCommand
+final class ClassInfoCommand extends AbstractCommand
 {
     /**
      * @var TypeAnalyzer
@@ -36,17 +37,17 @@ class ClassInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['name'])) {
             throw new InvalidArgumentsException(
                 'The fully qualified name of the structural element is required for this command.'
             );
         }
 
-        $result = $this->getClassInfo($arguments['name']);
-
-        return $result;
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getClassInfo($arguments['name']));
     }
 
     /**

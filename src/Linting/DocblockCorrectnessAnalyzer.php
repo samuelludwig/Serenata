@@ -14,7 +14,7 @@ use PhpIntegrator\Parsing\DocblockParser;
 /**
  * Analyzes the correctness of docblocks.
  */
-class DocblockCorrectnessAnalyzer implements AnalyzerInterface
+final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 {
     /**
      * @var string
@@ -90,6 +90,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             $this->getVarTagMissingErrors(),
             $this->getParameterMissingErrors(),
             $this->getParameterTypeMismatchErrors(),
+            $this->getReturnTypeMismatchErrors(),
             $this->getSuperfluousParameterErrors()
         );
     }
@@ -113,40 +114,40 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     {
         $errors = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $errors = array_merge($errors, $this->getVarTagMissingErrorsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $errors = array_merge($errors, $this->getVarTagMissingErrorsForStructure($classlike));
         }
 
         return $errors;
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getVarTagMissingErrorsForStructure(array $structure): array
+    protected function getVarTagMissingErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
-        foreach ($structure['properties'] as $property) {
-            $errors = array_merge($errors, $this->getVarTagMissingErrorsForProperty($structure, $property));
+        foreach ($classlike['properties'] as $property) {
+            $errors = array_merge($errors, $this->getVarTagMissingErrorsForProperty($classlike, $property));
         }
 
-        foreach ($structure['constants'] as $constant) {
-            $errors = array_merge($errors, $this->getVarTagMissingErrorsForClassConstant($structure, $constant));
+        foreach ($classlike['constants'] as $constant) {
+            $errors = array_merge($errors, $this->getVarTagMissingErrorsForClassConstant($classlike, $constant));
         }
 
         return $errors;
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $property
      *
      * @return array
      */
-    protected function getVarTagMissingErrorsForProperty(array $structure, array $property): array
+    protected function getVarTagMissingErrorsForProperty(array $classlike, array $property): array
     {
         if (!$property['docComment']) {
             return [];
@@ -168,12 +169,12 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $constant
      *
      * @return array
      */
-    protected function getVarTagMissingErrorsForClassConstant(array $structure, array $constant): array
+    protected function getVarTagMissingErrorsForClassConstant(array $classlike, array $constant): array
     {
         if (!$constant['docComment']) {
             return [];
@@ -201,8 +202,8 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     {
         $errors = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $errors = array_merge($errors, $this->getParameterMissingErrorsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $errors = array_merge($errors, $this->getParameterMissingErrorsForStructure($classlike));
         }
 
         foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
@@ -213,28 +214,28 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getParameterMissingErrorsForStructure(array $structure): array
+    protected function getParameterMissingErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
-        foreach ($structure['methods'] as $method) {
-            $errors = array_merge($errors, $this->getParameterMissingErrorsForMethod($structure, $method));
+        foreach ($classlike['methods'] as $method) {
+            $errors = array_merge($errors, $this->getParameterMissingErrorsForMethod($classlike, $method));
         }
 
         return $errors;
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $method
      *
      * @return array
      */
-    protected function getParameterMissingErrorsForMethod(array $structure, array $method): array
+    protected function getParameterMissingErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getParameterMissingErrorsForGlobalFunction($method);
     }
@@ -288,8 +289,8 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     {
         $errors = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForStructure($classlike));
         }
 
         foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
@@ -300,28 +301,28 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getParameterTypeMismatchErrorsForStructure(array $structure): array
+    protected function getParameterTypeMismatchErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
-        foreach ($structure['methods'] as $method) {
-            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForMethod($structure, $method));
+        foreach ($classlike['methods'] as $method) {
+            $errors = array_merge($errors, $this->getParameterTypeMismatchErrorsForMethod($classlike, $method));
         }
 
         return $errors;
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $method
      *
      * @return array
      */
-    protected function getParameterTypeMismatchErrorsForMethod(array $structure, array $method): array
+    protected function getParameterTypeMismatchErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getParameterTypeMismatchErrorsForGlobalFunction($method);
     }
@@ -339,7 +340,7 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
 
         $result = $this->docblockParser->parse(
             $globalFunction['docComment'],
-            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE, DocblockParser::RETURN_VALUE],
             $globalFunction['name']
         );
 
@@ -382,12 +383,118 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
+    protected function getReturnTypeMismatchErrors(): array
+    {
+        $errors = [];
+
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $errors = array_merge($errors, $this->getReturnTypeMismatchErrorsForStructure($classlike));
+        }
+
+        foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
+            $errors = array_merge($errors, $this->getReturnTypeMismatchErrorsForGlobalFunction($globalFunction));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $classlike
+     *
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrorsForStructure(array $classlike): array
+    {
+        $errors = [];
+
+        foreach ($classlike['methods'] as $method) {
+            $errors = array_merge($errors, $this->getReturnTypeMismatchErrorsForMethod($classlike, $method));
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @param array $classlike
+     * @param array $method
+     *
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrorsForMethod(array $classlike, array $method): array
+    {
+        return $this->getReturnTypeMismatchErrorsForGlobalFunction($method);
+    }
+
+    /**
+     * @param array $globalFunction
+     *
+     * @return array
+     */
+    protected function getReturnTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
+    {
+        if (!$globalFunction['docComment']) {
+            return [];
+        }
+
+        $result = $this->docblockParser->parse(
+            $globalFunction['docComment'],
+            [DocblockParser::DESCRIPTION, DocblockParser::PARAM_TYPE, DocblockParser::RETURN_VALUE],
+            $globalFunction['name']
+        );
+
+        if ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
+            return [];
+        }
+
+        if (!$globalFunction['returnTypeHint'] || !$result['return']) {
+            return [];
+        }
+
+        $isNullable = false;
+        $type = $globalFunction['returnTypeHint'];
+
+        if ($type !== null && mb_substr($type, 0, 1) === '?') {
+            $type = mb_substr($type, 1);
+            $isNullable = true;
+        }
+
+        $isTypeConformant = $this->parameterDocblockTypeSemanticEqualityChecker->isEqual(
+            [
+                'type'        => $type,
+                'isNullable'  => $isNullable,
+                'isVariadic'  => false,
+                'isReference' => false
+            ],
+            [
+                'type'        => $result['return']['type'],
+                'isReference' => false
+            ],
+            $this->file,
+            $globalFunction['startLine']
+        );
+
+        if ($isTypeConformant) {
+            return [];
+        }
+
+        return [
+            [
+                'message' => "Function docblock @return is not equivalent to actual return type.",
+                'start'   => $globalFunction['startPosName'],
+                'end'     => $globalFunction['endPosName']
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
     protected function getSuperfluousParameterErrors(): array
     {
         $errors = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForStructure($classlike));
         }
 
         foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
@@ -398,28 +505,28 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getSuperfluousParameterErrorsForStructure(array $structure): array
+    protected function getSuperfluousParameterErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
-        foreach ($structure['methods'] as $method) {
-            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForMethod($structure, $method));
+        foreach ($classlike['methods'] as $method) {
+            $errors = array_merge($errors, $this->getSuperfluousParameterErrorsForMethod($classlike, $method));
         }
 
         return $errors;
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $method
      *
      * @return array
      */
-    protected function getSuperfluousParameterErrorsForMethod(array $structure, array $method): array
+    protected function getSuperfluousParameterErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getSuperfluousParameterErrorsForGlobalFunction($method);
     }
@@ -480,8 +587,8 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     {
         $warnings = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $warnings = array_merge($warnings, $this->getDeprecatedCategoryTagWarningsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $warnings = array_merge($warnings, $this->getDeprecatedCategoryTagWarningsForStructure($classlike));
         }
 
         return $warnings;
@@ -494,8 +601,8 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     {
         $warnings = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $warnings = array_merge($warnings, $this->getDeprecatedSubpackageTagWarningsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $warnings = array_merge($warnings, $this->getDeprecatedSubpackageTagWarningsForStructure($classlike));
         }
 
         return $warnings;
@@ -508,23 +615,23 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     {
         $warnings = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $warnings = array_merge($warnings, $this->getDeprecatedLinkTagWarningsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $warnings = array_merge($warnings, $this->getDeprecatedLinkTagWarningsForStructure($classlike));
         }
 
         return $warnings;
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getDeprecatedCategoryTagWarningsForStructure(array $structure): array
+    protected function getDeprecatedCategoryTagWarningsForStructure(array $classlike): array
     {
-        $result = $this->docblockParser->parse($structure['docComment'], [
+        $result = $this->docblockParser->parse($classlike['docComment'], [
             DocblockParser::CATEGORY
-        ], $structure['name']);
+        ], $classlike['name']);
 
         if (!$result['category']) {
             return [];
@@ -533,22 +640,22 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         return [
             [
                 'message' => "Classlike docblock contains deprecated @category tag.",
-                'start'   => $structure['startPosName'],
-                'end'     => $structure['endPosName']
+                'start'   => $classlike['startPosName'],
+                'end'     => $classlike['endPosName']
             ]
         ];
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getDeprecatedSubpackageTagWarningsForStructure(array $structure): array
+    protected function getDeprecatedSubpackageTagWarningsForStructure(array $classlike): array
     {
-        $result = $this->docblockParser->parse($structure['docComment'], [
+        $result = $this->docblockParser->parse($classlike['docComment'], [
             DocblockParser::SUBPACKAGE
-        ], $structure['name']);
+        ], $classlike['name']);
 
         if (!$result['subpackage']) {
             return [];
@@ -557,24 +664,24 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         return [
             [
                 'message' => "Classlike docblock contains deprecated @subpackage tag.",
-                'start'   => $structure['startPosName'],
-                'end'     => $structure['endPosName']
+                'start'   => $classlike['startPosName'],
+                'end'     => $classlike['endPosName']
             ]
         ];
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      *
      * @see https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated
      */
-    protected function getDeprecatedLinkTagWarningsForStructure(array $structure): array
+    protected function getDeprecatedLinkTagWarningsForStructure(array $classlike): array
     {
-        $result = $this->docblockParser->parse($structure['docComment'], [
+        $result = $this->docblockParser->parse($classlike['docComment'], [
             DocblockParser::LINK
-        ], $structure['name']);
+        ], $classlike['name']);
 
         if (!$result['link']) {
             return [];
@@ -583,8 +690,8 @@ class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         return [
             [
                 'message' => "Classlike docblock contains deprecated @link tag. Use @see instead.",
-                'start'   => $structure['startPosName'],
-                'end'     => $structure['endPosName']
+                'start'   => $classlike['startPosName'],
+                'end'     => $classlike['endPosName']
             ]
         ];
     }

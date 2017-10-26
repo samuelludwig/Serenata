@@ -22,7 +22,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ConstFetch} node.
  */
-class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface
@@ -57,7 +57,7 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\ConstFetch) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -68,7 +68,7 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\ConstFetch $node
-     * @param string               $file
+     * @param Structures\File      $file
      * @param string               $code
      * @param int                  $offset
      *
@@ -76,7 +76,7 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromConstFetchNode(
         Node\Expr\ConstFetch $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {
@@ -89,7 +89,7 @@ class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         }
 
         $filePosition = new FilePosition(
-            $file,
+            $file->getPath(),
             new Position(SourceCodeHelpers::calculateLineByOffset($code, $offset), 0)
         );
 

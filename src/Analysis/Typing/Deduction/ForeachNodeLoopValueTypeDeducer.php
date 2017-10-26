@@ -6,12 +6,14 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of the loop value of a {@see Node\Stmt\Foreach_} node.
  */
-class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
+final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -36,7 +38,7 @@ class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Stmt\Foreach_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -47,7 +49,7 @@ class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Stmt\Foreach_ $node
-     * @param string             $file
+     * @param Structures\File    $file
      * @param string             $code
      * @param int                $offset
      *
@@ -55,7 +57,7 @@ class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function deduceTypesFromForeachNode(
         Node\Stmt\Foreach_ $node,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): array {

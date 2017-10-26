@@ -6,12 +6,14 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Parsing;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Parsing\Node\Keyword\Parent_} node.
  */
-class ParentNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ParentNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -29,7 +31,7 @@ class ParentNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Parsing\Node\Keyword\Parent_) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -39,13 +41,13 @@ class ParentNodeTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromParent(string $file, string $code, int $offset): array
+    protected function deduceTypesFromParent(Structures\File $file, string $code, int $offset): array
     {
         $node = new Node\Name('parent');
 

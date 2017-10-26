@@ -13,7 +13,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Node visitor that fetches usages of class, trait, and interface names from docblocks.
  */
-class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
+final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var TypeAnalyzer

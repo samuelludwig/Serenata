@@ -22,30 +22,24 @@ interface StorageInterface
      */
     public function getAccessModifiers(): array;
 
-     /**
-      * @throws StorageException
-      *
-      * @return Structures\StructureType[]
-      */
-    public function getStructureTypes(): array;
-
     /**
      * @param string $fqcn
      *
      * @throws StorageException
      *
-     * @return Structures\Structure|null
+     * @return Structures\Classlike|null
      */
-    public function findStructureByFqcn(string $fqcn): ?Structures\Structure;
+    public function findStructureByFqcn(string $fqcn): ?Structures\Classlike;
 
     /**
      * @param string $path
      *
      * @throws StorageException
+     * @throws FileNotFoundStorageException
      *
-     * @return Structures\File|null
+     * @return Structures\File
      */
-    public function findFileByPath(string $path): ?Structures\File;
+    public function getFileByPath(string $path): Structures\File;
 
     /**
      * @param object $entity

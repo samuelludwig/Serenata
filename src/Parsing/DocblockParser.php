@@ -346,7 +346,7 @@ class DocblockParser
 
         while ($partCount--) {
             if (!empty($parts)) {
-                $segments[] = $this->sanitizeText(array_shift($parts));
+                $segments[] = array_shift($parts);
             } else {
                 $segments[] = null;
             }
@@ -378,7 +378,7 @@ class DocblockParser
 
             if ($type) {
                 $return = [
-                    'type'        => $this->docblockTypeParser->parse($type),
+                    'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                     'description' => $description
                 ];
             }
@@ -417,6 +417,9 @@ class DocblockParser
                 if (empty($type) || empty($variableName)) {
                     continue;
                 }
+
+                $type = $this->sanitizeText($type);
+                $variableName = $this->sanitizeText($variableName);
 
                 $isVariadic = false;
                 $isReference = false;
@@ -466,9 +469,13 @@ class DocblockParser
                     continue;
                 }
 
+                $varType = $this->sanitizeText($varType);
+
                 $type = $this->docblockTypeParser->parse($varType);
 
                 if ($varName) {
+                    $varName = $this->sanitizeText($varName);
+
                     if (mb_substr($varName, 0, 1) === '$') {
                         // Example: "@var DateTime $foo My description". The tag includes the name of the property it
                         // documents, it must match the property we're fetching documentation about.
@@ -533,7 +540,7 @@ class DocblockParser
 
                 if ($type) {
                     $throws[] = [
-                        'type'        => $type,
+                        'type'        => $this->sanitizeText($type),
                         'description' => $description
                     ];
                 }
@@ -565,7 +572,7 @@ class DocblockParser
                     $partCount = count($match);
 
                     if ($partCount == 5) {
-                        $type = $match[2];
+                        $type = $match[2] ?: 'void';
                         $methodSignature = $match[3];
                         $description = $match[4];
                     } else if ($partCount == 4) {
@@ -573,13 +580,7 @@ class DocblockParser
                             $type = 'void';
                             $methodSignature = $match[3];
                             $description = null;
-                        } elseif (mb_strpos($match[2], '(') != false) {
-                            // The return type was omitted, e.g. '@method foo() My description.', in which case the
-                            // method returns 'void'.
-                            $type = 'void';
-                            $methodSignature = $match[2];
-                            $description = $match[3];
-                        } else {
+                        } elseif (mb_strpos($match[2], '(') === false) {
                             // The description was omitted.
                             $type = $match[2];
                             $methodSignature = $match[3];
@@ -609,21 +610,10 @@ class DocblockParser
                                 $parameterName = $match[2];
                                 $defaultValue = $match[3];
                             } elseif ($partCount == 3) {
-                                if (!empty($match[1]) && $match[1][0] == '$') {
-                                    $parameterType = null;
-                                    $parameterName = $match[1];
-                                    $defaultValue = $match[2];
-                                } else {
-                                    $parameterType = $match[1] ?: null;
-                                    $parameterName = $match[2];
-                                    $defaultValue = null;
-                                }
-                            } /*elseif ($partCount == 2) {
-                                // NOTE: Caught by $partCount == 3 (the type will be an empty string).
-                                $parameterType = null;
-                                $parameterName = $match[1];
+                                $parameterType = $match[1] ?: null;
+                                $parameterName = $match[2];
                                 $defaultValue = null;
-                            } */
+                            }
 
                             $data = [
                                 'type'         => $parameterType,
@@ -687,8 +677,12 @@ class DocblockParser
                     list($type, $variableName, $description) = $this->filterParameterTag($tag, 3);
                 }
 
-                $properties[$variableName] = [
-                    'type'        => $type,
+                if (!$type || !$variableName) {
+                    continue;
+                }
+
+                $properties[$this->sanitizeText($variableName)] = [
+                    'type'        => $this->sanitizeText($type),
                     'isStatic'    => ($staticKeyword === 'static'),
                     'description' => $description
                 ];
@@ -778,7 +772,7 @@ class DocblockParser
         }
 
         return [
-            'subpackage' => $name
+            'subpackage' => $name ? $this->sanitizeText($name) : null
         ];
     }
 
@@ -796,10 +790,12 @@ class DocblockParser
         if (isset($tags[static::LINK])) {
             list($uri, $description) = $this->filterParameterTag($tags[static::LINK][0], 2);
 
-            $links[] = [
-                'uri'         => $uri,
-                'description' => $description
-            ];
+            if ($uri) {
+                $links[] = [
+                    'uri'         => $this->sanitizeText($uri),
+                    'description' => $description
+                ];
+            }
         }
 
         return [
@@ -865,8 +861,8 @@ class DocblockParser
 
         return [
             'descriptions' => [
-                'short' => $this->sanitizeText($summary),
-                'long'  => $this->sanitizeText($description)
+                'short' => trim($summary, "\n"),
+                'long'  => trim($description, "\n")
             ]
         ];
     }

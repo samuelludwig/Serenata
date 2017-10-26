@@ -2,72 +2,77 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
+use PhpIntegrator\Analysis\NamespaceListProviderInterface;
+use PhpIntegrator\Analysis\FileNamespaceListProviderInterface;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
+use PhpIntegrator\Indexing\StorageInterface;
 
-use PhpIntegrator\Utility\NamespaceData;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available namespace.
  */
-class NamespaceListCommand extends AbstractCommand
+final class NamespaceListCommand extends AbstractCommand
 {
     /**
-     * @var ManagerRegistry
+     * @var StorageInterface
      */
-    private $managerRegistry;
+    private $storage;
 
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @var NamespaceListProviderInterface
      */
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
-        $this->managerRegistry = $managerRegistry;
+    private $namespaceListProvider;
+
+    /**
+     * @var FileNamespaceListProviderInterface
+     */
+    private $fileNamespaceListProvider;
+
+    /**
+     * @param StorageInterface                   $storage
+     * @param NamespaceListProviderInterface     $namespaceListProvider
+     * @param FileNamespaceListProviderInterface $fileNamespaceListProvider
+     */
+    public function __construct(
+        StorageInterface $storage,
+        NamespaceListProviderInterface $namespaceListProvider,
+        FileNamespaceListProviderInterface $fileNamespaceListProvider
+    ) {
+        $this->storage = $storage;
+        $this->namespaceListProvider = $namespaceListProvider;
+        $this->fileNamespaceListProvider = $fileNamespaceListProvider;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $file = isset($arguments['file']) ? $arguments['file'] : null;
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        $list = $this->getNamespaceList($file);
-
-        return $list;
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getNamespaceList($arguments['file'] ?? null)
+        );
     }
 
     /**
-     * @param string|null $file
+     * @param string|null $filePath
      *
      * @return array
      */
-    public function getNamespaceList(?string $file = null): array
+    public function getNamespaceList(?string $filePath = null): array
     {
         $criteria = [];
 
-        if ($file !== null) {
-            $fileEntity = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
-                'path' => $file
-            ]);
+        if ($filePath !== null) {
+            $file = $this->storage->getFileByPath($filePath);
 
-            if ($fileEntity === null) {
-                throw new InvalidArgumentsException("File \"{$file}\" is not present in the index");
-            }
-
-            $criteria['file'] = $fileEntity;
+            return $this->fileNamespaceListProvider->getAllForFile($file);
         }
 
-        $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy($criteria);
-
-        return array_map(function (Structures\FileNamespace $namespace) {
-            return [
-                'name'      => $namespace->getName(),
-                'startLine' => $namespace->getStartLine(),
-                'endLine'   => $namespace->getEndLine()
-            ];
-        }, $namespaces);
+        return $this->namespaceListProvider->getAll();
     }
 }

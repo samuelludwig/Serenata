@@ -4,12 +4,14 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Stmt\Expression} node.
  */
-class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -27,7 +29,7 @@ class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Stmt\Expression) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -38,14 +40,18 @@ class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Stmt\Expression $node
-     * @param string               $file
+     * @param Structures\File      $file
      * @param string               $code
      * @param int                  $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpressionNode(Node\Stmt\Expression $node, string $file, string $code, int $offset): array
-    {
+    protected function deduceTypesFromExpressionNode(
+        Node\Stmt\Expression $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): array {
         return $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $offset);
     }
 }

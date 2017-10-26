@@ -10,6 +10,8 @@ use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Parsing\ParserTokenHelper;
 
 use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
@@ -73,9 +75,9 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param string $file
-     * @param string $code
-     * @param int    $position
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $position
      *
      * @throws UnexpectedValueException when there is no signature help to be retrieved for the location.
      * @throws UnexpectedValueException when a node type is encountered that this method doesn't know how to handle.
@@ -83,7 +85,7 @@ class SignatureHelpRetriever
      * @return SignatureHelp
      */
     public function get(
-        string $file,
+        Structures\File $file,
         string $code,
         int $position
     ): SignatureHelp {
@@ -125,16 +127,16 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node   $node
-     * @param string $file
-     * @param string $code
-     * @param int    $position
+     * @param Node            $node
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $position
      *
      * @throws UnexpectedValueException
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelpForNode(Node $node, string $file, string $code, int $position): SignatureHelp
+    protected function getSignatureHelpForNode(Node $node, Structures\File $file, string $code, int $position): SignatureHelp
     {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
@@ -148,10 +150,7 @@ class SignatureHelpRetriever
             throw new UnexpectedValueException('No node supporting signature help found at location ' . $position);
         }
 
-        $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
-            $node,
-            Node\Arg::class
-        );
+        $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Arg::class);
 
         if ($argumentNode && $argumentNode->getAttribute('parent') !== $invocationNode) {
             // Usually the invocationNode will be the parent, but in case we're on the name of a nested function call,
@@ -165,14 +164,7 @@ class SignatureHelpRetriever
             } elseif ($invocationNode instanceof Node\Expr\New_) {
                 $nodeNameEndFilePosition = $invocationNode->class->getAttribute('endFilePos') + 1;
             } elseif ($invocationNode instanceof Node\Expr\MethodCall || $invocationNode instanceof Node\Expr\StaticCall) {
-                // FIXME: This is a best effort fix, it may result in problems when the argument contain leading or
-                // trailing spaces and the cursor is on them. As long as php-parser doesn't have name nodes instead of
-                // strings, this can't be fixed (hopefully that'll land in 4.0).
-                if ($position === $invocationNode->getAttribute('endFilePos')) {
-                    $nodeNameEndFilePosition = $position - 1;
-                } else {
-                    $nodeNameEndFilePosition = $position;
-                }
+                $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } else {
                 throw new LogicException(
                     'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
@@ -273,11 +265,11 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node   $node
-     * @param int    $argumentIndex
-     * @param string $file
-     * @param string $code
-     * @param int    $offset
+     * @param Node            $node
+     * @param int             $argumentIndex
+     * @param Structures\File $file
+     * @param string          $code
+     * @param int             $offset
      *
      * @throws UnexpectedValueException
      *
@@ -286,7 +278,7 @@ class SignatureHelpRetriever
     protected function generateResponseFor(
         Node $node,
         int $argumentIndex,
-        string $file,
+        Structures\File $file,
         string $code,
         int $offset
     ): SignatureHelp {
@@ -324,6 +316,8 @@ class SignatureHelpRetriever
      * @param array $functionInfo
      * @param int   $argumentIndex
      *
+     * @throws UnexpectedValueException
+     *
      * @return SignatureHelp
      */
     protected function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
@@ -336,24 +330,33 @@ class SignatureHelpRetriever
 
         $signature = new SignatureInformation($name, $documentation, $parameters);
 
-        return new SignatureHelp([$signature], 0,$argumentIndex);
+        return new SignatureHelp([$signature], 0, $argumentIndex);
     }
 
     /**
      * @param array $functionInfo
      * @param int   $argumentIndex
      *
-     * @return int
+     * @throws UnexpectedValueException
+     *
+     * @return int|null
      */
-    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): int
+    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): ?int
     {
         $parameterCount = count($functionInfo['parameters']);
 
-        if ($argumentIndex >= $parameterCount &&
-            $parameterCount > 0 &&
-            $functionInfo['parameters'][$parameterCount - 1]['isVariadic']
-        ) {
-            return $parameterCount - 1;
+        if ($argumentIndex >= $parameterCount) {
+            if ($argumentIndex === 0 && $parameterCount === 0) {
+                // First "argument" here isn't actually an argument, so we return null as index so we can still show
+                // signature help for functions without arguments.
+                return null;
+            } elseif ($parameterCount > 0 && $functionInfo['parameters'][$parameterCount - 1]['isVariadic']) {
+                return $parameterCount - 1;
+            } else {
+                throw new UnexpectedValueException(
+                    "Argument index {$argumentIndex} is out of bounds, only {$parameterCount} parameters supported"
+                );
+            }
         }
 
         return $argumentIndex;

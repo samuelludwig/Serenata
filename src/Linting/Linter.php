@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Linting;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Utility\SourceCodeHelpers;
 
 use PhpParser\Error;
@@ -85,13 +87,13 @@ class Linter
     }
 
     /**
-     * @param string          $file
+     * @param Structures\File $file
      * @param string          $code
      * @param LintingSettings $settings
      *
      * @return array
      */
-    public function lint(string $file, string $code, LintingSettings $settings): array
+    public function lint(Structures\File $file, string $code, LintingSettings $settings): array
     {
         // Parse the file to fetch the information we need.
         $nodes = [];
@@ -154,19 +156,19 @@ class Linter
     }
 
     /**
-     * @param string          $file
+     * @param Structures\File $file
      * @param string          $code
      * @param LintingSettings $settings
      *
      * @return AnalyzerInterface[]
      */
-    protected function getAnalyzersForRequest(string $file, string $code, LintingSettings $settings): array
+    protected function getAnalyzersForRequest(Structures\File $file, string $code, LintingSettings $settings): array
     {
         /** @var AnalyzerInterface[] $analyzers */
         $analyzers = [];
 
         if ($settings->getLintUnknownClasses()) {
-            $analyzers[] = $this->unknownClassAnalyzerFactory->create($file);
+            $analyzers[] = $this->unknownClassAnalyzerFactory->create($file->getPath());
         }
 
         if ($settings->getLintUnknownMembers()) {
@@ -178,7 +180,7 @@ class Linter
         }
 
         if ($settings->getLintDocblockCorrectness()) {
-            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file, $code);
+            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file->getPath(), $code);
         }
 
         if ($settings->getLintUnknownGlobalConstants()) {

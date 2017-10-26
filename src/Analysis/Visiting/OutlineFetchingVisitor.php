@@ -14,12 +14,12 @@ use PhpParser\NodeVisitorAbstract;
  * Node visitor that fetches the outline of a file, creating a list of structural elements (classes, interfaces, ...)
  * with their direct methods, properties, constants, and so on.
  */
-class OutlineFetchingVisitor extends NodeVisitorAbstract
+final class OutlineFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array
      */
-    private $structures = [];
+    private $classlikes = [];
 
     /**
      * @var array
@@ -81,7 +81,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\Class_) {
             if ($node->isAnonymous()) {
                 // Ticket #45 - Skip PHP 7 anonymous classes.
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return;
             }
 
             $this->parseClassNode($node);
@@ -117,14 +117,14 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
-        $this->structures[$fqcn] = [
+        $this->classlikes[$fqcn] = [
             'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'class',
             'startLine'      => $node->getLine(),
             'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
+            'startPosName'   => $node->name->getAttribute('startFilePos') ? $node->name->getAttribute('startFilePos') : null,
+            'endPosName'     => $node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null,
             'isAbstract'     => $node->isAbstract(),
             'isFinal'        => $node->isFinal(),
             'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
@@ -158,14 +158,14 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
-        $this->structures[$fqcn] = [
+        $this->classlikes[$fqcn] = [
             'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'interface',
             'startLine'      => $node->getLine(),
             'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
+            'startPosName'   => $node->name->getAttribute('startFilePos') ? $node->name->getAttribute('startFilePos') : null,
+            'endPosName'     => $node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null,
             'parents'        => $extendedInterfaces,
             'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
             'traits'         => [],
@@ -190,14 +190,14 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
-        $this->structures[$fqcn] = [
+        $this->classlikes[$fqcn] = [
             'name'           => $node->name->name,
             'fqcn'           => $fqcn,
             'type'           => 'trait',
             'startLine'      => $node->getLine(),
             'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
+            'startPosName'   => $node->name->getAttribute('startFilePos') ? $node->name->getAttribute('startFilePos') : null,
+            'endPosName'     => $node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null,
             'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
             'methods'        => [],
             'properties'     => [],
@@ -215,13 +215,13 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->traits as $traitName) {
-            $this->structures[$fqcn]['traits'][] =
+            $this->classlikes[$fqcn]['traits'][] =
                 NodeHelpers::fetchClassName($traitName->getAttribute('resolvedName'));
         }
 
         foreach ($node->adaptations as $adaptation) {
             if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
-                $this->structures[$fqcn]['traitAliases'][] = [
+                $this->classlikes[$fqcn]['traitAliases'][] = [
                     'name'                       => $adaptation->method,
                     'alias'                      => $adaptation->newName,
                     'trait'                      => $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null,
@@ -231,7 +231,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
                     'isInheritingAccessModifier' => ($adaptation->newModifier === null)
                 ];
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
-                $this->structures[$fqcn]['traitPrecedences'][] = [
+                $this->classlikes[$fqcn]['traitPrecedences'][] = [
                     'name'  => $adaptation->method,
                     'trait' => NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'))
                 ];
@@ -249,12 +249,12 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->props as $property) {
-            $this->structures[$fqcn]['properties'][$property->name->name] = [
+            $this->classlikes[$fqcn]['properties'][$property->name->name] = [
                 'name'             => $property->name->name,
                 'startLine'        => $property->getLine(),
                 'endLine'          => $property->getAttribute('endLine'),
-                'startPosName'     => $property->getAttribute('startFilePos') ? $property->getAttribute('startFilePos') : null,
-                'endPosName'       => $property->getAttribute('startFilePos') ? ($property->getAttribute('startFilePos') + mb_strlen($property->name) + 1) : null,
+                'startPosName'     => $property->name->getAttribute('startFilePos') ? $property->name->getAttribute('startFilePos') : null,
+                'endPosName'       => $property->name->getAttribute('endFilePos') ? ($property->name->getAttribute('endFilePos') + 1) : null,
                 'isPublic'         => $node->isPublic(),
                 'isPrivate'        => $node->isPrivate(),
                 'isStatic'         => $node->isStatic(),
@@ -304,7 +304,7 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
-        $this->structures[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
+        $this->classlikes[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
             'isPublic'       => $node->isPublic(),
             'isPrivate'      => $node->isPrivate(),
             'isProtected'    => $node->isProtected(),
@@ -367,28 +367,33 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
 
         $localType = null;
         $resolvedType = null;
+        $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
             $nodeType = $nodeType->type;
+            $returnTypeHint = '?';
         }
 
         if ($nodeType instanceof Node\Name) {
             $localType = NodeHelpers::fetchClassName($nodeType);
             $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
+            $returnTypeHint .= $resolvedType;
         } elseif ($nodeType instanceof Node\Identifier) {
             $localType = $nodeType->name;
             $resolvedType = $nodeType->name;
+            $returnTypeHint .= $resolvedType;
         }
 
         return [
             'name'                 => $node->name->name,
             'startLine'            => $node->getLine(),
             'endLine'              => $node->getAttribute('endLine'),
-            'startPosName'         => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos') : null,
-            'endPosName'           => $node->getAttribute('startFilePos') ? ($node->getAttribute('startFilePos') + 1) : null,
+            'startPosName'         => $node->name->getAttribute('startFilePos') ? $node->name->getAttribute('startFilePos') : null,
+            'endPosName'           => $node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null,
             'returnType'           => $localType,
             'fullReturnType'       => $resolvedType,
+            'returnTypeHint'       => $returnTypeHint,
             'isReturnTypeNullable' => ($node->getReturnType() instanceof Node\NullableType),
             'parameters'           => $parameters,
             'docComment'           => $node->getDocComment() ? $node->getDocComment()->getText() : null
@@ -405,12 +410,12 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
         foreach ($node->consts as $const) {
-            $this->structures[$fqcn]['constants'][$const->name->name] = [
+            $this->classlikes[$fqcn]['constants'][$const->name->name] = [
                 'name'             => $const->name->name,
                 'startLine'        => $const->getLine(),
                 'endLine'          => $const->getAttribute('endLine'),
-                'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
-                'endPosName'       => $const->getAttribute('startFilePos') ? ($const->getAttribute('startFilePos') + mb_strlen($const->name)) : null,
+                'startPosName'     => $const->name->getAttribute('startFilePos') ? $const->name->getAttribute('startFilePos') : null,
+                'endPosName'       => $const->name->getAttribute('endFilePos') ? ($const->name->getAttribute('endFilePos') + 1) : null,
                 'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
                 'isPublic'         => $node->isPublic(),
                 'isPrivate'        => $node->isPrivate(),
@@ -443,8 +448,8 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
                 'fqcn'             => $fqcn,
                 'startLine'        => $const->getLine(),
                 'endLine'          => $const->getAttribute('endLine'),
-                'startPosName'     => $const->getAttribute('startFilePos') ? $const->getAttribute('startFilePos') : null,
-                'endPosName'       => $const->getAttribute('endFilePos') ? $const->getAttribute('endFilePos') : null,
+                'startPosName'     => $const->name->getAttribute('startFilePos') ? $const->name->getAttribute('startFilePos') : null,
+                'endPosName'       => $const->name->getAttribute('endFilePos') ? $const->name->getAttribute('endFilePos') : null,
                 'docComment'       => $node->getDocComment() ? $node->getDocComment()->getText() : null,
                 'defaultValueNode' => $const->value,
 
@@ -513,9 +518,9 @@ class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return array
      */
-    public function getStructures(): array
+    public function getClasslikes(): array
     {
-        return $this->structures;
+        return $this->classlikes;
     }
 
     /**

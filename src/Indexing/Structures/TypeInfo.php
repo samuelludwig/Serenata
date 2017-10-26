@@ -3,7 +3,7 @@
 namespace PhpIntegrator\Indexing\Structures;
 
 /**
- * Represents a structure type.
+ * Represents information about a type that a structural element can have.
  */
 class TypeInfo
 {

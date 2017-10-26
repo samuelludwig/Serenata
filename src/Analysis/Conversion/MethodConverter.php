@@ -6,26 +6,28 @@ use ArrayAccess;
 
 use PhpIntegrator\Indexing\Structures;
 
+use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+
 /**
  * Converts raw method data from the index to more useful data.
  */
-class MethodConverter extends FunctionConverter
+final class MethodConverter extends FunctionConverter
 {
     /**
-     * @param Structures\Function_ $method
-     * @param ArrayAccess          $class
+     * @param Structures\Method $method
+     * @param ArrayAccess       $class
      *
      * @return array
      */
-    public function convertForClass(Structures\Function_ $method, ArrayAccess $class): array
+    public function convertForClass(Structures\Method $method, ArrayAccess $class): array
     {
         $data = parent::convert($method);
 
         return array_merge($data, [
             'isMagic'         => $method->getIsMagic(),
-            'isPublic'        => $method->getAccessModifier()->getName() === 'public',
-            'isProtected'     => $method->getAccessModifier()->getName() === 'protected',
-            'isPrivate'       => $method->getAccessModifier()->getName() === 'private',
+            'isPublic'        => $method->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,
+            'isProtected'     => $method->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_,
+            'isPrivate'       => $method->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_,
             'isStatic'        => $method->getIsStatic(),
             'isAbstract'      => $method->getIsAbstract(),
             'isFinal'         => $method->getIsFinal(),

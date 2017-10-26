@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
@@ -37,15 +39,15 @@ class PropertyFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\PropertyFetch $node
-     * @param string               $file
-     * @param string               $code
-     * @param int                  $offset
+     * @param Structures\File         $file
+     * @param string                  $code
+     * @param int                     $offset
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    public function generate(Node\Expr\PropertyFetch $node, string $file, string $code, int $offset): string
+    public function generate(Node\Expr\PropertyFetch $node, Structures\File $file, string $code, int $offset): string
     {
         $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $file, $code, $offset);
 

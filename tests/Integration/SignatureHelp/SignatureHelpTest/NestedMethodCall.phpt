@@ -17,6 +17,6 @@ class B
     public function bar()
     {
         $b = new B();
-        $b->foo($this->bar());
+        $b->foo( $this->bar(  ) );
     }
 }

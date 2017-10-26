@@ -12,7 +12,7 @@ use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryIn
 /**
  * Factory that creates instances of a {@see SpecialNameIgnoringPositionalNameResolver}.
  */
-class SpecialNameIgnoringPositionalNameResolverFactory implements StructureAwareNameResolverFactoryInterface
+final class SpecialNameIgnoringPositionalNameResolverFactory implements StructureAwareNameResolverFactoryInterface
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface

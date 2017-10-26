@@ -2,38 +2,37 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
+use PhpIntegrator\Indexing\IndexFilePruner;
 
-use PhpIntegrator\Indexing\ProjectIndexer;
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that vacuums a project.
  *
  * Vacuuming includes cleaning up the index, i.e. removing files that no longer exist.
  */
-class VacuumCommand extends AbstractCommand
+final class VacuumCommand extends AbstractCommand
 {
     /**
-     * @var ProjectIndexer
+     * @var IndexFilePruner
      */
-    private $projectIndexer;
+    private $indexFilePruner;
 
     /**
-     * @param ProjectIndexer $projectIndexer
+     * @param IndexFilePruner $indexFilePruner
      */
-    public function __construct(ProjectIndexer $projectIndexer)
+    public function __construct(IndexFilePruner $indexFilePruner)
     {
-        $this->projectIndexer = $projectIndexer;
+        $this->indexFilePruner = $indexFilePruner;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $success = $this->vacuum();
-
-        return $success;
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->vacuum());
     }
 
     /**
@@ -41,7 +40,7 @@ class VacuumCommand extends AbstractCommand
      */
     public function vacuum(): bool
     {
-        $this->projectIndexer->pruneRemovedFiles();
+        $this->indexFilePruner->prune();
 
         return true;
     }

@@ -10,7 +10,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Node visitor that fetches namespaces and their use statements.
  */
-class UseStatementFetchingVisitor extends NodeVisitorAbstract
+final class UseStatementFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array
@@ -37,7 +37,7 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
         $this->namespaces[0] = [
             'name'          => null,
             'startLine'     => 0,
-            'endLine'       => null,
+            'endLine'       => $this->lastLine + 1,
             'useStatements' => []
         ];
 
@@ -57,12 +57,12 @@ class UseStatementFetchingVisitor extends NodeVisitorAbstract
             $this->registerImportNode($node);
         }
 
-        if (isset($this->namespaces[$this->lastNamespaceIndex])) {
-            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = max(
-                $this->namespaces[$this->lastNamespaceIndex]['endLine'],
-                $node->getAttribute('endLine') + 1
-            );
-        }
+        // if (isset($this->namespaces[$this->lastNamespaceIndex])) {
+        //     $this->namespaces[$this->lastNamespaceIndex]['endLine'] = max(
+        //         $this->namespaces[$this->lastNamespaceIndex]['endLine'],
+        //         $node->getAttribute('endLine') + 1
+        //     );
+        // }
     }
 
     /**

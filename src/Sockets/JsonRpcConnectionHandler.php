@@ -10,7 +10,7 @@ use React\Socket\Connection;
  * Handles socket connections that send JSON-RPC requests via a simple HTTP-like protocol and dispatches the requests
  * to a handler.
  */
-class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
+final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 {
     /**
      * @var string
@@ -141,26 +141,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             $this->request['bytesRead'] += $bytesRead;
 
             if ($this->request['bytesRead'] == $this->request['length']) {
-                $jsonRpcRequest = null;
-
-                try {
-                    $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
-                } catch (UnexpectedValueException $e) {
-                    $jsonRpcRequest = null;
-                }
-
-                if ($jsonRpcRequest !== null) {
-                    $jsonRpcResponse = $this->getJsonRpcResponseForJsonRpcRequest($jsonRpcRequest);
-
-                    $this->send($jsonRpcResponse);
-                } else {
-                    trigger_error(
-                        'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
-                        E_USER_WARNING
-                    );
-                }
-
-                $this->resetRequestState();
+                $this->processRequest();
             }
         }
 
@@ -172,19 +153,34 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     }
 
     /**
-     * @param JsonRpcRequest $request
      *
-     * @return JsonRpcResponse
      */
-    protected function getJsonRpcResponseForJsonRpcRequest(JsonRpcRequest $request): JsonRpcResponse
+    protected function processRequest(): void
     {
-        return $this->jsonRpcRequestHandler->handle($request, $this);
+        $jsonRpcRequest = null;
+
+        try {
+            $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
+        } catch (UnexpectedValueException $e) {
+            $jsonRpcRequest = null;
+        }
+
+        if ($jsonRpcRequest !== null) {
+            $this->jsonRpcRequestHandler->handle($jsonRpcRequest, $this);
+        } else {
+            trigger_error(
+                'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
+                E_USER_WARNING
+            );
+        }
+
+        $this->resetRequestState();
     }
 
     /**
      * @inheritDoc
      */
-    public function send(JsonRpcResponse $response, bool $force = false): void
+    public function send(JsonRpcResponse $response): void
     {
         $responseContent = $this->getEncodedResponse($response);
 
@@ -195,7 +191,7 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             );
         }
 
-        $this->writeRawResponse($responseContent, $force);
+        $this->writeRawResponse($responseContent);
     }
 
     /**
@@ -271,22 +267,14 @@ class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
 
     /**
      * @param string $content
-     * @param bool   $force
      *
      * @return void
      */
-    protected function writeRawResponse(string $content, bool $force = false): void
+    protected function writeRawResponse(string $content): void
     {
         $this->connection->write('Content-Length: ' . strlen($content) . self::HEADER_DELIMITER);
         $this->connection->write(self::HEADER_DELIMITER);
         $this->connection->write($content);
-
-        if ($force) {
-            // The data we write to the socket is internally buffered until the next event loop tick. If the caller
-            // is attempting to stream data (i.e. he is in a loop itself), the data will never be written until that
-            // loop exits. This way we can force the buffer to be drained now.
-            $this->connection->getBuffer()->handleWrite();
-        }
     }
 
     /**

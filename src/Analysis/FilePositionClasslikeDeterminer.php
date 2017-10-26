@@ -2,9 +2,11 @@
 
 namespace PhpIntegrator\Analysis;
 
-use PhpIntegrator\Analysis\Typing\FileClassListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use PhpIntegrator\Common\Position;
+
+use PhpIntegrator\Indexing\Structures;
 
 /**
  * Determines in which class a position (offset) in a file is located.
@@ -12,27 +14,27 @@ use PhpIntegrator\Common\Position;
 class FilePositionClasslikeDeterminer
 {
     /**
-     * @var FileClassListProviderInterface
+     * @var FileClasslikeListProviderInterface
      */
-    private $fileClassListProvider;
+    private $fileClasslikeListProvider;
 
     /**
-     * @param FileClassListProviderInterface $fileClassListProvider
+     * @param FileClasslikeListProviderInterface $fileClasslikeListProvider
      */
-    public function __construct(FileClassListProviderInterface $fileClassListProvider)
+    public function __construct(FileClasslikeListProviderInterface $fileClasslikeListProvider)
     {
-        $this->fileClassListProvider = $fileClassListProvider;
+        $this->fileClasslikeListProvider = $fileClasslikeListProvider;
     }
 
     /**
-     * @param Position $position
-     * @param string   $filePath
+     * @param Position        $position
+     * @param Structures\File $file
      *
      * @return string|null
      */
-     public function determine(Position $position, string $filePath): ?string
+     public function determine(Position $position, Structures\File $file): ?string
      {
-         $classesInFile = $this->fileClassListProvider->getAllForFile($filePath);
+         $classesInFile = $this->fileClasslikeListProvider->getAllForFile($file);
 
          foreach ($classesInFile as $fqcn => $classInfo) {
              if ($position->getLine() >= $classInfo['startLine'] && $position->getLine() <= $classInfo['endLine']) {

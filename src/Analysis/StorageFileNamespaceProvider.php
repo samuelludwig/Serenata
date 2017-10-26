@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis;
 
-use LogicException;
-
 use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
@@ -14,12 +12,10 @@ use PhpIntegrator\NameQualificationUtilities\Import;
 use PhpIntegrator\NameQualificationUtilities\Namespace_;
 use PhpIntegrator\NameQualificationUtilities\FileNamespaceProviderInterface;
 
-use PhpIntegrator\Utility\NamespaceData;
-
 /**
  * Provides a list of namespaces and imports for a file based on data provided by a storage provider.
  */
-class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
+final class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
 {
     /**
      * @var StorageInterface
@@ -39,13 +35,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
      */
     public function provide(string $file): array
     {
-        $fileEntity = $this->storage->findFileByPath($file);
-
-        if ($fileEntity === null) {
-            throw new LogicException("Can't provide data for file \"{$file}\" because it wasn't indexed");
-        }
-
-        return $this->mapNamespaces($fileEntity->getNamespaces());
+        return $this->mapNamespaces($this->storage->getFileByPath($file)->getNamespaces());
     }
 
     /**
@@ -82,7 +72,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
     }
 
     /**
-     * @param Structures\FileNamespaceImport[] $rawImports
+     * @param Structures\FileNamespaceImport[] $imports
      *
      * @return Import[]
      */
@@ -94,7 +84,7 @@ class StorageFileNamespaceProvider implements FileNamespaceProviderInterface
     }
 
     /**
-     * @param Structures\FileNamespaceImport $rawImport
+     * @param Structures\FileNamespaceImport $import
      *
      * @return Import
      */

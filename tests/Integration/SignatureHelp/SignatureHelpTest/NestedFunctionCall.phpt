@@ -14,5 +14,5 @@ function foo($a)
 
 function bar()
 {
-    foo(bar());
+    foo( bar(  ) );
 }

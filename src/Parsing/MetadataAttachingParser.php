@@ -14,7 +14,7 @@ use PhpParser\NodeVisitor\NameResolver;
 /**
  * Parser that delegates parsing to another parser and attaches metadata to the nodes.
  */
-class MetadataAttachingParser implements Parser
+final class MetadataAttachingParser implements Parser
 {
     /**
      * @var Parser

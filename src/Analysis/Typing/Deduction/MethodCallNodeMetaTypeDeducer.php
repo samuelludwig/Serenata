@@ -6,13 +6,15 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\MetadataProviderInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node based on
  * data supplied by meta files and delegates to another deducer if no such data is present.
  */
-class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
+final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -47,7 +49,7 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, string $file, string $code, int $offset): array
+    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
     {
         if (!$node instanceof Node\Expr\MethodCall && !$node instanceof Node\Expr\StaticCall) {
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
@@ -58,16 +60,24 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param Node\Expr\MethodCall|Node\Expr\StaticCall $node
-     * @param string                                    $file
+     * @param Structures\File                           $file
      * @param string                                    $code
      * @param int                                       $offset
      *
      * @return string[]
      */
-    protected function deduceTypesFromMethodCallNode(Node\Expr $node, string $file, string $code, int $offset): array
-    {
+    protected function deduceTypesFromMethodCallNode(
+        Node\Expr $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): array {
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
         $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name;
+
+        if (!$methodName instanceof Node\Identifier) {
+            return [];
+        }
 
         $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 

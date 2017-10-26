@@ -12,7 +12,7 @@ use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryIn
 /**
  * Factory that creates instances of a {@see DocblockPositionalNameResolver}.
  */
-class DocblockPositionalNameResolverFactory implements StructureAwareNameResolverFactoryInterface
+final class DocblockPositionalNameResolverFactory implements StructureAwareNameResolverFactoryInterface
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface
