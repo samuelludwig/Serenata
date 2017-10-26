@@ -7,7 +7,7 @@ use PhpIntegrator\Analysis\FunctionListProviderInterface;
 /**
  * Provides function autocompletion suggestions at a specific location in a file.
  */
-class FunctionAutocompletionProvider implements AutocompletionProviderInterface
+final class FunctionAutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
      * @var FunctionListProviderInterface
