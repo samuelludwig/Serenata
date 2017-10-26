@@ -65,12 +65,12 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
             SuggestionKind::FUNCTION,
             $insertText,
             $this->createLabel($function),
-            $this->createDocumentation($function),
+            $function['shortDescription'],
             [
                 'isDeprecated'                  => $function['isDeprecated'],
                 'protectionLevel'               => null, // TODO: For leftLabel
                 'declaringStructure'            => null,
-                'url'                           => $this->createUrl($function),
+                'url'                           => null,
                 'returnTypes'                   => $this->createReturnTypes($function),
                 'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
             ]
@@ -132,22 +132,6 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string|null
      */
-    protected function createDocumentation(array $function): ?string
-    {
-        if ($function['shortDescription']) {
-            return $function['shortDescription'];
-        } elseif ($function['isBuiltin']) {
-            return 'Built-in PHP function.';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string|null
-     */
     protected function getFunctionProtectionLevel(array $function): ?string
     {
         if ($function['isPublic']) {
@@ -156,20 +140,6 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
             return 'protected';
         } elseif ($function['isPrivate']) {
             return 'private';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string|null
-     */
-    protected function createUrl(array $function): ?string
-    {
-        if ($function['isBuiltin']) {
-            return DocumentationBaseUrl::FUNCTIONS . $function['name'];
         }
 
         return null;

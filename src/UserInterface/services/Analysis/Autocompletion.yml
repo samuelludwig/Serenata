@@ -5,7 +5,7 @@ services:
     functionAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
-            - '@doctrineFunctionListProvider'
+            - '@functionListProvider'
 
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
