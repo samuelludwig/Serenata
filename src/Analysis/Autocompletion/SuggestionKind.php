@@ -10,5 +10,5 @@ final class SuggestionKind
     /**
      * @var string
      */
-    const FUNCTION = 'function';
+    public const FUNCTION = 'function';
 }
