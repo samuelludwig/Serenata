@@ -33,7 +33,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
     /**
      * @return AutocompletionSuggestion[]
      */
-    protected function getSuggestions(): array
+    private function getSuggestions(): array
     {
         $suggestions = [];
 
@@ -49,7 +49,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return AutocompletionSuggestion
      */
-    protected function createSuggestion(array $function): AutocompletionSuggestion
+    private function createSuggestion(array $function): AutocompletionSuggestion
     {
         $insertText = $function['name'];
         $placeCursorBetweenParentheses = !empty($function['parameters']);
@@ -82,7 +82,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string
      */
-    protected function createLabel(array $function): string
+    private function createLabel(array $function): string
     {
         $body = '(';
 
@@ -132,12 +132,12 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string|null
      */
-    protected function getFunctionProtectionLevel(array $function): ?string
+    private function getFunctionProtectionLevel(array $function): ?string
     {
         if ($function['isPublic']) {
             return 'public';
         } elseif ($function['isProtected']) {
-            return 'protected';
+            return 'private';
         } elseif ($function['isPrivate']) {
             return 'private';
         }
@@ -150,7 +150,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string
      */
-    protected function createReturnTypes(array $function): string
+    private function createReturnTypes(array $function): string
     {
         $typeNames = $this->getShortReturnTypes($function);
 
@@ -162,7 +162,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string[]
      */
-    protected function getShortReturnTypes(array $function): array
+    private function getShortReturnTypes(array $function): array
     {
         $shortTypes = [];
 
@@ -178,7 +178,7 @@ class FunctionAutocompletionProvider implements AutocompletionProviderInterface
      *
      * @return string
      */
-    protected function getClassShortNameFromFqcn(string $fqcn): string
+    private function getClassShortNameFromFqcn(string $fqcn): string
     {
         $parts = explode('\\', $fqcn);
 
