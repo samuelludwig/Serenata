@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 /**
  * Enumeration of suggestion kinds.
  */
-class SuggestionKind
+final class SuggestionKind
 {
     /**
      * @var string

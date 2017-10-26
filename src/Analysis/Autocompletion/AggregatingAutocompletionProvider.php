@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 /**
  * Provides autocompletion suggestions at a specific location in a file by aggregating results from delegates.
  */
-class AggregatingAutocompletionProvider implements AutocompletionProviderInterface
+final class AggregatingAutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
      * @var AutocompletionProviderInterface[]

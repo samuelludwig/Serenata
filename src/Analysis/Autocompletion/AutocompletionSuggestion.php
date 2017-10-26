@@ -9,7 +9,7 @@ use JsonSerializable;
  *
  * This is a value object and immutable.
  */
-class AutocompletionSuggestion implements JsonSerializable
+final class AutocompletionSuggestion implements JsonSerializable
 {
     /**
      * @var string
