@@ -26,6 +26,7 @@
 
 ### Structural changes (mostly relevant to clients)
 * Properties now also return a `filename` property, which was missing before
+* The namespace list will now return a map of ID's to values rather than just values, consistent with other lists
 * Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
   * These classes will return a new `isAnonymous` field.
 * The `reindex` command no longer takes a `stream-progress` argument (it will be silently ignored)
