@@ -1,34 +1,35 @@
 ## 3.1.0 (Unreleased)
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
-* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
-  * Class names inside comments are currently no longer supported due to the implementation being hard, [but this may change in the future](https://gitlab.com/php-integrator/core/issues/141).
-  * This moves us one step closer to becoming a language server in the long run.
 * [Indexing performance has been improved in various ways, for both small and large files](https://gitlab.com/php-integrator/core/issues/139)
-* [Folder indexing has been rewritten to be split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
-  * This is mostly refactoring to allow for future improvements, but this also included performance improvements
+* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
+  * Class names inside comments are currently no longer supported, [but this may change in the future](https://gitlab.com/php-integrator/core/issues/141). This should however pose less of a problem now, as docblock types should be accompanied by type hints, which are clickable.
+  * This moves us one step closer to becoming a language server in the long run.
+* [Folder indexing requests are now transparently split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
+  * This will allow for request cancelation and prioritization in the future.
 
 ### Bugs Fixed
+* [Fix using traits in interfaces crashing the server](https://gitlab.com/php-integrator/core/issues/133)
 * [Fix tooltips not working on grouped use statements](https://gitlab.com/php-integrator/core/issues/136)
-* [Using a trait in an interface will no longer crash the server](https://gitlab.com/php-integrator/core/issues/133)
-* [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)
-* [Project paths containing the tilde representing the home folder will now be properly expanded](https://gitlab.com/php-integrator/core/merge_requests/72)
-* [Variable expressions in method calls will no longer cause a crash whilst trying to deduce the type of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
-* [Fix folder scanning occurring twice during indexing, once for counting the total amount (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
-* Function and method docblock `@return` tag types will now also be validated against the actual return type
-* Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
-* Some edge case bugs with name (type) resolution were resolved by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
-* The core will now attempt to reestablish connection when the entity manager closes due to a database error
-* [Disk I/O errors and errors due to locked databases will now propagate as fatal error, as they currently can't be recovered from and to warn the user about internal failures](https://github.com/php-integrator/atom-base/issues/278)
-* [Fix "Position out of bounds" logic exception sometimes occurring with requests containing new code that had not been explicitly indexed via the reindex command beforehand, e.g. for signature help](https://gitlab.com/php-integrator/core/issues/126)
+* [Fix project paths containing the tilde not being expanded to the user's home folder](https://gitlab.com/php-integrator/core/merge_requests/72)
+* Fix core shrugging and bailing whenever the entity manager closed due to a database error
+* [Fix unsupported meta file static method types throwing an error instead of being silently skipped](https://gitlab.com/php-integrator/core/issues/130)
+* Fix some edge case bugs with name (type) resolution by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
+* Fix function and method docblock `@return` tag types not being validated against the actual return type
+* [Fix crash with variable expressions in method calls during type deduction of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
+* [Make disk I/O and locked database errors propagate as fatal errors, as they currently can't be recovered from and to notify the user](https://github.com/php-integrator/atom-base/issues/278)
+* [Fix folder scanning occurring twice during indexing, once for counting the total amount of items (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
+* [Fix occasional "Position out of bounds" logic exception during requests, such as signature help, containing code not explicitly indexed beforehand](https://gitlab.com/php-integrator/core/issues/126)
+* Fix bodies of anonymous classes not being subject to any parsing or linting
+  * This fixes use statements not being identified as used, among other issues
 * [Fix initialize command failing to reinitialize when database was locked or I/O errors occurred](https://github.com/php-integrator/atom-base/issues/278)
-  * This happened in spite of the original database connection being closed and the database itself completely being removed due to the WAL and SHM files lingering. This apparantly causes sqlite to try and use them as state for the new database when the schema was first initialized on it afterwards. This in turn resulted in never being able to break the chain of errors without removing all the database files manually.
+  * This happened in spite of the original database connection being closed and the database itself completely being removed due to the WAL and SHM files lingering. This seems to cause sqlite to try and reuse them for the new database during schema creation afterwards, which in turn resulted in never being able to break the chain of errors without removing all database files manually.
 
 ### Structural changes (mostly relevant to clients)
 * Properties now also return a `filename` property, which was missing before
 * The namespace list will now return a map of ID's to values rather than just values, consistent with other lists
-* Anonymous classes will now also be returned in various locations. They carry a special name and FQCN so they can be transparantly accessed.
-  * These classes will return a new `isAnonymous` field.
+* Anonymous classes are now included in class lists, carrying a special name and FQCN so they can be easily distinguished
+  * Classes now also include a new `isAnonymous` field that is set to `true` for these classes.
 * The `reindex` command no longer takes a `stream-progress` argument (it will be silently ignored)
   * Progress is now only streamed for folder index requests and is always on. If you don't want these notifications, you can simply ignore them.
 
