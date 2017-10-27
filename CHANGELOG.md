@@ -1,4 +1,4 @@
-## 3.1.0 (Unreleased)
+## 3.1.0
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
 * [Indexing performance has been improved in various ways, for both small and large files](https://gitlab.com/php-integrator/core/issues/139)
