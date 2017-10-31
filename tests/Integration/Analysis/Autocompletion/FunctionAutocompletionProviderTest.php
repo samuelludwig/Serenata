@@ -47,7 +47,7 @@ class FunctionAutocompletionProviderTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testRetrievesAllClasses(): void
+    public function testRetrievesAllFunctions(): void
     {
         $output = $this->provide('Functions.phpt');
 
