@@ -7,7 +7,7 @@ use PhpIntegrator\Indexing\Structures;
 /**
  * Converts raw constant data from the index to more useful data.
  */
-class ConstantConverter extends AbstractConverter
+final class ConstantConverter extends AbstractConverter
 {
     /**
      * @param Structures\ConstantLike $constant
