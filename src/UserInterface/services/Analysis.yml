@@ -69,6 +69,8 @@ services:
 
     classlikeConstantConverter:
         class: PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter
+        arguments:
+            - '@constantConverter'
 
     propertyConverter:
         class: PhpIntegrator\Analysis\Conversion\PropertyConverter

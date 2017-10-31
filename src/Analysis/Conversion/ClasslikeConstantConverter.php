@@ -11,8 +11,21 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 /**
  * Converts raw class constant data from the index to more useful data.
  */
-final class ClasslikeConstantConverter extends ConstantConverter
+final class ClasslikeConstantConverter
 {
+    /**
+     * @var ConstantConverter
+     */
+    private $constantConverter;
+
+    /**
+     * @param ConstantConverter $constantConverter
+     */
+    public function __construct(ConstantConverter $constantConverter)
+    {
+        $this->constantConverter = $constantConverter;
+    }
+
     /**
      * @param Structures\ClassConstant $constant
      * @param ArrayAccess              $class
@@ -21,12 +34,15 @@ final class ClasslikeConstantConverter extends ConstantConverter
      */
     public function convertForClass(Structures\ClassConstant $constant, ArrayAccess $class): array
     {
-        $data = parent::convert($constant);
+        return array_merge($this->constantConverter->convert($constant), [
+            'isPublic' => $constant->getAccessModifier() ?
+                $constant->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_ : true,
 
-        return array_merge($data, [
-            'isPublic'          => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_ : true,
-            'isProtected'       => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_ : false,
-            'isPrivate'         => $constant->getAccessModifier() ? $constant->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_ : false,
+            'isProtected' => $constant->getAccessModifier() ?
+                $constant->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_ : false,
+
+            'isPrivate' => $constant->getAccessModifier() ?
+                $constant->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_ : false,
 
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],
