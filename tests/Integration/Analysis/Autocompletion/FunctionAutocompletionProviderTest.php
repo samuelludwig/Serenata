@@ -18,15 +18,21 @@ class FunctionAutocompletionProviderTest extends AbstractIntegrationTest
     {
         $path = __DIR__ . '/FunctionAutocompletionProviderTest/' . $file;
 
-        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
+        $markerString = '// <MARKER>';
+
+        $markerOffset = $this->getMarkerOffset($path, $markerString);
 
         $container = $this->createTestContainer();
 
-        $this->indexTestFile($container, $path);
+        // Strip marker so it does not influence further processing.
+        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
+        $code = str_replace($markerString, '', $code);
+
+        $this->indexTestFileWithSource($container, $path, $code);
 
         $provider = $container->get('functionAutocompletionProvider');
 
-        return iterator_to_array($provider->provide($path, $markerOffset), false);
+        return iterator_to_array($provider->provide($code, $markerOffset), false);
     }
 
     /**
@@ -53,6 +59,48 @@ class FunctionAutocompletionProviderTest extends AbstractIntegrationTest
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo()', null, [
+                'isDeprecated'                  => false,
+                'protectionLevel'               => null,
+                'declaringStructure'            => null,
+                'url'                           => null,
+                'returnTypes'                   => '',
+                'placeCursorBetweenParentheses' => false
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOmitsParanthesesFromInsertionTextIfCursorIsFollowedByParanthesis(): void
+    {
+        $output = $this->provide('CursorFollowedByParanthesis.phpt');
+
+        $suggestions = [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', 'foo()', null, [
+                'isDeprecated'                  => false,
+                'protectionLevel'               => null,
+                'declaringStructure'            => null,
+                'url'                           => null,
+                'returnTypes'                   => '',
+                'placeCursorBetweenParentheses' => false
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testOmitsParanthesesFromInsertionTextIfCursorIsFollowedByWhitespaceAndParanthesis(): void
+    {
+        $output = $this->provide('CursorFollowedByWhitespaceAndParanthesis.phpt');
+
+        $suggestions = [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', 'foo()', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => null,
                 'declaringStructure'            => null,

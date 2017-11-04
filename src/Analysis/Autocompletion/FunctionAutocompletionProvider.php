@@ -29,23 +29,58 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      */
     public function provide(string $code, int $offset): Traversable
     {
+        $shouldIncludeParanthesesInInsertText = $this->shouldIncludeParanthesesInInsertText($code, $offset);
+
         foreach ($this->functionListProvider->getAll() as $function) {
-            yield $this->createSuggestion($function);
+            yield $this->createSuggestion($function, $shouldIncludeParanthesesInInsertText);
         }
     }
 
     /**
+     * @param string $code
+     * @param int    $offset
+     *
+     * @return bool
+     */
+    private function shouldIncludeParanthesesInInsertText(string $code, int $offset): bool
+    {
+        $length = mb_strlen($code);
+
+        for ($i = $offset; $i < $length; ++$i) {
+            if ($code[$i] === '(') {
+                return false;
+            } elseif ($this->isWhitespace($code[$i])) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $character
+     *
+     * @return bool
+     */
+    private function isWhitespace(string $character): bool
+    {
+        return ($character === ' ' || $character === "\r" || $character === "\n" || $character === "\t");
+    }
+
+    /**
      * @param array $function
+     * @param bool  $shouldIncludeParanthesesInInsertText
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $function): AutocompletionSuggestion
+    private function createSuggestion(array $function, bool $shouldIncludeParanthesesInInsertText): AutocompletionSuggestion
     {
         $insertText = $function['name'];
         $placeCursorBetweenParentheses = !empty($function['parameters']);
 
-        if (true) {
-            // TODO: If insertion position is followed by opening paraenthesis, don't add paraentheses at all.
+        if ($shouldIncludeParanthesesInInsertText) {
             $insertText .= '()';
         }
 
