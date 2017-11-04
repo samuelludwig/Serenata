@@ -44,7 +44,6 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         $insertText = $function['name'];
         $placeCursorBetweenParentheses = !empty($function['parameters']);
 
-
         if (true) {
             // TODO: If insertion position is followed by opening paraenthesis, don't add paraentheses at all.
             $insertText .= '()';
