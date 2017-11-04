@@ -62,6 +62,6 @@ class FunctionAutocompletionProviderTest extends AbstractIntegrationTest
             ])
         ];
 
-        $this->assertEquals($suggestions, $output);
+        static::assertEquals($suggestions, $output);
     }
 }
