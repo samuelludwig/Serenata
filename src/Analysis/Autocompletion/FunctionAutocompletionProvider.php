@@ -58,7 +58,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $function['shortDescription'],
             [
                 'isDeprecated'                  => $function['isDeprecated'],
-                'protectionLevel'               => null, // TODO: For leftLabel
+                'protectionLevel'               => null,
                 'declaringStructure'            => null,
                 'url'                           => null,
                 'returnTypes'                   => $this->createReturnTypes($function),
