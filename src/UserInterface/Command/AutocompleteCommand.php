@@ -72,6 +72,6 @@ class AutocompleteCommand extends AbstractCommand
      */
     public function getAutocompletionSuggestions(string $code, int $offset): array
     {
-        return $this->autocompletionProvider->provide($code, $offset);
+        return iterator_to_array($this->autocompletionProvider->provide($code, $offset), false);
     }
 }

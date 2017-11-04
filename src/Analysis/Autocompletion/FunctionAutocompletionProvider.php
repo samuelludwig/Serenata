@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
+use Traversable;
+
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
 
 /**
@@ -25,23 +27,11 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): array
+    public function provide(string $code, int $offset): Traversable
     {
-        return $this->getSuggestions();
-    }
-
-    /**
-     * @return AutocompletionSuggestion[]
-     */
-    private function getSuggestions(): array
-    {
-        $suggestions = [];
-
         foreach ($this->functionListProvider->getAll() as $function) {
-            $suggestions[] = $this->createSuggestion($function);
+            yield $this->createSuggestion($function);
         }
-
-        return $suggestions;
     }
 
     /**

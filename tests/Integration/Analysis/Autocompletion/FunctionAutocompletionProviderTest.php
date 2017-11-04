@@ -26,7 +26,7 @@ class FunctionAutocompletionProviderTest extends AbstractIntegrationTest
 
         $provider = $container->get('functionAutocompletionProvider');
 
-        return $provider->provide($path, $markerOffset);
+        return iterator_to_array($provider->provide($path, $markerOffset), false);
     }
 
     /**
