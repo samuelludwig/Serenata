@@ -75,8 +75,10 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $function, bool $shouldIncludeParanthesesInInsertText): AutocompletionSuggestion
-    {
+    private function createSuggestion(
+        array $function,
+        bool $shouldIncludeParanthesesInInsertText
+    ): AutocompletionSuggestion {
         $insertText = $function['name'];
         $placeCursorBetweenParentheses = !empty($function['parameters']);
 
