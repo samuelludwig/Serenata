@@ -23,5 +23,11 @@ services:
         arguments:
             - '@aggregatingAutocompletionProvider'
 
+    limitingAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\LimitingAutocompletionProvider
+        arguments:
+            - '@fuzzyMatchingAutocompletionProvider'
+            - 15
+
     autocompletionProvider:
-        alias: fuzzyMatchingAutocompletionProvider
+        alias: limitingAutocompletionProvider
