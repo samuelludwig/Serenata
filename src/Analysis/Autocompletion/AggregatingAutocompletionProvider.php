@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
-use Traversable;
-
 /**
  * Provides autocompletion suggestions at a specific location in a file by aggregating results from delegates.
  */
@@ -25,7 +23,7 @@ final class AggregatingAutocompletionProvider implements AutocompletionProviderI
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): Traversable
+    public function provide(string $code, int $offset): iterable
     {
         foreach ($this->delegates as $delegate) {
             yield from $delegate->provide($code, $offset);

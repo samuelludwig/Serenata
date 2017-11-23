@@ -44,6 +44,15 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
         $endFilePos = $node->getAttribute('endFilePos');
         $startFilePos = $node->getAttribute('startFilePos');
 
+        if ($node instanceof Node\Expr\Error && $endFilePos < $startFilePos) {
+            // As php-parser uses inclusive ranges, a range where startFilePos === $endFilePos would still describe a
+            // single character, hence the end can lie before the start. This works around that to ensure we can still
+            // fetch the error node itself rather than null.
+            //
+            // See also https://github.com/nikic/PHP-Parser/issues/440
+            $endFilePos = $startFilePos;
+        }
+
         if ($startFilePos > $this->position || $endFilePos < $this->position) {
             return;
         }

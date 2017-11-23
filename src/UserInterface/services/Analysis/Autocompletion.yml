@@ -7,10 +7,16 @@ services:
         arguments:
             - '@functionListProvider'
 
+    applicabilityCheckingFunctionAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingFunctionAutocompletionProvider
+        arguments:
+            - '@functionAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
-            - '@functionAutocompletionProvider'
+            - '@applicabilityCheckingFunctionAutocompletionProvider'
 
     autocompletionProvider:
         alias: aggregatingAutocompletionProvider

@@ -10,13 +10,18 @@ use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTest
 {
     /**
+     * @return string
+     */
+    abstract protected function getFolderName(): string;
+
+    /**
      * @param string $file
      *
      * @return string[]
      */
     protected function provide(string $file): array
     {
-        $path = __DIR__ . '/FunctionAutocompletionProviderTest/' . $file;
+        $path = __DIR__ . '/' . $this->getFolderName() . '/' . $file;
 
         $markerString = '// <MARKER>';
 

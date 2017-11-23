@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
-use Traversable;
-
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
 
 /**
@@ -27,7 +25,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): Traversable
+    public function provide(string $code, int $offset): iterable
     {
         $shouldIncludeParanthesesInInsertText = $this->shouldIncludeParanthesesInInsertText($code, $offset);
 

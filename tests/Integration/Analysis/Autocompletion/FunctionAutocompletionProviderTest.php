@@ -69,4 +69,12 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         static::assertEquals($suggestions, $output);
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getFolderName(): string
+    {
+        return 'FunctionAutocompletionProviderTest';
+    }
 }
