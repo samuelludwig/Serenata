@@ -35,7 +35,7 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
         $this->indexTestFileWithSource($container, $path, $code);
 
-        $provider = $container->get('autocompletionProvider');
+        $provider = $container->get('aggregatingAutocompletionProvider');
 
         return iterator_to_array($provider->provide($code, $markerOffset), false);
     }

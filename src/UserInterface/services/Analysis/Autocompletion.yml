@@ -18,5 +18,10 @@ services:
         arguments:
             - '@applicabilityCheckingFunctionAutocompletionProvider'
 
+    fuzzyMatchingAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
+        arguments:
+            - '@aggregatingAutocompletionProvider'
+
     autocompletionProvider:
-        alias: aggregatingAutocompletionProvider
+        alias: fuzzyMatchingAutocompletionProvider
