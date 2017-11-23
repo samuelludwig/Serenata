@@ -12,7 +12,7 @@ use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
 /**
- * Function autocompletion provider that Checks first if function autocompletion suggestions apply at the requested
+ * Function autocompletion provider that first checks if function autocompletion suggestions apply at the requested
  * offset and, if so, delegates to another provider.
  */
 final class ApplicabilityCheckingFunctionAutocompletionProvider implements AutocompletionProviderInterface
