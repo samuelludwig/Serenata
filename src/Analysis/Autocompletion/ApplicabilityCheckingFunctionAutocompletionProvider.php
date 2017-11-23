@@ -2,7 +2,6 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
-use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
