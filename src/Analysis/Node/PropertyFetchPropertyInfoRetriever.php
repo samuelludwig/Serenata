@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Node;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
@@ -55,7 +55,7 @@ class PropertyFetchPropertyInfoRetriever
             // Can't currently deduce type of an expression such as "$this->{$foo}";
             throw new UnexpectedValueException('Can\'t determine information of dynamic property fetch');
         } elseif (!$node instanceof Node\Expr\PropertyFetch && !$node instanceof Node\Expr\StaticPropertyFetch) {
-            throw new LogicException('Expected property fetch node, got ' . get_class($node) . ' instead');
+            throw new AssertionError('Expected property fetch node, got ' . get_class($node) . ' instead');
         }
 
         $objectNode = ($node instanceof Node\Expr\PropertyFetch) ? $node->var : $node->class;

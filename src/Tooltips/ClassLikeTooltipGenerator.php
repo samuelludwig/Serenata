@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tooltips;
 
-use LogicException;
+use AssertionError;
 
 /**
  * Generates tooltips for classlikes.
@@ -84,7 +84,7 @@ class ClassLikeTooltipGenerator
         } elseif ($info['type'] === 'interface') {
             $type = 'Interface';
         } else {
-            throw new LogicException('Unknown type "' . $info['type'] . '" for classlike encountered');
+            throw new AssertionError('Unknown type "' . $info['type'] . '" for classlike encountered');
         }
 
         return "# Type\n{$type}";

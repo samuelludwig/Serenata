@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Parsing;
 
-use LogicException;
+use AssertionError;
 
 use PhpIntegrator\Parsing\Node\Expr;
 
@@ -54,7 +54,7 @@ final class PartialParser implements Parser
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
-            throw new LogicException('Error handling is not supported as error recovery will be attempted automatically');
+            throw new AssertionError('Error handling is not supported as error recovery will be attempted automatically');
         }
 
         $correctedExpression = $this->getNormalizedCode($code);

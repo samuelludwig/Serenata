@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\SignatureHelp;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
@@ -166,7 +166,7 @@ class SignatureHelpRetriever
             } elseif ($invocationNode instanceof Node\Expr\MethodCall || $invocationNode instanceof Node\Expr\StaticCall) {
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } else {
-                throw new LogicException(
+                throw new AssertionError(
                     'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
                 );
             }

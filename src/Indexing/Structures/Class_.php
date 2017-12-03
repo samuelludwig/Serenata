@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Indexing\Structures;
 
+use AssertionError;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Ramsey\Uuid\Uuid;
@@ -192,7 +194,7 @@ class Class_ extends Classlike
     public function setParent(?Class_ $parent): void
     {
         if ($this->parentFqcn !== null) {
-            throw new \LogicException('Moving an item to another parent is not supported');
+            throw new AssertionError('Moving an item to another parent is not supported');
         }
 
         if ($parent === null) {

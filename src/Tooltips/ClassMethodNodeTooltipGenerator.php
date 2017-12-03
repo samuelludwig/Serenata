@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tooltips;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
@@ -63,7 +63,7 @@ class ClassMethodNodeTooltipGenerator
         $startLine = $node->getAttribute('startLine');
 
         if ($startLine === null) {
-            throw new LogicException('Nodes must have startLine metadata attached');
+            throw new AssertionError('Nodes must have startLine metadata attached');
         }
 
         $position = new Position($startLine, 0);

@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Parsing;
 
-use LogicException;
+use AssertionError;
 
 use PhpParser\Node;
 use PhpParser\Parser;
@@ -246,7 +246,7 @@ final class LastExpressionParser implements Parser
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
-            throw new LogicException('Error handling is not supported as error recovery will be attempted automatically');
+            throw new AssertionError('Error handling is not supported as error recovery will be attempted automatically');
         }
 
         $code = $this->getNormalizedCode($code);

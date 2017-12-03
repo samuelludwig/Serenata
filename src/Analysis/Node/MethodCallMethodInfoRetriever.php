@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Node;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
@@ -59,7 +59,7 @@ class MethodCallMethodInfoRetriever
             !$node instanceof Node\Expr\StaticCall &&
             !$node instanceof Node\Expr\New_
         ) {
-            throw new LogicException('Expected method call node, got ' . get_class($node) . ' instead');
+            throw new AssertionError('Expected method call node, got ' . get_class($node) . ' instead');
         } elseif ($node instanceof Node\Expr\New_) {
             if ($node->class instanceof Node\Expr) {
                 // Can't currently deduce type of an expression such as "$this->{$foo}()";

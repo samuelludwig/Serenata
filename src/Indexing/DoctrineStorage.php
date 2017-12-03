@@ -4,7 +4,6 @@ namespace PhpIntegrator\Indexing;
 
 use Throwable;
 use AssertionError;
-use LogicException;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -42,7 +41,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new LogicException('Should never be reached');
+        throw new AssertionError('Should never be reached');
     }
 
     /**
@@ -56,7 +55,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new LogicException('Should never be reached');
+        throw new AssertionError('Should never be reached');
     }
 
     /**
@@ -72,7 +71,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new LogicException('Should never be reached');
+        throw new AssertionError('Should never be reached');
     }
 
     /**
@@ -172,7 +171,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new LogicException('Should never be reached');
+        throw new AssertionError('Should never be reached');
     }
 
     /**

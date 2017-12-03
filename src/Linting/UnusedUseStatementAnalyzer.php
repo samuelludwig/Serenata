@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use LogicException;
+use AssertionError;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
@@ -252,7 +252,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
             }
         }
 
-        throw new LogicException('Sanity check failed: should always have at least one namespace structure');
+        throw new AssertionError('Sanity check failed: should always have at least one namespace structure');
     }
 
     /**

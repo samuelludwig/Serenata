@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Indexing;
 
-use LogicException;
+use AssertionError;
 
 use Doctrine\ORM;
 
@@ -86,7 +86,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
             return $this->getEntityManagerInstance();
         }
 
-        throw new LogicException('Unknown manager service requested with name ' . $name);
+        throw new AssertionError('Unknown manager service requested with name ' . $name);
     }
 
     /**

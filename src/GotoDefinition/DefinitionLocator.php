@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\GotoDefinition;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
@@ -177,7 +177,7 @@ class DefinitionLocator
             $parentNode = $node->getAttribute('parent', false);
 
             if ($parentNode === false) {
-                throw new LogicException('No parent metadata attached to node');
+                throw new AssertionError('No parent metadata attached to node');
             }
 
             if ($parentNode instanceof Node\Expr\ClassConstFetch) {
@@ -350,7 +350,7 @@ class DefinitionLocator
         $parentNode = $node->getAttribute('parent', false);
 
         if ($parentNode === false) {
-            throw new LogicException('Parent node data is required in metadata');
+            throw new AssertionError('Parent node data is required in metadata');
         }
 
         // Use statements are always fully qualified, they aren't resolved.
