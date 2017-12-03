@@ -98,7 +98,7 @@ abstract class AbstractApplication
      *
      * @return void
      */
-    private function instantiateRequiredServices(ContainerBuilder $container): void
+    protected function instantiateRequiredServices(ContainerBuilder $container): void
     {
         // TODO: Need to refactor this at some point to have more select cache clearing and to not instantiate multiple
         // mediators.
