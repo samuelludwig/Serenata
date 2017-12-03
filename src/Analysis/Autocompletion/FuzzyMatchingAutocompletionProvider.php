@@ -90,12 +90,10 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
             'caseSensitive'    => false,
             'threshold'        => 0.25,
             'maxPatternLength' => 128,
-            'keys'             => ['filterText'],
+            'keys'             => ['getFilterText'],
 
             'getFn' => function (AutocompletionSuggestion $item, string $path) {
-                $method = 'get' . ucfirst($path);
-
-                return $item->{$method}();
+                return $item->{$path}();
             }
         ]);
 
