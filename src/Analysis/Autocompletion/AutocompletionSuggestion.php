@@ -124,7 +124,7 @@ final class AutocompletionSuggestion implements JsonSerializable
             'insertText'    => $this->getInsertText(),
             'label'         => $this->getLabel(),
             'documentation' => $this->getDocumentation(),
-            'data'          => $this->getData()
+            'extraData'     => $this->getExtraData()
         ];
     }
 }
