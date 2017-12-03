@@ -53,13 +53,7 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      */
     public function provide(string $code, int $offset): iterable
     {
-        $suggestionScorePairList = $this->generateScoredSuggestionPairList($code, $offset);
-
-        usort($suggestionScorePairList, function (array $a, array $b) {
-            return $a[1] <=> $b[1];
-        });
-
-        return array_column($suggestionScorePairList, 0);
+        return $this->provideForPrefixAtOffset($code, $offset);
     }
 
     /**
@@ -68,11 +62,11 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      *
      * @return array[]
      */
-    private function generateScoredSuggestionPairList(string $code, string $offset): array
+    private function provideForPrefixAtOffset(string $code, string $offset): array
     {
         $prefix = $this->getPrefixAtOffset($code, $offset);
 
-        return $this->generateScoredSuggestionPairListForPrefix($code, $offset, $prefix);
+        return $this->provideForPrefix($code, $offset, $prefix);
     }
 
     /**
@@ -82,16 +76,30 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      *
      * @return array[]
      */
-    private function generateScoredSuggestionPairListForPrefix(string $code, string $offset, string $prefix): array
+    private function provideForPrefix(string $code, string $offset, string $prefix): array
     {
-        $suggestions = [];
+        $suggestionsArray = [];
 
-        /** @var AutocompletionSuggestion $suggestion */
         foreach ($this->delegate->provide($code, $offset) as $suggestion) {
-            $suggestions[] = [$suggestion, $this->calculateScore($prefix, $suggestion->getFilterText())];
+            $suggestionsArray[] = $suggestion;
         }
 
-        return $suggestions;
+        $fuse = new \Fuse\Fuse($suggestionsArray, [
+            // See also https://github.com/Loilo/Fuse#options
+            'shouldSort'       => true,
+            'caseSensitive'    => false,
+            'threshold'        => 0.25,
+            'maxPatternLength' => 128,
+            'keys'             => ['filterText'],
+
+            'getFn' => function (AutocompletionSuggestion $item, string $path) {
+                $method = 'get' . ucfirst($path);
+
+                return $item->{$method}();
+            }
+        ]);
+
+        return $fuse->search($prefix);
     }
 
     /**

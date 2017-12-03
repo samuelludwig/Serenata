@@ -70,8 +70,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         $provider = new FuzzyMatchingAutocompletionProvider($delegate);
 
         static::assertEquals([
-            $suggestions[1],
-            $suggestions[0]
+            $suggestions[0],
+            $suggestions[1]
         ], $provider->provide("test", 4));
     }
 
@@ -94,8 +94,7 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         $provider = new FuzzyMatchingAutocompletionProvider($delegate);
 
         static::assertEquals([
-            $suggestions[1],
-            $suggestions[0]
+            $suggestions[1]
         ], $provider->provide("test", 4));
     }
 
@@ -118,8 +117,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         $provider = new FuzzyMatchingAutocompletionProvider($delegate);
 
         static::assertEquals([
-            $suggestions[1],
-            $suggestions[0]
+            $suggestions[0],
+            $suggestions[1]
         ], $provider->provide("test", 4));
     }
 }
