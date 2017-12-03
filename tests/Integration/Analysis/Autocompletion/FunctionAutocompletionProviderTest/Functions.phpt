@@ -1,6 +1,9 @@
 <?php
 
-public function foo()
+/**
+ * @return int|string
+ */
+function foo()
 {
 
 }

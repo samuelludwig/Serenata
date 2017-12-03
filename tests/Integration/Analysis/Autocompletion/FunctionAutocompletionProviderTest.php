@@ -20,7 +20,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'protectionLevel'               => null,
                 'declaringStructure'            => null,
                 'url'                           => null,
-                'returnTypes'                   => '',
+                'returnTypes'                   => 'int|string',
                 'placeCursorBetweenParentheses' => false
             ])
         ];
