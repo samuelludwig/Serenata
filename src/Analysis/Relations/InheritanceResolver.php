@@ -127,9 +127,12 @@ final class InheritanceResolver extends AbstractResolver
             $childProperty = [];
         }
 
-        $class['properties'][$parentPropertyData['name']] = array_merge($parentPropertyData, $childProperty, $inheritedData, [
-            'override' => $overrideData
-        ]);
+        $class['properties'][$parentPropertyData['name']] = array_merge(
+            $parentPropertyData,
+            $childProperty,
+            $inheritedData,
+            ['override' => $overrideData]
+        );
     }
 
     /**

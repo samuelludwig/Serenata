@@ -310,7 +310,10 @@ class ClasslikeInfoBuilder
     private function buildMethodsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         foreach ($classlike->getMethods() as $method) {
-            $classlikeInfo['methods'][$method->getName()] = $this->methodConverter->convertForClass($method, $classlikeInfo);
+            $classlikeInfo['methods'][$method->getName()] = $this->methodConverter->convertForClass(
+                $method,
+                $classlikeInfo
+            );
         }
     }
 
@@ -415,7 +418,10 @@ class ClasslikeInfoBuilder
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
             if ($type['resolvedType'] !== null) {
-                $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType($type['resolvedType'], $elementFqcn);
+                $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType(
+                    $type['resolvedType'],
+                    $elementFqcn
+                );
             }
         });
     }
