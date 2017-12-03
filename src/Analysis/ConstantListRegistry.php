@@ -28,66 +28,66 @@ final class ConstantListRegistry implements ConstantListProviderInterface
     /**
      * @inheritDoc
      */
-     public function getAll(): array
-     {
-         return $this->getRegistry();
-     }
+    public function getAll(): array
+    {
+        return $this->getRegistry();
+    }
 
      /**
       * @param array $function
       */
-     public function add(array $function): void
-     {
-         $this->initializeRegistryIfNecessary();
+    public function add(array $function): void
+    {
+        $this->initializeRegistryIfNecessary();
 
-         $this->registry[$function['fqcn']] = $function;
-     }
+        $this->registry[$function['fqcn']] = $function;
+    }
 
      /**
       * @param array $function
       */
-     public function remove(array $function): void
-     {
-         $this->initializeRegistryIfNecessary();
+    public function remove(array $function): void
+    {
+        $this->initializeRegistryIfNecessary();
 
-         if (isset($this->registry[$function['fqcn']])) {
-             unset($this->registry[$function['fqcn']]);
-         }
-     }
+        if (isset($this->registry[$function['fqcn']])) {
+            unset($this->registry[$function['fqcn']]);
+        }
+    }
 
      /**
       * @return void
       */
-     public function reset(): void
-     {
-         $this->registry = null;
-     }
+    public function reset(): void
+    {
+        $this->registry = null;
+    }
 
      /**
       * @return array
       */
-     private function getRegistry(): array
-     {
-         $this->initializeRegistryIfNecessary();
+    private function getRegistry(): array
+    {
+        $this->initializeRegistryIfNecessary();
 
-         return $this->registry;
-     }
-
-     /**
-      * @return void
-      */
-     private function initializeRegistryIfNecessary(): void
-     {
-         if ($this->registry === null) {
-             $this->initializeRegistry();
-         }
-     }
+        return $this->registry;
+    }
 
      /**
       * @return void
       */
-     private function initializeRegistry(): void
-     {
-         $this->registry = $this->delegate->getAll();
-     }
+    private function initializeRegistryIfNecessary(): void
+    {
+        if ($this->registry === null) {
+            $this->initializeRegistry();
+        }
+    }
+
+     /**
+      * @return void
+      */
+    private function initializeRegistry(): void
+    {
+        $this->registry = $this->delegate->getAll();
+    }
 }

@@ -153,12 +153,12 @@ final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-     private function isValidType(string $type): bool
-     {
-         return
+    private function isValidType(string $type): bool
+    {
+        return
             !$this->typeAnalyzer->isSpecialType($type) &&
             !$this->docblockParser->isValidTag($type);
-     }
+    }
 
     /**
      * Retrieves the class usage list.
