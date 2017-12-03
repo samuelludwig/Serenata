@@ -6,6 +6,12 @@ use ArrayAccess;
 
 use PhpIntegrator\Analysis\Autocompletion\AutocompletionProviderInterface;
 
+use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
@@ -25,29 +31,45 @@ class AutocompleteCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param AutocompletionProviderInterface $autocompletionProvider
-     * @param sourceCodeStreamReader          $sourceCodeStreamReader
+     * @param SourceCodeStreamReader          $sourceCodeStreamReader
+     * @param StorageInterface                $storage
+     * @param FileIndexerInterface            $fileIndexer
      */
     public function __construct(
         AutocompletionProviderInterface $autocompletionProvider,
-        sourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        StorageInterface $storage,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->autocompletionProvider = $autocompletionProvider;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->storage = $storage;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {
             throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
         }
-
-        $code = null;
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
@@ -61,17 +83,24 @@ class AutocompleteCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->getAutocompletionSuggestions($code, $offset);
+        $result = $this->getAutocompletionSuggestions($arguments['file'], $code, $offset);
+
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
     }
 
     /**
+     * @param string $filePath
      * @param string $code
      * @param int    $offset
      *
      * @return array
      */
-    public function getAutocompletionSuggestions(string $code, int $offset): array
+    public function getAutocompletionSuggestions(string $filePath, string $code, int $offset): array
     {
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
         return iterator_to_array($this->autocompletionProvider->provide($code, $offset), false);
     }
 }

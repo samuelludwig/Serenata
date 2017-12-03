@@ -118,6 +118,8 @@ services:
         arguments:
             - '@autocompletionProvider'
             - '@sourceCodeStreamReader'
+            - '@storage'
+            - '@fileIndexer'
 
     gotoDefinitionCommand:
         class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand
