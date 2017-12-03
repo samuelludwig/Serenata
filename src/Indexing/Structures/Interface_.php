@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents an interface.
  */
-final class Interface_ extends Classlike
+class Interface_ extends Classlike
 {
     /**
      * @var string[]

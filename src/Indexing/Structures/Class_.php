@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a class.
  */
-final class Class_ extends Classlike
+class Class_ extends Classlike
 {
     /**
      * @var bool

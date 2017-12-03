@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a function parameter.
  */
-final class FunctionParameter extends FunctionLikeParameter
+class FunctionParameter extends FunctionLikeParameter
 {
     /**
      * @var Function_

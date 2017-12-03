@@ -3,7 +3,7 @@
 * None yet.
 
 ### Bugs Fixed
-* None yet.
+* Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
 
 ### Structural changes (mostly relevant to clients)
 * None yet.
