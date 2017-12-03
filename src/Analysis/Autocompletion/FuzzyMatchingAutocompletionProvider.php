@@ -84,6 +84,10 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
             $suggestionsArray[] = $suggestion;
         }
 
+        if ($prefix === '') {
+            return $suggestionsArray;
+        }
+
         $fuse = new \Fuse\Fuse($suggestionsArray, [
             // See also https://github.com/Loilo/Fuse#options
             'shouldSort'       => true,

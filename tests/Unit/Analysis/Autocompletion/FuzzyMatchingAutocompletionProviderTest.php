@@ -121,4 +121,28 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
             $suggestions[1]
         ], $provider->provide("test", 4));
     }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotFailOnEmptyPrefices(): void
+    {
+        $delegate = $this->getMockBuilder(AutocompletionProviderInterface::class)
+            ->setMethods(['provide'])
+            ->getMock();
+
+        $suggestions = [
+            new AutocompletionSuggestion('testos', SuggestionKind::FUNCTION, 'test', 'test', null),
+            new AutocompletionSuggestion('testo', SuggestionKind::FUNCTION, 'test', 'test', null)
+        ];
+
+        $delegate->method('provide')->willReturn($suggestions);
+
+        $provider = new FuzzyMatchingAutocompletionProvider($delegate);
+
+        static::assertEquals([
+            $suggestions[0],
+            $suggestions[1]
+        ], $provider->provide("", 0));
+    }
 }
