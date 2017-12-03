@@ -50,6 +50,8 @@ class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAu
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
             ['UseStatement.phpt'],
+            // ['Docblock.phpt'],
+            // ['Comment.phpt'],
             // ['FunctionSignature.phpt'],
             // ['MethodSignature.phpt'],
             ['PropertyFetch.phpt'],
