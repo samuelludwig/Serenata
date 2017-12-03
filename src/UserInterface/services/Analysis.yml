@@ -1,5 +1,6 @@
 imports:
     - { resource: Analysis/Typing.yml }
+    - { resource: Analysis/Autocompletion.yml }
 
 parameters:
 

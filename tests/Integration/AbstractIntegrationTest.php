@@ -203,6 +203,38 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @param ContainerBuilder $container
+     * @param string           $path
+     * @param string           $source
+     */
+    protected function indexTestFileWithSource(ContainerBuilder $container, string $path, string $source): void
+    {
+        $stream = new TmpFileStream();
+
+        $sourceCodeStreamReader = new SourceCodeStreamReader(
+            $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
+            $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
+            $stream
+        );
+
+        $indexer = new Indexer(
+            $container->get('requestQueue'),
+            $container->get('fileIndexer'),
+            $container->get('directoryIndexRequestDemuxer'),
+            $container->get('indexFilePruner'),
+            $container->get('pathNormalizer'),
+            $sourceCodeStreamReader,
+            $container->get('directoryIndexableFileIteratorFactory')
+        );
+
+        $stream->set($source);
+
+        $this->indexPathViaIndexer($indexer, $path, true);
+
+        $stream->close();
+    }
+
+    /**
      * @param string  $path
      * @param Closure $afterIndex
      * @param Closure $afterReindex

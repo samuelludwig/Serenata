@@ -1,0 +1,33 @@
+parameters:
+
+
+services:
+    functionAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
+        arguments:
+            - '@functionListProvider'
+
+    applicabilityCheckingFunctionAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingFunctionAutocompletionProvider
+        arguments:
+            - '@functionAutocompletionProvider'
+            - '@parser'
+
+    aggregatingAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
+        arguments:
+            - '@applicabilityCheckingFunctionAutocompletionProvider'
+
+    fuzzyMatchingAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
+        arguments:
+            - '@aggregatingAutocompletionProvider'
+
+    limitingAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\LimitingAutocompletionProvider
+        arguments:
+            - '@fuzzyMatchingAutocompletionProvider'
+            - 15
+
+    autocompletionProvider:
+        alias: limitingAutocompletionProvider

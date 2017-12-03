@@ -113,6 +113,14 @@ services:
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'
 
+    autocompleteCommand:
+        class: PhpIntegrator\UserInterface\Command\AutocompleteCommand
+        arguments:
+            - '@autocompletionProvider'
+            - '@sourceCodeStreamReader'
+            - '@storage'
+            - '@fileIndexer'
+
     gotoDefinitionCommand:
         class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand
         arguments:
