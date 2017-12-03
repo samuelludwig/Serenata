@@ -119,4 +119,12 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
     {
         return 'FunctionAutocompletionProviderTest';
     }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getProviderName(): string
+    {
+        return 'functionAutocompletionProvider';
+    }
 }

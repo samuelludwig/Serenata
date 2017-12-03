@@ -15,6 +15,11 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
     abstract protected function getFolderName(): string;
 
     /**
+     * @return string
+     */
+    abstract protected function getProviderName(): string;
+
+    /**
      * @param string $file
      *
      * @return string[]
@@ -35,9 +40,15 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
         $this->indexTestFileWithSource($container, $path, $code);
 
-        $provider = $container->get('aggregatingAutocompletionProvider');
+        $provider = $container->get($this->getProviderName());
 
-        return iterator_to_array($provider->provide($code, $markerOffset), false);
+        $results = $provider->provide($code, $markerOffset);
+
+        if (is_array($results)) {
+            return $results;
+        }
+
+        return iterator_to_array($results, false);
     }
 
     /**

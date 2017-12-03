@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis\Autocompletion;
 
-class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+class ApplicabilityCheckingConstantAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @dataProvider getFileNamesWhereShouldApply
@@ -66,7 +66,7 @@ class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAu
      */
     protected function getFolderName(): string
     {
-        return 'ApplicabilityCheckingFunctionAutocompletionProviderTest';
+        return 'ApplicabilityCheckingConstantAutocompletionProviderTest';
     }
 
     /**
@@ -74,6 +74,6 @@ class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAu
      */
     protected function getProviderName(): string
     {
-        return 'applicabilityCheckingFunctionAutocompletionProvider';
+        return 'applicabilityCheckingConstantAutocompletionProvider';
     }
 }

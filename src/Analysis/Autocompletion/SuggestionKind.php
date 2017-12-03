@@ -11,4 +11,9 @@ final class SuggestionKind
      * @var string
      */
     public const FUNCTION = 'function';
+
+    /**
+     * @var string
+     */
+    public const CONSTANT = 'constant';
 }

@@ -13,10 +13,22 @@ services:
             - '@functionAutocompletionProvider'
             - '@parser'
 
+    constantAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionProvider
+        arguments:
+            - '@constantListProvider'
+
+    applicabilityCheckingConstantAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingConstantAutocompletionProvider
+        arguments:
+            - '@constantAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
             - '@applicabilityCheckingFunctionAutocompletionProvider'
+            - '@applicabilityCheckingConstantAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
