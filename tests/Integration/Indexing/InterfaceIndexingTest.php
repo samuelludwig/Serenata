@@ -161,7 +161,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\Interface_
      */
-    protected function indexInterface(string $file): Structures\Interface_
+    private function indexInterface(string $file): Structures\Interface_
     {
         $path = $this->getPathFor($file);
 
@@ -179,7 +179,7 @@ class InterfaceIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/InterfaceIndexingTest/' . $file;
     }

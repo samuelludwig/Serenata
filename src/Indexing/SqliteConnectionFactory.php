@@ -14,7 +14,7 @@ class SqliteConnectionFactory
     /**
      * @return Configuration
      */
-    protected function getConfiguration(): Configuration
+    private function getConfiguration(): Configuration
     {
         return new Configuration();
     }

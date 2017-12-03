@@ -271,7 +271,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
      *
      * @return GotoDefinitionResult|null
      */
-    protected function locateDefinition(string $file, int $position): ?GotoDefinitionResult
+    private function locateDefinition(string $file, int $position): ?GotoDefinitionResult
     {
         $path = $this->getPathFor($file);
 
@@ -289,7 +289,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/DefinitionLocatorTest/' . $file;
     }
@@ -300,7 +300,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
      * @param int                  $end
      * @param GotoDefinitionResult $gotoDefinitionResult
      */
-    protected function assertGotoDefinitionResultEquals(
+    private function assertGotoDefinitionResultEquals(
         string $fileName,
         int $start,
         int $end,

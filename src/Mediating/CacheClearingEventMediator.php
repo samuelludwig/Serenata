@@ -49,7 +49,7 @@ class CacheClearingEventMediator
     /**
      * @return void
      */
-    protected function setup(): void
+    private function setup(): void
     {
         $this->eventEmitter->on($this->eventName, function () {
             $this->clearCache();
@@ -59,7 +59,7 @@ class CacheClearingEventMediator
     /**
      * @return void
      */
-    protected function clearCache(): void
+    private function clearCache(): void
     {
         $this->clearableCache->clearCache();
     }

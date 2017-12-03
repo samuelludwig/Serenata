@@ -57,7 +57,7 @@ class SocketServer
      *
      * @return void
      */
-    protected function onConnectionEstablished(Connection $connection): void
+    private function onConnectionEstablished(Connection $connection): void
     {
         $handler = $this->connectionHandlerFactory->create($connection);
 
@@ -73,7 +73,7 @@ class SocketServer
      *
      * @return void
      */
-    protected function onConnectionClosed(Connection $connection): void
+    private function onConnectionClosed(Connection $connection): void
     {
         $this->connectionMap->detach($connection);
     }

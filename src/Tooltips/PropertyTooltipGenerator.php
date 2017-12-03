@@ -41,7 +41,7 @@ class PropertyTooltipGenerator
      *
      * @return string
      */
-    protected function generateSummary(array $info): string
+    private function generateSummary(array $info): string
     {
         if ($info['shortDescription']) {
             return $info['shortDescription'];
@@ -55,7 +55,7 @@ class PropertyTooltipGenerator
      *
      * @return string|null
      */
-    protected function generateLongDescription(array $info): ?string
+    private function generateLongDescription(array $info): ?string
     {
         if (!empty($info['longDescription'])) {
             return "# Description\n" . $info['longDescription'];
@@ -69,7 +69,7 @@ class PropertyTooltipGenerator
      *
      * @return string
      */
-    protected function generateType(array $info): string
+    private function generateType(array $info): string
     {
         $returnDescription = null;
 

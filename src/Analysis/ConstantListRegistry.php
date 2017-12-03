@@ -66,7 +66,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
      /**
       * @return array
       */
-     protected function getRegistry(): array
+     private function getRegistry(): array
      {
          $this->initializeRegistryIfNecessary();
 
@@ -76,7 +76,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
      /**
       * @return void
       */
-     protected function initializeRegistryIfNecessary(): void
+     private function initializeRegistryIfNecessary(): void
      {
          if ($this->registry === null) {
              $this->initializeRegistry();
@@ -86,7 +86,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
      /**
       * @return void
       */
-     protected function initializeRegistry(): void
+     private function initializeRegistry(): void
      {
          $this->registry = $this->delegate->getAll();
      }

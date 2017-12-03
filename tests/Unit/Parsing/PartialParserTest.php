@@ -15,7 +15,7 @@ class PartialParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserFactory
      */
-    protected function createParserFactoryStub(): ParserFactory
+    private function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
     }
@@ -23,7 +23,7 @@ class PartialParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return PartialParser
      */
-    protected function createPartialParser(): PartialParser
+    private function createPartialParser(): PartialParser
     {
         return new PartialParser($this->createParserFactoryStub(), new Lexer());
     }

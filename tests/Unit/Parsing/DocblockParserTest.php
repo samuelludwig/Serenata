@@ -241,7 +241,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return DocblockParser
      */
-    protected function getDocblockParser(): DocblockParser
+    private function getDocblockParser(): DocblockParser
     {
         return new DocblockParser(
             $this->getDocblockAnalyzer(),
@@ -252,7 +252,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return DocblockAnalyzer
      */
-    protected function getDocblockAnalyzer(): DocblockAnalyzer
+    private function getDocblockAnalyzer(): DocblockAnalyzer
     {
         return new DocblockAnalyzer();
     }
@@ -260,7 +260,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return DocblockTypeParser
      */
-    protected function getDocblockTypeParser(): DocblockTypeParser
+    private function getDocblockTypeParser(): DocblockTypeParser
     {
         return new DocblockTypeParser();
     }

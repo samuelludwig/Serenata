@@ -96,7 +96,7 @@ class ExpressionTypeInfoMap
      *
      * @return void
      */
-    protected function createIfNecessary(string $expression): void
+    private function createIfNecessary(string $expression): void
     {
         if ($this->has($expression)) {
             return;
@@ -110,7 +110,7 @@ class ExpressionTypeInfoMap
      *
      * @return void
      */
-    protected function create(string $expression): void
+    private function create(string $expression): void
     {
         $this->map[$expression] = new ExpressionTypeInfo();
     }

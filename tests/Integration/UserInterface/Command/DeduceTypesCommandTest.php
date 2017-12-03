@@ -1074,7 +1074,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
+    private function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
     {
         $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
 
@@ -1100,7 +1100,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    protected function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
+    private function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
     {
         $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
         $metaFilePath = __DIR__ . '/DeduceTypesCommandTest/' . $metaFile;
@@ -1127,7 +1127,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
      *
      * @return int
      */
-    protected function getMarkerOffset(string $path, string $marker): int
+    private function getMarkerOffset(string $path, string $marker): int
     {
         $testFileContents = @file_get_contents($path);
 

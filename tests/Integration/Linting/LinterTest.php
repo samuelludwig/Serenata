@@ -672,7 +672,7 @@ class LinterTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    protected function lintFile(string $filePath, bool $indexingMayFail = false): array
+    private function lintFile(string $filePath, bool $indexingMayFail = false): array
     {
         $path = __DIR__ . '/LinterTest/' . $filePath;
 

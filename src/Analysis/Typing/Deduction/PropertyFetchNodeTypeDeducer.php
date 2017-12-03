@@ -66,7 +66,7 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromPropertyFetchNode(
+    private function deduceTypesFromPropertyFetchNode(
         Node\Expr $node,
         Structures\File $file,
         string $code,

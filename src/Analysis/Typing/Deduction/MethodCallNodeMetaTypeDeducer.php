@@ -66,7 +66,7 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromMethodCallNode(
+    private function deduceTypesFromMethodCallNode(
         Node\Expr $node,
         Structures\File $file,
         string $code,

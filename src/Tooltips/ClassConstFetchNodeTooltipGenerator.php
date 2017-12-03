@@ -95,7 +95,7 @@ class ClassConstFetchNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
+    private function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
     {
         $classTypes = [];
 
@@ -118,7 +118,7 @@ class ClassConstFetchNodeTooltipGenerator
      *
      * @return array|null
      */
-    protected function fetchClassConstantInfo(string $classType, string $name): ?array
+    private function fetchClassConstantInfo(string $classType, string $name): ?array
     {
         $classInfo = null;
 

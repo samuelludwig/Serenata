@@ -110,7 +110,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getVarTagMissingErrors(): array
+    private function getVarTagMissingErrors(): array
     {
         $errors = [];
 
@@ -126,7 +126,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getVarTagMissingErrorsForStructure(array $classlike): array
+    private function getVarTagMissingErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
@@ -147,7 +147,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getVarTagMissingErrorsForProperty(array $classlike, array $property): array
+    private function getVarTagMissingErrorsForProperty(array $classlike, array $property): array
     {
         if (!$property['docComment']) {
             return [];
@@ -174,7 +174,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getVarTagMissingErrorsForClassConstant(array $classlike, array $constant): array
+    private function getVarTagMissingErrorsForClassConstant(array $classlike, array $constant): array
     {
         if (!$constant['docComment']) {
             return [];
@@ -198,7 +198,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getParameterMissingErrors(): array
+    private function getParameterMissingErrors(): array
     {
         $errors = [];
 
@@ -218,7 +218,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getParameterMissingErrorsForStructure(array $classlike): array
+    private function getParameterMissingErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
@@ -235,7 +235,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getParameterMissingErrorsForMethod(array $classlike, array $method): array
+    private function getParameterMissingErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getParameterMissingErrorsForGlobalFunction($method);
     }
@@ -245,7 +245,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getParameterMissingErrorsForGlobalFunction(array $globalFunction): array
+    private function getParameterMissingErrorsForGlobalFunction(array $globalFunction): array
     {
         if (!$globalFunction['docComment']) {
            return [];
@@ -285,7 +285,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getParameterTypeMismatchErrors(): array
+    private function getParameterTypeMismatchErrors(): array
     {
         $errors = [];
 
@@ -305,7 +305,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getParameterTypeMismatchErrorsForStructure(array $classlike): array
+    private function getParameterTypeMismatchErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
@@ -322,7 +322,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getParameterTypeMismatchErrorsForMethod(array $classlike, array $method): array
+    private function getParameterTypeMismatchErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getParameterTypeMismatchErrorsForGlobalFunction($method);
     }
@@ -332,7 +332,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getParameterTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
+    private function getParameterTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
     {
         if (!$globalFunction['docComment']) {
             return [];
@@ -383,7 +383,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getReturnTypeMismatchErrors(): array
+    private function getReturnTypeMismatchErrors(): array
     {
         $errors = [];
 
@@ -403,7 +403,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getReturnTypeMismatchErrorsForStructure(array $classlike): array
+    private function getReturnTypeMismatchErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
@@ -420,7 +420,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getReturnTypeMismatchErrorsForMethod(array $classlike, array $method): array
+    private function getReturnTypeMismatchErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getReturnTypeMismatchErrorsForGlobalFunction($method);
     }
@@ -430,7 +430,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getReturnTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
+    private function getReturnTypeMismatchErrorsForGlobalFunction(array $globalFunction): array
     {
         if (!$globalFunction['docComment']) {
             return [];
@@ -489,7 +489,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getSuperfluousParameterErrors(): array
+    private function getSuperfluousParameterErrors(): array
     {
         $errors = [];
 
@@ -509,7 +509,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getSuperfluousParameterErrorsForStructure(array $classlike): array
+    private function getSuperfluousParameterErrorsForStructure(array $classlike): array
     {
         $errors = [];
 
@@ -526,7 +526,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getSuperfluousParameterErrorsForMethod(array $classlike, array $method): array
+    private function getSuperfluousParameterErrorsForMethod(array $classlike, array $method): array
     {
         return $this->getSuperfluousParameterErrorsForGlobalFunction($method);
     }
@@ -536,7 +536,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getSuperfluousParameterErrorsForGlobalFunction(array $globalFunction): array
+    private function getSuperfluousParameterErrorsForGlobalFunction(array $globalFunction): array
     {
         if (!$globalFunction['docComment']) {
             return [];
@@ -583,7 +583,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getDeprecatedCategoryTagWarnings(): array
+    private function getDeprecatedCategoryTagWarnings(): array
     {
         $warnings = [];
 
@@ -597,7 +597,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getDeprecatedSubpackageTagWarnings(): array
+    private function getDeprecatedSubpackageTagWarnings(): array
     {
         $warnings = [];
 
@@ -611,7 +611,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getDeprecatedLinkTagWarnings(): array
+    private function getDeprecatedLinkTagWarnings(): array
     {
         $warnings = [];
 
@@ -627,7 +627,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getDeprecatedCategoryTagWarningsForStructure(array $classlike): array
+    private function getDeprecatedCategoryTagWarningsForStructure(array $classlike): array
     {
         $result = $this->docblockParser->parse($classlike['docComment'], [
             DocblockParser::CATEGORY
@@ -651,7 +651,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getDeprecatedSubpackageTagWarningsForStructure(array $classlike): array
+    private function getDeprecatedSubpackageTagWarningsForStructure(array $classlike): array
     {
         $result = $this->docblockParser->parse($classlike['docComment'], [
             DocblockParser::SUBPACKAGE
@@ -677,7 +677,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
      *
      * @see https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md#710-link-deprecated
      */
-    protected function getDeprecatedLinkTagWarningsForStructure(array $classlike): array
+    private function getDeprecatedLinkTagWarningsForStructure(array $classlike): array
     {
         $result = $this->docblockParser->parse($classlike['docComment'], [
             DocblockParser::LINK

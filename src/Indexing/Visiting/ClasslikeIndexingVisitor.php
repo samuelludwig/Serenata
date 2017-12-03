@@ -222,7 +222,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processEnterClasslikeNode(Node\Stmt\ClassLike $node): void
+    private function processEnterClasslikeNode(Node\Stmt\ClassLike $node): void
     {
         $this->classlikeStack->push($this->parseClasslikeNode($node));
     }
@@ -232,7 +232,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processLeaveClasslikeNode(Node\Stmt\ClassLike $node): void
+    private function processLeaveClasslikeNode(Node\Stmt\ClassLike $node): void
     {
         $this->classlikeStack->pop();
     }
@@ -242,7 +242,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return Structures\Classlike
      */
-    protected function parseClasslikeNode(Node\Stmt\ClassLike $node): Structures\Classlike
+    private function parseClasslikeNode(Node\Stmt\ClassLike $node): Structures\Classlike
     {
         if (!isset($node->namespacedName)) {
             // return;
@@ -370,7 +370,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
+    private function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
         $traitUses = [];
 
@@ -389,7 +389,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Classlike $classlike): void
+    private function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Classlike $classlike): void
     {
         if ($classlike instanceof Structures\Class_) {
             $this->processClassRelations($node, $classlike);
@@ -408,7 +408,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processClassRelations(Node\Stmt\Class_ $node, Structures\Class_ $class): void
+    private function processClassRelations(Node\Stmt\Class_ $node, Structures\Class_ $class): void
     {
         if ($node->extends) {
             $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
@@ -447,7 +447,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processInterfaceRelations(Node\Stmt\Interface_ $node, Structures\Interface_ $interface): void
+    private function processInterfaceRelations(Node\Stmt\Interface_ $node, Structures\Interface_ $interface): void
     {
         $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
             $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
@@ -472,7 +472,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Classlike $classlike): void
+    private function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Classlike $classlike): void
     {
         if ($classlike instanceof Structures\Interface_) {
             return; // Nope, interfaces can't use traits.
@@ -565,7 +565,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassPropertyNode(Node\Stmt\Property $node): void
+    private function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
         $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
@@ -649,7 +649,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
+    private function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
         $localType = null;
         $resolvedType = null;
@@ -834,7 +834,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassConstantStatementNode(Node\Stmt\ClassConst $node): void
+    private function parseClassConstantStatementNode(Node\Stmt\ClassConst $node): void
     {
         foreach ($node->consts as $const) {
             $this->parseClassConstantNode($const, $node);
@@ -847,7 +847,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassConstantNode(Node\Const_ $node, Node\Stmt\ClassConst $classConst): void
+    private function parseClassConstantNode(Node\Const_ $node, Node\Stmt\ClassConst $classConst): void
     {
         $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
 
@@ -928,7 +928,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function indexMagicProperty(
+    private function indexMagicProperty(
         array $rawData,
         Structures\Classlike $classlike,
         Structures\AccessModifier $accessModifier,
@@ -969,7 +969,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function indexMagicMethod(
+    private function indexMagicMethod(
         array $rawData,
         Structures\Classlike $classlike,
         Structures\AccessModifier $accessModifier,
@@ -1054,7 +1054,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function indexClassKeyword(Structures\Classlike $classlike): void
+    private function indexClassKeyword(Structures\Classlike $classlike): void
     {
         $constant = new Structures\ClassConstant(
             'class',
@@ -1081,7 +1081,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return Structures\TypeInfo[]
      */
-    protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
+    private function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
     {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
@@ -1094,7 +1094,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return Structures\TypeInfo[]
      */
-    protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
+    private function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
     {
         $types = [];
 
@@ -1110,7 +1110,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @return array
      */
-    protected function getAccessModifierMap(): array
+    private function getAccessModifierMap(): array
     {
         if (!$this->accessModifierMap) {
             $modifiers = $this->storage->getAccessModifiers();
@@ -1130,7 +1130,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return Structures\Classlike|null
      */
-    protected function findStructureByFqcn(string $fqcn): ?Structures\Classlike
+    private function findStructureByFqcn(string $fqcn): ?Structures\Classlike
     {
         foreach ($this->classlikesFound as $classlike) {
             $foundFqcn = $this->classlikesFound[$classlike];

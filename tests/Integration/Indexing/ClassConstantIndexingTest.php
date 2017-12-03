@@ -232,7 +232,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\ClassConstant
      */
-    protected function indexConstant(string $file): Structures\ClassConstant
+    private function indexConstant(string $file): Structures\ClassConstant
     {
         $path = $this->getPathFor($file);
 
@@ -255,7 +255,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/ClassConstantIndexingTest/' . $file;
     }

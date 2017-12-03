@@ -87,7 +87,7 @@ class ClassMethodNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getMethodInfo(string $fqcn, string $method): array
+    private function getMethodInfo(string $fqcn, string $method): array
     {
         $classlikeInfo = null;
 

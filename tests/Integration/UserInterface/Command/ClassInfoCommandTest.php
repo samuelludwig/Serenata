@@ -1909,7 +1909,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    protected function getClassInfo(string $file, string $fqcn): array
+    private function getClassInfo(string $file, string $fqcn): array
     {
         $path = $this->getPathFor($file);
 
@@ -1925,7 +1925,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/ClassInfoCommandTest/' . $file;
     }

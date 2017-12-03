@@ -140,7 +140,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      *
      * @return AvailableVariablesCommand
      */
-    protected function getCommand(string $file, bool $mayFail = false): AvailableVariablesCommand
+    private function getCommand(string $file, bool $mayFail = false): AvailableVariablesCommand
     {
         $path = $this->getTestFilePath($file);
 
@@ -154,7 +154,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getTestFilePath(string $name): string
+    private function getTestFilePath(string $name): string
     {
         return __DIR__ . '/AvailableVariablesCommandTest/' . $name;
     }
@@ -165,7 +165,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    protected function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
+    private function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
     {
         $command = $this->getCommand($file, $mayIndexingFail);
 
@@ -182,7 +182,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      *
      * @return int|null
      */
-    protected function getMarkerOffset(string $path, string $marker): ?int
+    private function getMarkerOffset(string $path, string $marker): ?int
     {
         $testFileContents = file_get_contents($path);
 

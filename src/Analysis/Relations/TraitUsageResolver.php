@@ -72,7 +72,7 @@ final class TraitUsageResolver extends AbstractResolver
      *
      * @return void
      */
-    protected function resolveTraitUseOfProperty(array $traitPropertyData, ArrayObject $class): void
+    private function resolveTraitUseOfProperty(array $traitPropertyData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childProperty = null;
@@ -129,7 +129,7 @@ final class TraitUsageResolver extends AbstractResolver
      *
      * @return void
      */
-    protected function resolveTraitUseOfMethod(array $traitMethodData, ArrayObject $class): void
+    private function resolveTraitUseOfMethod(array $traitMethodData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childMethod = null;

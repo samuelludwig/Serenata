@@ -48,7 +48,7 @@ final class ModificationTimeFilterIterator extends FilterIterator
      *
      * @return Structures\File[]
      */
-    protected function createFileModifiedMap(array $filesInIndex): array
+    private function createFileModifiedMap(array $filesInIndex): array
     {
         $map = [];
 

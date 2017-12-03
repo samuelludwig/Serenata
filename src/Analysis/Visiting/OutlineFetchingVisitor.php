@@ -105,7 +105,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassNode(Node\Stmt\Class_ $node): void
+    private function parseClassNode(Node\Stmt\Class_ $node): void
     {
         $this->currentStructure = $node;
 
@@ -142,7 +142,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseInterfaceNode(Node\Stmt\Interface_ $node): void
+    private function parseInterfaceNode(Node\Stmt\Interface_ $node): void
     {
         if (!isset($node->namespacedName)) {
             return;
@@ -180,7 +180,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseTraitNode(Node\Stmt\Trait_ $node): void
+    private function parseTraitNode(Node\Stmt\Trait_ $node): void
     {
         if (!isset($node->namespacedName)) {
             return;
@@ -210,7 +210,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseTraitUseNode(Node\Stmt\TraitUse $node): void
+    private function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
@@ -244,7 +244,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassPropertyNode(Node\Stmt\Property $node): void
+    private function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
@@ -278,7 +278,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseFunctionNode(Node\Stmt\Function_ $node): void
+    private function parseFunctionNode(Node\Stmt\Function_ $node): void
     {
         $data = $this->extractFunctionLikeNodeData($node);
 
@@ -296,7 +296,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
+    private function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
         if (!isset($this->currentStructure->namespacedName)) {
             return;
@@ -319,7 +319,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return array
      */
-    protected function extractFunctionLikeNodeData(Node\FunctionLike $node): array
+    private function extractFunctionLikeNodeData(Node\FunctionLike $node): array
     {
         $parameters = [];
 
@@ -405,7 +405,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClassConstantNode(Node\Stmt\ClassConst $node): void
+    private function parseClassConstantNode(Node\Stmt\ClassConst $node): void
     {
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
 
@@ -436,7 +436,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseConstantNode(Node\Stmt\Const_ $node): void
+    private function parseConstantNode(Node\Stmt\Const_ $node): void
     {
         foreach ($node->consts as $const) {
             $fqcn = $this->typeNormalizer->getNormalizedFqcn(
@@ -467,7 +467,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseDefineNode(Node\Expr\FuncCall $node): void
+    private function parseDefineNode(Node\Expr\FuncCall $node): void
     {
         if (count($node->args) < 2) {
             return;

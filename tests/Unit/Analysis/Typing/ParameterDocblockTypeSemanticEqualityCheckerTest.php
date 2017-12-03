@@ -1121,7 +1121,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      *
      * @return StructureAwareNameResolverFactoryInterface
      */
-    protected function mockStructureAwareNameResolverFactory(
+    private function mockStructureAwareNameResolverFactory(
         PositionalNameResolverInterface $structureAwareNameResolverMock
     ): StructureAwareNameResolverFactoryInterface {
         $resolver = $this->getMockBuilder(StructureAwareNameResolverFactoryInterface::class)
@@ -1139,7 +1139,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
      *
      * @return ClasslikeInfoBuilder
      */
-    protected function getClasslikeInfoBuilderMock(array $returnValues = []): ClasslikeInfoBuilder
+    private function getClasslikeInfoBuilderMock(array $returnValues = []): ClasslikeInfoBuilder
     {
         $classlikeInfoBuilder = $this->getMockBuilder(ClasslikeInfoBuilder::class)
             ->disableOriginalConstructor()

@@ -72,7 +72,7 @@ class NameNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getClassLikeInfo(string $fullyQualifiedName): array
+    private function getClassLikeInfo(string $fullyQualifiedName): array
     {
         return $this->classLikeInfoBuilder->getClasslikeInfo($fullyQualifiedName);
     }

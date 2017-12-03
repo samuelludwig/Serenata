@@ -75,7 +75,7 @@ class JsonRpcQueueItemProcessor
      *
      * @return JsonRpcResponse|null
      */
-    protected function handle(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    private function handle(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
         $params = $queueItem->getRequest()->getParams();
 
@@ -98,7 +98,7 @@ class JsonRpcQueueItemProcessor
      *
      * @return Command\CommandInterface
      */
-    protected function getCommandByMethod(string $method): Command\CommandInterface
+    private function getCommandByMethod(string $method): Command\CommandInterface
     {
         try {
             return $this->container->get($method . 'Command');
@@ -114,7 +114,7 @@ class JsonRpcQueueItemProcessor
      *
      * @return string
      */
-    protected function getCompleteBacktraceFromThrowable(Throwable $throwable): string
+    private function getCompleteBacktraceFromThrowable(Throwable $throwable): string
     {
         $counter = 1;
 
@@ -145,7 +145,7 @@ class JsonRpcQueueItemProcessor
      *
      * @return Vector
      */
-    protected function getThrowableVector(Throwable $throwable): Vector
+    private function getThrowableVector(Throwable $throwable): Vector
     {
         $vector = new Vector();
 
@@ -163,7 +163,7 @@ class JsonRpcQueueItemProcessor
     /**
      * @param string $databaseFile
      */
-    protected function setDatabaseFile(string $databaseFile): void
+    private function setDatabaseFile(string $databaseFile): void
     {
         /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = $this->container->get('managerRegistry');

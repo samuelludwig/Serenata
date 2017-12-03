@@ -158,7 +158,7 @@ final class DeduceTypesCommand extends AbstractCommand
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpression(
+    private function deduceTypesFromExpression(
         Structures\File $file,
         string $code,
         string $expression,
@@ -185,7 +185,7 @@ final class DeduceTypesCommand extends AbstractCommand
      *
      * @return Node
      */
-    protected function getNodeWithoutLastElement(Node $node): Node
+    private function getNodeWithoutLastElement(Node $node): Node
     {
         if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
             return $node->var;
@@ -207,7 +207,7 @@ final class DeduceTypesCommand extends AbstractCommand
      *
      * @return string[]
      */
-    protected function deduceTypesFromNode(Structures\File $file, string $code, Node $node, int $offset): array
+    private function deduceTypesFromNode(Structures\File $file, string $code, Node $node, int $offset): array
     {
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
@@ -225,7 +225,7 @@ final class DeduceTypesCommand extends AbstractCommand
      *
      * @return void
      */
-    protected function attachRelevantNamespaceToNode(Node $node, Structures\File $file, int $line): void
+    private function attachRelevantNamespaceToNode(Node $node, Structures\File $file, int $line): void
     {
         $namespace = null;
         $namespaceNode = null;

@@ -126,7 +126,7 @@ class DefinitionLocator
      *
      * @return Node
      */
-    protected function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(array $nodes, int $position): Node
     {
         $visitor = new NodeFetchingVisitor($position);
 
@@ -160,7 +160,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfStructuralElementRepresentedByNode(
+    private function locateDefinitionOfStructuralElementRepresentedByNode(
         Node $node,
         Structures\File $file,
         string $code
@@ -223,7 +223,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfFuncCallNode(Node\Expr\FuncCall $node): GotoDefinitionResult
+    private function locateDefinitionOfFuncCallNode(Node\Expr\FuncCall $node): GotoDefinitionResult
     {
         return $this->funcCallNodeDefinitionLocator->locate($node);
     }
@@ -238,7 +238,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfMethodCallNode(
+    private function locateDefinitionOfMethodCallNode(
         Node\Expr\MethodCall $node,
         Structures\File $file,
         string $code,
@@ -257,7 +257,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfStaticMethodCallNode(
+    private function locateDefinitionOfStaticMethodCallNode(
         Node\Expr\StaticCall $node,
         Structures\File $file,
         string $code,
@@ -276,7 +276,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfPropertyFetchNode(
+    private function locateDefinitionOfPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -295,7 +295,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfStaticPropertyFetchNode(
+    private function locateDefinitionOfStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -311,7 +311,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfConstFetchNode(Node\Expr\ConstFetch $node): GotoDefinitionResult
+    private function locateDefinitionOfConstFetchNode(Node\Expr\ConstFetch $node): GotoDefinitionResult
     {
         return $this->constFetchNodeDefinitionLocator->generate($node);
     }
@@ -325,7 +325,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfClassConstFetchNode(
+    private function locateDefinitionOfClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
         Structures\File $file,
         string $code
@@ -342,7 +342,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfUseUseNode(
+    private function locateDefinitionOfUseUseNode(
         Node\Stmt\UseUse $node,
         Structures\File $file,
         int $line
@@ -372,7 +372,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfNameNode(
+    private function locateDefinitionOfNameNode(
         Node\Name $node,
         Structures\File $file,
         int $line
@@ -387,7 +387,7 @@ class DefinitionLocator
      *
      * @return Node[]
      */
-    protected function getNodesFromCode(string $code): array
+    private function getNodesFromCode(string $code): array
     {
         $nodes = $this->parser->parse($code, $this->getErrorHandler());
 
@@ -401,7 +401,7 @@ class DefinitionLocator
     /**
      * @return ErrorHandler\Collecting
      */
-    protected function getErrorHandler(): ErrorHandler\Collecting
+    private function getErrorHandler(): ErrorHandler\Collecting
     {
         return new ErrorHandler\Collecting();
     }

@@ -68,7 +68,7 @@ class ConstFetchNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getConstantInfo(string $fullyQualifiedName): array
+    private function getConstantInfo(string $fullyQualifiedName): array
     {
         $functions = $this->constantListProvider->getAll();
 

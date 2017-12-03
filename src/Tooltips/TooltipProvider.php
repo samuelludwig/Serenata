@@ -144,7 +144,7 @@ class TooltipProvider
      *
      * @return Node
      */
-    protected function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(array $nodes, int $position): Node
     {
         $visitor = new NodeFetchingVisitor($position);
 
@@ -178,7 +178,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForNode(Node $node, Structures\File $file, string $code): string
+    private function getTooltipForNode(Node $node, Structures\File $file, string $code): string
     {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node);
@@ -242,7 +242,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForFuncCallNode(Node\Expr\FuncCall $node): string
+    private function getTooltipForFuncCallNode(Node\Expr\FuncCall $node): string
     {
         return $this->funcCallNodeTooltipGenerator->generate($node);
     }
@@ -257,7 +257,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForMethodCallNode(
+    private function getTooltipForMethodCallNode(
         Node\Expr\MethodCall $node,
         Structures\File $file,
         string $code,
@@ -276,7 +276,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForStaticMethodCallNode(
+    private function getTooltipForStaticMethodCallNode(
         Node\Expr\StaticCall $node,
         Structures\File $file,
         string $code,
@@ -295,7 +295,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForPropertyFetchNode(
+    private function getTooltipForPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -314,7 +314,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForStaticPropertyFetchNode(
+    private function getTooltipForStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -330,7 +330,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
+    private function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
     {
         return $this->constFetchNodeTooltipGenerator->generate($node);
     }
@@ -344,7 +344,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForClassConstFetchNode(
+    private function getTooltipForClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
         Structures\File $file,
         string $code
@@ -361,7 +361,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
+    private function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
     {
         $parentNode = $node->getAttribute('parent', false);
 
@@ -386,7 +386,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
+    private function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
     {
         return $this->functionNodeTooltipGenerator->generate($node);
     }
@@ -399,7 +399,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, Structures\File $file): string
+    private function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, Structures\File $file): string
     {
         return $this->classMethodNodeTooltipGenerator->generate($node, $file);
     }
@@ -413,7 +413,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForNameNode(Node\Name $node, Structures\File $file, int $line): string
+    private function getTooltipForNameNode(Node\Name $node, Structures\File $file, int $line): string
     {
         return $this->nameNodeTooltipGenerator->generate($node, $file, $line);
     }
@@ -425,7 +425,7 @@ class TooltipProvider
      *
      * @return Node[]
      */
-    protected function getNodesFromCode(string $code): array
+    private function getNodesFromCode(string $code): array
     {
         $nodes = $this->parser->parse($code, $this->getErrorHandler());
 
@@ -439,7 +439,7 @@ class TooltipProvider
     /**
      * @return ErrorHandler\Collecting
      */
-    protected function getErrorHandler(): ErrorHandler\Collecting
+    private function getErrorHandler(): ErrorHandler\Collecting
     {
         return new ErrorHandler\Collecting();
     }

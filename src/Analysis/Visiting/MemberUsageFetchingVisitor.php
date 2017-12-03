@@ -194,7 +194,7 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    protected function isClassExcluded(string $className): bool
+    private function isClassExcluded(string $className): bool
     {
         $className = $this->typeAnalyzer->getNormalizedFqcn($className);
 

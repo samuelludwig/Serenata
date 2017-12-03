@@ -16,7 +16,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserFactory
      */
-    protected function createParserFactoryStub(): ParserFactory
+    private function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
     }
@@ -24,7 +24,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPrettyPrinterStub(): PrettyPrinter
+    private function createPrettyPrinterStub(): PrettyPrinter
     {
         return new PrettyPrinter();
     }
@@ -32,7 +32,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserFactory
      */
-    protected function createPartialParserStub(): PartialParser
+    private function createPartialParserStub(): PartialParser
     {
         return new PartialParser($this->createParserFactoryStub(), new Lexer());
     }
@@ -40,7 +40,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserTokenHelper
      */
-    protected function createParserTokenHelperStub(): ParserTokenHelper
+    private function createParserTokenHelperStub(): ParserTokenHelper
     {
         return new ParserTokenHelper();
     }
@@ -48,7 +48,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return LastExpressionParser
      */
-    protected function createLastExpressionParser(): LastExpressionParser
+    private function createLastExpressionParser(): LastExpressionParser
     {
         return new LastExpressionParser(
             $this->createPartialParserStub(),

@@ -390,7 +390,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelp(string $file, int $position): SignatureHelp
+    private function getSignatureHelp(string $file, int $position): SignatureHelp
     {
         $path = $this->getPathFor($file);
 
@@ -408,7 +408,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/SignatureHelpTest/' . $file;
     }
@@ -419,7 +419,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      * @param int                    $end
      * @param SignatureInformation[] $signatures
      */
-    protected function assertSignatureHelpSignaturesEquals(
+    private function assertSignatureHelpSignaturesEquals(
         string $fileName,
         int $start,
         int $end,
@@ -470,7 +470,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      * @param int      $end
      * @param int|null $activeParameter
      */
-    protected function assertSignatureHelpActiveParameterEquals(
+    private function assertSignatureHelpActiveParameterEquals(
         string $fileName,
         int $start,
         int $end,

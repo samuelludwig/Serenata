@@ -54,7 +54,7 @@ class SchemaInitializer
     /**
      * @return void
      */
-    protected function loadFixtures(): void
+    private function loadFixtures(): void
     {
         $entityManager = $this->managerRegistry->getManager();
 

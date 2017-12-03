@@ -283,7 +283,7 @@ final class LastExpressionParser implements Parser
      *
      * @return string
      */
-    protected function getNormalizedCode(string $code): string
+    private function getNormalizedCode(string $code): string
     {
         if (mb_substr(trim($code), 0, 5) !== '<?php') {
             return '<?php ' . $code;

@@ -175,7 +175,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      *
      * @return string
      */
-    protected function interchangeType(string $docblockType, string $oldType, string $newType): string
+    private function interchangeType(string $docblockType, string $oldType, string $newType): string
     {
         if ($this->isArraySyntaxTypeHint($docblockType)) {
             $valueType = $this->getValueTypeFromArraySyntaxTypeHint($docblockType);

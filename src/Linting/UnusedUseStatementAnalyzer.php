@@ -100,7 +100,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getWarningsForClasses(): array
+    private function getWarningsForClasses(): array
     {
         // Cross-reference the found class names against the class map.
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -149,7 +149,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getWarningsForConstants(): array
+    private function getWarningsForConstants(): array
     {
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -195,7 +195,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getWarningsForFunctions(): array
+    private function getWarningsForFunctions(): array
     {
         $unknownClasses = [];
         $namespaces = $this->useStatementFetchingVisitor->getNamespaces();
@@ -244,7 +244,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
      *
      * @return int
      */
-    protected function getRelevantNamespaceIndexForLine(array $namespaces, int $line): int
+    private function getRelevantNamespaceIndexForLine(array $namespaces, int $line): int
     {
         foreach ($namespaces as $index => $namespace) {
             if ($this->lineLiesWithinNamespaceRange($line, $namespace)) {
@@ -261,7 +261,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
      *
      * @return bool
      */
-    protected function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
+    private function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
     {
         return (
             $line >= $namespace['startLine'] &&

@@ -144,7 +144,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function getResolvedTypes(
+    private function getResolvedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
         Structures\File $file,
@@ -188,7 +188,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function getUnreferencedTypes(
+    private function getUnreferencedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
         Structures\File $file,
@@ -228,7 +228,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
     {
         $dummyNode = new Parsing\Node\Keyword\Self_();
 
@@ -242,7 +242,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function deduceTypesFromStatic(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromStatic(Structures\File $file, string $code, int $offset): array
     {
         $dummyNode = new Parsing\Node\Keyword\Static_();
 
@@ -259,7 +259,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function getTypes(
+    private function getTypes(
         ExpressionTypeInfo $expressionTypeInfo,
         string $expression,
         Structures\File $file,
@@ -289,7 +289,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function getTypesForBestMatchNode(
+    private function getTypesForBestMatchNode(
         string $expression,
         Node $node,
         Structures\File $file,
@@ -314,7 +314,7 @@ class LocalTypeScanner
      *
      * @return string[]
      */
-    protected function deduceTypesFromFunctionLikeParameter(
+    private function deduceTypesFromFunctionLikeParameter(
         Node\FunctionLike $node,
         string $parameterName,
         Structures\File $file,

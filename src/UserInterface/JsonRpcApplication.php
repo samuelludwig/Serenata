@@ -87,7 +87,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @return void
      */
-    protected function ensurePeriodicTimerIsInstalled(): void
+    private function ensurePeriodicTimerIsInstalled(): void
     {
         if ($this->periodicTimer !== null) {
             return;
@@ -100,7 +100,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @return void
      */
-    protected function installPeriodicTimer(): void
+    private function installPeriodicTimer(): void
     {
         $this->periodicTimer = $this->loop->addPeriodicTimer(self::REQUEST_HANDLE_FREQUENCY_SECONDS, function () {
             $this->processNextQueueItem();
@@ -114,7 +114,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @return void
      */
-    protected function uninstallPeriodicTimer(): void
+    private function uninstallPeriodicTimer(): void
     {
         $this->loop->cancelTimer($this->periodicTimer);
         $this->periodicTimer = null;
@@ -127,7 +127,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @return void
      */
-    protected function processNextQueueItem(): void
+    private function processNextQueueItem(): void
     {
         $this->getContainer()->get('jsonRpcQueueItemProcessor')->process(
             $this->getContainer()->get('requestQueue')->pop()
@@ -141,7 +141,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      *
      * @return int
      */
-    protected function getRequestHandlingPortFromOptions(array $options): int
+    private function getRequestHandlingPortFromOptions(array $options): int
     {
         if (isset($options['p'])) {
             return (int) $options['p'];
@@ -160,7 +160,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      *
      * @return void
      */
-    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
+    private function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 

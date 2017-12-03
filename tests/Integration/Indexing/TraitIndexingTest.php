@@ -229,7 +229,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\Trait_
      */
-    protected function indexTrait(string $file): Structures\Trait_
+    private function indexTrait(string $file): Structures\Trait_
     {
         $path = $this->getPathFor($file);
 
@@ -247,7 +247,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/TraitIndexingTest/' . $file;
     }

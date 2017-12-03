@@ -76,7 +76,7 @@ final class PartialParser implements Parser
      *
      * @return string
      */
-    protected function getNormalizedCode(string $code): string
+    private function getNormalizedCode(string $code): string
     {
         if (mb_substr(trim($code), 0, 5) !== '<?php') {
             return '<?php ' . $code;
@@ -90,7 +90,7 @@ final class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithKeywordCorrection(string $code): ?array
+    private function tryParseWithKeywordCorrection(string $code): ?array
     {
         if (mb_strrpos($code, 'self') === (mb_strlen($code) - mb_strlen('self'))) {
             return [new \PhpIntegrator\Parsing\Node\Keyword\Self_()];
@@ -108,7 +108,7 @@ final class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithTrailingSemicolonCorrection(string $code): ?array
+    private function tryParseWithTrailingSemicolonCorrection(string $code): ?array
     {
         return $this->tryParse($code . ';');
     }
@@ -118,7 +118,7 @@ final class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithHeredocTerminationCorrection(string $code): ?array
+    private function tryParseWithHeredocTerminationCorrection(string $code): ?array
     {
         return $this->tryParse($code . ";\n"); // Heredocs need to be suffixed by a semicolon and a newline.
     }
@@ -128,7 +128,7 @@ final class PartialParser implements Parser
      *
      * @return array|null
      */
-    protected function tryParseWithFunctionTerminationCorrection(string $code): ?array
+    private function tryParseWithFunctionTerminationCorrection(string $code): ?array
     {
         return $this->tryParse($code . ");");
     }
@@ -138,7 +138,7 @@ final class PartialParser implements Parser
      *
      * @return array|null
      */
-    protected function tryParseWithFunctionMissingArgumentCorrection(string $code): ?array
+    private function tryParseWithFunctionMissingArgumentCorrection(string $code): ?array
     {
         $dummyName = '____DUMMY____';
 
@@ -173,7 +173,7 @@ final class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithTernaryOperatorTerminationCorrection(string $code): ?array
+    private function tryParseWithTernaryOperatorTerminationCorrection(string $code): ?array
     {
         $dummyName = '____DUMMY____';
 
@@ -214,7 +214,7 @@ final class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParseWithDummyInsertion(string $code): ?array
+    private function tryParseWithDummyInsertion(string $code): ?array
     {
         $removeDummy = false;
         $dummyName = '____DUMMY____';
@@ -244,7 +244,7 @@ final class PartialParser implements Parser
      *
      * @return Node[]|null
      */
-    protected function tryParse(string $code): ?array
+    private function tryParse(string $code): ?array
     {
         try {
             return $this->getStrictParser()->parse($code);
@@ -258,7 +258,7 @@ final class PartialParser implements Parser
     /**
      * @return Parser
      */
-    protected function getStrictParser(): Parser
+    private function getStrictParser(): Parser
     {
         if (!$this->strictParser instanceof Parser) {
             $this->strictParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, $this->lexer);

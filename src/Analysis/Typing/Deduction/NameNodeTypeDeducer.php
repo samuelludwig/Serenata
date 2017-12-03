@@ -84,7 +84,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromNameNode(Node\Name $node, Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromNameNode(Node\Name $node, Structures\File $file, string $code, int $offset): array
     {
         $nameString = NodeHelpers::fetchClassName($node);
 
@@ -133,7 +133,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string|null
      */
-    protected function findCurrentClassAt(Structures\File $file, string $source, int $offset): ?string
+    private function findCurrentClassAt(Structures\File $file, string $source, int $offset): ?string
     {
         $line = SourceCodeHelpers::calculateLineByOffset($source, $offset);
 
@@ -147,7 +147,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string|null
      */
-    protected function findCurrentClassAtLine(Structures\File $file, string $source, int $line): ?string
+    private function findCurrentClassAtLine(Structures\File $file, string $source, int $line): ?string
     {
         $classes = $this->fileClasslikeListProvider->getAllForFile($file);
 

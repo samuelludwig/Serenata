@@ -339,7 +339,7 @@ class DocblockParser
      *
      * @return string[]
      */
-    protected function filterParameterTag(string $value, int $partCount): array
+    private function filterParameterTag(string $value, int $partCount): array
     {
         $segments = [];
         $parts = explode(' ', $value);
@@ -369,7 +369,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterReturn(?string $docblock, string $itemName, array $tags): array
+    private function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
         $return = null;
 
@@ -406,7 +406,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterParams(?string $docblock, string $itemName, array $tags): array
+    private function filterParams(?string $docblock, string $itemName, array $tags): array
     {
         $params = [];
 
@@ -457,7 +457,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterVar(?string $docblock, string $itemName, array $tags): array
+    private function filterVar(?string $docblock, string $itemName, array $tags): array
     {
         $vars = [];
 
@@ -514,7 +514,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterDeprecated(?string $docblock, string $itemName, array $tags): array
+    private function filterDeprecated(?string $docblock, string $itemName, array $tags): array
     {
         return [
             'deprecated' => isset($tags[static::DEPRECATED])
@@ -530,7 +530,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterThrows(?string $docblock, string $itemName, array $tags): array
+    private function filterThrows(?string $docblock, string $itemName, array $tags): array
     {
         $throws = [];
 
@@ -561,7 +561,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterMethod(?string $docblock, string $itemName, array $tags): array
+    private function filterMethod(?string $docblock, string $itemName, array $tags): array
     {
         $methods = [];
 
@@ -658,7 +658,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyTag(
+    private function filterPropertyTag(
         string $tagName,
         string $keyName,
         ?string $docblock,
@@ -703,7 +703,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterProperty(?string $docblock, string $itemName, array $tags): array
+    private function filterProperty(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY, 'properties', $docblock, $itemName, $tags);
     }
@@ -717,7 +717,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
+    private function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_READ, 'propertiesReadOnly', $docblock, $itemName, $tags);
     }
@@ -731,7 +731,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
+    private function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_WRITE, 'propertiesWriteOnly', $docblock, $itemName, $tags);
     }
@@ -743,7 +743,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterCategory(?string $docblock, string $itemName, array $tags): array
+    private function filterCategory(?string $docblock, string $itemName, array $tags): array
     {
         $description = null;
 
@@ -763,7 +763,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterSubpackage(?string $docblock, string $itemName, array $tags): array
+    private function filterSubpackage(?string $docblock, string $itemName, array $tags): array
     {
         $name = null;
 
@@ -783,7 +783,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterLink(?string $docblock, string $itemName, array $tags): array
+    private function filterLink(?string $docblock, string $itemName, array $tags): array
     {
         $links = [];
 
@@ -812,7 +812,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterAnnotation(?string $docblock, string $itemName, array $tags): array
+    private function filterAnnotation(?string $docblock, string $itemName, array $tags): array
     {
         return [
             'annotation' => isset($tags[static::ANNOTATION])
@@ -828,7 +828,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterDescription(?string $docblock, string $itemName, array $tags): array
+    private function filterDescription(?string $docblock, string $itemName, array $tags): array
     {
         $summary = '';
         $description = '';
@@ -874,7 +874,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function sanitizeText(string $text): string
+    private function sanitizeText(string $text): string
     {
         return trim(htmlentities($text));
     }
@@ -887,7 +887,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function replaceNewlines(string $string, string $replacement): string
+    private function replaceNewlines(string $string, string $replacement): string
     {
         return str_replace(["\n", "\r\n", PHP_EOL], $replacement, $string);
     }
@@ -899,7 +899,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function normalizeNewlines(string $string): string
+    private function normalizeNewlines(string $string): string
     {
         return $this->replaceNewlines($string, "\n");
     }

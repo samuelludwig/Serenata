@@ -46,7 +46,7 @@ final class ExpressionNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromExpressionNode(
+    private function deduceTypesFromExpressionNode(
         Node\Stmt\Expression $node,
         Structures\File $file,
         string $code,

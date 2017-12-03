@@ -74,7 +74,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\Constant
      */
-    protected function indexDefine(string $file): Structures\Constant
+    private function indexDefine(string $file): Structures\Constant
     {
         $path = $this->getPathFor($file);
 
@@ -92,7 +92,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/DefineIndexingTest/' . $file;
     }

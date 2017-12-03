@@ -68,7 +68,7 @@ class FunctionFunctionInfoRetriever
      *
      * @return array
      */
-    protected function getFunctionInfo(string $fullyQualifiedName): array
+    private function getFunctionInfo(string $fullyQualifiedName): array
     {
         $functions = $this->functionListProvider->getAll();
 

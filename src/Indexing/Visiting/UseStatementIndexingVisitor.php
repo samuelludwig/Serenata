@@ -90,7 +90,7 @@ final class UseStatementIndexingVisitor implements NodeVisitor
      *
      * @return void
      */
-    protected function indexNamespace(array $namespace): void
+    private function indexNamespace(array $namespace): void
     {
         $namespaceEntity = new Structures\FileNamespace(
             $namespace['startLine'],
@@ -113,7 +113,7 @@ final class UseStatementIndexingVisitor implements NodeVisitor
      *
      * @return void
      */
-    protected function indexUseStatement(array $useStatement, Structures\FileNamespace $namespace): void
+    private function indexUseStatement(array $useStatement, Structures\FileNamespace $namespace): void
     {
         $import = new Structures\FileNamespaceImport(
             $useStatement['line'],

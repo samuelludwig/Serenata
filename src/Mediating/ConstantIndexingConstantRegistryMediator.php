@@ -51,7 +51,7 @@ class ConstantIndexingConstantRegistryMediator
     /**
      * @return void
      */
-    protected function setup(): void
+    private function setup(): void
     {
         $this->eventEmitter->on(IndexingEventName::CONSTANT_UPDATED, function (Structures\Constant $constant) {
             $this->constantListRegistry->add($this->constantConverter->convert($constant));

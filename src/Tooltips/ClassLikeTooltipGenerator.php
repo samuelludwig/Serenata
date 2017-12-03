@@ -31,7 +31,7 @@ class ClassLikeTooltipGenerator
      *
      * @return string
      */
-    protected function generateSummary(array $info): string
+    private function generateSummary(array $info): string
     {
         if ($info['shortDescription']) {
             return $info['shortDescription'];
@@ -45,7 +45,7 @@ class ClassLikeTooltipGenerator
      *
      * @return string|null
      */
-    protected function generateLongDescription(array $info): ?string
+    private function generateLongDescription(array $info): ?string
     {
         if (!empty($info['longDescription'])) {
             return "# Description\n" . $info['longDescription'];
@@ -59,7 +59,7 @@ class ClassLikeTooltipGenerator
      *
      * @return string
      */
-    protected function generateFullName(array $info): string
+    private function generateFullName(array $info): string
     {
         return "# Full Name\n*{$info['fqcn']}*";
     }
@@ -69,7 +69,7 @@ class ClassLikeTooltipGenerator
      *
      * @return string
      */
-    protected function generateType(array $info): string
+    private function generateType(array $info): string
     {
         $type = null;
 

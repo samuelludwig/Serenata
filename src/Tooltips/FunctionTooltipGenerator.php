@@ -54,7 +54,7 @@ class FunctionTooltipGenerator
      *
      * @return string
      */
-    protected function generateSummary(array $functionInfo): string
+    private function generateSummary(array $functionInfo): string
     {
         if ($functionInfo['shortDescription']) {
             return $functionInfo['shortDescription'];
@@ -68,7 +68,7 @@ class FunctionTooltipGenerator
      *
      * @return string|null
      */
-    protected function generateLongDescription(array $functionInfo): ?string
+    private function generateLongDescription(array $functionInfo): ?string
     {
         if (!empty($functionInfo['longDescription'])) {
             return "# Description\n" . $functionInfo['longDescription'];
@@ -82,7 +82,7 @@ class FunctionTooltipGenerator
      *
      * @return string|null
      */
-    protected function generateParameters(array $functionInfo): ?string
+    private function generateParameters(array $functionInfo): ?string
     {
         $parameterLines = [];
 
@@ -108,7 +108,7 @@ class FunctionTooltipGenerator
      *
      * @return string
      */
-    protected function generateParameterLine(array $parameter): string
+    private function generateParameterLine(array $parameter): string
     {
         $parameterColumns = [];
 
@@ -151,7 +151,7 @@ class FunctionTooltipGenerator
      *
      * @return string
      */
-    protected function generateReturn(array $functionInfo): string
+    private function generateReturn(array $functionInfo): string
     {
         $returnDescription = null;
 
@@ -177,7 +177,7 @@ class FunctionTooltipGenerator
      *
      * @return string|null
      */
-    protected function generateThrows(array $functionInfo): ?string
+    private function generateThrows(array $functionInfo): ?string
     {
         $throwsLines = [];
 

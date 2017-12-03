@@ -122,7 +122,7 @@ class TypePossibilityMap
      *
      * @return string[]
      */
-    protected function getAllWithPossibility(int $possibility): array
+    private function getAllWithPossibility(int $possibility): array
     {
         $guaranteedTypes = [];
 

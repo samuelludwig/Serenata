@@ -74,7 +74,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseDefineNode(Node\Expr\FuncCall $node): void
+    private function parseDefineNode(Node\Expr\FuncCall $node): void
     {
         if (count($node->args) < 2) {
             return;

@@ -30,7 +30,7 @@ final class LNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromLNumberNode(Node\Scalar\LNumber $node): array
+    private function deduceTypesFromLNumberNode(Node\Scalar\LNumber $node): array
     {
         return ['int'];
     }

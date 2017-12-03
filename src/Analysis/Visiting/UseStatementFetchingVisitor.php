@@ -88,7 +88,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\Stmt\Namespace_ $node
      */
-    protected function beginNamespace(Node\Stmt\Namespace_ $node): void
+    private function beginNamespace(Node\Stmt\Namespace_ $node): void
     {
         $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $node->getLine() - 1;
         $this->namespaces[++$this->lastNamespaceIndex] = [
@@ -104,7 +104,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function registerImportNode(Node $node): void
+    private function registerImportNode(Node $node): void
     {
         $prefix = '';
 
@@ -124,7 +124,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function registerImport(Node $node, Node\Stmt\UseUse $use, string $prefix): void
+    private function registerImport(Node $node, Node\Stmt\UseUse $use, string $prefix): void
     {
         $type = $node->type === Node\Stmt\Use_::TYPE_UNKNOWN ? $use->type : $node->type;
 

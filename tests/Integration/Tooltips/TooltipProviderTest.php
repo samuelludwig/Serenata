@@ -430,7 +430,7 @@ Hello!
      *
      * @return void
      */
-    protected function performTooltipTest(string $fileName, int $start, int $end, string $contents): void
+    private function performTooltipTest(string $fileName, int $start, int $end, string $contents): void
     {
         $path = $this->getPathFor($fileName);
 
@@ -470,7 +470,7 @@ Hello!
      *
      * @return TooltipResult|null
      */
-    protected function getTooltip(Structures\File $file, int $position): ?TooltipResult
+    private function getTooltip(Structures\File $file, int $position): ?TooltipResult
     {
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($file->getPath());
 
@@ -482,7 +482,7 @@ Hello!
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/TooltipProviderTest/' . $file;
     }

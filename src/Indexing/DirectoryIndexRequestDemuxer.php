@@ -76,7 +76,7 @@ class DirectoryIndexRequestDemuxer
      * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      */
-    protected function queueIndexRequest(
+    private function queueIndexRequest(
         SplFileInfo $fileInfo,
         array $extensionsToIndex,
         array $globsToExclude,
@@ -97,7 +97,7 @@ class DirectoryIndexRequestDemuxer
      * @param int                            $total
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      */
-    protected function queueProgressRequest(
+    private function queueProgressRequest(
         int $originatingRequestId,
         int $index,
         int $total,

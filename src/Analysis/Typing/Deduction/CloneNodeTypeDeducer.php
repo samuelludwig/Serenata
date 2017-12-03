@@ -46,7 +46,7 @@ final class CloneNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromCloneNode(
+    private function deduceTypesFromCloneNode(
         Node\Expr\Clone_ $node,
         Structures\File $file,
         string $code,

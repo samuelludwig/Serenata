@@ -72,7 +72,7 @@ final class CachingParser implements Parser
     /**
      * @param ErrorHandler\Collecting $errorHandler
      */
-    protected function copyCollectedErrorsTo(ErrorHandler\Collecting $errorHandler): void
+    private function copyCollectedErrorsTo(ErrorHandler\Collecting $errorHandler): void
     {
         $errorHandler->clearErrors();
 

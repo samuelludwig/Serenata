@@ -57,7 +57,7 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    protected function getGlobalConstants(string $file): array
+    private function getGlobalConstants(string $file): array
     {
         $path = $this->getPathFor($file);
 
@@ -73,7 +73,7 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
     }

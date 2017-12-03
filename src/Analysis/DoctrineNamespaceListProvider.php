@@ -71,7 +71,7 @@ final class DoctrineNamespaceListProvider implements FileNamespaceListProviderIn
      *
      * @return array
      */
-    protected function mapNamespaces(array $namespaces): array
+    private function mapNamespaces(array $namespaces): array
     {
         $result = [];
 

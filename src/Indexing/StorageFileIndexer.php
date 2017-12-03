@@ -149,7 +149,7 @@ final class StorageFileIndexer implements FileIndexerInterface
      *
      * @return void
      */
-    protected function runTraverser(array $nodes, string $code, Structures\File $file): void
+    private function runTraverser(array $nodes, string $code, Structures\File $file): void
     {
         $visitors = $this->getVisitorsForFile($code, $file);
 
@@ -180,7 +180,7 @@ final class StorageFileIndexer implements FileIndexerInterface
      *
      * @return array
      */
-    protected function getVisitorsForFile(string $code, Structures\File $file): array
+    private function getVisitorsForFile(string $code, Structures\File $file): array
     {
         return [
             new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code),

@@ -13,7 +13,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return FunctionParameterPrettyPrinter
      */
-    protected function getFunctionParameterPrettyPrinterStub(): FunctionParameterPrettyPrinter
+    private function getFunctionParameterPrettyPrinterStub(): FunctionParameterPrettyPrinter
     {
         return new FunctionParameterPrettyPrinter(
             new ParameterDefaultValuePrettyPrinter(),

@@ -98,7 +98,7 @@ final class InitializeCommand extends AbstractCommand
     /**
      * @return void
      */
-    protected function ensureIndexDatabaseDoesNotExist(): void
+    private function ensureIndexDatabaseDoesNotExist(): void
     {
         $this->managerRegistry->ensureConnectionClosed();
 
@@ -124,7 +124,7 @@ final class InitializeCommand extends AbstractCommand
     /**
      * @return void
      */
-    protected function clearCache(): void
+    private function clearCache(): void
     {
         if ($this->cache instanceof ClearableCache) {
             $this->cache->deleteAll();

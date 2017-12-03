@@ -70,7 +70,7 @@ final class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function processName(Node\Name $node): void
+    private function processName(Node\Name $node): void
     {
         if ($this->lastNode instanceof Node\Expr\FuncCall ||
             $this->lastNode instanceof Node\Expr\ConstFetch ||
@@ -97,7 +97,7 @@ final class ClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-     protected function isValidNameNode(Node\Name $node): bool
+     private function isValidNameNode(Node\Name $node): bool
      {
          return !NodeHelpers::isReservedNameNode($node);
      }

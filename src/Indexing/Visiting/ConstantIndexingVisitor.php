@@ -113,7 +113,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseConstantStatementNode(Node\Stmt\Const_ $node): void
+    private function parseConstantStatementNode(Node\Stmt\Const_ $node): void
     {
         foreach ($node->consts as $const) {
             $this->indexConstant($const, $node);
@@ -126,7 +126,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function indexConstant(Node\Const_ $node, Node\Stmt\Const_ $const): void
+    private function indexConstant(Node\Const_ $node, Node\Stmt\Const_ $const): void
     {
         $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
 
@@ -192,7 +192,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
+    private function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
     {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
@@ -205,7 +205,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      *
      * @return Structures\TypeInfo[]
      */
-    protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
+    private function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
     {
         $types = [];
 

@@ -109,7 +109,7 @@ class SignatureHelpRetriever
      *
      * @return Node
      */
-    protected function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(array $nodes, int $position): Node
     {
         $visitor = new NodeFetchingVisitor($position);
 
@@ -136,7 +136,7 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelpForNode(Node $node, Structures\File $file, string $code, int $position): SignatureHelp
+    private function getSignatureHelpForNode(Node $node, Structures\File $file, string $code, int $position): SignatureHelp
     {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
@@ -188,7 +188,7 @@ class SignatureHelpRetriever
      *
      * @return int
      */
-    protected function getArgumentIndex(Node $invocationNode, string $code, int $position): int
+    private function getArgumentIndex(Node $invocationNode, string $code, int $position): int
     {
         $arguments = $invocationNode->args;
 
@@ -275,7 +275,7 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    protected function generateResponseFor(
+    private function generateResponseFor(
         Node $node,
         int $argumentIndex,
         Structures\File $file,
@@ -320,7 +320,7 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    protected function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
+    private function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
     {
         $name = $functionInfo['name'];
         $documentation = $functionInfo['shortDescription'];
@@ -341,7 +341,7 @@ class SignatureHelpRetriever
      *
      * @return int|null
      */
-    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): ?int
+    private function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): ?int
     {
         $parameterCount = count($functionInfo['parameters']);
 
@@ -367,7 +367,7 @@ class SignatureHelpRetriever
      *
      * @return ParameterInformation[]
      */
-    protected function getResponseParametersForFunctionParameters(array $parameters): array
+    private function getResponseParametersForFunctionParameters(array $parameters): array
     {
         $responseParameters = [];
 
@@ -383,7 +383,7 @@ class SignatureHelpRetriever
      *
      * @return ParameterInformation
      */
-    protected function getResponseParametersForFunctionParameter(array $parameter): ParameterInformation
+    private function getResponseParametersForFunctionParameter(array $parameter): ParameterInformation
     {
         $label = $this->functionParameterPrettyPrinter->print($parameter);
 
@@ -397,7 +397,7 @@ class SignatureHelpRetriever
      *
      * @return Node[]
      */
-    protected function getNodesFromCode(string $code): array
+    private function getNodesFromCode(string $code): array
     {
         $nodes = $this->parser->parse($code, $this->getErrorHandler());
 
@@ -411,7 +411,7 @@ class SignatureHelpRetriever
     /**
      * @return ErrorHandler\Collecting
      */
-    protected function getErrorHandler(): ErrorHandler\Collecting
+    private function getErrorHandler(): ErrorHandler\Collecting
     {
         return new ErrorHandler\Collecting();
     }

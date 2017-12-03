@@ -47,7 +47,7 @@ abstract class AbstractApplication
     /**
      * @return ContainerBuilder
      */
-    protected function createContainer(): ContainerBuilder
+    private function createContainer(): ContainerBuilder
     {
         $container = new ContainerBuilder();
 
@@ -60,7 +60,7 @@ abstract class AbstractApplication
     /**
      * @param ContainerBuilder $container
      */
-    protected function registerYamlServices(ContainerBuilder $container): void
+    private function registerYamlServices(ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/services'));
         $loader->load('Main.yml');
@@ -71,7 +71,7 @@ abstract class AbstractApplication
      *
      * @return void
      */
-    protected function registerServices(ContainerBuilder $container): void
+    private function registerServices(ContainerBuilder $container): void
     {
         $container
             ->register('application', AbstractApplication::class)
@@ -98,7 +98,7 @@ abstract class AbstractApplication
      *
      * @return void
      */
-    protected function instantiateRequiredServices(ContainerBuilder $container): void
+    private function instantiateRequiredServices(ContainerBuilder $container): void
     {
         // TODO: Need to refactor this at some point to have more select cache clearing and to not instantiate multiple
         // mediators.
