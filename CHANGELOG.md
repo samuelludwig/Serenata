@@ -1,3 +1,13 @@
+## 3.2.0
+### Major Changes
+* None yet.
+
+### Bugs Fixed
+* None yet.
+
+### Structural changes (mostly relevant to clients)
+* None yet.
+
 ## 3.1.0
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
