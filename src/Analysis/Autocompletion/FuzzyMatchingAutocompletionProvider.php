@@ -86,6 +86,8 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
 
         if ($prefix === '') {
             return $suggestionsArray;
+        } elseif (empty($suggestionsArray)) {
+            return [];
         }
 
         $fuse = new \Fuse\Fuse($suggestionsArray, [
