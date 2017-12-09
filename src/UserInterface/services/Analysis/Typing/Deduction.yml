@@ -186,3 +186,10 @@ services:
 
     nodeTypeDeducer:
         alias: nodeTypeDeducer.configurableDelegator
+
+    expressionTypeDeducer:
+        class: PhpIntegrator\Analysis\Typing\Deduction\ExpressionTypeDeducer
+        arguments:
+            - '@nodeTypeDeducer'
+            - '@lastExpressionParser'
+            - '@positionalNamespaceDeterminer'

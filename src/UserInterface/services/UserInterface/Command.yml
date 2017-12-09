@@ -92,11 +92,9 @@ services:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
         arguments:
             - '@storage'
-            - '@nodeTypeDeducer'
-            - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
-            - '@positionalNamespaceDeterminer'
             - '@fileIndexer'
+            - '@expressionTypeDeducer'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand

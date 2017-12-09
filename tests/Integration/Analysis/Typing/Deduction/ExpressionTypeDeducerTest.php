@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
+namespace PhpIntegrator\Tests\Integration\Analysis\Typing\Deduction;
 
 use ReflectionClass;
 
@@ -10,7 +10,7 @@ use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class DeduceTypesCommandTest extends AbstractIntegrationTest
+class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 {
     /**
      * @return void
@@ -994,7 +994,7 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
         );
 
         static::assertSame([
-            '\\(anonymous_427f548311b91663c6b3a43f7f250cb3_19)'
+            '\\(anonymous_900f7887ef5b4f095d64d0db98512ebe_19)'
         ], $result);
     }
 
@@ -1076,21 +1076,23 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
      */
     private function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
     {
-        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
+        $path = __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
         $this->indexTestFile($this->container, $path);
 
-        $command = $this->container->get('deduceTypesCommand');
-
-        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
-        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
-        $reflectionMethod->setAccessible(true);
+        $expressionTypeDeducer = $this->container->get('expressionTypeDeducer');
 
         $file = $this->container->get('storage')->getFileByPath($path);
 
-        return $reflectionMethod->invoke($command, $file, file_get_contents($path), $expression, $markerOffset, $ignoreLastElement);
+        return $expressionTypeDeducer->deduce(
+            $file,
+            file_get_contents($path),
+            $markerOffset,
+            $expression,
+            $ignoreLastElement
+        );
     }
 
     /**
@@ -1102,23 +1104,25 @@ class DeduceTypesCommandTest extends AbstractIntegrationTest
      */
     private function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
     {
-        $path = __DIR__ . '/DeduceTypesCommandTest/' . $file;
-        $metaFilePath = __DIR__ . '/DeduceTypesCommandTest/' . $metaFile;
+        $path = __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
+        $metaFilePath = __DIR__ . '/ExpressionTypeDeducerTest/' . $metaFile;
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
         $this->indexTestFile($this->container, $metaFilePath);
         $this->indexTestFile($this->container, $path);
 
-        $command = $this->container->get('deduceTypesCommand');
-
-        $reflectionClass = new ReflectionClass(DeduceTypesCommand::class);
-        $reflectionMethod = $reflectionClass->getMethod('deduceTypesFromExpression');
-        $reflectionMethod->setAccessible(true);
+        $expressionTypeDeducer = $this->container->get('expressionTypeDeducer');
 
         $file = $this->container->get('storage')->getFileByPath($path);
 
-        return $reflectionMethod->invoke($command, $file, file_get_contents($path), $expression, $markerOffset, false);
+        return $expressionTypeDeducer->deduce(
+            $file,
+            file_get_contents($path),
+            $markerOffset,
+            $expression,
+            false
+        );
     }
 
     /**

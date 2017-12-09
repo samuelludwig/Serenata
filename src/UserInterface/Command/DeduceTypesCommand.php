@@ -2,28 +2,16 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+use PhpIntegrator\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
-
-use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\FileIndexerInterface;
-
-use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
-
-use PhpIntegrator\Parsing\LastExpressionParser;
 
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
-
-use PhpParser\Node;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
 
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
@@ -36,24 +24,9 @@ final class DeduceTypesCommand extends AbstractCommand
     private $storage;
 
     /**
-     * @var NodeTypeDeducerInterface
-     */
-    private $nodeTypeDeducer;
-
-    /**
-     * @var LastExpressionParser
-     */
-    private $lastExpressionParser;
-
-    /**
      * @var SourceCodeStreamReader
      */
     private $sourceCodeStreamReader;
-
-    /**
-     * @var PositionalNamespaceDeterminerInterface
-     */
-    private $positionalNamespaceDeterminer;
 
     /**
      * @var FileIndexerInterface
@@ -61,27 +34,26 @@ final class DeduceTypesCommand extends AbstractCommand
     private $fileIndexer;
 
     /**
-     * @param StorageInterface                       $storage
-     * @param NodeTypeDeducerInterface               $nodeTypeDeducer
-     * @param LastExpressionParser                   $lastExpressionParser
-     * @param SourceCodeStreamReader                 $sourceCodeStreamReader
-     * @param PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
-     * @param FileIndexerInterface                   $fileIndexer
+     * @var ExpressionTypeDeducer
+     */
+    private $expressionTypeDeducer;
+
+    /**
+     * @param StorageInterface       $storage
+     * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
+     * @param ExpressionTypeDeducer  $expressionTypeDeducer
      */
     public function __construct(
         StorageInterface $storage,
-        NodeTypeDeducerInterface $nodeTypeDeducer,
-        LastExpressionParser $lastExpressionParser,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer,
-        FileIndexerInterface $fileIndexer
+        FileIndexerInterface $fileIndexer,
+        ExpressionTypeDeducer $expressionTypeDeducer
     ) {
         $this->storage = $storage;
-        $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->positionalNamespaceDeterminer = $positionalNamespaceDeterminer;
         $this->fileIndexer = $fileIndexer;
+        $this->expressionTypeDeducer = $expressionTypeDeducer;
     }
 
     /**
@@ -146,113 +118,12 @@ final class DeduceTypesCommand extends AbstractCommand
 
         $this->fileIndexer->index($filePath, $code);
 
-        return $this->deduceTypesFromExpression($file, $code, $codeWithExpression, $offset, $ignoreLastElement);
-    }
-
-    /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param string          $expression
-     * @param int             $offset
-     * @param bool            $ignoreLastElement
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromExpression(
-        Structures\File $file,
-        string $code,
-        string $expression,
-        int $offset,
-        bool $ignoreLastElement
-    ): array {
-        $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
-
-        if ($node === null) {
-            return [];
-        } elseif ($node instanceof Node\Stmt\Expression) {
-            $node = $node->expr;
-        }
-
-        if ($ignoreLastElement) {
-            $node = $this->getNodeWithoutLastElement($node);
-        }
-
-        return $this->deduceTypesFromNode($file, $code, $node, $offset);
-    }
-
-    /**
-     * @param Node $node
-     *
-     * @return Node
-     */
-    private function getNodeWithoutLastElement(Node $node): Node
-    {
-        if ($node instanceof Node\Expr\MethodCall || $node instanceof Node\Expr\PropertyFetch) {
-            return $node->var;
-        } elseif ($node instanceof Node\Expr\StaticCall ||
-            $node instanceof Node\Expr\StaticPropertyFetch ||
-            $node instanceof Node\Expr\ClassConstFetch
-        ) {
-            return $node->class;
-        }
-
-        return $node;
-    }
-
-    /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param Node            $node
-     * @param int             $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromNode(Structures\File $file, string $code, Node $node, int $offset): array
-    {
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
-        // We're dealing with partial code, its context may be lost because of it being invalid, so we can't rely on
-        // the namespace attaching visitor here.
-        $this->attachRelevantNamespaceToNode($node, $file, $line);
-
-        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node            $node
-     * @param Structures\File $file
-     * @param int             $line
-     *
-     * @return void
-     */
-    private function attachRelevantNamespaceToNode(Node $node, Structures\File $file, int $line): void
-    {
-        $namespace = null;
-        $namespaceNode = null;
-
-        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
-
-        $namespace = $this->positionalNamespaceDeterminer->determine($filePosition);
-
-        if ($namespace->getName() !== null) {
-            $namespaceNode = new Node\Name\FullyQualified($namespace->getName());
-        }
-
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new class($namespaceNode) extends NodeVisitorAbstract {
-            private $namespaceNode;
-
-            public function __construct(?Node\Name $namespaceNode)
-            {
-                $this->namespaceNode = $namespaceNode;
-            }
-
-            public function enterNode(Node $node)
-            {
-                $node->setAttribute('namespace', $this->namespaceNode);
-            }
-        });
-
-        $traverser->traverse([$node]);
+        return $this->expressionTypeDeducer->deduce(
+            $file,
+            $code,
+            $offset,
+            $codeWithExpression,
+            $ignoreLastElement
+        );
     }
 }
