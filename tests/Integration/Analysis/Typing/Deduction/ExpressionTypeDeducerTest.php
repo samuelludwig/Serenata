@@ -988,13 +988,14 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
      */
     public function testAnonymousClass(): void
     {
-        $result = $this->deduceTypesFromExpression(
-            'AnonymousClass.phpt',
-            '$test'
-        );
+        $fileName = 'AnonymousClass.phpt';
+
+        $result = $this->deduceTypesFromExpression($fileName, '$test');
+
+        $filePath = $this->getFilePath($fileName);
 
         static::assertSame([
-            '\\(anonymous_900f7887ef5b4f095d64d0db98512ebe_19)'
+            '\\(anonymous_' . md5($filePath) . '_19)'
         ], $result);
     }
 
@@ -1076,7 +1077,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
      */
     private function deduceTypesFromExpression(string $file, string $expression, bool $ignoreLastElement = false): array
     {
-        $path = __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
+        $path = $this->getFilePath($file);
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
 
@@ -1104,7 +1105,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
      */
     private function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): array
     {
-        $path = __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
+        $path = $this->getFilePath($file);
         $metaFilePath = __DIR__ . '/ExpressionTypeDeducerTest/' . $metaFile;
 
         $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
@@ -1123,6 +1124,16 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             $expression,
             false
         );
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    private function getFilePath(string $file): string
+    {
+        return __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
     }
 
     /**

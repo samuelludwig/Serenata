@@ -125,10 +125,14 @@ class ClassIndexingTest extends AbstractIntegrationTest
      */
     public function testAnonymousClass(): void
     {
-        $structure = $this->indexClass('AnonymousClass.phpt');
+        $fileName = 'AnonymousClass.phpt';
 
-        static::assertSame('(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getName());
-        static::assertSame('\\(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getFqcn());
+        $structure = $this->indexClass($fileName);
+
+        $filePath = $this->getPathFor($fileName);
+
+        static::assertSame('(anonymous_' . md5($filePath) . '_19)', $structure->getName());
+        static::assertSame('\\(anonymous_' . md5($filePath) . '_19)', $structure->getFqcn());
         static::assertTrue($structure->getIsAnonymous());
     }
 
