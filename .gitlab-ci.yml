@@ -1,0 +1,30 @@
+stages:
+    - test
+
+.cache_composer: &cache_composer
+    cache:
+        paths:
+            - vendor/
+
+.setup_dependencies: &setup_dependencies
+    before_script:
+        - curl -sS https://getcomposer.org/installer | php
+        - php composer.phar install --prefer-dist --optimize-autoloader --no-interaction --no-progress
+
+.run_tests: &run_tests
+    script:
+        - php vendor/bin/phpunit
+
+PHP 7.1:
+    image: php:7.1-alpine
+    stage: test
+    <<: *setup_dependencies
+    <<: *run_tests
+    <<: *cache_composer
+
+PHP 7.2:
+    image: php:7.2-rc-alpine
+    stage: test
+    <<: *setup_dependencies
+    <<: *run_tests
+    <<: *cache_composer
