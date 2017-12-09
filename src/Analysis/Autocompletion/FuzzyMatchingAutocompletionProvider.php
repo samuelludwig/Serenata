@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
+use PhpIntegrator\Indexing\Structures\File;
+
 /**
  * Autocompletion provider that delegates to another provider and then fuzzy matches the suggestions based on what was
  * already typed at the requested offset.
@@ -51,36 +53,38 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): iterable
+    public function provide(File $file, string $code, int $offset): iterable
     {
-        return $this->provideForPrefixAtOffset($code, $offset);
+        return $this->provideForPrefixAtOffset($file, $code, $offset);
     }
 
     /**
+     * @param File   $file
      * @param string $code
      * @param string $offset
      *
      * @return array[]
      */
-    private function provideForPrefixAtOffset(string $code, string $offset): array
+    private function provideForPrefixAtOffset(File $file, string $code, string $offset): array
     {
         $prefix = $this->getPrefixAtOffset($code, $offset);
 
-        return $this->provideForPrefix($code, $offset, $prefix);
+        return $this->provideForPrefix($file, $code, $offset, $prefix);
     }
 
     /**
+     * @param File   $file,
      * @param string $code
      * @param string $offset
      * @param string $prefix
      *
      * @return array[]
      */
-    private function provideForPrefix(string $code, string $offset, string $prefix): array
+    private function provideForPrefix(File $file, string $code, string $offset, string $prefix): array
     {
         $suggestionsArray = [];
 
-        foreach ($this->delegate->provide($code, $offset) as $suggestion) {
+        foreach ($this->delegate->provide($file, $code, $offset) as $suggestion) {
             $suggestionsArray[] = $suggestion;
         }
 

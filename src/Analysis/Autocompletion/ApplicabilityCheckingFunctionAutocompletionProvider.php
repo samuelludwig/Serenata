@@ -6,11 +6,12 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures\File;
+
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
-
 /**
  * Function autocompletion provider that first checks if function autocompletion suggestions apply at the requested
  * offset and, if so, delegates to another provider.
@@ -40,7 +41,7 @@ final class ApplicabilityCheckingFunctionAutocompletionProvider implements Autoc
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): iterable
+    public function provide(File $file, string $code, int $offset): iterable
     {
         $nodes = [];
 
@@ -56,7 +57,7 @@ final class ApplicabilityCheckingFunctionAutocompletionProvider implements Autoc
             return [];
         }
 
-        return $this->delegate->provide($code, $offset);
+        return $this->delegate->provide($file, $code, $offset);
     }
 
     /**

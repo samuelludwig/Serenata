@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis\Autocompletion;
 
+use PhpIntegrator\Indexing\Structures;
+
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 /**
@@ -42,7 +44,7 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
         $provider = $container->get($this->getProviderName());
 
-        $results = $provider->provide($code, $markerOffset);
+        $results = $provider->provide($this->getFileStub(), $code, $markerOffset);
 
         if (is_array($results)) {
             return $results;
@@ -64,5 +66,13 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
         $markerOffset = mb_strpos($testFileContents, $marker);
 
         return $markerOffset;
+    }
+
+    /**
+     * @return Structures\File
+     */
+    private function getFileStub(): Structures\File
+    {
+        return new Structures\File('TestFile.php', new \DateTime(), []);
     }
 }

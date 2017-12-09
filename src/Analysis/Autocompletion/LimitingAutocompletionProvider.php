@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
+use PhpIntegrator\Indexing\Structures\File;
+
 /**
  * Autocompletion provider that delegates to another provider and then limits the suggestion count to a fixed amount.
  */
@@ -30,11 +32,11 @@ final class LimitingAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): iterable
+    public function provide(File $file, string $code, int $offset): iterable
     {
         $number = 0;
 
-        foreach ($this->delegate->provide($code, $offset) as $suggestion) {
+        foreach ($this->delegate->provide($file, $code, $offset) as $suggestion) {
             if ($number++ >= $this->limit) {
                 break;
             }

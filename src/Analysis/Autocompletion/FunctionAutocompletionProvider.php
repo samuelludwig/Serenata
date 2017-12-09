@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
 
+use PhpIntegrator\Indexing\Structures\File;
+
 /**
  * Provides function autocompletion suggestions at a specific location in a file.
  */
@@ -25,7 +27,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): iterable
+    public function provide(File $file, string $code, int $offset): iterable
     {
         $shouldIncludeParanthesesInInsertText = $this->shouldIncludeParanthesesInInsertText($code, $offset);
 

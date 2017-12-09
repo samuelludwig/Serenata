@@ -101,6 +101,6 @@ class AutocompleteCommand extends AbstractCommand
 
         $this->fileIndexer->index($filePath, $code);
 
-        return iterator_to_array($this->autocompletionProvider->provide($code, $offset), false);
+        return iterator_to_array($this->autocompletionProvider->provide($file, $code, $offset), false);
     }
 }

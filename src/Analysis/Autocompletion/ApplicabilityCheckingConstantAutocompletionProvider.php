@@ -6,6 +6,8 @@ use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
+use PhpIntegrator\Indexing\Structures\File;
+
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -40,7 +42,7 @@ final class ApplicabilityCheckingConstantAutocompletionProvider implements Autoc
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): iterable
+    public function provide(File $file, string $code, int $offset): iterable
     {
         $nodes = [];
 
@@ -56,7 +58,7 @@ final class ApplicabilityCheckingConstantAutocompletionProvider implements Autoc
             return [];
         }
 
-        return $this->delegate->provide($code, $offset);
+        return $this->delegate->provide($file, $code, $offset);
     }
 
     /**

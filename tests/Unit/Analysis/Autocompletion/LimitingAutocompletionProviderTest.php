@@ -7,6 +7,8 @@ use PhpIntegrator\Analysis\Autocompletion\AutocompletionSuggestion;
 use PhpIntegrator\Analysis\Autocompletion\LimitingAutocompletionProvider;
 use PhpIntegrator\Analysis\Autocompletion\AutocompletionProviderInterface;
 
+use PhpIntegrator\Indexing\Structures;
+
 class LimitingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -29,6 +31,14 @@ class LimitingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
 
         static::assertEquals([
             $suggestions[0],
-        ], iterator_to_array($provider->provide("test", 4)));
+        ], iterator_to_array($provider->provide($this->getFileStub(), "test", 4)));
+    }
+
+    /**
+     * @return Structures\File
+     */
+    private function getFileStub(): Structures\File
+    {
+        return new Structures\File('TestFile.php', new \DateTime(), []);
     }
 }

@@ -9,6 +9,8 @@ use PhpIntegrator\Analysis\Autocompletion\AutocompletionSuggestion;
 use PhpIntegrator\Analysis\Autocompletion\AutocompletionProviderInterface;
 use PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider;
 
+use PhpIntegrator\Indexing\Structures;
+
 class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -72,7 +74,7 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         static::assertEquals([
             $suggestions[0],
             $suggestions[1]
-        ], $provider->provide("test", 4));
+        ], $provider->provide($this->getFileStub(), "test", 4));
     }
 
     /**
@@ -95,7 +97,7 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
 
         static::assertEquals([
             $suggestions[1]
-        ], $provider->provide("test", 4));
+        ], $provider->provide($this->getFileStub(), "test", 4));
     }
 
     /**
@@ -119,7 +121,7 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         static::assertEquals([
             $suggestions[0],
             $suggestions[1]
-        ], $provider->provide("test", 4));
+        ], $provider->provide($this->getFileStub(), "test", 4));
     }
 
     /**
@@ -137,7 +139,7 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
 
         $provider = new FuzzyMatchingAutocompletionProvider($delegate);
 
-        static::assertEquals([], $provider->provide("test", 4));
+        static::assertEquals([], $provider->provide($this->getFileStub(), "test", 4));
     }
 
     /**
@@ -161,6 +163,14 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         static::assertEquals([
             $suggestions[0],
             $suggestions[1]
-        ], $provider->provide("", 0));
+        ], $provider->provide($this->getFileStub(), "", 0));
+    }
+
+    /**
+     * @return Structures\File
+     */
+    private function getFileStub(): Structures\File
+    {
+        return new Structures\File('TestFile.php', new \DateTime(), []);
     }
 }

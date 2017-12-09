@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 
 use PhpIntegrator\Analysis\ConstantListProviderInterface;
 
+use PhpIntegrator\Indexing\Structures\File;
+
 /**
  * Provides constant autocompletion suggestions at a specific location in a file.
  */
@@ -25,7 +27,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(string $code, int $offset): iterable
+    public function provide(File $file, string $code, int $offset): iterable
     {
         foreach ($this->constantListProvider->getAll() as $constant) {
             yield $this->createSuggestion($constant);
