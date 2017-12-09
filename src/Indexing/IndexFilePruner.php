@@ -2,10 +2,6 @@
 
 namespace PhpIntegrator\Indexing;
 
-use PhpIntegrator\Indexing\Indexer;
-
-use PhpIntegrator\Sockets\JsonRpcRequest;
-
 /**
  * Prunes removed files from the index.
  */
@@ -17,11 +13,18 @@ class IndexFilePruner
     private $storage;
 
     /**
-     * @param StorageInterface $storage
+     * @var FileExistenceCheckerInterface
      */
-    public function __construct(StorageInterface $storage)
+    private $fileExistenceChecker;
+
+    /**
+     * @param StorageInterface              $storage
+     * @param FileExistenceCheckerInterface $fileExistenceChecker
+     */
+    public function __construct(StorageInterface $storage, FileExistenceCheckerInterface $fileExistenceChecker)
     {
         $this->storage = $storage;
+        $this->fileExistenceChecker = $fileExistenceChecker;
     }
 
     /**
@@ -32,7 +35,7 @@ class IndexFilePruner
         $this->storage->beginTransaction();
 
         foreach ($this->storage->getFiles() as $file) {
-            if (!file_exists($file->getPath())) {
+            if (!$this->fileExistenceChecker->exists($file->getPath())) {
                 $this->storage->delete($file);
             }
         }
