@@ -25,7 +25,7 @@
 * Fix core shrugging and bailing whenever the entity manager closed due to a database error
 * [Fix unsupported meta file static method types throwing an error instead of being silently skipped](https://gitlab.com/php-integrator/core/issues/130)
 * Fix some edge case bugs with name (type) resolution by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
-* Fix function and method docblock `@return` tag types not being validated against the actual return type
+* [Fix function and method docblock `@return` tag types not being validated against the actual return type](https://gitlab.com/php-integrator/core/issues/94)
 * [Fix crash with variable expressions in method calls during type deduction of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
 * [Make disk I/O and locked database errors propagate as fatal errors, as they currently can't be recovered from and to notify the user](https://github.com/php-integrator/atom-base/issues/278)
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount of items (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
