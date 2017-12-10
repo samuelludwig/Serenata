@@ -156,24 +156,6 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @param array $function
      *
-     * @return string|null
-     */
-    private function getFunctionProtectionLevel(array $function): ?string
-    {
-        if ($function['isPublic']) {
-            return 'public';
-        } elseif ($function['isProtected']) {
-            return 'private';
-        } elseif ($function['isPrivate']) {
-            return 'private';
-        }
-
-        return null;
-    }
-
-    /**
-     * @param array $function
-     *
      * @return string
      */
     private function createReturnTypes(array $function): string
