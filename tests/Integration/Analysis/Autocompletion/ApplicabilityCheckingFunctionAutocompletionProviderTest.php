@@ -13,7 +13,7 @@ class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAu
      */
     public function testAppliesAtExpectedLocations(string $fileName): void
     {
-        static::assertNotEmpty($this->provide($fileName));
+        static::assertNotEmpty($this->provide($fileName, 'FunctionList.phpt'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAu
      */
     public function testDoesNotApplyAtExpectedLocations(string $fileName): void
     {
-        static::assertEmpty($this->provide($fileName));
+        static::assertEmpty($this->provide($fileName, 'FunctionList.phpt'));
     }
 
     /**
@@ -66,7 +66,7 @@ class ApplicabilityCheckingFunctionAutocompletionProviderTest extends AbstractAu
      */
     protected function getFolderName(): string
     {
-        return 'ApplicabilityCheckingFunctionAutocompletionProviderTest';
+        return 'ApplicabilityCheckingAutocompletionProviderTest';
     }
 
     /**

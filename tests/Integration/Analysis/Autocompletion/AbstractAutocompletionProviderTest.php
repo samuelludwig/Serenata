@@ -23,10 +23,11 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
     /**
      * @param string $file
+     * @param string $additionalFile
      *
      * @return string[]
      */
-    protected function provide(string $file): array
+    protected function provide(string $file, ?string $additionalFile = null): array
     {
         $path = $this->getPathFor($file);
 
@@ -41,6 +42,10 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
         $code = str_replace($markerString, '', $code);
 
         $this->indexTestFileWithSource($container, $path, $code);
+
+        if ($additionalFile !== null) {
+            $this->indexTestFile($container, $this->getPathFor($additionalFile));
+        }
 
         $provider = $container->get($this->getProviderName());
 
