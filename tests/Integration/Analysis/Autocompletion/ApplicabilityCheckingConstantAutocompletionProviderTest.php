@@ -13,7 +13,7 @@ class ApplicabilityCheckingConstantAutocompletionProviderTest extends AbstractAu
      */
     public function testAppliesAtExpectedLocations(string $fileName): void
     {
-        static::assertNotEmpty($this->provide($fileName, 'ConstantList.php'));
+        static::assertNotEmpty($this->provide($fileName, 'ConstantList.phpt'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ApplicabilityCheckingConstantAutocompletionProviderTest extends AbstractAu
      */
     public function testDoesNotApplyAtExpectedLocations(string $fileName): void
     {
-        static::assertEmpty($this->provide($fileName, 'ConstantList.php'));
+        static::assertEmpty($this->provide($fileName, 'ConstantList.phpt'));
     }
 
     /**
