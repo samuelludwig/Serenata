@@ -28,7 +28,7 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
      */
     protected function provide(string $file): array
     {
-        $path = __DIR__ . '/' . $this->getFolderName() . '/' . $file;
+        $path = $this->getPathFor($file);
 
         $markerString = '// <MARKER>';
 
@@ -44,7 +44,7 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
         $provider = $container->get($this->getProviderName());
 
-        $results = $provider->provide($this->getFileStub(), $code, $markerOffset);
+        $results = $provider->provide($this->getFileStub($path), $code, $markerOffset);
 
         if (is_array($results)) {
             return $results;
@@ -69,10 +69,22 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
     }
 
     /**
+     * @param string $fileName
+     *
+     * @return string
+     */
+    protected function getPathFor(string $fileName): string
+    {
+        return __DIR__ . '/' . $this->getFolderName() . '/' . $fileName;
+    }
+
+    /**
+     * @param string $filePath
+     *
      * @return Structures\File
      */
-    private function getFileStub(): Structures\File
+    private function getFileStub(string $filePath): Structures\File
     {
-        return new Structures\File('TestFile.php', new \DateTime(), []);
+        return new Structures\File($filePath, new \DateTime(), []);
     }
 }

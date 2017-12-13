@@ -16,4 +16,9 @@ final class SuggestionKind
      * @var string
      */
     public const CONSTANT = 'constant';
+
+    /**
+     * @var string
+     */
+    public const METHOD = 'method';
 }

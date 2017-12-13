@@ -24,11 +24,24 @@ services:
             - '@constantAutocompletionProvider'
             - '@parser'
 
+    nonStaticMethodAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\NonStaticMethodAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    applicabilityCheckingNonStaticMethodAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingNonStaticMethodAutocompletionProvider
+        arguments:
+            - '@nonStaticMethodAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
+            - '@applicabilityCheckingNonStaticMethodAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
