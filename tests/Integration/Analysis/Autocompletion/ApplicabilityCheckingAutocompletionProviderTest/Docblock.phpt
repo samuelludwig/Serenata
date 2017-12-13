@@ -3,4 +3,4 @@
 /**
  * // <MARKER>
  */
-const FOO = 5;
+echo 'test';
