@@ -36,12 +36,25 @@ services:
             - '@nonStaticMethodAutocompletionProvider'
             - '@parser'
 
+    staticMethodAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\StaticMethodAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    applicabilityCheckingStaticMethodAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingStaticMethodAutocompletionProvider
+        arguments:
+            - '@staticMethodAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
             - '@applicabilityCheckingNonStaticMethodAutocompletionProvider'
+            - '@applicabilityCheckingStaticMethodAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
