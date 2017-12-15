@@ -48,9 +48,14 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel&lo', 6));
         static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel:lo', 6));
         static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel!lo', 6));
+        static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel?lo', 6));
         static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel@lo', 6));
         static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel#lo', 6));
         static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel%lo', 6));
+        static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel>lo', 6));
+        static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel<lo', 6));
+        static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel=lo', 6));
+        static::assertSame('lo', $reflectionMethod->invoke($provider, 'hel\lo', 6));
     }
 
     /**

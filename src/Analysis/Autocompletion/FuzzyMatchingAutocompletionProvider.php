@@ -32,9 +32,14 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
         "&"  => true,
         ":"  => true,
         "!"  => true,
+        "?"  => true,
         "@"  => true,
         "#"  => true,
-        "%"  => true
+        "%"  => true,
+        ">"  => true,
+        "<"  => true,
+        "="  => true,
+        "\\" => true
     ];
 
     /**
