@@ -130,7 +130,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
     /**
      * @return void
      */
-    public function testMarksDeprecatedFunctionAsDeprecated(): void
+    public function testMarksDeprecatedMethodAsDeprecated(): void
     {
         $fileName = 'DeprecatedMethod.phpt';
 
