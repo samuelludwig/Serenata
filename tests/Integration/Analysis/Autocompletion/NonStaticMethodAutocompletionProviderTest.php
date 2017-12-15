@@ -12,7 +12,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
      */
     public function testRetrievesAllMethods(): void
     {
-        $fileName = 'Methods.phpt';
+        $fileName = 'Method.phpt';
 
         $output = $this->provide($fileName);
 
