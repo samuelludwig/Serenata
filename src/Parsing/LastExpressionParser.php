@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
+use PhpParser\Node\Stmt\Nop;
+
 /**
  * Parser that attempts to parse the last expression in a string of code.
  */
@@ -255,13 +257,11 @@ final class LastExpressionParser implements Parser
         $expression = substr($code, $boundary);
         $expression = trim($expression);
 
-        if ($expression === '') {
-            throw new \PhpParser\Error(
-                'Could not parse last expression for code, the last expression was <<<' . $expression . '>>>'
-            );
+        if ($expression !== '') {
+            $nodes = $this->delegate->parse($expression, $errorHandler);
+        } else {
+            $nodes = [new Nop()];
         }
-
-        $nodes = $this->delegate->parse($expression, $errorHandler);
 
         if (empty($nodes)) {
             throw new \PhpParser\Error(
