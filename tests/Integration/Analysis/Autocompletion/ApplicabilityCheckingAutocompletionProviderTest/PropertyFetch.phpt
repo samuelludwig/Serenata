@@ -1,4 +1,4 @@
 <?php
 
 $a = new \A();
-$a->a// <MARKER>;
+$a->f// <MARKER>;
