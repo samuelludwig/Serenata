@@ -1,3 +1,3 @@
 <?php
 
-SomeClass::a// <MARKER>();
+A::a// <MARKER>();
