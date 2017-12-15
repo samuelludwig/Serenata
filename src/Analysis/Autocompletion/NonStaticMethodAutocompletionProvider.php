@@ -84,7 +84,9 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         bool $shouldIncludeParanthesesInInsertText
     ): Generator {
         foreach ($classlikeInfo['methods'] as $method) {
-            yield $this->createSuggestion($method, $shouldIncludeParanthesesInInsertText);
+            if (!$method['isStatic']) {
+                yield $this->createSuggestion($method, $shouldIncludeParanthesesInInsertText);
+            }
         }
     }
 

@@ -158,6 +158,18 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
     }
 
     /**
+     * @return void
+     */
+    public function testDoesNotReturnStaticMethod(): void
+    {
+        $fileName = 'StaticMethod.phpt';
+
+        $output = $this->provide($fileName);
+
+        static::assertEquals([], $output);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getFolderName(): string
