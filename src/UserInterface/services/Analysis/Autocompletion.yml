@@ -48,6 +48,30 @@ services:
             - '@staticMethodAutocompletionProvider'
             - '@parser'
 
+    nonStaticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\NonStaticPropertyAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    applicabilityCheckingNonStaticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingNonStaticPropertyAutocompletionProvider
+        arguments:
+            - '@nonStaticPropertyAutocompletionProvider'
+            - '@parser'
+
+    staticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\StaticPropertyAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    applicabilityCheckingStaticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingStaticPropertyAutocompletionProvider
+        arguments:
+            - '@staticPropertyAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
@@ -55,6 +79,8 @@ services:
             - '@applicabilityCheckingConstantAutocompletionProvider'
             - '@applicabilityCheckingNonStaticMethodAutocompletionProvider'
             - '@applicabilityCheckingStaticMethodAutocompletionProvider'
+            - '@applicabilityCheckingNonStaticPropertyAutocompletionProvider'
+            - '@applicabilityCheckingStaticPropertyAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
