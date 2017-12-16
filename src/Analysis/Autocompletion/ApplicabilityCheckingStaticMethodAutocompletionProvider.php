@@ -72,7 +72,10 @@ final class ApplicabilityCheckingStaticMethodAutocompletionProvider implements A
             return $this->doesApplyInsideNode($node->expr);
         }
 
-        return $node instanceof Node\Expr\StaticCall || $node instanceof Node\Expr\StaticPropertyFetch;
+        return
+            $node instanceof Node\Expr\StaticCall ||
+            $node instanceof Node\Expr\StaticPropertyFetch ||
+            $node instanceof Node\Expr\ClassConstFetch;
     }
 
     /**
