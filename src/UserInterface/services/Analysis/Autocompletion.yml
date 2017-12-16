@@ -72,6 +72,18 @@ services:
             - '@staticPropertyAutocompletionProvider'
             - '@parser'
 
+    classConstantAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ClassConstantAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+
+    applicabilityCheckingClassConstantAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingClassConstantAutocompletionProvider
+        arguments:
+            - '@classConstantAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
@@ -81,6 +93,7 @@ services:
             - '@applicabilityCheckingStaticMethodAutocompletionProvider'
             - '@applicabilityCheckingNonStaticPropertyAutocompletionProvider'
             - '@applicabilityCheckingStaticPropertyAutocompletionProvider'
+            - '@applicabilityCheckingClassConstantAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
