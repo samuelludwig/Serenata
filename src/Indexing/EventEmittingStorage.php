@@ -75,6 +75,14 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
         } elseif ($entity instanceof Structures\FunctionParameter) {
             $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity->getFunction()]);
         } elseif ($entity instanceof Structures\Classlike) {
+
+
+
+            // TODO: Remove me, for testing purposes.
+            // echo "Persisted " . $entity->getFqcn() . PHP_EOL;
+
+
+
             $this->emit(IndexingEventName::CLASSLIKE_UPDATED, [$entity]);
         }
     }
@@ -93,6 +101,15 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
         } elseif ($entity instanceof Structures\Function_) {
             $this->emit(IndexingEventName::FUNCTION_REMOVED, [$entity]);
         } elseif ($entity instanceof Structures\Classlike) {
+
+
+
+            // TODO: Remove me, for testing purposes.
+            // echo "Removed " . $entity->getFqcn() . PHP_EOL;
+
+
+
+
             $this->emit(IndexingEventName::CLASSLIKE_REMOVED, [$entity]);
         }
     }

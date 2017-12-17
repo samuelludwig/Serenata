@@ -2,6 +2,17 @@ parameters:
 
 
 services:
+    classlikeAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
+        arguments:
+            - '@classlikeListProvider'
+
+    applicabilityCheckingClasslikeAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingClasslikeAutocompletionProvider
+        arguments:
+            - '@classlikeAutocompletionProvider'
+            - '@parser'
+
     functionAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
@@ -99,6 +110,7 @@ services:
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
+            - '@applicabilityCheckingClasslikeAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
             - '@applicabilityCheckingNonStaticMethodAutocompletionProvider'

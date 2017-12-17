@@ -10,6 +10,16 @@ final class SuggestionKind
     /**
      * @var string
      */
+    public const CLASS_ = 'class';
+
+    /**
+     * @var string
+     */
+    public const MIXIN = 'mixin';
+
+    /**
+     * @var string
+     */
     public const FUNCTION = 'function';
 
     /**
