@@ -1,5 +1,5 @@
 <?php
 
-// <INJECTION>
+$foo = 5;
 
 // <MARKER>

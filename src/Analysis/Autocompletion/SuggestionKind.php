@@ -26,4 +26,9 @@ final class SuggestionKind
      * @var string
      */
     public const PROPERTY = 'property';
+
+    /**
+     * @var string
+     */
+    public const VARIABLE = 'variable';
 }

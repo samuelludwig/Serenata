@@ -2,5 +2,7 @@
 
 function bar()
 {
+    // <INJECTION>
+    
     // <MARKER>();
 }

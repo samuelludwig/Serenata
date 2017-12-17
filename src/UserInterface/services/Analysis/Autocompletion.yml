@@ -84,6 +84,18 @@ services:
             - '@classConstantAutocompletionProvider'
             - '@parser'
 
+    localVariableAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\LocalVariableAutocompletionProvider
+        arguments:
+            - '@variableScanner'
+            - '@parser'
+
+    applicabilityCheckingLocalVariableAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingLocalVariableAutocompletionProvider
+        arguments:
+            - '@localVariableAutocompletionProvider'
+            - '@parser'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
@@ -94,6 +106,7 @@ services:
             - '@applicabilityCheckingNonStaticPropertyAutocompletionProvider'
             - '@applicabilityCheckingStaticPropertyAutocompletionProvider'
             - '@applicabilityCheckingClassConstantAutocompletionProvider'
+            - '@applicabilityCheckingLocalVariableAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider

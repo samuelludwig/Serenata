@@ -22,30 +22,38 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
     abstract protected function getProviderName(): string;
 
     /**
-     * @param string $file
-     * @param string $additionalFile
+     * @param string      $file
+     * @param string|null $additionalFile
+     * @param string      $injectionPoint
      *
      * @return string[]
      */
-    protected function provide(string $file, ?string $additionalFile = null): array
+    protected function provide(string $file, ?string $additionalFile = null, string $injectionPoint = '<?php'): array
     {
         $path = $this->getPathFor($file);
 
-        $markerString = '// <MARKER>';
-
-        $markerOffset = $this->getMarkerOffset($path, $markerString);
-
         $container = $this->createTestContainer();
 
-        // Strip marker so it does not influence further processing.
         $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
+
+        if ($additionalFile !== null) {
+            $additionalCode = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile(
+                $this->getPathFor($additionalFile)
+            );
+
+            $code = str_replace($injectionPoint, $additionalCode, $code, $count);
+
+            static::assertGreaterThan(0, $count, 'Injection point for additional code not found in file ' . $file);
+        }
+
+        $markerString = '// <MARKER>';
+
+        $markerOffset = $this->getMarkerOffset($code, $markerString);
+
+        // Strip marker so it does not influence further processing.
         $code = str_replace($markerString, '', $code);
 
         $this->indexTestFileWithSource($container, $path, $code);
-
-        if ($additionalFile !== null) {
-            $this->indexTestFile($container, $this->getPathFor($additionalFile));
-        }
 
         $provider = $container->get($this->getProviderName());
 
@@ -59,16 +67,14 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
     }
 
     /**
-     * @param string $path
+     * @param string $code
      * @param string $marker
      *
      * @return int
      */
-    protected function getMarkerOffset(string $path, string $marker): int
+    protected function getMarkerOffset(string $code, string $marker): int
     {
-        $testFileContents = @file_get_contents($path);
-
-        $markerOffset = mb_strpos($testFileContents, $marker);
+        $markerOffset = mb_strpos($code, $marker);
 
         return $markerOffset;
     }
