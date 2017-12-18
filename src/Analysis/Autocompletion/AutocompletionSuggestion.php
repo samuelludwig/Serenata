@@ -98,7 +98,7 @@ final class AutocompletionSuggestion implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getDocumentation(): ?string
     {
