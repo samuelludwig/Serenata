@@ -7,44 +7,60 @@ services:
         arguments:
             - '@classlikeListProvider'
 
+    classlikeAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionApplicabilityChecker
+
     applicabilityCheckingClasslikeAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingClasslikeAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@classlikeAutocompletionProvider'
             - '@parser'
+            - '@classlikeAutocompletionApplicabilityChecker'
 
     namespaceAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionProvider
         arguments:
             - '@namespaceListProvider'
 
+    namespaceAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionApplicabilityChecker
+
     applicabilityCheckingNamespaceAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingNamespaceAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@namespaceAutocompletionProvider'
             - '@parser'
+            - '@namespaceAutocompletionApplicabilityChecker'
 
     functionAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
             - '@functionListProvider'
 
+    functionAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionApplicabilityChecker
+
     applicabilityCheckingFunctionAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingFunctionAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@functionAutocompletionProvider'
             - '@parser'
+            - '@functionAutocompletionApplicabilityChecker'
 
     constantAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionProvider
         arguments:
             - '@constantListProvider'
 
+    constantAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionApplicabilityChecker
+
     applicabilityCheckingConstantAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingConstantAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@constantAutocompletionProvider'
             - '@parser'
+            - '@constantAutocompletionApplicabilityChecker'
 
     nonStaticMethodAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NonStaticMethodAutocompletionProvider
@@ -52,11 +68,15 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
 
+    nonStaticMethodAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\NonStaticMethodAutocompletionApplicabilityChecker
+
     applicabilityCheckingNonStaticMethodAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingNonStaticMethodAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@nonStaticMethodAutocompletionProvider'
             - '@parser'
+            - '@nonStaticMethodAutocompletionApplicabilityChecker'
 
     staticMethodAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\StaticMethodAutocompletionProvider
@@ -64,11 +84,15 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
 
+    staticMethodAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\StaticMethodAutocompletionApplicabilityChecker
+
     applicabilityCheckingStaticMethodAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingStaticMethodAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@staticMethodAutocompletionProvider'
             - '@parser'
+            - '@staticMethodAutocompletionApplicabilityChecker'
 
     nonStaticPropertyAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NonStaticPropertyAutocompletionProvider
@@ -76,11 +100,15 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
 
+    nonStaticPropertyAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\NonStaticPropertyAutocompletionApplicabilityChecker
+
     applicabilityCheckingNonStaticPropertyAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingNonStaticPropertyAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@nonStaticPropertyAutocompletionProvider'
             - '@parser'
+            - '@nonStaticPropertyAutocompletionApplicabilityChecker'
 
     staticPropertyAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\StaticPropertyAutocompletionProvider
@@ -88,11 +116,15 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
 
+    staticPropertyAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\StaticPropertyAutocompletionApplicabilityChecker
+
     applicabilityCheckingStaticPropertyAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingStaticPropertyAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@staticPropertyAutocompletionProvider'
             - '@parser'
+            - '@staticPropertyAutocompletionApplicabilityChecker'
 
     classConstantAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ClassConstantAutocompletionProvider
@@ -100,11 +132,15 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
 
+    classConstantAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\ClassConstantAutocompletionApplicabilityChecker
+
     applicabilityCheckingClassConstantAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingClassConstantAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@classConstantAutocompletionProvider'
             - '@parser'
+            - '@classConstantAutocompletionApplicabilityChecker'
 
     localVariableAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\LocalVariableAutocompletionProvider
@@ -112,11 +148,15 @@ services:
             - '@variableScanner'
             - '@parser'
 
+    localVariableAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\LocalVariableAutocompletionApplicabilityChecker
+
     applicabilityCheckingLocalVariableAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingLocalVariableAutocompletionProvider
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@localVariableAutocompletionProvider'
             - '@parser'
+            - '@localVariableAutocompletionApplicabilityChecker'
 
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider

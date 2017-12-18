@@ -14,10 +14,10 @@ use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
 /**
- * Static property autocompletion provider that first checks if function autocompletion suggestions apply at the
- * requested offset and, if so, delegates to another provider.
+ * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,
+ * delegates to another provider.
  */
-final class ApplicabilityCheckingStaticPropertyAutocompletionProvider implements AutocompletionProviderInterface
+final class ApplicabilityCheckingAutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
      * @var AutocompletionProviderInterface
@@ -30,13 +30,23 @@ final class ApplicabilityCheckingStaticPropertyAutocompletionProvider implements
     private $parser;
 
     /**
-     * @param AutocompletionProviderInterface $delegate
-     * @param Parser                          $parser
+     * @var AutocompletionApplicabilityCheckerInterface
      */
-    public function __construct(AutocompletionProviderInterface $delegate, Parser $parser)
-    {
+    private $autocompletionApplicabilityChecker;
+
+    /**
+     * @param AutocompletionProviderInterface             $delegate
+     * @param Parser                                      $parser
+     * @param AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker
+     */
+    public function __construct(
+        AutocompletionProviderInterface $delegate,
+        Parser $parser,
+        AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker
+    ) {
         $this->delegate = $delegate;
         $this->parser = $parser;
+        $this->autocompletionApplicabilityChecker = $autocompletionApplicabilityChecker;
     }
 
     /**
@@ -54,28 +64,13 @@ final class ApplicabilityCheckingStaticPropertyAutocompletionProvider implements
 
         $node = $this->findNodeAt($nodes, $offset);
 
-        if ($node !== null && !$this->doesApplyInsideNode($node)) {
-            return [];
+        if ($node !== null && $this->autocompletionApplicabilityChecker->doesApplyTo($node)) {
+            return $this->delegate->provide($file, $code, $offset);
+        } elseif ($node === null && $this->autocompletionApplicabilityChecker->doesApplyOutsideNodes()) {
+            return $this->delegate->provide($file, $code, $offset);
         }
 
-        return $this->delegate->provide($file, $code, $offset);
-    }
-
-    /**
-     * @param Node $node
-     *
-     * @return bool
-     */
-    private function doesApplyInsideNode(Node $node): bool
-    {
-        if ($node instanceof Node\Stmt\Expression) {
-            return $this->doesApplyInsideNode($node->expr);
-        }
-
-        return
-            $node instanceof Node\Expr\StaticCall ||
-            $node instanceof Node\Expr\StaticPropertyFetch ||
-            $node instanceof Node\Expr\ClassConstFetch;
+        return [];
     }
 
     /**
