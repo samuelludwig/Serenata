@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 
 use JsonSerializable;
 
+use PhpIntegrator\Utility\TextEdit;
+
 /**
  * Represents a single autocompletion suggestion.
  *
@@ -42,12 +44,18 @@ final class AutocompletionSuggestion implements JsonSerializable
     private $extraData;
 
     /**
+     * @var TextEdit[]
+     */
+    private $additionalTextEdits;
+
+    /**
      * @param string      $filterText
      * @param string      $kind
      * @param string      $insertText
      * @param string      $label
      * @param string|null $documentation
      * @param array       $extraData
+     * @param TextEdit[]  $additionalTextEdits
      */
     public function __construct(
         string $filterText,
@@ -55,7 +63,8 @@ final class AutocompletionSuggestion implements JsonSerializable
         string $insertText,
         string $label,
         ?string $documentation,
-        array $extraData = []
+        array $extraData = [],
+        array $additionalTextEdits = []
     ) {
         $this->filterText = $filterText;
         $this->kind = $kind;
@@ -63,6 +72,7 @@ final class AutocompletionSuggestion implements JsonSerializable
         $this->label = $label;
         $this->documentation = $documentation;
         $this->extraData = $extraData;
+        $this->additionalTextEdits = $additionalTextEdits;
     }
 
     /**
@@ -114,17 +124,26 @@ final class AutocompletionSuggestion implements JsonSerializable
     }
 
     /**
+     * @return TextEdit[]
+     */
+    public function getAdditionalTextEdits(): array
+    {
+        return $this->additionalTextEdits;
+    }
+
+    /**
      * @inheritDoc
      */
     public function jsonSerialize()
     {
         return [
-            'filterText'    => $this->getFilterText(),
-            'kind'          => $this->getKind(),
-            'insertText'    => $this->getInsertText(),
-            'label'         => $this->getLabel(),
-            'documentation' => $this->getDocumentation(),
-            'extraData'     => $this->getExtraData()
+            'filterText'          => $this->getFilterText(),
+            'kind'                => $this->getKind(),
+            'insertText'          => $this->getInsertText(),
+            'label'               => $this->getLabel(),
+            'documentation'       => $this->getDocumentation(),
+            'extraData'           => $this->getExtraData(),
+            'additionalTextEdits' => $this->getAdditionalTextEdits()
         ];
     }
 }
