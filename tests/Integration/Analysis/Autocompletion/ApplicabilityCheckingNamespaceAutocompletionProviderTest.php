@@ -34,6 +34,7 @@ class ApplicabilityCheckingNamespaceAutocompletionProviderTest extends AbstractA
     public function getFileNamesWhereShouldApply(): array
     {
         return [
+            ['Namespace.phpt'],
             ['UseStatement.phpt']
         ];
     }

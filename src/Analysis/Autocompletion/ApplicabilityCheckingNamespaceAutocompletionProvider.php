@@ -74,7 +74,10 @@ final class ApplicabilityCheckingNamespaceAutocompletionProvider implements Auto
             return $this->doesApplyInsideNode($node->expr);
         }
 
-        return $node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\UseUse;
+        return
+            $node instanceof Node\Stmt\Use_ ||
+            $node instanceof Node\Stmt\UseUse ||
+            $node instanceof Node\Stmt\Namespace_;
     }
 
     /**
