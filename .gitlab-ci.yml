@@ -23,7 +23,7 @@ PHP 7.1:
     <<: *cache_composer
 
 PHP 7.2:
-    image: php:7.2-rc-alpine
+    image: php:7.2-alpine
     stage: test
     <<: *setup_dependencies
     <<: *run_tests
