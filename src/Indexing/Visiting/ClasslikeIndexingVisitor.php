@@ -180,7 +180,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->classlikeStack = new Stack();
-        $this->classlikesFound = new SplObjectStorage();;
+        $this->classlikesFound = new SplObjectStorage();
         $this->relationsStorage = new SplObjectStorage();
         $this->traitUseStorage = new SplObjectStorage();
 
