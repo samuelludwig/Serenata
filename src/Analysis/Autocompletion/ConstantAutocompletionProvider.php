@@ -49,7 +49,6 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $constant['shortDescription'],
             [
                 'isDeprecated' => $constant['isDeprecated'],
-                'url'          => null,
                 'returnTypes'  => $this->createReturnTypes($constant)
             ]
         );

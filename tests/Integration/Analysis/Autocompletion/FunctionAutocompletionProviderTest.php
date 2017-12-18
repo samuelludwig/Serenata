@@ -17,9 +17,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo()', null, [
                 'isDeprecated'                  => false,
-                'protectionLevel'               => null,
-                'declaringStructure'            => null,
-                'url'                           => null,
                 'returnTypes'                   => 'int|string',
                 'placeCursorBetweenParentheses' => false
             ])
@@ -38,9 +35,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', 'foo()', null, [
                 'isDeprecated'                  => false,
-                'protectionLevel'               => null,
-                'declaringStructure'            => null,
-                'url'                           => null,
                 'returnTypes'                   => '',
                 'placeCursorBetweenParentheses' => false
             ])
@@ -59,9 +53,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', 'foo()', null, [
                 'isDeprecated'                  => false,
-                'protectionLevel'               => null,
-                'declaringStructure'            => null,
-                'url'                           => null,
                 'returnTypes'                   => '',
                 'placeCursorBetweenParentheses' => false
             ])
@@ -80,9 +71,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo($test)', null, [
                 'isDeprecated'                  => false,
-                'protectionLevel'               => null,
-                'declaringStructure'            => null,
-                'url'                           => null,
                 'returnTypes'                   => '',
                 'placeCursorBetweenParentheses' => true
             ])
@@ -101,9 +89,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo()', null, [
                 'isDeprecated'                  => true,
-                'protectionLevel'               => null,
-                'declaringStructure'            => null,
-                'url'                           => null,
                 'returnTypes'                   => 'void',
                 'placeCursorBetweenParentheses' => false
             ])
