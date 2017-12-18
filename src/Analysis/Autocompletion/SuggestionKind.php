@@ -20,6 +20,11 @@ final class SuggestionKind
     /**
      * @var string
      */
+    public const IMPORT = 'import';
+
+    /**
+     * @var string
+     */
     public const FUNCTION = 'function';
 
     /**

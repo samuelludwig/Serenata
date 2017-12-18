@@ -13,6 +13,17 @@ services:
             - '@classlikeAutocompletionProvider'
             - '@parser'
 
+    namespaceAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionProvider
+        arguments:
+            - '@namespaceListProvider'
+
+    applicabilityCheckingNamespaceAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingNamespaceAutocompletionProvider
+        arguments:
+            - '@namespaceAutocompletionProvider'
+            - '@parser'
+
     functionAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
@@ -113,6 +124,7 @@ services:
             - '@applicabilityCheckingClasslikeAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
+            - '@applicabilityCheckingNamespaceAutocompletionProvider'
             - '@applicabilityCheckingNonStaticMethodAutocompletionProvider'
             - '@applicabilityCheckingStaticMethodAutocompletionProvider'
             - '@applicabilityCheckingNonStaticPropertyAutocompletionProvider'
