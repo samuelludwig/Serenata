@@ -57,7 +57,8 @@ class FunctionAutocompletionApplicabilityCheckerTest extends AbstractAutocomplet
             ['PropertyFetch.phpt'],
             ['StaticPropertyFetch.phpt'],
             ['ClassBody.phpt'],
-            ['String.phpt']
+            ['String.phpt'],
+            ['StaticMethodCallParent.phpt']
         ];
     }
 

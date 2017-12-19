@@ -57,7 +57,8 @@ class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             ['PropertyFetch.phpt'],
             ['StaticPropertyFetch.phpt'],
             ['ClassBody.phpt'],
-            ['String.phpt']
+            ['String.phpt'],
+            ['StaticMethodCallParent.phpt']
         ];
     }
 

@@ -35,7 +35,8 @@ class NonStaticMethodAutocompletionApplicabilityCheckerTest extends AbstractAuto
     {
         return [
             ['PropertyFetch.phpt'],
-            ['MethodCall.phpt']
+            ['MethodCall.phpt'],
+            ['StaticMethodCallParent.phpt']
         ];
     }
 

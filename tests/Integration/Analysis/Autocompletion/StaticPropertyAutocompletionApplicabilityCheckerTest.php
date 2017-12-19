@@ -35,7 +35,8 @@ class StaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAutoc
     {
         return [
             ['StaticMethodCall.phpt'],
-            ['StaticPropertyFetch.phpt']
+            ['StaticPropertyFetch.phpt'],
+            ['StaticMethodCallParent.phpt']
         ];
     }
 

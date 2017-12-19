@@ -57,7 +57,8 @@ class NonStaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAu
             ['ClassBody.phpt'],
             ['String.phpt'],
             ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt']
+            ['FunctionLike.phpt'],
+            ['StaticMethodCallParent.phpt']
         ];
     }
 
