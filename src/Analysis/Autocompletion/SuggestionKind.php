@@ -10,6 +10,11 @@ final class SuggestionKind
     /**
      * @var string
      */
+    public const KEYWORD = 'keyword';
+
+    /**
+     * @var string
+     */
     public const CLASS_ = 'class';
 
     /**

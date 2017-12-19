@@ -2,6 +2,19 @@ parameters:
 
 
 services:
+    keywordAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\KeywordAutocompletionProvider
+
+    keywordAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\KeywordAutocompletionApplicabilityChecker
+
+    applicabilityCheckingKeywordAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@keywordAutocompletionProvider'
+            - '@parser'
+            - '@keywordAutocompletionApplicabilityChecker'
+
     classlikeAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
         arguments:
@@ -161,6 +174,7 @@ services:
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
+            - '@applicabilityCheckingKeywordAutocompletionProvider'
             - '@applicabilityCheckingClasslikeAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
