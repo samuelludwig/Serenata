@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis\Autocompletion;
 
-use PhpIntegrator\Indexing\Structures;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 /**
@@ -57,7 +55,11 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
         $provider = $container->get($this->getProviderName());
 
-        $results = $provider->provide($this->getFileStub($path), $code, $markerOffset);
+        $results = $provider->provide(
+            $container->get('storage')->getFileByPath($path),
+            $code,
+            $markerOffset
+        );
 
         if (is_array($results)) {
             return $results;
@@ -87,15 +89,5 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
     protected function getPathFor(string $fileName): string
     {
         return __DIR__ . '/' . $this->getFolderName() . '/' . $fileName;
-    }
-
-    /**
-     * @param string $filePath
-     *
-     * @return Structures\File
-     */
-    private function getFileStub(string $filePath): Structures\File
-    {
-        return new Structures\File($filePath, new \DateTime(), []);
     }
 }
