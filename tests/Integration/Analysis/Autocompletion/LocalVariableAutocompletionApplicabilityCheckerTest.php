@@ -58,6 +58,7 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
             ['StaticPropertyFetch.phpt'],
             ['ClassBody.phpt'],
             ['String.phpt'],
+            ['StaticMethodCallSelf.phpt'],
             ['StaticMethodCallParent.phpt']
         ];
     }

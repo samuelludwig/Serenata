@@ -59,6 +59,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             ['StaticPropertyFetch.phpt'],
             ['ClassBody.phpt'],
             ['String.phpt'],
+            ['StaticMethodCallSelf.phpt'],
             ['StaticMethodCallParent.phpt']
         ];
     }
