@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis\Autocompletion;
 
-class ApplicabilityCheckingNonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @dataProvider getFileNamesWhereShouldApply
@@ -13,7 +13,7 @@ class ApplicabilityCheckingNonStaticMethodAutocompletionProviderTest extends Abs
      */
     public function testAppliesAtExpectedLocations(string $fileName): void
     {
-        static::assertNotEmpty($this->provide($fileName, 'MethodList.phpt'));
+        static::assertNotEmpty($this->provide($fileName, 'ClasslikeList.phpt'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ApplicabilityCheckingNonStaticMethodAutocompletionProviderTest extends Abs
      */
     public function testDoesNotApplyAtExpectedLocations(string $fileName): void
     {
-        static::assertEmpty($this->provide($fileName, 'MethodList.phpt'));
+        static::assertEmpty($this->provide($fileName, 'ClasslikeList.phpt'));
     }
 
     /**
@@ -34,8 +34,8 @@ class ApplicabilityCheckingNonStaticMethodAutocompletionProviderTest extends Abs
     public function getFileNamesWhereShouldApply(): array
     {
         return [
-            ['PropertyFetch.phpt'],
-            ['MethodCall.phpt']
+            ['TopLevelNamespace.phpt'],
+            ['FunctionLike.phpt']
         ];
     }
 
@@ -46,18 +46,18 @@ class ApplicabilityCheckingNonStaticMethodAutocompletionProviderTest extends Abs
     {
         return [
             ['VariableName.phpt'],
+            ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
             ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],
-            ['FunctionSignature.phpt'],
-            ['MethodSignature.phpt'],
+            // ['FunctionSignature.phpt'],
+            // ['MethodSignature.phpt'],
+            ['PropertyFetch.phpt'],
             ['StaticPropertyFetch.phpt'],
             ['ClassBody.phpt'],
-            ['String.phpt'],
-            ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt']
+            ['String.phpt']
         ];
     }
 
@@ -74,6 +74,6 @@ class ApplicabilityCheckingNonStaticMethodAutocompletionProviderTest extends Abs
      */
     protected function getProviderName(): string
     {
-        return 'applicabilityCheckingNonStaticMethodAutocompletionProvider';
+        return 'applicabilityCheckingClasslikeAutocompletionProvider';
     }
 }
