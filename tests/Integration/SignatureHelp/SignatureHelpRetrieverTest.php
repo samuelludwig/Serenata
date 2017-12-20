@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\SignatureHelp;
+namespace PhpIntegrator\Tests\Integration\SignatureHelp;
 
 use UnexpectedValueException;
 
