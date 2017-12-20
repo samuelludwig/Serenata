@@ -2,16 +2,11 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
-use UnexpectedValueException;
-
-use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
 
 use PhpIntegrator\Indexing\Structures\File;
 
 use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
 
 /**
  * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,
@@ -25,9 +20,9 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
     private $delegate;
 
     /**
-     * @var Parser
+     * @var NodeAtOffsetLocatorInterface
      */
-    private $parser;
+    private $nodeAtOffsetLocator;
 
     /**
      * @var AutocompletionApplicabilityCheckerInterface
@@ -36,16 +31,16 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
 
     /**
      * @param AutocompletionProviderInterface             $delegate
-     * @param Parser                                      $parser
+     * @param NodeAtOffsetLocatorInterface                $nodeAtOffsetLocator
      * @param AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker
      */
     public function __construct(
         AutocompletionProviderInterface $delegate,
-        Parser $parser,
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker
     ) {
         $this->delegate = $delegate;
-        $this->parser = $parser;
+        $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->autocompletionApplicabilityChecker = $autocompletionApplicabilityChecker;
     }
 
@@ -54,15 +49,7 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        $nodes = [];
-
-        try {
-            $nodes = $this->getNodesFromCode($code);
-        } catch (UnexpectedValueException $e) {
-            return [];
-        }
-
-        $node = $this->findNodeAt($nodes, $offset);
+        $node = $this->findNodeAt($code, $offset);
 
         if ($node !== null && $this->autocompletionApplicabilityChecker->doesApplyTo($node)) {
             return $this->delegate->provide($file, $code, $offset);
@@ -74,21 +61,17 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
     }
 
     /**
-     * @param array $nodes
-     * @param int   $position
+     * @param string $code
+     * @param int    $position
      *
      * @return Node|null
      */
-    private function findNodeAt(array $nodes, int $position): ?Node
+    private function findNodeAt(string $code, int $position): ?Node
     {
-        $visitor = new NodeFetchingVisitor($position);
+        $result = $this->nodeAtOffsetLocator->locate($code, $position);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($nodes);
-
-        $node = $visitor->getNode();
-        $nearestInterestingNode = $visitor->getNearestInterestingNode();
+        $node = $result->getNode();
+        $nearestInterestingNode = $result->getNearestInterestingNode();
 
         if (!$node) {
             return null;
@@ -102,31 +85,5 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
         }
 
         return ($node instanceof Node\Name || $node instanceof Node\Identifier) ? $node : $nearestInterestingNode;
-    }
-
-    /**
-     * @param string $code
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return Node[]
-     */
-    private function getNodesFromCode(string $code): array
-    {
-        $nodes = $this->parser->parse($code, $this->getErrorHandler());
-
-        if ($nodes === null) {
-            throw new UnexpectedValueException('No nodes returned after parsing code');
-        }
-
-        return $nodes;
-    }
-
-    /**
-     * @return ErrorHandler\Collecting
-     */
-    private function getErrorHandler(): ErrorHandler\Collecting
-    {
-        return new ErrorHandler\Collecting();
     }
 }

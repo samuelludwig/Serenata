@@ -234,6 +234,11 @@ services:
             - '@storage'
             - '@typeAnalyzer'
 
+    nodeAtOffsetLocator:
+        class: PhpIntegrator\Analysis\NodeAtOffsetLocator
+        arguments:
+            - '@parser'
+
     functionNameNodeFqsenDeterminer:
         class: PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer
         arguments:

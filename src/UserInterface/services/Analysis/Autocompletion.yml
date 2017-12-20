@@ -12,7 +12,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@keywordAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@keywordAutocompletionApplicabilityChecker'
 
     classlikeAutocompletionProvider:
@@ -27,7 +27,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@classlikeAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@classlikeAutocompletionApplicabilityChecker'
 
     namespaceAutocompletionProvider:
@@ -42,7 +42,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@namespaceAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@namespaceAutocompletionApplicabilityChecker'
 
     functionAutocompletionProvider:
@@ -57,7 +57,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@functionAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@functionAutocompletionApplicabilityChecker'
 
     constantAutocompletionProvider:
@@ -72,7 +72,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@constantAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@constantAutocompletionApplicabilityChecker'
 
     nonStaticMethodAutocompletionProvider:
@@ -88,7 +88,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@nonStaticMethodAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@nonStaticMethodAutocompletionApplicabilityChecker'
 
     staticMethodAutocompletionProvider:
@@ -104,7 +104,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@staticMethodAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@staticMethodAutocompletionApplicabilityChecker'
 
     nonStaticPropertyAutocompletionProvider:
@@ -120,7 +120,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@nonStaticPropertyAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@nonStaticPropertyAutocompletionApplicabilityChecker'
 
     staticPropertyAutocompletionProvider:
@@ -136,7 +136,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@staticPropertyAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@staticPropertyAutocompletionApplicabilityChecker'
 
     classConstantAutocompletionProvider:
@@ -152,7 +152,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@classConstantAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@classConstantAutocompletionApplicabilityChecker'
 
     localVariableAutocompletionProvider:
@@ -168,7 +168,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@localVariableAutocompletionProvider'
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@localVariableAutocompletionApplicabilityChecker'
 
     aggregatingAutocompletionProvider:
