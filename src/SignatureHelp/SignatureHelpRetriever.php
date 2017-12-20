@@ -5,10 +5,10 @@ namespace PhpIntegrator\SignatureHelp;
 use AssertionError;
 use UnexpectedValueException;
 
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+
 use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
 use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
-
-use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
 use PhpIntegrator\Indexing\Structures;
 
@@ -19,9 +19,6 @@ use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
 
 /**
  * Retrieves invocation information for function and method calls.
@@ -29,9 +26,9 @@ use PhpParser\NodeTraverser;
 class SignatureHelpRetriever
 {
     /**
-     * @var Parser
+     * @var NodeAtOffsetLocatorInterface
      */
-    private $parser;
+    private $nodeAtOffsetLocator;
 
     /**
      * @var ParserTokenHelper
@@ -54,20 +51,20 @@ class SignatureHelpRetriever
     private $functionParameterPrettyPrinter;
 
     /**
-     * @param Parser                         $parser
+     * @param NodeAtOffsetLocatorInterface   $nodeAtOffsetLocator
      * @param ParserTokenHelper              $parserTokenHelper
      * @param FunctionFunctionInfoRetriever  $functionFunctionInfoRetriever
      * @param MethodCallMethodInfoRetriever  $methodCallMethodInfoRetriever
      * @param FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
      */
     public function __construct(
-        Parser $parser,
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         ParserTokenHelper $parserTokenHelper,
         FunctionFunctionInfoRetriever $functionFunctionInfoRetriever,
         MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever,
         FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
     ) {
-        $this->parser = $parser;
+        $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->parserTokenHelper = $parserTokenHelper;
         $this->functionFunctionInfoRetriever = $functionFunctionInfoRetriever;
         $this->methodCallMethodInfoRetriever = $methodCallMethodInfoRetriever;
@@ -92,8 +89,7 @@ class SignatureHelpRetriever
         $nodes = [];
 
         // try {
-            $nodes = $this->getNodesFromCode($code);
-            $node = $this->getNodeAt($nodes, $position);
+            $node = $this->getNodeAt($code, $position);
 
             return $this->getSignatureHelpForNode($node, $file, $code, $position);
         // } catch (UnexpectedValueException $e) {
@@ -102,22 +98,18 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param array $nodes
-     * @param int   $position
+     * @param string $code
+     * @param int    $position
      *
      * @throws UnexpectedValueException
      *
      * @return Node
      */
-    private function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(string $code, int $position): Node
     {
-        $visitor = new NodeFetchingVisitor($position);
+        $result = $this->nodeAtOffsetLocator->locate($code, $position);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($nodes);
-
-        $node = $visitor->getNode();
+        $node = $result->getNode();
 
         if (!$node) {
             throw new UnexpectedValueException('No node found at location ' . $position);
@@ -388,31 +380,5 @@ class SignatureHelpRetriever
         $label = $this->functionParameterPrettyPrinter->print($parameter);
 
         return new ParameterInformation($label, $parameter['description']);
-    }
-
-    /**
-     * @param string $code
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return Node[]
-     */
-    private function getNodesFromCode(string $code): array
-    {
-        $nodes = $this->parser->parse($code, $this->getErrorHandler());
-
-        if ($nodes === null) {
-            throw new UnexpectedValueException('No nodes returned after parsing code');
-        }
-
-        return $nodes;
-    }
-
-    /**
-     * @return ErrorHandler\Collecting
-     */
-    private function getErrorHandler(): ErrorHandler\Collecting
-    {
-        return new ErrorHandler\Collecting();
     }
 }
