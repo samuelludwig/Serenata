@@ -5,7 +5,7 @@ services:
     definitionLocator:
         class: PhpIntegrator\GotoDefinition\DefinitionLocator
         arguments:
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@funcCallNodeDefinitionLocator'
             - '@methodCallNodeDefinitionLocator'
             - '@constFetchNodeDefinitionLocator'
