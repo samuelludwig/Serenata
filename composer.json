@@ -12,7 +12,7 @@
         "php-integrator/name-qualification-utilities": "^0.2",
         "php-integrator/docblock-type-parser": "^0.2",
         "doctrine/cache": "^1.7",
-        "doctrine/orm": "^2.5",
+        "doctrine/orm": "^2.6",
         "evenement/evenement": "^3.0",
         "nikic/php-parser": "v4.0.0alpha2",
         "react/socket": "^0.8",
