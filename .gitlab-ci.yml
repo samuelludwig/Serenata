@@ -13,6 +13,7 @@ stages:
     stage: build
     <<: *build-setup-composer
     cache:
+        key: "$CI_JOB_NAME"
         paths:
             - vendor/
     artifacts:
