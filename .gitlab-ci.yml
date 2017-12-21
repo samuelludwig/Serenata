@@ -1,6 +1,7 @@
 stages:
     - build
     - test
+    - code-quality
 
 # ----- Build stage
 .build-setup-composer: &build-setup-composer
@@ -46,3 +47,15 @@ test:php-7.2:
     <<: *test-job-shared
     dependencies:
         - build:php-7.2
+
+# ----- Code quality analysis stage
+code-quality:code-coverage:
+    image: php:7.1-alpine
+    stage: code-quality
+    before_script:
+        - pecl install xdebug-2.5.0
+        - docker-php-ext-enable xdebug
+    script:
+        - php vendor/bin/phpunit --coverage-text --colors=never
+    dependencies:
+        - build:php-7.1
