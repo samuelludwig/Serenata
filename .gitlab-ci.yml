@@ -59,7 +59,7 @@ code-quality:code-coverage:
         - apk add --no-cache gcc
         - apk add --no-cache g++
         - apk add --no-cache make
-        - pecl install xdebug-2.5.0
+        - pecl install xdebug
         - docker-php-ext-enable xdebug
     script:
         - php vendor/bin/phpunit --coverage-text --colors=never
