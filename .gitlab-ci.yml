@@ -56,6 +56,9 @@ code-quality:code-coverage:
     stage: code-quality
     before_script:
         - apk add --no-cache autoconf
+        - apk add --no-cache gcc
+        - apk add --no-cache g++
+        - apk add --no-cache make
         - pecl install xdebug-2.5.0
         - docker-php-ext-enable xdebug
     script:
