@@ -1,10 +1,5 @@
 # php-integrator/core
-[![pipeline status](https://gitlab.com/php-integrator/core/badges/development/pipeline.svg)](https://gitlab.com/php-integrator/core/commits/development) [![coverage report](https://gitlab.com/php-integrator/core/badges/development/coverage.svg)](https://gitlab.com/php-integrator/core/commits/development)
-
-<p align="right">
-:coffee:
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ">Send me some coffee beans</a>
-</p>
+[![pipeline status](https://gitlab.com/php-integrator/core/badges/development/pipeline.svg)](https://gitlab.com/php-integrator/core/commits/development) [![coverage report](https://gitlab.com/php-integrator/core/badges/development/coverage.svg)](https://gitlab.com/php-integrator/core/commits/development) :coffee: Send me some coffee beans via [Liberapay](https://liberapay.com/Gert-dev/donate) or [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ)
 
 PHP Integrator is a server that indexes PHP code and performs static analysis. It stores its information in a database
 and can retrieve information about your code to clients by communicating over sockets. Clients can use this information
