@@ -55,6 +55,7 @@ code-quality:code-coverage:
     image: php:7.1-alpine
     stage: code-quality
     before_script:
+        - apk add --no-cache autoconf
         - pecl install xdebug-2.5.0
         - docker-php-ext-enable xdebug
     script:
