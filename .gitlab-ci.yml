@@ -1,30 +1,48 @@
 stages:
+    - build
     - test
 
-.cache_composer: &cache_composer
-    cache:
-        paths:
-            - vendor/
-
-.setup_dependencies: &setup_dependencies
-    before_script:
+# ----- Build stage
+.build-setup-composer: &build-setup-composer
+    script:
         - curl -sS https://getcomposer.org/installer | php
         - php composer.phar install --prefer-dist --optimize-autoloader --no-interaction --no-progress
 
-.run_tests: &run_tests
+.build-job-shared: &build-job-shared
+    stage: build
+    <<: *build-setup-composer
+    cache:
+        paths:
+            - vendor/
+    artifacts:
+        paths:
+            - vendor/
+
+build:php-7.1:
+    image: php:7.1-alpine
+    <<: *build-job-shared
+
+build:php-7.2:
+    image: php:7.2-alpine
+    <<: *build-job-shared
+
+# ----- Test stage
+.test-run-phpunit: &test-run-phpunit
     script:
         - php vendor/bin/phpunit
 
-PHP 7.1:
-    image: php:7.1-alpine
+.test-job-shared: &test-job-shared
     stage: test
-    <<: *setup_dependencies
-    <<: *run_tests
-    <<: *cache_composer
+    <<: *test-run-phpunit
 
-PHP 7.2:
+test:php-7.1:
+    image: php:7.1-alpine
+    <<: *test-job-shared
+    dependencies:
+        - build:php-7.1
+
+test:php-7.2:
     image: php:7.2-alpine
-    stage: test
-    <<: *setup_dependencies
-    <<: *run_tests
-    <<: *cache_composer
+    <<: *test-job-shared
+    dependencies:
+        - build:php-7.2
