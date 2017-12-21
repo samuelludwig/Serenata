@@ -1,5 +1,5 @@
 # php-integrator/core
-[![pipeline status](https://gitlab.com/php-integrator/core/badges/development/pipeline.svg)](https://gitlab.com/php-integrator/core/commits/development)
+[![pipeline status](https://gitlab.com/php-integrator/core/badges/development/pipeline.svg)](https://gitlab.com/php-integrator/core/commits/development) [![coverage report](https://gitlab.com/php-integrator/core/badges/development/coverage.svg)](https://gitlab.com/php-integrator/core/commits/development)
 
 <p align="right">
 :coffee:
