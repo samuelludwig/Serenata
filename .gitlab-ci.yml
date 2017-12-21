@@ -17,6 +17,7 @@ stages:
         paths:
             - vendor/
     artifacts:
+        expire_in: 1 hrs
         paths:
             - vendor/
 
