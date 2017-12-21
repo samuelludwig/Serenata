@@ -1,4 +1,6 @@
 # php-integrator/core
+[![pipeline status](https://gitlab.com/php-integrator/core/badges/development/pipeline.svg)](https://gitlab.com/php-integrator/core/commits/development)
+
 <p align="right">
 :coffee:
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ">Send me some coffee beans</a>
