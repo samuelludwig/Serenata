@@ -1,6 +1,6 @@
 stages:
     - build
-    # - test
+    - test
     - code-quality
 
 # ----- Build stage
@@ -25,30 +25,30 @@ build:php-7.1:
     image: php:7.1-alpine
     <<: *build-job-shared
 
-# build:php-7.2:
-#     image: php:7.2-alpine
-#     <<: *build-job-shared
+build:php-7.2:
+    image: php:7.2-alpine
+    <<: *build-job-shared
 
 # ----- Test stage
-# .test-run-phpunit: &test-run-phpunit
-#     script:
-#         - php vendor/bin/phpunit
-#
-# .test-job-shared: &test-job-shared
-#     stage: test
-#     <<: *test-run-phpunit
-#
-# test:php-7.1:
-#     image: php:7.1-alpine
-#     <<: *test-job-shared
-#     dependencies:
-#         - build:php-7.1
-#
-# test:php-7.2:
-#     image: php:7.2-alpine
-#     <<: *test-job-shared
-#     dependencies:
-#         - build:php-7.2
+.test-run-phpunit: &test-run-phpunit
+    script:
+        - php vendor/bin/phpunit
+
+.test-job-shared: &test-job-shared
+    stage: test
+    <<: *test-run-phpunit
+
+test:php-7.1:
+    image: php:7.1-alpine
+    <<: *test-job-shared
+    dependencies:
+        - build:php-7.1
+
+test:php-7.2:
+    image: php:7.2-alpine
+    <<: *test-job-shared
+    dependencies:
+        - build:php-7.2
 
 # ----- Code quality analysis stage
 code-quality:code-coverage:
