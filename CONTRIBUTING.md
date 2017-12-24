@@ -3,7 +3,7 @@ A PHP static analyzer and server on top of that are both projects with a rather 
 
 If you would like to contribute, but don't have any itch of your own to scratch, [the issue list](https://gitlab.com/php-integrator/core/issues) provides an overview of open issues and feature requests that could benefit from new development. Apart from these, there may also be improvements [in the Atom packages](https://github.com/php-integrator) that require work in the core itself.
 
-## Code Style
+## Coding Guidelines
 The code base follows the PSR-2 coding style and the PSR-4 standard for namespacing. If you'd like to make changes, but are not familiar with PSR-2, [PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) is a tool that you can integrate with most IDE's and editors that will show styling problems to you early on.
 
 There is also a `.editorconfig` file in the root of the project. If you don't have an editor that directly supports them, make sure you match its settings to it before you submit the code in a merge request.
