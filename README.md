@@ -11,4 +11,7 @@ More information for users, both developers looking to implement the core in oth
 Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
 [the list of projects](https://github.com/php-integrator).
 
+## Contributing
+See [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
+
 ![GPLv3 Logo](https://gitlab.com/php-integrator/core/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)
