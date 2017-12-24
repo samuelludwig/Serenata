@@ -13,17 +13,28 @@ Most area's of the code contain either unit tests or integration tests. If you f
 
 There are some small areas left that currently don't have tests, such as the actual commands and the application, which are mostly facades to functionality that is tested. (Tests for these areas are, of course, very welcome, too!)
 
-### Running Tests
+### PHPUnit
 Tests use the omnipresent PHPUnit, which is installed as dev dependency by Composer. To execute them, just run it:
 
-```
+```sh
 ./vendor/bin/phpunit
 ```
+
+### Paratest (Parallel PHPUnit)
+If you own a processor that supports running multiple threads concurrently, as is rather common nowadays, you can also replace PHPUnit with [paratest](https://github.com/brianium/paratest) to run the tests in parallel:
+
+```sh
+./vendor/bin/paratest -p8 --exclude-group=Performance
+```
+
+Here the `8` in `-p8` is the number of processes that can be spawned at once. Usually this is set to the amount of threads your processor can handle simultaneously.
+
+`paratest` doesn't seem to exclude the groups excluded in `phpunit.xml`, so the Performance group must be disabled explicitly.
 
 ### Performance Tests
 There are some simple performance tests, which don't run by default, but are handy if you want to quickly and roughly test a difference in performance. These are all part of the group `Performance`:
 
-```
+```sh
 ./vendor/bin/phpunit --group=Performance
 ```
 
