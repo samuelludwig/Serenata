@@ -41,7 +41,7 @@ There are some simple performance tests, which don't run by default, but are han
 ### Unit Or Integration Tests?
 Unit tests usually much more exhaustively test all parts of a single class, so they are never a lost effort. but there are some locations where it may be much easier to integration test instead. An example are locations that require a tree hierarchy of AST nodes to see if they are correctly processed by e.g. tooltips or signature help. (Unit testing these would require building the tree manually.)
 
-## How Do I Test Full Stack?
+## How Do I Test A Complete Stack?
 It can seem challenging to develop the core and test the changes in a real world scenario. Using Atom as an example, the easiest is probably to do the following:
 
 1. Set up the core from Git somewhere (install composer dependencies, ensure tests work, ...)
