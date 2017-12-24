@@ -19,6 +19,16 @@ If you want to use the core directly, i.e. just to be able to fire it up and com
 composer create-project "php-integrator/core" "php-integrator-core" --prefer-dist --no-dev
 ```
 
+You can then run it with:
+
+```sh
+php -d memory_limit=1024M src/Main.php --port=11111
+```
+
+You can select any port you desire, as long as it is not in use on your system.
+
+The memory limit can also be freely set. The memory needed very much depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the core on itself, it sits at around 150 MB on a 64-bit Linux system with PHP 7.1.
+
 ### Development
 If you want to make the core part of your (existing) project and use the classes contained inside it for your own purposes:
 
