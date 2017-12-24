@@ -41,6 +41,23 @@ There are some simple performance tests, which don't run by default, but are han
 ### Unit Or Integration Tests?
 Unit tests usually much more exhaustively test all parts of a single class, so they are never a lost effort. but there are some locations where it may be much easier to integration test instead. An example are locations that require a tree hierarchy of AST nodes to see if they are correctly processed by e.g. tooltips or signature help. (Unit testing these would require building the tree manually.)
 
+## Debugging And Profiling (xdebug)
+### Using Atom
+Take a look inside [`~/.atom/packages/php-integrator-base/lib/Proxy.coffee`in the base package](https://github.com/php-integrator/atom-base/blob/master/lib/Proxy.coffee#L100). You will find some commented out code here that you can uncomment and modify to enable xdebug.
+
+### Manually (CLI)
+```sh
+php \
+    -d zend_extension=/usr/lib/php/modules/xdebug.so \
+    -d xdebug.profiler_enable=On \
+    -d xdebug.profiler_output_dir=/tmp \
+    -d memory_limit=1024M \
+    src/Main.php \
+    --port=11111
+```
+
+Replace the `zend_extension` value with the path to your xdebug library file. You will then need to connect a client to the socket on the mentioned port (`11111` here) in order to execute specific commands.
+
 ## How Do I Test A Complete Stack?
 It can seem challenging to develop the core and test the changes in a real world scenario. Using Atom as an example, the easiest is probably to do the following:
 
