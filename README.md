@@ -11,6 +11,25 @@ More information for users, both developers looking to implement the core in oth
 Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
 [the list of projects](https://github.com/php-integrator).
 
+## Installation
+### Runtime
+If you want to use the core directly, i.e. just to be able to fire it up and communicate with it over a socket, such as when you want to integrate it into an editor:
+
+```sh
+composer create-project "php-integrator/core" "php-integrator-core" --prefer-dist --no-dev
+```
+
+### Development
+If you want to make the core part of your (existing) project and use the classes contained inside it for your own purposes:
+
+```sh
+composer require "php-integrator/core"
+```
+
+Note that the core was designed primarily as an application and not as a library. However, it is still very much possible to instantiate the classes you need yourself.
+
+You may also be interested in [other libraries that are part of the php-integrator suite](https://gitlab.com/php-integrator). In the future, more code may be split from the core into proper, separate libraries.
+
 ## Contributing
 See [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
 
