@@ -7,7 +7,7 @@ to provide various functionalities, such as autocompletion, code navigation and 
 
 More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/php-integrator/core/wikis/home) as well as [the website](https://php-integrator.github.io/).
 
-## Where is it used?
+## Where Is It Used?
 Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
 [the list of projects](https://github.com/php-integrator).
 
