@@ -6,6 +6,7 @@ imports:
     - { resource: Mediating.yml }
     - { resource: Parsing.yml }
     - { resource: PrettyPrinting.yml }
+    - { resource: Refactoring.yml }
     - { resource: SignatureHelp.yml }
     - { resource: Sockets.yml }
     - { resource: Tooltips.yml }
