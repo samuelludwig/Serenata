@@ -58,7 +58,7 @@ php \
 
 Replace the `zend_extension` value with the path to your xdebug library file. You will then need to connect a client to the socket on the mentioned port (`11111` here) in order to execute specific commands.
 
-## How Do I Test A Complete Stack?
+## Testing A Complete Stack
 It can seem challenging to develop the core and test the changes in a real world scenario. Using Atom as an example, the easiest is probably to do the following:
 
 1. Set up the core from Git somewhere (install composer dependencies, ensure tests work, ...)
