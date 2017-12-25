@@ -185,6 +185,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testRandomSkipsAdditionalNewlineIfImportHasSamePrefixAsExistingImportsIfShouldBePlacedBetweenThemAndAllowed(): void
+    {
+        $name = '\Foo\Bar\Caz';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatementsWithSamePrefix.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testSelectsActiveNamespaceBlockBasedOnPosition(): void
     {
         $name = '\Foo\Bar';
