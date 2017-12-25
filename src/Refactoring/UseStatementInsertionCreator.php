@@ -94,16 +94,12 @@ class UseStatementInsertionCreator
                 'Adding use statements for non-compound name in anonymous namespaces is prohibited as it generates ' .
                 'a warning in PHP'
             );
+        } elseif ($namespaceNode !== null && $name === $namespaceNode->name->toString()) {
+            throw new UseStatementEqualsNamespaceException(
+                'Can not add use statement with same name as containing namespace'
+            );
         }
 
-        // TODO: Adapt legacy code:
-        //     else if suggestion.data.nameToImport.indexOf(currentNamespaceName) == 0
-        //          nameToImportRelativeToNamespace = suggestion.displayText.substr(currentNamespaceName.length + 1)
-        //
-        //          # If a user is in A\B and wants to import A\B\C\D, we don't need to add a use statement if he is typing
-        //          # C\D, as it will be relative, but we will need to add one when he typed just D as it won't be
-        //          # relative.
-        //          return if nameToImportRelativeToNamespace.split('\\').length == suggestion.text.split('\\').length
         // TODO: Refactor entire class, mostly just a direct translation of the CoffeeScript code from the Atom package.
 
         return $this->locateInsertionPosition(
