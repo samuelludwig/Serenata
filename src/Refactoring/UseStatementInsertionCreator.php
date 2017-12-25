@@ -317,6 +317,14 @@ class UseStatementInsertionCreator
 
         $maxLength = min(count($firstClassNameParts), count($secondClassNameParts));
 
+        // At this point, both FQSEN's share a common namespace, e.g. A\B and A\B\C\D, or XMLElement and XMLDocument.
+        // The one with the most namespace parts ends up last.
+        if (count($firstClassNameParts) < count($secondClassNameParts)) {
+            return -1;
+        } elseif (count($firstClassNameParts) > count($secondClassNameParts)) {
+            return 1;
+        }
+
         if ($maxLength >= 3) {
             for ($i = 0; $i <= $maxLength; ++$i) {
                 if ($firstClassNameParts[$i] !== $secondClassNameParts[$i]) {
@@ -329,14 +337,6 @@ class UseStatementInsertionCreator
             }
 
             throw new AssertionError('Both names are identical, which should not happen');
-        }
-
-        // At this point, both FQSEN's share a common namespace, e.g. A\B and A\B\C\D, or XMLElement and XMLDocument.
-        // The one with the most namespace parts ends up last.
-        if (count($firstClassNameParts) < count($secondClassNameParts)) {
-            return -1;
-        } elseif (count($firstClassNameParts) > count($secondClassNameParts)) {
-            return 1;
         }
 
         if (mb_strlen($firstClassName) === mb_strlen($secondClassName)) {
