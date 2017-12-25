@@ -87,9 +87,7 @@ class UseStatementInsertionCreator
             throw new UseStatementAlreadyExistsException(
                 'Use statement for ' . $name . ' with kind ' . $kind . 'already exists'
             );
-        }
-
-        if (mb_strpos($name, '\\') === false && ($namespaceNode === null || $namespaceNode->name === null)) {
+        } elseif (mb_strpos($name, '\\') === false && ($namespaceNode === null || $namespaceNode->name === null)) {
             throw new NonCompoundNameInAnonymousNamespaceException(
                 'Adding use statements for non-compound name in anonymous namespaces is prohibited as it generates ' .
                 'a warning in PHP'
