@@ -180,13 +180,20 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testInsertsInActiveNamespaceBlock(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
+    /**
+     * @return void
+     */
+    public function testSelectsActiveNamespaceBlockBasedOnPosition(): void
+    {
+        $name = '\Foo\Bar';
+        $insertionPoint = new Position(8, 0);
+        $file = 'MultipleNamespaces.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
 
     /**
      * @return void

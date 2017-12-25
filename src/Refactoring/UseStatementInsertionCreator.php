@@ -89,8 +89,6 @@ class UseStatementInsertionCreator
             );
         }
 
-        // TODO: Automatically select active namespace node based on $offset and insert use statement there (see test
-        // stub)
         // TODO: Handle corner case:
         //    # When we have no namespace or are in an anonymous namespace, adding use statements for "non-compound"
         //    # namespaces, such as "DateTime" will generate a warning.
@@ -130,7 +128,7 @@ class UseStatementInsertionCreator
         $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
 
         if ($namespaceNode !== null) {
-            return $namespaceNode->getEndLine() + 2 - 1;
+            return $namespaceNode->name->getEndLine() + 2 - 1;
         }
 
         $nodes = $this->getNodesFromCode($code);
