@@ -89,7 +89,9 @@ class UseStatementInsertionCreator
             );
         }
 
-        // TODO: Adapt legacy code:
+        // TODO: Automatically select active namespace node based on $offset and insert use statement there (see test
+        // stub)
+        // TODO: Handle corner case:
         //    # When we have no namespace or are in an anonymous namespace, adding use statements for "non-compound"
         //    # namespaces, such as "DateTime" will generate a warning.
         // TODO: Adapt legacy code:
@@ -100,40 +102,143 @@ class UseStatementInsertionCreator
         //          # C\D, as it will be relative, but we will need to add one when he typed just D as it won't be
         //          # relative.
         //          return if nameToImportRelativeToNamespace.split('\\').length == suggestion.text.split('\\').length
-        // TODO: Finish tests
-        // TODO: Test function imports
-        // TODO: Test constant imports
-        // TODO: Test that function and constant imports do not collide with classlike imports, even if they share the
-        // same name.
+        // TODO: Refactor entire class, mostly just a direct translation of the CoffeeScript code from the Atom package.
 
-        return new TextEdit($this->locateInsertionPosition(), $this->getInsertionText($name, $kind));
-    }
-
-    /**
-     * @return Range
-     */
-    private function locateInsertionPosition(): Range
-    {
-        // TODO: Locate best position.
-        // TODO: Fallback insert position (if no existing imports) = try line and position before first node in
-        // namespace.
-
-        return new Range(
-            new Position(2, 0),
-            new Position(2, 0)
+        return $this->locateInsertionPosition(
+            $name,
+            $kind,
+            $code,
+            $position,
+            $useStatementList,
+            $allowAdditionalNewlines
         );
+
+        // return new TextEdit(
+        //     $this->locateInsertionPosition($name, $kind, $useStatementList, $allowAdditionalNewlines),
+        //     $this->getInsertionText($name, $kind)
+        // );
     }
 
     /**
-     * @param string $name
-     * @param string $kind
+     * @param string $code
+     * @param int    $position
      *
-     * @return string
+     * @return int
      */
-    private function getInsertionText(string $name, string $kind): string
+    private function determineZeroIndexedFallbackLine(string $code, int $position): int
     {
-        return "use {$name};\n";
+        $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
+
+        if ($namespaceNode !== null) {
+            return $namespaceNode->getEndLine() + 2 - 1;
+        }
+
+        $nodes = $this->getNodesFromCode($code);
+
+        if (!empty($nodes)) {
+            return max($nodes[0]->getStartLine() - 1 - 1, 0);
+        }
+
+        return 2;
     }
+
+    /**
+     * @param string                                $name
+     * @param string                                $kind
+     * @param string                                $code
+     * @param int                                   $position
+     * @param (Node\Stmt\Use_|Node\Stmt\GroupUse)[] $useStatementList
+     * @param bool                                  $allowAdditionalNewlines
+     *
+     * @return TextEdit
+     */
+    private function locateInsertionPosition(
+        string $name,
+        string $kind,
+        string $code,
+        int $position,
+        array $useStatementList,
+        bool $allowAdditionalNewlines
+    ): TextEdit {
+        $placeBelow = false;
+        $doNewLine = false;
+        $bestUseStatementLine = null;
+        $lastMatchThatSharedNamespacePrefixLine = null;
+
+        $normalizedName = $this->typeNormalizer->getNormalizedFqcn($name);
+
+        foreach ($useStatementList as $useStatement) {
+            $placeBelow = true;
+            $bestUseStatementLine = $useStatement->getEndLine();
+
+            foreach ($useStatement->uses as $useUseNode) {
+                $useUseNodeName = $this->getFullNameFromUseUse($useStatement, $useUseNode);
+
+                $shareCommonNamespacePrefix = $this->doShareCommonNamespacePrefix($normalizedName, $useUseNodeName);
+
+                $doNewLine = !$shareCommonNamespacePrefix;
+
+                if ($this->scoreClassName($normalizedName, $useUseNodeName) <= 0) {
+                    $placeBelow = false;
+
+                    // Normally we keep going until the sorting indicates we should stop, and then place the use
+                    // statement above the 'incorrect' match, but if the previous use statement was a use statement
+                    // that has the same namespace, we want to ensure we stick close to it instead of creating
+                    // additional newlines (which the item from the same namespace already placed).
+                    if ($lastMatchThatSharedNamespacePrefixLine !== null) {
+                        $placeBelow = true;
+                        $doNewLine = false;
+                        $bestUseStatementLine = $lastMatchThatSharedNamespacePrefixLine;
+                    }
+
+                    break 2;
+                }
+
+                $lastMatchThatSharedNamespacePrefixLine = $shareCommonNamespacePrefix !== null ?
+                    $useStatement->getEndLine() :
+                    null;
+            }
+        }
+
+        if ($bestUseStatementLine === null) {
+            $bestUseStatementLine = $this->determineZeroIndexedFallbackLine($code, $position);
+        } else {
+            --$bestUseStatementLine; // Make line zero-indexed.
+        }
+
+        if (!$allowAdditionalNewlines) {
+            $doNewLine = false;
+        }
+
+        $textToInsert = '';
+
+        if ($doNewLine && $placeBelow) {
+            $textToInsert .= "\n";
+        }
+
+        $textToInsert .= "use {$name};\n";
+
+        if ($doNewLine && !$placeBelow) {
+            $textToInsert .= "\n";
+        }
+
+        $line = $bestUseStatementLine + ($placeBelow ? 1 : 0);
+
+        $range = new Range(new Position($line, 0), new Position($line, 0));
+
+        return new TextEdit($range, $textToInsert);
+    }
+
+    // /**
+    //  * @param string $name
+    //  * @param string $kind
+    //  *
+    //  * @return string
+    //  */
+    // private function getInsertionText(string $name, string $kind): string
+    // {
+    //     return "use {$name};\n";
+    // }
 
     /**
      * @param string                                $name
@@ -176,6 +281,75 @@ class UseStatementInsertionCreator
     }
 
     /**
+     * Returns a boolean indicating if the specified class names share a common namespace prefix.
+     *
+     * @param string $firstClassName
+     * @param string $secondClassName
+     *
+     * @return bool
+     */
+    private function doShareCommonNamespacePrefix(string $firstClassName, string $secondClassName): bool
+    {
+        $firstClassNameParts = explode('\\', $firstClassName);
+        $secondClassNameParts = explode('\\', $secondClassName);
+
+        array_pop($firstClassNameParts);
+        array_pop($secondClassNameParts);
+
+        return implode('\\', $firstClassNameParts) === implode('\\', $secondClassNameParts);
+    }
+
+    /**
+     * Scores the first class name against the second, indicating how much they 'match' each other.
+     *
+     * This can be used to e.g. find an appropriate location to place a class in an existing list of classes.
+     *
+     * @param string $firstClassName
+     * @param string $secondClassName
+     *
+     * @return float A floating point number that represents the score.
+     */
+    private function scoreClassName(string $firstClassName, string $secondClassName): float
+    {
+        $maxLength = 0;
+        $totalScore = 0;
+
+        $firstClassNameParts = explode('\\', $firstClassName);
+        $secondClassNameParts = explode('\\', $secondClassName);
+
+        $maxLength = min(count($firstClassNameParts), count($secondClassNameParts));
+
+        if ($maxLength >= 3) {
+            for ($i = 0; $i <= $maxLength; ++$i) {
+                if ($firstClassNameParts[$i] !== $secondClassNameParts[$i]) {
+                    if (mb_strlen($firstClassNameParts[$i]) === mb_strlen($secondClassNameParts[$i])) {
+                        return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
+                    }
+
+                    return mb_strlen($firstClassNameParts[$i]) <=> mb_strlen($secondClassNameParts[$i]);
+                }
+            }
+
+            throw new AssertionError('Both names are identical, which should not happen');
+        }
+
+        // At this point, both FQSEN's share a common namespace, e.g. A\B and A\B\C\D, or XMLElement and XMLDocument.
+        // The one with the most namespace parts ends up last.
+        if (count($firstClassNameParts) < count($secondClassNameParts)) {
+            return -1;
+        } elseif (count($firstClassNameParts) > count($secondClassNameParts)) {
+            return 1;
+        }
+
+        if (mb_strlen($firstClassName) === mb_strlen($secondClassName)) {
+            return substr_compare($firstClassName, $secondClassName, 0);
+        }
+
+        // Both items have share the same namespace, sort from shortest to longest last word (class, interface, ...).
+        return mb_strlen($firstClassName) <=> mb_strlen($secondClassName);
+    }
+
+    /**
      * @param string $code
      * @param int    $position
      *
@@ -196,6 +370,29 @@ class UseStatementInsertionCreator
 
             if ($parentNode === false) {
                 throw new AssertionError('No required parent metadata attached to node');
+            }
+        }
+
+        $nodes = [];
+
+        try {
+            $nodes = $this->getNodesFromCode($code);
+        } catch (UnexpectedValueException $e) {
+            throw new UseStatementInsertionCreationException(
+                'Could not parse code needed for use statement insertion creation',
+                0,
+                $e
+            );
+        }
+
+        foreach ($nodes as $node) {
+            $endFilePos = $node->getAttribute('endFilePos');
+            $startFilePos = $node->getAttribute('startFilePos');
+
+            if ($startFilePos > $position) {
+                break;
+            } elseif ($node instanceof Node\Stmt\Namespace_) {
+                return $node;
             }
         }
 

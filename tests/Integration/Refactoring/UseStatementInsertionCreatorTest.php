@@ -18,11 +18,11 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testInsertsOnTopWithoutExplicitNamespace(): void
+    public function testInsertsBeforeFirstNodeIfNoUseStatementsNorAnyNamespaceExists(): void
     {
         $name = '\Foo';
         $insertionPoint = new Position(2, 0);
-        $file = 'WithoutExplicitNamespace.phpt';
+        $file = 'NoNamespaceAndNoUseStatements.phpt';
 
         static::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
@@ -30,92 +30,156 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         );
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testAddsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsAllowed(): void
-    // {
-    //     $name = '\Foo\Bar';
-    //     $insertionPoint = new Position(4, 0);
-    //     $file = 'DifferentPrefix.phpt';
-    //
-    //     static::assertEquals(
-    //         new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
-    //         $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
-    //     );
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testSkipsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsNotAllowed(): void
-    // {
-    //     $name = '\Foo\Bar';
-    //     $insertionPoint = new Position(3, 0);
-    //     $file = 'DifferentPrefix.phpt';
-    //
-    //     static::assertEquals(
-    //         new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
-    //         $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
-    //     );
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testPlacesBeforeExistingImportWithSamePrefixIfIsShorter(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testPlacesAfterExistingImportWithSamePrefixIfIsLonger(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testPlacesBeforeExistingImportWithSamePrefixIfIsSameLengthAndStringValueIsLower(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testPlacesAfterExistingImportWithSamePrefixIfIsSameLengthAndStringValueIsGreater(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testInsertsBeforeFirstComment(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testInsertsBeforeFirstClassWhenClassIsOnFirstLine(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
-    // /**
-    //  * @return void
-    //  */
-    // public function testInsertsBeforeFirstClassWhenClassIsOnThirdLine(): void
-    // {
-    //     static::assertFalse(true, 'TODO');
-    // }
-    //
+    /**
+     * @return void
+     */
+    public function testInsertsAfterNamespaceIfNoUseStatementsExist(): void
+    {
+        $name = '\Foo\Bar';
+        $insertionPoint = new Position(4, 0);
+        $file = 'NamespaceWithNoUseStatements.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportHigherWhenItHasFewerNamespaceSegmentsThanTheOther(): void
+    {
+        $name = 'Foo';
+        $insertionPoint = new Position(2, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportLowerWhenItHasMoreNamespaceSegmentsThanTheOther(): void
+    {
+        $name = 'Foo\Bar\Baz';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportHigherWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsTheSameLengthAndIsAlphabeticallyMoreRelevant(): void
+    {
+        $name = 'Bar\Aab';
+        $insertionPoint = new Position(2, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportLowerWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsTheSameLengthAndIsAlphabeticallyLessRelevant(): void
+    {
+        $name = 'Bar\Qux';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportHigherWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsNotTheSameLengthAndIsShorter(): void
+    {
+        $name = 'Bar\Qu';
+        $insertionPoint = new Position(2, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportLowerWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsNotTheSameLengthAndIsLonger(): void
+    {
+        $name = 'Bar\Quux';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsAllowed(): void
+    {
+        $name = '\Foo\Bar';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotAddAdditionalNewlineIfImportHasSamePrefixAsExistingImportEvenIfAllowed(): void
+    {
+        $name = '\Bar\Qux';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsNotAllowed(): void
+    {
+        $name = '\Foo\Bar';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
     // /**
     //  * @return void
     //  */
