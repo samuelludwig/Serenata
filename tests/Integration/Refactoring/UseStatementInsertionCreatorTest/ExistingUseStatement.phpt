@@ -1,6 +1,6 @@
 <?php
 
-use Bar\Baz;
+use Bar\Baz\Qux;
 
 
 

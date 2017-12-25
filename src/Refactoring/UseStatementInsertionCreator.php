@@ -89,9 +89,13 @@ class UseStatementInsertionCreator
             );
         }
 
-        // TODO: Handle corner case:
-        //    # When we have no namespace or are in an anonymous namespace, adding use statements for "non-compound"
-        //    # namespaces, such as "DateTime" will generate a warning.
+        if (mb_strpos($name, '\\') === false && ($namespaceNode === null || $namespaceNode->name === null)) {
+            throw new NonCompoundNameInAnonymousNamespaceException(
+                'Adding use statements for non-compound name in anonymous namespaces is prohibited as it generates ' .
+                'a warning in PHP'
+            );
+        }
+
         // TODO: Adapt legacy code:
         //     else if suggestion.data.nameToImport.indexOf(currentNamespaceName) == 0
         //          nameToImportRelativeToNamespace = suggestion.displayText.substr(currentNamespaceName.length + 1)

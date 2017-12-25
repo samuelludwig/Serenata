@@ -8,6 +8,7 @@ use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
 use PhpIntegrator\Refactoring\UseStatementAlreadyExistsException;
+use PhpIntegrator\Refactoring\NonCompoundNameInAnonymousNamespaceException;
 
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
@@ -50,7 +51,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSortsNewImportHigherWhenItHasFewerNamespaceSegmentsThanTheOther(): void
     {
-        $name = 'Foo';
+        $name = 'Foo\Bar';
         $insertionPoint = new Position(2, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -65,7 +66,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSortsNewImportLowerWhenItHasMoreNamespaceSegmentsThanTheOther(): void
     {
-        $name = 'Foo\Bar\Baz';
+        $name = 'Foo\Bar\Baz\Qux';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -80,7 +81,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSortsNewImportHigherWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsTheSameLengthAndIsAlphabeticallyMoreRelevant(): void
     {
-        $name = 'Bar\Aab';
+        $name = 'Bar\Baz\Aux';
         $insertionPoint = new Position(2, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -95,7 +96,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSortsNewImportLowerWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsTheSameLengthAndIsAlphabeticallyLessRelevant(): void
     {
-        $name = 'Bar\Qux';
+        $name = 'Bar\Baz\Zux';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -110,7 +111,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSortsNewImportHigherWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsNotTheSameLengthAndIsShorter(): void
     {
-        $name = 'Bar\Qu';
+        $name = 'Bar\Baz\Qu';
         $insertionPoint = new Position(2, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -125,7 +126,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSortsNewImportLowerWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsNotTheSameLengthAndIsLonger(): void
     {
-        $name = 'Bar\Quux';
+        $name = 'Bar\Baz\Quux';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -140,7 +141,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testAddsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsAllowed(): void
     {
-        $name = '\Foo\Bar';
+        $name = '\Foo\Bar\Baz';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -155,7 +156,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testDoesNotAddAdditionalNewlineIfImportHasSamePrefixAsExistingImportEvenIfAllowed(): void
     {
-        $name = '\Bar\Qux';
+        $name = '\Bar\Baz\Quux';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -170,7 +171,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testSkipsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsNotAllowed(): void
     {
-        $name = '\Foo\Bar';
+        $name = '\Foo\Bar\Baz';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
@@ -217,6 +218,32 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $file = 'ClasslikeUseStatementAlreadyExistsInGroupedStatement.phpt';
 
         $this->expectException(UseStatementAlreadyExistsException::class);
+
+        $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenAddingNonCompoundClasslikeUseStatementInImplicitAnonymousNamespace(): void
+    {
+        $name = 'Foo';
+        $file = 'AnonymousNamespace.phpt';
+
+        $this->expectException(NonCompoundNameInAnonymousNamespaceException::class);
+
+        $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenAddingNonCompoundClasslikeUseStatementInExplicitAnonymousNamespace(): void
+    {
+        $name = 'Foo';
+        $file = 'NoNamespaceAndNoUseStatements.phpt';
+
+        $this->expectException(NonCompoundNameInAnonymousNamespaceException::class);
 
         $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false);
     }
