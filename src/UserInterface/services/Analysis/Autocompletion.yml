@@ -2,6 +2,9 @@ parameters:
 
 
 services:
+    autocompletionPrefixDeterminer:
+        class: PhpIntegrator\Analysis\Autocompletion\AutocompletionPrefixDeterminer
+
     keywordAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\KeywordAutocompletionProvider
 
@@ -190,6 +193,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
         arguments:
             - '@aggregatingAutocompletionProvider'
+            - '@autocompletionPrefixDeterminer'
 
     limitingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\LimitingAutocompletionProvider

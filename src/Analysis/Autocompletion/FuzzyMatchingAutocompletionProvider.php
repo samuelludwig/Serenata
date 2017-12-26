@@ -11,48 +11,25 @@ use PhpIntegrator\Indexing\Structures\File;
 final class FuzzyMatchingAutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
-     * @var string[]
-     */
-    private const BOUNDARY_TOKEN_MAP = [
-        " "  => true,
-        "\n" => true,
-        "\t" => true,
-        "("  => true,
-        ")"  => true,
-        "{"  => true,
-        "}"  => true,
-        "["  => true,
-        "]"  => true,
-        "+"  => true,
-        "-"  => true,
-        "*"  => true,
-        "/"  => true,
-        "^"  => true,
-        "|"  => true,
-        "&"  => true,
-        ":"  => true,
-        "!"  => true,
-        "?"  => true,
-        "@"  => true,
-        "#"  => true,
-        "%"  => true,
-        ">"  => true,
-        "<"  => true,
-        "="  => true,
-        "\\" => true
-    ];
-
-    /**
      * @var AutocompletionProviderInterface
      */
     private $delegate;
 
     /**
-     * @param AutocompletionProviderInterface $delegate
+     * @var AutocompletionPrefixDeterminerInterface
      */
-    public function __construct(AutocompletionProviderInterface $delegate)
-    {
+    private $autocompletionPrefixDeterminer;
+
+    /**
+     * @param AutocompletionProviderInterface         $delegate
+     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+     */
+    public function __construct(
+        AutocompletionProviderInterface $delegate,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+    ) {
         $this->delegate = $delegate;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
@@ -72,13 +49,13 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      */
     private function provideForPrefixAtOffset(File $file, string $code, string $offset): array
     {
-        $prefix = $this->getPrefixAtOffset($code, $offset);
+        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
 
         return $this->provideForPrefix($file, $code, $offset, $prefix);
     }
 
     /**
-     * @param File   $file,
+     * @param File   $file
      * @param string $code
      * @param string $offset
      * @param string $prefix
@@ -113,27 +90,5 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
         ]);
 
         return $fuse->search($prefix);
-    }
-
-    /**
-     * @param string $code
-     * @param int    $offset
-     *
-     * @return string
-     */
-    private function getPrefixAtOffset(string $code, int $offset): string
-    {
-        $i = max($offset - 1, 0);
-
-        while ($i > 0) {
-            if (isset(self::BOUNDARY_TOKEN_MAP[$code[$i]])) {
-                ++$i; // Don't include the boundary character itself.
-                break;
-            }
-
-            --$i;
-        }
-
-        return substr($code, $i, $offset - $i);
     }
 }
