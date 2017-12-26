@@ -95,6 +95,7 @@ class UseStatementInsertionCreator
             }
         }
 
+
         return new TextEdit(
             new Range(new Position($line, 0), new Position($line, 0)),
             $textToInsert
@@ -398,9 +399,9 @@ class UseStatementInsertionCreator
                 return $node;
             }
 
-            $parentNode = $node->getAttribute('parent', false);
+            $node = $node->getAttribute('parent', false);
 
-            if ($parentNode === false) {
+            if ($node === false) {
                 throw new AssertionError('No required parent metadata attached to node');
             }
         }
