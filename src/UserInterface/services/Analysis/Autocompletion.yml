@@ -22,6 +22,8 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
         arguments:
             - '@classlikeListProvider'
+            - '@autocompletionPrefixDeterminer'
+            - '@useStatementInsertionCreator'
 
     classlikeAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionApplicabilityChecker
