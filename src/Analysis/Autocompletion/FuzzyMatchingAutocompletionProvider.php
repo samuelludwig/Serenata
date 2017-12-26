@@ -116,18 +116,6 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
     }
 
     /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return int
-     */
-    private function calculateScore(string $a, string $b): int
-    {
-        // TODO: Up the cost of deletion?
-        return levenshtein($a, $b);
-    }
-
-    /**
      * @param string $code
      * @param int    $offset
      *
