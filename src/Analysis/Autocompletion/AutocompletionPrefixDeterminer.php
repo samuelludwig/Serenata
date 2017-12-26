@@ -35,8 +35,7 @@ final class AutocompletionPrefixDeterminer implements AutocompletionPrefixDeterm
         "%"  => true,
         ">"  => true,
         "<"  => true,
-        "="  => true,
-        "\\" => true
+        "="  => true
     ];
 
     /**

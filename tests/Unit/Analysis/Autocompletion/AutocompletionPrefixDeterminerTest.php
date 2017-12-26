@@ -41,6 +41,15 @@ class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
         static::assertSame('lo', $determiner->determine('hel>lo', 6));
         static::assertSame('lo', $determiner->determine('hel<lo', 6));
         static::assertSame('lo', $determiner->determine('hel=lo', 6));
-        static::assertSame('lo', $determiner->determine('hel\lo', 6));
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotSeeNamespaceSeparatorAsBoundaryCharacter(): void
+    {
+        $determiner = new AutocompletionPrefixDeterminer();;
+
+        static::assertSame('hel\lo', $determiner->determine('hel\lo', 6));
     }
 }
