@@ -215,6 +215,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testProperlyCalculatesFallbackLineInAnonymousNamespace(): void
+    {
+        $name = 'Foo\Bar\Baz';
+        $insertionPoint = new Position(3, 0);
+        $file = 'AnonymousNamespace.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testThrowsExceptionWhenClasslikeUseStatementAlreadyExists(): void
     {
         $name = '\Foo\Bar';

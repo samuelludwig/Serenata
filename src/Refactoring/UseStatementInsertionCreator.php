@@ -127,7 +127,7 @@ class UseStatementInsertionCreator
                 'Adding use statements for non-compound name in anonymous namespaces is prohibited as it generates ' .
                 'a warning in PHP'
             );
-        } elseif ($namespaceNode !== null && $name === $namespaceNode->name->toString()) {
+        } elseif ($namespaceNode !== null && $namespaceNode->name !== null && $name === $namespaceNode->name->toString()) {
             throw new UseStatementEqualsNamespaceException(
                 'Can not add use statement with same name as containing namespace'
             );
@@ -247,7 +247,11 @@ class UseStatementInsertionCreator
         $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
 
         if ($namespaceNode !== null) {
-            return $namespaceNode->name->getEndLine() + 2 - 1;
+            if ($namespaceNode->name !== null) {
+                return $namespaceNode->name->getEndLine() + 2 - 1;
+            } else {
+                return $namespaceNode->getStartLine() + 1 - 1;
+            }
         }
 
         $nodes = $this->getNodesFromCode($code);
