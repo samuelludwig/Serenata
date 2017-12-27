@@ -234,10 +234,18 @@ services:
             - '@storage'
             - '@typeAnalyzer'
 
-    nodeAtOffsetLocator:
+    nodeAtOffsetLocator.raw:
         class: PhpIntegrator\Analysis\NodeAtOffsetLocator
         arguments:
             - '@parser'
+
+    nodeAtOffsetLocator.cachingDecorator:
+        class: PhpIntegrator\Analysis\CachingNodeAtOffsetLocator
+        arguments:
+            - '@nodeAtOffsetLocator.raw'
+
+    nodeAtOffsetLocator:
+        alias: nodeAtOffsetLocator.cachingDecorator
 
     functionNameNodeFqsenDeterminer:
         class: PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer

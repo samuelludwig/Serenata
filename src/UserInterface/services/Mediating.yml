@@ -9,6 +9,7 @@ services:
                 - '@classlikeExistenceChecker'
                 - '@globalFunctionExistenceChecker'
                 - '@globalConstantExistenceChecker'
+                - '@nodeAtOffsetLocator.cachingDecorator'
                 - '@fileClasslikeListProvider.cachingDecorator'
 
     cacheClearingEventMediator1:
