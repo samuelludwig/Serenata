@@ -37,7 +37,13 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        return $this->provideForPrefixAtOffset($file, $code, $offset);
+        $suggestionScorePairList = $this->generateScoredSuggestionPairList($file, $code, $offset);
+
+        usort($suggestionScorePairList, function (array $a, array $b) {
+            return $a[1] <=> $b[1];
+        });
+
+        return array_column($suggestionScorePairList, 0);
     }
 
     /**
@@ -47,11 +53,11 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      *
      * @return array[]
      */
-    private function provideForPrefixAtOffset(File $file, string $code, string $offset): array
+    private function generateScoredSuggestionPairList(File $file, string $code, string $offset): array
     {
         $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
 
-        return $this->provideForPrefix($file, $code, $offset, $prefix);
+        return $this->generateScoredSuggestionPairListForPrefix($file, $code, $offset, $prefix);
     }
 
     /**
@@ -62,33 +68,34 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      *
      * @return array[]
      */
-    private function provideForPrefix(File $file, string $code, string $offset, string $prefix): array
-    {
-        $suggestionsArray = [];
+    private function generateScoredSuggestionPairListForPrefix(
+        File $file,
+        string $code,
+        string $offset,
+        string $prefix
+    ): array {
+        $suggestions = [];
 
+        if (empty($prefix)) {
+            return iterator_to_array($this->delegate->provide($file, $code, $offset));
+        }
+
+        /** @var AutocompletionSuggestion $suggestion */
         foreach ($this->delegate->provide($file, $code, $offset) as $suggestion) {
-            $suggestionsArray[] = $suggestion;
+            $suggestions[] = [$suggestion, $this->calculateScore($prefix, $suggestion->getFilterText())];
         }
 
-        if ($prefix === '') {
-            return $suggestionsArray;
-        } elseif (empty($suggestionsArray)) {
-            return [];
-        }
+        return $suggestions;
+    }
 
-        $fuse = new \Fuse\Fuse($suggestionsArray, [
-            // See also https://github.com/Loilo/Fuse#options
-            'shouldSort'       => true,
-            'caseSensitive'    => false,
-            'threshold'        => 0.25,
-            'maxPatternLength' => 128,
-            'keys'             => ['getFilterText'],
-
-            'getFn' => function (AutocompletionSuggestion $item, string $path) {
-                return $item->{$path}();
-            }
-        ]);
-
-        return $fuse->search($prefix);
+    /**
+     * @param string $a
+     * @param string $b
+     *
+     * @return int
+     */
+    private function calculateScore(string $a, string $b): int
+    {
+        return levenshtein($a, $b);
     }
 }

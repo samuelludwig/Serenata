@@ -26,8 +26,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
             ->getMock();
 
         $suggestions = [
-            new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', 'test', null),
-            new AutocompletionSuggestion('test1', SuggestionKind::FUNCTION, 'test', 'test', null)
+            new AutocompletionSuggestion('test1', SuggestionKind::FUNCTION, 'test', 'test', null),
+            new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', 'test', null)
         ];
 
         $delegate->method('provide')->willReturn($suggestions);
@@ -65,7 +65,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
 
         static::assertEquals([
-            $suggestions[1]
+            $suggestions[1],
+            $suggestions[0]
         ], $provider->provide($this->getFileStub(), "test", 4));
     }
 
@@ -93,8 +94,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
 
         static::assertEquals([
-            $suggestions[0],
-            $suggestions[1]
+            $suggestions[1],
+            $suggestions[0]
         ], $provider->provide($this->getFileStub(), "test", 4));
     }
 
@@ -145,8 +146,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
 
         static::assertEquals([
-            $suggestions[0],
-            $suggestions[1]
+            $suggestions[1],
+            $suggestions[0]
         ], $provider->provide($this->getFileStub(), "", 0));
     }
 
