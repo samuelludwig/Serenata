@@ -140,6 +140,36 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testGroupsUseStatementsWithSimilarNamespaceSegmentsTogetherByAttachingToTopOfGroup(): void
+    {
+        $name = 'Three\Segments\Bar';
+        $insertionPoint = new Position(6, 0);
+        $file = 'ExistingUseStatementWithSurroundingDifferentlySegmentedOnes.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGroupsUseStatementsWithSimilarNamespaceSegmentsTogetherByAttachingToBottomOfGroup(): void
+    {
+        $name = 'Three\Segments\Qux';
+        $insertionPoint = new Position(7, 0);
+        $file = 'ExistingUseStatementWithSurroundingDifferentlySegmentedOnes.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testAddsAdditionalNewlineIfImportHasDifferentPrefixThanExistingImportsAndIsAllowed(): void
     {
         $name = '\Foo\Bar\Baz';

@@ -145,6 +145,7 @@ class UseStatementInsertionCreator
     private function locateBestZeroIndexedLineForInsertion(string $name, string $kind, string $code, int $position): int
     {
         $bestLine = null;
+        $previousMatchThatSharedNamespacePrefixLine = null;
 
         foreach ($this->retrieveRelevantUseStatements($code, $position) as $useStatement) {
             $bestLine = $useStatement->getEndLine();
@@ -153,8 +154,17 @@ class UseStatementInsertionCreator
                 $useUseNodeName = $this->getFullNameFromUseUse($useStatement, $useUseNode);
 
                 if ($this->shouldNameBeSortedHigherThan($name, $useUseNodeName)) {
+                    if ($previousMatchThatSharedNamespacePrefixLine !== null) {
+                        $bestLine = $previousMatchThatSharedNamespacePrefixLine + 1;
+                    }
+
                     break 2;
                 }
+
+                $previousMatchThatSharedNamespacePrefixLine =
+                    $this->doShareCommonNamespacePrefix($name, $useUseNodeName) ?
+                        $useStatement->getEndLine() :
+                        null;
             }
         }
 
@@ -176,6 +186,7 @@ class UseStatementInsertionCreator
     private function shouldAddAdditionalNewline(string $name, string $kind, string $code, int $position): bool
     {
         $addAdditionalNewline = false;
+        $previousMatchThatSharedNamespacePrefixLine = null;
 
         foreach ($this->retrieveRelevantUseStatements($code, $position) as $useStatement) {
             $addAdditionalNewline = true;
@@ -186,8 +197,17 @@ class UseStatementInsertionCreator
                 $addAdditionalNewline = !$this->doShareCommonNamespacePrefix($name, $useUseNodeName);
 
                 if ($this->shouldNameBeSortedHigherThan($name, $useUseNodeName)) {
+                    if ($previousMatchThatSharedNamespacePrefixLine !== null) {
+                        $addAdditionalNewline = false;
+                    }
+
                     break 2;
                 }
+
+                $previousMatchThatSharedNamespacePrefixLine =
+                    $this->doShareCommonNamespacePrefix($name, $useUseNodeName) ?
+                        $useStatement->getEndLine() :
+                        null;
             }
         }
 
