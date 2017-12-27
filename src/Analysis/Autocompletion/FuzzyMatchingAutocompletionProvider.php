@@ -96,6 +96,6 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      */
     private function calculateScore(string $a, string $b): int
     {
-        return levenshtein($a, $b);
+        return levenshtein($a, $b, 1, 50, 1000);
     }
 }
