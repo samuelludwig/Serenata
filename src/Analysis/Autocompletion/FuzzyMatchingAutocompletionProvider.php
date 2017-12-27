@@ -76,10 +76,6 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
     ): array {
         $suggestions = [];
 
-        if (empty($prefix)) {
-            return iterator_to_array($this->delegate->provide($file, $code, $offset));
-        }
-
         /** @var AutocompletionSuggestion $suggestion */
         foreach ($this->delegate->provide($file, $code, $offset) as $suggestion) {
             $suggestions[] = [$suggestion, $this->calculateScore($prefix, $suggestion->getFilterText())];
