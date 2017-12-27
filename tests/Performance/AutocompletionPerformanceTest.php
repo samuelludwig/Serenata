@@ -25,13 +25,24 @@ class AutocompletionPerformanceTest extends AbstractPerformanceTest
 
         $this->indexPath($this->container, $pathToIndex);
 
-        $testFilePath = $pathToIndex . '/Core/Core.php';
+        $testFilePath = $pathToIndex . '/Core/Core_d.php';
+        $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($testFilePath);
 
-        $time = $this->time(function () use ($testFilePath) {
+        $positionThatWillGenerateNonEmptyPrefix = mb_strpos($code, "define ('E_ERROR', 1);");
+
+        // Empty prefixes are a specially optimized case that we don't want to trigger to have more realistic results.
+        static::assertTrue(
+            $positionThatWillGenerateNonEmptyPrefix !== false,
+            'No location found that would generate a non-empty prefix'
+        );
+
+        $positionThatWillGenerateNonEmptyPrefix += mb_strlen('define');
+
+        $time = $this->time(function () use ($testFilePath, $code, $positionThatWillGenerateNonEmptyPrefix) {
             $suggestions = iterator_to_array($this->container->get('autocompletionProvider')->provide(
                 $this->container->get('storage')->getFileByPath($testFilePath),
-                $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($testFilePath),
-                6
+                $code,
+                $positionThatWillGenerateNonEmptyPrefix
             ));
         });
 
