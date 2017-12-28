@@ -49,10 +49,6 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      */
     public function score(string $approximation, string $referenceText): ?float
     {
-        if ($approximation === $referenceText) {
-            return 0; // Optimize and exit early.
-        }
-
         $approximationLength = strlen($approximation);
         $referenceTextLength = strlen($referenceText);
 
@@ -96,7 +92,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
         $bonus = 0;
         $scanEnd = ($approximationLength - $referenceTextLength);
 
-        for ($i = 0; $i < $scanEnd; ++$i) {
+        for ($i = 0; $i <= $scanEnd; ++$i) {
             if (substr($approximation, $i, $referenceTextLength) === $referenceText) {
                 $bonus += self::REPLACEMENT_COST * 5;
             }

@@ -51,11 +51,39 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
     /**
      * @return void
      */
-    public function testScoresParametersThatContainSubstringMatchesMoreFavorably(): void
+    public function testScoresParametersThatContainSubstringMatchesInMiddleOfApproximationMoreFavorably(): void
     {
         $test1 = '\UnexpectedValueException';
         $test2 = '\SQLiteUnbuffered';
         $referenceText = 'Une';
+
+        $matcher = new LevenshteinApproximateStringMatcher();
+
+        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+    }
+
+    /**
+     * @return void
+     */
+    public function testScoresParametersThatContainSubstringMatchesAtEndOfApproximationMoreFavorably(): void
+    {
+        $test1 = '\UnexpectedValueException';
+        $test2 = '\DoctrineTest\InstantiatorTest\Exception\UnexpectedValueExceptionTest';
+        $referenceText = 'UnexpectedValueException';
+
+        $matcher = new LevenshteinApproximateStringMatcher();
+
+        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+    }
+
+    /**
+     * @return void
+     */
+    public function testScoresParametersThatContainExactMatchesOfApproximationMoreFavorably(): void
+    {
+        $test1 = 'UnexpectedValueException';
+        $test2 = 'http\Exception\UnexpectedValueException';
+        $referenceText = 'UnexpectedValueException';
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
