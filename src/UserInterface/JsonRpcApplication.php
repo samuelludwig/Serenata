@@ -41,7 +41,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     private $loop;
 
     /**
-     * @return Timer
+     * @var Timer
      */
     private $periodicTimer;
 
