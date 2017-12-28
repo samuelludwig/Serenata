@@ -105,6 +105,9 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $this->periodicTimer = $this->loop->addPeriodicTimer(self::REQUEST_HANDLE_FREQUENCY_SECONDS, function () {
             $this->processNextQueueItem();
 
+            // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
+            gc_collect_cycles();
+
             if ($this->getContainer()->get('requestQueue')->isEmpty()) {
                 $this->uninstallPeriodicTimer();
             }

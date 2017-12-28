@@ -21,6 +21,27 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 // https://github.com/Gert-dev/php-integrator-base/issues/91
 ini_set('xdebug.max_nesting_level', 10000);
 
+// Disable circular reference collection in the garbage collection. Note that this doesn't actually disable the entire
+// garbage collector, but just the (automatic) circular reference collection.
+//
+// Disabling this gives a rather significant performance boost in some operations. A good example is autocompletion
+// as used in the performance test testProvideAllFromStubs in the AutocompletionPerformanceTest class:
+//
+//     vendor/bin/phpunit --filter=testProvideAllFromStubs --group=Performance
+//
+// It is very likely that this happens because we are going over the 10.000 item buffer limit of the PHP circular
+// reference garbage collector, causing it to collect on every reference decrement, resulting in the performance hit.
+// This amount of objects is most likely resulting from the objects being fetched and maintained via Doctrine (a
+// common scenario with only the JetBrains PHP stubs indexed already seems to have ~5000 constants).
+//
+// The application itself will explicitly call gc_collect_cycles every so often to ensure that there is still some
+// circular reference collection happening.
+//
+// Sources:
+//     - https://scrutinizer-ci.com/blog/composer-gc-performance-who-is-affected-too
+//     - https://blog.ircmaxell.com/2014/12/what-about-garbage.html
+gc_disable();
+
 // Explicitly set the timezone to avoid warnings in some older PHP 5 versions. Also, this prevents files suddenly being
 // picked up as being modified if the user changes the timezone in php.ini.
 date_default_timezone_set('UTC');
