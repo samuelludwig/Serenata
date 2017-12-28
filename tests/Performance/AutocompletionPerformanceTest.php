@@ -36,14 +36,14 @@ class AutocompletionPerformanceTest extends AbstractPerformanceTest
             'No location found that would generate a non-empty prefix'
         );
 
-        $positionThatWillGenerateNonEmptyPrefix += mb_strlen('define');
+        $positionThatWillGenerateNonEmptyPrefix += mb_strlen('d');
 
         $time = $this->time(function () use ($testFilePath, $code, $positionThatWillGenerateNonEmptyPrefix) {
-            $suggestions = iterator_to_array($this->container->get('autocompletionProvider')->provide(
+            $suggestions = $this->container->get('autocompletionProvider')->provide(
                 $this->container->get('storage')->getFileByPath($testFilePath),
                 $code,
                 $positionThatWillGenerateNonEmptyPrefix
-            ));
+            );
         });
 
         unlink($dummyDatabasePath);

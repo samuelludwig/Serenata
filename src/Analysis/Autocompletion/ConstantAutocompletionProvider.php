@@ -17,11 +17,36 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     private $constantListProvider;
 
     /**
-     * @param ConstantListProviderInterface $constantListProvider
+     * @var AutocompletionPrefixDeterminerInterface
      */
-    public function __construct(ConstantListProviderInterface $constantListProvider)
-    {
+    private $autocompletionPrefixDeterminer;
+
+    /**
+     * @var ApproximateStringMatching\BestStringApproximationDeterminerInterface
+     */
+    private $bestStringApproximationDeterminer;
+
+    /**
+     * @var int
+     */
+    private $resultLimit;
+
+    /**
+     * @param ConstantListProviderInterface                                        $constantListProvider
+     * @param AutocompletionPrefixDeterminerInterface                              $autocompletionPrefixDeterminer
+     * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param int                                                                  $resultLimit
+     */
+    public function __construct(
+        ConstantListProviderInterface $constantListProvider,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
+        ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        int $resultLimit
+    ) {
         $this->constantListProvider = $constantListProvider;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->resultLimit = $resultLimit;
     }
 
     /**
@@ -29,7 +54,14 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        foreach ($this->constantListProvider->getAll() as $constant) {
+        $bestApproximations = $this->bestStringApproximationDeterminer->determine(
+            $this->constantListProvider->getAll(),
+            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            'name',
+            $this->resultLimit
+        );
+
+        foreach ($bestApproximations as $constant) {
             yield $this->createSuggestion($constant);
         }
     }

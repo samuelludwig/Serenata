@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
+use ArrayAccess;
+use AssertionError;
 use JsonSerializable;
 
 use PhpIntegrator\Utility\TextEdit;
@@ -11,7 +13,7 @@ use PhpIntegrator\Utility\TextEdit;
  *
  * This is a value object and immutable.
  */
-final class AutocompletionSuggestion implements JsonSerializable
+final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
 {
     /**
      * @var string
@@ -145,5 +147,39 @@ final class AutocompletionSuggestion implements JsonSerializable
             'extraData'           => $this->getExtraData(),
             'additionalTextEdits' => $this->getAdditionalTextEdits()
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new AssertionError('Setting properties directly is not allowed, use setters instead');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetExists($offset)
+    {
+        $array = $this->jsonSerialize();
+
+        return isset($array[$offset]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetUnset($offset)
+    {
+        throw new AssertionError('Unsetting properties is not allowed');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetGet($offset)
+    {
+        return $this->jsonSerialize()[$offset];
     }
 }

@@ -17,11 +17,36 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
     private $namespaceListProvider;
 
     /**
-     * @param NamespaceListProviderInterface $namespaceListProvider
+     * @var AutocompletionPrefixDeterminerInterface
      */
-    public function __construct(NamespaceListProviderInterface $namespaceListProvider)
-    {
+    private $autocompletionPrefixDeterminer;
+
+    /**
+     * @var ApproximateStringMatching\BestStringApproximationDeterminerInterface
+     */
+    private $bestStringApproximationDeterminer;
+
+    /**
+     * @var int
+     */
+    private $resultLimit;
+
+    /**
+     * @param NamespaceListProviderInterface                                       $namespaceListProvider
+     * @param AutocompletionPrefixDeterminerInterface                              $autocompletionPrefixDeterminer
+     * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param int                                                                  $resultLimit
+     */
+    public function __construct(
+        NamespaceListProviderInterface $namespaceListProvider,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
+        ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        int $resultLimit
+    ) {
         $this->namespaceListProvider = $namespaceListProvider;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->resultLimit = $resultLimit;
     }
 
     /**
@@ -29,10 +54,19 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        foreach ($this->namespaceListProvider->getAll() as $namespace) {
-            if ($namespace['name'] !== null) {
-                yield $this->createSuggestion($namespace);
-            }
+        $namespaceArrays = array_filter($this->namespaceListProvider->getAll(), function (array $namespace) {
+            return $namespace['name'] !== null;
+        });
+
+        $bestApproximations = $this->bestStringApproximationDeterminer->determine(
+            $namespaceArrays,
+            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            'name',
+            $this->resultLimit
+        );
+
+        foreach ($bestApproximations as $namespace) {
+            yield $this->createSuggestion($namespace);
         }
     }
 

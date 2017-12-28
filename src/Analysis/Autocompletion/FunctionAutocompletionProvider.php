@@ -17,11 +17,36 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     private $functionListProvider;
 
     /**
-     * @param FunctionListProviderInterface $functionListProvider
+     * @var AutocompletionPrefixDeterminerInterface
      */
-    public function __construct(FunctionListProviderInterface $functionListProvider)
-    {
+    private $autocompletionPrefixDeterminer;
+
+    /**
+     * @var ApproximateStringMatching\BestStringApproximationDeterminerInterface
+     */
+    private $bestStringApproximationDeterminer;
+
+    /**
+     * @var int
+     */
+    private $resultLimit;
+
+    /**
+     * @param FunctionListProviderInterface                                        $functionListProvider
+     * @param AutocompletionPrefixDeterminerInterface                              $autocompletionPrefixDeterminer
+     * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param int                                                                  $resultLimit
+     */
+    public function __construct(
+        FunctionListProviderInterface $functionListProvider,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
+        ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        int $resultLimit
+    ) {
         $this->functionListProvider = $functionListProvider;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->resultLimit = $resultLimit;
     }
 
     /**
@@ -31,7 +56,14 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     {
         $shouldIncludeParanthesesInInsertText = $this->shouldIncludeParanthesesInInsertText($code, $offset);
 
-        foreach ($this->functionListProvider->getAll() as $function) {
+        $bestApproximations = $this->bestStringApproximationDeterminer->determine(
+            $this->functionListProvider->getAll(),
+            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            'name',
+            $this->resultLimit
+        );
+
+        foreach ($bestApproximations as $function) {
             yield $this->createSuggestion($function, $shouldIncludeParanthesesInInsertText);
         }
     }

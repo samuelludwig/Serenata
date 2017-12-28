@@ -21,15 +21,31 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
     private $autocompletionPrefixDeterminer;
 
     /**
-     * @param AutocompletionProviderInterface         $delegate
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+     * @var ApproximateStringMatching\BestStringApproximationDeterminerInterface
+     */
+    private $bestStringApproximationDeterminer;
+
+    /**
+     * @var int
+     */
+    private $resultLimit;
+
+    /**
+     * @param AutocompletionProviderInterface                                      $delegate
+     * @param AutocompletionPrefixDeterminerInterface                              $autocompletionPrefixDeterminer
+     * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param int                                                                  $resultLimit
      */
     public function __construct(
         AutocompletionProviderInterface $delegate,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
+        ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        int $resultLimit
     ) {
         $this->delegate = $delegate;
         $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->resultLimit = $resultLimit;
     }
 
     /**
@@ -37,61 +53,14 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        $suggestionScorePairList = $this->generateScoredSuggestionPairList($file, $code, $offset);
-
-        usort($suggestionScorePairList, function (array $a, array $b) {
-            return $a[1] <=> $b[1];
-        });
-
-        return array_column($suggestionScorePairList, 0);
-    }
-
-    /**
-     * @param File   $file
-     * @param string $code
-     * @param string $offset
-     *
-     * @return array[]
-     */
-    private function generateScoredSuggestionPairList(File $file, string $code, string $offset): array
-    {
+        $items = $this->delegate->provide($file, $code, $offset);
         $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
 
-        return $this->generateScoredSuggestionPairListForPrefix($file, $code, $offset, $prefix);
-    }
-
-    /**
-     * @param File   $file
-     * @param string $code
-     * @param string $offset
-     * @param string $prefix
-     *
-     * @return array[]
-     */
-    private function generateScoredSuggestionPairListForPrefix(
-        File $file,
-        string $code,
-        string $offset,
-        string $prefix
-    ): array {
-        $suggestions = [];
-
-        /** @var AutocompletionSuggestion $suggestion */
-        foreach ($this->delegate->provide($file, $code, $offset) as $suggestion) {
-            $suggestions[] = [$suggestion, $this->calculateScore($prefix, $suggestion->getFilterText())];
-        }
-
-        return $suggestions;
-    }
-
-    /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return int
-     */
-    private function calculateScore(string $a, string $b): int
-    {
-        return levenshtein($a, $b, 1, 50, 1000);
+        return $this->bestStringApproximationDeterminer->determine(
+            $items,
+            $prefix,
+            'filterText',
+            $this->resultLimit
+        );
     }
 }

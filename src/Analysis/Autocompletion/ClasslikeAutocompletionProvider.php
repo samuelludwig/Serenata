@@ -27,28 +27,44 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     private $classlikeListProvider;
 
     /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
-
-    /**
      * @var UseStatementInsertionCreator
      */
     private $useStatementInsertionCreator;
 
     /**
-     * @param ClasslikeListProviderInterface          $classlikeListProvider
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
-     * @param UseStatementInsertionCreator            $useStatementInsertionCreator
+     * @var AutocompletionPrefixDeterminerInterface
+     */
+    private $autocompletionPrefixDeterminer;
+
+    /**
+     * @var ApproximateStringMatching\BestStringApproximationDeterminerInterface
+     */
+    private $bestStringApproximationDeterminer;
+
+    /**
+     * @var int
+     */
+    private $resultLimit;
+
+    /**
+     * @param ClasslikeListProviderInterface                                       $classlikeListProvider
+     * @param UseStatementInsertionCreator                                         $useStatementInsertionCreator
+     * @param AutocompletionPrefixDeterminerInterface                              $autocompletionPrefixDeterminer
+     * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param int                                                                  $resultLimit
      */
     public function __construct(
         ClasslikeListProviderInterface $classlikeListProvider,
+        UseStatementInsertionCreator $useStatementInsertionCreator,
         AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
-        UseStatementInsertionCreator $useStatementInsertionCreator
+        ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        int $resultLimit
     ) {
         $this->classlikeListProvider = $classlikeListProvider;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->useStatementInsertionCreator = $useStatementInsertionCreator;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->resultLimit = $resultLimit;
     }
 
     /**
@@ -56,7 +72,14 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        foreach ($this->classlikeListProvider->getAll() as $classlike) {
+        $bestApproximations = $this->bestStringApproximationDeterminer->determine(
+            $this->classlikeListProvider->getAll(),
+            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            'fqcn',
+            $this->resultLimit
+        );
+
+        foreach ($bestApproximations as $classlike) {
             yield $this->createSuggestion($classlike, $code, $offset);
         }
     }

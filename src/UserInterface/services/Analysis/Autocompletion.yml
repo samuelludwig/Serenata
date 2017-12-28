@@ -1,9 +1,23 @@
 parameters:
-
+    autocompletion.resultLimit: 15
 
 services:
     autocompletionPrefixDeterminer:
         class: PhpIntegrator\Analysis\Autocompletion\AutocompletionPrefixDeterminer
+
+    levenshteinApproximateStringMatcher:
+        class: PhpIntegrator\Analysis\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher
+
+    autocompletionApproximateStringMatcher:
+        alias: levenshteinApproximateStringMatcher
+
+    approximateStringMatchingBestStringApproximationDeterminer:
+        class: PhpIntegrator\Analysis\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer
+        arguments:
+            - '@autocompletionApproximateStringMatcher'
+
+    bestStringApproximationDeterminer:
+        alias: approximateStringMatchingBestStringApproximationDeterminer
 
     keywordAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\KeywordAutocompletionProvider
@@ -22,8 +36,10 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
         arguments:
             - '@classlikeListProvider'
-            - '@autocompletionPrefixDeterminer'
             - '@useStatementInsertionCreator'
+            - '@autocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.resultLimit%'
 
     classlikeAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionApplicabilityChecker
@@ -39,6 +55,9 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionProvider
         arguments:
             - '@namespaceListProvider'
+            - '@autocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.resultLimit%'
 
     namespaceAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionApplicabilityChecker
@@ -54,6 +73,9 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
             - '@functionListProvider'
+            - '@autocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.resultLimit%'
 
     functionAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionApplicabilityChecker
@@ -69,6 +91,9 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionProvider
         arguments:
             - '@constantListProvider'
+            - '@autocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.resultLimit%'
 
     constantAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionApplicabilityChecker
@@ -196,12 +221,8 @@ services:
         arguments:
             - '@aggregatingAutocompletionProvider'
             - '@autocompletionPrefixDeterminer'
-
-    limitingAutocompletionProvider:
-        class: PhpIntegrator\Analysis\Autocompletion\LimitingAutocompletionProvider
-        arguments:
-            - '@fuzzyMatchingAutocompletionProvider'
-            - 15
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.resultLimit%'
 
     autocompletionProvider:
-        alias: limitingAutocompletionProvider
+        alias: fuzzyMatchingAutocompletionProvider

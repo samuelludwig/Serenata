@@ -8,6 +8,8 @@ use PhpIntegrator\Analysis\Autocompletion\AutocompletionProviderInterface;
 use PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider;
 use PhpIntegrator\Analysis\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
+use PhpIntegrator\Analysis\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+
 use PhpIntegrator\Indexing\Structures;
 
 class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
@@ -15,13 +17,17 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
     /**
      * @return void
      */
-    public function testSortsSuggestionsHigherUpThatRequireFewerInsertions(): void
+    public function testSortsSuggestionsHigherUpThatHaveBetterScore(): void
     {
         $delegate = $this->getMockBuilder(AutocompletionProviderInterface::class)
             ->setMethods(['provide'])
             ->getMock();
 
         $prefixDeterminer = $this->getMockBuilder(AutocompletionPrefixDeterminerInterface::class)
+            ->setMethods(['determine'])
+            ->getMock();
+
+        $bestStringApproximationDeterminer = $this->getMockBuilder(BestStringApproximationDeterminerInterface::class)
             ->setMethods(['determine'])
             ->getMock();
 
@@ -30,125 +36,24 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
             new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', 'test', null)
         ];
 
-        $delegate->method('provide')->willReturn($suggestions);
-        $prefixDeterminer->method('determine')->willReturn('test');
+        $delegate->expects($this->once())->method('provide')->willReturn($suggestions);
+        $prefixDeterminer->expects($this->once())->method('determine')->willReturn('test');
+        $bestStringApproximationDeterminer->expects($this->once())->method('determine')->willReturn([
+            $suggestions[1],
+            $suggestions[0]
+        ]);
 
-        $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
-
-        static::assertEquals([
-            $suggestions[0],
-            $suggestions[1]
-        ], $provider->provide($this->getFileStub(), "test", 4));
-    }
-
-    /**
-     * @return void
-     */
-    public function testSortsSuggestionsHigherUpThatRequireFewerReplacements(): void
-    {
-        $delegate = $this->getMockBuilder(AutocompletionProviderInterface::class)
-            ->setMethods(['provide'])
-            ->getMock();
-
-        $prefixDeterminer = $this->getMockBuilder(AutocompletionPrefixDeterminerInterface::class)
-            ->setMethods(['determine'])
-            ->getMock();
-
-        $suggestions = [
-            new AutocompletionSuggestion('tevo', SuggestionKind::FUNCTION, 'test', 'test', null),
-            new AutocompletionSuggestion('teso', SuggestionKind::FUNCTION, 'test', 'test', null)
-        ];
-
-        $delegate->method('provide')->willReturn($suggestions);
-        $prefixDeterminer->method('determine')->willReturn('test');
-
-        $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
+        $provider = new FuzzyMatchingAutocompletionProvider(
+            $delegate,
+            $prefixDeterminer,
+            $bestStringApproximationDeterminer,
+            15
+        );
 
         static::assertEquals([
             $suggestions[1],
             $suggestions[0]
         ], $provider->provide($this->getFileStub(), "test", 4));
-    }
-
-    /**
-     * @return void
-     */
-    public function testSortsSuggestionsHigherUpThatRequireFewerRemovals(): void
-    {
-        $delegate = $this->getMockBuilder(AutocompletionProviderInterface::class)
-            ->setMethods(['provide'])
-            ->getMock();
-
-        $prefixDeterminer = $this->getMockBuilder(AutocompletionPrefixDeterminerInterface::class)
-            ->setMethods(['determine'])
-            ->getMock();
-
-        $suggestions = [
-            new AutocompletionSuggestion('testos', SuggestionKind::FUNCTION, 'test', 'test', null),
-            new AutocompletionSuggestion('testo', SuggestionKind::FUNCTION, 'test', 'test', null)
-        ];
-
-        $delegate->method('provide')->willReturn($suggestions);
-        $prefixDeterminer->method('determine')->willReturn('test');
-
-        $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
-
-        static::assertEquals([
-            $suggestions[1],
-            $suggestions[0]
-        ], $provider->provide($this->getFileStub(), "test", 4));
-    }
-
-    /**
-     * @return void
-     */
-    public function testDoesNotFailWhenNoSuggestionsArePresent(): void
-    {
-        $delegate = $this->getMockBuilder(AutocompletionProviderInterface::class)
-            ->setMethods(['provide'])
-            ->getMock();
-
-        $prefixDeterminer = $this->getMockBuilder(AutocompletionPrefixDeterminerInterface::class)
-            ->setMethods(['determine'])
-            ->getMock();
-
-        $suggestions = [];
-
-        $delegate->method('provide')->willReturn($suggestions);
-        $prefixDeterminer->method('determine')->willReturn('test');
-
-        $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
-
-        static::assertEquals([], $provider->provide($this->getFileStub(), "test", 4));
-    }
-
-    /**
-     * @return void
-     */
-    public function testDoesNotFailOnEmptyPrefices(): void
-    {
-        $delegate = $this->getMockBuilder(AutocompletionProviderInterface::class)
-            ->setMethods(['provide'])
-            ->getMock();
-
-        $prefixDeterminer = $this->getMockBuilder(AutocompletionPrefixDeterminerInterface::class)
-            ->setMethods(['determine'])
-            ->getMock();
-
-        $suggestions = [
-            new AutocompletionSuggestion('testos', SuggestionKind::FUNCTION, 'test', 'test', null),
-            new AutocompletionSuggestion('testo', SuggestionKind::FUNCTION, 'test', 'test', null)
-        ];
-
-        $delegate->method('provide')->willReturn($suggestions);
-        $prefixDeterminer->method('determine')->willReturn('test');
-
-        $provider = new FuzzyMatchingAutocompletionProvider($delegate, $prefixDeterminer);
-
-        static::assertEquals([
-            $suggestions[1],
-            $suggestions[0]
-        ], $provider->provide($this->getFileStub(), "", 0));
     }
 
     /**
