@@ -2,18 +2,21 @@
 
 namespace PhpIntegrator\Indexing;
 
+use Throwable;
+use AssertionError;
 use LogicException;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Exception\LockWaitTimeoutException;
 
 use PhpIntegrator\Analysis\MetadataProviderInterface;
 
 /**
  * Storage backend that uses Doctrine.
  */
-class DoctrineStorage implements StorageInterface, MetadataProviderInterface
+final class DoctrineStorage implements StorageInterface, MetadataProviderInterface
 {
     /**
      * @var ManagerRegistry
@@ -35,8 +38,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     {
         try {
             return $this->managerRegistry->getRepository(Structures\File::class)->findAll();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
 
         throw new LogicException('Should never be reached');
@@ -49,8 +52,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     {
         try {
             return $this->managerRegistry->getRepository(Structures\AccessModifier::class)->findAll();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
 
         throw new LogicException('Should never be reached');
@@ -59,14 +62,14 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     /**
      * @inheritDoc
      */
-    public function findStructureByFqcn(string $fqcn): ?Structures\Structure
+    public function findStructureByFqcn(string $fqcn): ?Structures\Classlike
     {
         try {
-            return $this->managerRegistry->getRepository(Structures\Structure::class)->findOneBy([
+            return $this->managerRegistry->getRepository(Structures\Classlike::class)->findOneBy([
                 'fqcn' => $fqcn
             ]);
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
 
         throw new LogicException('Should never be reached');
@@ -81,8 +84,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
             $file = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
                 'path' => $path
             ]);
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
 
         if ($file === null) {
@@ -100,8 +103,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
         try {
             $this->managerRegistry->getManager()->persist($entity);
             $this->managerRegistry->getManager()->flush();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
     }
 
@@ -112,8 +115,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     {
         try {
             $this->managerRegistry->getManager()->remove($entity);
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
     }
 
@@ -124,8 +127,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     {
         try {
             $this->managerRegistry->getConnection()->beginTransaction();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
     }
 
@@ -138,8 +141,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
             $this->managerRegistry->getManager()->flush();
 
             $this->managerRegistry->getConnection()->commit();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
     }
 
@@ -150,8 +153,8 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
     {
         try {
             $this->managerRegistry->getConnection()->rollback();
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
     }
 
@@ -165,10 +168,33 @@ class DoctrineStorage implements StorageInterface, MetadataProviderInterface
                 'fqcn' => $fqcn,
                 'name' => $method
             ]);
-        } catch (DriverException $e) {
-            throw new StorageException($e->getMessage(), 0, $e);
+        } catch (Throwable $t) {
+            $this->handleThrowable($t);
         }
 
         throw new LogicException('Should never be reached');
+    }
+
+    /**
+     * @param Throwable $throwable
+     *
+     * @throws Throwable
+     */
+    private function handleThrowable(Throwable $throwable): void
+    {
+        if ($throwable instanceof DriverException) {
+            if ($throwable instanceof LockWaitTimeoutException) {
+                // Not strictly a bug in the code, but this kind of error is fatal and currently not automagically
+                // fixed, so the user should know about it, rather than have the server not work properly.
+                throw new AssertionError($throwable->getMessage(), 0, $throwable);
+            } elseif (mb_strpos($throwable->getMessage(), 'disk I/O error') !== false) {
+                // Same as above.
+                throw new AssertionError($throwable->getMessage(), 0, $throwable);
+            }
+
+            throw new StorageException($throwable->getMessage(), 0, $throwable);
+        }
+
+        throw $throwable;
     }
 }

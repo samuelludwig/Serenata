@@ -18,7 +18,7 @@ use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 /**
  * Looks for unused use statements.
  */
-class UnusedUseStatementAnalyzer implements AnalyzerInterface
+final class UnusedUseStatementAnalyzer implements AnalyzerInterface
 {
     /**
      * @var ClassUsageFetchingVisitor

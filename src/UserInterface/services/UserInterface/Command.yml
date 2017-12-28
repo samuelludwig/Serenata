@@ -15,10 +15,13 @@ services:
         arguments:
             - '@indexer'
 
+    echoResponseCommand:
+        class: PhpIntegrator\UserInterface\Command\EchoResponseCommand
+
     vacuumCommand:
         class: PhpIntegrator\UserInterface\Command\VacuumCommand
         arguments:
-            - '@projectIndexer'
+            - '@indexFilePruner'
 
     testCommand:
         class: PhpIntegrator\UserInterface\Command\TestCommand
@@ -31,13 +34,14 @@ services:
             - '@storage'
             - '@tooltipProvider'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'
 
     classListCommand:
         class: PhpIntegrator\UserInterface\Command\ClassListCommand
         arguments:
             - '@storage'
-            - '@structureListProvider'
-            - '@fileStructureListProvider.instance'
+            - '@classlikeListProvider'
+            - '@fileClasslikeListProvider.instance'
 
     classInfoCommand:
         class: PhpIntegrator\UserInterface\Command\ClassInfoCommand
@@ -73,13 +77,16 @@ services:
             - '@storage'
             - '@sourceCodeStreamReader'
             - '@linter'
+            - '@fileIndexer'
 
     availableVariablesCommand:
         class: PhpIntegrator\UserInterface\Command\AvailableVariablesCommand
         arguments:
             - '@variableScanner'
-            - '@parser'
             - '@sourceCodeStreamReader'
+            - '@updateEnforcingIndexer'
+            - '@parser'
+            - '@fileIndexer'
 
     deduceTypesCommand:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
@@ -89,6 +96,7 @@ services:
             - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
             - '@positionalNamespaceDeterminer'
+            - '@fileIndexer'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
@@ -96,6 +104,7 @@ services:
             - '@storage'
             - '@signatureHelpRetriever'
             - '@sourceCodeStreamReader'
+            - '@fileIndexer'
 
     namespaceListCommand:
         class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
@@ -103,3 +112,11 @@ services:
             - '@storage'
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'
+
+    gotoDefinitionCommand:
+        class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand
+        arguments:
+            - '@storage'
+            - '@definitionLocator'
+            - '@sourceCodeStreamReader'
+            - '@fileIndexer'

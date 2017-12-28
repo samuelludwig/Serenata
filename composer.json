@@ -8,24 +8,23 @@
         "php": "^7.1",
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
-        "php-integrator/common": "~0.1.0",
-        "php-integrator/name-qualification-utilities": "~0.1.0",
-        "php-integrator/docblock-type-parser": "~0.2.0",
-        "doctrine/cache": "^1.6",
-        "doctrine/dbal": "^2.5",
+        "php-integrator/common": "^0.1",
+        "php-integrator/name-qualification-utilities": "^0.2",
+        "php-integrator/docblock-type-parser": "^0.2",
+        "doctrine/cache": "^1.7",
         "doctrine/orm": "^2.5",
-        "evenement/evenement": "^2.0",
-        "nikic/php-parser": "dev-master#b2c6497d632b952ad9a53f3ad10e6dc7ae50e41e",
-        "react/socket": "~0.7.0",
+        "evenement/evenement": "^3.0",
+        "nikic/php-parser": "v4.0.0alpha1",
+        "react/socket": "^0.8",
         "symfony/yaml": "^3.3",
         "symfony/config": "^3.3",
         "symfony/dependency-injection": "^3.3",
         "ramsey/uuid": "^3.6",
         "jetbrains/phpstorm-stubs": "dev-master",
-        "php-ds/php-ds": "^1.1"
+        "php-ds/php-ds": "^1.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.2",
+        "phpunit/phpunit": "^6.3",
         "symfony/var-dumper": "^3.3"
     },
     "autoload": {

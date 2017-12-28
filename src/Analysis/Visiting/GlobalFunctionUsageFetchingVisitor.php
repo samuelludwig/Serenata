@@ -9,7 +9,7 @@ use PhpParser\NodeVisitor\NameResolver;
 /**
  * Node visitor that fetches usages of (global) functions.
  */
-class GlobalFunctionUsageFetchingVisitor extends NameResolver
+final class GlobalFunctionUsageFetchingVisitor extends NameResolver
 {
     /**
      * @var Node\Expr\FuncCall[]

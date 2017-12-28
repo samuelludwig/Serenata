@@ -2,14 +2,15 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of global functions.
  */
-class GlobalFunctionsCommand extends AbstractCommand
+final class GlobalFunctionsCommand extends AbstractCommand
 {
     /**
      * @var FunctionListProviderInterface
@@ -27,9 +28,9 @@ class GlobalFunctionsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return $this->getGlobalFunctions();
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getGlobalFunctions());
     }
 
      /**

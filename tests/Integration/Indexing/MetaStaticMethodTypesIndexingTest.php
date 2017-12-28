@@ -23,17 +23,17 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
 
-        $this->assertCount(2, $types);
+        static::assertCount(2, $types);
 
-        $this->assertEquals(0, $types[0]->getArgumentIndex());
-        $this->assertEquals('bar', $types[0]->getValue());
-        $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-        $this->assertEquals('\B\Bar', $types[0]->getReturnType());
+        static::assertSame(0, $types[0]->getArgumentIndex());
+        static::assertSame('bar', $types[0]->getValue());
+        static::assertSame(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+        static::assertSame('\B\Bar', $types[0]->getReturnType());
 
-        $this->assertEquals(0, $types[1]->getArgumentIndex());
-        $this->assertEquals('car', $types[1]->getValue());
-        $this->assertEquals(Node\Scalar\String_::class, $types[1]->getValueNodeType());
-        $this->assertEquals('\B\Car', $types[1]->getReturnType());
+        static::assertSame(0, $types[1]->getArgumentIndex());
+        static::assertSame('car', $types[1]->getValue());
+        static::assertSame(Node\Scalar\String_::class, $types[1]->getValueNodeType());
+        static::assertSame('\B\Car', $types[1]->getReturnType());
     }
 
     /**
@@ -44,32 +44,32 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
 
-            $this->assertCount(1, $types);
+            static::assertCount(1, $types);
 
-            $this->assertEquals(0, $types[0]->getArgumentIndex());
-            $this->assertEquals('bar', $types[0]->getValue());
-            $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-            $this->assertEquals('\A\Bar', $types[0]->getReturnType());
+            static::assertSame(0, $types[0]->getArgumentIndex());
+            static::assertSame('bar', $types[0]->getValue());
+            static::assertSame(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+            static::assertSame('\A\Bar', $types[0]->getReturnType());
 
             return str_replace('\A\\', '\B\\', $source);
         };
 
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
-            $this->assertCount(0, $types);
+            static::assertCount(0, $types);
 
             $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\B\Foo', 'get');
-            $this->assertCount(1, $types);
+            static::assertCount(1, $types);
 
-            $this->assertEquals(0, $types[0]->getArgumentIndex());
-            $this->assertEquals('bar', $types[0]->getValue());
-            $this->assertEquals(Node\Scalar\String_::class, $types[0]->getValueNodeType());
-            $this->assertEquals('\B\Bar', $types[0]->getReturnType());
+            static::assertSame(0, $types[0]->getArgumentIndex());
+            static::assertSame('bar', $types[0]->getValue());
+            static::assertSame(Node\Scalar\String_::class, $types[0]->getValueNodeType());
+            static::assertSame('\B\Bar', $types[0]->getReturnType());
         };
 
         $path = $this->getPathFor('StaticMethodTypeChanges.phpt');
 
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -83,7 +83,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -97,7 +97,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -111,7 +111,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -125,7 +125,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -139,7 +139,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -153,7 +153,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -167,7 +167,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**
@@ -181,7 +181,7 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 
         $types = $this->container->get('managerRegistry')->getRepository(MetaStaticMethodType::class)->findAll();
 
-        $this->assertCount(0, $types);
+        static::assertCount(0, $types);
     }
 
     /**

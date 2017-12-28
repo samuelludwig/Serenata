@@ -10,7 +10,7 @@ use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 /**
  * Checks if a constant exists via Doctrine.
  */
-class DoctrineGlobalConstantExistenceChecker implements ConstantPresenceIndicatorInterface
+final class DoctrineGlobalConstantExistenceChecker implements ConstantPresenceIndicatorInterface
 {
     /**
      * @var ManagerRegistry

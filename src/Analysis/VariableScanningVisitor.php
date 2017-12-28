@@ -9,7 +9,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Visitor that queries the nodes for information about available (set) variables.
  */
-class VariableScanningVisitor extends NodeVisitorAbstract
+final class VariableScanningVisitor extends NodeVisitorAbstract
 {
     /**
      * @var string[]

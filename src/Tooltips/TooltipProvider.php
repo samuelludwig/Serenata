@@ -363,8 +363,18 @@ class TooltipProvider
      */
     protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
     {
+        $parentNode = $node->getAttribute('parent', false);
+
+        if ($parentNode === false) {
+            throw new LogicException('Parent node data is required in metadata');
+        }
+
         // Use statements are always fully qualified, they aren't resolved.
         $nameNode = new Node\Name\FullyQualified($node->name->toString());
+
+        if ($parentNode instanceof Node\Stmt\GroupUse) {
+            $nameNode = new Node\Name\FullyQualified(Node\Name::concat($parentNode->prefix, $nameNode));
+        }
 
         return $this->nameNodeTooltipGenerator->generate($nameNode, $file, $line);
     }

@@ -7,12 +7,12 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a (global) constant.
  */
-class Constant extends ConstantLike
+final class Constant extends ConstantLike
 {
     /**
      * @var string
      */
-    protected $fqcn;
+    private $fqcn;
 
     /**
      * @param string              $name

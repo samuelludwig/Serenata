@@ -2,18 +2,19 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
+use PhpIntegrator\Analysis\ClasslikeListProviderInterface;
 
-use PhpIntegrator\Analysis\StructureListProviderInterface;
-
-use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
  */
-class ClassListCommand extends AbstractCommand
+final class ClassListCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -21,38 +22,43 @@ class ClassListCommand extends AbstractCommand
     private $storage;
 
     /**
-     * @var StructureListProviderInterface
+     * @var ClasslikeListProviderInterface
      */
-    private $structureListProvider;
+    private $classlikeListProvider;
 
     /**
-     * @var FileStructureListProviderInterface
+     * @var FileClasslikeListProviderInterface
      */
-    private $fileStructureListProvider;
+    private $fileClasslikeListProvider;
 
     /**
      * @param StorageInterface                   $storage
-     * @param StructureListProviderInterface     $structureListProvider
-     * @param FileStructureListProviderInterface $fileStructureListProvider
+     * @param ClasslikeListProviderInterface     $classlikeListProvider
+     * @param FileClasslikeListProviderInterface $fileClasslikeListProvider
      */
     public function __construct(
         StorageInterface $storage,
-        StructureListProviderInterface $structureListProvider,
-        FileStructureListProviderInterface $fileStructureListProvider
+        ClasslikeListProviderInterface $classlikeListProvider,
+        FileClasslikeListProviderInterface $fileClasslikeListProvider
     ) {
         $this->storage = $storage;
-        $this->structureListProvider = $structureListProvider;
-        $this->fileStructureListProvider = $fileStructureListProvider;
+        $this->classlikeListProvider = $classlikeListProvider;
+        $this->fileClasslikeListProvider = $fileClasslikeListProvider;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         $filePath = $arguments['file'] ?? null;
 
-        return ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll();
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll()
+        );
     }
 
     /**
@@ -60,7 +66,7 @@ class ClassListCommand extends AbstractCommand
      */
     public function getAll(): array
     {
-        return $this->structureListProvider->getAll();
+        return $this->classlikeListProvider->getAll();
     }
 
     /**
@@ -72,6 +78,6 @@ class ClassListCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        return $this->fileStructureListProvider->getAllForFile($file);
+        return $this->fileClasslikeListProvider->getAllForFile($file);
     }
 }

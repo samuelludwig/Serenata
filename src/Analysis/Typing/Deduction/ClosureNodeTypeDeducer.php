@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\Closure} node.
  */
-class ClosureNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ClosureNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @inheritDoc

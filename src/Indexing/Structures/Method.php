@@ -9,12 +9,12 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a (class) method.
  */
-class Method extends FunctionLike
+final class Method extends FunctionLike
 {
     /**
-     * @var Structure
+     * @var Classlike
      */
-    private $structure;
+    private $classlike;
 
     /**
      * @var AccessModifier
@@ -51,7 +51,7 @@ class Method extends FunctionLike
      * @param string|null    $longDescription
      * @param string|null    $returnDescription
      * @param string|null    $returnTypeHint
-     * @param Structure      $structure
+     * @param Classlike      $classlike
      * @param AccessModifier $accessModifier
      * @param bool           $isMagic
      * @param bool           $isStatic
@@ -71,7 +71,7 @@ class Method extends FunctionLike
         ?string $longDescription,
         ?string $returnDescription,
         ?string $returnTypeHint,
-        Structure $structure,
+        Classlike $classlike,
         AccessModifier $accessModifier,
         bool $isMagic,
         bool $isStatic,
@@ -91,7 +91,7 @@ class Method extends FunctionLike
         $this->longDescription = $longDescription;
         $this->returnDescription = $returnDescription;
         $this->returnTypeHint = $returnTypeHint;
-        $this->structure = $structure;
+        $this->classlike = $classlike;
         $this->accessModifier = $accessModifier;
         $this->isMagic = $isMagic;
         $this->isStatic = $isStatic;
@@ -103,15 +103,15 @@ class Method extends FunctionLike
 
         $this->parameters = new ArrayCollection();
 
-        $structure->addMethod($this);
+        $classlike->addMethod($this);
     }
 
     /**
-     * @return Structure
+     * @return Classlike
      */
-    public function getStructure(): Structure
+    public function getClasslike(): Classlike
     {
-        return $this->structure;
+        return $this->classlike;
     }
 
     /**

@@ -7,7 +7,7 @@ namespace PhpIntegrator\Utility\Typing;
  *
  * {@inheritDoc}
  */
-class ClassType extends Type
+final class ClassType extends Type
 {
 
 }

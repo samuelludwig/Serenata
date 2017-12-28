@@ -15,7 +15,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
 
-        $this->assertEquals(2, count($output['errors']));
+        static::assertSame(2, count($output['errors']));
     }
 
     /**
@@ -25,7 +25,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownClassesNoNamespace.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 32,
@@ -41,7 +41,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownClassesSingleNamespace.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 83,
@@ -67,7 +67,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownClassesMultipleNamespaces.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 97,
@@ -89,7 +89,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownClassesDocblock.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 75,
@@ -129,7 +129,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('GroupedUseStatements.phpt');
 
-        $this->assertEquals([], $output['errors']);
+        static::assertSame([], $output['errors']);
     }
 
     /**
@@ -139,7 +139,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('ParentKeyword.phpt');
 
-        $this->assertEquals([], $output['errors']);
+        static::assertSame([], $output['errors']);
     }
 
     /**
@@ -149,7 +149,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoType.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Member ‘foo’ could not be found because expression has no type.',
                 'start'   => 21,
@@ -165,7 +165,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoClasslike.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Member ‘foo’ does not exist for type ‘int’.',
                 'start'   => 57,
@@ -187,7 +187,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is not defined or imported anywhere.',
                 'start'   => 248,
@@ -221,7 +221,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownMemberExpressionWithNoSuchMember.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Member ‘test’ was not explicitly defined in ‘\A\Foo’. It will be created at runtime.',
                 'start'   => 114,
@@ -249,7 +249,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownGlobalFunctions.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Function is not defined or imported anywhere.',
                 'start'   => 151,
@@ -277,7 +277,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnknownGlobalConstants.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Constant is not defined or imported anywhere.',
                 'start'   => 98,
@@ -305,7 +305,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnusedUseStatementsSingleNamespace.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 39,
@@ -321,7 +321,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnusedUseStatementsMultipleNamespaces.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 47,
@@ -343,7 +343,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('GroupedUseStatements.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 152,
@@ -371,7 +371,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnusedUseStatementsConstant.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Constant is imported, but not used anywhere.',
                 'start'   => 56,
@@ -387,7 +387,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnusedUseStatementsFunction.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Function is imported, but not used anywhere.',
                 'start'   => 58,
@@ -403,7 +403,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnusedUseStatementsDocblock.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike is imported, but not used anywhere.',
                 'start'   => 53,
@@ -425,7 +425,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('UnusedUseStatementsAnonymousClass.phpt');
 
-        $this->assertEquals([], $output['warnings']);
+        static::assertSame([], $output['warnings']);
     }
 
     /**
@@ -435,7 +435,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessMissingDocumentation.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Documentation for method is missing.',
                 'start'   => 467,
@@ -475,7 +475,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessMissingParameter.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Function docblock is missing @param tag for ‘$param2’.',
                 'start'   => 191,
@@ -491,7 +491,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessParamWithReference.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
 
         ], $output['errors']);
     }
@@ -503,7 +503,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessVariadicParam.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
 
         ], $output['errors']);
     }
@@ -515,7 +515,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessFullInheritance.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
 
         ], $output['errors']);
     }
@@ -527,7 +527,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessParameterTypeMismatch.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Function docblock has incorrect @param type for ‘$param1’.',
                 'start'   => 343,
@@ -543,7 +543,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessReferenceParam.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Function docblock has incorrect @param type for ‘$param1’.',
                 'start'   => 74,
@@ -559,8 +559,24 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessParamTypeDifferentQualifications.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
 
+        ], $output['errors']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAnalyzesFunctionReturnTypes(): void
+    {
+        $output = $this->lintFile('DocblockCorrectnessReturnTypeMismatch.phpt');
+
+        static::assertSame([
+            [
+                'message' => 'Function docblock @return is not equivalent to actual return type.',
+                'start'   => 127,
+                'end'     => 165
+            ]
         ], $output['errors']);
     }
 
@@ -571,7 +587,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessSuperfluousParameters.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Function docblock contains superfluous @param tags for: ‘$extra1, $extra2’.',
                 'start'   => 265,
@@ -587,7 +603,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessMissingVarTag.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Property docblock is missing @var tag.',
                 'start'   => 116,
@@ -609,7 +625,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedCategoryTag.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike docblock contains deprecated @category tag.',
                 'start'   => 53,
@@ -625,7 +641,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedSubpackageTag.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' => 'Classlike docblock contains deprecated @subpackage tag.',
                 'start'   => 55,
@@ -641,7 +657,7 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedLinkTag.phpt');
 
-        $this->assertEquals([
+        static::assertSame([
             [
                 'message' =>  'Classlike docblock contains deprecated @link tag. Use @see instead.',
                 'start'   => 69,

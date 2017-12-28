@@ -57,10 +57,10 @@ class FunctionNameNodeFqsenDeterminer
         // Unqualified global function calls, such as "array_walk", could refer to "array_walk" in the current
         // namespace (e.g. "\A\array_walk") or, if not present in the current namespace, the root namespace
         // (e.g. "\array_walk").
-        $fqcnForCurrentNamespace = '\\' . $namespace . '\\' . $node->toString();
+        $fqsenForCurrentNamespace = '\\' . $namespace . '\\' . $node->toString();
 
-        if ($this->functionPresenceIndicator->isPresent($fqcnForCurrentNamespace)) {
-            return $fqcnForCurrentNamespace;
+        if ($this->functionPresenceIndicator->isPresent($fqsenForCurrentNamespace)) {
+            return $fqsenForCurrentNamespace;
         }
 
         return '\\' . $node->toString();

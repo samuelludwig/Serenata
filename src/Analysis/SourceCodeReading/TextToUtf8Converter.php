@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\SourceCodeReading;
 /**
  * Converts text to UTF-8.
  */
-class TextToUtf8Converter implements TextEncodingConverterInterface
+final class TextToUtf8Converter implements TextEncodingConverterInterface
 {
     /**
      * @inheritDoc

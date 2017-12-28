@@ -9,10 +9,10 @@ use RuntimeException;
  */
 interface NamespaceListProviderInterface
 {
-     /**
-      * @throws RuntimeException
-      *
-      * @return array[]
-      */
-     public function getAll(): array;
+    /**
+     * @throws RuntimeException
+     *
+     * @return array array<string, array> mapping namespace ID's to namespaces.
+     */
+    public function getAll(): array;
 }

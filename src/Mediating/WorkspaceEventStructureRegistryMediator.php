@@ -4,7 +4,7 @@ namespace PhpIntegrator\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\StructureListRegistry;
+use PhpIntegrator\Analysis\ClasslikeListRegistry;
 
 use PhpIntegrator\Indexing\WorkspaceEventName;
 
@@ -14,9 +14,9 @@ use PhpIntegrator\Indexing\WorkspaceEventName;
 class WorkspaceEventStructureRegistryMediator
 {
     /**
-     * @var StructureListRegistry
+     * @var ClasslikeListRegistry
      */
-    private $structureListRegistry;
+    private $classlikeListRegistry;
 
     /**
      * @var EventEmitterInterface
@@ -24,14 +24,14 @@ class WorkspaceEventStructureRegistryMediator
     private $eventEmitter;
 
     /**
-     * @param StructureListRegistry  $structureListRegistry
+     * @param ClasslikeListRegistry  $classlikeListRegistry
      * @param EventEmitterInterface $eventEmitter
      */
     public function __construct(
-        StructureListRegistry $structureListRegistry,
+        ClasslikeListRegistry $classlikeListRegistry,
         EventEmitterInterface $eventEmitter
     ) {
-        $this->structureListRegistry = $structureListRegistry;
+        $this->classlikeListRegistry = $classlikeListRegistry;
         $this->eventEmitter = $eventEmitter;
 
         $this->setup();
@@ -43,7 +43,7 @@ class WorkspaceEventStructureRegistryMediator
     protected function setup(): void
     {
         $this->eventEmitter->on(WorkspaceEventName::CHANGED, function (string $filePath) {
-            $this->structureListRegistry->reset();
+            $this->classlikeListRegistry->reset();
         });
     }
 }

@@ -7,9 +7,12 @@ use ReflectionClass;
 
 use PhpIntegrator\Indexing\Indexer;
 
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+
 use PhpIntegrator\UserInterface\JsonRpcApplication;
 use PhpIntegrator\UserInterface\AbstractApplication;
 
+use PhpIntegrator\Utility\TmpFileStream;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -21,6 +24,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var JsonRpcApplication
+     */
+    private static $application;
+
     /**
      * @var ContainerBuilder
      */
@@ -61,7 +69,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     {
         $refClass = new ReflectionClass(JsonRpcApplication::class);
 
-        $refMethod = $refClass->getMethod('createContainer');
+        $refMethod = $refClass->getMethod('getContainer');
         $refMethod->setAccessible(true);
 
         $container = $refMethod->invoke($application);
@@ -97,9 +105,12 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
         $container->get('cache')->deleteAll();
 
-        $success = $container->get('initializeCommand')->initialize(false);
+        $success = $container->get('initializeCommand')->initialize(
+            $this->mockJsonRpcResponseSenderInterface(),
+            false
+        );
 
-        $this->assertTrue($success);
+        static::assertTrue($success);
     }
 
     /**
@@ -108,14 +119,14 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function createTestContainer(): ContainerBuilder
     {
         if (!self::$testContainer) {
-            $application = $this->createApplication();
+            self::$application = $this->createApplication();
 
             // Loading the container from the YAML file is expensive and a large slowdown to testing. As we're testing
             // integration anyway, we can share this container. We only need to ensure state is not maintained between
             // creations, which is handled by prepareContainer.
-            self::$testContainer = $this->createContainer($application);
+            self::$testContainer = $this->createContainer(self::$application);
 
-            $this->instantiateRequiredServices($application, self::$testContainer);
+            $this->instantiateRequiredServices(self::$application, self::$testContainer);
         }
 
         $this->prepareContainer(self::$testContainer, false);
@@ -132,16 +143,50 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
-        $success = $container->get('indexer')->reindex(
+        $this->indexPathViaIndexer($container->get('indexer'), $testPath, false, $mayFail);
+    }
+
+    /**
+     * @param Indexer $indexer
+     * @param string  $testPath
+     * @param bool    $useStdin
+     * @param bool    $mayFail
+     *
+     * @return void
+     */
+    protected function indexPathViaIndexer(
+        Indexer $indexer,
+        string $testPath,
+        bool $useStdin,
+        bool $mayFail = false
+    ): void {
+        $success = $indexer->index(
             [$testPath],
-            false,
-            false,
+            ['php', 'phpt'],
             [],
-            ['php', 'phpt']
+            $useStdin,
+            $this->mockJsonRpcResponseSenderInterface()
         );
 
         if (!$mayFail) {
-            $this->assertTrue($success);
+            static::assertTrue($success);
+        }
+
+        $this->processOpenQueueItems();
+    }
+
+    /**
+     * @return void
+     */
+    protected function processOpenQueueItems(): void
+    {
+        $refClass = new ReflectionClass(JsonRpcApplication::class);
+
+        $refMethod = $refClass->getMethod('processNextQueueItem');
+        $refMethod->setAccessible(true);
+
+        while (!$this->container->get('requestQueue')->isEmpty()) {
+            $refMethod->invoke(self::$application);
         }
     }
 
@@ -172,7 +217,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
         for ($i = 0; $i <= 1; ++$i) {
             $container = $this->createTestContainer();
 
-            $stream = tmpfile();
+            $stream = new TmpFileStream();
 
             $sourceCodeStreamReader = new SourceCodeStreamReader(
                 $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
@@ -180,15 +225,17 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
                 $stream
             );
 
-            $indexer = new Indexer($container->get('projectIndexer'), $sourceCodeStreamReader);
-
-            $indexer->reindex(
-                [$path],
-                false,
-                false,
-                [],
-                ['phpt']
+            $indexer = new Indexer(
+                $container->get('requestQueue'),
+                $container->get('fileIndexer'),
+                $container->get('directoryIndexRequestDemuxer'),
+                $container->get('indexFilePruner'),
+                $container->get('pathNormalizer'),
+                $sourceCodeStreamReader,
+                $container->get('directoryIndexableFileIteratorFactory')
             );
+
+            $this->indexPathViaIndexer($indexer, $path, false);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -201,16 +248,9 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
                 $container->get('managerRegistry')->getManager()->clear();
             }
 
-            fwrite($stream, $source);
-            rewind($stream);
+            $stream->set($source);
 
-            $indexer->reindex(
-                [$path],
-                true,
-                false,
-                [],
-                ['phpt']
-            );
+            $this->indexPathViaIndexer($indexer, $path, true);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -218,7 +258,17 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
 
             $afterReindex($container, $path, $source);
 
-            fclose($stream);
+            $stream->close();
         }
+    }
+
+    /**
+     * @return JsonRpcResponseSenderInterface
+     */
+    protected function mockJsonRpcResponseSenderInterface(): JsonRpcResponseSenderInterface
+    {
+        return $this->getMockBuilder(JsonRpcResponseSenderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

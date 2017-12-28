@@ -11,7 +11,7 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 /**
  * Converts raw property data from the index to more useful data.
  */
-class PropertyConverter extends AbstractConverter
+final class PropertyConverter extends AbstractConverter
 {
     /**
      * @param Structures\Property $property
@@ -25,6 +25,7 @@ class PropertyConverter extends AbstractConverter
             'name'               => $property->getName(),
             'startLine'          => $property->getStartLine(),
             'endLine'            => $property->getEndLine(),
+            'filename'           => $property->getFile()->getPath(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
             'isPublic'           => $property->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,

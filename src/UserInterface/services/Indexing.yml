@@ -2,6 +2,9 @@ parameters:
 
 
 services:
+    requestQueue:
+        class: Ds\Queue
+
     sqliteConnectionFactory:
         class: PhpIntegrator\Indexing\SqliteConnectionFactory
 
@@ -37,8 +40,28 @@ services:
     storage:
         alias: storage.eventEmittingStorage
 
-    fileIndexer:
-        class: PhpIntegrator\Indexing\FileIndexer
+    pathNormalizer:
+        class: PhpIntegrator\Indexing\PathNormalizer
+
+    directoryIndexableFileIteratorFactory:
+        class: PhpIntegrator\Indexing\DirectoryIndexableFileIteratorFactory
+        arguments:
+            - '@storage'
+            - '@pathNormalizer'
+
+    directoryIndexRequestDemuxer:
+        class: PhpIntegrator\Indexing\DirectoryIndexRequestDemuxer
+        arguments:
+            - '@requestQueue'
+            - '@directoryIndexableFileIteratorFactory'
+
+    indexFilePruner:
+        class: PhpIntegrator\Indexing\IndexFilePruner
+        arguments:
+            - '@storage'
+
+    storageFileIndexer:
+        class: PhpIntegrator\Indexing\StorageFileIndexer
         arguments:
             - '@storage'
             - '@typeAnalyzer'
@@ -47,15 +70,28 @@ services:
             - '@parser'
             - '@structureAwareNameResolverFactory'
 
-    projectIndexer:
-        class: PhpIntegrator\Indexing\ProjectIndexer
+    unmodifiedFileSkippingIndexer:
+        class: PhpIntegrator\Indexing\UnmodifiedFileSkippingIndexer
         arguments:
+            - '@storageFileIndexer'
             - '@storage'
-            - '@fileIndexer'
-            - '@sourceCodeStreamReader'
+
+    updateEnforcingIndexer:
+        class: PhpIntegrator\Indexing\UpdateEnforcingIndexer
+        arguments:
+            - '@unmodifiedFileSkippingIndexer'
+            - '@storage'
+
+    fileIndexer:
+        alias: unmodifiedFileSkippingIndexer
 
     indexer:
         class: PhpIntegrator\Indexing\Indexer
         arguments:
-            - '@projectIndexer'
+            - '@requestQueue'
+            - '@fileIndexer'
+            - '@directoryIndexRequestDemuxer'
+            - '@indexFilePruner'
+            - '@pathNormalizer'
             - '@sourceCodeStreamReader'
+            - '@directoryIndexableFileIteratorFactory'

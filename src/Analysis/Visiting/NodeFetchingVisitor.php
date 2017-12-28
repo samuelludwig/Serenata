@@ -9,7 +9,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Visitor that retrieves the node at a specific location.
  */
-class NodeFetchingVisitor extends NodeVisitorAbstract
+final class NodeFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var int

@@ -13,7 +13,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node.
  */
-class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var MethodCallMethodInfoRetriever

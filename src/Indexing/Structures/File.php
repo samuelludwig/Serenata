@@ -25,6 +25,11 @@ class File
     private $path;
 
     /**
+     * @var string|null
+     */
+    private $lastIndexedSourceHash;
+
+    /**
      * @var DateTime
      */
     private $indexedOn;
@@ -42,7 +47,7 @@ class File
     /**
      * @var ArrayCollection
      */
-    private $structures;
+    private $classlikes;
 
     /**
      * @var ArrayCollection
@@ -63,21 +68,41 @@ class File
     {
         $this->id = (string) Uuid::uuid4();
         $this->path = $path;
+        $this->lastIndexedSourceHash = null;
         $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);
 
         $this->constants = new ArrayCollection();
         $this->functions = new ArrayCollection();
-        $this->structures = new ArrayCollection();
+        $this->classlikes = new ArrayCollection();
         $this->metaStaticMethodTypes = new ArrayCollection();
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastIndexedSourceHash(): ?string
+    {
+        return $this->lastIndexedSourceHash;
+    }
+
+    /**
+     * @param string|null $lastIndexedSourceHash
+     *
+     * @return static
+     */
+    public function setLastIndexedSourceHash(?string $lastIndexedSourceHash)
+    {
+        $this->lastIndexedSourceHash = $lastIndexedSourceHash;
+        return $this;
     }
 
     /**
@@ -164,31 +189,31 @@ class File
     }
 
     /**
-     * @return Structure[]
+     * @return Classlike[]
      */
-    public function getStructures(): array
+    public function getClasslikes(): array
     {
-        return array_values($this->structures->toArray());
+        return array_values($this->classlikes->toArray());
     }
 
     /**
-     * @param Structure $structure
+     * @param Classlike $classlike
      */
-    public function addStructure(Structure $structure): void
+    public function addClasslike(Classlike $classlike): void
     {
-        $this->structures->add($structure);
+        $this->classlikes->add($classlike);
     }
 
     /**
-     * @param Structure $structure
+     * @param Classlike $classlike
      */
-    public function removeStructure(Structure $structure): void
+    public function removeClasslike(Classlike $classlike): void
     {
-        if (!$this->structures->contains($structure)) {
-            throw new OutOfRangeException('Can not remove structure from file that isn\'t even part of file');
+        if (!$this->classlikes->contains($classlike)) {
+            throw new OutOfRangeException('Can not remove classlike from file that isn\'t even part of file');
         }
 
-        $this->structures->removeElement($structure);
+        $this->classlikes->removeElement($classlike);
     }
 
     /**

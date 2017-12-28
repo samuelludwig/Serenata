@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents an aliased trait method in a trait.
  */
-class TraitTraitAlias extends StructureTraitAlias
+final class TraitTraitAlias extends ClasslikeTraitAlias
 {
     /**
      * @var Trait_

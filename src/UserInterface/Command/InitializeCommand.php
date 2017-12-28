@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
 
@@ -11,10 +9,14 @@ use PhpIntegrator\Indexing\Indexer;
 use PhpIntegrator\Indexing\ManagerRegistry;
 use PhpIntegrator\Indexing\SchemaInitializer;
 
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+
 /**
  * Command that initializes a project.
  */
-class InitializeCommand extends AbstractCommand
+final class InitializeCommand extends AbstractCommand
 {
     /**
      * @var SchemaInitializer
@@ -57,31 +59,34 @@ class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $success = $this->initialize();
-
-        return $success;
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->initialize($queueItem->getJsonRpcResponseSender())
+        );
     }
 
     /**
-     * @param bool $includeBuiltinItems
-     *
-     * @return bool
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param bool                           $includeBuiltinItems
      */
-    public function initialize(bool $includeBuiltinItems = true): bool
-    {
+    public function initialize(
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        bool $includeBuiltinItems = true
+    ): bool {
         $this->ensureIndexDatabaseDoesNotExist();
 
         $this->schemaInitializer->initialize();
 
         if ($includeBuiltinItems) {
-            $this->indexer->reindex(
+            $this->indexer->index(
                 [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
-                false,
-                false,
+                ['php'],
                 [],
-                ['php']
+                false,
+                $jsonRpcResponseSender,
+                null
             );
         }
 
@@ -95,10 +100,24 @@ class InitializeCommand extends AbstractCommand
      */
     protected function ensureIndexDatabaseDoesNotExist(): void
     {
-        if (file_exists($this->managerRegistry->getDatabasePath())) {
-            $this->managerRegistry->ensureConnectionClosed();
+        $this->managerRegistry->ensureConnectionClosed();
 
-            unlink($this->managerRegistry->getDatabasePath());
+        $databasePath = $this->managerRegistry->getDatabasePath();
+
+        if (empty($databasePath)) {
+            return;
+        }
+
+        if (file_exists($databasePath)) {
+            unlink($databasePath);
+        }
+
+        if (file_exists($databasePath . '-shm')) {
+            unlink($databasePath . '-shm');
+        }
+
+        if (file_exists($databasePath . '-wal')) {
+            unlink($databasePath . '-wal');
         }
     }
 

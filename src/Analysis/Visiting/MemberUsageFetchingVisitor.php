@@ -18,7 +18,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Node visitor that fetches usages of member names.
  */
-class MemberUsageFetchingVisitor extends NodeVisitorAbstract
+final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var int

@@ -16,13 +16,14 @@ use Doctrine\ORM\EntityManager;
 
 use Doctrine\ORM\Cache\DefaultCacheFactory;
 use Doctrine\ORM\Cache\RegionsConfiguration;
+
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
 /**
  * Handles indexation of PHP code.
  */
-class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInterface
+final class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInterface
 {
     use EventEmitterTrait;
 
@@ -105,7 +106,7 @@ class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInt
      */
     protected function getEntityManagerInstance(): EntityManager
     {
-        if ($this->entityManager === null) {
+        if ($this->entityManager === null || !$this->entityManager->isOpen()) {
             $regionConfig = new RegionsConfiguration();
             $cacheFactory = new DefaultCacheFactory($regionConfig, $this->cache);
 
@@ -133,7 +134,10 @@ class ManagerRegistry extends AbstractManagerRegistry implements EventEmitterInt
             // Entity manager depends on connection, cascade reset.
             $this->resetService('defaultEntityManager');
         } elseif ($name === 'defaultEntityManager') {
-            $this->entityManager = null;
+            if ($this->entityManager !== null) {
+                $this->entityManager->close();
+                $this->entityManager = null;
+            }
         }
     }
 

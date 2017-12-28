@@ -15,7 +15,7 @@ use PhpParser\NodeVisitorAbstract;
  * Inheriting from this visitor is unnecessary as it can simply be added to the traverser you wish to limit all
  * visitors for.
  */
-class ScopeLimitingVisitor extends NodeVisitorAbstract
+final class ScopeLimitingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var int

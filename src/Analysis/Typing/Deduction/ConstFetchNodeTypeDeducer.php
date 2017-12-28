@@ -22,7 +22,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ConstFetch} node.
  */
-class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface

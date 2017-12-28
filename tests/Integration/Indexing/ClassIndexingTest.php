@@ -17,27 +17,27 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('SimpleClass.phpt');
 
-        $this->assertEquals('Test', $structure->getName());
-        $this->assertEquals('\Test', $structure->getFqcn());
-        $this->assertEquals($this->getPathFor('SimpleClass.phpt'), $structure->getFile()->getPath());
-        $this->assertEquals(3, $structure->getStartLine());
-        $this->assertEquals(6, $structure->getEndLine());
-        $this->assertNull($structure->getShortDescription());
-        $this->assertNull($structure->getLongDescription());
-        $this->assertFalse($structure->getIsDeprecated());
-        $this->assertFalse($structure->getHasDocblock());
-        $this->assertCount(1, $structure->getConstants());
-        $this->assertEmpty($structure->getProperties());
-        $this->assertEmpty($structure->getMethods());
-        $this->assertFalse($structure->getIsAbstract());
-        $this->assertFalse($structure->getIsFinal());
-        $this->assertFalse($structure->getIsAnnotation());
-        $this->assertNull($structure->getParentFqcn());
-        $this->assertEmpty($structure->getChildFqcns());
-        $this->assertEmpty($structure->getInterfaceFqcns());
-        $this->assertEmpty($structure->getTraitFqcns());
-        $this->assertEmpty($structure->getTraitAliases());
-        $this->assertEmpty($structure->getTraitPrecedences());
+        static::assertSame('Test', $structure->getName());
+        static::assertSame('\Test', $structure->getFqcn());
+        static::assertSame($this->getPathFor('SimpleClass.phpt'), $structure->getFile()->getPath());
+        static::assertSame(3, $structure->getStartLine());
+        static::assertSame(6, $structure->getEndLine());
+        static::assertNull($structure->getShortDescription());
+        static::assertNull($structure->getLongDescription());
+        static::assertFalse($structure->getIsDeprecated());
+        static::assertFalse($structure->getHasDocblock());
+        static::assertCount(1, $structure->getConstants());
+        static::assertEmpty($structure->getProperties());
+        static::assertEmpty($structure->getMethods());
+        static::assertFalse($structure->getIsAbstract());
+        static::assertFalse($structure->getIsFinal());
+        static::assertFalse($structure->getIsAnnotation());
+        static::assertNull($structure->getParentFqcn());
+        static::assertEmpty($structure->getChildFqcns());
+        static::assertEmpty($structure->getInterfaceFqcns());
+        static::assertEmpty($structure->getTraitFqcns());
+        static::assertEmpty($structure->getTraitAliases());
+        static::assertEmpty($structure->getTraitPrecedences());
     }
 
     /**
@@ -47,7 +47,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassNamespace.phpt');
 
-        $this->assertEquals('\N\Test', $structure->getFqcn());
+        static::assertSame('\N\Test', $structure->getFqcn());
     }
 
     /**
@@ -57,7 +57,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassShortDescription.phpt');
 
-        $this->assertEquals('A summary.', $structure->getShortDescription());
+        static::assertSame('A summary.', $structure->getShortDescription());
     }
 
     /**
@@ -67,7 +67,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassLongDescription.phpt');
 
-        $this->assertEquals('A long description.', $structure->getLongDescription());
+        static::assertSame('A long description.', $structure->getLongDescription());
     }
 
     /**
@@ -77,7 +77,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('DeprecatedClass.phpt');
 
-        $this->assertTrue($structure->getIsDeprecated());
+        static::assertTrue($structure->getIsDeprecated());
     }
 
     /**
@@ -87,7 +87,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassWithDocblock.phpt');
 
-        $this->assertTrue($structure->getHasDocblock());
+        static::assertTrue($structure->getHasDocblock());
     }
 
     /**
@@ -97,7 +97,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('AbstractClass.phpt');
 
-        $this->assertTrue($structure->getIsAbstract());
+        static::assertTrue($structure->getIsAbstract());
     }
 
     /**
@@ -107,7 +107,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('FinalClass.phpt');
 
-        $this->assertTrue($structure->getIsFinal());
+        static::assertTrue($structure->getIsFinal());
     }
 
     /**
@@ -117,7 +117,19 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('AnnotationClass.phpt');
 
-        $this->assertTrue($structure->getIsAnnotation());
+        static::assertTrue($structure->getIsAnnotation());
+    }
+
+    /**
+     * @return void
+     */
+    public function testAnonymousClass(): void
+    {
+        $structure = $this->indexClass('AnonymousClass.phpt');
+
+        static::assertSame('(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getName());
+        static::assertSame('\\(anonymous_3f9d75c4d503b417a1cb91db55e4ddcc_19)', $structure->getFqcn());
+        static::assertTrue($structure->getIsAnonymous());
     }
 
     /**
@@ -131,11 +143,11 @@ class ClassIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        $this->assertCount(2, $entities);
+        static::assertCount(2, $entities);
 
-        $this->assertCount(1, $entities[0]->getChildFqcns());
-        $this->assertEquals($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
-        $this->assertEquals($entities[0]->getFqcn(), $entities[1]->getParentFqcn());
+        static::assertCount(1, $entities[0]->getChildFqcns());
+        static::assertSame($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
+        static::assertSame($entities[0]->getFqcn(), $entities[1]->getParentFqcn());
     }
 
     /**
@@ -145,8 +157,8 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassInterface.phpt');
 
-        $this->assertCount(1, $structure->getInterfaceFqcns());
-        $this->assertEquals('\I', $structure->getInterfaceFqcns()[0]);
+        static::assertCount(1, $structure->getInterfaceFqcns());
+        static::assertSame('\I', $structure->getInterfaceFqcns()[0]);
     }
 
     /**
@@ -156,9 +168,9 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassTrait.phpt');
 
-        $this->assertCount(2, $structure->getTraitFqcns());
-        $this->assertEquals('\A', $structure->getTraitFqcns()[0]);
-        $this->assertEquals('\B', $structure->getTraitFqcns()[1]);
+        static::assertCount(2, $structure->getTraitFqcns());
+        static::assertSame('\A', $structure->getTraitFqcns()[0]);
+        static::assertSame('\B', $structure->getTraitFqcns()[1]);
     }
 
     /**
@@ -168,12 +180,12 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassTraitAlias.phpt');
 
-        $this->assertCount(1, $structure->getTraitAliases());
-        $this->assertEquals($structure, $structure->getTraitAliases()[0]->getClass());
-        $this->assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
-        $this->assertNull($structure->getTraitAliases()[0]->getAccessModifier());
-        $this->assertEquals('foo', $structure->getTraitAliases()[0]->getName());
-        $this->assertEquals('bar', $structure->getTraitAliases()[0]->getAlias());
+        static::assertCount(1, $structure->getTraitAliases());
+        static::assertSame($structure, $structure->getTraitAliases()[0]->getClass());
+        static::assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
+        static::assertNull($structure->getTraitAliases()[0]->getAccessModifier());
+        static::assertSame('foo', $structure->getTraitAliases()[0]->getName());
+        static::assertSame('bar', $structure->getTraitAliases()[0]->getAlias());
     }
 
     /**
@@ -183,8 +195,8 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassTraitAliasWithTraitName.phpt');
 
-        $this->assertCount(1, $structure->getTraitAliases());
-        $this->assertEquals('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
+        static::assertCount(1, $structure->getTraitAliases());
+        static::assertSame('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
     }
 
     /**
@@ -194,9 +206,9 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassTraitAliasWithAccessModifier.phpt');
 
-        $this->assertCount(1, $structure->getTraitAliases());
-        $this->assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
-        $this->assertEquals('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
+        static::assertCount(1, $structure->getTraitAliases());
+        static::assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
+        static::assertSame('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
     }
 
     /**
@@ -206,10 +218,42 @@ class ClassIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexClass('ClassTraitPrecedence.phpt');
 
-        $this->assertCount(1, $structure->getTraitPrecedences());
-        $this->assertEquals($structure, $structure->getTraitPrecedences()[0]->getClass());
-        $this->assertEquals('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
-        $this->assertEquals('foo', $structure->getTraitPrecedences()[0]->getName());
+        static::assertCount(1, $structure->getTraitPrecedences());
+        static::assertSame($structure, $structure->getTraitPrecedences()[0]->getClass());
+        static::assertSame('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
+        static::assertSame('foo', $structure->getTraitPrecedences()[0]->getName());
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassIsCorrectlyContinuedAfterAnonymousClassStops(): void
+    {
+        $path = $this->getPathFor('ClassIsCorrectlyContinuedAfterAnonymousClassStops.phpt');
+
+        $this->indexTestFile($this->container, $path);
+
+        $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
+
+        static::assertCount(4, $structures);
+
+        $testClass = $structures[2];
+
+        static::assertSame('Test', $testClass->getName());
+        static::assertCount(2, $testClass->getMethods());
+        static::assertSame('method1', $testClass->getMethods()[0]->getName());
+        static::assertSame('method2', $testClass->getMethods()[1]->getName());
+        static::assertSame('\N\Parent1', $testClass->getParentFqcn());
+        static::assertSame(['\N\Trait1'], $testClass->getTraitFqcns());
+        static::assertSame(['\N\Interface1'], $testClass->getInterfaceFqcns());
+
+        $anonymousClass = $structures[3];
+
+        static::assertCount(1, $anonymousClass->getMethods());
+        static::assertSame('anonMethod', $anonymousClass->getMethods()[0]->getName());
+        static::assertSame('\N\Parent2', $anonymousClass->getParentFqcn());
+        static::assertSame(['\N\Trait2'], $anonymousClass->getTraitFqcns());
+        static::assertSame(['\N\Interface2'], $anonymousClass->getInterfaceFqcns());
     }
 
     /**
@@ -220,11 +264,11 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            $this->assertCount(1, $structures);
+            static::assertCount(1, $structures);
 
             $structure = $structures[0];
 
-            $this->assertEquals('Test', $structure->getName());
+            static::assertSame('Test', $structure->getName());
 
             return str_replace('Test', 'Test2 ', $source);
         };
@@ -232,16 +276,16 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            $this->assertCount(1, $structures);
+            static::assertCount(1, $structures);
 
             $structure = $structures[0];
 
-            $this->assertEquals('Test2', $structure->getName());
+            static::assertSame('Test2', $structure->getName());
         };
 
         $path = $this->getPathFor('ClassRenameChange.phpt');
 
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -252,11 +296,11 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            $this->assertCount(3, $structures);
+            static::assertCount(3, $structures);
 
             $structure = $structures[2];
 
-            $this->assertEquals('\Parent1', $structure->getParentFqcn());
+            static::assertSame('\Parent1', $structure->getParentFqcn());
 
             return str_replace('Parent1', 'Parent2 ', $source);
         };
@@ -264,16 +308,16 @@ class ClassIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            $this->assertCount(3, $structures);
+            static::assertCount(3, $structures);
 
             $structure = $structures[2];
 
-            $this->assertEquals('\Parent2', $structure->getParentFqcn());
+            static::assertSame('\Parent2', $structure->getParentFqcn());
         };
 
         $path = $this->getPathFor('ClassParentChange.phpt');
 
-        $this->assertReindexingChanges($path, $afterIndex, $afterReindex);
+        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -289,7 +333,7 @@ class ClassIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        $this->assertCount(1, $entities);
+        static::assertCount(1, $entities);
 
         return $entities[0];
     }

@@ -13,7 +13,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Node visitor that fetches usages of class, trait, and interface names.
  */
-class ClassUsageFetchingVisitor extends NodeVisitorAbstract
+final class ClassUsageFetchingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var array

@@ -13,7 +13,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ClassConstFetch} node.
  */
-class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

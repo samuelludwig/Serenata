@@ -2,17 +2,18 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\NamespaceListProviderInterface;
 use PhpIntegrator\Analysis\FileNamespaceListProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
 
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+
 /**
  * Command that shows a list of available namespace.
  */
-class NamespaceListCommand extends AbstractCommand
+final class NamespaceListCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -47,9 +48,14 @@ class NamespaceListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return $this->getNamespaceList($arguments['file'] ?? null);
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getNamespaceList($arguments['file'] ?? null)
+        );
     }
 
     /**

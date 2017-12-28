@@ -11,7 +11,7 @@ use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
 /**
  * Analyzes code to search for missing docblocks.
  */
-class DocblockMissingAnalyzer implements AnalyzerInterface
+final class DocblockMissingAnalyzer implements AnalyzerInterface
 {
     /**
      * @var OutlineFetchingVisitor
@@ -73,8 +73,8 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
     {
         $warnings = [];
 
-        foreach ($this->outlineIndexingVisitor->getStructures() as $structure) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForStructure($structure));
+        foreach ($this->outlineIndexingVisitor->getClasslikes() as $classlike) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForStructure($classlike));
         }
 
         foreach ($this->outlineIndexingVisitor->getGlobalFunctions() as $globalFunction) {
@@ -85,34 +85,34 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForStructure(array $structure): array
+    protected function getMissingDocumentationWarningsForStructure(array $classlike): array
     {
         $warnings = [];
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
             $warnings[] = [
                 'message' => "Documentation for classlike is missing.",
-                'start'   => $structure['startPosName'],
-                'end'     => $structure['endPosName']
+                'start'   => $classlike['startPosName'],
+                'end'     => $classlike['endPosName']
             ];
         }
 
-        foreach ($structure['methods'] as $method) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForMethod($structure, $method));
+        foreach ($classlike['methods'] as $method) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForMethod($classlike, $method));
         }
 
-        foreach ($structure['properties'] as $property) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForProperty($structure, $property));
+        foreach ($classlike['properties'] as $property) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForProperty($classlike, $property));
         }
 
-        foreach ($structure['constants'] as $constant) {
-            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForClassConstant($structure, $constant));
+        foreach ($classlike['constants'] as $constant) {
+            $warnings = array_merge($warnings, $this->getMissingDocumentationWarningsForClassConstant($classlike, $constant));
         }
 
         return $warnings;
@@ -139,18 +139,18 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $method
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForMethod(array $structure, array $method): array
+    protected function getMissingDocumentationWarningsForMethod(array $classlike, array $method): array
     {
         if ($method['docComment']) {
             return [];
         }
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
 
         if (!$classInfo ||
             !isset($classInfo['methods'][$method['name']]) ||
@@ -169,18 +169,18 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $property
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForProperty(array $structure, array $property): array
+    protected function getMissingDocumentationWarningsForProperty(array $classlike, array $property): array
     {
         if ($property['docComment']) {
             return [];
         }
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($structure['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
 
         if (!$classInfo ||
             !isset($classInfo['properties'][$property['name']]) ||
@@ -199,12 +199,12 @@ class DocblockMissingAnalyzer implements AnalyzerInterface
     }
 
     /**
-     * @param array $structure
+     * @param array $classlike
      * @param array $constant
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForClassConstant(array $structure, array $constant): array
+    protected function getMissingDocumentationWarningsForClassConstant(array $classlike, array $constant): array
     {
         if ($constant['docComment']) {
             return [];

@@ -6,13 +6,14 @@
 >
 
     <entity name="PhpIntegrator\Indexing\Structures\Class_" change-tracking-policy="DEFERRED_EXPLICIT">
+        <field name="isAnonymous"        type="boolean" nullable="false" />
         <field name="isAbstract"         type="boolean" nullable="false" />
         <field name="isFinal"            type="boolean" nullable="false" />
         <field name="isAnnotation"       type="boolean" nullable="false" />
         <field name="parentFqcn"         type="string"  nullable="true" />
 
         <!-- These can't be join tables as the associations may not disappear if the other end is removed, otherwise -->
-        <!-- we'd need to traverse the entire class list to update items when a missing structure is added. -->
+        <!-- we'd need to traverse the entire class list to update items when a missing classlike is added. -->
         <field name="childFqcns"         type="array"   nullable="false" />
         <field name="interfaceFqcns"     type="array"   nullable="false" />
         <field name="traitFqcns"         type="array"   nullable="false" />

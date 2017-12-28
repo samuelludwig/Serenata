@@ -8,7 +8,7 @@ use PhpIntegrator\Indexing\ManagerRegistry;
 /**
  * Checks if a classlike exists via Doctrine.
  */
-class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface
+final class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface
 {
     /**
      * @var ManagerRegistry
@@ -28,7 +28,7 @@ class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheckerInte
      */
     public function doesClassExist(string $fqcn): bool
     {
-        return !!$this->managerRegistry->getRepository(Structures\Structure::class)->findOneBy([
+        return !!$this->managerRegistry->getRepository(Structures\Classlike::class)->findOneBy([
             'fqcn' => $fqcn
         ]);
     }

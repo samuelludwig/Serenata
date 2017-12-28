@@ -14,7 +14,7 @@ use PhpParser\Node;
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node based on
  * data supplied by meta files and delegates to another deducer if no such data is present.
  */
-class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
+final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -74,6 +74,10 @@ class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
     ): array {
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
         $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name;
+
+        if (!$methodName instanceof Node\Identifier) {
+            return [];
+        }
 
         $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
 

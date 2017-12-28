@@ -2,19 +2,21 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\Linting\Linter;
 use PhpIntegrator\Linting\LintingSettings;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeStreamReader;
 
 /**
  * Command that lints a file for various problems.
  */
-class LintCommand extends AbstractCommand
+final class LintCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -32,25 +34,35 @@ class LintCommand extends AbstractCommand
     private $linter;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      * @param Linter                 $linter
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        Linter $linter
+        Linter $linter,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->linter = $linter;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A file name is required for this command.');
         }
@@ -73,7 +85,10 @@ class LintCommand extends AbstractCommand
             !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
         );
 
-        return $this->lint($arguments['file'], $code, $settings);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->lint($arguments['file'], $code, $settings)
+        );
     }
 
     /**
@@ -85,6 +100,10 @@ class LintCommand extends AbstractCommand
      */
     public function lint(string $filePath, string $code, LintingSettings $settings): array
     {
-        return $this->linter->lint($this->storage->getFileByPath($filePath), $code, $settings);
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->linter->lint($file, $code, $settings);
     }
 }

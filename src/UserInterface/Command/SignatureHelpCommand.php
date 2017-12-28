@@ -2,12 +2,14 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\SignatureHelp\SignatureHelp;
 use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -15,7 +17,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 /**
  * Allows fetching signature help (call tips) for a method or function call.
  */
-class SignatureHelpCommand extends AbstractCommand
+final class SignatureHelpCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -33,25 +35,35 @@ class SignatureHelpCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
      * @param SignatureHelpRetriever $signatureHelpRetriever
      * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         SignatureHelpRetriever $signatureHelpRetriever,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->signatureHelpRetriever = $signatureHelpRetriever;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {
@@ -70,7 +82,10 @@ class SignatureHelpCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->signatureHelp($arguments['file'], $code, $offset);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->signatureHelp($arguments['file'], $code, $offset)
+        );
     }
 
     /**
@@ -82,6 +97,10 @@ class SignatureHelpCommand extends AbstractCommand
      */
     public function signatureHelp(string $filePath, string $code, int $offset): SignatureHelp
     {
-        return $this->signatureHelpRetriever->get($this->storage->getFileByPath($filePath), $code, $offset);
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->signatureHelpRetriever->get($file, $code, $offset);
     }
 }

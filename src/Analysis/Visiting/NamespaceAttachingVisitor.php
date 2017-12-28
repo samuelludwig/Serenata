@@ -9,7 +9,7 @@ use PhpParser\NodeVisitor\NameResolver;
 /**
  * Visitor that attaches the active namespace to each node it traverses.
  */
-class NamespaceAttachingVisitor extends NameResolver
+final class NamespaceAttachingVisitor extends NameResolver
 {
     /**
      * Constructor.

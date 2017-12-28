@@ -75,9 +75,9 @@ class Property
     private $typeDescription;
 
     /**
-     * @var Structure
+     * @var Classlike
      */
-    private $structure;
+    private $classlike;
 
     /**
      * @var AccessModifier
@@ -102,7 +102,7 @@ class Property
      * @param string|null    $shortDescription
      * @param string|null    $longDescription
      * @param string|null    $typeDescription
-     * @param Structure      $structure
+     * @param Classlike      $classlike
      * @param AccessModifier $accessModifier
      * @param TypeInfo[]     $types
      */
@@ -119,7 +119,7 @@ class Property
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        Structure $structure,
+        Classlike $classlike,
         AccessModifier $accessModifier,
         array $types
     ) {
@@ -136,11 +136,11 @@ class Property
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
-        $this->structure = $structure;
+        $this->classlike = $classlike;
         $this->accessModifier = $accessModifier;
         $this->types = $types;
 
-        $structure->addProperty($this);
+        $classlike->addProperty($this);
     }
 
     /**
@@ -248,11 +248,11 @@ class Property
     }
 
     /**
-     * @return Structure
+     * @return Classlike
      */
-    public function getStructure(): Structure
+    public function getClasslike(): Classlike
     {
-        return $this->structure;
+        return $this->classlike;
     }
 
     /**

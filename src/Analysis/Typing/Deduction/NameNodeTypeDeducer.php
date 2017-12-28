@@ -7,7 +7,7 @@ use UnexpectedValueException;
 use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileStructureListProviderInterface;
+use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use PhpIntegrator\Common\Position;
 use PhpIntegrator\Common\FilePosition;
@@ -24,7 +24,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Name} node.
  */
-class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var TypeAnalyzer
@@ -37,9 +37,9 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $classlikeInfoBuilder;
 
     /**
-     * @var FileStructureListProviderInterface
+     * @var FileClasslikeListProviderInterface
      */
-    private $fileStructureListProvider;
+    private $fileClasslikeListProvider;
 
     /**
      * @var StructureAwareNameResolverFactoryInterface
@@ -49,18 +49,18 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
-     * @param FileStructureListProviderInterface         $fileStructureListProvider
+     * @param FileClasslikeListProviderInterface         $fileClasslikeListProvider
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         TypeAnalyzer $typeAnalyzer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
-        FileStructureListProviderInterface $fileStructureListProvider,
+        FileClasslikeListProviderInterface $fileClasslikeListProvider,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-        $this->fileStructureListProvider = $fileStructureListProvider;
+        $this->fileClasslikeListProvider = $fileClasslikeListProvider;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
     }
 
@@ -149,7 +149,7 @@ class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     protected function findCurrentClassAtLine(Structures\File $file, string $source, int $line): ?string
     {
-        $classes = $this->fileStructureListProvider->getAllForFile($file);
+        $classes = $this->fileClasslikeListProvider->getAllForFile($file);
 
         foreach ($classes as $fqcn => $class) {
             if ($line >= $class['startLine'] && $line <= $class['endLine']) {

@@ -9,8 +9,13 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a class.
  */
-class Class_ extends Structure
+final class Class_ extends Classlike
 {
+    /**
+     * @var bool
+     */
+    private $isAnonymous;
+
     /**
      * @var bool
      */
@@ -74,6 +79,7 @@ class Class_ extends Structure
      * @param int           $endLine
      * @param string|null   $shortDescription
      * @param string|null   $longDescription
+     * @param bool          $isAnonymous
      * @param bool          $isAbstract
      * @param bool          $isFinal
      * @param bool          $isAnnotation
@@ -89,6 +95,7 @@ class Class_ extends Structure
         int $endLine,
         string $shortDescription = null,
         string $longDescription = null,
+        bool $isAnonymous,
         bool $isAbstract,
         bool $isFinal,
         bool $isAnnotation,
@@ -104,6 +111,7 @@ class Class_ extends Structure
         $this->endLine = $endLine;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
+        $this->isAnonymous = $isAnonymous;
         $this->isAbstract = $isAbstract;
         $this->isFinal = $isFinal;
         $this->isAnnotation = $isAnnotation;
@@ -123,7 +131,15 @@ class Class_ extends Structure
 
         $this->setParent($parent);
 
-        $file->addStructure($this);
+        $file->addClasslike($this);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsAnonymous(): bool
+    {
+        return $this->isAnonymous;
     }
 
     /**
@@ -291,13 +307,13 @@ class Class_ extends Structure
     }
 
     /**
-     * @param ClassTraitAlias $structureTraitAlias
+     * @param ClassTraitAlias $classlikeTraitAlias
      *
      * @return void
      */
-    public function addTraitAlias(ClassTraitAlias $structureTraitAlias): void
+    public function addTraitAlias(ClassTraitAlias $classlikeTraitAlias): void
     {
-        $this->traitAliases->add($structureTraitAlias);
+        $this->traitAliases->add($classlikeTraitAlias);
     }
 
     /**
@@ -309,13 +325,13 @@ class Class_ extends Structure
     }
 
     /**
-     * @param ClassTraitPrecedence $structureTraitPrecedence
+     * @param ClassTraitPrecedence $classlikeTraitPrecedence
      *
      * @return void
      */
-    public function addTraitPrecedence(ClassTraitPrecedence $structureTraitPrecedence): void
+    public function addTraitPrecedence(ClassTraitPrecedence $classlikeTraitPrecedence): void
     {
-        $this->traitPrecedences->add($structureTraitPrecedence);
+        $this->traitPrecedences->add($classlikeTraitPrecedence);
     }
 
     /**
@@ -323,6 +339,6 @@ class Class_ extends Structure
      */
     public function getTypeName(): string
     {
-        return StructureTypeNameValue::CLASS_;
+        return ClasslikeTypeNameValue::CLASS_;
     }
 }

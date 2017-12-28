@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\SourceCodeReading;
 /**
  * Source code reader that reads the source code for a file from a stream.
  */
-class FileSourceCodeStreamReader implements FileSourceCodeReaderInterface
+final class FileSourceCodeStreamReader implements FileSourceCodeReaderInterface
 {
     /**
      * @var resource

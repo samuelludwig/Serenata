@@ -16,7 +16,7 @@ use PhpParser\Node;
  * This is a thin type deducer that can deduce the type of any node by delegating the type deduction to a more
  * appropriate deducer returned by the configured factory.
  */
-class NodeTypeDeducer extends AbstractNodeTypeDeducer
+final class NodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents an interface.
  */
-class Interface_ extends Structure
+final class Interface_ extends Classlike
 {
     /**
      * @var string[]
@@ -72,7 +72,7 @@ class Interface_ extends Structure
         $this->properties = new ArrayCollection();
         $this->methods = new ArrayCollection();
 
-        $file->addStructure($this);
+        $file->addClasslike($this);
     }
 
     /**
@@ -156,6 +156,6 @@ class Interface_ extends Structure
      */
     public function getTypeName(): string
     {
-        return StructureTypeNameValue::INTERFACE_;
+        return ClasslikeTypeNameValue::INTERFACE_;
     }
 }

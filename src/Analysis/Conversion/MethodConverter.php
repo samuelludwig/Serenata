@@ -11,7 +11,7 @@ use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
 /**
  * Converts raw method data from the index to more useful data.
  */
-class MethodConverter extends FunctionConverter
+final class MethodConverter extends FunctionConverter
 {
     /**
      * @param Structures\Method $method

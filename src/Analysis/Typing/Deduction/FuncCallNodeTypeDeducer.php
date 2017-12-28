@@ -16,7 +16,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\FuncCall} node.
  */
-class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var ManagerRegistry

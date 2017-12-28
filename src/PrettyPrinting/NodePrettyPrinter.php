@@ -7,7 +7,7 @@ use PhpParser\PrettyPrinter;
 /**
  * Pretty printer extensions that can handle our custom nodes.
  */
-class NodePrettyPrinter extends PrettyPrinter\Standard
+final class NodePrettyPrinter extends PrettyPrinter\Standard
 {
     public function parsing_Node_Keyword_Static()
     {

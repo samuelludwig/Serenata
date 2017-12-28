@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a trait.
  */
-class Trait_ extends Structure
+final class Trait_ extends Classlike
 {
     /**
      * @var string[]
@@ -86,7 +86,7 @@ class Trait_ extends Structure
         $this->properties = new ArrayCollection();
         $this->methods = new ArrayCollection();
 
-        $file->addStructure($this);
+        $file->addClasslike($this);
     }
 
     /**
@@ -136,13 +136,13 @@ class Trait_ extends Structure
     }
 
     /**
-     * @param Class_|Trait_ $structure
+     * @param Class_|Trait_ $classlike
      *
      * @return void
      */
-    public function addTraitUser(Structure $structure): void
+    public function addTraitUser(Classlike $classlike): void
     {
-        if (!$structure instanceof Class_ && !$structure instanceof Trait_) {
+        if (!$classlike instanceof Class_ && !$classlike instanceof Trait_) {
             throw new DomainException('Only classes and other traits can use traits');
         }
 
@@ -152,9 +152,9 @@ class Trait_ extends Structure
 
         $this->isAddingTraitUser = true;
 
-        $this->traitUserFqcns[] = $structure->getFqcn();
+        $this->traitUserFqcns[] = $classlike->getFqcn();
 
-        $structure->addTrait($this);
+        $classlike->addTrait($this);
 
         $this->isAddingTraitUser = false;
     }
@@ -168,13 +168,13 @@ class Trait_ extends Structure
     }
 
     /**
-     * @param TraitTraitAlias $structureTraitAlias
+     * @param TraitTraitAlias $classlikeTraitAlias
      *
      * @return void
      */
-    public function addTraitAlias(TraitTraitAlias $structureTraitAlias): void
+    public function addTraitAlias(TraitTraitAlias $classlikeTraitAlias): void
     {
-        $this->traitAliases->add($structureTraitAlias);
+        $this->traitAliases->add($classlikeTraitAlias);
     }
 
     /**
@@ -186,13 +186,13 @@ class Trait_ extends Structure
     }
 
     /**
-     * @param TraitTraitPrecedence $structureTraitPrecedence
+     * @param TraitTraitPrecedence $classlikeTraitPrecedence
      *
      * @return void
      */
-    public function addTraitPrecedence(TraitTraitPrecedence $structureTraitPrecedence): void
+    public function addTraitPrecedence(TraitTraitPrecedence $classlikeTraitPrecedence): void
     {
-        $this->traitPrecedences->add($structureTraitPrecedence);
+        $this->traitPrecedences->add($classlikeTraitPrecedence);
     }
 
     /**
@@ -200,6 +200,6 @@ class Trait_ extends Structure
      */
     public function getTypeName(): string
     {
-        return StructureTypeNameValue::TRAIT_;
+        return ClasslikeTypeNameValue::TRAIT_;
     }
 }

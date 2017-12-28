@@ -2,9 +2,11 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Tooltips\TooltipResult;
 use PhpIntegrator\Tooltips\TooltipProvider;
@@ -15,7 +17,7 @@ use PhpIntegrator\Utility\SourceCodeStreamReader;
 /**
  * Command that fetches tooltip information for a specific location.
  */
-class TooltipCommand extends AbstractCommand
+final class TooltipCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -33,25 +35,35 @@ class TooltipCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface       $storage
      * @param TooltipProvider        $tooltipProvider
      * @param SourceCodeStreamReader $sourceCodeStreamReader
+     * @param FileIndexerInterface   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         TooltipProvider $tooltipProvider,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->tooltipProvider = $tooltipProvider;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {
@@ -70,7 +82,10 @@ class TooltipCommand extends AbstractCommand
             $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
         }
 
-        return $this->getTooltip($arguments['file'], $code, $offset);
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getTooltip($arguments['file'], $code, $offset)
+        );
     }
 
     /**
@@ -82,6 +97,10 @@ class TooltipCommand extends AbstractCommand
      */
     public function getTooltip(string $filePath, string $code, int $offset): ?TooltipResult
     {
-        return $this->tooltipProvider->get($this->storage->getFileByPath($filePath), $code, $offset);
+        $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
+
+        return $this->tooltipProvider->get($file, $code, $offset);
     }
 }

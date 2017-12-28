@@ -12,9 +12,9 @@ use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\ManagerRegistry;
 
 /**
- * Retrieves a list of available structures via Doctrine.
+ * Retrieves a list of available classlikes via Doctrine.
  */
-class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterface, NamespaceListProviderInterface
+final class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterface, NamespaceListProviderInterface
 {
     /**
      * @var NamespaceConverter
@@ -47,9 +47,7 @@ class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterfac
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        return array_map(function (Structures\FileNamespace $namespace) {
-            return $this->namespaceConverter->convert($namespace);
-        }, $namespaces);
+        return $this->mapNamespaces($namespaces);
     }
 
     /**
@@ -65,8 +63,22 @@ class DoctrineNamespaceListProvider implements FileNamespaceListProviderInterfac
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
 
-        return array_map(function (Structures\FileNamespace $namespace) {
-            return $this->namespaceConverter->convert($namespace);
-        }, $namespaces);
+        return $this->mapNamespaces($namespaces);
+    }
+
+    /**
+     * @param array $namespaces
+     *
+     * @return array
+     */
+    protected function mapNamespaces(array $namespaces): array
+    {
+        $result = [];
+
+        foreach ($namespaces as $element) {
+            $result[$element->getId()] = $this->namespaceConverter->convert($element);
+        }
+
+        return $result;
     }
 }

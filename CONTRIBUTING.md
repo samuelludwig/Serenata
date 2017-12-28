@@ -29,3 +29,17 @@ There are some simple performance tests, which don't run by default, but are han
 
 ### Unit Or Integration Tests?
 Unit tests usually much more exhaustively test all parts of a single class, so they are never a lost effort. but there are some locations where it may be much easier to integration test instead. An example are locations that require a tree hierarchy of AST nodes to see if they are correctly processed by e.g. tooltips or signature help. (Unit testing these would require building the tree manually.)
+
+## How Do I Test Full Stack?
+It can seem challenging to develop the core and test the changes in a real world scenario. Using Atom as an example, the easiest is probably to do the following:
+
+1. Set up the core from Git somewhere (install composer dependencies, ensure tests work, ...)
+2. Set up the Atom packages from Git in `~/.atom/packages` and run `apm install` in their folders to install their dependencies
+  * Optionally, you can also just clone them somewhere else and symlink these folders into the Atom packages directory.
+3. Go into the base package's `core` subfolder and symlink the core's Git repository folder to a new folder symlink with the name of [the core version specification used by the base package](https://github.com/php-integrator/atom-base/blob/master/lib/Main.coffee#L161)
+  * To put this more plainly, symlink e.g. `php-integrator-base/core/3.0.0`, or whatever the version used by the base package is, to the core folder you pulled from Git
+
+To summarize all of this, just replace the packages that are installed by Atom with their Git variants and replace the core the base package automatically downloads with the core from Git. Alternatively, you can set up a Git repository with the appropriate remotes in the existing folders.
+
+### Atom Dev Mode
+Rather than place the packages in `~/.atom/packages`, you can also use `~/.atom/dev/packages`. These packages are only loaded if Atom is in dev mode, which can also be automatically configured on a per-project basis with `atom-project-manager`.

@@ -7,7 +7,7 @@ use PhpIntegrator\NameQualificationUtilities\FileNamespaceProviderInterface;
 /**
  * Delegates namespace provision to a delegate and adds a caching layer on top of it.
  */
-class CachingFileNamespaceProvider implements FileNamespaceProviderInterface, ClearableCacheInterface
+final class CachingFileNamespaceProvider implements FileNamespaceProviderInterface, ClearableCacheInterface
 {
     /**
      * @var FileNamespaceProviderInterface

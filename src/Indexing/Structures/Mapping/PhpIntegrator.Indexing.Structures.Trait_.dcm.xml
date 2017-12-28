@@ -7,7 +7,7 @@
 
     <entity name="PhpIntegrator\Indexing\Structures\Trait_" change-tracking-policy="DEFERRED_EXPLICIT">
         <!-- These can't be join tables as the associations may not disappear if the other end is removed, otherwise -->
-        <!-- we'd need to traverse the entire class list to update items when a missing structure is added. -->
+        <!-- we'd need to traverse the entire class list to update items when a missing classlike is added. -->
         <field name="traitFqcns"     type="array" nullable="false" />
         <field name="traitUserFqcns" type="array" nullable="false" />
 

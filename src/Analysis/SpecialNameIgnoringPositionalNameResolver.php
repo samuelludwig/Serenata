@@ -12,7 +12,7 @@ use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
 /**
  * Positional name resolver that ignores special names (Such as scalar type names).
  */
-class SpecialNameIgnoringPositionalNameResolver implements PositionalNameResolverInterface
+final class SpecialNameIgnoringPositionalNameResolver implements PositionalNameResolverInterface
 {
     /**
      * @var PositionalNameResolverInterface

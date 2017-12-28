@@ -38,7 +38,7 @@ class SqliteConnectionFactory
         $connection->executeQuery('PRAGMA synchronous=OFF');
 
         // Activate memory-mapped I/O. See also https://www.sqlite.org/mmap.html . In a test case, this halved the
-        // time it took to build information about a structure (from 250 ms to 125 ms). On systems that do not
+        // time it took to build information about a classlike (from 250 ms to 125 ms). On systems that do not
         // support it, this pragma just does nothing.
         $connection->executeQuery('PRAGMA mmap_size=100000000'); // About 100 MB.
 

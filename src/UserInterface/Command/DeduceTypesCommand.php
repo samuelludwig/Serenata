@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use PhpIntegrator\Common\Position;
@@ -11,10 +9,14 @@ use PhpIntegrator\Common\FilePosition;
 
 use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
+use PhpIntegrator\Indexing\FileIndexerInterface;
 
 use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
 use PhpIntegrator\Parsing\LastExpressionParser;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
@@ -26,7 +28,7 @@ use PhpParser\NodeVisitorAbstract;
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
  */
-class DeduceTypesCommand extends AbstractCommand
+final class DeduceTypesCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -54,31 +56,41 @@ class DeduceTypesCommand extends AbstractCommand
     private $positionalNamespaceDeterminer;
 
     /**
+     * @var FileIndexerInterface
+     */
+    private $fileIndexer;
+
+    /**
      * @param StorageInterface                       $storage
      * @param NodeTypeDeducerInterface               $nodeTypeDeducer
      * @param LastExpressionParser                   $lastExpressionParser
      * @param SourceCodeStreamReader                 $sourceCodeStreamReader
      * @param PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
+     * @param FileIndexerInterface                   $fileIndexer
      */
     public function __construct(
         StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         LastExpressionParser $lastExpressionParser,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer
+        PositionalNamespaceDeterminerInterface $positionalNamespaceDeterminer,
+        FileIndexerInterface $fileIndexer
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->lastExpressionParser = $lastExpressionParser;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->positionalNamespaceDeterminer = $positionalNamespaceDeterminer;
+        $this->fileIndexer = $fileIndexer;
     }
 
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['file'])) {
             throw new InvalidArgumentsException('A --file must be supplied!');
         } elseif (!isset($arguments['offset'])) {
@@ -103,13 +115,15 @@ class DeduceTypesCommand extends AbstractCommand
             $codeWithExpression = $arguments['expression'];
         }
 
-        return $this->deduceTypes(
+        $result = $this->deduceTypes(
             $arguments['file'],
             $code,
             $codeWithExpression,
             $offset,
             isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
         );
+
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
     }
 
     /**
@@ -129,6 +143,8 @@ class DeduceTypesCommand extends AbstractCommand
         bool $ignoreLastElement
     ): array {
         $file = $this->storage->getFileByPath($filePath);
+
+        $this->fileIndexer->index($filePath, $code);
 
         return $this->deduceTypesFromExpression($file, $code, $codeWithExpression, $offset, $ignoreLastElement);
     }

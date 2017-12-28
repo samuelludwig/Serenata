@@ -7,7 +7,7 @@ namespace PhpIntegrator\Utility\Typing;
  *
  * {@inheritDoc}
  */
-class SpecialType extends Type
+final class SpecialType extends Type
 {
 
 }

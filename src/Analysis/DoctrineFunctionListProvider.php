@@ -36,22 +36,24 @@ final class DoctrineFunctionListProvider implements FunctionListProviderInterfac
         $this->managerRegistry = $managerRegistry;
     }
 
-     /// @inherited
-     public function getAll(): array
-     {
-         $items = [];
-         $result = [];
+    /**
+     * @inheritDoc
+     */
+    public function getAll(): array
+    {
+        $items = [];
+        $result = [];
 
-         try {
-             $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();;
-         } catch (DriverException $e) {
-             throw new RuntimeException($e->getMessage(), 0, $e);
-         }
+        try {
+            $items = $this->managerRegistry->getRepository(Structures\Function_::class)->findAll();
+        } catch (DriverException $e) {
+            throw new RuntimeException($e->getMessage(), 0, $e);
+        }
 
-         foreach ($items as $function) {
-             $result[$function->getFqcn()] = $this->functionConverter->convert($function);
-         }
+        foreach ($items as $function) {
+            $result[$function->getFqcn()] = $this->functionConverter->convert($function);
+        }
 
-         return $result;
-     }
+        return $result;
+    }
 }

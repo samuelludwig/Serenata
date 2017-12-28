@@ -21,7 +21,7 @@ use PhpParser\NodeVisitorAbstract;
  * php-parser. This is necessary for being able to deal with incomplete expressions such as "$this->" to see what the
  * type of the expression is. This information can in turn be used by client functionality such as autocompletion.
  */
-class PartialParser implements Parser
+final class PartialParser implements Parser
 {
     /**
      * @var Parser

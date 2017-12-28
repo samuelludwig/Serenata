@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 use PhpIntegrator\Common\Position;
@@ -13,10 +11,13 @@ use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+
 /**
  * Command that makes a FQCN relative to local use statements in a file.
  */
-class LocalizeTypeCommand extends AbstractCommand
+final class LocalizeTypeCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -43,8 +44,10 @@ class LocalizeTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['type'])) {
             throw new InvalidArgumentsException('The type is required for this command.');
         } elseif (!isset($arguments['file'])) {
@@ -60,7 +63,7 @@ class LocalizeTypeCommand extends AbstractCommand
             isset($arguments['kind']) ? $arguments['kind'] : UseStatementKind::TYPE_CLASSLIKE
         );
 
-        return $type;
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $type);
     }
 
     /**

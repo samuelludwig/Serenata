@@ -2,14 +2,15 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\ConstantListProviderInterface;
+
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of global constants.
  */
-class GlobalConstantsCommand extends AbstractCommand
+final class GlobalConstantsCommand extends AbstractCommand
 {
     /**
      * @var ConstantListProviderInterface
@@ -27,9 +28,9 @@ class GlobalConstantsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return $this->getGlobalConstants();
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getGlobalConstants());
     }
 
     /**

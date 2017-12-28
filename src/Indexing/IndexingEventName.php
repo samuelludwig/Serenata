@@ -45,10 +45,15 @@ class IndexingEventName
     /**
      * @var string
      */
-    public const STRUCTURE_UPDATED = 'structureUpdated';
+    public const CLASSLIKE_UPDATED = 'classlikeUpdated';
 
     /**
      * @var string
      */
-    public const STRUCTURE_REMOVED = 'structureRemoved';
+    public const CLASSLIKE_REMOVED = 'classlikeRemoved';
+
+    /**
+     * @var string
+     */
+    public const INDEXING_SUCCEEDED_EVENT = 'indexingSucceeded';
 }

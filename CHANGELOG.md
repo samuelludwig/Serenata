@@ -1,6 +1,37 @@
-## 3.0.1 (Unreleased)
-* [Fix unsupported meta file static method types throwing an error instead of being skipped](https://gitlab.com/php-integrator/core/issues/130)
-* Fix bodies of anonymous classes not being subject to any parsing or linting (which caused use statements to not be identified as used, among other things)
+## 3.1.0
+### Major Changes
+* [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
+* [Indexing performance has been improved in various ways, for both small and large files](https://gitlab.com/php-integrator/core/issues/139)
+* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
+  * Class names inside comments are currently no longer supported, [but this may change in the future](https://gitlab.com/php-integrator/core/issues/141). This should however pose less of a problem now, as docblock types should be accompanied by type hints, which are clickable.
+  * This moves us one step closer to becoming a language server in the long run.
+* [Folder indexing requests are now transparently split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
+  * This will allow for request cancelation and prioritization in the future.
+
+### Bugs Fixed
+* [Fix using traits in interfaces crashing the server](https://gitlab.com/php-integrator/core/issues/133)
+* [Fix tooltips not working on grouped use statements](https://gitlab.com/php-integrator/core/issues/136)
+* [Fix project paths containing the tilde not being expanded to the user's home folder](https://gitlab.com/php-integrator/core/merge_requests/72)
+* Fix core shrugging and bailing whenever the entity manager closed due to a database error
+* [Fix unsupported meta file static method types throwing an error instead of being silently skipped](https://gitlab.com/php-integrator/core/issues/130)
+* Fix some edge case bugs with name (type) resolution by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
+* Fix function and method docblock `@return` tag types not being validated against the actual return type
+* [Fix crash with variable expressions in method calls during type deduction of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
+* [Make disk I/O and locked database errors propagate as fatal errors, as they currently can't be recovered from and to notify the user](https://github.com/php-integrator/atom-base/issues/278)
+* [Fix folder scanning occurring twice during indexing, once for counting the total amount of items (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
+* [Fix occasional "Position out of bounds" logic exception during requests, such as signature help, containing code not explicitly indexed beforehand](https://gitlab.com/php-integrator/core/issues/126)
+* Fix bodies of anonymous classes not being subject to any parsing or linting
+  * This fixes use statements not being identified as used, among other issues
+* [Fix initialize command failing to reinitialize when database was locked or I/O errors occurred](https://github.com/php-integrator/atom-base/issues/278)
+  * This happened in spite of the original database connection being closed and the database itself completely being removed due to the WAL and SHM files lingering. This seems to cause sqlite to try and reuse them for the new database during schema creation afterwards, which in turn resulted in never being able to break the chain of errors without removing all database files manually.
+
+### Structural changes (mostly relevant to clients)
+* Properties now also return a `filename` property, which was missing before
+* The namespace list will now return a map of ID's to values rather than just values, consistent with other lists
+* Anonymous classes are now included in class lists, carrying a special name and FQCN so they can be easily distinguished
+  * Classes now also include a new `isAnonymous` field that is set to `true` for these classes.
+* The `reindex` command no longer takes a `stream-progress` argument (it will be silently ignored)
+  * Progress is now only streamed for folder index requests and is always on. If you don't want these notifications, you can simply ignore them.
 
 ## 3.0.0
 ### Major changes
@@ -9,7 +40,7 @@
 * [PHP 7.1 is now properly supported](https://gitlab.com/php-integrator/core/issues/40)
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
 * [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked](https://gitlab.com/php-integrator/core/issues/122)
-  * This is primarily used by the autocompletion Atom package, which will benefit from an improvement in response times and minor hiccups.
+  * This is primarily used by the autocompletion Atom package, which will benefit from an improvement in response times and fewer minor hiccups.
 * [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
   * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it.
 *  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
@@ -106,7 +137,7 @@ function foo(C $c) {}
 
 ### Various enhancements
 * Updated dependencies
-* Traits using other traits is now supported
+* Traits using other traits are now supported
 * Default values for parameters will be used to deduce their type (if it could not be deduced from the docblock or a type hint is omitted)
 * Fatal server errors will now include a much more comprehensive backtrace, listing previous exceptions in the exception chain as well
 * Specialized array types containing compound types, such as `(int|bool)[]`, are now supported. This primarily affects docblock parameter type linting, as it's currently not used anywhere else

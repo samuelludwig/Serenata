@@ -10,7 +10,7 @@ use PhpIntegrator\Indexing\Structures;
 /**
  * Filters out {@see \SplFileInfo} values that haven't been modified since a preconfigured time.
  */
-class ModificationTimeFilterIterator extends FilterIterator
+final class ModificationTimeFilterIterator extends FilterIterator
 {
     /**
      * @var Structures\File[]
@@ -19,13 +19,13 @@ class ModificationTimeFilterIterator extends FilterIterator
 
     /**
      * @param Iterator          $iterator
-     * @param Structures\File[] $fileModifiedMap
+     * @param Structures\File[] $filesInIndex
      */
-    public function __construct(Iterator $iterator, array $fileModifiedMap)
+    public function __construct(Iterator $iterator, array $filesInIndex)
     {
         parent::__construct($iterator);
 
-        $this->fileModifiedMap = $fileModifiedMap;
+        $this->fileModifiedMap = $this->createFileModifiedMap($filesInIndex);
     }
 
     /**
@@ -41,5 +41,21 @@ class ModificationTimeFilterIterator extends FilterIterator
         return
             !isset($this->fileModifiedMap[$filename]) ||
             $value->getMTime() > $this->fileModifiedMap[$filename]->getIndexedOn()->getTimestamp();
+    }
+
+    /**
+     * @param Structures\File[] $filesInIndex
+     *
+     * @return Structures\File[]
+     */
+    protected function createFileModifiedMap(array $filesInIndex): array
+    {
+        $map = [];
+
+        foreach ($filesInIndex as $file) {
+            $map[$file->getPath()] = $file;
+        }
+
+        return $map;
     }
 }

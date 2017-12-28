@@ -18,7 +18,7 @@ use PhpParser\PrettyPrinterAbstract;
  * Visitor that walks to a specific position, building a list of information about variables and their possible and
  * guaranteed types.
  */
-class TypeQueryingVisitor extends NodeVisitorAbstract
+final class TypeQueryingVisitor extends NodeVisitorAbstract
 {
     /**
      * @var int

@@ -11,7 +11,7 @@ use ArrayObject;
  * other words, it doesn't matter if the class is actually implementing the methods from the interface, as long as it's
  * (directly) referencing it, this class handles it.
  */
-class InterfaceImplementationResolver extends AbstractResolver
+final class InterfaceImplementationResolver extends AbstractResolver
 {
     /**
      * @param ArrayObject $interface

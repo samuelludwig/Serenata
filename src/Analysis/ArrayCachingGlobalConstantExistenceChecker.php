@@ -7,7 +7,7 @@ use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 /**
  * Delegates classlike existence checking to another object and adds a caching wrapper.
  */
-class ArrayCachingGlobalConstantExistenceChecker implements ConstantPresenceIndicatorInterface, ClearableCacheInterface
+final class ArrayCachingGlobalConstantExistenceChecker implements ConstantPresenceIndicatorInterface, ClearableCacheInterface
 {
     /**
      * @var ConstantPresenceIndicatorInterface

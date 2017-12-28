@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 use PhpIntegrator\Common\Position;
@@ -13,10 +11,13 @@ use PhpIntegrator\Indexing\StorageInterface;
 
 use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
+use PhpIntegrator\Sockets\JsonRpcResponse;
+use PhpIntegrator\Sockets\JsonRpcQueueItem;
+
 /**
  * Command that resolves local types in a file.
  */
-class ResolveTypeCommand extends AbstractCommand
+final class ResolveTypeCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
@@ -43,8 +44,10 @@ class ResolveTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(ArrayAccess $arguments)
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
         if (!isset($arguments['type'])) {
             throw new InvalidArgumentsException('The type is required for this command.');
         } elseif (!isset($arguments['file'])) {
@@ -60,7 +63,7 @@ class ResolveTypeCommand extends AbstractCommand
             isset($arguments['kind']) ? $arguments['kind'] : UseStatementKind::TYPE_CLASSLIKE
         );
 
-        return $type;
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $type);
     }
 
     /**

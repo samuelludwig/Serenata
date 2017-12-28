@@ -11,7 +11,7 @@ use PhpParser\Node;
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\Ternary} node.
  */
-class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
+final class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
      * @var NodeTypeDeducerInterface

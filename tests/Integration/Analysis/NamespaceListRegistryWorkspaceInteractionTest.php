@@ -16,17 +16,21 @@ class NamespaceListRegistryWorkspaceInteractionTest extends AbstractIntegrationT
     {
         $registry = $this->container->get('namespaceListProvider.registry');
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
 
         $registry->add([
+            'id'   => 'foo',
             'fqcn' => '\Test'
         ]);
 
-        $this->assertCount(1, $registry->getAll());
+        static::assertCount(1, $registry->getAll());
 
         $this->container->get('managerRegistry')->setDatabasePath(':memory:');
-        $this->container->get('initializeCommand')->initialize(false);
+        $this->container->get('initializeCommand')->initialize(
+            $this->mockJsonRpcResponseSenderInterface(),
+            false
+        );
 
-        $this->assertEmpty($registry->getAll());
+        static::assertEmpty($registry->getAll());
     }
 }

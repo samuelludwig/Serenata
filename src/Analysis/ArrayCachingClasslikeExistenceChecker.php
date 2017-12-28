@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis;
 /**
  * Delegates classlike existence checking to another object and adds a caching wrapper.
  */
-class ArrayCachingClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface, ClearableCacheInterface
+final class ArrayCachingClasslikeExistenceChecker implements ClasslikeExistenceCheckerInterface, ClearableCacheInterface
 {
     /**
      * @var ClasslikeExistenceCheckerInterface
