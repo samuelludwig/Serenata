@@ -73,4 +73,30 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
 
         static::assertNotNull($matcher->score($test, $referenceText));
     }
+
+    /**
+     * @return void
+     */
+    public function testScoresApproximationThatIsTooLongAsNullInsteadOfShowingWarning(): void
+    {
+        $test = str_repeat('a', 100000);
+        $referenceText = '1';
+
+        $matcher = new LevenshteinApproximateStringMatcher();
+
+        static::assertNull($matcher->score($test, $referenceText));
+    }
+
+    /**
+     * @return void
+     */
+    public function testScoresReferenceTextThatIsTooLongAsNullInsteadOfShowingWarning(): void
+    {
+        $test = '1';
+        $referenceText = str_repeat('a', 100000);
+
+        $matcher = new LevenshteinApproximateStringMatcher();
+
+        static::assertNull($matcher->score($test, $referenceText));
+    }
 }

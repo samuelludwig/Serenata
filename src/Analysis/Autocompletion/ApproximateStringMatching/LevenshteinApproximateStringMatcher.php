@@ -17,9 +17,9 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      */
     public function score(string $approximation, string $referenceText): ?float
     {
-        $score = levenshtein($referenceText, $approximation, 1, 100, 300);
+        $score = @levenshtein($referenceText, $approximation, 1, 100, 300);
 
-        if ($score > self::THRESHOLD) {
+        if ($score === -1 || $score > self::THRESHOLD) {
             return null;
         }
 
