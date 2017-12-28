@@ -53,6 +53,15 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function tearDown()
+    {
+        // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
+        gc_collect_cycles();
+    }
+
+    /**
      * @return JsonRpcApplication
      */
     protected function createApplication(): JsonRpcApplication
