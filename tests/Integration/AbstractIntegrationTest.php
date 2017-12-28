@@ -45,7 +45,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected $container;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     public function setUp()
     {
@@ -53,7 +53,7 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     public function tearDown()
     {
