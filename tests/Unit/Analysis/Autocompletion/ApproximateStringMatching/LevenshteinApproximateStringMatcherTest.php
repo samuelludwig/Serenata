@@ -25,8 +25,8 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
      */
     public function testScoresParametersThatRequireFewerReplacementsMoreFavorably(): void
     {
-        $test1 = 'teso';
-        $test2 = 'tevo';
+        $test1 = 'veso';
+        $test2 = 'vevo';
         $referenceText = 'test';
 
         $matcher = new LevenshteinApproximateStringMatcher();
@@ -42,6 +42,20 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
         $test1 = 'testo';
         $test2 = 'testos';
         $referenceText = 'test';
+
+        $matcher = new LevenshteinApproximateStringMatcher();
+
+        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+    }
+
+    /**
+     * @return void
+     */
+    public function testScoresParametersThatContainSubstringMatchesMoreFavorably(): void
+    {
+        $test1 = '\UnexpectedValueException';
+        $test2 = '\SQLiteUnbuffered';
+        $referenceText = 'Une';
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
