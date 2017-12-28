@@ -32,7 +32,7 @@ build:php-7.2:
 # ----- Test stage
 .test-run-phpunit: &test-run-phpunit
     script:
-        - php vendor/bin/phpunit
+        - php -d memory_limit=256M vendor/bin/phpunit
 
 .test-job-shared: &test-job-shared
     stage: test
