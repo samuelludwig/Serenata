@@ -53,12 +53,9 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        $items = $this->delegate->provide($file, $code, $offset);
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
         return $this->bestStringApproximationDeterminer->determine(
-            $items,
-            $prefix,
+            $this->delegate->provide($file, $code, $offset),
+            $this->autocompletionPrefixDeterminer->determine($code, $offset),
             'filterText',
             $this->resultLimit
         );
