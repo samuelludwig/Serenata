@@ -4,6 +4,7 @@
 
 ### Bugs Fixed
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
+* Fix same files being queued for reindexing erroneously when their modification date was updated, but their contents did not change (they were never being actually indexed, but still reevaluated each time)
 
 ### Structural changes (mostly relevant to clients)
 * None yet.

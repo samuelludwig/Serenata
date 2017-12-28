@@ -2,6 +2,7 @@
 
 namespace PhpIntegrator\Indexing;
 
+use DateTime;
 use AssertionError;
 
 /**
@@ -44,18 +45,19 @@ final class UnmodifiedFileSkippingIndexer implements FileIndexerInterface
 
         $requestedCodeHash = $this->hashSource($code);
 
-        if ($file !== null && $file->getLastIndexedSourceHash() === $requestedCodeHash) {
-            return; // We already indexed the same code, skip it.
+        if ($file === null || $file->getLastIndexedSourceHash() !== $requestedCodeHash) {
+            $this->delegate->index($filePath, $code);
+
+            try {
+                $file = $this->storage->getFileByPath($filePath);
+            } catch (FileNotFoundStorageException $e) {
+                throw new AssertionError("File {$filePath} is not in index, even though it was just indexed", 0, $e);
+            }
         }
 
-        $this->delegate->index($filePath, $code);
-
-        try {
-            $file = $this->storage->getFileByPath($filePath);
-        } catch (FileNotFoundStorageException $e) {
-            throw new AssertionError("File {$filePath} is not in index, even though it was just indexed", 0, $e);
-        }
-
+        // Even if we don't index, still update the hash. We're not trying to cancel the index, just to avoid costly
+        // recomputation that has no effect.
+        $file->setIndexedOn(new DateTime());
         $file->setLastIndexedSourceHash($requestedCodeHash);
 
         $this->storage->beginTransaction();
