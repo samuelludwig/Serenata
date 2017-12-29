@@ -144,7 +144,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         $fileName = 'NestedFunctionCall.phpt';
 
         static::assertSignatureHelpSignaturesEquals($fileName, 127, 131, $expectedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 133, 134, $expectedNestedSignaturesResult);
+        static::assertSignatureHelpSignaturesEquals($fileName, 132, 134, $expectedNestedSignaturesResult);
         static::assertSignatureHelpSignaturesEquals($fileName, 135, 136, $expectedSignaturesResult);
         static::assertSignatureHelpActiveParameterEquals($fileName, 127, 131, 0);
         static::assertSignatureHelpActiveParameterEquals($fileName, 132, 134, null);
