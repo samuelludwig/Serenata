@@ -41,6 +41,7 @@ class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
         static::assertSame('lo', $determiner->determine('hel>lo', 6));
         static::assertSame('lo', $determiner->determine('hel<lo', 6));
         static::assertSame('lo', $determiner->determine('hel=lo', 6));
+        static::assertSame('lo', $determiner->determine('hel,lo', 6));
     }
 
     /**
