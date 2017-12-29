@@ -12,6 +12,14 @@ final class NonStaticMethodAutocompletionApplicabilityChecker implements Autocom
     /**
      * @inheritDoc
      */
+    public function doesApplyToPrefix(string $prefix): bool
+    {
+        return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function doesApplyOutsideNodes(): bool
     {
         return false;

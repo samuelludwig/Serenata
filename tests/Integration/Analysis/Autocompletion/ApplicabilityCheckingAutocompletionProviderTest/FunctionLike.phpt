@@ -4,5 +4,5 @@ function bar()
 {
     // <INJECTION>
     
-    // <MARKER>();
+    f// <MARKER>();
 }

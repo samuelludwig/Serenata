@@ -10,6 +10,13 @@ use PhpParser\Node;
 interface AutocompletionApplicabilityCheckerInterface
 {
     /**
+     * @param string $prefix
+     *
+     * @return bool
+     */
+    public function doesApplyToPrefix(string $prefix): bool;
+
+    /**
      * @return bool
      */
     public function doesApplyOutsideNodes(): bool;

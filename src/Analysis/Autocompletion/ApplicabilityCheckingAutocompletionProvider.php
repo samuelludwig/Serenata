@@ -30,18 +30,26 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
     private $autocompletionApplicabilityChecker;
 
     /**
+     * @var AutocompletionPrefixDeterminerInterface
+     */
+    private $autocompletionPrefixDeterminer;
+
+    /**
      * @param AutocompletionProviderInterface             $delegate
      * @param NodeAtOffsetLocatorInterface                $nodeAtOffsetLocator
      * @param AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker
+     * @param AutocompletionPrefixDeterminerInterface     $autocompletionPrefixDeterminer
      */
     public function __construct(
         AutocompletionProviderInterface $delegate,
         NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
-        AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker
+        AutocompletionApplicabilityCheckerInterface $autocompletionApplicabilityChecker,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
     ) {
         $this->delegate = $delegate;
         $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->autocompletionApplicabilityChecker = $autocompletionApplicabilityChecker;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
@@ -49,6 +57,12 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
+        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+
+        if (!$this->autocompletionApplicabilityChecker->doesApplyToPrefix($prefix)) {
+            return [];
+        }
+
         $node = $this->nodeAtOffsetLocator->locate($code, $offset)->getNode();
 
         if ($node !== null && $this->autocompletionApplicabilityChecker->doesApplyTo($node)) {

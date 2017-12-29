@@ -12,6 +12,16 @@ final class KeywordAutocompletionApplicabilityChecker implements AutocompletionA
     /**
      * @inheritDoc
      */
+    public function doesApplyToPrefix(string $prefix): bool
+    {
+        // Prevent trigger happy suggestions when user hasn't even actually typed anything, resulting in some editors
+        // immediately and unwantedly confirming a suggestion when the user attempted to create a newline.
+        return $prefix !== '';
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function doesApplyOutsideNodes(): bool
     {
         return true;
