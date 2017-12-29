@@ -24,6 +24,12 @@ final class NonStaticMethodAutocompletionApplicabilityChecker implements Autocom
     {
         if ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyTo($node->expr);
+        } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
+            return $this->doesApplyTo($node->getAttribute('parent'));
+        } elseif ($node instanceof Node\Expr\Error) {
+            $parent = $node->getAttribute('parent', false);
+
+            return $parent !== false ? $this->doesApplyTo($parent) : false;
         } elseif ($node instanceof Node\Expr\StaticCall &&
             $node->class instanceof Node\Name &&
             in_array($node->class->toString(), ['self', 'parent'], true)

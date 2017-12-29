@@ -35,7 +35,8 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
     {
         return [
             ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt']
+            ['FunctionLike.phpt'],
+            ['VariableName.phpt']
         ];
     }
 
@@ -45,7 +46,6 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
     public function getFileNamesWhereShouldNotApply(): array
     {
         return [
-            ['VariableName.phpt'],
             ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],

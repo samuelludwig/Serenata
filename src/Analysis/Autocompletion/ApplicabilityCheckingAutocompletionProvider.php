@@ -49,7 +49,7 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        $node = $this->findNodeAt($code, $offset);
+        $node = $this->nodeAtOffsetLocator->locate($code, $offset)->getNode();
 
         if ($node !== null && $this->autocompletionApplicabilityChecker->doesApplyTo($node)) {
             return $this->delegate->provide($file, $code, $offset);
@@ -58,32 +58,5 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
         }
 
         return [];
-    }
-
-    /**
-     * @param string $code
-     * @param int    $position
-     *
-     * @return Node|null
-     */
-    private function findNodeAt(string $code, int $position): ?Node
-    {
-        $result = $this->nodeAtOffsetLocator->locate($code, $position);
-
-        $node = $result->getNode();
-        $nearestInterestingNode = $result->getNearestInterestingNode();
-
-        if (!$node) {
-            return null;
-        }
-
-        if ($nearestInterestingNode instanceof Node\Expr\FuncCall ||
-            $nearestInterestingNode instanceof Node\Expr\ConstFetch ||
-            $nearestInterestingNode instanceof Node\Stmt\UseUse
-        ) {
-            return $nearestInterestingNode;
-        }
-
-        return ($node instanceof Node\Name || $node instanceof Node\Identifier) ? $node : $nearestInterestingNode;
     }
 }

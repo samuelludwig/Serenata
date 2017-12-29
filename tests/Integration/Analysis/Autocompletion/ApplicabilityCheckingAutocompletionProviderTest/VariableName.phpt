@@ -1,3 +1,5 @@
 <?php
 
-$// <MARKER>;
+// <INJECTION>
+
+$a// <MARKER>;
