@@ -33,8 +33,7 @@ final class ClassConstantAutocompletionApplicabilityChecker implements Autocompl
         }
 
         return
-            $node instanceof Node\Expr\StaticCall ||
-            $node instanceof Node\Expr\StaticPropertyFetch ||
+            ($node instanceof Node\Expr\StaticCall && !$node->name instanceof Node\VarLikeIdentifier) ||
             $node instanceof Node\Expr\ClassConstFetch;
     }
 }

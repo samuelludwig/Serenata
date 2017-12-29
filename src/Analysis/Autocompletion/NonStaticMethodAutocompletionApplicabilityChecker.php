@@ -31,11 +31,15 @@ final class NonStaticMethodAutocompletionApplicabilityChecker implements Autocom
 
             return $parent !== false ? $this->doesApplyTo($parent) : false;
         } elseif ($node instanceof Node\Expr\StaticCall &&
+            !$node->name instanceof Node\VarLikeIdentifier &&
+            !$node->name instanceof Node\Expr &&
             $node->class instanceof Node\Name &&
             in_array($node->class->toString(), ['self', 'parent'], true)
         ) {
             return true;
         } elseif ($node instanceof Node\Expr\StaticPropertyFetch &&
+            !$node->name instanceof Node\VarLikeIdentifier &&
+            !$node->name instanceof Node\Expr &&
             $node->class instanceof Node\Name &&
             in_array($node->class->toString(), ['self', 'parent'], true)
         ) {

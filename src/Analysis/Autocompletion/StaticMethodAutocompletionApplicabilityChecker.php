@@ -30,11 +30,18 @@ final class StaticMethodAutocompletionApplicabilityChecker implements Autocomple
             $parent = $node->getAttribute('parent', false);
 
             return $parent !== false ? $this->doesApplyTo($parent) : false;
+        } elseif ($node instanceof Node\Expr\StaticCall &&
+            !$node->name instanceof Node\VarLikeIdentifier &&
+            !$node->name instanceof Node\Expr
+        ) {
+            return true;
+        } elseif ($node instanceof Node\Expr\StaticPropertyFetch &&
+            !$node->name instanceof Node\VarLikeIdentifier &&
+            !$node->name instanceof Node\Expr
+        ) {
+            return true;
         }
 
-        return
-            $node instanceof Node\Expr\StaticCall ||
-            $node instanceof Node\Expr\StaticPropertyFetch ||
-            $node instanceof Node\Expr\ClassConstFetch;
+        return $node instanceof Node\Expr\ClassConstFetch;
     }
 }

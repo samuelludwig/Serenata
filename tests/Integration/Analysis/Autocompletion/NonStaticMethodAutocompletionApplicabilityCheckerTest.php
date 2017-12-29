@@ -55,11 +55,18 @@ class NonStaticMethodAutocompletionApplicabilityCheckerTest extends AbstractAuto
             // ['Comment.phpt'],
             ['FunctionSignature.phpt'],
             ['MethodSignature.phpt'],
-            ['StaticPropertyFetch.phpt'],
             ['ClassBody.phpt'],
             ['String.phpt'],
             ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt']
+            ['FunctionLike.phpt'],
+            ['StaticPropertyFetch.phpt'],
+            ['StaticPropertyFetchError.phpt'],
+            ['StaticPropertyFetchSelf.phpt'],
+            ['StaticPropertyFetchSelfError.phpt'],
+            ['StaticPropertyFetchStatic.phpt'],
+            ['StaticPropertyFetchStaticError.phpt'],
+            ['StaticPropertyFetchParent.phpt'],
+            ['StaticPropertyFetchParentError.phpt']
         ];
     }
 
