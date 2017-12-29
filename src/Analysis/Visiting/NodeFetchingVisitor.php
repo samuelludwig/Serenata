@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
