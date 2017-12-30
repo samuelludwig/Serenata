@@ -1,0 +1,3 @@
+<?php
+
+SomeClass::T// <MARKER>

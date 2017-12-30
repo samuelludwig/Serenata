@@ -49,6 +49,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
+            ['ClassConstFetchNoDelimiter.phpt'],
             ['TopLevelNamespace.phpt'],
             ['FunctionLike.phpt'],
             // ['Docblock.phpt'],

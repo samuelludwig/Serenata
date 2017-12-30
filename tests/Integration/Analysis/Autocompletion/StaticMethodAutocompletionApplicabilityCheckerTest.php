@@ -48,6 +48,7 @@ class StaticMethodAutocompletionApplicabilityCheckerTest extends AbstractAutocom
         return [
             ['VariableName.phpt'],
             ['ClassConstFetch.phpt'],
+            ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],

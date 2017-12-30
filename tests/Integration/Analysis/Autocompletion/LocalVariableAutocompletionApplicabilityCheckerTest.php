@@ -49,6 +49,7 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
             ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
+            ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],

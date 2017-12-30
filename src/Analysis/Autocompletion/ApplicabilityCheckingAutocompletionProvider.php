@@ -63,7 +63,10 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
             return [];
         }
 
-        $node = $this->nodeAtOffsetLocator->locate($code, $offset)->getNode();
+        // The position the position is at may already be the start of another node. We're interested in what's just
+        // before the position (usually the cursor), not what is "at" or "just to the right" of the cursor, hence the
+        // -1.
+        $node = $this->nodeAtOffsetLocator->locate($code, $offset - 1)->getNode();
 
         if ($node !== null && $this->autocompletionApplicabilityChecker->doesApplyTo($node)) {
             return $this->delegate->provide($file, $code, $offset);

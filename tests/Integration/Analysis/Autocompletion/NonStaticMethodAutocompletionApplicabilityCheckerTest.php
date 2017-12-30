@@ -50,6 +50,7 @@ class NonStaticMethodAutocompletionApplicabilityCheckerTest extends AbstractAuto
             ['VariableName.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
+            ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],

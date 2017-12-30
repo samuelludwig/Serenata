@@ -48,6 +48,7 @@ class ClassConstantAutocompletionApplicabilityCheckerTest extends AbstractAutoco
         return [
             ['VariableName.phpt'],
             ['ClassConstFetch.phpt'],
+            ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],

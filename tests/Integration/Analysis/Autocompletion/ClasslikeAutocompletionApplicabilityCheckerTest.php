@@ -49,6 +49,7 @@ class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
+            ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],
