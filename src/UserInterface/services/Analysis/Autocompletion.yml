@@ -1,5 +1,6 @@
 parameters:
-    autocompletion.resultLimit: 15
+    autocompletion.largeProviderResultLimit: 15
+    autocompletion.finalSuggestionsResultLimit: 50
 
 services:
     autocompletionPrefixDeterminer:
@@ -40,7 +41,7 @@ services:
             - '@useStatementInsertionCreator'
             - '@autocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
-            - '%autocompletion.resultLimit%'
+            - '%autocompletion.largeProviderResultLimit%'
 
     classlikeAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionApplicabilityChecker
@@ -59,7 +60,7 @@ services:
             - '@namespaceListProvider'
             - '@autocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
-            - '%autocompletion.resultLimit%'
+            - '%autocompletion.largeProviderResultLimit%'
 
     namespaceAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionApplicabilityChecker
@@ -78,7 +79,7 @@ services:
             - '@functionListProvider'
             - '@autocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
-            - '%autocompletion.resultLimit%'
+            - '%autocompletion.largeProviderResultLimit%'
 
     functionAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionApplicabilityChecker
@@ -97,7 +98,7 @@ services:
             - '@constantListProvider'
             - '@autocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
-            - '%autocompletion.resultLimit%'
+            - '%autocompletion.largeProviderResultLimit%'
 
     constantAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionApplicabilityChecker
@@ -233,7 +234,7 @@ services:
             - '@aggregatingAutocompletionProvider'
             - '@autocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
-            - '%autocompletion.resultLimit%'
+            - '%autocompletion.finalSuggestionsResultLimit%'
 
     autocompletionProvider:
         alias: fuzzyMatchingAutocompletionProvider
