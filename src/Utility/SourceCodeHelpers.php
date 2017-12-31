@@ -33,7 +33,7 @@ class SourceCodeHelpers
     }
 
     /**
-     * Calculates the 0-indexed offset for the specified 0-indexed line and character/
+     * Calculates the 0-indexed offset for the specified 0-indexed line and character.
      *
      * @param string $source
      * @param int    $line
