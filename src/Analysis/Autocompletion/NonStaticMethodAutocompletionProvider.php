@@ -29,15 +29,31 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
     private $classlikeInfoBuilder;
 
     /**
-     * @param ExpressionTypeDeducer $expressionTypeDeducer
-     * @param ClasslikeInfoBuilder  $classlikeInfoBuilder
+     * @var FunctionAutocompletionSuggestionLabelCreator
+     */
+    private $functionAutocompletionSuggestionLabelCreator;
+
+    /**
+     * @var FunctionAutocompletionSuggestionParanthesesNecessityEvaluator
+     */
+    private $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
+
+    /**
+     * @param ExpressionTypeDeducer                                         $expressionTypeDeducer
+     * @param ClasslikeInfoBuilder                                          $classlikeInfoBuilder
+     * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
+     * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
+        FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
+        $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
     }
 
     /**
@@ -63,7 +79,8 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
 
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
-        $shouldIncludeParanthesesInInsertText = $this->shouldIncludeParanthesesInInsertText($code, $offset);
+        $shouldIncludeParanthesesInInsertText = $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator
+            ->evaluate($code, $offset);
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
             yield from $this->createSuggestionsForClasslikeInfo(
@@ -112,7 +129,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             SuggestionKind::METHOD,
             $insertText,
             null,
-            $this->createMethodLabel($method),
+            $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
             [
                 'isDeprecated'                  => $method['isDeprecated'],
@@ -140,89 +157,6 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         }
 
         throw new AssertionError('Unknown protection level encountered');
-    }
-
-    /**
-     * @param string $code
-     * @param int    $offset
-     *
-     * @return bool
-     */
-    private function shouldIncludeParanthesesInInsertText(string $code, int $offset): bool
-    {
-        $length = mb_strlen($code);
-
-        for ($i = $offset; $i < $length; ++$i) {
-            if ($code[$i] === '(') {
-                return false;
-            } elseif ($this->isWhitespace($code[$i])) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $character
-     *
-     * @return bool
-     */
-    private function isWhitespace(string $character): bool
-    {
-        return ($character === ' ' || $character === "\r" || $character === "\n" || $character === "\t");
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string
-     */
-    private function createMethodLabel(array $function): string
-    {
-        $body = '(';
-
-        $isInOptionalList = false;
-
-        foreach ($function['parameters'] as $index => $param) {
-            $description = '';
-
-            if ($param['isOptional'] && !$isInOptionalList) {
-                $description .= '[';
-            }
-
-            if ($index > 0) {
-                $description .= ', ';
-            }
-
-            if ($param['isVariadic']) {
-                $description .= '...';
-            }
-
-            if ($param['isReference']) {
-                $description .= '&';
-            }
-
-            $description .= '$' . $param['name'];
-
-            if ($param['defaultValue']) {
-                $description .= ' = ' . $param['defaultValue'];
-            }
-
-            if ($param['isOptional'] && $index === (count($function['parameters']) - 1)) {
-                $description .= ']';
-            }
-
-            $isInOptionalList = $param['isOptional'];
-
-            $body .= $description;
-        }
-
-        $body .= ')';
-
-        return $function['name'] . $body;
     }
 
     /**
