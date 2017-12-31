@@ -27,13 +27,23 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
     private $parser;
 
     /**
-     * @param VariableScanner $variableScanner
-     * @param Parser          $parser
+     * @var AutocompletionSuggestionTypeFormatter
      */
-    public function __construct(VariableScanner $variableScanner, Parser $parser)
-    {
+    private $autocompletionSuggestionTypeFormatter;
+
+    /**
+     * @param VariableScanner                       $variableScanner
+     * @param Parser                                $parser
+     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+     */
+    public function __construct(
+        VariableScanner $variableScanner,
+        Parser $parser,
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+    ) {
         $this->variableScanner = $variableScanner;
         $this->parser = $parser;
+        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
     }
 
     /**
@@ -61,6 +71,12 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      */
     private function createSuggestion(array $variable): AutocompletionSuggestion
     {
+        $typeArray = array_map(function (string $type) {
+            return [
+                'fqcn' => $type
+            ];
+        }, explode('|', $variable['type']));
+
         return new AutocompletionSuggestion(
             $variable['name'],
             SuggestionKind::VARIABLE,
@@ -70,49 +86,9 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             null,
             [
                 'isDeprecated' => false,
-                'returnTypes'  => $this->createReturnTypes($variable)
+                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($typeArray)
             ]
         );
-    }
-
-    /**
-     * @param array $variable
-     *
-     * @return string
-     */
-    private function createReturnTypes(array $variable): string
-    {
-        $typeNames = $this->getShortReturnTypes($variable);
-
-        return implode('|', $typeNames);
-    }
-
-    /**
-     * @param array $variable
-     *
-     * @return string[]
-     */
-    private function getShortReturnTypes(array $variable): array
-    {
-        $shortTypes = [];
-
-        foreach (explode('|', $variable['type']) as $type) {
-            $shortTypes[] = $this->getClassShortNameFromFqcn($type);
-        }
-
-        return $shortTypes;
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return string
-     */
-    private function getClassShortNameFromFqcn(string $fqcn): string
-    {
-        $parts = explode('\\', $fqcn);
-
-        return array_pop($parts);
     }
 
     /**

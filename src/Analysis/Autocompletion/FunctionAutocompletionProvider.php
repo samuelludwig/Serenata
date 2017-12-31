@@ -37,6 +37,11 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     private $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
     /**
+     * @var AutocompletionSuggestionTypeFormatter
+     */
+    private $autocompletionSuggestionTypeFormatter;
+
+    /**
      * @var int
      */
     private $resultLimit;
@@ -47,6 +52,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
      * @param FunctionAutocompletionSuggestionLabelCreator                         $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator        $functionAutocompletionSuggestionParanthesesNecessityEvaluator
+     * @param AutocompletionSuggestionTypeFormatter                                $autocompletionSuggestionTypeFormatter
      * @param int                                                                  $resultLimit
      */
     public function __construct(
@@ -55,6 +61,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
         int $resultLimit
     ) {
         $this->functionListProvider = $functionListProvider;
@@ -62,6 +69,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
+        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
         $this->resultLimit = $resultLimit;
     }
 
@@ -111,49 +119,9 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $function['shortDescription'],
             [
                 'isDeprecated'                  => $function['isDeprecated'],
-                'returnTypes'                   => $this->createReturnTypes($function),
+                'returnTypes'                   => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes']),
                 'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
             ]
         );
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string
-     */
-    private function createReturnTypes(array $function): string
-    {
-        $typeNames = $this->getShortReturnTypes($function);
-
-        return implode('|', $typeNames);
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string[]
-     */
-    private function getShortReturnTypes(array $function): array
-    {
-        $shortTypes = [];
-
-        foreach ($function['returnTypes'] as $type) {
-            $shortTypes[] = $this->getClassShortNameFromFqcn($type['fqcn']);
-        }
-
-        return $shortTypes;
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return string
-     */
-    private function getClassShortNameFromFqcn(string $fqcn): string
-    {
-        $parts = explode('\\', $fqcn);
-
-        return array_pop($parts);
     }
 }

@@ -20,6 +20,9 @@ services:
     bestStringApproximationDeterminer:
         alias: approximateStringMatchingBestStringApproximationDeterminer
 
+    autocompletionSuggestionTypeFormatter:
+        class: PhpIntegrator\Analysis\Autocompletion\AutocompletionSuggestionTypeFormatter
+
     functionAutocompletionSuggestionLabelCreator:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionSuggestionLabelCreator
 
@@ -87,6 +90,7 @@ services:
             - '@bestStringApproximationDeterminer'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
+            - '@autocompletionSuggestionTypeFormatter'
             - '%autocompletion.largeProviderResultLimit%'
 
     functionAutocompletionApplicabilityChecker:
@@ -106,6 +110,7 @@ services:
             - '@constantListProvider'
             - '@autocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
+            - '@autocompletionSuggestionTypeFormatter'
             - '%autocompletion.largeProviderResultLimit%'
 
     constantAutocompletionApplicabilityChecker:
@@ -126,6 +131,7 @@ services:
             - '@classlikeInfoBuilder'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
+            - '@autocompletionSuggestionTypeFormatter'
 
     nonStaticMethodAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\NonStaticMethodAutocompletionApplicabilityChecker
@@ -145,6 +151,7 @@ services:
             - '@classlikeInfoBuilder'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
+            - '@autocompletionSuggestionTypeFormatter'
 
     staticMethodAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\StaticMethodAutocompletionApplicabilityChecker
@@ -162,6 +169,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@autocompletionSuggestionTypeFormatter'
 
     nonStaticPropertyAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\NonStaticPropertyAutocompletionApplicabilityChecker
@@ -179,6 +187,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@autocompletionSuggestionTypeFormatter'
 
     staticPropertyAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\StaticPropertyAutocompletionApplicabilityChecker
@@ -196,6 +205,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@autocompletionSuggestionTypeFormatter'
 
     classConstantAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\ClassConstantAutocompletionApplicabilityChecker
@@ -213,6 +223,7 @@ services:
         arguments:
             - '@variableScanner'
             - '@parser'
+            - '@autocompletionSuggestionTypeFormatter'
 
     localVariableAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Analysis\Autocompletion\LocalVariableAutocompletionApplicabilityChecker

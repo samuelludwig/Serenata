@@ -27,6 +27,11 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     private $bestStringApproximationDeterminer;
 
     /**
+     * @var AutocompletionSuggestionTypeFormatter
+     */
+    private $autocompletionSuggestionTypeFormatter;
+
+    /**
      * @var int
      */
     private $resultLimit;
@@ -35,17 +40,20 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
      * @param ConstantListProviderInterface                                        $constantListProvider
      * @param AutocompletionPrefixDeterminerInterface                              $autocompletionPrefixDeterminer
      * @param ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param AutocompletionSuggestionTypeFormatter                                $autocompletionSuggestionTypeFormatter
      * @param int                                                                  $resultLimit
      */
     public function __construct(
         ConstantListProviderInterface $constantListProvider,
         AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         ApproximateStringMatching\BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
         int $resultLimit
     ) {
         $this->constantListProvider = $constantListProvider;
         $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
         $this->resultLimit = $resultLimit;
     }
 
@@ -82,48 +90,8 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $constant['shortDescription'],
             [
                 'isDeprecated' => $constant['isDeprecated'],
-                'returnTypes'  => $this->createReturnTypes($constant)
+                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($constant['types'])
             ]
         );
-    }
-
-    /**
-     * @param array $constant
-     *
-     * @return string
-     */
-    private function createReturnTypes(array $constant): string
-    {
-        $typeNames = $this->getShortReturnTypes($constant);
-
-        return implode('|', $typeNames);
-    }
-
-    /**
-     * @param array $constant
-     *
-     * @return string[]
-     */
-    private function getShortReturnTypes(array $constant): array
-    {
-        $shortTypes = [];
-
-        foreach ($constant['types'] as $type) {
-            $shortTypes[] = $this->getClassShortNameFromFqcn($type['fqcn']);
-        }
-
-        return $shortTypes;
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return string
-     */
-    private function getClassShortNameFromFqcn(string $fqcn): string
-    {
-        $parts = explode('\\', $fqcn);
-
-        return array_pop($parts);
     }
 }

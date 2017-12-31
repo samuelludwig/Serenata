@@ -39,21 +39,29 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     private $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
     /**
+     * @var AutocompletionSuggestionTypeFormatter
+     */
+    private $autocompletionSuggestionTypeFormatter;
+
+    /**
      * @param ExpressionTypeDeducer                                         $expressionTypeDeducer
      * @param ClasslikeInfoBuilder                                          $classlikeInfoBuilder
      * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
+     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
         ClasslikeInfoBuilder $classlikeInfoBuilder,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
-        FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
+        FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
+        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
     }
 
     /**
@@ -134,7 +142,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
             [
                 'isDeprecated'                  => $method['isDeprecated'],
                 'declaringStructure'            => $method['declaringStructure'],
-                'returnTypes'                   => $this->createReturnTypes($method),
+                'returnTypes'                   => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
                 'protectionLevel'               => $this->extractProtectionLevelStringFromMemberData($method),
                 'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
             ]
@@ -157,45 +165,5 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
         }
 
         throw new AssertionError('Unknown protection level encountered');
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string
-     */
-    private function createReturnTypes(array $function): string
-    {
-        $typeNames = $this->getShortReturnTypes($function);
-
-        return implode('|', $typeNames);
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string[]
-     */
-    private function getShortReturnTypes(array $function): array
-    {
-        $shortTypes = [];
-
-        foreach ($function['returnTypes'] as $type) {
-            $shortTypes[] = $this->getClassShortNameFromFqcn($type['fqcn']);
-        }
-
-        return $shortTypes;
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return string
-     */
-    private function getClassShortNameFromFqcn(string $fqcn): string
-    {
-        $parts = explode('\\', $fqcn);
-
-        return array_pop($parts);
     }
 }

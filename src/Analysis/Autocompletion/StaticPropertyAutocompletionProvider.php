@@ -29,15 +29,23 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     private $classlikeInfoBuilder;
 
     /**
-     * @param ExpressionTypeDeducer $expressionTypeDeducer
-     * @param ClasslikeInfoBuilder  $classlikeInfoBuilder
+     * @var AutocompletionSuggestionTypeFormatter
+     */
+    private $autocompletionSuggestionTypeFormatter;
+
+    /**
+     * @param ExpressionTypeDeducer                 $expressionTypeDeducer
+     * @param ClasslikeInfoBuilder                  $classlikeInfoBuilder
+     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
     }
 
     /**
@@ -99,7 +107,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             [
                 'isDeprecated'       => $property['isDeprecated'],
                 'declaringStructure' => $property['declaringStructure'],
-                'returnTypes'        => $this->createReturnTypes($property),
+                'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($property['types']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property)
             ]
         );
@@ -121,45 +129,5 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
         }
 
         throw new AssertionError('Unknown protection level encountered');
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string
-     */
-    private function createReturnTypes(array $function): string
-    {
-        $typeNames = $this->getShortReturnTypes($function);
-
-        return implode('|', $typeNames);
-    }
-
-    /**
-     * @param array $function
-     *
-     * @return string[]
-     */
-    private function getShortReturnTypes(array $function): array
-    {
-        $shortTypes = [];
-
-        foreach ($function['types'] as $type) {
-            $shortTypes[] = $this->getClassShortNameFromFqcn($type['fqcn']);
-        }
-
-        return $shortTypes;
-    }
-
-    /**
-     * @param string $fqcn
-     *
-     * @return string
-     */
-    private function getClassShortNameFromFqcn(string $fqcn): string
-    {
-        $parts = explode('\\', $fqcn);
-
-        return array_pop($parts);
     }
 }
