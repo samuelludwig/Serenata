@@ -15,7 +15,7 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $output = $this->provide('Namespace.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', 'Foo', null, [
+            new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
                 'isDeprecated' => false,
                 'returnTypes'  => 'namespace'
             ])

@@ -15,7 +15,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Constants.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', 'FOO', null, [
+            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
                 'isDeprecated' => false,
                 'returnTypes'  => 'int|string'
             ])
@@ -32,7 +32,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedConstant.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', 'FOO', null, [
+            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
                 'isDeprecated' => true,
                 'returnTypes'  => 'int'
             ])

@@ -122,6 +122,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $function['name'],
             SuggestionKind::FUNCTION,
             $insertText,
+            null,
             $this->createLabel($function),
             $function['shortDescription'],
             [

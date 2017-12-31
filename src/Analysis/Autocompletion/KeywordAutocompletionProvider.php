@@ -35,6 +35,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             $keyword['name'],
             SuggestionKind::KEYWORD,
             $keyword['name'],
+            null,
             $keyword['name'],
             'PHP keyword',
             [

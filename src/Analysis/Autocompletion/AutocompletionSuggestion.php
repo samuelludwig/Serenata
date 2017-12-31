@@ -26,9 +26,14 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $kind;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $insertText;
+
+    /**
+     * @var TextEdit|null
+     */
+    private $textEdit;
 
     /**
      * @var string
@@ -51,18 +56,20 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $additionalTextEdits;
 
     /**
-     * @param string      $filterText
-     * @param string      $kind
-     * @param string      $insertText
-     * @param string      $label
-     * @param string|null $documentation
-     * @param array       $extraData
-     * @param TextEdit[]  $additionalTextEdits
+     * @param string        $filterText
+     * @param string        $kind
+     * @param string|null   $insertText
+     * @param TextEdit|null $textEdit
+     * @param string        $label
+     * @param string|null   $documentation
+     * @param array         $extraData
+     * @param TextEdit[]    $additionalTextEdits
      */
     public function __construct(
         string $filterText,
         string $kind,
-        string $insertText,
+        ?string $insertText,
+        ?TextEdit $textEdit,
         string $label,
         ?string $documentation,
         array $extraData = [],
@@ -71,10 +78,15 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         $this->filterText = $filterText;
         $this->kind = $kind;
         $this->insertText = $insertText;
+        $this->textEdit = $textEdit;
         $this->label = $label;
         $this->documentation = $documentation;
         $this->extraData = $extraData;
         $this->additionalTextEdits = $additionalTextEdits;
+
+        if ($insertText === null && $textEdit === null) {
+            throw new AssertionError('Either an insertText or a textEdit must be provided');
+        }
     }
 
     /**
@@ -94,11 +106,19 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getInsertText(): string
+    public function getInsertText(): ?string
     {
         return $this->insertText;
+    }
+
+    /**
+     * @return TextEdit|null
+     */
+    public function getTextEdit(): ?TextEdit
+    {
+        return $this->textEdit;
     }
 
     /**
@@ -142,6 +162,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
             'filterText'          => $this->getFilterText(),
             'kind'                => $this->getKind(),
             'insertText'          => $this->getInsertText(),
+            'textEdit'            => $this->getTextEdit(),
             'label'               => $this->getLabel(),
             'documentation'       => $this->getDocumentation(),
             'extraData'           => $this->getExtraData(),

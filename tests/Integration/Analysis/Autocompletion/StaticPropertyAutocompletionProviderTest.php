@@ -17,7 +17,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('$foo', SuggestionKind::PROPERTY, '$foo', 'foo', null, [
+            new AutocompletionSuggestion('$foo', SuggestionKind::PROPERTY, '$foo', null, 'foo', null, [
                 'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
@@ -46,7 +46,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('$foo', SuggestionKind::PROPERTY, '$foo', 'foo', null, [
+            new AutocompletionSuggestion('$foo', SuggestionKind::PROPERTY, '$foo', null, 'foo', null, [
                 'isDeprecated'       => true,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [

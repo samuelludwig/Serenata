@@ -4,6 +4,11 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 
 use AssertionError;
 
+use PhpIntegrator\Common\Range;
+use PhpIntegrator\Common\Position;
+
+use PhpIntegrator\Utility\SourceCodeHelpers;
+
 use PhpIntegrator\Analysis\ClasslikeListProviderInterface;
 
 use PhpIntegrator\Analysis\Visiting\UseStatementKind;
@@ -72,15 +77,17 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
+        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $this->classlikeListProvider->getAll(),
-            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            $prefix,
             'fqcn',
             $this->resultLimit
         );
 
         foreach ($bestApproximations as $classlike) {
-            yield $this->createSuggestion($classlike, $code, $offset);
+            yield $this->createSuggestion($classlike, $code, $offset, $prefix);
         }
     }
 
@@ -88,20 +95,27 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      * @param array  $classlike
      * @param string $code
      * @param int    $offset
+     * @param string $prefix
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $classlike, string $code, int $offset): AutocompletionSuggestion
-    {
+    private function createSuggestion(
+        array $classlike,
+        string $code,
+        int $offset,
+        string $prefix
+    ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $this->getFqcnWithoutLeadingSlash($classlike),
             $classlike['type'] === ClasslikeTypeNameValue::TRAIT_ ? SuggestionKind::MIXIN : SuggestionKind::CLASS_,
             $this->getInsertTextForSuggestion($classlike, $code, $offset),
+            $this->getTextEditForSuggestion($classlike, $code, $offset, $prefix),
             $this->getFqcnWithoutLeadingSlash($classlike),
             $classlike['shortDescription'],
             [
                 'isDeprecated' => $classlike['isDeprecated'],
-                'returnTypes'  => $classlike['type']
+                'returnTypes'  => $classlike['type'],
+                'prefix'       => $prefix
             ],
             $this->createAdditionalTextEditsForSuggestion($classlike, $code, $offset)
         );
@@ -121,6 +135,32 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         }
 
         return $fqcn;
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array  $classlike
+     * @param string $code
+     * @param int    $offset
+     * @param string $prefix
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(array $classlike, string $code, int $offset, string $prefix): TextEdit
+    {
+        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset) - 1;
+        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $line, $code);
+
+        return new TextEdit(
+            new Range(new Position($line, $character - mb_strlen($prefix)), new Position($line, $character)),
+            $this->getInsertTextForSuggestion($classlike, $code, $offset)
+        );
     }
 
     /**

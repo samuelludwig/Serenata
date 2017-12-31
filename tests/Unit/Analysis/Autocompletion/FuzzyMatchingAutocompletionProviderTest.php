@@ -32,8 +32,8 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
             ->getMock();
 
         $suggestions = [
-            new AutocompletionSuggestion('test1', SuggestionKind::FUNCTION, 'test', 'test', null),
-            new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', 'test', null)
+            new AutocompletionSuggestion('test1', SuggestionKind::FUNCTION, 'test', null, 'test', null),
+            new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', null, 'test', null)
         ];
 
         $delegate->expects($this->once())->method('provide')->willReturn($suggestions);

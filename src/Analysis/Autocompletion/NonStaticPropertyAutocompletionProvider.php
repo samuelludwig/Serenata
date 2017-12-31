@@ -93,6 +93,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
             $property['name'],
             SuggestionKind::PROPERTY,
             $property['name'],
+            null,
             $property['name'],
             $property['shortDescription'],
             [

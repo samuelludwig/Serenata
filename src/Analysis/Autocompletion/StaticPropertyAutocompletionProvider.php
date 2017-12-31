@@ -93,6 +93,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             '$' . $property['name'],
             SuggestionKind::PROPERTY,
             '$' . $property['name'],
+            null,
             $property['name'],
             $property['shortDescription'],
             [

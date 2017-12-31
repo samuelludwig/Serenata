@@ -15,7 +15,7 @@ class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('LocalVariable.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('$foo', SuggestionKind::VARIABLE, '$foo', '$foo', null, [
+            new AutocompletionSuggestion('$foo', SuggestionKind::VARIABLE, '$foo', null, '$foo', null, [
                 'isDeprecated' => false,
                 'returnTypes'  => ''
             ])

@@ -17,7 +17,7 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', 'FOO', null, [
+            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
                 'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
@@ -47,7 +47,7 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', 'FOO', null, [
+            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
                 'isDeprecated'       => true,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [

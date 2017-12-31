@@ -17,7 +17,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -47,7 +47,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -77,7 +77,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -107,7 +107,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', 'foo($test)', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', null, 'foo($test)', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -137,7 +137,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', null, 'foo()', null, [
                 'isDeprecated'                  => true,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [

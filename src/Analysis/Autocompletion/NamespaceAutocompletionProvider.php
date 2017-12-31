@@ -87,6 +87,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             $fqcnWithoutLeadingSlash,
             SuggestionKind::IMPORT,
             $namespace['name'],
+            null,
             $fqcnWithoutLeadingSlash,
             null,
             [

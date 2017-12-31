@@ -15,7 +15,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Functions.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'returnTypes'                   => 'int|string',
                 'placeCursorBetweenParentheses' => false
@@ -33,7 +33,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('CursorFollowedByParanthesis.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'returnTypes'                   => '',
                 'placeCursorBetweenParentheses' => false
@@ -51,7 +51,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('CursorFollowedByWhitespaceAndParanthesis.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'returnTypes'                   => '',
                 'placeCursorBetweenParentheses' => false
@@ -69,7 +69,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('FunctionWithParameters.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo($test)', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', null, 'foo($test)', null, [
                 'isDeprecated'                  => false,
                 'returnTypes'                   => '',
                 'placeCursorBetweenParentheses' => true
@@ -87,7 +87,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedFunction.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()', null, 'foo()', null, [
                 'isDeprecated'                  => true,
                 'returnTypes'                   => 'void',
                 'placeCursorBetweenParentheses' => false

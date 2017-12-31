@@ -15,7 +15,7 @@ class KeywordAutocompletionProviderTest extends AbstractAutocompletionProviderTe
         $output = $this->provide('Keywords.phpt');
 
         $firstSuggestion =
-            new AutocompletionSuggestion('self', SuggestionKind::KEYWORD, 'self', 'self', 'PHP keyword', [
+            new AutocompletionSuggestion('self', SuggestionKind::KEYWORD, 'self', null, 'self', 'PHP keyword', [
                 'isDeprecated' => false,
                 'returnTypes'  => ''
             ]);

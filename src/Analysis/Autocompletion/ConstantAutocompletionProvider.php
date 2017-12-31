@@ -77,6 +77,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $constant['name'],
             SuggestionKind::CONSTANT,
             $constant['name'],
+            null,
             $constant['name'],
             $constant['shortDescription'],
             [

@@ -111,6 +111,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
             $method['name'],
             SuggestionKind::METHOD,
             $insertText,
+            null,
             $this->createMethodLabel($method),
             $method['shortDescription'],
             [

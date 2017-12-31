@@ -111,6 +111,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             $method['name'],
             SuggestionKind::METHOD,
             $insertText,
+            null,
             $this->createMethodLabel($method),
             $method['shortDescription'],
             [

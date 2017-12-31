@@ -65,6 +65,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             $variable['name'],
             SuggestionKind::VARIABLE,
             $variable['name'],
+            null,
             $variable['name'],
             null,
             [
