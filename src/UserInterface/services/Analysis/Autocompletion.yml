@@ -43,6 +43,17 @@ services:
             - '@keywordAutocompletionApplicabilityChecker'
             - '@autocompletionPrefixDeterminer'
 
+    superglobalAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\SuperglobalAutocompletionProvider
+
+    applicabilityCheckingKeywordAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@superglobalAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@localVariableAutocompletionApplicabilityChecker'
+            - '@autocompletionPrefixDeterminer'
+
     classlikeAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
         arguments:
@@ -256,6 +267,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
             - '@applicabilityCheckingKeywordAutocompletionProvider'
+            - '@applicabilityCheckingSuperglobalAutocompletionProvider'
             - '@applicabilityCheckingClasslikeAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
