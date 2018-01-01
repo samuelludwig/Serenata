@@ -2,19 +2,13 @@
 
 namespace PhpIntegrator\UserInterface;
 
-use Ds;
 use React;
-use Throwable;
 use RuntimeException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Sockets\SocketServer;
-use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\RequestParsingException;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
@@ -22,8 +16,6 @@ use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 use React\EventLoop\LoopInterface;
 
 use React\EventLoop\Timer\Timer;
-
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Application extension that can handle JSON-RPC requests.
