@@ -236,6 +236,22 @@ services:
             - '@localVariableAutocompletionApplicabilityChecker'
             - '@autocompletionPrefixDeterminer'
 
+    parameterNameAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ParameterNameAutocompletionProvider
+        arguments:
+            - '@nodeAtOffsetLocator'
+
+    parameterNameAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\ParameterNameAutocompletionApplicabilityChecker
+
+    applicabilityCheckingParameterNameAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@parameterNameAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@parameterNameAutocompletionApplicabilityChecker'
+            - '@autocompletionPrefixDeterminer'
+
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
@@ -250,6 +266,7 @@ services:
             - '@applicabilityCheckingStaticPropertyAutocompletionProvider'
             - '@applicabilityCheckingClassConstantAutocompletionProvider'
             - '@applicabilityCheckingLocalVariableAutocompletionProvider'
+            - '@applicabilityCheckingParameterNameAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider

@@ -49,7 +49,13 @@ final class LocalVariableAutocompletionApplicabilityChecker implements Autocompl
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             return false;
         } elseif ($node instanceof Node\Expr\Variable) {
-            return true;
+            $parent = $node->getAttribute('parent', false);
+
+            if ($parent === false) {
+                return true;
+            }
+
+            return !$parent instanceof Node\Param;
         } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyTo($node->expr);
         } elseif ($node instanceof Node\Expr\Error) {

@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis\Autocompletion;
 
-class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
+class ParameterNameAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @dataProvider getFileNamesWhereShouldApply
@@ -13,7 +13,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
      */
     public function testAppliesAtExpectedLocations(string $fileName): void
     {
-        static::assertNotEmpty($this->provide($fileName, 'NamespaceList.phpt'));
+        static::assertNotEmpty($this->provide($fileName));
     }
 
     /**
@@ -25,7 +25,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
      */
     public function testDoesNotApplyAtExpectedLocations(string $fileName): void
     {
-        static::assertEmpty($this->provide($fileName, 'NamespaceList.phpt'));
+        static::assertEmpty($this->provide($fileName));
     }
 
     /**
@@ -34,8 +34,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
     public function getFileNamesWhereShouldApply(): array
     {
         return [
-            ['Namespace.phpt'],
-            ['UseStatement.phpt']
+            ['ParameterName.phpt']
         ];
     }
 
@@ -45,17 +44,18 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
     public function getFileNamesWhereShouldNotApply(): array
     {
         return [
+            ['TopLevelNamespace.phpt'],
+            ['FunctionLike.phpt'],
             ['VariableName.phpt'],
             ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
             ['ClassConstFetchNoDelimiter.phpt'],
-            ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt'],
+            ['UseStatement.phpt'],
             // ['Docblock.phpt'],
             // ['Comment.phpt'],
-            ['FunctionSignature.phpt'],
-            ['MethodSignature.phpt'],
+            // ['FunctionSignature.phpt'],
+            // ['MethodSignature.phpt'],
             ['PropertyFetch.phpt'],
             ['ClassBody.phpt'],
             ['String.phpt'],
@@ -68,8 +68,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             ['StaticPropertyFetchStatic.phpt'],
             ['StaticPropertyFetchStaticError.phpt'],
             ['StaticPropertyFetchParent.phpt'],
-            ['StaticPropertyFetchParentError.phpt'],
-            ['ParameterName.phpt']
+            ['StaticPropertyFetchParentError.phpt']
         ];
     }
 
@@ -86,6 +85,6 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
      */
     protected function getProviderName(): string
     {
-        return 'applicabilityCheckingNamespaceAutocompletionProvider';
+        return 'applicabilityCheckingParameterNameAutocompletionProvider';
     }
 }

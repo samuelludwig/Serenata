@@ -67,7 +67,8 @@ class NonStaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAu
             ['StaticPropertyFetchStatic.phpt'],
             ['StaticPropertyFetchStaticError.phpt'],
             ['StaticPropertyFetchParent.phpt'],
-            ['StaticPropertyFetchParentError.phpt']
+            ['StaticPropertyFetchParentError.phpt'],
+            ['ParameterName.phpt']
         ];
     }
 

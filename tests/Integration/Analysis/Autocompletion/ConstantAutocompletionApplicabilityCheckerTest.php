@@ -67,7 +67,8 @@ class ConstantAutocompletionApplicabilityCheckerTest extends AbstractAutocomplet
             ['StaticPropertyFetchStatic.phpt'],
             ['StaticPropertyFetchStaticError.phpt'],
             ['StaticPropertyFetchParent.phpt'],
-            ['StaticPropertyFetchParentError.phpt']
+            ['StaticPropertyFetchParentError.phpt'],
+            ['ParameterName.phpt']
         ];
     }
 

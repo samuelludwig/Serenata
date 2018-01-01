@@ -65,7 +65,8 @@ class StaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAutoc
             ['TopLevelNamespace.phpt'],
             ['FunctionLike.phpt'],
             ['PropertyFetch.phpt'],
-            ['MethodCall.phpt']
+            ['MethodCall.phpt'],
+            ['ParameterName.phpt']
         ];
     }
 
