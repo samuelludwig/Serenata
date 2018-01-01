@@ -4,6 +4,7 @@
   * Fuzzy matching happens in the core itself. This is necessary to prevent large amounts of relevant suggestions being sent back to the client solely so the client can filter them by itself, which is very taxing on the socket connection, the client, as well as the server itself as it must prepare these results for transmission.
 * [Requests can now be cancelled via the `CancelRequest` command](https://gitlab.com/php-integrator/core/issues/144)
   * Note that, as the core is synchronous and single-threaded, requests that are already being processed cannot be cancelled. Requests are queued internally before they are processed, so it is still worhtwile to try and cancel requests where applicable (in these cases the core will be able to skip the processing part of the request).
+* Performance has improved in several area's, including signature help and tooltips, due to additional internal caching to avoid recomputation
 
 ### Bugs Fixed
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
