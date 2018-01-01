@@ -44,17 +44,19 @@ class JsonRpcQueue
     public function pop(): JsonRpcQueueItem
     {
         /** @var JsonRpcQueueItem $request */
-        $request = $this->queue->pop();
+        $requestQueueItem = $this->queue->pop();
 
-        if ($request->getIsCancelled()) {
+        if ($requestQueueItem->getRequest()->getId() !== null &&
+            $this->getIsCancelled($requestQueueItem->getRequest()->getId())
+        ) {
             return new JsonRpcQueueItem(
-                $request->getRequest(),
-                $request->getJsonRpcResponseSender(),
+                $requestQueueItem->getRequest(),
+                $requestQueueItem->getJsonRpcResponseSender(),
                 true
             );
         }
 
-        return $request;
+        return $requestQueueItem;
     }
 
     /**
