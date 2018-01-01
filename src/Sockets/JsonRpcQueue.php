@@ -8,7 +8,7 @@ use UnderflowException;
 /**
  * JSON RPC queue.
  */
-class JsonRpcQueue
+final class JsonRpcQueue
 {
     /**
      * @var Ds\Queue
