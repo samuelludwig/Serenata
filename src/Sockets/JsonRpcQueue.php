@@ -11,7 +11,7 @@ use UnderflowException;
 final class JsonRpcQueue
 {
     /**
-     * @var Ds\Queue
+     * @var Ds\PriorityQueue
      */
     private $queue;
 
@@ -25,15 +25,16 @@ final class JsonRpcQueue
      */
     public function __construct()
     {
-        $this->queue = new Ds\Queue();
+        $this->queue = new Ds\PriorityQueue();
     }
 
     /**
      * @param JsonRpcQueueItem $item
+     * @param int              $priority
      */
-    public function push(JsonRpcQueueItem $item): void
+    public function push(JsonRpcQueueItem $item, int $priority = JsonRpcQueueItemPriority::NORMAL): void
     {
-        $this->queue->push($item);
+        $this->queue->push($item, $priority);
     }
 
     /**

@@ -9,6 +9,7 @@ use UnexpectedValueException;
 use PhpIntegrator\Sockets\SocketServer;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use PhpIntegrator\Sockets\JsonRpcQueueItemPriority;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
@@ -71,7 +72,17 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
     {
-        $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
+        $priority = JsonRpcQueueItemPriority::NORMAL;
+
+        // TODO: Refactor into a separate "PriorityDeterminer" class that works with requests.
+        if ($request->getMethod() === 'cancelRequest') {
+            $priority = JsonRpcQueueItemPriority::CRITICAL;
+        }
+
+        $this->getContainer()->get('requestQueue')->push(
+            new JsonRpcQueueItem($request, $jsonRpcResponseSender),
+            $priority
+        );
 
         $this->ensurePeriodicTimerIsInstalled();
     }
