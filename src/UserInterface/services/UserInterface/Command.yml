@@ -2,6 +2,11 @@ parameters:
 
 
 services:
+    cancelRequestCommand:
+        class: PhpIntegrator\UserInterface\Command\CancelRequestCommand
+        arguments:
+            - '@requestQueue'
+
     initializeCommand:
         class: PhpIntegrator\UserInterface\Command\InitializeCommand
         arguments:

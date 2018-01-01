@@ -41,25 +41,29 @@ class JsonRpcQueueItemProcessor
         $error = null;
         $response = null;
 
-        try {
-            $response = $this->handle($queueItem);
-        } catch (RequestParsingException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-        } catch (Command\InvalidArgumentsException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-        } catch (IncorrectDatabaseVersionException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
-        } catch (\RuntimeException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
-        } catch (\Throwable $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line'      => $e->getLine(),
-                'file'      => $e->getFile(),
-                'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
-            ]);
+        if (!$queueItem->getIsCancelled()) {
+            try {
+                $response = $this->handle($queueItem);
+            } catch (RequestParsingException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
+            } catch (Command\InvalidArgumentsException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
+            } catch (IncorrectDatabaseVersionException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
+            } catch (\RuntimeException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
+            } catch (\Throwable $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
+                    'line'      => $e->getLine(),
+                    'file'      => $e->getFile(),
+                    'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
+                ]);
+            }
+        } else {
+            $error = new JsonRpcError(JsonRpcErrorCode::REQUEST_CANCELLED, 'Request was cancelled');
         }
 
-        if (/*$response === null &&*/ $error !== null) {
+        if ($error !== null) {
             $response = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
         }
 

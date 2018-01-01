@@ -20,13 +20,23 @@ class JsonRpcQueueItem
     private $jsonRpcResponseSender;
 
     /**
+     * @var bool
+     */
+    private $isCancelled;
+
+    /**
      * @param JsonRpcRequest                 $request
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param bool                           $isCancelled
      */
-    public function __construct(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender)
-    {
+    public function __construct(
+        JsonRpcRequest $request,
+        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        bool $isCancelled = false
+    ) {
         $this->request = $request;
         $this->jsonRpcResponseSender = $jsonRpcResponseSender;
+        $this->isCancelled = $isCancelled;
     }
 
     /**
@@ -43,5 +53,13 @@ class JsonRpcQueueItem
     public function getJsonRpcResponseSender(): JsonRpcResponseSenderInterface
     {
         return $this->jsonRpcResponseSender;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsCancelled(): bool
+    {
+        return $this->isCancelled;
     }
 }

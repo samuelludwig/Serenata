@@ -2,9 +2,6 @@ parameters:
 
 
 services:
-    requestQueue:
-        class: Ds\Queue
-
     sqliteConnectionFactory:
         class: PhpIntegrator\Indexing\SqliteConnectionFactory
 

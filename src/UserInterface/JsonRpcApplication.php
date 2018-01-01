@@ -123,10 +123,6 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $this->periodicTimer = null;
     }
 
-
-
-
-
     /**
      * @return void
      */
