@@ -1,6 +1,6 @@
 ## 3.2.0
 ### Major Changes
-* [Autocompletion is now supported](https://gitlab.com/php-integrator/core/issues/43)
+* [Autocompletion is now supported via the `Autocomplete` command](https://gitlab.com/php-integrator/core/issues/43)
   * Fuzzy matching happens in the core itself. This is necessary to prevent large amounts of relevant suggestions being sent back to the client solely so the client can filter them by itself, which is very taxing on the socket connection, the client, as well as the server itself as it must prepare these results for transmission.
 * [Requests can now be cancelled via the `CancelRequest` command](https://gitlab.com/php-integrator/core/issues/144)
   * Note that, as the core is synchronous and single-threaded, requests that are already being processed cannot be cancelled. Requests are queued internally before they are processed, so it is still worhtwile to try and cancel requests where applicable. In these cases the core will be able to skip the processing part of the request.
