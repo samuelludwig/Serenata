@@ -49,6 +49,8 @@ class JsonRpcQueue
         if ($requestQueueItem->getRequest()->getId() !== null &&
             $this->getIsCancelled($requestQueueItem->getRequest()->getId())
         ) {
+            $this->pruneCancelled($requestQueueItem->getRequest()->getId());
+
             return new JsonRpcQueueItem(
                 $requestQueueItem->getRequest(),
                 $requestQueueItem->getJsonRpcResponseSender(),
@@ -73,6 +75,14 @@ class JsonRpcQueue
     public function cancel(string $requestId): void
     {
         $this->cancelledIds[$requestId] = true;
+    }
+
+    /**
+     * @param string $requestId
+     */
+    private function pruneCancelled(string $requestId): void
+    {
+        unset($this->cancelledIds[$requestId]);
     }
 
     /**
