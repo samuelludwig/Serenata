@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\AvailableVariablesCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class AvailableVariablesCommandTest extends AbstractIntegrationTest
