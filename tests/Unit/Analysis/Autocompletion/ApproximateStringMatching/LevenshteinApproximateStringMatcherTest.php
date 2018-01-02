@@ -95,12 +95,10 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
      */
     public function testScoresParametersThatAreTooFarApartAsNull(): void
     {
-        $test = 'foo';
-        $referenceText = 'test';
-
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertNull($matcher->score($test, $referenceText));
+        static::assertNull($matcher->score('foo', 'test'));
+        static::assertNull($matcher->score('Application\Test\FooBar\QuxProviderInterface', 'ActiveUserProviderInterface'));
     }
 
     /**

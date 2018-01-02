@@ -37,7 +37,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      *
      * @var int
      */
-    private const REMOVAL_COST = self::REPLACEMENT_COST * 5;
+    private const REMOVAL_COST = self::REPLACEMENT_COST * 3;
 
     /**
      * @var int
