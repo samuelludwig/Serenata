@@ -46,7 +46,7 @@ services:
     superglobalAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\SuperglobalAutocompletionProvider
 
-    applicabilityCheckingKeywordAutocompletionProvider:
+    applicabilityCheckingSuperglobalAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@superglobalAutocompletionProvider'
