@@ -95,6 +95,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
         for ($i = 0; $i <= $scanEnd; ++$i) {
             if (substr($approximation, $i, $referenceTextLength) === $referenceText) {
                 $bonus += self::REPLACEMENT_COST * 5;
+                break;
             }
         }
 
