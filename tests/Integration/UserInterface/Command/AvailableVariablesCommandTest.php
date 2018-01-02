@@ -9,6 +9,56 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testDoesNotReturnVariableStartingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariableStartingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariableEndingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariableEndingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariablePartOfAssignmentStartingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariablePartOfAssignmentStartingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariablePartOfAssignmentEndingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariablePartOfAssignmentEndingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariableOperatingAsLeftOperandOfAssignmentAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariableOperatingAsLeftOperandOfAssignmentAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testReturnsOnlyVariablesRelevantToTheGlobalScope(): void
     {
         $output = $this->getAvailableVariables('GlobalScope.phpt');

@@ -8,6 +8,7 @@
 
 ### Bugs Fixed
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
+* Fetching local variables will no longer include variables that aren't actually available yet at the offset because they are being assigned to
 * Fix same files being queued for reindexing erroneously when their modification date was updated, but their contents did not change (they were never being actually indexed, but still reevaluated each time)
 
 ### Structural changes (mostly relevant to clients)
