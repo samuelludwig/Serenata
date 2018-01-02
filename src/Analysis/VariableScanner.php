@@ -27,7 +27,7 @@ class VariableScanner
         $queryingVisitor = new VariableScanningVisitor($offset);
         $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
 
-        $traverser = new NodeTraverser(false);
+        $traverser = new NodeTraverser();
         $traverser->addVisitor($scopeLimitingVisitor);
         $traverser->addVisitor($queryingVisitor);
         $traverser->traverse($nodes);
