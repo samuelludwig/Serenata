@@ -6,3 +6,6 @@ services:
         class: PhpIntegrator\Sockets\JsonRpcQueueItemProcessor
         arguments:
             - '@service_container'
+
+    jsonRpcRequestPriorityDeterminer:
+        class: PhpIntegrator\Sockets\JsonRpcRequestPriorityDeterminer
