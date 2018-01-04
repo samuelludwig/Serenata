@@ -2,6 +2,11 @@ parameters:
 
 
 services:
+    requestQueue:
+        class: PhpIntegrator\Sockets\JsonRpcQueue
+        arguments:
+            - '@jsonRpcRequestPriorityDeterminer'
+
     jsonRpcQueueItemProcessor:
         class: PhpIntegrator\Sockets\JsonRpcQueueItemProcessor
         arguments:

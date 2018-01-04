@@ -11,6 +11,11 @@ use UnderflowException;
 final class JsonRpcQueue
 {
     /**
+     * @var JsonRpcRequestPriorityDeterminer
+     */
+    private $jsonRpcRequestPriorityDeterminer;
+
+    /**
      * @var Ds\PriorityQueue
      */
     private $queue;
@@ -21,19 +26,26 @@ final class JsonRpcQueue
     private $cancelledIds = [];
 
     /**
-     *
+     * @param JsonRpcRequestPriorityDeterminer $jsonRpcRequestPriorityDeterminer
      */
-    public function __construct()
+    public function __construct(JsonRpcRequestPriorityDeterminer $jsonRpcRequestPriorityDeterminer)
     {
+        $this->jsonRpcRequestPriorityDeterminer = $jsonRpcRequestPriorityDeterminer;
+
         $this->queue = new Ds\PriorityQueue();
     }
 
     /**
      * @param JsonRpcQueueItem $item
-     * @param int              $priority
+     * @param int|null         $priority The priority of the item, see {@see JsonRpcQueueItemPriority}. Set to null to
+     *                                   determine automatically (recommended).
      */
-    public function push(JsonRpcQueueItem $item, int $priority = JsonRpcQueueItemPriority::NORMAL): void
+    public function push(JsonRpcQueueItem $item, ?int $priority = null): void
     {
+        $priority = $priority !== null ? $priority : $this->jsonRpcRequestPriorityDeterminer->determine(
+            $item->getRequest()
+        );
+
         $this->queue->push($item, $priority);
     }
 

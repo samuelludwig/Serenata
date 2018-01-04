@@ -19,6 +19,3 @@ parameters:
 services:
     cache:
         class: Doctrine\Common\Cache\ArrayCache
-
-    requestQueue:
-        class: PhpIntegrator\Sockets\JsonRpcQueue
