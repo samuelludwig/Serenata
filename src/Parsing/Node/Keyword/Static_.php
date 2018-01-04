@@ -16,4 +16,12 @@ final class Static_ extends Expr
     {
         return [];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getType(): string
+    {
+        return 'Expr_Static';
+    }
 }

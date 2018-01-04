@@ -17,4 +17,12 @@ final class Dummy extends Node\Expr
     {
         return [];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getType(): string
+    {
+        return 'Expr_Dummy';
+    }
 }
