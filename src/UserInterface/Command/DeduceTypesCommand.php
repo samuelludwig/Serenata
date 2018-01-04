@@ -116,7 +116,7 @@ final class DeduceTypesCommand extends AbstractCommand
     ): array {
         $file = $this->storage->getFileByPath($filePath);
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         return $this->expressionTypeDeducer->deduce(
             $file,

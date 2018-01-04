@@ -99,7 +99,7 @@ final class SignatureHelpCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         return $this->signatureHelpRetriever->get($file, $code, $offset);
     }

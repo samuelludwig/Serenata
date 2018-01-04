@@ -99,7 +99,7 @@ final class TooltipCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         return $this->tooltipProvider->get($file, $code, $offset);
     }

@@ -99,7 +99,7 @@ final class GotoDefinitionCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         return $this->definitionLocator->locate($file, $code, $offset);
     }

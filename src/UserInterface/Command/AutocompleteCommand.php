@@ -99,7 +99,7 @@ class AutocompleteCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         return $this->autocompletionProvider->provide($file, $code, $offset);
     }
