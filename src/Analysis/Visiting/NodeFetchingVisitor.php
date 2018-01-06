@@ -4,6 +4,7 @@ namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpParser\Node;
 use PhpParser\Comment;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -60,8 +61,10 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
             $endFilePos = $startFilePos;
         }
 
-        if ($endFilePos < $this->position || $startFilePos > $this->position) {
-            return;
+        if ($endFilePos < $this->position) {
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        } elseif ($startFilePos > $this->position) {
+            return NodeTraverser::STOP_TRAVERSAL;
         }
 
         $this->matchingNode = $node;
