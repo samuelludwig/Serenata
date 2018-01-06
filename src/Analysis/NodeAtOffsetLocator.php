@@ -39,7 +39,7 @@ class NodeAtOffsetLocator implements NodeAtOffsetLocatorInterface
         try {
             $nodes = $this->getNodesFromCode($code);
         } catch (UnexpectedValueException $e) {
-            return [];
+            return new NodeAtOffsetLocatorResult(null, null);
         }
 
         $visitor = new NodeFetchingVisitor($position);
