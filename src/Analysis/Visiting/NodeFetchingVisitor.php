@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpParser\Node;
+use PhpParser\Comment;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -16,14 +17,19 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     private $position;
 
     /**
-     * @var Node
+     * @var Node|null
      */
     private $matchingNode;
 
     /**
-     * @var Node
+     * @var Node|null
      */
     private $mostInterestingNode;
+
+    /**
+     * @var Comment|null
+     */
+    private $comment;
 
     /**
      * Constructor.
@@ -40,6 +46,8 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
+        $this->analyzeNodeComments($node);
+
         $endFilePos = $node->getAttribute('endFilePos');
         $startFilePos = $node->getAttribute('startFilePos');
 
@@ -52,7 +60,7 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
             $endFilePos = $startFilePos;
         }
 
-        if ($startFilePos > $this->position || $endFilePos < $this->position) {
+        if ($endFilePos < $this->position || $startFilePos > $this->position) {
             return;
         }
 
@@ -60,6 +68,29 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
 
         if (!$node instanceof Node\Name && !$node instanceof Node\Identifier) {
             $this->mostInterestingNode = $node;
+        }
+    }
+
+    /**
+     * @param Node $node
+     */
+    private function analyzeNodeComments(Node $node): void
+    {
+        foreach ($node->getComments() as $comment) {
+            $this->analyzeNodeComment($comment);
+        }
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    private function analyzeNodeComment(Comment $comment): void
+    {
+        // NOTE: This is now an open (exclusive) range.
+        $endPosition = $comment->getFilePos() + strlen($comment->getText());
+
+        if ($this->position >= $comment->getFilePos() && $this->position < $endPosition) {
+            $this->comment = $comment;
         }
     }
 
@@ -82,5 +113,13 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     public function getNearestInterestingNode(): ?Node
     {
         return $this->mostInterestingNode;
+    }
+
+    /**
+     * @return Comment|null
+     */
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
     }
 }

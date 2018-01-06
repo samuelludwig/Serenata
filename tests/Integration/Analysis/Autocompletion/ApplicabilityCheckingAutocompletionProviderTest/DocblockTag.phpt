@@ -1,0 +1,6 @@
+<?php
+
+/**
+ * @// <MARKER>
+ */
+echo 'test';

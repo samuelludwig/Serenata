@@ -52,6 +52,7 @@ class KeywordAutocompletionApplicabilityCheckerTest extends AbstractAutocompleti
             ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             ['Docblock.phpt'],
+            ['DocblockTag.phpt'],
             ['Comment.phpt'],
             // ['FunctionSignature.phpt'],
             // ['MethodSignature.phpt'],

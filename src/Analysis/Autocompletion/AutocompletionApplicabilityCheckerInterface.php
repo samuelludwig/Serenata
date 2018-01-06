@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Autocompletion;
 
-use PhpParser\Node;
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
 
 /**
  * Checks if autocompletion applies to a specific node.
@@ -17,14 +17,9 @@ interface AutocompletionApplicabilityCheckerInterface
     public function doesApplyToPrefix(string $prefix): bool;
 
     /**
-     * @return bool
-     */
-    public function doesApplyOutsideNodes(): bool;
-
-    /**
-     * @param Node $node
+     * @param NodeAtOffsetLocatorResult $node
      *
      * @return bool
      */
-    public function doesApplyTo(Node $node): bool;
+    public function doesApplyTo(NodeAtOffsetLocatorResult $node): bool;
 }

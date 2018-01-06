@@ -57,6 +57,7 @@ class StaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAutoc
             ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             ['Docblock.phpt'],
+            ['DocblockTag.phpt'],
             ['Comment.phpt'],
             ['FunctionSignature.phpt'],
             ['MethodSignature.phpt'],

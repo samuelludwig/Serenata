@@ -53,6 +53,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             ['TopLevelNamespace.phpt'],
             ['FunctionLike.phpt'],
             ['Docblock.phpt'],
+            ['DocblockTag.phpt'],
             ['Comment.phpt'],
             ['FunctionSignature.phpt'],
             ['MethodSignature.phpt'],

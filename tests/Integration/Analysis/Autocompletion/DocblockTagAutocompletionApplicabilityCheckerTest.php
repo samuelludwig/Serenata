@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Analysis\Autocompletion;
 
-class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
+class DocblockTagAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @dataProvider getFileNamesWhereShouldApply
@@ -13,7 +13,7 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
      */
     public function testAppliesAtExpectedLocations(string $fileName): void
     {
-        static::assertNotEmpty($this->provide($fileName, 'LocalVariableList.phpt', '// <INJECTION>'));
+        static::assertNotEmpty($this->provide($fileName));
     }
 
     /**
@@ -25,7 +25,7 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
      */
     public function testDoesNotApplyAtExpectedLocations(string $fileName): void
     {
-        static::assertEmpty($this->provide($fileName, 'LocalVariableList.phpt'));
+        static::assertEmpty($this->provide($fileName));
     }
 
     /**
@@ -34,9 +34,7 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
     public function getFileNamesWhereShouldApply(): array
     {
         return [
-            ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt'],
-            ['VariableName.phpt']
+            ['DocblockTag.phpt']
         ];
     }
 
@@ -46,13 +44,15 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
     public function getFileNamesWhereShouldNotApply(): array
     {
         return [
+            ['TopLevelNamespace.phpt'],
+            ['FunctionLike.phpt'],
+            ['VariableName.phpt'],
             ['MethodCall.phpt'],
             ['StaticMethodCall.phpt'],
             ['ClassConstFetch.phpt'],
             ['ClassConstFetchNoDelimiter.phpt'],
             ['UseStatement.phpt'],
             ['Docblock.phpt'],
-            ['DocblockTag.phpt'],
             ['Comment.phpt'],
             // ['FunctionSignature.phpt'],
             // ['MethodSignature.phpt'],
@@ -86,6 +86,6 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
      */
     protected function getProviderName(): string
     {
-        return 'applicabilityCheckingLocalVariableAutocompletionProvider';
+        return 'applicabilityCheckingDocblockTagAutocompletionProvider';
     }
 }

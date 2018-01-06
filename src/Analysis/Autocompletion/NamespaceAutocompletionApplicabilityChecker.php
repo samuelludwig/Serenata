@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 
 use PhpParser\Node;
 
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
+
 /**
  * Checks if namespace autocompletion applies for a specific node.
  */
@@ -22,24 +24,30 @@ final class NamespaceAutocompletionApplicabilityChecker implements Autocompletio
     /**
      * @inheritDoc
      */
-    public function doesApplyOutsideNodes(): bool
+    public function doesApplyTo(NodeAtOffsetLocatorResult $nodeAtOffsetLocatorResult): bool
     {
-        return false;
+        if ($nodeAtOffsetLocatorResult->getNode() === null) {
+            return false;
+        }
+
+        return $this->doesApplyToNode($nodeAtOffsetLocatorResult->getNode());
     }
 
     /**
-     * @inheritDoc
+     * @param Node $node
+     *
+     * @return bool
      */
-    public function doesApplyTo(Node $node): bool
+    private function doesApplyToNode(Node $node): bool
     {
         if ($node instanceof Node\Stmt\Expression) {
-            return $this->doesApplyTo($node->expr);
+            return $this->doesApplyToNode($node->expr);
         } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
-            return $this->doesApplyTo($node->getAttribute('parent'));
+            return $this->doesApplyToNode($node->getAttribute('parent'));
         } elseif ($node instanceof Node\Expr\Error) {
             $parent = $node->getAttribute('parent', false);
 
-            return $parent !== false ? $this->doesApplyTo($parent) : false;
+            return $parent !== false ? $this->doesApplyToNode($parent) : false;
         }
 
         return

@@ -8,37 +8,18 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 final class AutocompletionPrefixDeterminer implements AutocompletionPrefixDeterminerInterface
 {
     /**
-     * @var string[]
+     * @var AutocompletionPrefixBoundaryTokenRetrieverInterface
      */
-    private const BOUNDARY_TOKEN_MAP = [
-        " "  => true,
-        "\n" => true,
-        "\t" => true,
-        "("  => true,
-        ")"  => true,
-        "{"  => true,
-        "}"  => true,
-        "["  => true,
-        "]"  => true,
-        "+"  => true,
-        "-"  => true,
-        "*"  => true,
-        "/"  => true,
-        "^"  => true,
-        "|"  => true,
-        "&"  => true,
-        ":"  => true,
-        "!"  => true,
-        "?"  => true,
-        "@"  => true,
-        "#"  => true,
-        "%"  => true,
-        ">"  => true,
-        "<"  => true,
-        "="  => true,
-        ","  => true,
-        ";"  => true
-    ];
+    private $autocompletionPrefixBoundaryTokenRetriever;
+
+    /**
+     * @param AutocompletionPrefixBoundaryTokenRetrieverInterface $autocompletionPrefixBoundaryTokenRetriever
+     */
+    public function __construct(
+        AutocompletionPrefixBoundaryTokenRetrieverInterface $autocompletionPrefixBoundaryTokenRetriever
+    ) {
+        $this->autocompletionPrefixBoundaryTokenRetriever = $autocompletionPrefixBoundaryTokenRetriever;
+    }
 
     /**
      * @inheritDoc
@@ -47,8 +28,10 @@ final class AutocompletionPrefixDeterminer implements AutocompletionPrefixDeterm
     {
         $i = max($offset - 1, 0);
 
+        $tokens = $this->autocompletionPrefixBoundaryTokenRetriever->retrieve();
+
         while ($i > 0) {
-            if (isset(self::BOUNDARY_TOKEN_MAP[$code[$i]])) {
+            if (in_array($code[$i], $tokens, true)) {
                 ++$i; // Don't include the boundary character itself.
                 break;
             }

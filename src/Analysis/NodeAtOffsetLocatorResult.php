@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Analysis;
 
 use PhpParser\Node;
+use PhpParser\Comment;
 
 /**
  * Result originating from a {@see NodeAtOffsetLocatorInterface}.
@@ -20,13 +21,20 @@ class NodeAtOffsetLocatorResult
     private $nearestInterestingNode;
 
     /**
-     * @param Node|null $node
-     * @param Node|null $nearestInterestingNode
+     * @var Comment|null
      */
-    public function __construct(?Node $node, ?Node $nearestInterestingNode)
+    private $comment;
+
+    /**
+     * @param Node|null    $node
+     * @param Node|null    $nearestInterestingNode
+     * @param Comment|null $comment
+     */
+    public function __construct(?Node $node, ?Node $nearestInterestingNode, ?Comment $comment)
     {
         $this->node = $node;
         $this->nearestInterestingNode = $nearestInterestingNode;
+        $this->comment = $comment;
     }
 
     /**
@@ -43,5 +51,13 @@ class NodeAtOffsetLocatorResult
     public function getNearestInterestingNode(): ?Node
     {
         return $this->nearestInterestingNode;
+    }
+
+    /**
+     * @return Comment|null
+     */
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
     }
 }

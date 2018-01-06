@@ -3,8 +3,23 @@ parameters:
     autocompletion.finalSuggestionsResultLimit: 50
 
 services:
-    autocompletionPrefixDeterminer:
+    defaultAutocompletionPrefixBoundaryTokenRetriever:
+        class: PhpIntegrator\Analysis\Autocompletion\DefaultAutocompletionPrefixBoundaryTokenRetriever
+
+    docblockAutocompletionPrefixBoundaryTokenRetriever:
+        class: PhpIntegrator\Analysis\Autocompletion\DocblockAutocompletionPrefixBoundaryTokenRetriever
+        arguments:
+            - '@defaultAutocompletionPrefixBoundaryTokenRetriever'
+
+    defaultAutocompletionPrefixDeterminer:
         class: PhpIntegrator\Analysis\Autocompletion\AutocompletionPrefixDeterminer
+        arguments:
+            - '@defaultAutocompletionPrefixBoundaryTokenRetriever'
+
+    docblockAutocompletionPrefixDeterminer:
+        class: PhpIntegrator\Analysis\Autocompletion\AutocompletionPrefixDeterminer
+        arguments:
+            - '@docblockAutocompletionPrefixBoundaryTokenRetriever'
 
     levenshteinApproximateStringMatcher:
         class: PhpIntegrator\Analysis\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher
@@ -41,7 +56,23 @@ services:
             - '@keywordAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@keywordAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    docblockTagAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\DocblockTagAutocompletionProvider
+        arguments:
+            - '@docblockAutocompletionPrefixDeterminer'
+
+    docblockTagAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Analysis\Autocompletion\DocblockTagAutocompletionApplicabilityChecker
+
+    applicabilityCheckingDocblockTagAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@docblockTagAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@docblockTagAutocompletionApplicabilityChecker'
+            - '@docblockAutocompletionPrefixDeterminer'
 
     superglobalAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\SuperglobalAutocompletionProvider
@@ -52,14 +83,14 @@ services:
             - '@superglobalAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@localVariableAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     classlikeAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
         arguments:
             - '@classlikeListProvider'
             - '@useStatementInsertionCreator'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.largeProviderResultLimit%'
 
@@ -72,13 +103,13 @@ services:
             - '@classlikeAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@classlikeAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     namespaceAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionProvider
         arguments:
             - '@namespaceListProvider'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.largeProviderResultLimit%'
 
@@ -91,13 +122,13 @@ services:
             - '@namespaceAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@namespaceAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     functionAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\FunctionAutocompletionProvider
         arguments:
             - '@functionListProvider'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
@@ -113,13 +144,13 @@ services:
             - '@functionAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@functionAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     constantAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ConstantAutocompletionProvider
         arguments:
             - '@constantListProvider'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@autocompletionSuggestionTypeFormatter'
             - '%autocompletion.largeProviderResultLimit%'
@@ -133,7 +164,7 @@ services:
             - '@constantAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@constantAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     nonStaticMethodAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NonStaticMethodAutocompletionProvider
@@ -153,7 +184,7 @@ services:
             - '@nonStaticMethodAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@nonStaticMethodAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     staticMethodAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\StaticMethodAutocompletionProvider
@@ -173,7 +204,7 @@ services:
             - '@staticMethodAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@staticMethodAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     nonStaticPropertyAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NonStaticPropertyAutocompletionProvider
@@ -191,7 +222,7 @@ services:
             - '@nonStaticPropertyAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@nonStaticPropertyAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     staticPropertyAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\StaticPropertyAutocompletionProvider
@@ -209,7 +240,7 @@ services:
             - '@staticPropertyAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@staticPropertyAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     classConstantAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ClassConstantAutocompletionProvider
@@ -227,7 +258,7 @@ services:
             - '@classConstantAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@classConstantAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     localVariableAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\LocalVariableAutocompletionProvider
@@ -245,7 +276,7 @@ services:
             - '@localVariableAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@localVariableAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     parameterNameAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\ParameterNameAutocompletionProvider
@@ -261,12 +292,13 @@ services:
             - '@parameterNameAutocompletionProvider'
             - '@nodeAtOffsetLocator'
             - '@parameterNameAutocompletionApplicabilityChecker'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     aggregatingAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\AggregatingAutocompletionProvider
         arguments:
             - '@applicabilityCheckingKeywordAutocompletionProvider'
+            - '@applicabilityCheckingDocblockTagAutocompletionProvider'
             - '@applicabilityCheckingSuperglobalAutocompletionProvider'
             - '@applicabilityCheckingClasslikeAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'
@@ -284,7 +316,7 @@ services:
         class: PhpIntegrator\Analysis\Autocompletion\FuzzyMatchingAutocompletionProvider
         arguments:
             - '@aggregatingAutocompletionProvider'
-            - '@autocompletionPrefixDeterminer'
+            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.finalSuggestionsResultLimit%'
 

@@ -39,7 +39,7 @@ class NodeAtOffsetLocator implements NodeAtOffsetLocatorInterface
         try {
             $nodes = $this->getNodesFromCode($code);
         } catch (UnexpectedValueException $e) {
-            return new NodeAtOffsetLocatorResult(null, null);
+            return new NodeAtOffsetLocatorResult(null, null, null);
         }
 
         $visitor = new NodeFetchingVisitor($position);
@@ -48,7 +48,11 @@ class NodeAtOffsetLocator implements NodeAtOffsetLocatorInterface
         $traverser->addVisitor($visitor);
         $traverser->traverse($nodes);
 
-        return new NodeAtOffsetLocatorResult($visitor->getNode(), $visitor->getNearestInterestingNode());
+        return new NodeAtOffsetLocatorResult(
+            $visitor->getNode(),
+            $visitor->getNearestInterestingNode(),
+            $visitor->getComment()
+        );
     }
 
     /**

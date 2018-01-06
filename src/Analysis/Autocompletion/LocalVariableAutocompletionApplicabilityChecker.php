@@ -4,6 +4,8 @@ namespace PhpIntegrator\Analysis\Autocompletion;
 
 use PhpParser\Node;
 
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
+
 /**
  * Checks if local variable autocompletion applies for a specific node.
  */
@@ -22,15 +24,23 @@ final class LocalVariableAutocompletionApplicabilityChecker implements Autocompl
     /**
      * @inheritDoc
      */
-    public function doesApplyOutsideNodes(): bool
+    public function doesApplyTo(NodeAtOffsetLocatorResult $nodeAtOffsetLocatorResult): bool
     {
-        return true;
+        if ($nodeAtOffsetLocatorResult->getComment() !== null) {
+            return false;
+        } elseif ($nodeAtOffsetLocatorResult->getNode() === null) {
+            return true;
+        }
+
+        return $this->doesApplyToNode($nodeAtOffsetLocatorResult->getNode());
     }
 
     /**
-     * @inheritDoc
+     * @param Node $node
+     *
+     * @return bool
      */
-    public function doesApplyTo(Node $node): bool
+    private function doesApplyToNode(Node $node): bool
     {
         if ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\UseUse) {
             return false;
@@ -57,13 +67,13 @@ final class LocalVariableAutocompletionApplicabilityChecker implements Autocompl
 
             return !$parent instanceof Node\Param;
         } elseif ($node instanceof Node\Stmt\Expression) {
-            return $this->doesApplyTo($node->expr);
+            return $this->doesApplyToNode($node->expr);
         } elseif ($node instanceof Node\Expr\Error) {
             $parent = $node->getAttribute('parent', false);
 
-            return $parent !== false ? $this->doesApplyTo($parent) : false;
+            return $parent !== false ? $this->doesApplyToNode($parent) : false;
         } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
-            return $this->doesApplyTo($node->getAttribute('parent'));
+            return $this->doesApplyToNode($node->getAttribute('parent'));
         }
 
         return true;
