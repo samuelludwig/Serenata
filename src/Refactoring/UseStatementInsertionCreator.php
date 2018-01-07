@@ -74,7 +74,7 @@ class UseStatementInsertionCreator
         int $position,
         bool $allowAdditionalNewlines
     ): TextEdit {
-        $this->enforceThatCreationIsPossible($name, $kind, $code, $position);
+        $this->enforceThatCreationIsPossibleAndNecessary($name, $kind, $code, $position);
 
         $textToInsert = "use {$name};\n";
 
@@ -108,7 +108,7 @@ class UseStatementInsertionCreator
      * @param string $code
      * @param int    $position
      */
-    private function enforceThatCreationIsPossible(
+    private function enforceThatCreationIsPossibleAndNecessary(
         string $name,
         string $kind,
         string $code,
