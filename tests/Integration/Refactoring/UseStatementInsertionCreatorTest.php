@@ -7,6 +7,7 @@ use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
+use PhpIntegrator\Refactoring\UseStatementUnnecessaryException;
 use PhpIntegrator\Refactoring\UseStatementAlreadyExistsException;
 use PhpIntegrator\Refactoring\UseStatementEqualsNamespaceException;
 use PhpIntegrator\Refactoring\NonCompoundNameInAnonymousNamespaceException;
@@ -22,7 +23,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testInsertsBeforeFirstNodeIfNoUseStatementsNorAnyNamespaceExists(): void
     {
-        $name = '\Foo';
+        $name = '\Foo\Bar';
         $insertionPoint = new Position(2, 0);
         $file = 'NoNamespaceAndNoUseStatements.phpt';
 
@@ -318,6 +319,19 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $file = 'NamespaceWithNoUseStatements.phpt';
 
         $this->expectException(UseStatementEqualsNamespaceException::class);
+
+        $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowsExceptionWhenAddingUseStatementForClassInSameNamespaceAsActiveNamespace(): void
+    {
+        $name = 'A\B';
+        $file = 'NamespaceWithNoUseStatements.phpt';
+
+        $this->expectException(UseStatementUnnecessaryException::class);
 
         $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false);
     }

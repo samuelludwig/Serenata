@@ -74,11 +74,11 @@ class UseStatementInsertionCreator
         int $position,
         bool $allowAdditionalNewlines
     ): TextEdit {
-        $this->enforceThatCreationIsPossibleAndNecessary($name, $kind, $code, $position);
+        $normalizedName = $this->typeNormalizer->getNormalizedFqcn($name);
+
+        $this->enforceThatCreationIsPossibleAndNecessary($normalizedName, $kind, $code, $position);
 
         $textToInsert = "use {$name};\n";
-
-        $normalizedName = $this->typeNormalizer->getNormalizedFqcn($name);
 
         $line = $this->locateBestZeroIndexedLineForInsertion($normalizedName, $kind, $code, $position);
         $shouldInsertBelowBestLine = $this->shouldInsertBelowLineOfBestMatch($normalizedName, $kind, $code, $position);
@@ -122,16 +122,36 @@ class UseStatementInsertionCreator
 
         $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
 
-        if (mb_strpos($name, '\\') === false && ($namespaceNode === null || $namespaceNode->name === null)) {
+        if (mb_strpos($name, '\\', 1) === false && ($namespaceNode === null || $namespaceNode->name === null)) {
             throw new NonCompoundNameInAnonymousNamespaceException(
                 'Adding use statements for non-compound name in anonymous namespaces is prohibited as it generates ' .
                 'a warning in PHP'
             );
-        } elseif ($namespaceNode !== null && $namespaceNode->name !== null && $name === $namespaceNode->name->toString()) {
+        } elseif ($namespaceNode === null || $namespaceNode->name === null) {
+            return;
+        }
+
+        $namespaceName = $this->typeNormalizer->getNormalizedFqcn($namespaceNode->name->toString());
+
+        if ($name === $namespaceName) {
             throw new UseStatementEqualsNamespaceException(
                 'Can not add use statement with same name as containing namespace'
             );
         }
+
+        $parts = explode('\\', $name);
+
+        array_pop($parts);
+
+        $prefixOfName = implode('\\', $parts);
+
+        // die(\Symfony\Component\VarDumper\VarDumper::dump(['location' => __FILE__ . ':' . __LINE__, 'var' => $prefixOfName, $name, $namespaceNode->name->toString()]));
+
+        if ($prefixOfName === $namespaceName) {
+           throw new UseStatementUnnecessaryException(
+               'Can not add use statement with same name as containing namespace'
+           );
+       }
     }
 
     /**
@@ -295,12 +315,10 @@ class UseStatementInsertionCreator
     {
         $useStatements = $this->retrieveRelevantUseStatements($code, $position);
 
-        $normalizedName = $this->typeNormalizer->getNormalizedFqcn($name);
-
-        return !empty(array_filter($useStatements, function (Node\Stmt $useStatement) use ($normalizedName): bool {
+        return !empty(array_filter($useStatements, function (Node\Stmt $useStatement) use ($name): bool {
             /** @var Node\Stmt\Use_|Node\Stmt\GroupUse $useStatement */
             foreach ($useStatement->uses as $useUseNode) {
-                if ($this->getFullNameFromUseUse($useStatement, $useUseNode) === $normalizedName) {
+                if ($this->getFullNameFromUseUse($useStatement, $useUseNode) === $name) {
                     return true;
                 }
             }
