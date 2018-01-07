@@ -105,6 +105,23 @@ services:
             - '@classlikeAutocompletionApplicabilityChecker'
             - '@defaultAutocompletionPrefixDeterminer'
 
+    docblockAnnotationAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ClasslikeAutocompletionProvider
+        arguments:
+            - '@annotationFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingDocblockAnnotationAutocompletionProvider:
+        class: PhpIntegrator\Analysis\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@docblockAnnotationAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@docblockTagAutocompletionApplicabilityChecker'
+            - '@docblockAutocompletionPrefixDeterminer'
+
     namespaceAutocompletionProvider:
         class: PhpIntegrator\Analysis\Autocompletion\NamespaceAutocompletionProvider
         arguments:
@@ -299,6 +316,7 @@ services:
         arguments:
             - '@applicabilityCheckingKeywordAutocompletionProvider'
             - '@applicabilityCheckingDocblockTagAutocompletionProvider'
+            - '@applicabilityCheckingDocblockAnnotationAutocompletionProvider'
             - '@applicabilityCheckingSuperglobalAutocompletionProvider'
             - '@applicabilityCheckingClasslikeAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'

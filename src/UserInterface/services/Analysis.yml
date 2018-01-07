@@ -205,6 +205,11 @@ services:
     classlikeListProvider:
         alias: classlikeListProvider.registry
 
+    annotationFilteringClasslikeListProvider:
+        class: PhpIntegrator\Analysis\AnnotationFilteringClasslikeListProvider
+        arguments:
+            - '@classlikeListProvider'
+
     namespaceListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineNamespaceListProvider
         arguments:
