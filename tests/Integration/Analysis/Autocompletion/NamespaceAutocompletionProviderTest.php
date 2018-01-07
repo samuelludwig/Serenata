@@ -10,7 +10,7 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
     /**
      * @return void
      */
-    public function testRetrievesAllClasslikes(): void
+    public function testRetrievesAll(): void
     {
         $output = $this->provide('Namespace.phpt');
 
