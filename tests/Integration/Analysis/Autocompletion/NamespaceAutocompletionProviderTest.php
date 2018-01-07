@@ -27,6 +27,16 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
     /**
      * @return void
      */
+    public function testOmitsAnonymousNamespaces(): void
+    {
+        $output = $this->provide('AnonymousNamespace.phpt');
+
+        static::assertEquals([], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testDeduplicatesNames(): void
     {
         $output = $this->provide('Namespaces.phpt');
