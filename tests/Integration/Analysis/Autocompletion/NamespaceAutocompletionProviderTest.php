@@ -25,6 +25,23 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
     }
 
     /**
+     * @return void
+     */
+    public function testDeduplicatesNames(): void
+    {
+        $output = $this->provide('Namespaces.phpt');
+
+        $suggestions = [
+            new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
+                'isDeprecated' => false,
+                'returnTypes'  => 'namespace'
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getFolderName(): string

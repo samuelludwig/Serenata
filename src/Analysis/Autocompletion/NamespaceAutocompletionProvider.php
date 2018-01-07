@@ -54,9 +54,22 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
-        $namespaceArrays = array_filter($this->namespaceListProvider->getAll(), function (array $namespace) {
-            return $namespace['name'] !== null;
-        });
+        $existingNames = [];
+
+        $namespaceArrays = array_filter(
+            $this->namespaceListProvider->getAll(),
+            function (array $namespace) use (&$existingNames): bool {
+                if ($namespace['name'] === null) {
+                    return false;
+                } elseif (isset($existingNames[$namespace['name']])) {
+                    return false;
+                }
+
+                $existingNames[$namespace['name']] = true;
+
+                return true;
+            }
+        );
 
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $namespaceArrays,
