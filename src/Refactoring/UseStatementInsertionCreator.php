@@ -146,10 +146,10 @@ class UseStatementInsertionCreator
         $prefixOfName = implode('\\', $parts);
 
         if ($prefixOfName === $namespaceName) {
-           throw new UseStatementUnnecessaryException(
-               'Can not add use statement with same name as containing namespace'
-           );
-       }
+            throw new UseStatementUnnecessaryException(
+                'Can not add use statement with same name as containing namespace'
+            );
+        }
     }
 
     /**
