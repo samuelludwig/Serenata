@@ -145,8 +145,6 @@ class UseStatementInsertionCreator
 
         $prefixOfName = implode('\\', $parts);
 
-        // die(\Symfony\Component\VarDumper\VarDumper::dump(['location' => __FILE__ . ':' . __LINE__, 'var' => $prefixOfName, $name, $namespaceNode->name->toString()]));
-
         if ($prefixOfName === $namespaceName) {
            throw new UseStatementUnnecessaryException(
                'Can not add use statement with same name as containing namespace'
