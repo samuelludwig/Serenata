@@ -24,7 +24,7 @@ class AutocompleteCommand extends AbstractCommand
     private $autocompletionProvider;
 
     /**
-     * @var sourceCodeStreamReader
+     * @var SourceCodeStreamReader
      */
     private $sourceCodeStreamReader;
 
