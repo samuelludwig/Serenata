@@ -23,7 +23,7 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion(
-                'Foo',
+                '\Foo',
                 SuggestionKind::CLASS_,
                 'Foo',
                 new TextEdit(
@@ -52,7 +52,7 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion(
-                'Foo',
+                '\Foo',
                 SuggestionKind::CLASS_,
                 'Foo',
                 new TextEdit(
@@ -81,7 +81,7 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion(
-                'Foo',
+                '\Foo',
                 SuggestionKind::MIXIN,
                 'Foo',
                 new TextEdit(
@@ -110,7 +110,7 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion(
-                'Foo',
+                '\Foo',
                 SuggestionKind::CLASS_,
                 '\Foo',
                 new TextEdit(
@@ -139,7 +139,7 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion(
-                'Foo\Bar\Baz',
+                '\Foo\Bar\Baz',
                 SuggestionKind::CLASS_,
                 'Baz',
                 new TextEdit(
