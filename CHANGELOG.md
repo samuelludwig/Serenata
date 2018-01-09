@@ -12,7 +12,7 @@
 * [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
 * Fetching local variables will no longer include variables that aren't actually available yet at the offset because they are being assigned to
-* Fix same files being queued for reindexing erroneously when their modification date was updated, but their contents did not change (they were never being actually indexed, but still reevaluated each time)
+* Fix same files erroneously being queued for reindexing when their modification date was updated, even if their contents did not change (they were never actually reindexed, but still reevaluated)
 
 ### Structural changes (mostly relevant to clients)
 * None yet.
