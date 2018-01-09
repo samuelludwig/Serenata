@@ -21,7 +21,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return ParserFactory
+     * @return PartialParser
      */
     private function createPartialParserStub(): PartialParser
     {
