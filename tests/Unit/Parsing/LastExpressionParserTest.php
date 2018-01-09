@@ -77,7 +77,7 @@ SOURCE;
                 // More code here.
             }
 
-            Bar::testProperty
+            Bar::TEST_CONSTANT
 SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
@@ -86,7 +86,7 @@ SOURCE;
         static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
         static::assertSame('Bar', $result->expr->class->toString());
         static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('testProperty', $result->expr->name->name);
+        static::assertSame('TEST_CONSTANT', $result->expr->name->name);
     }
 
     /**
