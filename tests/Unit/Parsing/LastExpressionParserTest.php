@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Tests\Unit\Parsing;
 
 use PhpIntegrator\Parsing\PartialParser;
-use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
@@ -19,14 +18,6 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     private function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
-    }
-
-    /**
-     * @return ParserFactory
-     */
-    private function createPrettyPrinterStub(): PrettyPrinter
-    {
-        return new PrettyPrinter();
     }
 
     /**
