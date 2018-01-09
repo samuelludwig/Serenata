@@ -92,6 +92,46 @@ SOURCE;
     /**
      * @return void
      */
+    public function testSeesDoInClassConstFetchAsClassConstFetch(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            Bar::DO
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        static::assertSame('Bar', $result->expr->class->toString());
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('DO', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSeesNewInClassConstFetchAsClassConstFetch(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            self::NEW
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        static::assertSame('self', $result->expr->class->toString());
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('NEW', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
     public function testStopsAtStaticClassNamesContainingANamespace(): void
     {
         $source = <<<'SOURCE'

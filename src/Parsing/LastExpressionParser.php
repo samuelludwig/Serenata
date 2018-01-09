@@ -196,10 +196,16 @@ final class LastExpressionParser implements Parser
                     $squiggleBracketsOpened === $squiggleBracketsClosed
                 ) {
                     // NOTE: We may have entered a closure.
-                    if (in_array($token['type'], $expressionBoundaryTokens) ||
-                        (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) ||
-                        ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON)
-                    ) {
+                    if (in_array($token['type'], $expressionBoundaryTokens)) {
+                        $nextToken = $currentTokenIndex > 0 ? $tokens[$currentTokenIndex - 1] : null;
+                        $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
+
+                        if ($nextTokenType !== T_DOUBLE_COLON) {
+                            return ++$i;
+                        }
+                    } elseif (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) {
+                        return ++$i;
+                    } elseif ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON) {
                         return ++$i;
                     } elseif ($token['type'] === T_DOUBLE_COLON) {
                         // For static class names and things like the self and parent keywords, we won't know when to
