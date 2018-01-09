@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use ArrayAccess;
-
 use PhpIntegrator\Autocompletion\AutocompletionProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
