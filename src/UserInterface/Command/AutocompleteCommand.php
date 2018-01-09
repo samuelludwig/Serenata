@@ -4,7 +4,7 @@ namespace PhpIntegrator\UserInterface\Command;
 
 use ArrayAccess;
 
-use PhpIntegrator\Analysis\Autocompletion\AutocompletionProviderInterface;
+use PhpIntegrator\Autocompletion\AutocompletionProviderInterface;
 
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\FileIndexerInterface;
