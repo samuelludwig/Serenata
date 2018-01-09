@@ -149,6 +149,46 @@ SOURCE;
     /**
      * @return void
      */
+    public function testStopsAtYieldKeyword(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            yield $this->someProperty
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertSame('this', $result->expr->var->name);
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('someProperty', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStopsAtYieldKeyword2(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            yield from $this->someProperty
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertSame('this', $result->expr->var->name);
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('someProperty', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
     public function testStopsAtBuiltinConstructs(): void
     {
         $source = <<<'SOURCE'
