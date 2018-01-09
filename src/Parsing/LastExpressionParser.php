@@ -97,7 +97,7 @@ final class LastExpressionParser implements Parser
                 if ($token['type'] !== T_START_HEREDOC) {
                     return $i + 1;
                 }
-            } else if ($token['type'] === T_START_HEREDOC) {
+            } elseif ($token['type'] === T_START_HEREDOC) {
                 if (!$isWalkingHeredocStart) {
                     ++$hereDocsOpened;
                     $isWalkingHeredocStart = true;
@@ -185,33 +185,34 @@ final class LastExpressionParser implements Parser
                         $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
 
                         // Subscopes can only exist when e.g. a closure is embedded as an argument to a function call,
-                        // in which case they will be inside parentheses or brackets. If we find a subscope outside these
-                        // simbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
+                        // in which case they will be inside parentheses or brackets. If we find a subscope outside
+                        // these symbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
                         if ($nextTokenType !== T_VARIABLE) {
                             return ++$i;
                         }
                     }
-                } elseif (
-                    $parenthesesOpened === $parenthesesClosed &&
+                } elseif ($parenthesesOpened === $parenthesesClosed &&
                     $squareBracketsOpened === $squareBracketsClosed &&
                     $squiggleBracketsOpened === $squiggleBracketsClosed
                 ) {
                     // NOTE: We may have entered a closure.
-                    if (
-                        in_array($token['type'], $expressionBoundaryTokens) ||
+                    if (in_array($token['type'], $expressionBoundaryTokens) ||
                         (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) ||
                         ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON)
                     ) {
                         return ++$i;
                     } elseif ($token['type'] === T_DOUBLE_COLON) {
-                        // For static class names and things like the self and parent keywords, we won't know when to stop.
-                        // These always appear the start of the call stack, so we know we can stop if we find them.
+                        // For static class names and things like the self and parent keywords, we won't know when to
+                        // stop. These always appear the start of the call stack, so we know we can stop if we find
+                        // them.
                         $startedStaticClassName = true;
                     }
                 }
             }
 
-            if ($startedStaticClassName && !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC])) {
+            if ($startedStaticClassName &&
+                !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC])
+            ) {
                 return ++$i;
             }
         }
@@ -248,7 +249,9 @@ final class LastExpressionParser implements Parser
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
-            throw new AssertionError('Error handling is not supported as error recovery will be attempted automatically');
+            throw new AssertionError(
+                'Error handling is not supported as error recovery will be attempted automatically'
+            );
         }
 
         $code = $this->getNormalizedCode($code);
