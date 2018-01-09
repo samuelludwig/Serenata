@@ -54,7 +54,9 @@ final class PartialParser implements Parser
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
-            throw new AssertionError('Error handling is not supported as error recovery will be attempted automatically');
+            throw new AssertionError(
+                'Error handling is not supported as error recovery will be attempted automatically'
+            );
         }
 
         $correctedExpression = $this->getNormalizedCode($code);
@@ -197,7 +199,9 @@ final class PartialParser implements Parser
             public function enterNode(Node $node)
             {
                 if ($node instanceof Node\Expr\Ternary) {
-                    if ($node->else instanceof Node\Expr\ConstFetch && $node->else->name->toString() === $this->dummyName) {
+                    if ($node->else instanceof Node\Expr\ConstFetch &&
+                        $node->else->name->toString() === $this->dummyName
+                    ) {
                         $node->else = new Expr\Dummy();
                     }
                 }
