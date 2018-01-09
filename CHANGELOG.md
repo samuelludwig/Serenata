@@ -9,9 +9,9 @@
 * Performance has improved in several area's, including signature help and tooltips, due to additional internal caching to avoid recomputation
 
 ### Bugs Fixed
+* [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
 * Fetching local variables will no longer include variables that aren't actually available yet at the offset because they are being assigned to
-* [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
 * Fix same files being queued for reindexing erroneously when their modification date was updated, but their contents did not change (they were never being actually indexed, but still reevaluated each time)
 
 ### Structural changes (mostly relevant to clients)
