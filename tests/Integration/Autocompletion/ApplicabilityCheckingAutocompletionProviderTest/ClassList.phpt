@@ -1,5 +1,7 @@
 <?php
 
+// <INJECTION>
+
 class A
 {
     

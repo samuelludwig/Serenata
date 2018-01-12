@@ -1,5 +1,7 @@
 <?php
 
+// <INJECTION>
+
 function bar()
 {
     // <INJECTION>

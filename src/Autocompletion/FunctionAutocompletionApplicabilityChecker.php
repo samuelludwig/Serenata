@@ -60,6 +60,8 @@ final class FunctionAutocompletionApplicabilityChecker implements Autocompletion
             return false;
         } elseif ($node instanceof Node\Expr\Variable) {
             return false;
+        } elseif ($node instanceof Node\Stmt\Namespace_) {
+            return false;
         } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyToNode($node->expr);
         } elseif ($node instanceof Node\Expr\Error) {

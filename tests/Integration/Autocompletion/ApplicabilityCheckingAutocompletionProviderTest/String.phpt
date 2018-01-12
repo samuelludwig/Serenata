@@ -1,3 +1,5 @@
 <?php
 
+// <INJECTION>
+
 $test = "// <MARKER>";

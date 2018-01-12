@@ -22,11 +22,10 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
     /**
      * @param string      $file
      * @param string|null $additionalFile
-     * @param string      $injectionPoint
      *
      * @return string[]
      */
-    protected function provide(string $file, ?string $additionalFile = null, string $injectionPoint = '<?php'): array
+    protected function provide(string $file, ?string $additionalFile = null): array
     {
         $path = $this->getPathFor($file);
 
@@ -39,7 +38,7 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
                 $this->getPathFor($additionalFile)
             );
 
-            $code = str_replace($injectionPoint, $additionalCode, $code, $count);
+            $code = str_replace('// <INJECTION>', $additionalCode, $code, $count);
 
             static::assertGreaterThan(0, $count, 'Injection point for additional code not found in file ' . $file);
         }

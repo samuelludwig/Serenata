@@ -2,30 +2,14 @@
 
 namespace PhpIntegrator\Tests\Integration\Autocompletion;
 
-class DocblockTagAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
+class DocblockTagAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionApplicabilityCheckerTest
 {
     /**
-     * @dataProvider getFileNamesWhereShouldApply
-     *
-     * @param string $fileName
-     *
-     * @return void
+     * @inheritDoc
      */
-    public function testAppliesAtExpectedLocations(string $fileName): void
+    protected function getFileNameOfFileContainingSuggestionSources(): ?string
     {
-        static::assertNotEmpty($this->provide($fileName));
-    }
-
-    /**
-     * @dataProvider getFileNamesWhereShouldNotApply
-     *
-     * @param string $fileName
-     *
-     * @return void
-     */
-    public function testDoesNotApplyAtExpectedLocations(string $fileName): void
-    {
-        static::assertEmpty($this->provide($fileName));
+        return null;
     }
 
     /**
@@ -34,51 +18,8 @@ class DocblockTagAutocompletionApplicabilityCheckerTest extends AbstractAutocomp
     public function getFileNamesWhereShouldApply(): array
     {
         return [
-            ['DocblockTag.phpt']
+            'DocblockTag.phpt'
         ];
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getFileNamesWhereShouldNotApply(): array
-    {
-        return [
-            ['TopLevelNamespace.phpt'],
-            ['FunctionLike.phpt'],
-            ['VariableName.phpt'],
-            ['MethodCall.phpt'],
-            ['StaticMethodCall.phpt'],
-            ['ClassConstFetch.phpt'],
-            ['ClassConstFetchNoDelimiter.phpt'],
-            ['UseStatement.phpt'],
-            ['Docblock.phpt'],
-            ['Comment.phpt'],
-            // ['FunctionSignature.phpt'],
-            // ['MethodSignature.phpt'],
-            ['PropertyFetch.phpt'],
-            ['ClassBody.phpt'],
-            ['String.phpt'],
-            ['StaticMethodCallSelf.phpt'],
-            ['StaticMethodCallParent.phpt'],
-            ['StaticPropertyFetch.phpt'],
-            ['StaticPropertyFetchError.phpt'],
-            ['StaticPropertyFetchSelf.phpt'],
-            ['StaticPropertyFetchSelfError.phpt'],
-            ['StaticPropertyFetchStatic.phpt'],
-            ['StaticPropertyFetchStaticError.phpt'],
-            ['StaticPropertyFetchParent.phpt'],
-            ['StaticPropertyFetchParentError.phpt'],
-            ['ParameterName.phpt']
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getFolderName(): string
-    {
-        return 'ApplicabilityCheckingAutocompletionProviderTest';
     }
 
     /**
