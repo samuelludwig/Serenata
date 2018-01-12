@@ -12,7 +12,7 @@ use PhpIntegrator\Indexing\Structures\ClasslikeTypeNameValue;
 
 use PhpIntegrator\Utility\TextEdit;
 
-class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @return void
@@ -64,35 +64,6 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
                 [
                     'isDeprecated' => true,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => ''
-                ]
-            )
-        ];
-
-        static::assertEquals($suggestions, $output);
-    }
-
-    /**
-     * @return void
-     */
-    public function testUsesMixinTypeForTraits(): void
-    {
-        $output = $this->provide('Trait.phpt');
-
-        $suggestions = [
-            new AutocompletionSuggestion(
-                '\Foo',
-                SuggestionKind::MIXIN,
-                'Foo',
-                new TextEdit(
-                    new Range(new Position(7, 0), new Position(7, 0)),
-                    'Foo'
-                ),
-                'Foo',
-                null,
-                [
-                    'isDeprecated' => false,
-                    'returnTypes'  => ClasslikeTypeNameValue::TRAIT_,
                     'prefix'       => ''
                 ]
             )
@@ -178,6 +149,6 @@ class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProvider
      */
     protected function getProviderName(): string
     {
-        return 'classlikeAutocompletionProvider';
+        return 'classAutocompletionProvider';
     }
 }

@@ -85,24 +85,64 @@ services:
             - '@localVariableAutocompletionApplicabilityChecker'
             - '@defaultAutocompletionPrefixDeterminer'
 
-    classlikeAutocompletionProvider:
+    classAutocompletionProvider:
         class: PhpIntegrator\Autocompletion\ClasslikeAutocompletionProvider
         arguments:
-            - '@classlikeListProvider'
+            - '@classFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
             - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.largeProviderResultLimit%'
 
-    classlikeAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ClasslikeAutocompletionApplicabilityChecker
+    classAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ClassAutocompletionApplicabilityChecker
 
-    applicabilityCheckingClasslikeAutocompletionProvider:
+    applicabilityCheckingClassAutocompletionProvider:
         class: PhpIntegrator\Autocompletion\ApplicabilityCheckingAutocompletionProvider
         arguments:
-            - '@classlikeAutocompletionProvider'
+            - '@classAutocompletionProvider'
             - '@nodeAtOffsetLocator'
-            - '@classlikeAutocompletionApplicabilityChecker'
+            - '@classAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    interfaceAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\ClasslikeAutocompletionProvider
+        arguments:
+            - '@interfaceFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    interfaceAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ClassAutocompletionApplicabilityChecker
+
+    applicabilityCheckingInterfaceAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@interfaceAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@interfaceAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    traitAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\ClasslikeAutocompletionProvider
+        arguments:
+            - '@traitFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    traitAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ClassAutocompletionApplicabilityChecker
+
+    applicabilityCheckingTraitAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@traitAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@traitAutocompletionApplicabilityChecker'
             - '@defaultAutocompletionPrefixDeterminer'
 
     docblockAnnotationAutocompletionProvider:
@@ -318,7 +358,9 @@ services:
             - '@applicabilityCheckingDocblockTagAutocompletionProvider'
             - '@applicabilityCheckingDocblockAnnotationAutocompletionProvider'
             - '@applicabilityCheckingSuperglobalAutocompletionProvider'
-            - '@applicabilityCheckingClasslikeAutocompletionProvider'
+            - '@applicabilityCheckingClassAutocompletionProvider'
+            - '@applicabilityCheckingInterfaceAutocompletionProvider'
+            - '@applicabilityCheckingTraitAutocompletionProvider'
             - '@applicabilityCheckingFunctionAutocompletionProvider'
             - '@applicabilityCheckingConstantAutocompletionProvider'
             - '@applicabilityCheckingNamespaceAutocompletionProvider'

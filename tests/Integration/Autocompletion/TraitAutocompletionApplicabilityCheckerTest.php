@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Tests\Integration\Autocompletion;
 
-class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
+class TraitAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @dataProvider getFileNamesWhereShouldApply
@@ -13,7 +13,7 @@ class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
      */
     public function testAppliesAtExpectedLocations(string $fileName): void
     {
-        static::assertNotEmpty($this->provide($fileName, 'ClasslikeList.phpt'));
+        static::assertNotEmpty($this->provide($fileName, 'TraitList.phpt'));
     }
 
     /**
@@ -25,7 +25,7 @@ class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
      */
     public function testDoesNotApplyAtExpectedLocations(string $fileName): void
     {
-        static::assertEmpty($this->provide($fileName, 'ClasslikeList.phpt'));
+        static::assertEmpty($this->provide($fileName, 'TraitList.phpt'));
     }
 
     /**
@@ -86,6 +86,6 @@ class ClasslikeAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
      */
     protected function getProviderName(): string
     {
-        return 'applicabilityCheckingClasslikeAutocompletionProvider';
+        return 'applicabilityCheckingTraitAutocompletionProvider';
     }
 }

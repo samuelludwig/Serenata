@@ -209,6 +209,21 @@ services:
         arguments:
             - '@classlikeListProvider'
 
+    classFilteringClasslikeListProvider:
+        class: PhpIntegrator\Analysis\ClassFilteringClasslikeListProvider
+        arguments:
+            - '@classlikeListProvider'
+
+    interfaceFilteringClasslikeListProvider:
+        class: PhpIntegrator\Analysis\InterfaceFilteringClasslikeListProvider
+        arguments:
+            - '@classlikeListProvider'
+
+    traitFilteringClasslikeListProvider:
+        class: PhpIntegrator\Analysis\TraitFilteringClasslikeListProvider
+        arguments:
+            - '@classlikeListProvider'
+
     namespaceListProvider.doctrineBackend:
         class: PhpIntegrator\Analysis\DoctrineNamespaceListProvider
         arguments:

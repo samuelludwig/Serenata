@@ -1,0 +1,8 @@
+<?php
+
+interface Foo
+{
+    
+}
+
+// <MARKER>

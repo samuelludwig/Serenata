@@ -7,9 +7,9 @@ use PhpParser\Node;
 use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
 
 /**
- * Checks if classlike autocompletion applies for a specific node.
+ * Checks if class autocompletion applies for a specific node.
  */
-final class ClasslikeAutocompletionApplicabilityChecker implements AutocompletionApplicabilityCheckerInterface
+final class ClassAutocompletionApplicabilityChecker implements AutocompletionApplicabilityCheckerInterface
 {
     /**
      * @inheritDoc
