@@ -62,6 +62,16 @@ final class KeywordAutocompletionApplicabilityChecker implements AutocompletionA
             return false;
         } elseif ($node instanceof Node\Stmt\Namespace_) {
             return false;
+        } elseif ($node instanceof Node\Param) {
+            return false;
+        } elseif ($node instanceof Node\Expr\New_) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUse) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Alias) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
+            return false;
         } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyToNode($node->expr);
         } elseif ($node instanceof Node\Expr\Error) {

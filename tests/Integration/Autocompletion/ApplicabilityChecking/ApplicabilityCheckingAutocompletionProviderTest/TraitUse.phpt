@@ -2,6 +2,7 @@
 
 // <INJECTION>
 
-namespace {
+class Z
+{
     use A// <MARKER>;
 }

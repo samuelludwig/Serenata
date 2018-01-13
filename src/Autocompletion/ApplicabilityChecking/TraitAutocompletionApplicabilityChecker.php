@@ -43,7 +43,7 @@ final class TraitAutocompletionApplicabilityChecker implements AutocompletionApp
     private function doesApplyToNode(Node $node): bool
     {
         if ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\UseUse) {
-            return false;
+            return true;
         } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
             return false;
         } elseif ($node instanceof Node\Expr\StaticCall) {
@@ -59,6 +59,16 @@ final class TraitAutocompletionApplicabilityChecker implements AutocompletionApp
         } elseif ($node instanceof Node\Stmt\ClassLike) {
             return false;
         } elseif ($node instanceof Node\Expr\Variable) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\Namespace_) {
+            return false;
+        } elseif ($node instanceof Node\Param) {
+            return false;
+        } elseif ($node instanceof Node\Expr\New_) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Alias) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
             return false;
         } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyToNode($node->expr);

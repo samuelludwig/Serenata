@@ -19,7 +19,11 @@ class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocompletion
     {
         return [
             'TopLevelNamespace.phpt',
-            'FunctionLike.phpt'
+            'FunctionLike.phpt',
+            'ParameterType.phpt',
+            'New.phpt',
+            'ClassExtends.phpt',
+            'UseStatement.phpt'
         ];
     }
 

@@ -19,7 +19,11 @@ class InterfaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
     {
         return [
             'TopLevelNamespace.phpt',
-            'FunctionLike.phpt'
+            'FunctionLike.phpt',
+            'ParameterType.phpt',
+            'InterfaceExtends.phpt',
+            'Implements.phpt',
+            'UseStatement.phpt'
         ];
     }
 

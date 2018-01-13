@@ -19,7 +19,9 @@ class TraitAutocompletionApplicabilityCheckerTest extends AbstractAutocompletion
     {
         return [
             'TopLevelNamespace.phpt',
-            'FunctionLike.phpt'
+            'FunctionLike.phpt',
+            'TraitUse.phpt',
+            'UseStatement.phpt'
         ];
     }
 

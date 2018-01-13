@@ -43,7 +43,7 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
     private function doesApplyToNode(Node $node): bool
     {
         if ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\UseUse) {
-            return false;
+            return true;
         } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
             return false;
         } elseif ($node instanceof Node\Expr\StaticCall) {
@@ -62,6 +62,12 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
             return false;
         } elseif ($node instanceof Node\Stmt\Namespace_) {
             return false;
+        } elseif ($node instanceof Node\Stmt\TraitUse) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Alias) {
+            return false;
+        } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
+            return false;
         } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyToNode($node->expr);
         } elseif ($node instanceof Node\Expr\Error) {
@@ -69,7 +75,19 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
 
             return $parent !== false ? $this->doesApplyToNode($parent) : false;
         } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
-            return $this->doesApplyToNode($node->getAttribute('parent'));
+            $parent = $node->getAttribute('parent');
+
+            if ($parent instanceof Node\Stmt\Class_) {
+                if ($parent->extends === $node) {
+                    return true;
+                }
+            } elseif ($parent instanceof Node\Stmt\Interface_) {
+                if (in_array($node, $parent->extends, true)) {
+                    return false;
+                }
+            }
+
+            return $this->doesApplyToNode($parent);
         }
 
         return true;
