@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\UserInterface\Command;
 
-use PhpIntegrator\Autocompletion\AutocompletionProviderInterface;
-
 use PhpIntegrator\Indexing\StorageInterface;
 use PhpIntegrator\Indexing\FileIndexerInterface;
 
@@ -12,6 +10,8 @@ use PhpIntegrator\Sockets\JsonRpcQueueItem;
 
 use PhpIntegrator\Utility\SourceCodeHelpers;
 use PhpIntegrator\Utility\SourceCodeStreamReader;
+
+use PhpIntegrator\Autocompletion\Providers\AutocompletionProviderInterface;
 
 /**
  * Command that shows autocompletion suggestions at a specific location.
