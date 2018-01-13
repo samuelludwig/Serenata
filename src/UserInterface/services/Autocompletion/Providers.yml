@@ -1,0 +1,298 @@
+parameters:
+    autocompletion.largeProviderResultLimit: 15
+    autocompletion.finalSuggestionsResultLimit: 50
+
+services:
+    keywordAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\KeywordAutocompletionProvider
+
+    applicabilityCheckingKeywordAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@keywordAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@keywordAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    docblockTagAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\DocblockTagAutocompletionProvider
+        arguments:
+            - '@docblockAutocompletionPrefixDeterminer'
+
+    applicabilityCheckingDocblockTagAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@docblockTagAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@docblockTagAutocompletionApplicabilityChecker'
+            - '@docblockAutocompletionPrefixDeterminer'
+
+    superglobalAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\SuperglobalAutocompletionProvider
+
+    applicabilityCheckingSuperglobalAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@superglobalAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@localVariableAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    classAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        arguments:
+            - '@classFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingClassAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@classAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@classAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    interfaceAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        arguments:
+            - '@interfaceFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingInterfaceAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@interfaceAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@interfaceAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    traitAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        arguments:
+            - '@traitFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingTraitAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@traitAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@traitAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    docblockAnnotationAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        arguments:
+            - '@annotationFilteringClasslikeListProvider'
+            - '@useStatementInsertionCreator'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingDocblockAnnotationAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@docblockAnnotationAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@docblockTagAutocompletionApplicabilityChecker'
+            - '@docblockAutocompletionPrefixDeterminer'
+
+    namespaceAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\NamespaceAutocompletionProvider
+        arguments:
+            - '@namespaceListProvider'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingNamespaceAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@namespaceAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@namespaceAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    functionAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\FunctionAutocompletionProvider
+        arguments:
+            - '@functionListProvider'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '@functionAutocompletionSuggestionLabelCreator'
+            - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
+            - '@autocompletionSuggestionTypeFormatter'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingFunctionAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@functionAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@functionAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    constantAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ConstantAutocompletionProvider
+        arguments:
+            - '@constantListProvider'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '@autocompletionSuggestionTypeFormatter'
+            - '%autocompletion.largeProviderResultLimit%'
+
+    applicabilityCheckingConstantAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@constantAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@constantAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    nonStaticMethodAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\NonStaticMethodAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+            - '@functionAutocompletionSuggestionLabelCreator'
+            - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
+            - '@autocompletionSuggestionTypeFormatter'
+
+    applicabilityCheckingNonStaticMethodAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@nonStaticMethodAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@nonStaticMethodAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    staticMethodAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\StaticMethodAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+            - '@functionAutocompletionSuggestionLabelCreator'
+            - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
+            - '@autocompletionSuggestionTypeFormatter'
+
+    applicabilityCheckingStaticMethodAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@staticMethodAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@staticMethodAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    nonStaticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\NonStaticPropertyAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+            - '@autocompletionSuggestionTypeFormatter'
+
+    applicabilityCheckingNonStaticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@nonStaticPropertyAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@nonStaticPropertyAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    staticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\StaticPropertyAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+            - '@autocompletionSuggestionTypeFormatter'
+
+    applicabilityCheckingStaticPropertyAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@staticPropertyAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@staticPropertyAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    classConstantAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ClassConstantAutocompletionProvider
+        arguments:
+            - '@expressionTypeDeducer'
+            - '@classlikeInfoBuilder'
+            - '@autocompletionSuggestionTypeFormatter'
+
+    applicabilityCheckingClassConstantAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@classConstantAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@classConstantAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    localVariableAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\LocalVariableAutocompletionProvider
+        arguments:
+            - '@variableScanner'
+            - '@parser'
+            - '@autocompletionSuggestionTypeFormatter'
+
+    applicabilityCheckingLocalVariableAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@localVariableAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@localVariableAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    parameterNameAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ParameterNameAutocompletionProvider
+        arguments:
+            - '@nodeAtOffsetLocator'
+
+    applicabilityCheckingParameterNameAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        arguments:
+            - '@parameterNameAutocompletionProvider'
+            - '@nodeAtOffsetLocator'
+            - '@parameterNameAutocompletionApplicabilityChecker'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    aggregatingAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\AggregatingAutocompletionProvider
+        arguments:
+            - '@applicabilityCheckingKeywordAutocompletionProvider'
+            - '@applicabilityCheckingDocblockTagAutocompletionProvider'
+            - '@applicabilityCheckingDocblockAnnotationAutocompletionProvider'
+            - '@applicabilityCheckingSuperglobalAutocompletionProvider'
+            - '@applicabilityCheckingClassAutocompletionProvider'
+            - '@applicabilityCheckingInterfaceAutocompletionProvider'
+            - '@applicabilityCheckingTraitAutocompletionProvider'
+            - '@applicabilityCheckingFunctionAutocompletionProvider'
+            - '@applicabilityCheckingConstantAutocompletionProvider'
+            - '@applicabilityCheckingNamespaceAutocompletionProvider'
+            - '@applicabilityCheckingNonStaticMethodAutocompletionProvider'
+            - '@applicabilityCheckingStaticMethodAutocompletionProvider'
+            - '@applicabilityCheckingNonStaticPropertyAutocompletionProvider'
+            - '@applicabilityCheckingStaticPropertyAutocompletionProvider'
+            - '@applicabilityCheckingClassConstantAutocompletionProvider'
+            - '@applicabilityCheckingLocalVariableAutocompletionProvider'
+            - '@applicabilityCheckingParameterNameAutocompletionProvider'
+
+    fuzzyMatchingAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider
+        arguments:
+            - '@aggregatingAutocompletionProvider'
+            - '@defaultAutocompletionPrefixDeterminer'
+            - '@bestStringApproximationDeterminer'
+            - '%autocompletion.finalSuggestionsResultLimit%'
+
+    autocompletionProvider:
+        alias: fuzzyMatchingAutocompletionProvider
