@@ -15,10 +15,10 @@ services:
         class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassAutocompletionApplicabilityChecker
 
     interfaceAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassAutocompletionApplicabilityChecker
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\InterfaceAutocompletionApplicabilityChecker
 
     traitAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassAutocompletionApplicabilityChecker
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\TraitAutocompletionApplicabilityChecker
 
     namespaceAutocompletionApplicabilityChecker:
         class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NamespaceAutocompletionApplicabilityChecker
