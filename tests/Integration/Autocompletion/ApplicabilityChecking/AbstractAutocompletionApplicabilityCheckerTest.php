@@ -75,6 +75,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
             'FunctionLike.phpt',
             'VariableName.phpt',
             'MethodCall.phpt',
+            'ClassConstant.phpt',
             'ClassConstFetch.phpt',
             'ClassConstFetchClassName.phpt',
             'ClassConstFetchNoDelimiter.phpt',

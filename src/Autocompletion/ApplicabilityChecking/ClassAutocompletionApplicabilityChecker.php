@@ -64,6 +64,8 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
             return false;
         } elseif ($node instanceof Node\Stmt\Property || $node instanceof Node\Stmt\PropertyProperty) {
             return false;
+        } elseif ($node instanceof Node\Const_) {
+            return false;
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             return false;
         } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Alias) {
@@ -107,8 +109,6 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
         } elseif ($node instanceof Node\Identifier) {
             return $this->doesApplyToNode($node->getAttribute('parent'));
         }
-
-
 
         return true;
     }

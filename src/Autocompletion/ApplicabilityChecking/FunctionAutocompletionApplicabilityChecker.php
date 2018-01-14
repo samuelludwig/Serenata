@@ -64,6 +64,8 @@ final class FunctionAutocompletionApplicabilityChecker implements Autocompletion
             return false;
         } elseif ($node instanceof Node\Stmt\Property || $node instanceof Node\Stmt\PropertyProperty) {
             return false;
+        } elseif ($node instanceof Node\Const_) {
+            return false;
         } elseif ($node instanceof Node\Param) {
             return false;
         } elseif ($node instanceof Node\Expr\New_) {
