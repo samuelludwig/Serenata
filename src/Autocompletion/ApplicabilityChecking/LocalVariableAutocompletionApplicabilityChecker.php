@@ -68,6 +68,8 @@ final class LocalVariableAutocompletionApplicabilityChecker implements Autocompl
             return !$parent instanceof Node\Param;
         } elseif ($node instanceof Node\Stmt\Namespace_) {
             return false;
+        } elseif ($node instanceof Node\Stmt\Property || $node instanceof Node\Stmt\PropertyProperty) {
+            return false;
         } elseif ($node instanceof Node\Param) {
             return false;
         } elseif ($node instanceof Node\Stmt\TraitUse) {

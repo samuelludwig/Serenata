@@ -62,6 +62,8 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
             return false;
         } elseif ($node instanceof Node\Stmt\Namespace_) {
             return false;
+        } elseif ($node instanceof Node\Stmt\Property || $node instanceof Node\Stmt\PropertyProperty) {
+            return false;
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             return false;
         } elseif ($node instanceof Node\Stmt\TraitUseAdaptation\Alias) {

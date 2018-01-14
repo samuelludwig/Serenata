@@ -62,6 +62,8 @@ final class InterfaceAutocompletionApplicabilityChecker implements Autocompletio
             return false;
         } elseif ($node instanceof Node\Stmt\Namespace_) {
             return false;
+        } elseif ($node instanceof Node\Stmt\Property || $node instanceof Node\Stmt\PropertyProperty) {
+            return false;
         } elseif ($node instanceof Node\Expr\New_) {
             return false;
         } elseif ($node instanceof Node\Stmt\TraitUse) {

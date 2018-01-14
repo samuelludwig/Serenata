@@ -85,6 +85,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
             'Comment.phpt',
             // 'FunctionSignature.phpt',
             // 'MethodSignature.phpt',
+            'Property.phpt',
             'PropertyFetch.phpt',
             'ClassBody.phpt',
             'String.phpt',
