@@ -231,6 +231,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testInsertsAdditionalNewlineInOrderToMaintainSingleNewlineBetweenFirstUseStatementAndExistingClass(): void
+    {
+        $name = '\Foo\Bar\Caz';
+        $insertionPoint = new Position(4, 0);
+        $file = 'NoUseStatementsAndClass.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testSelectsActiveNamespaceBlockBasedOnPosition(): void
     {
         $name = '\Foo\Bar';

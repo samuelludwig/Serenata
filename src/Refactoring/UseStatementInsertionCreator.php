@@ -203,7 +203,7 @@ class UseStatementInsertionCreator
      */
     private function shouldAddAdditionalNewline(string $name, string $kind, string $code, int $position): bool
     {
-        $addAdditionalNewline = false;
+        $addAdditionalNewline = true;
         $previousMatchThatSharedNamespacePrefixLine = null;
 
         foreach ($this->retrieveRelevantUseStatements($code, $position) as $useStatement) {
