@@ -127,7 +127,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 [
                     new TextEdit(
                         new Range(new Position(10, 0), new Position(10, 0)),
-                        "use Foo\Bar\Baz;\n"
+                        "use Foo\Bar\Baz;\n\n"
                     )
                 ]
             )
