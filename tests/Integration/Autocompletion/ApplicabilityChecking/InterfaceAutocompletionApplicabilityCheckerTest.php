@@ -23,7 +23,9 @@ class InterfaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
             'ParameterType.phpt',
             'InterfaceExtends.phpt',
             'Implements.phpt',
-            'UseStatement.phpt'
+            'UseStatement.phpt',
+            'ClassConstFetchClassName.phpt',
+            'StaticMethodCallClassName.phpt'
         ];
     }
 

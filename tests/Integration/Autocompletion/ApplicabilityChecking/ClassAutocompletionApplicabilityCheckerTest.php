@@ -23,7 +23,10 @@ class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocompletion
             'ParameterType.phpt',
             'New.phpt',
             'ClassExtends.phpt',
-            'UseStatement.phpt'
+            'UseStatement.phpt',
+            'ClassConstFetchClassName.phpt',
+            'StaticMethodCallClassName.phpt',
+            'StaticPropertyFetchClassName.phpt'
         ];
     }
 

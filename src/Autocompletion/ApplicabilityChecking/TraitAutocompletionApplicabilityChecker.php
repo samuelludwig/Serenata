@@ -76,7 +76,15 @@ final class TraitAutocompletionApplicabilityChecker implements AutocompletionApp
             $parent = $node->getAttribute('parent', false);
 
             return $parent !== false ? $this->doesApplyToNode($parent) : false;
-        } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
+        } elseif ($node instanceof Node\Name) {
+            $parent = $node->getAttribute('parent');
+
+            if ($parent instanceof Node\Expr\StaticCall) {
+                return true;
+            }
+
+            return $this->doesApplyToNode($parent);
+        } elseif ($node instanceof Node\Identifier) {
             return $this->doesApplyToNode($node->getAttribute('parent'));
         }
 

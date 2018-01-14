@@ -76,7 +76,7 @@ final class InterfaceAutocompletionApplicabilityChecker implements Autocompletio
             $parent = $node->getAttribute('parent', false);
 
             return $parent !== false ? $this->doesApplyToNode($parent) : false;
-        } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
+        } elseif ($node instanceof Node\Name) {
             $parent = $node->getAttribute('parent');
 
             if ($parent instanceof Node\Stmt\Class_) {
@@ -89,9 +89,15 @@ final class InterfaceAutocompletionApplicabilityChecker implements Autocompletio
                 if (in_array($node, $parent->extends, true)) {
                     return true;
                 }
+            } elseif ($parent instanceof Node\Expr\StaticCall) {
+                return true;
+            } elseif ($parent instanceof Node\Expr\ClassConstFetch) {
+                return true;
             }
 
             return $this->doesApplyToNode($parent);
+        } elseif ($node instanceof Node\Identifier) {
+            return $this->doesApplyToNode($node->getAttribute('parent'));
         }
 
         return true;
