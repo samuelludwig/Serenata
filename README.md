@@ -1,9 +1,37 @@
-# php-integrator/core
-[![pipeline status](https://gitlab.com/php-integrator/core/badges/development/pipeline.svg)](https://gitlab.com/php-integrator/core/commits/development) [![coverage report](https://gitlab.com/php-integrator/core/badges/development/coverage.svg)](https://gitlab.com/php-integrator/core/commits/development) :coffee: Send me some coffee beans via [Liberapay](https://liberapay.com/Gert-dev/donate) or [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ)
+<div align="center">
+    <a href="https://gitlab.com/php-integrator/core"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="PHP Integrator" title="PHP Integrator" width="258"></a>
 
-PHP Integrator is a server that indexes PHP code and performs static analysis. It stores its information in a database and can retrieve information about your code to clients by communicating over sockets. Clients can use this information to provide various functionalities, such as autocompletion, code navigation and tooltips.
+    <h1>PHP Integrator - Core</h1>
+    <h4>A server providing IDE-like features for PHP code bases to clients</h4>
+
+    <a href="https://gitlab.com/php-integrator/core/commits/development">
+        <img src="https://gitlab.com/php-integrator/core/badges/development/pipeline.svg">
+    </a>
+
+    <a href="https://gitlab.com/php-integrator/core/commits/development">
+        <img src="https://gitlab.com/php-integrator/core/badges/development/coverage.svg">
+    </a>
+
+    <a href="https://liberapay.com/Gert-dev/donate">
+        <img src="https://img.shields.io/badge/send_coffee_beans-Liberapay-blue.svg?&amp;style=flat">
+    </a>
+
+    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ">
+        <img src="https://img.shields.io/badge/send_coffee_beans-PayPal-blue.svg?&amp;style=flat">
+    </a>
+</div>
+
+PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and can retrieve information about your code to clients by communicating over sockets. Clients can use this information to provide various functionalities, such as autocompletion, code navigation and tooltips.
 
 More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/php-integrator/core/wikis/home) as well as [the website](https://php-integrator.github.io/).
+
+## What Features Are Supported?
+* Autocompletion
+* Goto Definition (code navigation)
+* Signature help (call tips)
+* Tooltips
+
+There are also other requests clients can send to extract information about a code base. However, we are in the process of slowly migrating to become a [language server](https://microsoft.github.io/language-server-protocol/) for PHP, so these may be replaced by compliant requests in the future.
 
 ## Where Is It Used?
 Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
