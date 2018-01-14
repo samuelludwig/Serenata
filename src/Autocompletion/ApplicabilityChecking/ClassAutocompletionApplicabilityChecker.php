@@ -107,7 +107,13 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
 
             return $this->doesApplyToNode($parent);
         } elseif ($node instanceof Node\Identifier) {
-            return $this->doesApplyToNode($node->getAttribute('parent'));
+            $parent = $node->getAttribute('parent');
+
+            if ($parent instanceof Node\FunctionLike) {
+                return false;
+            }
+
+            return $this->doesApplyToNode($parent);
         }
 
         return true;

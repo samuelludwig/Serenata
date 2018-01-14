@@ -90,8 +90,16 @@ final class FunctionAutocompletionApplicabilityChecker implements Autocompletion
             $parent = $node->getAttribute('parent', false);
 
             return $parent !== false ? $this->doesApplyToNode($parent) : false;
-        } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
+        } elseif ($node instanceof Node\Name) {
             return $this->doesApplyToNode($node->getAttribute('parent'));
+        } elseif ($node instanceof Node\Identifier) {
+            $parent = $node->getAttribute('parent');
+
+            if ($parent instanceof Node\FunctionLike) {
+                return false;
+            }
+
+            return $this->doesApplyToNode($parent);
         }
 
         return true;
