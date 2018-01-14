@@ -30,6 +30,7 @@ More information for users, both developers looking to implement the core in oth
 * Goto Definition (code navigation)
 * Signature help (call tips)
 * Tooltips
+* Linting
 
 There are also other requests clients can send to extract information about a code base. However, we are in the process of slowly migrating to become a [language server](https://microsoft.github.io/language-server-protocol/) for PHP, so these may be replaced by compliant requests in the future.
 
