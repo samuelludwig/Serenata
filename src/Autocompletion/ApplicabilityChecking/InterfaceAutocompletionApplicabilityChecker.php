@@ -72,6 +72,14 @@ final class InterfaceAutocompletionApplicabilityChecker implements Autocompletio
             return false;
         } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyToNode($node->expr);
+        } elseif ($node instanceof Node\Expr\Clone_) {
+            return false;
+        } elseif ($node instanceof Node\Expr\ConstFetch) {
+            $parent = $node->getAttribute('parent', false);
+
+            if ($parent instanceof Node\Expr\Clone_) {
+                return false;
+            }
         } elseif ($node instanceof Node\Expr\Error) {
             $parent = $node->getAttribute('parent', false);
 
