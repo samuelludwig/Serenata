@@ -31,9 +31,9 @@ class ApproximateStringMatchingBestStringApproximationDeterminer implements Best
         // to fetch the best n items afterwards. It turns out that just sorting these ~5000 items by a simple comparison
         // function has abysmal performance (around ~60 ms on my, rather high end at the time of writing, hardware).
         //
-        // By partitioning n items in m nested arrays in an associative array (internally a hash map in PHP) by their
-        // score, we can limit the sorting to the m partitions, of which there are considerably fewer than actual items,
-        // in fact, we could state that m <= n.
+        // By partitioning n items in nested arrays in an associative array (internally a hash map in PHP) by their
+        // score, we can limit the sorting to the m partitions, of which there are usually considerably fewer than
+        // actual items. In fact, we could state that m <= n.
         //
         // After the partition sorting, we proceed to fetch only the requested x results from the best partitions.
         // Finally, we sort the resulting, usually limited set of x items, again by the actual criteria and we're done.
