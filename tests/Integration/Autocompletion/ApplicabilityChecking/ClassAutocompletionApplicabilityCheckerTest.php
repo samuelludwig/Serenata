@@ -21,6 +21,7 @@ class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocompletion
             'TopLevelNamespace.phpt',
             'FunctionLike.phpt',
             'ParameterType.phpt',
+            'ParameterDefaultValue.phpt',
             'New.phpt',
             'ClassExtends.phpt',
             'UseStatement.phpt',

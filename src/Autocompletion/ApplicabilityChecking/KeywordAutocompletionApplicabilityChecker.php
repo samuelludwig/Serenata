@@ -85,6 +85,8 @@ final class KeywordAutocompletionApplicabilityChecker implements AutocompletionA
 
             if ($parent instanceof Node\Expr\Clone_) {
                 return false;
+            } elseif ($parent instanceof Node\Param && $parent->default === $node) {
+                return false;
             }
         } elseif ($node instanceof Node\Expr\Error) {
             $parent = $node->getAttribute('parent', false);

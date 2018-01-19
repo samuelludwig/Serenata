@@ -19,7 +19,8 @@ class ConstantAutocompletionApplicabilityCheckerTest extends AbstractAutocomplet
     {
         return [
             'TopLevelNamespace.phpt',
-            'FunctionLike.phpt'
+            'FunctionLike.phpt',
+            'ParameterDefaultValue.phpt'
         ];
     }
 

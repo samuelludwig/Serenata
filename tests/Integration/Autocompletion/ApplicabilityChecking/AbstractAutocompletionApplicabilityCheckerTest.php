@@ -106,6 +106,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
             'StaticPropertyFetchParentError.phpt',
             'ParameterName.phpt',
             'ParameterType.phpt',
+            'ParameterDefaultValue.phpt',
             'Clone.phpt',
             'New.phpt',
             'ClassExtends.phpt',

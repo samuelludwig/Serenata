@@ -4,6 +4,8 @@ namespace PhpIntegrator\Autocompletion\ApplicabilityChecking;
 
 use PhpParser\Node;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
 
 /**
@@ -84,6 +86,8 @@ final class FunctionAutocompletionApplicabilityChecker implements Autocompletion
             $parent = $node->getAttribute('parent', false);
 
             if ($parent instanceof Node\Expr\Clone_) {
+                return false;
+            } elseif ($parent instanceof Node\Param && $parent->default === $node) {
                 return false;
             }
         } elseif ($node instanceof Node\Expr\Error) {
