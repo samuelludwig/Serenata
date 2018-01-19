@@ -20,7 +20,9 @@ class ClassConstantAutocompletionApplicabilityCheckerTest extends AbstractAutoco
         return [
             'StaticMethodCall.phpt',
             'StaticMethodCallSelf.phpt',
-            'StaticMethodCallParent.phpt'
+            'StaticMethodCallParent.phpt',
+            'ClassConstFetch.phpt',
+            'ClassConstFetchNoDelimiter.phpt'
         ];
     }
 

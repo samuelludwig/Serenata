@@ -28,7 +28,9 @@ class StaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAutoc
             'StaticPropertyFetchStatic.phpt',
             'StaticPropertyFetchStaticError.phpt',
             'StaticPropertyFetchParent.phpt',
-            'StaticPropertyFetchParentError.phpt'
+            'StaticPropertyFetchParentError.phpt',
+            'ClassConstFetch.phpt',
+            'ClassConstFetchNoDelimiter.phpt'
         ];
     }
 

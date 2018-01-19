@@ -2,4 +2,4 @@
 
 // <INJECTION>
 
-SomeClass::T// <MARKER>;
+A::T// <MARKER>;
