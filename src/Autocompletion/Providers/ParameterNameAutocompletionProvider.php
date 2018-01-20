@@ -4,10 +4,17 @@ namespace PhpIntegrator\Autocompletion\Providers;
 
 use PhpParser\Node;
 
+use PhpIntegrator\Common\Range;
+use PhpIntegrator\Common\Position;
+
+use PhpIntegrator\Utility\TextEdit;
+use PhpIntegrator\Utility\SourceCodeHelpers;
+
 use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
 
 use PhpIntegrator\Autocompletion\SuggestionKind;
 use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
+use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use PhpIntegrator\Indexing\Structures\File;
 
@@ -22,11 +29,20 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
     private $nodeAtOffsetLocator;
 
     /**
-     * @param NodeAtOffsetLocatorInterface $nodeAtOffsetLocator
+     * @var AutocompletionPrefixDeterminerInterface
      */
-    public function __construct(NodeAtOffsetLocatorInterface $nodeAtOffsetLocator)
-    {
+    private $autocompletionPrefixDeterminer;
+
+    /**
+     * @param NodeAtOffsetLocatorInterface            $nodeAtOffsetLocator
+     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+     */
+    public function __construct(
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+    ) {
         $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
@@ -34,21 +50,26 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
+        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+
         $paramNode = $this->findParamNode($code, $offset);
 
         if ($paramNode === null) {
             return [];
         }
 
-        return $this->createSuggestionsForParamNode($paramNode);
+        return $this->createSuggestionsForParamNode($paramNode, $code, $offset, $prefix);
     }
 
     /**
      * @param Node\Param $node
+     * @param string     $code
+     * @param int        $offset
+     * @param string     $prefix
      *
      * @return AutocompletionSuggestion[]
      */
-    private function createSuggestionsForParamNode(Node\Param $node): array
+    private function createSuggestionsForParamNode(Node\Param $node, string $code, int $offset, string $prefix): array
     {
         if ($node->type === null) {
             return [];
@@ -56,14 +77,19 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
 
         $typeName = $this->determineTypeNameOfNode($node->type);
 
-        $suggestions = $this->generateSuggestionsForName($typeName);
+        $suggestions = $this->generateSuggestionsForName($typeName, $code, $offset, $prefix);
 
         $typeNameParts = array_filter(explode('\\', $typeName));
 
         if (count($typeNameParts) > 1) {
             $lastTypeNamePart = array_pop($typeNameParts);
 
-            $suggestions = array_merge($suggestions, $this->generateSuggestionsForName($lastTypeNamePart));
+            $suggestions = array_merge($suggestions, $this->generateSuggestionsForName(
+                $lastTypeNamePart,
+                $code,
+                $offset,
+                $prefix
+            ));
         }
 
         return $suggestions;
@@ -71,23 +97,31 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
 
     /**
      * @param string $name
+     * @param string $code
+     * @param int    $offset
+     * @param string $prefix
      *
      * @return AutocompletionSuggestion[]
      */
-    private function generateSuggestionsForName(string $name): array
+    private function generateSuggestionsForName(string $name, string $code, int $offset, string $prefix): array
     {
         $suggestions = [];
 
         // "MyNamespace\Foo" -> "$myNamespaceFoo", "MyClass" -> "$myClass"
         $bestTypeNameApproximation = lcfirst(str_replace('\\', '', $name));
 
-        $suggestions[] = $this->createSuggestion('$' . $bestTypeNameApproximation);
+        $suggestions[] = $this->createSuggestion('$' . $bestTypeNameApproximation, $code, $offset, $prefix);
 
         // "MyNamespace\FooInterface" -> "$myNamespaceFoo", "SomeTrait" -> "Some", "MyClass" -> "$my"
         $bestTypeNameApproximationWithoutLastWord = $this->generateNameWithoutLastWord($bestTypeNameApproximation);
 
         if ($bestTypeNameApproximationWithoutLastWord !== '') {
-            $suggestions[] = $this->createSuggestion('$' . $bestTypeNameApproximationWithoutLastWord);
+            $suggestions[] = $this->createSuggestion(
+                '$' . $bestTypeNameApproximationWithoutLastWord,
+                $code,
+                $offset,
+                $prefix
+            );
         }
 
         return $suggestions;
@@ -136,18 +170,50 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
 
     /**
      * @param string $name
+     * @param string $code
+     * @param int    $offset
+     * @param string $prefix
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(string $name): AutocompletionSuggestion
+    private function createSuggestion(string $name, string $code, int $offset, string $prefix): AutocompletionSuggestion
     {
         return new AutocompletionSuggestion(
             $name,
             SuggestionKind::VARIABLE,
             $name,
-            null,
+            $this->getTextEditForSuggestion($name, $code, $offset, $prefix),
             $name,
-            null
+            null,
+            [
+                'prefix' => $prefix
+            ]
+        );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param string $name
+     * @param string $code
+     * @param int    $offset
+     * @param string $prefix
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(string $name, string $code, int $offset, string $prefix): TextEdit
+    {
+        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset) - 1;
+        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $line, $code);
+
+        return new TextEdit(
+            new Range(new Position($line, $character - mb_strlen($prefix)), new Position($line, $character)),
+            $name
         );
     }
 

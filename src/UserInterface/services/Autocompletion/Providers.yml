@@ -257,6 +257,7 @@ services:
         class: PhpIntegrator\Autocompletion\Providers\ParameterNameAutocompletionProvider
         arguments:
             - '@nodeAtOffsetLocator'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingParameterNameAutocompletionProvider:
         class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider

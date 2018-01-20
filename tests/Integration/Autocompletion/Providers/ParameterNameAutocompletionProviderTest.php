@@ -2,6 +2,11 @@
 
 namespace PhpIntegrator\Tests\Integration\Autocompletion\Providers;
 
+use PhpIntegrator\Common\Range;
+use PhpIntegrator\Common\Position;
+
+use PhpIntegrator\Utility\TextEdit;
+
 use PhpIntegrator\Autocompletion\SuggestionKind;
 use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
 
@@ -25,7 +30,20 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('ScalarParameter.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('$int', SuggestionKind::VARIABLE, '$int', null, '$int', null)
+            new AutocompletionSuggestion(
+                '$int',
+                SuggestionKind::VARIABLE,
+                '$int',
+                new TextEdit(
+                    new Range(new Position(4, 28), new Position(4, 30)),
+                    '$int'
+                ),
+                '$int',
+                null,
+                [
+                    'prefix' => '$p'
+                ]
+            )
         ];
 
         static::assertEquals($suggestions, $output);
@@ -43,18 +61,30 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$someClasslike',
                 SuggestionKind::VARIABLE,
                 '$someClasslike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 38), new Position(4, 40)),
+                    '$someClasslike'
+                ),
                 '$someClasslike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$some',
                 SuggestionKind::VARIABLE,
                 '$some',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 38), new Position(4, 40)),
+                    '$some'
+                ),
                 '$some',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             )
         ];
 
@@ -73,27 +103,45 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$someClasslike',
                 SuggestionKind::VARIABLE,
                 '$someClasslike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 39), new Position(4, 41)),
+                    '$someClasslike'
+                ),
                 '$someClasslike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$some',
                 SuggestionKind::VARIABLE,
                 '$some',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 39), new Position(4, 41)),
+                    '$some'
+                ),
                 '$some',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$classlike',
                 SuggestionKind::VARIABLE,
                 '$classlike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 39), new Position(4, 41)),
+                    '$classlike'
+                ),
                 '$classlike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             )
         ];
 
@@ -112,27 +160,45 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$someClasslike',
                 SuggestionKind::VARIABLE,
                 '$someClasslike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 40), new Position(4, 42)),
+                    '$someClasslike'
+                ),
                 '$someClasslike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$some',
                 SuggestionKind::VARIABLE,
                 '$some',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 40), new Position(4, 42)),
+                    '$some'
+                ),
                 '$some',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$classlike',
                 SuggestionKind::VARIABLE,
                 '$classlike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 40), new Position(4, 42)),
+                    '$classlike'
+                ),
                 '$classlike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             )
         ];
 
@@ -151,36 +217,60 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$someClasslikeType',
                 SuggestionKind::VARIABLE,
                 '$someClasslikeType',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 43), new Position(4, 45)),
+                    '$someClasslikeType'
+                ),
                 '$someClasslikeType',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$someClasslike',
                 SuggestionKind::VARIABLE,
                 '$someClasslike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 43), new Position(4, 45)),
+                    '$someClasslike'
+                ),
                 '$someClasslike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$classlikeType',
                 SuggestionKind::VARIABLE,
                 '$classlikeType',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 43), new Position(4, 45)),
+                    '$classlikeType'
+                ),
                 '$classlikeType',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             ),
 
             new AutocompletionSuggestion(
                 '$classlike',
                 SuggestionKind::VARIABLE,
                 '$classlike',
-                null,
+                new TextEdit(
+                    new Range(new Position(4, 43), new Position(4, 45)),
+                    '$classlike'
+                ),
                 '$classlike',
-                null
+                null,
+                [
+                    'prefix' => '$p'
+                ]
             )
         ];
 
