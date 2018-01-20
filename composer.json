@@ -3,7 +3,7 @@
     "description": "PHP code analysis and utilities",
     "keywords": ["static", "analysis", "indexing", "indexer", "integrator", "autocompletion", "refactoring", "tooltips", "signature-help"],
     "homepage": "https://php-integrator.github.io",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-or-later",
     "require": {
         "php": "^7.1",
         "ext-mbstring": "*",
