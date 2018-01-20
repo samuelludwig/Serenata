@@ -16,7 +16,7 @@
         "php-ds/php-ds": "^1.2",
         "php-integrator/common": "^0.1",
         "php-integrator/docblock-type-parser": "^0.2",
-        "php-integrator/name-qualification-utilities": "^0.2",
+        "php-integrator/name-qualification-utilities": "^0.3",
         "ramsey/uuid": "^3.7",
         "react/socket": "^0.8",
         "symfony/config": "^4.0",
