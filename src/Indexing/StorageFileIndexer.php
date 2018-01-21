@@ -112,6 +112,10 @@ final class StorageFileIndexer implements FileIndexerInterface
         try {
             $nodes = $this->getNodes($code);
 
+            // NOTE: Traversing twice may seem absurd, but a rewrite of the use statement indexing visitor to support
+            // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
+            // performance worse, because of the constant flushing and entity changes due to the end lines being
+            // recalculated, than just traversing twice.
             $this->indexNamespacesWithUseStatements($file, $nodes, $code);
             $this->indexCode($file, $nodes, $code);
 
@@ -164,10 +168,6 @@ final class StorageFileIndexer implements FileIndexerInterface
     {
         $useStatementIndexingVisitor = new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code);
 
-        // NOTE: Traversing twice may seem absurd, but a rewrite of the use statement indexing visitor to support
-        // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
-        // performance worse, because of the constant flushing and entity changes due to the end lines being
-        // recalculated, than just traversing twice.
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new Visiting\ClassLikeBodySkippingVisitor());
         $traverser->addVisitor(new Visiting\FunctionLikeBodySkippingVisitor());
