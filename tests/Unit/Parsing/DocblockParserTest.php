@@ -239,6 +239,46 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testLeavesMarkdownAsIs(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * This *is* _some_ markdown.
+             *
+             * ```
+             * Code sample.
+             * ```
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame('This *is* _some_ markdown.', $result['descriptions']['short']);
+        static::assertSame("```\nCode sample.\n```", $result['descriptions']['long']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testLeavesHtmlAsIs(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * This <p>is</p> <strong>some</strong> HTML.
+             *
+             * <p>
+             * Code sample.
+             * </p>
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame('This <p>is</p> <strong>some</strong> HTML.', $result['descriptions']['short']);
+        static::assertSame("<p>\nCode sample.\n</p>", $result['descriptions']['long']);
+    }
+
+    /**
      * @return DocblockParser
      */
     private function getDocblockParser(): DocblockParser
