@@ -22,23 +22,31 @@ class TooltipProviderTest extends AbstractIntegrationTest
 Hello!
 
 # Parameters
-   |   |   ' . '
---- | --- | ---
-**•&nbsp;$first** | *string* | Testdescription More text on next line.
+#### • **$first** — *string*
+Testdescription More text on next line.
 
  Another paragraph.
-**•&nbsp;$second** | *int* | Test
-**•&nbsp;$third** | *\Exception* | Test
+
+#### • **$second** — *int*
+Test
+
+#### • **$third** — *\Exception*
+Test
+
 
 # Returns
 *string&#124;bool*
 
 # Throws
-   |   |   ' . '
---- | --- | ---
-•&nbsp;**\Exception** | When something happens
-•&nbsp;**\LogicException** | When something else happens.
-•&nbsp;**\RuntimeException** |  ');
+#### • **\Exception**
+When something happens
+
+#### • **\LogicException**
+When something else happens.
+
+#### • **\RuntimeException**
+(No context available)
+');
     }
 
     /**
@@ -399,10 +407,12 @@ Hello!
         $this->performTooltipTest($fileName, 46, 49, 'This is a summary.
 
 # Parameters
-   |   |   ' . '
---- | --- | ---
-**•&nbsp;$param1** | *int* |  ' . '
-**•&nbsp;$param2** | *bool* |  ' . '
+#### • **$param1** — *int*
+(No documentation available)
+
+#### • **$param2** — *bool*
+(No documentation available)
+
 
 # Returns
 *void*');

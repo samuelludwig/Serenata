@@ -9,6 +9,10 @@
   * The results of requests may not be entirely accurate as the index is still being updated, but it is an improvement over the previous denial of service until it completed.
 * Performance has improved in several area's, including signature help and tooltips, due to additional internal caching that avoid recomputation
 
+### Other Improvements
+* Tooltip markdown was restructured and no longer uses tables
+  * Tables do not properly support paragraphs, which are commonly used in docblocks, without HTML's `<br>`, which is not supported by some markdown libraries such as `marked`. Additionally, this turned out to improve readability when there is a lot of information.
+
 ### Bugs Fixed
 * [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them

@@ -91,16 +91,10 @@ class FunctionTooltipGenerator
         }
 
         foreach ($functionInfo['parameters'] as $parameter) {
-            $parameterLines[] = $this->generateParameterLine($parameter);
+            $parameterLines[] = $this->generateParameter($parameter);
         }
 
-        // The header symbols seem to be required for some markdown parser, such as npm's marked.
-        $table =
-            "   |   |   \n" .
-            "--- | --- | ---\n" .
-            implode("\n", $parameterLines);
-
-        return "# Parameters\n" . $table;
+        return "# Parameters\n" . implode("\n", $parameterLines);
     }
 
     /**
@@ -108,42 +102,39 @@ class FunctionTooltipGenerator
      *
      * @return string
      */
-    private function generateParameterLine(array $parameter): string
+    private function generateParameter(array $parameter): string
     {
-        $parameterColumns = [];
-
-        $name = '';
-        $name .= '•&nbsp;';
+        $text = '';
 
         if ($parameter['isOptional']) {
-            $name .= '[';
+            $text .= '[';
         }
 
-        $name .= $this->parameterNamePrettyPrinter->print($parameter);
+        $text .= $this->parameterNamePrettyPrinter->print($parameter);
 
         if ($parameter['isOptional']) {
-            $name .= ']';
+            $text .= ']';
         }
 
-        $parameterColumns[] = '**' . $name . '**';
+        $text = '#### • **' . $text . '**';
 
         if (!empty($parameter['types'])) {
             $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
                 return $type['type'];
             }, $parameter['types']));
 
-            $parameterColumns[] = '*' . $value . '*';
-        } else {
-            $parameterColumns[] = ' ';
+            $text .= ' — *' . $value . '*';
         }
+
+        $text .= "\n";
 
         if ($parameter['description']) {
-            $parameterColumns[] = $parameter['description'];
+            $text .= ($parameter['description']);
         } else {
-            $parameterColumns[] = ' ';
+            $text .= '(No documentation available)';
         }
 
-        return implode(' | ', $parameterColumns);
+        return $text . "\n";
     }
 
     /**
@@ -182,29 +173,21 @@ class FunctionTooltipGenerator
         $throwsLines = [];
 
         foreach ($functionInfo['throws'] as $throwsItem) {
-            $throwsColumns = [];
-
-            $throwsColumns[] = "•&nbsp;**{$throwsItem['type']}**";
+            $text = "#### • **{$throwsItem['type']}**\n";
 
             if ($throwsItem['description']) {
-                $throwsColumns[] = $throwsItem['description'];
+                $text .= $throwsItem['description'];
             } else {
-                $throwsColumns[] = ' ';
+                $text .= '(No context available)';
             }
 
-            $throwsLines[] = implode(' | ', $throwsColumns);
+            $throwsLines[] = $text . "\n";
         }
 
         if (empty($throwsLines)) {
             return null;
         }
 
-        // The header symbols seem to be required for some markdown parser, such as npm's marked.
-        $table =
-            "   |   |   \n" .
-            "--- | --- | ---\n" .
-            implode("\n", $throwsLines);
-
-        return "# Throws\n" . $table;
+        return "# Throws\n" . implode("\n", $throwsLines);
     }
 }
