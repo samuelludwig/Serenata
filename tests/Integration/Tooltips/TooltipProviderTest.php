@@ -15,7 +15,7 @@ class TooltipProviderTest extends AbstractIntegrationTest
      */
     public function testFuncCallContainsAllSections(): void
     {
-        $this->performTooltipTest('FuncCallAllSections.phpt', 435, 440, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('FuncCallAllSections.phpt', 487, 492, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
@@ -24,7 +24,9 @@ Hello!
 # Parameters
    |   |   ' . '
 --- | --- | ---
-**•&nbsp;$first** | *string* | Testdescription
+**•&nbsp;$first** | *string* | Testdescription More text on next line.
+
+ Another paragraph.
 **•&nbsp;$second** | *int* | Test
 **•&nbsp;$third** | *\Exception* | Test
 
