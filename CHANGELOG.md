@@ -16,7 +16,8 @@
 * Fix same files erroneously being queued for reindexing when their modification date was updated, even if their contents did not change (they were never actually reindexed, but still reevaluated)
 
 ### Structural changes (mostly relevant to clients)
-* None yet.
+* HTML in docblocks is internally now automatically converted to markdown, so clients can always assume documentation is in markdown format
+  * This is mostly relevant to old code bases and the JetBrains stubs, which use HTML rather than markdown.
 
 ## 3.1.0
 ### Major Changes

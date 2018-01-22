@@ -52,11 +52,21 @@ services:
             - '@partialParser'
             - '@parserTokenHelper'
 
+    docblockHtmlToMarkdownConverterFactory:
+        class: PhpIntegrator\Parsing\DocblockHtmlToMarkdownConverterFactory
+
+    docblockHtmlToMarkdownConverter:
+        class: League\HTMLToMarkdown\HtmlConverter
+        factory:
+            - '@docblockHtmlToMarkdownConverterFactory'
+            - 'create'
+
     docblockParser:
         class: PhpIntegrator\Parsing\DocblockParser
         arguments:
             - '@docblockAnalyzer'
             - '@docblockTypeParser'
+            - '@docblockHtmlToMarkdownConverter'
 
     docblockTypeParser:
         class: PhpIntegrator\DocblockTypeParser\DocblockTypeParser

@@ -2,8 +2,6 @@
 
 namespace PhpIntegrator\Tests\Unit\Parsing;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
-
 use PhpIntegrator\DocblockTypeParser\IntDocblockType;
 use PhpIntegrator\DocblockTypeParser\NullDocblockType;
 use PhpIntegrator\DocblockTypeParser\StringDocblockType;
@@ -11,9 +9,9 @@ use PhpIntegrator\DocblockTypeParser\CompoundDocblockType;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
-use PhpIntegrator\DocblockTypeParser\DocblockTypeParser;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class DocblockParserTest extends \PHPUnit\Framework\TestCase
+class DocblockParserTest extends AbstractIntegrationTest
 {
     /**
      * @return void
@@ -196,6 +194,26 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
+    public function testVarTagWithClassType(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @var \DateTime
+             */
+        ', [DocblockParser::VAR_TYPE], '');
+
+        static::assertEquals([
+            '$' => [
+                'type'        => '\DateTime',
+                'description' => ''
+            ]
+        ], $result['var']);
+    }
+
+    /**
+     * @return void
+     */
     public function testParamTagWithoutType(): void
     {
         $parser = $this->getDocblockParser();
@@ -266,7 +284,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
         $parser = $this->getDocblockParser();
         $result = $parser->parse('
             /**
-             * This <p>is</p> <strong>some</strong> HTML.
+             * This <strong>is</strong> <i>some</i> HTML.
              *
              * <p>
              * Code sample.
@@ -274,8 +292,8 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::DESCRIPTION], '');
 
-        static::assertSame('This <p>is</p> <strong>some</strong> HTML.', $result['descriptions']['short']);
-        static::assertSame("<p>\nCode sample.\n</p>", $result['descriptions']['long']);
+        static::assertSame('This **is** _some_ HTML.', $result['descriptions']['short']);
+        static::assertSame("Code sample.", $result['descriptions']['long']);
     }
 
     /**
@@ -283,25 +301,6 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
      */
     private function getDocblockParser(): DocblockParser
     {
-        return new DocblockParser(
-            $this->getDocblockAnalyzer(),
-            $this->getDocblockTypeParser()
-        );
-    }
-
-    /**
-     * @return DocblockAnalyzer
-     */
-    private function getDocblockAnalyzer(): DocblockAnalyzer
-    {
-        return new DocblockAnalyzer();
-    }
-
-    /**
-     * @return DocblockTypeParser
-     */
-    private function getDocblockTypeParser(): DocblockTypeParser
-    {
-        return new DocblockTypeParser();
+        return $this->container->get('docblockParser');
     }
 }

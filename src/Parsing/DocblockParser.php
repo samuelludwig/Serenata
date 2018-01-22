@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Parsing;
 
+use League\HTMLToMarkdown\HtmlConverter;
+
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 
 use PhpIntegrator\DocblockTypeParser\DocblockTypeParserInterface;
@@ -98,7 +100,7 @@ class DocblockParser
     /**
      * @var string
      */
-    protected const TAG_START_REGEX = '/^\s*(?:\/\*)?\*\s+(\@.+)(?:\*\/)?$/';
+    protected const TAG_START_REGEX = '/^(\@.+)(?:\*\/)?$/';
 
     /**
      * @var DocblockAnalyzer
@@ -111,13 +113,23 @@ class DocblockParser
     private $docblockTypeParser;
 
     /**
+     * @var HtmlConverter
+     */
+    private $htmlToMarkdownConverter;
+
+    /**
      * @param DocblockAnalyzer            $docblockAnalyzer
      * @param DocblockTypeParserInterface $docblockTypeParser
+     * @param HtmlConverter               $htmlToMarkdownConverter
      */
-    public function __construct(DocblockAnalyzer $docblockAnalyzer, DocblockTypeParserInterface $docblockTypeParser)
-    {
+    public function __construct(
+        DocblockAnalyzer $docblockAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        HtmlConverter $htmlToMarkdownConverter
+    ) {
         $this->docblockAnalyzer = $docblockAnalyzer;
         $this->docblockTypeParser = $docblockTypeParser;
+        $this->htmlToMarkdownConverter = $htmlToMarkdownConverter;
     }
 
     /**
@@ -148,34 +160,29 @@ class DocblockParser
             $docblock = mb_substr($docblock, 2);
             $docblock = mb_substr($docblock, 0, -2);
 
-            preg_match_all('/\*\s+(@[a-zA-Z0-9-\\\\]+(?:\(.*\))?)(?:\s+([.\n]*))/', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+            // Remove the delimiters of the docblock itself at the start of each line, if any.
+            $docblock = preg_replace('/^ +/m', '', $docblock);
+            $docblock = preg_replace('/^\*+/m', '', $docblock);
+            $docblock = preg_replace('/^ +/m', '', $docblock);
+            $docblock = trim($docblock);
+
+            $docblock = $this->htmlToMarkdownConverter->convert($docblock);
+
+            preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
             $segments = [];
-            $previousStart = 0;
-            $previousTag = null;
+            $previousMatch = null;
 
             // Build a list of 'segments', which are just a collection of ranges indicating where each detected tag
             // starts and stops.
             foreach ($matches as $match) {
-                $tag = $match[1][0];
-                $tagOffset = $match[0][1];
+                $segments[] = [$previousMatch[0][0], $previousMatch[0][1], $match[0][1]];
 
-                $tagContentOffset = null;
-
-                if (isset($match[2][1])) {
-                    $tagContentOffset = $match[2][1];
-                } else {
-                    $tagContentOffset = $previousStart;
-                }
-
-                $segments[] = [$previousTag, $previousStart, $tagOffset];
-
-                $previousStart = $tagContentOffset;
-                $previousTag = $tag;
+                $previousMatch = $match;
             }
 
             // NOTE: preg_match_all returns byte offsets, not character offsets.
-            $segments[] = [$previousTag, $previousStart, strlen($docblock)];
+            $segments[] = [$previousMatch[0][0], $previousMatch[0][1], strlen($docblock)];
 
             foreach ($segments as $segment) {
                 list($tag, $start, $end) = $segment;
@@ -189,13 +196,17 @@ class DocblockParser
                 }
 
                 $tagValue = substr($docblock, $start, $end - $start);
+                $tagValue = substr($tagValue, strlen($tag));
                 $tagValue = $this->normalizeNewlines($tagValue);
 
-                // Remove the delimiters of the docblock itself at the start of each line, if any.
-                $tagValue = preg_replace('/\n\s+\*\s*/', ' ', $tagValue);
+                // Multiple spaces are collapsed, like Markdown and HTML.
+                $tagValue = preg_replace('/ +/', ' ', $tagValue);
 
-                // Collapse multiple spaces, just like HTML does.
-                $tagValue = preg_replace('/\s\s+/', ' ', $tagValue);
+                // Newlines are treated as spaces if there is only one (seen as programmatic wrap).
+                $tagValue = preg_replace('/\n(?!\n)/', ' ', $tagValue);
+
+                // Two or more newlines signify a new paragraph, which is maintained.
+                $tagValue = preg_replace('/\n+/', "\n\n", $tagValue);
 
                 $tags[$tag][] = trim($tagValue);
             }

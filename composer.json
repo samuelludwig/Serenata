@@ -12,6 +12,7 @@
         "doctrine/orm": "^2.6",
         "evenement/evenement": "^3.0",
         "jetbrains/phpstorm-stubs": "dev-master",
+        "league/html-to-markdown": "^4.6",
         "nikic/php-parser": "v4.0.0alpha3",
         "php-ds/php-ds": "^1.2",
         "php-integrator/common": "^0.1",
