@@ -323,7 +323,8 @@ class DocblockParser
             'ticket',
             'uses',
 
-            // Doctrine annotation tags, see also http://doctrine-common.readthedocs.io/en/latest/reference/annotations.html .
+            // Doctrine annotation tags, see also
+            // http://doctrine-common.readthedocs.io/en/latest/reference/annotations.html .
             'Annotation',
             'Target',
             'Enum',
