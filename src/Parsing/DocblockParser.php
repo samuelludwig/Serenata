@@ -586,7 +586,7 @@ class DocblockParser
                         $type = $match[2] ?: 'void';
                         $methodSignature = $match[3];
                         $description = $match[4];
-                    } else if ($partCount == 4) {
+                    } elseif ($partCount == 4) {
                         if (empty($match[2])) {
                             $type = 'void';
                             $methodSignature = $match[3];
