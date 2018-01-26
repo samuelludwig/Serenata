@@ -113,10 +113,9 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         bool $shouldIncludeParanthesesInInsertText
     ): AutocompletionSuggestion {
         $insertText = $function['name'];
-        $placeCursorBetweenParentheses = !empty($function['parameters']);
 
         if ($shouldIncludeParanthesesInInsertText) {
-            $insertText .= '()';
+            $insertText .= '($0)';
         }
 
         return new AutocompletionSuggestion(
@@ -127,9 +126,8 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $this->functionAutocompletionSuggestionLabelCreator->create($function),
             $function['shortDescription'],
             [
-                'isDeprecated'                  => $function['isDeprecated'],
-                'returnTypes'                   => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes']),
-                'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
+                'isDeprecated' => $function['isDeprecated'],
+                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes'])
             ]
         );
     }

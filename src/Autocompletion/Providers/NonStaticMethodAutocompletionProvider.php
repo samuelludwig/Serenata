@@ -132,10 +132,9 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         bool $shouldIncludeParanthesesInInsertText
     ): AutocompletionSuggestion {
         $insertText = $method['name'];
-        $placeCursorBetweenParentheses = !empty($method['parameters']);
 
         if ($shouldIncludeParanthesesInInsertText) {
-            $insertText .= '()';
+            $insertText .= '($0)';
         }
 
         return new AutocompletionSuggestion(
@@ -146,11 +145,10 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
             [
-                'isDeprecated'                  => $method['isDeprecated'],
-                'declaringStructure'            => $method['declaringStructure'],
-                'returnTypes'                   => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
-                'protectionLevel'               => $this->extractProtectionLevelStringFromMemberData($method),
-                'placeCursorBetweenParentheses' => $placeCursorBetweenParentheses
+                'isDeprecated'       => $method['isDeprecated'],
+                'declaringStructure' => $method['declaringStructure'],
+                'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
+                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method)
             ]
         );
     }

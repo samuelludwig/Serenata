@@ -17,7 +17,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', null, 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -29,8 +29,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'startLineMember' => 8,
                     'endLineMember'   => 11,
                 ],
-                'returnTypes'                   => 'int|string',
-                'placeCursorBetweenParentheses' => false
+                'returnTypes' => 'int|string'
             ])
         ];
 
@@ -59,8 +58,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-                'returnTypes'                   => '',
-                'placeCursorBetweenParentheses' => false
+                'returnTypes' => ''
             ])
         ];
 
@@ -89,38 +87,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-                'returnTypes'                   => '',
-                'placeCursorBetweenParentheses' => false
-            ])
-        ];
-
-        static::assertEquals($suggestions, $output);
-    }
-
-    /**
-     * @return void
-     */
-    public function testSuggestsPlacingCursorBetweenParanthesesWhenParametersExist(): void
-    {
-        $fileName = 'MethodWithParameters.phpt';
-
-        $output = $this->provide($fileName);
-
-        $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', null, 'foo($test)', null, [
-                'isDeprecated'                  => false,
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
-                        'fqcn'            => '\A',
-                        'filename'        => $this->getPathFor($fileName),
-                        'startLine'       => 3,
-                        'endLine'         => 9,
-                        'type'            => 'class',
-                        'startLineMember' => 5,
-                        'endLineMember'   => 8,
-                    ],
-                'returnTypes'                   => '',
-                'placeCursorBetweenParentheses' => true
+                'returnTypes' => ''
             ])
         ];
 
@@ -137,7 +104,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()', null, 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo()', null, [
                 'isDeprecated'                  => true,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -149,8 +116,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                         'startLineMember' => 8,
                         'endLineMember'   => 11,
                     ],
-                'returnTypes'                   => 'void',
-                'placeCursorBetweenParentheses' => false
+                'returnTypes' => 'void'
             ])
         ];
 
