@@ -611,7 +611,12 @@ class DocblockParser
                         $methodParameterList = $match[2];
 
                         // NOTE: Example string: "$param1, int $param2, $param3 = array(), SOME\\TYPE_1 $param4 = null".
-                        preg_match_all('/(?:(\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)\s+)?(\$[A-Za-z0-9_]+)(?:\s*=\s*([^,]+))?(?:,|$)/', $methodParameterList, $matches, PREG_SET_ORDER);
+                        preg_match_all(
+                            '/(?:(\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)\s+)?(\$[A-Za-z0-9_]+)(?:\s*=\s*([^,]+))?(?:,|$)/',
+                            $methodParameterList,
+                            $matches,
+                            PREG_SET_ORDER
+                        );
 
                         foreach ($matches as $match) {
                             $partCount = count($match);
