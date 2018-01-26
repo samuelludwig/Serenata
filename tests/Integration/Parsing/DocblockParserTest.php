@@ -69,7 +69,7 @@ class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$someString' => [
-                'type'        => new CompoundDocblockType(
+                'type' => new CompoundDocblockType(
                     new StringDocblockType(),
                     new NullDocblockType()
                 ),
