@@ -16,6 +16,7 @@
 ### Bugs Fixed
 * [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
 * Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
+* Fix wonky docblock types such as `@throws |UnexpectedValueException` causing fatal indexing errors when used in class methods
 * Fetching local variables will no longer include variables that aren't actually available yet at the offset because they are being assigned to
 * Fix same files erroneously being queued for reindexing when their modification date was updated, even if their contents did not change (they were never actually reindexed, but still reevaluated)
 

@@ -551,7 +551,7 @@ class DocblockParser
 
                 if ($type) {
                     $throws[] = [
-                        'type'        => $this->sanitizeText($type),
+                        'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                         'description' => $description
                     ];
                 }
@@ -617,7 +617,7 @@ class DocblockParser
                             $partCount = count($match);
 
                             if ($partCount == 4) {
-                                $parameterType = $match[1];
+                                $parameterType = $match[1] ?: null;
                                 $parameterName = $match[2];
                                 $defaultValue = $match[3];
                             } elseif ($partCount == 3) {
@@ -627,7 +627,10 @@ class DocblockParser
                             }
 
                             $data = [
-                                'type'         => $parameterType,
+                                'type' => $parameterType !== null ?
+                                    $this->docblockTypeParser->parse($parameterType) :
+                                    null,
+
                                 'defaultValue' => $defaultValue
                             ];
 
@@ -643,7 +646,7 @@ class DocblockParser
                     }
 
                     $methods[$methodName] = [
-                        'type'                => $type,
+                        'type'                => $type !== null ? $this->docblockTypeParser->parse($type) : null,
                         'isStatic'            => $isStatic,
                         'requiredParameters'  => $requiredParameters,
                         'optionalParameters'  => $optionalParameters,
@@ -693,7 +696,7 @@ class DocblockParser
                 }
 
                 $properties[$this->sanitizeText($variableName)] = [
-                    'type'        => $this->sanitizeText($type),
+                    'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                     'isStatic'    => ($staticKeyword === 'static'),
                     'description' => $description
                 ];

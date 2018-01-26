@@ -4,6 +4,7 @@ namespace PhpIntegrator\Tests\Unit\Parsing;
 
 use PhpIntegrator\DocblockTypeParser\IntDocblockType;
 use PhpIntegrator\DocblockTypeParser\NullDocblockType;
+use PhpIntegrator\DocblockTypeParser\ClassDocblockType;
 use PhpIntegrator\DocblockTypeParser\StringDocblockType;
 use PhpIntegrator\DocblockTypeParser\CompoundDocblockType;
 
@@ -148,12 +149,9 @@ class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertSame([
-            [
-                'type'        => '\UnexpectedValueException',
-                'description' => 'Some description'
-            ]
-        ], $result['throws']);
+        static::assertCount(1, $result['throws']);
+        static::assertEquals(new ClassDocblockType('\UnexpectedValueException'), $result['throws'][0]['type']);
+        static::assertSame('Some description', $result['throws'][0]['description']);
     }
 
     /**
@@ -168,12 +166,9 @@ class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertSame([
-            [
-                'type'        => '\UnexpectedValueException',
-                'description' => null
-            ]
-        ], $result['throws']);
+        static::assertCount(1, $result['throws']);
+        static::assertEquals(new ClassDocblockType('\UnexpectedValueException'), $result['throws'][0]['type']);
+        static::assertSame(null, $result['throws'][0]['description']);
     }
 
     /**
