@@ -579,7 +579,11 @@ class DocblockParser
         if (isset($tags[static::METHOD])) {
             foreach ($tags[static::METHOD] as $tag) {
                 // The method signature can contain spaces, so we can't use a simple filterParameterTag.
-                if (preg_match('/^(static\s+)?(?:(\S+)\s+)?([A-Za-z0-9_]+\(.*\))(?:\s+(.+))?$/', $tag, $match) !== false) {
+                if (preg_match(
+                    '/^(static\s+)?(?:(\S+)\s+)?([A-Za-z0-9_]+\(.*\))(?:\s+(.+))?$/',
+                    $tag,
+                    $match
+                ) !== false) {
                     $partCount = count($match);
 
                     if ($partCount == 5) {
