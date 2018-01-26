@@ -639,7 +639,6 @@ class DocblockParser
                             } else {
                                 $optionalParameters[$parameterName] = $data;
                             }
-
                         }
                     } else {
                         continue; // Invalid method signature.
