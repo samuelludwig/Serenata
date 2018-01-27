@@ -49,38 +49,27 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      */
     public function score(string $approximation, string $referenceText): ?float
     {
-        $approximationLength = strlen($approximation);
-        $referenceTextLength = strlen($referenceText);
-
         // We need to exit early for these to avoid incorrect results, see below.
-        if ($approximationLength > self::MAX_LENGTH_IN_BYTES) {
+        if (strlen($approximation) > self::MAX_LENGTH_IN_BYTES) {
             return null;
-        } elseif ($referenceTextLength > self::MAX_LENGTH_IN_BYTES) {
+        } elseif (strlen($referenceText) > self::MAX_LENGTH_IN_BYTES) {
             return null;
+        } elseif ($referenceText === '') {
+            return null; // Nothing can match this, except another empty string, which is pretty useless on its own.
         }
 
-        $score = @levenshtein(
-            $referenceText,
-            $approximation,
-            self::INSERTION_COST,
-            self::REPLACEMENT_COST,
-            self::REMOVAL_COST
-        );
-
-        if ($score === -1 || $score > self::THRESHOLD) {
-            return null;
-        }
-
-        return $score - $this->calculateBonusForSubstringMatches($approximation, $referenceText);
+        return $this->isSubstringMatch($approximation, $referenceText) ?
+            $this->calculateSubstringMatchScore($approximation, $referenceText) :
+            $this->calculateFuzzyMatchScore($approximation, $referenceText);
     }
 
     /**
      * @param string $approximation
      * @param string $referenceText
      *
-     * @return float
+     * @return bool
      */
-    private function calculateBonusForSubstringMatches(string $approximation, string $referenceText): float
+    private function isSubstringMatch(string $approximation, string $referenceText): bool
     {
         $referenceTextLength = strlen($referenceText);
         $approximationLength = strlen($approximation);
@@ -94,9 +83,84 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
 
         for ($i = 0; $i <= $scanEnd; ++$i) {
             if (substr($approximation, $i, $referenceTextLength) === $referenceText) {
-                $bonus += self::REPLACEMENT_COST * 5;
-                break;
+                return true;
             }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $approximation
+     * @param string $referenceText
+     *
+     * @return float
+     */
+    private function calculateSubstringMatchScore(string $approximation, string $referenceText): float
+    {
+        return
+            (self::MAX_LENGTH_IN_BYTES * 3) -
+            $this->calculateBonusForBoundarySubstringMatches($approximation, $referenceText) +
+            (strlen($approximation) - strlen($referenceText));
+    }
+
+    /**
+     * @param string $approximation
+     * @param string $referenceText
+     *
+     * @return float|null
+     */
+    private function calculateFuzzyMatchScore(string $approximation, string $referenceText): ?float
+    {
+        $score = @levenshtein(
+            $referenceText,
+            $approximation,
+            self::INSERTION_COST,
+            self::REPLACEMENT_COST,
+            self::REMOVAL_COST
+        );
+
+        if ($score === -1 || $score > self::THRESHOLD) {
+            return null;
+        }
+
+        return $score;
+    }
+
+    /**
+     * Calculates a bonus to assign if substring matches are surrounded by word boundaries.
+     *
+     * @example matching "A" against "A\B" gets a bonus because the former is part of the latter and followed by "\\"
+     * @example matching "B" against "A\B" gets a bonus because the former is part of the latter and preceded by "\\"
+     * @example matching "B" against "ABC" does not get a bonus
+     *
+     * @param string $approximation
+     * @param string $referenceText
+     *
+     * @return float
+     */
+    private function calculateBonusForBoundarySubstringMatches(string $approximation, string $referenceText): float
+    {
+        $approximationLength = strlen($approximation);
+        $referenceTextLength = strlen($referenceText);
+
+        $i = strpos($approximation, $referenceText);
+
+        assert($i !== false, "Can't calculate bonus for substring matches as there is no substring match");
+
+        $bonus = 0;
+
+        // This is already a perfect substring match, but if the approximation matches an actual full namespace
+        // segment or class name, that's even better than just part of one. In a scenario where two matches have
+        // this, the shortest one gets upped.
+        if ($i === 0 || $approximation[$i - 1] === '\\') {
+            $bonus += self::MAX_LENGTH_IN_BYTES;
+        }
+
+        if (($i + $referenceTextLength) >= $approximationLength ||
+            $approximation[$i + $referenceTextLength] === '\\'
+        ) {
+            $bonus += self::MAX_LENGTH_IN_BYTES;
         }
 
         return $bonus;
