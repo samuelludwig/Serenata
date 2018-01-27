@@ -15,6 +15,11 @@ services:
             - '@indexer'
             - '@cache'
 
+    exitCommand:
+        class: PhpIntegrator\UserInterface\Command\ExitCommand
+        arguments:
+            - '@managerRegistry'
+
     reindexCommand:
         class: PhpIntegrator\UserInterface\Command\ReindexCommand
         arguments:

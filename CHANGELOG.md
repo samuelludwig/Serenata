@@ -10,6 +10,7 @@
 * Performance has improved in several area's, including signature help and tooltips, due to additional internal caching that avoid recomputation
 
 ### Other Improvements
+* A new `exit` command was added that allows to request the server to shutdown cleanly
 * Signature help signature labels now include the parameter list as well
   * These were already retrievable via the actual parameters, but some UI's such as Visual Studio Code and atom-ide-ui don't explicitly show the parameter label separately at the time of writing
 * Tooltip markdown was restructured and no longer uses tables
