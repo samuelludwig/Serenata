@@ -26,8 +26,10 @@ final class NamespaceAutocompletionApplicabilityChecker implements Autocompletio
      */
     public function doesApplyTo(NodeAtOffsetLocatorResult $nodeAtOffsetLocatorResult): bool
     {
-        if ($nodeAtOffsetLocatorResult->getNode() === null) {
+        if ($nodeAtOffsetLocatorResult->getComment() !== null) {
             return false;
+        } elseif ($nodeAtOffsetLocatorResult->getNode() === null) {
+            return true;
         }
 
         return $this->doesApplyToNode($nodeAtOffsetLocatorResult->getNode());
