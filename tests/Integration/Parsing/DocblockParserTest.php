@@ -292,6 +292,21 @@ class DocblockParserTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testStripsUnconvertableHtmlTags(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * This <script>alert("test")</script>
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame('This alert("test")', $result['descriptions']['short']);
+    }
+
+    /**
      * @return DocblockParser
      */
     private function getDocblockParser(): DocblockParser
