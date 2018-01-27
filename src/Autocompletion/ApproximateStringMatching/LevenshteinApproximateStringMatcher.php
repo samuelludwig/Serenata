@@ -71,23 +71,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      */
     private function isSubstringMatch(string $approximation, string $referenceText): bool
     {
-        $referenceTextLength = strlen($referenceText);
-        $approximationLength = strlen($approximation);
-
-        if ($referenceTextLength > $approximationLength) {
-            return 0;
-        }
-
-        $bonus = 0;
-        $scanEnd = ($approximationLength - $referenceTextLength);
-
-        for ($i = 0; $i <= $scanEnd; ++$i) {
-            if (substr($approximation, $i, $referenceTextLength) === $referenceText) {
-                return true;
-            }
-        }
-
-        return false;
+        return strpos($approximation, $referenceText) !== false;
     }
 
     /**
