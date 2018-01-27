@@ -28,14 +28,19 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     private const REQUEST_HANDLE_FREQUENCY_SECONDS = 0.00001;
 
     /**
+     * @var int
+     */
+    private const CYCLE_COLLECTION_FREQUENCY_SECONDS = 5;
+
+    /**
      * @var LoopInterface
      */
     private $loop;
 
     /**
-     * @var Timer
+     * @var Timer|null
      */
-    private $periodicTimer;
+    private $periodicQueueProcessingTimer;
 
     /**
      * @inheritDoc
@@ -73,46 +78,47 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     {
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
-        $this->ensurePeriodicTimerIsInstalled();
+        $this->ensurePeriodicQueueProcessingTimerIsInstalled();
     }
 
     /**
      * @return void
      */
-    private function ensurePeriodicTimerIsInstalled(): void
+    private function ensurePeriodicQueueProcessingTimerIsInstalled(): void
     {
-        if ($this->periodicTimer !== null) {
+        if ($this->periodicQueueProcessingTimer !== null) {
             return;
         }
 
-        $this->installPeriodicTimer();
+        $this->installPeriodicQueueProcessingTimer();
     }
 
 
     /**
      * @return void
      */
-    private function installPeriodicTimer(): void
+    private function installPeriodicQueueProcessingTimer(): void
     {
-        $this->periodicTimer = $this->loop->addPeriodicTimer(self::REQUEST_HANDLE_FREQUENCY_SECONDS, function () {
-            $this->processNextQueueItem();
+        $this->periodicQueueProcessingTimer = $this->loop->addPeriodicTimer(
+            self::REQUEST_HANDLE_FREQUENCY_SECONDS,
+            function () {
+                $this->processNextQueueItem();
 
-            // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
-            gc_collect_cycles();
-
-            if ($this->getContainer()->get('requestQueue')->isEmpty()) {
-                $this->uninstallPeriodicTimer();
+                if ($this->getContainer()->get('requestQueue')->isEmpty()) {
+                    $this->uninstallPeriodicQueueProcessingTimer();
+                }
             }
-        });
+        );
     }
 
     /**
      * @return void
      */
-    private function uninstallPeriodicTimer(): void
+    private function uninstallPeriodicQueueProcessingTimer(): void
     {
-        $this->loop->cancelTimer($this->periodicTimer);
-        $this->periodicTimer = null;
+        $this->loop->cancelTimer($this->periodicQueueProcessingTimer);
+
+        $this->periodicQueueProcessingTimer = null;
     }
 
     /**
@@ -156,5 +162,16 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
         $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
+
+        $this->loop->addPeriodicTimer(
+            self::CYCLE_COLLECTION_FREQUENCY_SECONDS,
+            function () {
+                // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
+                // Do *not* do this after every request handle as it puts a major strain on performance, especially
+                // during project indexing. Also don't cancel this timer when the last request is handled, as during
+                // normal usage, the frequency may be too high to ever trigger before it is cancelled.
+                gc_collect_cycles();
+            }
+        );
     }
 }
