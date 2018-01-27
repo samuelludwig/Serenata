@@ -8,4 +8,4 @@ function foo()
 
 }
 
-// <MARKER>
+f// <MARKER>

@@ -5,4 +5,4 @@ trait Foo
     
 }
 
-// <MARKER>
+F// <MARKER>

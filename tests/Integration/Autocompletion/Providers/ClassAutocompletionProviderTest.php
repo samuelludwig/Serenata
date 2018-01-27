@@ -27,7 +27,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 SuggestionKind::CLASS_,
                 'Foo',
                 new TextEdit(
-                    new Range(new Position(7, 0), new Position(7, 0)),
+                    new Range(new Position(7, 0), new Position(7, 1)),
                     'Foo'
                 ),
                 'Foo',
@@ -35,7 +35,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 [
                     'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => ''
+                    'prefix'       => 'F'
                 ]
             )
         ];
@@ -56,7 +56,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 SuggestionKind::CLASS_,
                 'Foo',
                 new TextEdit(
-                    new Range(new Position(10, 0), new Position(10, 0)),
+                    new Range(new Position(10, 0), new Position(10, 1)),
                     'Foo'
                 ),
                 'Foo',
@@ -64,7 +64,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 [
                     'isDeprecated' => true,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => ''
+                    'prefix'       => 'F'
                 ]
             )
         ];
@@ -114,7 +114,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 SuggestionKind::CLASS_,
                 'Baz',
                 new TextEdit(
-                    new Range(new Position(10, 4), new Position(10, 4)),
+                    new Range(new Position(10, 4), new Position(10, 5)),
                     'Baz'
                 ),
                 'Foo\Bar\Baz',
@@ -122,7 +122,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 [
                     'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => ''
+                    'prefix'       => 'F'
                 ],
                 [
                     new TextEdit(

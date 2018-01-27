@@ -27,7 +27,7 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 SuggestionKind::CLASS_,
                 'Foo',
                 new TextEdit(
-                    new Range(new Position(7, 0), new Position(7, 0)),
+                    new Range(new Position(7, 0), new Position(7, 1)),
                     'Foo'
                 ),
                 'Foo',
@@ -35,7 +35,7 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 [
                     'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::INTERFACE_,
-                    'prefix'       => ''
+                    'prefix'       => 'F'
                 ]
             )
         ];

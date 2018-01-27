@@ -5,5 +5,5 @@ public function foo()
 
 }
 
-// <MARKER>
+f// <MARKER>
 ();

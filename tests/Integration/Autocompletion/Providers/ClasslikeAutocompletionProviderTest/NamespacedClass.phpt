@@ -8,5 +8,5 @@ namespace Foo\Bar {
 }
 
 namespace {
-    // <MARKER>
+    F// <MARKER>
 }

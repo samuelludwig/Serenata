@@ -27,7 +27,7 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 SuggestionKind::MIXIN,
                 'Foo',
                 new TextEdit(
-                    new Range(new Position(7, 0), new Position(7, 0)),
+                    new Range(new Position(7, 0), new Position(7, 1)),
                     'Foo'
                 ),
                 'Foo',
@@ -35,7 +35,7 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 [
                     'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::TRAIT_,
-                    'prefix'       => ''
+                    'prefix'       => 'F'
                 ]
             )
         ];
