@@ -71,23 +71,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      */
     private function isSubstringMatch(string $approximation, string $referenceText): bool
     {
-        $referenceTextLength = strlen($referenceText);
-        $approximationLength = strlen($approximation);
-
-        if ($referenceTextLength > $approximationLength) {
-            return 0;
-        }
-
-        $bonus = 0;
-        $scanEnd = ($approximationLength - $referenceTextLength);
-
-        for ($i = 0; $i <= $scanEnd; ++$i) {
-            if (substr($approximation, $i, $referenceTextLength) === $referenceText) {
-                return true;
-            }
-        }
-
-        return false;
+        return strpos($approximation, $referenceText) !== false;
     }
 
     /**
@@ -150,9 +134,6 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
 
         $bonus = 0;
 
-        // This is already a perfect substring match, but if the approximation matches an actual full namespace
-        // segment or class name, that's even better than just part of one. In a scenario where two matches have
-        // this, the shortest one gets upped.
         if ($i === 0 || $approximation[$i - 1] === '\\') {
             $bonus += self::MAX_LENGTH_IN_BYTES;
         }
