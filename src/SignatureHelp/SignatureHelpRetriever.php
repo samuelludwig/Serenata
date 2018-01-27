@@ -128,8 +128,12 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    private function getSignatureHelpForNode(Node $node, Structures\File $file, string $code, int $position): SignatureHelp
-    {
+    private function getSignatureHelpForNode(
+        Node $node,
+        Structures\File $file,
+        string $code,
+        int $position
+    ): SignatureHelp {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
             Node\Expr\FuncCall::class,
@@ -155,7 +159,9 @@ class SignatureHelpRetriever
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } elseif ($invocationNode instanceof Node\Expr\New_) {
                 $nodeNameEndFilePosition = $invocationNode->class->getAttribute('endFilePos') + 1;
-            } elseif ($invocationNode instanceof Node\Expr\MethodCall || $invocationNode instanceof Node\Expr\StaticCall) {
+            } elseif ($invocationNode instanceof Node\Expr\MethodCall ||
+                $invocationNode instanceof Node\Expr\StaticCall
+            ) {
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } else {
                 throw new AssertionError(
@@ -278,8 +284,7 @@ class SignatureHelpRetriever
         $parameters = [];
         $documentation = null;
 
-        if (
-            $node instanceof Node\Expr\MethodCall ||
+        if ($node instanceof Node\Expr\MethodCall ||
             $node instanceof Node\Expr\StaticCall ||
             $node instanceof Node\Expr\New_
         ) {
