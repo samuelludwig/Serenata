@@ -70,6 +70,8 @@ final class InitializeCommand extends AbstractCommand
     /**
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param bool                           $includeBuiltinItems
+     *
+     * @return bool
      */
     public function initialize(
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
