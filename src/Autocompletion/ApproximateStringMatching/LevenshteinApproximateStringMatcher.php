@@ -150,9 +150,6 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
 
         $bonus = 0;
 
-        // This is already a perfect substring match, but if the approximation matches an actual full namespace
-        // segment or class name, that's even better than just part of one. In a scenario where two matches have
-        // this, the shortest one gets upped.
         if ($i === 0 || $approximation[$i - 1] === '\\') {
             $bonus += self::MAX_LENGTH_IN_BYTES;
         }
