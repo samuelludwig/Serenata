@@ -274,7 +274,7 @@ class DocblockParserTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testLeavesHtmlAsIs(): void
+    public function testConvertsHtmlToMarkdown(): void
     {
         $parser = $this->getDocblockParser();
         $result = $parser->parse('
