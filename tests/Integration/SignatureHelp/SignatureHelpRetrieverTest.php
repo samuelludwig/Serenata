@@ -18,7 +18,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -39,7 +39,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallWhitespaceBeforeFirstAndOnlyArgument(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.')
             ])
         ];
@@ -56,7 +56,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallWhitespaceBetweenArguments(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, int $b)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('int $b', 'Parameter B.')
             ])
@@ -75,7 +75,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallWithMissingLastArgumentAfterComma(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, int $b)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('int $b', 'Parameter B.')
             ])
@@ -94,7 +94,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     // public function testFunctionCallDoesNotWorkWhenInsideClosureArgumentBody(): void
     // {
     //     $expectedSignaturesResult = [
-    //         new SignatureInformation('test', null, [
+    //         new SignatureInformation('test(\Closure $a)', null, [
     //             new ParameterInformation('\Closure $a', null)
     //         ])
     //     ];
@@ -132,13 +132,13 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNestedFunctionCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('foo', 'Some summary.', [
+            new SignatureInformation('foo(int $a)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.')
             ])
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('bar', null, [])
+            new SignatureInformation('bar()', null, [])
         ];
 
         $fileName = 'NestedFunctionCall.phpt';
@@ -157,7 +157,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testMethodCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -178,13 +178,13 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNestedMethodCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('foo', 'Some summary.', [
+            new SignatureInformation('foo(int $a)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.')
             ])
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('bar', null, [])
+            new SignatureInformation('bar()', null, [])
         ];
 
         $fileName = 'NestedMethodCall.phpt';
@@ -203,7 +203,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testStaticMethodCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -224,7 +224,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testConstructor(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('__construct', 'Some summary.', [
+            new SignatureInformation('__construct(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -245,13 +245,13 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNestedConstructor(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('__construct', null, [
+            new SignatureInformation('__construct(int $a)', null, [
                 new ParameterInformation('int $a', null)
             ])
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('__construct', null, [
+            new SignatureInformation('__construct(int $b)', null, [
                 new ParameterInformation('int $b', null)
             ])
         ];

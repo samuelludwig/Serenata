@@ -325,9 +325,26 @@ class SignatureHelpRetriever
 
         $argumentIndex = $this->getNormalizedFunctionArgumentIndex($functionInfo, $argumentIndex);
 
-        $signature = new SignatureInformation($name, $documentation, $parameters);
+        $signature = new SignatureInformation(
+            $this->formatSignatureLabel($name, $parameters),
+            $documentation,
+            $parameters
+        );
 
         return new SignatureHelp([$signature], 0, $argumentIndex);
+    }
+
+    /**
+     * @param string                 $name
+     * @param ParameterInformation[] $parameters
+     *
+     * @return string
+     */
+    private function formatSignatureLabel(string $name, array $parameters): string
+    {
+        return $name . '(' . implode(', ', array_map(function (ParameterInformation $parameterInformation) {
+            return $parameterInformation->getLabel();
+        }, $parameters)) . ')';
     }
 
     /**
