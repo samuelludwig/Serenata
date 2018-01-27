@@ -93,7 +93,6 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $this->installPeriodicQueueProcessingTimer();
     }
 
-
     /**
      * @return void
      */
