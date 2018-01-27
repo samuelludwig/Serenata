@@ -95,7 +95,6 @@ class UseStatementInsertionCreator
             }
         }
 
-
         return new TextEdit(
             new Range(new Position($line, 0), new Position($line, 0)),
             $textToInsert
