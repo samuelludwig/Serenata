@@ -34,7 +34,7 @@ class DocblockHtmlToMarkdownConverterFactory
         $environment->getConfig()->merge([
             'header_style'    => 'setext',
             'suppress_errors' => true,
-            'strip_tags'      => false,
+            'strip_tags'      => true,
             'bold_style'      => '**',
             'italic_style'    => '_',
             'remove_nodes'    => '',
