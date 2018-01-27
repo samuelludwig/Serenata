@@ -12,7 +12,7 @@ use PhpIntegrator\Indexing\Structures\ClasslikeTypeNameValue;
 
 use PhpIntegrator\Utility\TextEdit;
 
-class ClasslikeAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @return void
