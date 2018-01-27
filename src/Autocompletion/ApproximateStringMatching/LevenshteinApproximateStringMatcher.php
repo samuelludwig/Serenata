@@ -54,8 +54,6 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
             return null;
         } elseif (strlen($referenceText) > self::MAX_LENGTH_IN_BYTES) {
             return null;
-        } elseif ($referenceText === '') {
-            return null; // Nothing can match this, except another empty string, which is pretty useless on its own.
         }
 
         return $this->isSubstringMatch($approximation, $referenceText) ?
@@ -71,7 +69,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
      */
     private function isSubstringMatch(string $approximation, string $referenceText): bool
     {
-        return strpos($approximation, $referenceText) !== false;
+        return $referenceText !== '' && strpos($approximation, $referenceText) !== false;
     }
 
     /**

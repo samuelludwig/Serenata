@@ -139,7 +139,7 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertNull($matcher->score($test, $referenceText));
+        static::assertNotNull($matcher->score($test, $referenceText));
     }
 
     /**
