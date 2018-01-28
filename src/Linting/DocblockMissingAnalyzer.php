@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -24,17 +24,20 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
     private $typeAnalyzer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param string               $code
-     * @param TypeAnalyzer         $typeAnalyzer
-     * @param ClasslikeInfoBuilder $classlikeInfoBuilder
+     * @param string                        $code
+     * @param TypeAnalyzer                  $typeAnalyzer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
-    public function __construct(string $code, TypeAnalyzer $typeAnalyzer, ClasslikeInfoBuilder $classlikeInfoBuilder)
-    {
+    public function __construct(
+        string $code,
+        TypeAnalyzer $typeAnalyzer,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+    ) {
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
 
         $this->outlineIndexingVisitor = new OutlineFetchingVisitor($typeAnalyzer, $code);
@@ -93,7 +96,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
     {
         $warnings = [];
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
             $warnings[] = [
@@ -150,7 +153,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
             return [];
         }
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
         if (!$classInfo ||
             !isset($classInfo['methods'][$method['name']]) ||
@@ -180,7 +183,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
             return [];
         }
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
         if (!$classInfo ||
             !isset($classInfo['properties'][$property['name']]) ||

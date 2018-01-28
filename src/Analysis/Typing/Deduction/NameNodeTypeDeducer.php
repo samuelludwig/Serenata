@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
@@ -32,7 +32,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $typeAnalyzer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
@@ -48,13 +48,13 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param TypeAnalyzer                               $typeAnalyzer
-     * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
+     * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
      * @param FileClasslikeListProviderInterface         $fileClasslikeListProvider
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
         TypeAnalyzer $typeAnalyzer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         FileClasslikeListProviderInterface $fileClasslikeListProvider,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
@@ -103,7 +103,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
                 return [];
             }
 
-            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($currentClassName);
+            $classInfo = $this->classlikeInfoBuilder->build($currentClassName);
 
             if (!$classInfo || empty($classInfo['parents'])) {
                 return [];

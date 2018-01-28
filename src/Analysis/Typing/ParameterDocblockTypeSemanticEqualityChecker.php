@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\DocblockTypeParser;
 
@@ -30,17 +30,17 @@ class ParameterDocblockTypeSemanticEqualityChecker
     private $structureAwareNameResolverFactory;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-     * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
+     * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -290,8 +290,8 @@ class ParameterDocblockTypeSemanticEqualityChecker
         }
 
         try {
-            $typeClassInfo = $this->classlikeInfoBuilder->getClasslikeInfo($type->toString());
-            $docblockTypeClassInfo = $this->classlikeInfoBuilder->getClasslikeInfo($docblockType->getName());
+            $typeClassInfo = $this->classlikeInfoBuilder->build($type->toString());
+            $docblockTypeClassInfo = $this->classlikeInfoBuilder->build($docblockType->getName());
         } catch (UnexpectedValueException $e) {
             return false;
         }

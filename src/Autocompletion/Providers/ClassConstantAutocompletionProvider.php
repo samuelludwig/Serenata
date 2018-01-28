@@ -6,7 +6,7 @@ use Generator;
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 use PhpIntegrator\Analysis\CircularDependencyException;
 
 use PhpIntegrator\Autocompletion\SuggestionKind;
@@ -28,7 +28,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
     private $expressionTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
@@ -39,12 +39,12 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
 
     /**
      * @param ExpressionTypeDeducer                 $expressionTypeDeducer
-     * @param ClasslikeInfoBuilder                  $classlikeInfoBuilder
+     * @param ClasslikeInfoBuilderInterface         $classlikeInfoBuilder
      * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
@@ -67,7 +67,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
 
         $classlikeInfoElements = array_map(function (string $type) {
             try {
-                return $this->classlikeInfoBuilder->getClasslikeInfo($type);
+                return $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 return null;
             }

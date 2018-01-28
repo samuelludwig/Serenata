@@ -6,7 +6,7 @@ use Generator;
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 use PhpIntegrator\Analysis\CircularDependencyException;
 
 use PhpIntegrator\Autocompletion\SuggestionKind;
@@ -30,7 +30,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     private $expressionTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
@@ -51,14 +51,14 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
 
     /**
      * @param ExpressionTypeDeducer                                         $expressionTypeDeducer
-     * @param ClasslikeInfoBuilder                                          $classlikeInfoBuilder
+     * @param ClasslikeInfoBuilderInterface                                 $classlikeInfoBuilder
      * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
      * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
         AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
@@ -85,7 +85,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
 
         $classlikeInfoElements = array_map(function (string $type) {
             try {
-                return $this->classlikeInfoBuilder->getClasslikeInfo($type);
+                return $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 return null;
             }

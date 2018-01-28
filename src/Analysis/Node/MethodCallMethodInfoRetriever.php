@@ -5,7 +5,7 @@ namespace PhpIntegrator\Analysis\Node;
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -25,17 +25,17 @@ class MethodCallMethodInfoRetriever
     private $nodeTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -83,7 +83,7 @@ class MethodCallMethodInfoRetriever
             $info = null;
 
             try {
-                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
+                $info = $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException $e) {
                 continue;
             }

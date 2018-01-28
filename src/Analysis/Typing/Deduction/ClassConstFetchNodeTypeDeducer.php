@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Indexing\Structures;
 
@@ -21,17 +21,17 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $nodeTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder            $classlikeInfoBuilder
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -71,7 +71,7 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             $info = null;
 
             try {
-                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
+                $info = $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException $e) {
                 continue;
             }

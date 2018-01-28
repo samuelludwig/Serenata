@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -21,7 +21,7 @@ class UnknownMemberAnalyzerFactory
     private $nodeTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
@@ -31,13 +31,13 @@ class UnknownMemberAnalyzerFactory
     private $typeAnalyzer;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
-     * @param TypeAnalyzer             $typeAnalyzer
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @param TypeAnalyzer                  $typeAnalyzer
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;

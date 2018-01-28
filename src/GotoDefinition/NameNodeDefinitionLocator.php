@@ -4,7 +4,7 @@ namespace PhpIntegrator\GotoDefinition;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
 
@@ -23,17 +23,17 @@ class NameNodeDefinitionLocator
     private $nameNodeFqsenDeterminer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classLikeInfoBuilder;
 
     /**
-     * @param NameNodeFqsenDeterminer   $nameNodeFqsenDeterminer
-     * @param ClasslikeInfoBuilder      $classLikeInfoBuilder
+     * @param NameNodeFqsenDeterminer       $nameNodeFqsenDeterminer
+     * @param ClasslikeInfoBuilderInterface $classLikeInfoBuilder
      */
     public function __construct(
         NameNodeFqsenDeterminer $nameNodeFqsenDeterminer,
-        ClasslikeInfoBuilder $classLikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classLikeInfoBuilder
     ) {
         $this->nameNodeFqsenDeterminer = $nameNodeFqsenDeterminer;
         $this->classLikeInfoBuilder = $classLikeInfoBuilder;
@@ -66,6 +66,6 @@ class NameNodeDefinitionLocator
      */
     private function getClassLikeInfo(string $fullyQualifiedName): array
     {
-        return $this->classLikeInfoBuilder->getClasslikeInfo($fullyQualifiedName);
+        return $this->classLikeInfoBuilder->build($fullyQualifiedName);
     }
 }

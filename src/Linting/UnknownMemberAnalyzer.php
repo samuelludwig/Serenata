@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -23,15 +23,15 @@ final class UnknownMemberAnalyzer implements AnalyzerInterface
     private $methodUsageFetchingVisitor;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
-     * @param TypeAnalyzer             $typeAnalyzer
-     * @param Structures\File          $file
-     * @param string                   $code
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @param TypeAnalyzer                  $typeAnalyzer
+     * @param Structures\File               $file
+     * @param string                        $code
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
         Structures\File $file,
         string $code

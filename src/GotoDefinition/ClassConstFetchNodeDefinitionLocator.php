@@ -4,7 +4,7 @@ namespace PhpIntegrator\GotoDefinition;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -23,16 +23,18 @@ class ClassConstFetchNodeDefinitionLocator
     private $nodeTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
-    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer, ClasslikeInfoBuilder $classlikeInfoBuilder)
-    {
+    public function __construct(
+        NodeTypeDeducerInterface $nodeTypeDeducer,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+    ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
@@ -113,7 +115,7 @@ class ClassConstFetchNodeDefinitionLocator
         $classInfo = null;
 
         try {
-            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classType);
+            $classInfo = $this->classlikeInfoBuilder->build($classType);
         } catch (UnexpectedValueException $e) {
             return null;
         }

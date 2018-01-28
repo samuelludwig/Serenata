@@ -1143,11 +1143,11 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
     {
         $classlikeInfoBuilder = $this->getMockBuilder(ClasslikeInfoBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getClasslikeInfo'])
+            ->setMethods(['build'])
             ->getMock();
 
         if (!empty($returnValues)) {
-            $classlikeInfoBuilder->method('getClasslikeInfo')->willReturn(...$returnValues);
+            $classlikeInfoBuilder->method('build')->willReturn(...$returnValues);
         }
 
         return $classlikeInfoBuilder;
