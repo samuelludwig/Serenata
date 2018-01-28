@@ -72,7 +72,7 @@ final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
             }
         }
 
-        // We use an associative array so we automatically avoid duplicate types.
+        // Use associative array to avoid duplicate types.
         return array_keys($types);
     }
 }
