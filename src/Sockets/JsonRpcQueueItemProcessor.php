@@ -16,6 +16,8 @@ use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 use PhpIntegrator\UserInterface\Command;
 
+use PhpIntegrator\UserInterface\Command\InvalidArgumentsException;
+
 /**
  * Processes {@see JsonRpcQueueItem}s.
  */
@@ -77,6 +79,8 @@ class JsonRpcQueueItemProcessor
      * @param JsonRpcQueueItem $queueItem
      *
      * @throws RequestParsingException
+     * @throws InvalidArgumentsException
+     * @throws Throwable
      *
      * @return JsonRpcResponse|null
      */
