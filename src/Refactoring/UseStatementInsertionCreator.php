@@ -400,7 +400,7 @@ class UseStatementInsertionCreator
         }
 
         if ($maxLength >= 3) {
-            for ($i = 0; $i <= $maxLength; ++$i) {
+            for ($i = 0; $i < $maxLength; ++$i) {
                 if ($firstClassNameParts[$i] !== $secondClassNameParts[$i]) {
                     if (mb_strlen($firstClassNameParts[$i]) === mb_strlen($secondClassNameParts[$i])) {
                         return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
