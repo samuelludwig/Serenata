@@ -107,6 +107,20 @@ class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCas
     /**
      * @return void
      */
+    public function testScoresParametersThatContainExactMatchAtTheEndMoreFavorablyThanOnesInBetween(): void
+    {
+        $test1 = 'A\Foobar\Foobar';
+        $test2 = 'A\Foobar\Stub';
+        $referenceText = 'Foobar';
+
+        $matcher = new LevenshteinApproximateStringMatcher();
+
+        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+    }
+
+    /**
+     * @return void
+     */
     public function testDoesNotAssignExtraFavorForParamtersThatContainExactMatchesOfApproximationMultipleTimes(): void
     {
         $test1 = 'UnexpectedValueException\UnexpectedValueException';

@@ -126,7 +126,7 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
         $approximationLength = strlen($approximation);
         $referenceTextLength = strlen($referenceText);
 
-        $i = strpos($approximation, $referenceText);
+        $i = strrpos($approximation, $referenceText);
 
         assert($i !== false, "Can't calculate bonus for substring matches as there is no substring match");
 
@@ -139,6 +139,10 @@ class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInt
         if (($i + $referenceTextLength) >= $approximationLength ||
             $approximation[$i + $referenceTextLength] === '\\'
         ) {
+            $bonus += self::MAX_LENGTH_IN_BYTES;
+        }
+
+        if ($i === $approximationLength - $referenceTextLength) {
             $bonus += self::MAX_LENGTH_IN_BYTES;
         }
 
