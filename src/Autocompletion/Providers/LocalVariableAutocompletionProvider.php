@@ -4,6 +4,9 @@ namespace PhpIntegrator\Autocompletion\Providers;
 
 use UnexpectedValueException;
 
+use PhpParser\Parser;
+use PhpParser\ErrorHandler;
+
 use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
@@ -18,9 +21,6 @@ use PhpIntegrator\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use PhpIntegrator\Indexing\Structures\File;
-
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
 
 /**
  * Provides local variable autocompletion suggestions at a specific location in a file.
