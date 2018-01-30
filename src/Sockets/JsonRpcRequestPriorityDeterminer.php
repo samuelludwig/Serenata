@@ -5,7 +5,7 @@ namespace PhpIntegrator\Sockets;
 /**
  * Determines the appropriate priority for {@see JsonRpcRequest}s
  */
-final class JsonRpcRequestPriorityDeterminer
+final class JsonRpcRequestPriorityDeterminer implements JsonRpcRequestPriorityDeterminerInterface
 {
     /**
      * @param JsonRpcRequest $request

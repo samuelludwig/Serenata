@@ -11,7 +11,7 @@ use UnderflowException;
 final class JsonRpcQueue
 {
     /**
-     * @var JsonRpcRequestPriorityDeterminer
+     * @var JsonRpcRequestPriorityDeterminerInterface
      */
     private $jsonRpcRequestPriorityDeterminer;
 
@@ -26,9 +26,9 @@ final class JsonRpcQueue
     private $cancelledIds = [];
 
     /**
-     * @param JsonRpcRequestPriorityDeterminer $jsonRpcRequestPriorityDeterminer
+     * @param JsonRpcRequestPriorityDeterminerInterface $jsonRpcRequestPriorityDeterminer
      */
-    public function __construct(JsonRpcRequestPriorityDeterminer $jsonRpcRequestPriorityDeterminer)
+    public function __construct(JsonRpcRequestPriorityDeterminerInterface $jsonRpcRequestPriorityDeterminer)
     {
         $this->jsonRpcRequestPriorityDeterminer = $jsonRpcRequestPriorityDeterminer;
 
