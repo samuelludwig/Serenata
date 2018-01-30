@@ -5,20 +5,20 @@ namespace PhpIntegrator\Refactoring;
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
-
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
-
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use PhpParser\Node;
+use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 
 use PhpIntegrator\Common\Range;
 use PhpIntegrator\Common\Position;
 
 use PhpIntegrator\Utility\TextEdit;
 
-use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+
+use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
+
+use PhpIntegrator\Analysis\Visiting\UseStatementKind;
 
 /**
  * Creates {@see TextEdit}s that insert use statements (imports).
