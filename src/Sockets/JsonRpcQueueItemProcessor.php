@@ -110,8 +110,6 @@ class JsonRpcQueueItemProcessor
         } catch (NotFoundExceptionInterface $e) {
             throw new RequestParsingException('Method "' . $method . '" was not found');
         }
-
-        throw new AssertionError('Should not be reached');
     }
 
     /**
