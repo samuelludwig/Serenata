@@ -6,6 +6,9 @@ use Throwable;
 
 use Ds\Vector;
 
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 
 use PhpIntegrator\Indexing\ManagerRegistry;
@@ -13,22 +16,20 @@ use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 use PhpIntegrator\UserInterface\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-
 /**
  * Processes {@see JsonRpcQueueItem}s.
  */
 class JsonRpcQueueItemProcessor
 {
     /**
-     * @var ContainerBuilder
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param ContainerBuilder $container
+     * @param ContainerInterface $container
      */
-    public function __construct(ContainerBuilder $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -106,7 +107,7 @@ class JsonRpcQueueItemProcessor
     {
         try {
             return $this->container->get($method . 'Command');
-        } catch (ServiceNotFoundException $e) {
+        } catch (NotFoundExceptionInterface $e) {
             throw new RequestParsingException('Method "' . $method . '" was not found');
         }
 
