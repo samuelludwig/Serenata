@@ -30,7 +30,7 @@ final class ArrayNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromArrayNode(Node\Expr\Array_ $node): array
+    private function deduceTypesFromArrayNode(Node\Expr\Array_ $node): array
     {
         return ['array'];
     }

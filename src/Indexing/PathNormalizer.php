@@ -26,7 +26,7 @@ class PathNormalizer
      *
      * @return string
      */
-    protected function resolveHomeDirectoryTilde(string $path): string
+    private function resolveHomeDirectoryTilde(string $path): string
     {
         if (substr($path, 0, 1) === '~' && isset($_SERVER['HOME'])) {
 			return substr_replace($path, $_SERVER['HOME'], 0, 1);

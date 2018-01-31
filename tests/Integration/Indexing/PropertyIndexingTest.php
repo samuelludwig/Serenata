@@ -350,7 +350,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\Property
      */
-    protected function indexProperty(string $file): Structures\Property
+    private function indexProperty(string $file): Structures\Property
     {
         $path = $this->getPathFor($file);
 
@@ -373,7 +373,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/PropertyIndexingTest/' . $file;
     }

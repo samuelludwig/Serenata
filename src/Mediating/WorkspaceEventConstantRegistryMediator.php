@@ -40,7 +40,7 @@ class WorkspaceEventConstantRegistryMediator
     /**
      * @return void
      */
-    protected function setup(): void
+    private function setup(): void
     {
         $this->eventEmitter->on(WorkspaceEventName::CHANGED, function (string $filePath) {
             $this->constantListRegistry->reset();

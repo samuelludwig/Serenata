@@ -2,9 +2,6 @@ parameters:
 
 
 services:
-    requestQueue:
-        class: Ds\Queue
-
     sqliteConnectionFactory:
         class: PhpIntegrator\Indexing\SqliteConnectionFactory
 
@@ -55,10 +52,17 @@ services:
             - '@requestQueue'
             - '@directoryIndexableFileIteratorFactory'
 
+    phpFileExistenceChecker:
+        class: PhpIntegrator\Indexing\PhpFileExistenceChecker
+
+    fileExistenceChecker:
+        alias: phpFileExistenceChecker
+
     indexFilePruner:
         class: PhpIntegrator\Indexing\IndexFilePruner
         arguments:
             - '@storage'
+            - '@fileExistenceChecker'
 
     storageFileIndexer:
         class: PhpIntegrator\Indexing\StorageFileIndexer

@@ -18,6 +18,16 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
     private $delegate;
 
     /**
+     * List of scheduled events.
+     *
+     * By not immediately emitting events, we ensure that, for example, multiple persists of the same entity do not emit
+     * the same event multiple times to avoid costly recomputations caused by listeners.
+     *
+     * @var array
+     */
+    private $scheduledEvents = [];
+
+    /**
      * @param StorageInterface $delegate
      */
     public function __construct(StorageInterface $delegate)
@@ -65,17 +75,17 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
         $this->delegate->persist($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(IndexingEventName::NAMESPACE_UPDATED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::NAMESPACE_UPDATED, $entity);
         } elseif ($entity instanceof Structures\FileNamespaceImport) {
-            $this->emit(IndexingEventName::IMPORT_INSERTED);
+            $this->scheduleEvent(IndexingEventName::IMPORT_INSERTED, $entity);
         } elseif ($entity instanceof Structures\Constant) {
-            $this->emit(IndexingEventName::CONSTANT_UPDATED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::CONSTANT_UPDATED, $entity);
         } elseif ($entity instanceof Structures\Function_) {
-            $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::FUNCTION_UPDATED, $entity);
         } elseif ($entity instanceof Structures\FunctionParameter) {
-            $this->emit(IndexingEventName::FUNCTION_UPDATED, [$entity->getFunction()]);
+            $this->scheduleEvent(IndexingEventName::FUNCTION_UPDATED, $entity->getFunction());
         } elseif ($entity instanceof Structures\Classlike) {
-            $this->emit(IndexingEventName::CLASSLIKE_UPDATED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::CLASSLIKE_UPDATED, $entity);
         }
     }
 
@@ -87,13 +97,13 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
         $this->delegate->delete($entity);
 
         if ($entity instanceof Structures\FileNamespace) {
-            $this->emit(IndexingEventName::NAMESPACE_REMOVED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::NAMESPACE_REMOVED, $entity);
         } elseif ($entity instanceof Structures\Constant) {
-            $this->emit(IndexingEventName::CONSTANT_REMOVED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::CONSTANT_REMOVED, $entity);
         } elseif ($entity instanceof Structures\Function_) {
-            $this->emit(IndexingEventName::FUNCTION_REMOVED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::FUNCTION_REMOVED, $entity);
         } elseif ($entity instanceof Structures\Classlike) {
-            $this->emit(IndexingEventName::CLASSLIKE_REMOVED, [$entity]);
+            $this->scheduleEvent(IndexingEventName::CLASSLIKE_REMOVED, $entity);
         }
     }
 
@@ -110,6 +120,8 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
      */
     public function commitTransaction(): void
     {
+        $this->dispatchScheduledEvents();
+
         $this->delegate->commitTransaction();
     }
 
@@ -118,6 +130,37 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
      */
     public function rollbackTransaction(): void
     {
+        $this->clearScheduledEvents();
+
         $this->delegate->rollbackTransaction();
+    }
+
+    /**
+     * @param string $event
+     * @param object $entity
+     */
+    private function scheduleEvent(string $event, $entity): void
+    {
+        $this->scheduledEvents[spl_object_hash($entity) . '_' . $event] = [$event, [$entity]];
+    }
+
+    /**
+     * @return void
+     */
+    private function dispatchScheduledEvents(): void
+    {
+        foreach ($this->scheduledEvents as $scheduledEvent) {
+            $this->emit($scheduledEvent[0], $scheduledEvent[1]);
+        }
+
+        $this->clearScheduledEvents();
+    }
+
+    /**
+     * @return void
+     */
+    private function clearScheduledEvents(): void
+    {
+        $this->scheduledEvents = [];
     }
 }

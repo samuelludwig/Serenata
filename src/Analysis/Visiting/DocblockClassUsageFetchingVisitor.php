@@ -71,7 +71,7 @@ final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function fetchTypeClasses(Comment\Doc $docblock): void
+    private function fetchTypeClasses(Comment\Doc $docblock): void
     {
         preg_match_all(
             '/@(?:param|throws|return|var)\s+((?:\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)(?:\[\])?(?:\|(?:\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)(?:\[\])?)*)(?:$|\s|\})/',
@@ -92,7 +92,7 @@ final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function fetchAnnotationClasses(Comment\Doc $docblock): void
+    private function fetchAnnotationClasses(Comment\Doc $docblock): void
     {
         preg_match_all(
             '/\*\s+@((?:\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)(?:\[\])?(?:\|(?:\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)(?:\[\])?)*)(?:$|\W|\})/',
@@ -113,7 +113,7 @@ final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function validateType(Comment\Doc $docblock, string $typeString, int $typeStringOffset): void
+    private function validateType(Comment\Doc $docblock, string $typeString, int $typeStringOffset): void
     {
         $types = explode(DocblockParser::TYPE_SPLITTER, $typeString);
         foreach ($types as $type) {
@@ -153,12 +153,12 @@ final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-     protected function isValidType(string $type): bool
-     {
-         return
+    private function isValidType(string $type): bool
+    {
+        return
             !$this->typeAnalyzer->isSpecialType($type) &&
             !$this->docblockParser->isValidTag($type);
-     }
+    }
 
     /**
      * Retrieves the class usage list.

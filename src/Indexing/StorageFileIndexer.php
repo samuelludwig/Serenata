@@ -4,7 +4,7 @@ namespace PhpIntegrator\Indexing;
 
 use DateTime;
 use Exception;
-use LogicException;
+use AssertionError;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -98,18 +98,6 @@ final class StorageFileIndexer implements FileIndexerInterface
      */
     public function index(string $filePath, string $code): void
     {
-        $handler = new ErrorHandler\Collecting();
-
-        try {
-            $nodes = $this->parser->parse($code, $handler);
-
-            if ($nodes === null) {
-                throw new Error('Unknown syntax error encountered');
-            }
-        } catch (Error $e) {
-            throw new IndexingFailedException($e->getMessage(), 0, $e);
-        }
-
         $this->storage->beginTransaction();
 
         try {
@@ -122,7 +110,14 @@ final class StorageFileIndexer implements FileIndexerInterface
         $this->storage->persist($file);
 
         try {
-            $traverser = $this->runTraverser($nodes, $code, $file);
+            $nodes = $this->getNodes($code);
+
+            // NOTE: Traversing twice may seem absurd, but a rewrite of the use statement indexing visitor to support
+            // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
+            // performance worse, because of the constant flushing and entity changes due to the end lines being
+            // recalculated, than just traversing twice.
+            $this->indexNamespacesWithUseStatements($file, $nodes, $code);
+            $this->indexCode($file, $nodes, $code);
 
             $this->storage->commitTransaction();
         } catch (Error $e) {
@@ -132,7 +127,7 @@ final class StorageFileIndexer implements FileIndexerInterface
         } catch (Exception $e) {
             $this->storage->rollbackTransaction();
 
-            throw new LogicException(
+            throw new AssertionError(
                 'Could not index file due to an internal exception. This likely means an exception should be caught ' .
                 'at a deeper level (if it is acceptable) or there is a bug. The file is "' . $filePath . '" and the ' .
                 'exact exception message: "' . $e->getMessage() . '"',
@@ -143,35 +138,80 @@ final class StorageFileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param array           $nodes
-     * @param string          $code
-     * @param Structures\File $file
+     * @param string $code
      *
-     * @return void
+     * @throws Error
+     *
+     * @return array
      */
-    protected function runTraverser(array $nodes, string $code, Structures\File $file): void
+    private function getNodes(string $code): array
     {
-        $visitors = $this->getVisitorsForFile($code, $file);
+        $handler = new ErrorHandler\Collecting();
 
-        $useStatementIndexingVisitor = array_shift($visitors);
+        $nodes = $this->parser->parse($code, $handler);
 
-        // NOTE: Traversing twice may seem absurd, but a rewrite of the use statement indexing visitor to support
-        // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
-        // performance worse, because of the constant flushing and entity changes due to the end lines being
-        // recalculated, than just traversing twice.
+        if ($nodes === null) {
+            throw new Error('Unknown syntax error encountered');
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * @param Structures\File $file
+     * @param string          $code
+     * @param array           $nodes
+     *
+     * @throws Exception
+     */
+    private function indexNamespacesWithUseStatements(Structures\File $file, array $nodes, string $code): void
+    {
+        $useStatementIndexingVisitor = new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code);
+
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new Visiting\ClassLikeBodySkippingVisitor());
         $traverser->addVisitor(new Visiting\FunctionLikeBodySkippingVisitor());
         $traverser->addVisitor($useStatementIndexingVisitor);
-        $traverser->traverse($nodes);
 
+        $this->storage->beginTransaction();
+
+        try {
+            $traverser->traverse($nodes);
+
+            $this->storage->commitTransaction();
+        } catch (Exception $e) {
+            $this->storage->rollbackTransaction();
+
+            throw $e;
+        }
+    }
+
+    /**
+     * @param Structures\File $file
+     * @param array           $nodes
+     * @param string          $code
+     *
+     * @throws Exception
+     */
+    private function indexCode(Structures\File $file, array $nodes, string $code): void
+    {
         $traverser = new NodeTraverser();
 
-        foreach ($visitors as $visitor) {
+        foreach ($this->getIndexingVisitors($code, $file) as $visitor) {
             $traverser->addVisitor($visitor);
         }
 
-        $traverser->traverse($nodes);
+        $this->storage->beginTransaction();
+
+        try {
+            $traverser->traverse($nodes);
+
+            $this->storage->commitTransaction();
+        } catch (Exception $e) {
+            $this->storage->rollbackTransaction();
+
+            throw $e;
+        }
     }
 
     /**
@@ -180,11 +220,9 @@ final class StorageFileIndexer implements FileIndexerInterface
      *
      * @return array
      */
-    protected function getVisitorsForFile(string $code, Structures\File $file): array
+    private function getIndexingVisitors(string $code, Structures\File $file): array
     {
         return [
-            new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code),
-
             new Visiting\ConstantIndexingVisitor(
                 $this->storage,
                 $this->docblockParser,

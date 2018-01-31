@@ -30,7 +30,7 @@ final class DNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromDNumberNode(Node\Scalar\DNumber $node): array
+    private function deduceTypesFromDNumberNode(Node\Scalar\DNumber $node): array
     {
         return ['float'];
     }

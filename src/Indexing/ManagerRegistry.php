@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Indexing;
 
-use LogicException;
+use AssertionError;
 
 use Doctrine\ORM;
 
@@ -86,13 +86,13 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
             return $this->getEntityManagerInstance();
         }
 
-        throw new LogicException('Unknown manager service requested with name ' . $name);
+        throw new AssertionError('Unknown manager service requested with name ' . $name);
     }
 
     /**
      * @return Connection
      */
-    protected function getConnectionInstance(): Connection
+    private function getConnectionInstance(): Connection
     {
         if ($this->connection === null) {
             $this->connection = $this->sqliteConnectionFactory->create($this->getDatabasePath());
@@ -104,7 +104,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
     /**
      * @return EntityManager
      */
-    protected function getEntityManagerInstance(): EntityManager
+    private function getEntityManagerInstance(): EntityManager
     {
         if ($this->entityManager === null || !$this->entityManager->isOpen()) {
             $regionConfig = new RegionsConfiguration();

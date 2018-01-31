@@ -2,10 +2,10 @@
 
 namespace PhpIntegrator\Analysis\Node;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -25,17 +25,17 @@ class MethodCallMethodInfoRetriever
     private $nodeTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -59,7 +59,7 @@ class MethodCallMethodInfoRetriever
             !$node instanceof Node\Expr\StaticCall &&
             !$node instanceof Node\Expr\New_
         ) {
-            throw new LogicException('Expected method call node, got ' . get_class($node) . ' instead');
+            throw new AssertionError('Expected method call node, got ' . get_class($node) . ' instead');
         } elseif ($node instanceof Node\Expr\New_) {
             if ($node->class instanceof Node\Expr) {
                 // Can't currently deduce type of an expression such as "$this->{$foo}()";
@@ -83,7 +83,7 @@ class MethodCallMethodInfoRetriever
             $info = null;
 
             try {
-                $info = $this->classlikeInfoBuilder->getClasslikeInfo($type);
+                $info = $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException $e) {
                 continue;
             }

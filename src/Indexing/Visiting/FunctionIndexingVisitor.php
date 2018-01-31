@@ -115,7 +115,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function indexFunction(Node\Stmt\Function_ $node): void
+    private function indexFunction(Node\Stmt\Function_ $node): void
     {
         $localType = null;
         $resolvedType = null;
@@ -283,7 +283,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      *
      * @return array[]
      */
-    protected function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
+    private function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
     {
         $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
 
@@ -296,7 +296,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      *
      * @return Structures\TypeInfo[]
      */
-    protected function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
+    private function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
     {
         $types = [];
 

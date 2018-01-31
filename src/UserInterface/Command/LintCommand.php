@@ -102,7 +102,7 @@ final class LintCommand extends AbstractCommand
     {
         $file = $this->storage->getFileByPath($filePath);
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         return $this->linter->lint($file, $code, $settings);
     }

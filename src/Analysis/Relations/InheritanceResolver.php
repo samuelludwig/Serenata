@@ -52,7 +52,7 @@ final class InheritanceResolver extends AbstractResolver
      *
      * @return void
      */
-    protected function resolveInheritanceOfConstant(array $parentConstantData, ArrayObject $class): void
+    private function resolveInheritanceOfConstant(array $parentConstantData, ArrayObject $class): void
     {
         $class['constants'][$parentConstantData['name']] = $parentConstantData + [
             'declaringClass' => [
@@ -81,7 +81,7 @@ final class InheritanceResolver extends AbstractResolver
      *
      * @return void
      */
-    protected function resolveInheritanceOfProperty(array $parentPropertyData, ArrayObject $class): void
+    private function resolveInheritanceOfProperty(array $parentPropertyData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childProperty = null;
@@ -127,9 +127,12 @@ final class InheritanceResolver extends AbstractResolver
             $childProperty = [];
         }
 
-        $class['properties'][$parentPropertyData['name']] = array_merge($parentPropertyData, $childProperty, $inheritedData, [
-            'override' => $overrideData
-        ]);
+        $class['properties'][$parentPropertyData['name']] = array_merge(
+            $parentPropertyData,
+            $childProperty,
+            $inheritedData,
+            ['override' => $overrideData]
+        );
     }
 
     /**
@@ -138,7 +141,7 @@ final class InheritanceResolver extends AbstractResolver
      *
      * @return void
      */
-    protected function resolveInheritanceOfMethod(array $parentMethodData, ArrayObject $class): void
+    private function resolveInheritanceOfMethod(array $parentMethodData, ArrayObject $class): void
     {
         $inheritedData = [];
         $childMethod = null;

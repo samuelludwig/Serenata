@@ -46,7 +46,7 @@ final class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromTernaryNode(
+    private function deduceTypesFromTernaryNode(
         Node\Expr\Ternary $node,
         Structures\File $file,
         string $code,

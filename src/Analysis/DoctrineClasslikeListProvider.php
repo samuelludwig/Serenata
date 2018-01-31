@@ -73,7 +73,7 @@ final class DoctrineClasslikeListProvider implements FileClasslikeListProviderIn
      *
      * @return array
      */
-    protected function mapClasslikes(array $classlikes): array
+    private function mapClasslikes(array $classlikes): array
     {
         $result = [];
 

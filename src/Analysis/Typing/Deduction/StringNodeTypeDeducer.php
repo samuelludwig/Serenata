@@ -30,7 +30,7 @@ final class StringNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromStringNode(Node\Scalar\String_ $node): array
+    private function deduceTypesFromStringNode(Node\Scalar\String_ $node): array
     {
         return ['string'];
     }

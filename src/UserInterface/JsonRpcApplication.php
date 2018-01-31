@@ -2,19 +2,13 @@
 
 namespace PhpIntegrator\UserInterface;
 
-use Ds;
 use React;
-use Throwable;
 use RuntimeException;
 use UnexpectedValueException;
 
 use PhpIntegrator\Sockets\SocketServer;
-use PhpIntegrator\Sockets\JsonRpcError;
 use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcErrorCode;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\RequestParsingException;
 use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
 use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
@@ -22,8 +16,6 @@ use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
 use React\EventLoop\LoopInterface;
 
 use React\EventLoop\Timer\Timer;
-
-use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * Application extension that can handle JSON-RPC requests.
@@ -36,14 +28,19 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     private const REQUEST_HANDLE_FREQUENCY_SECONDS = 0.00001;
 
     /**
+     * @var int
+     */
+    private const CYCLE_COLLECTION_FREQUENCY_SECONDS = 5;
+
+    /**
      * @var LoopInterface
      */
     private $loop;
 
     /**
-     * @return Timer
+     * @var Timer|null
      */
-    private $periodicTimer;
+    private $periodicQueueProcessingTimer;
 
     /**
      * @inheritDoc
@@ -81,53 +78,52 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     {
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
-        $this->ensurePeriodicTimerIsInstalled();
+        $this->ensurePeriodicQueueProcessingTimerIsInstalled();
     }
 
     /**
      * @return void
      */
-    protected function ensurePeriodicTimerIsInstalled(): void
+    private function ensurePeriodicQueueProcessingTimerIsInstalled(): void
     {
-        if ($this->periodicTimer !== null) {
+        if ($this->periodicQueueProcessingTimer !== null) {
             return;
         }
 
-        $this->installPeriodicTimer();
+        $this->installPeriodicQueueProcessingTimer();
     }
-
 
     /**
      * @return void
      */
-    protected function installPeriodicTimer(): void
+    private function installPeriodicQueueProcessingTimer(): void
     {
-        $this->periodicTimer = $this->loop->addPeriodicTimer(self::REQUEST_HANDLE_FREQUENCY_SECONDS, function () {
-            $this->processNextQueueItem();
+        $this->periodicQueueProcessingTimer = $this->loop->addPeriodicTimer(
+            self::REQUEST_HANDLE_FREQUENCY_SECONDS,
+            function () {
+                $this->processNextQueueItem();
 
-            if ($this->getContainer()->get('requestQueue')->isEmpty()) {
-                $this->uninstallPeriodicTimer();
+                if ($this->getContainer()->get('requestQueue')->isEmpty()) {
+                    $this->uninstallPeriodicQueueProcessingTimer();
+                }
             }
-        });
+        );
     }
 
     /**
      * @return void
      */
-    protected function uninstallPeriodicTimer(): void
+    private function uninstallPeriodicQueueProcessingTimer(): void
     {
-        $this->loop->cancelTimer($this->periodicTimer);
-        $this->periodicTimer = null;
+        $this->loop->cancelTimer($this->periodicQueueProcessingTimer);
+
+        $this->periodicQueueProcessingTimer = null;
     }
-
-
-
-
 
     /**
      * @return void
      */
-    protected function processNextQueueItem(): void
+    private function processNextQueueItem(): void
     {
         $this->getContainer()->get('jsonRpcQueueItemProcessor')->process(
             $this->getContainer()->get('requestQueue')->pop()
@@ -141,7 +137,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      *
      * @return int
      */
-    protected function getRequestHandlingPortFromOptions(array $options): int
+    private function getRequestHandlingPortFromOptions(array $options): int
     {
         if (isset($options['p'])) {
             return (int) $options['p'];
@@ -160,10 +156,21 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      *
      * @return void
      */
-    protected function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
+    private function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
         $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
+
+        $this->loop->addPeriodicTimer(
+            self::CYCLE_COLLECTION_FREQUENCY_SECONDS,
+            function () {
+                // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
+                // Do *not* do this after every request handle as it puts a major strain on performance, especially
+                // during project indexing. Also don't cancel this timer when the last request is handled, as during
+                // normal usage, the frequency may be too high to ever trigger before it is cancelled.
+                gc_collect_cycles();
+            }
+        );
     }
 }

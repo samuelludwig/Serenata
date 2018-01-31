@@ -2,13 +2,13 @@
 
 namespace PhpIntegrator\SignatureHelp;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
+
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
 
 use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
 use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
-
-use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
 
 use PhpIntegrator\Indexing\Structures;
 
@@ -19,9 +19,6 @@ use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
 use PhpIntegrator\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
 
 /**
  * Retrieves invocation information for function and method calls.
@@ -29,9 +26,9 @@ use PhpParser\NodeTraverser;
 class SignatureHelpRetriever
 {
     /**
-     * @var Parser
+     * @var NodeAtOffsetLocatorInterface
      */
-    private $parser;
+    private $nodeAtOffsetLocator;
 
     /**
      * @var ParserTokenHelper
@@ -54,20 +51,20 @@ class SignatureHelpRetriever
     private $functionParameterPrettyPrinter;
 
     /**
-     * @param Parser                         $parser
+     * @param NodeAtOffsetLocatorInterface   $nodeAtOffsetLocator
      * @param ParserTokenHelper              $parserTokenHelper
      * @param FunctionFunctionInfoRetriever  $functionFunctionInfoRetriever
      * @param MethodCallMethodInfoRetriever  $methodCallMethodInfoRetriever
      * @param FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
      */
     public function __construct(
-        Parser $parser,
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         ParserTokenHelper $parserTokenHelper,
         FunctionFunctionInfoRetriever $functionFunctionInfoRetriever,
         MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever,
         FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
     ) {
-        $this->parser = $parser;
+        $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->parserTokenHelper = $parserTokenHelper;
         $this->functionFunctionInfoRetriever = $functionFunctionInfoRetriever;
         $this->methodCallMethodInfoRetriever = $methodCallMethodInfoRetriever;
@@ -92,8 +89,7 @@ class SignatureHelpRetriever
         $nodes = [];
 
         // try {
-            $nodes = $this->getNodesFromCode($code);
-            $node = $this->getNodeAt($nodes, $position);
+            $node = $this->getNodeAt($code, $position);
 
             return $this->getSignatureHelpForNode($node, $file, $code, $position);
         // } catch (UnexpectedValueException $e) {
@@ -102,22 +98,18 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param array $nodes
-     * @param int   $position
+     * @param string $code
+     * @param int    $position
      *
      * @throws UnexpectedValueException
      *
      * @return Node
      */
-    protected function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(string $code, int $position): Node
     {
-        $visitor = new NodeFetchingVisitor($position);
+        $result = $this->nodeAtOffsetLocator->locate($code, $position);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($nodes);
-
-        $node = $visitor->getNode();
+        $node = $result->getNode();
 
         if (!$node) {
             throw new UnexpectedValueException('No node found at location ' . $position);
@@ -136,8 +128,12 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelpForNode(Node $node, Structures\File $file, string $code, int $position): SignatureHelp
-    {
+    private function getSignatureHelpForNode(
+        Node $node,
+        Structures\File $file,
+        string $code,
+        int $position
+    ): SignatureHelp {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
             Node\Expr\FuncCall::class,
@@ -163,10 +159,12 @@ class SignatureHelpRetriever
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } elseif ($invocationNode instanceof Node\Expr\New_) {
                 $nodeNameEndFilePosition = $invocationNode->class->getAttribute('endFilePos') + 1;
-            } elseif ($invocationNode instanceof Node\Expr\MethodCall || $invocationNode instanceof Node\Expr\StaticCall) {
+            } elseif ($invocationNode instanceof Node\Expr\MethodCall ||
+                $invocationNode instanceof Node\Expr\StaticCall
+            ) {
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } else {
-                throw new LogicException(
+                throw new AssertionError(
                     'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
                 );
             }
@@ -188,7 +186,7 @@ class SignatureHelpRetriever
      *
      * @return int
      */
-    protected function getArgumentIndex(Node $invocationNode, string $code, int $position): int
+    private function getArgumentIndex(Node $invocationNode, string $code, int $position): int
     {
         $arguments = $invocationNode->args;
 
@@ -275,7 +273,7 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    protected function generateResponseFor(
+    private function generateResponseFor(
         Node $node,
         int $argumentIndex,
         Structures\File $file,
@@ -286,8 +284,7 @@ class SignatureHelpRetriever
         $parameters = [];
         $documentation = null;
 
-        if (
-            $node instanceof Node\Expr\MethodCall ||
+        if ($node instanceof Node\Expr\MethodCall ||
             $node instanceof Node\Expr\StaticCall ||
             $node instanceof Node\Expr\New_
         ) {
@@ -320,7 +317,7 @@ class SignatureHelpRetriever
      *
      * @return SignatureHelp
      */
-    protected function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
+    private function generateResponseFromFunctionInfo(array $functionInfo, int $argumentIndex): SignatureHelp
     {
         $name = $functionInfo['name'];
         $documentation = $functionInfo['shortDescription'];
@@ -328,9 +325,26 @@ class SignatureHelpRetriever
 
         $argumentIndex = $this->getNormalizedFunctionArgumentIndex($functionInfo, $argumentIndex);
 
-        $signature = new SignatureInformation($name, $documentation, $parameters);
+        $signature = new SignatureInformation(
+            $this->formatSignatureLabel($name, $parameters),
+            $documentation,
+            $parameters
+        );
 
         return new SignatureHelp([$signature], 0, $argumentIndex);
+    }
+
+    /**
+     * @param string                 $name
+     * @param ParameterInformation[] $parameters
+     *
+     * @return string
+     */
+    private function formatSignatureLabel(string $name, array $parameters): string
+    {
+        return $name . '(' . implode(', ', array_map(function (ParameterInformation $parameterInformation) {
+            return $parameterInformation->getLabel();
+        }, $parameters)) . ')';
     }
 
     /**
@@ -341,7 +355,7 @@ class SignatureHelpRetriever
      *
      * @return int|null
      */
-    protected function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): ?int
+    private function getNormalizedFunctionArgumentIndex(array $functionInfo, int $argumentIndex): ?int
     {
         $parameterCount = count($functionInfo['parameters']);
 
@@ -367,7 +381,7 @@ class SignatureHelpRetriever
      *
      * @return ParameterInformation[]
      */
-    protected function getResponseParametersForFunctionParameters(array $parameters): array
+    private function getResponseParametersForFunctionParameters(array $parameters): array
     {
         $responseParameters = [];
 
@@ -383,36 +397,10 @@ class SignatureHelpRetriever
      *
      * @return ParameterInformation
      */
-    protected function getResponseParametersForFunctionParameter(array $parameter): ParameterInformation
+    private function getResponseParametersForFunctionParameter(array $parameter): ParameterInformation
     {
         $label = $this->functionParameterPrettyPrinter->print($parameter);
 
         return new ParameterInformation($label, $parameter['description']);
-    }
-
-    /**
-     * @param string $code
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return Node[]
-     */
-    protected function getNodesFromCode(string $code): array
-    {
-        $nodes = $this->parser->parse($code, $this->getErrorHandler());
-
-        if ($nodes === null) {
-            throw new UnexpectedValueException('No nodes returned after parsing code');
-        }
-
-        return $nodes;
-    }
-
-    /**
-     * @return ErrorHandler\Collecting
-     */
-    protected function getErrorHandler(): ErrorHandler\Collecting
-    {
-        return new ErrorHandler\Collecting();
     }
 }

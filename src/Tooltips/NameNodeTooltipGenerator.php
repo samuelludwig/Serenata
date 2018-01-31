@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
 
@@ -28,19 +28,19 @@ class NameNodeTooltipGenerator
     private $nameNodeFqsenDeterminer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classLikeInfoBuilder;
 
     /**
-     * @param ClassLikeTooltipGenerator $classLikeTooltipGenerator
-     * @param NameNodeFqsenDeterminer   $nameNodeFqsenDeterminer
-     * @param ClasslikeInfoBuilder      $classLikeInfoBuilder
+     * @param ClassLikeTooltipGenerator     $classLikeTooltipGenerator
+     * @param NameNodeFqsenDeterminer       $nameNodeFqsenDeterminer
+     * @param ClasslikeInfoBuilderInterface $classLikeInfoBuilder
      */
     public function __construct(
         ClassLikeTooltipGenerator $classLikeTooltipGenerator,
         NameNodeFqsenDeterminer $nameNodeFqsenDeterminer,
-        ClasslikeInfoBuilder $classLikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classLikeInfoBuilder
     ) {
         $this->classLikeTooltipGenerator = $classLikeTooltipGenerator;
         $this->nameNodeFqsenDeterminer = $nameNodeFqsenDeterminer;
@@ -72,8 +72,8 @@ class NameNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getClassLikeInfo(string $fullyQualifiedName): array
+    private function getClassLikeInfo(string $fullyQualifiedName): array
     {
-        return $this->classLikeInfoBuilder->getClasslikeInfo($fullyQualifiedName);
+        return $this->classLikeInfoBuilder->build($fullyQualifiedName);
     }
 }

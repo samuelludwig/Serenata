@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Analysis\Visiting;
 
 use PhpParser\Node;
+use PhpParser\Comment;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
@@ -17,14 +18,19 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     private $position;
 
     /**
-     * @var Node
+     * @var Node|null
      */
     private $matchingNode;
 
     /**
-     * @var Node
+     * @var Node|null
      */
     private $mostInterestingNode;
+
+    /**
+     * @var Comment|null
+     */
+    private $comment;
 
     /**
      * Constructor.
@@ -41,17 +47,53 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
+        $this->analyzeNodeComments($node);
+
         $endFilePos = $node->getAttribute('endFilePos');
         $startFilePos = $node->getAttribute('startFilePos');
 
-        if ($startFilePos > $this->position || $endFilePos < $this->position) {
-            return;
+        if ($node instanceof Node\Expr\Error && $endFilePos < $startFilePos) {
+            // As php-parser uses inclusive ranges, a range where startFilePos === $endFilePos would still describe a
+            // single character, hence the end can lie before the start. This works around that to ensure we can still
+            // fetch the error node itself rather than null.
+            //
+            // See also https://github.com/nikic/PHP-Parser/issues/440
+            $endFilePos = $startFilePos;
+        }
+
+        if ($endFilePos < $this->position) {
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+        } elseif ($startFilePos > $this->position) {
+            return NodeTraverser::STOP_TRAVERSAL;
         }
 
         $this->matchingNode = $node;
 
         if (!$node instanceof Node\Name && !$node instanceof Node\Identifier) {
             $this->mostInterestingNode = $node;
+        }
+    }
+
+    /**
+     * @param Node $node
+     */
+    private function analyzeNodeComments(Node $node): void
+    {
+        foreach ($node->getComments() as $comment) {
+            $this->analyzeNodeComment($comment);
+        }
+    }
+
+    /**
+     * @param Comment $comment
+     */
+    private function analyzeNodeComment(Comment $comment): void
+    {
+        // NOTE: This is now an open (exclusive) range.
+        $endPosition = $comment->getFilePos() + strlen($comment->getText());
+
+        if ($this->position >= $comment->getFilePos() && $this->position < $endPosition) {
+            $this->comment = $comment;
         }
     }
 
@@ -74,5 +116,13 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     public function getNearestInterestingNode(): ?Node
     {
         return $this->mostInterestingNode;
+    }
+
+    /**
+     * @return Comment|null
+     */
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
     }
 }

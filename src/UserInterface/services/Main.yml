@@ -1,11 +1,13 @@
 imports:
     - { resource: Analysis.yml }
+    - { resource: Autocompletion.yml }
     - { resource: GotoDefinition.yml }
     - { resource: Indexing.yml }
     - { resource: Linting.yml }
     - { resource: Mediating.yml }
     - { resource: Parsing.yml }
     - { resource: PrettyPrinting.yml }
+    - { resource: Refactoring.yml }
     - { resource: SignatureHelp.yml }
     - { resource: Sockets.yml }
     - { resource: Tooltips.yml }

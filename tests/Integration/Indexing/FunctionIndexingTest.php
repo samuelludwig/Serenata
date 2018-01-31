@@ -383,7 +383,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\Function_
      */
-    protected function indexFunction(string $file): Structures\Function_
+    private function indexFunction(string $file): Structures\Function_
     {
         $path = $this->getPathFor($file);
 
@@ -401,7 +401,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/FunctionIndexingTest/' . $file;
     }

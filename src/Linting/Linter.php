@@ -162,7 +162,7 @@ class Linter
      *
      * @return AnalyzerInterface[]
      */
-    protected function getAnalyzersForRequest(Structures\File $file, string $code, LintingSettings $settings): array
+    private function getAnalyzersForRequest(Structures\File $file, string $code, LintingSettings $settings): array
     {
         /** @var AnalyzerInterface[] $analyzers */
         $analyzers = [];

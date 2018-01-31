@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\SignatureHelp;
+namespace PhpIntegrator\Tests\Integration\SignatureHelp;
 
 use UnexpectedValueException;
 
@@ -18,7 +18,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -39,7 +39,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallWhitespaceBeforeFirstAndOnlyArgument(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.')
             ])
         ];
@@ -56,7 +56,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallWhitespaceBetweenArguments(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, int $b)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('int $b', 'Parameter B.')
             ])
@@ -75,7 +75,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallWithMissingLastArgumentAfterComma(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, int $b)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('int $b', 'Parameter B.')
             ])
@@ -94,7 +94,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     // public function testFunctionCallDoesNotWorkWhenInsideClosureArgumentBody(): void
     // {
     //     $expectedSignaturesResult = [
-    //         new SignatureInformation('test', null, [
+    //         new SignatureInformation('test(\Closure $a)', null, [
     //             new ParameterInformation('\Closure $a', null)
     //         ])
     //     ];
@@ -132,19 +132,19 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNestedFunctionCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('foo', 'Some summary.', [
+            new SignatureInformation('foo(int $a)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.')
             ])
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('bar', null, [])
+            new SignatureInformation('bar()', null, [])
         ];
 
         $fileName = 'NestedFunctionCall.phpt';
 
         static::assertSignatureHelpSignaturesEquals($fileName, 127, 131, $expectedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 133, 134, $expectedNestedSignaturesResult);
+        static::assertSignatureHelpSignaturesEquals($fileName, 132, 134, $expectedNestedSignaturesResult);
         static::assertSignatureHelpSignaturesEquals($fileName, 135, 136, $expectedSignaturesResult);
         static::assertSignatureHelpActiveParameterEquals($fileName, 127, 131, 0);
         static::assertSignatureHelpActiveParameterEquals($fileName, 132, 134, null);
@@ -157,7 +157,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testMethodCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -178,13 +178,13 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNestedMethodCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('foo', 'Some summary.', [
+            new SignatureInformation('foo(int $a)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.')
             ])
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('bar', null, [])
+            new SignatureInformation('bar()', null, [])
         ];
 
         $fileName = 'NestedMethodCall.phpt';
@@ -203,7 +203,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testStaticMethodCall(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test', 'Some summary.', [
+            new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -224,7 +224,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testConstructor(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('__construct', 'Some summary.', [
+            new SignatureInformation('__construct(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
                 new ParameterInformation('string $c', 'Parameter C.')
@@ -245,13 +245,13 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testNestedConstructor(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('__construct', null, [
+            new SignatureInformation('__construct(int $a)', null, [
                 new ParameterInformation('int $a', null)
             ])
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('__construct', null, [
+            new SignatureInformation('__construct(int $b)', null, [
                 new ParameterInformation('int $b', null)
             ])
         ];
@@ -390,7 +390,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      *
      * @return SignatureHelp
      */
-    protected function getSignatureHelp(string $file, int $position): SignatureHelp
+    private function getSignatureHelp(string $file, int $position): SignatureHelp
     {
         $path = $this->getPathFor($file);
 
@@ -408,7 +408,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/SignatureHelpTest/' . $file;
     }
@@ -419,7 +419,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      * @param int                    $end
      * @param SignatureInformation[] $signatures
      */
-    protected function assertSignatureHelpSignaturesEquals(
+    private function assertSignatureHelpSignaturesEquals(
         string $fileName,
         int $start,
         int $end,
@@ -446,7 +446,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         }
 
         static::assertTrue(
-            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() !== $signatures),
+            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() != $signatures),
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
 
@@ -459,7 +459,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         }
 
         static::assertTrue(
-            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() !== $signatures),
+            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() != $signatures),
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );
     }
@@ -470,7 +470,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      * @param int      $end
      * @param int|null $activeParameter
      */
-    protected function assertSignatureHelpActiveParameterEquals(
+    private function assertSignatureHelpActiveParameterEquals(
         string $fileName,
         int $start,
         int $end,

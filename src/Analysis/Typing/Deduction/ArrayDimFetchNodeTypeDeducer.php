@@ -55,7 +55,7 @@ final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromArrayDimFetchNode(
+    private function deduceTypesFromArrayDimFetchNode(
         Node\Expr\ArrayDimFetch $node,
         Structures\File $file,
         string $code,

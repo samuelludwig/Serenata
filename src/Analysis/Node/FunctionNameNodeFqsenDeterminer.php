@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Node;
 
-use LogicException;
+use AssertionError;
 
 use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
@@ -39,7 +39,7 @@ class FunctionNameNodeFqsenDeterminer
         $namespaceNode = $node->getAttribute('namespace', false);
 
         if ($namespaceNode === false) {
-            throw new LogicException('Namespace must be attached to node in order to determine FQSEN');
+            throw new AssertionError('Namespace must be attached to node in order to determine FQSEN');
         }
 
         $namespace = null;

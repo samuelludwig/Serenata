@@ -7,7 +7,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a (global) constant.
  */
-final class Constant extends ConstantLike
+class Constant extends ConstantLike
 {
     /**
      * @var string

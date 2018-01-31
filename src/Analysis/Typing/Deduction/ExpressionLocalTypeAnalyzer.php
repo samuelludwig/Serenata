@@ -71,7 +71,7 @@ class ExpressionLocalTypeAnalyzer
      *
      * @return TypeQueryingVisitor
      */
-    protected function walkTypeQueryingVisitorTo(string $code, int $offset): TypeQueryingVisitor
+    private function walkTypeQueryingVisitorTo(string $code, int $offset): TypeQueryingVisitor
     {
         $nodes = null;
 

@@ -46,7 +46,7 @@ final class NewNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromNewNode(
+    private function deduceTypesFromNewNode(
         Node\Expr\New_ $node,
         Structures\File $file,
         string $code,

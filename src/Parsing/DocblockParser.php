@@ -2,6 +2,8 @@
 
 namespace PhpIntegrator\Parsing;
 
+use League\HTMLToMarkdown\HtmlConverter;
+
 use PhpIntegrator\Analysis\DocblockAnalyzer;
 
 use PhpIntegrator\DocblockTypeParser\DocblockTypeParserInterface;
@@ -98,7 +100,7 @@ class DocblockParser
     /**
      * @var string
      */
-    protected const TAG_START_REGEX = '/^\s*(?:\/\*)?\*\s+(\@.+)(?:\*\/)?$/';
+    protected const TAG_START_REGEX = '/^(\@.+)(?:\*\/)?$/';
 
     /**
      * @var DocblockAnalyzer
@@ -111,13 +113,23 @@ class DocblockParser
     private $docblockTypeParser;
 
     /**
+     * @var HtmlConverter
+     */
+    private $htmlToMarkdownConverter;
+
+    /**
      * @param DocblockAnalyzer            $docblockAnalyzer
      * @param DocblockTypeParserInterface $docblockTypeParser
+     * @param HtmlConverter               $htmlToMarkdownConverter
      */
-    public function __construct(DocblockAnalyzer $docblockAnalyzer, DocblockTypeParserInterface $docblockTypeParser)
-    {
+    public function __construct(
+        DocblockAnalyzer $docblockAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        HtmlConverter $htmlToMarkdownConverter
+    ) {
         $this->docblockAnalyzer = $docblockAnalyzer;
         $this->docblockTypeParser = $docblockTypeParser;
+        $this->htmlToMarkdownConverter = $htmlToMarkdownConverter;
     }
 
     /**
@@ -148,34 +160,29 @@ class DocblockParser
             $docblock = mb_substr($docblock, 2);
             $docblock = mb_substr($docblock, 0, -2);
 
-            preg_match_all('/\*\s+(@[a-zA-Z0-9-\\\\]+(?:\(.*\))?)(?:\s+([.\n]*))/', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
+            // Remove the delimiters of the docblock itself at the start of each line, if any.
+            $docblock = preg_replace('/^ +/m', '', $docblock);
+            $docblock = preg_replace('/^\*+/m', '', $docblock);
+            $docblock = preg_replace('/^ +/m', '', $docblock);
+            $docblock = trim($docblock);
+
+            $docblock = $this->htmlToMarkdownConverter->convert($docblock);
+
+            preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
             $segments = [];
-            $previousStart = 0;
-            $previousTag = null;
+            $previousMatch = null;
 
             // Build a list of 'segments', which are just a collection of ranges indicating where each detected tag
             // starts and stops.
             foreach ($matches as $match) {
-                $tag = $match[1][0];
-                $tagOffset = $match[0][1];
+                $segments[] = [$previousMatch[0][0], $previousMatch[0][1], $match[0][1]];
 
-                $tagContentOffset = null;
-
-                if (isset($match[2][1])) {
-                    $tagContentOffset = $match[2][1];
-                } else {
-                    $tagContentOffset = $previousStart;
-                }
-
-                $segments[] = [$previousTag, $previousStart, $tagOffset];
-
-                $previousStart = $tagContentOffset;
-                $previousTag = $tag;
+                $previousMatch = $match;
             }
 
             // NOTE: preg_match_all returns byte offsets, not character offsets.
-            $segments[] = [$previousTag, $previousStart, strlen($docblock)];
+            $segments[] = [$previousMatch[0][0], $previousMatch[0][1], strlen($docblock)];
 
             foreach ($segments as $segment) {
                 list($tag, $start, $end) = $segment;
@@ -189,13 +196,17 @@ class DocblockParser
                 }
 
                 $tagValue = substr($docblock, $start, $end - $start);
+                $tagValue = substr($tagValue, strlen($tag));
                 $tagValue = $this->normalizeNewlines($tagValue);
 
-                // Remove the delimiters of the docblock itself at the start of each line, if any.
-                $tagValue = preg_replace('/\n\s+\*\s*/', ' ', $tagValue);
+                // Multiple spaces are collapsed, like Markdown and HTML.
+                $tagValue = preg_replace('/ +/', ' ', $tagValue);
 
-                // Collapse multiple spaces, just like HTML does.
-                $tagValue = preg_replace('/\s\s+/', ' ', $tagValue);
+                // Newlines are treated as spaces if there is only one (seen as programmatic wrap).
+                $tagValue = preg_replace('/\n(?!\n)/', ' ', $tagValue);
+
+                // Two or more newlines signify a new paragraph, which is maintained.
+                $tagValue = preg_replace('/\n+/', "\n\n", $tagValue);
 
                 $tags[$tag][] = trim($tagValue);
             }
@@ -312,7 +323,8 @@ class DocblockParser
             'ticket',
             'uses',
 
-            // Doctrine annotation tags, see also http://doctrine-common.readthedocs.io/en/latest/reference/annotations.html .
+            // Doctrine annotation tags, see also
+            // http://doctrine-common.readthedocs.io/en/latest/reference/annotations.html .
             'Annotation',
             'Target',
             'Enum',
@@ -339,7 +351,7 @@ class DocblockParser
      *
      * @return string[]
      */
-    protected function filterParameterTag(string $value, int $partCount): array
+    private function filterParameterTag(string $value, int $partCount): array
     {
         $segments = [];
         $parts = explode(' ', $value);
@@ -369,7 +381,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterReturn(?string $docblock, string $itemName, array $tags): array
+    private function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
         $return = null;
 
@@ -406,7 +418,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterParams(?string $docblock, string $itemName, array $tags): array
+    private function filterParams(?string $docblock, string $itemName, array $tags): array
     {
         $params = [];
 
@@ -457,7 +469,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterVar(?string $docblock, string $itemName, array $tags): array
+    private function filterVar(?string $docblock, string $itemName, array $tags): array
     {
         $vars = [];
 
@@ -514,7 +526,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterDeprecated(?string $docblock, string $itemName, array $tags): array
+    private function filterDeprecated(?string $docblock, string $itemName, array $tags): array
     {
         return [
             'deprecated' => isset($tags[static::DEPRECATED])
@@ -530,7 +542,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterThrows(?string $docblock, string $itemName, array $tags): array
+    private function filterThrows(?string $docblock, string $itemName, array $tags): array
     {
         $throws = [];
 
@@ -540,7 +552,7 @@ class DocblockParser
 
                 if ($type) {
                     $throws[] = [
-                        'type'        => $this->sanitizeText($type),
+                        'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                         'description' => $description
                     ];
                 }
@@ -561,21 +573,25 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterMethod(?string $docblock, string $itemName, array $tags): array
+    private function filterMethod(?string $docblock, string $itemName, array $tags): array
     {
         $methods = [];
 
         if (isset($tags[static::METHOD])) {
             foreach ($tags[static::METHOD] as $tag) {
                 // The method signature can contain spaces, so we can't use a simple filterParameterTag.
-                if (preg_match('/^(static\s+)?(?:(\S+)\s+)?([A-Za-z0-9_]+\(.*\))(?:\s+(.+))?$/', $tag, $match) !== false) {
+                if (preg_match(
+                    '/^(static\s+)?(?:(\S+)\s+)?([A-Za-z0-9_]+\(.*\))(?:\s+(.+))?$/',
+                    $tag,
+                    $match
+                ) !== false) {
                     $partCount = count($match);
 
                     if ($partCount == 5) {
                         $type = $match[2] ?: 'void';
                         $methodSignature = $match[3];
                         $description = $match[4];
-                    } else if ($partCount == 4) {
+                    } elseif ($partCount == 4) {
                         if (empty($match[2])) {
                             $type = 'void';
                             $methodSignature = $match[3];
@@ -600,13 +616,18 @@ class DocblockParser
                         $methodParameterList = $match[2];
 
                         // NOTE: Example string: "$param1, int $param2, $param3 = array(), SOME\\TYPE_1 $param4 = null".
-                        preg_match_all('/(?:(\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)\s+)?(\$[A-Za-z0-9_]+)(?:\s*=\s*([^,]+))?(?:,|$)/', $methodParameterList, $matches, PREG_SET_ORDER);
+                        preg_match_all(
+                            '/(?:(\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*)\s+)?(\$[A-Za-z0-9_]+)(?:\s*=\s*([^,]+))?(?:,|$)/',
+                            $methodParameterList,
+                            $matches,
+                            PREG_SET_ORDER
+                        );
 
                         foreach ($matches as $match) {
                             $partCount = count($match);
 
                             if ($partCount == 4) {
-                                $parameterType = $match[1];
+                                $parameterType = $match[1] ?: null;
                                 $parameterName = $match[2];
                                 $defaultValue = $match[3];
                             } elseif ($partCount == 3) {
@@ -616,7 +637,10 @@ class DocblockParser
                             }
 
                             $data = [
-                                'type'         => $parameterType,
+                                'type' => $parameterType !== null ?
+                                    $this->docblockTypeParser->parse($parameterType) :
+                                    null,
+
                                 'defaultValue' => $defaultValue
                             ];
 
@@ -625,14 +649,13 @@ class DocblockParser
                             } else {
                                 $optionalParameters[$parameterName] = $data;
                             }
-
                         }
                     } else {
                         continue; // Invalid method signature.
                     }
 
                     $methods[$methodName] = [
-                        'type'                => $type,
+                        'type'                => $type !== null ? $this->docblockTypeParser->parse($type) : null,
                         'isStatic'            => $isStatic,
                         'requiredParameters'  => $requiredParameters,
                         'optionalParameters'  => $optionalParameters,
@@ -658,7 +681,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyTag(
+    private function filterPropertyTag(
         string $tagName,
         string $keyName,
         ?string $docblock,
@@ -682,7 +705,7 @@ class DocblockParser
                 }
 
                 $properties[$this->sanitizeText($variableName)] = [
-                    'type'        => $this->sanitizeText($type),
+                    'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                     'isStatic'    => ($staticKeyword === 'static'),
                     'description' => $description
                 ];
@@ -703,7 +726,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterProperty(?string $docblock, string $itemName, array $tags): array
+    private function filterProperty(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY, 'properties', $docblock, $itemName, $tags);
     }
@@ -717,7 +740,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
+    private function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_READ, 'propertiesReadOnly', $docblock, $itemName, $tags);
     }
@@ -731,7 +754,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
+    private function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
     {
         return $this->filterPropertyTag(static::PROPERTY_WRITE, 'propertiesWriteOnly', $docblock, $itemName, $tags);
     }
@@ -743,7 +766,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterCategory(?string $docblock, string $itemName, array $tags): array
+    private function filterCategory(?string $docblock, string $itemName, array $tags): array
     {
         $description = null;
 
@@ -763,7 +786,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterSubpackage(?string $docblock, string $itemName, array $tags): array
+    private function filterSubpackage(?string $docblock, string $itemName, array $tags): array
     {
         $name = null;
 
@@ -783,7 +806,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterLink(?string $docblock, string $itemName, array $tags): array
+    private function filterLink(?string $docblock, string $itemName, array $tags): array
     {
         $links = [];
 
@@ -812,7 +835,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterAnnotation(?string $docblock, string $itemName, array $tags): array
+    private function filterAnnotation(?string $docblock, string $itemName, array $tags): array
     {
         return [
             'annotation' => isset($tags[static::ANNOTATION])
@@ -828,7 +851,7 @@ class DocblockParser
      *
      * @return array
      */
-    protected function filterDescription(?string $docblock, string $itemName, array $tags): array
+    private function filterDescription(?string $docblock, string $itemName, array $tags): array
     {
         $summary = '';
         $description = '';
@@ -840,7 +863,9 @@ class DocblockParser
         foreach ($lines as $i => $line) {
             $matches = null;
 
-            if (preg_match(self::TAG_START_REGEX, $line, $matches) === 1 && !$this->docblockAnalyzer->isFullInheritDocSyntax(trim($matches[1]))) {
+            if (preg_match(self::TAG_START_REGEX, $line, $matches) === 1 &&
+                !$this->docblockAnalyzer->isFullInheritDocSyntax(trim($matches[1]))
+            ) {
                 break; // Found the start of a tag, the summary and description are finished.
             }
 
@@ -874,7 +899,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function sanitizeText(string $text): string
+    private function sanitizeText(string $text): string
     {
         return trim(htmlentities($text));
     }
@@ -887,7 +912,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function replaceNewlines(string $string, string $replacement): string
+    private function replaceNewlines(string $string, string $replacement): string
     {
         return str_replace(["\n", "\r\n", PHP_EOL], $replacement, $string);
     }
@@ -899,7 +924,7 @@ class DocblockParser
      *
      * @return string
      */
-    protected function normalizeNewlines(string $string): string
+    private function normalizeNewlines(string $string): string
     {
         return $this->replaceNewlines($string, "\n");
     }

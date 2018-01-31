@@ -33,7 +33,7 @@ class SourceCodeHelpers
     }
 
     /**
-     * Calculates the 0-indexed offset for the specified 0-indexed line and character/
+     * Calculates the 0-indexed offset for the specified 0-indexed line and character.
      *
      * @param string $source
      * @param int    $line
@@ -68,6 +68,33 @@ class SourceCodeHelpers
     }
 
     /**
+     * Retrieves the 0-indexed character offset of the character on the specified line using the specified 0-indexed
+     * byte offset.
+     *
+     * @param int    $byteOffset
+     * @param int    $line
+     * @param string $string
+     *
+     * @return int
+     */
+    public static function getCharacterOnLineFromByteOffset(int $byteOffset, int $line, string $string): int
+    {
+        $part = substr($string, 0, $byteOffset);
+
+        $i = $byteOffset;
+
+        while (--$i >= 0) {
+            if ($part[$i] === "\n") {
+                break;
+            }
+        }
+
+        $characterByteOffset = $byteOffset - $i - 1;
+
+        return static::getCharacterOffsetFromByteOffset($characterByteOffset, $string);
+    }
+
+    /**
      * Retrieves the character offset from the specified byte offset in the specified string. The result will always be
      * smaller than or equal to the passed in value, depending on the amount of multi-byte characters encountered.
      *
@@ -76,10 +103,10 @@ class SourceCodeHelpers
      *
      * @return int
      */
-    // public static function getCharacterOffsetFromByteOffset(int $byteOffset, string $string): int
-    // {
-    //     return mb_strlen(mb_strcut($string, 0, $byteOffset));
-    // }
+    private static function getCharacterOffsetFromByteOffset(int $byteOffset, string $string): int
+    {
+        return mb_strlen(mb_strcut($string, 0, $byteOffset));
+    }
 
     /**
      * Retrieves the byte offset from the specified character offset in the specified string. The result will always be

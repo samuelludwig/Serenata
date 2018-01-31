@@ -47,7 +47,7 @@ final class StaticNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromStatic(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromStatic(Structures\File $file, string $code, int $offset): array
     {
         $node = new Node\Name('static');
 

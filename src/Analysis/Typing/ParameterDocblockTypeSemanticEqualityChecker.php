@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\DocblockTypeParser;
 
@@ -30,17 +30,17 @@ class ParameterDocblockTypeSemanticEqualityChecker
     private $structureAwareNameResolverFactory;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-     * @param ClasslikeInfoBuilder                       $classlikeInfoBuilder
+     * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -79,7 +79,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return array
      */
-    protected function calculateParameterTypeList(
+    private function calculateParameterTypeList(
         array $parameter,
         FilePosition $filePosition,
         PositionalNameResolverInterface $positionalNameResolver
@@ -106,7 +106,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return DocblockTypeParser\DocblockType
      */
-    protected function getResolvedDocblockParameterType(
+    private function getResolvedDocblockParameterType(
         DocblockTypeParser\DocblockType $docblockType,
         FilePosition $filePosition,
         PositionalNameResolverInterface $positionalNameResolver
@@ -134,7 +134,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return bool
      */
-    protected function doesParameterTypeListMatchDocblockTypeList(
+    private function doesParameterTypeListMatchDocblockTypeList(
         TypeList $parameterTypeList,
         DocblockTypeParser\DocblockType $docblockType
     ): bool {
@@ -155,7 +155,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return bool
      */
-    protected function doesParameterTypeListStrictlyMatchDocblockTypeList(
+    private function doesParameterTypeListStrictlyMatchDocblockTypeList(
         TypeList $parameterTypeList,
         DocblockTypeParser\DocblockType $docblockType
     ): bool {
@@ -175,7 +175,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return bool
      */
-    protected function doesParameterTypeListContainClassType(TypeList $typeList): bool
+    private function doesParameterTypeListContainClassType(TypeList $typeList): bool
     {
         return !$typeList->filter(function (Type $type) {
             return $type instanceof ClassType;
@@ -188,7 +188,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return bool
      */
-    protected function doesParameterArrayTypeListMatchDocblockTypeList(
+    private function doesParameterArrayTypeListMatchDocblockTypeList(
         TypeList $parameterTypeList,
         DocblockTypeParser\DocblockType $docblockType
     ): bool {
@@ -221,7 +221,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return bool
      */
-    protected function doesParameterClassTypeListMatchDocblockTypeList(
+    private function doesParameterClassTypeListMatchDocblockTypeList(
         TypeList $parameterTypeList,
         DocblockTypeParser\DocblockType $docblockType
     ): bool {
@@ -281,7 +281,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      *
      * @return bool
      */
-    protected function doesDocblockClassSatisfyTypeParameterClassType(
+    private function doesDocblockClassSatisfyTypeParameterClassType(
         DocblockTypeParser\ClassDocblockType $docblockType,
         ClassType $type
     ): bool {
@@ -290,8 +290,8 @@ class ParameterDocblockTypeSemanticEqualityChecker
         }
 
         try {
-            $typeClassInfo = $this->classlikeInfoBuilder->getClasslikeInfo($type->toString());
-            $docblockTypeClassInfo = $this->classlikeInfoBuilder->getClasslikeInfo($docblockType->getName());
+            $typeClassInfo = $this->classlikeInfoBuilder->build($type->toString());
+            $docblockTypeClassInfo = $this->classlikeInfoBuilder->build($docblockType->getName());
         } catch (UnexpectedValueException $e) {
             return false;
         }

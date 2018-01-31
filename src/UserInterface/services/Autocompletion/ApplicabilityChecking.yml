@@ -1,0 +1,51 @@
+parameters:
+
+
+services:
+    keywordAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\KeywordAutocompletionApplicabilityChecker
+
+    docblockTagAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\DocblockTagAutocompletionApplicabilityChecker
+
+    superglobalAutocompletionProvider:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\SuperglobalAutocompletionProvider
+
+    classAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassAutocompletionApplicabilityChecker
+
+    interfaceAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\InterfaceAutocompletionApplicabilityChecker
+
+    traitAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\TraitAutocompletionApplicabilityChecker
+
+    namespaceAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NamespaceAutocompletionApplicabilityChecker
+
+    functionAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\FunctionAutocompletionApplicabilityChecker
+
+    constantAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ConstantAutocompletionApplicabilityChecker
+
+    nonStaticMethodAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NonStaticMethodAutocompletionApplicabilityChecker
+
+    staticMethodAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\StaticMethodAutocompletionApplicabilityChecker
+
+    nonStaticPropertyAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NonStaticPropertyAutocompletionApplicabilityChecker
+
+    staticPropertyAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\StaticPropertyAutocompletionApplicabilityChecker
+
+    classConstantAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassConstantAutocompletionApplicabilityChecker
+
+    localVariableAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\LocalVariableAutocompletionApplicabilityChecker
+
+    parameterNameAutocompletionApplicabilityChecker:
+        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ParameterNameAutocompletionApplicabilityChecker

@@ -47,7 +47,9 @@ abstract class AbstractResolver
     {
         return
             !$processedData['hasDocblock'] ||
-            ($processedData['shortDescription'] && $this->docblockAnalyzer->isFullInheritDocSyntax($processedData['shortDescription']));
+            ($processedData['shortDescription'] && $this->docblockAnalyzer->isFullInheritDocSyntax(
+                $processedData['shortDescription']
+            ));
     }
 
     /**

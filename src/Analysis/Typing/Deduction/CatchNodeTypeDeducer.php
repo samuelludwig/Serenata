@@ -46,7 +46,7 @@ final class CatchNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromCatchNode(
+    private function deduceTypesFromCatchNode(
         Node\Stmt\Catch_ $node,
         Structures\File $file,
         string $code,

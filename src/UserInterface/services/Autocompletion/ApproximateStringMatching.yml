@@ -1,0 +1,11 @@
+parameters:
+
+
+services:
+    approximateStringMatchingBestStringApproximationDeterminer:
+        class: PhpIntegrator\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer
+        arguments:
+            - '@autocompletionApproximateStringMatcher'
+
+    bestStringApproximationDeterminer:
+        alias: approximateStringMatchingBestStringApproximationDeterminer

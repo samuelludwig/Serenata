@@ -47,7 +47,7 @@ final class ParentNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromParent(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromParent(Structures\File $file, string $code, int $offset): array
     {
         $node = new Node\Name('parent');
 

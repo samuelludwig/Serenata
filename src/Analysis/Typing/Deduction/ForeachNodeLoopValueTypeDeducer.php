@@ -55,7 +55,7 @@ final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromForeachNode(
+    private function deduceTypesFromForeachNode(
         Node\Stmt\Foreach_ $node,
         Structures\File $file,
         string $code,

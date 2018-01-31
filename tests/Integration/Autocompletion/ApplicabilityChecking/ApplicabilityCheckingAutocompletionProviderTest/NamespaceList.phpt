@@ -1,0 +1,8 @@
+<?php
+
+// <INJECTION>
+
+namespace A
+{
+    
+}

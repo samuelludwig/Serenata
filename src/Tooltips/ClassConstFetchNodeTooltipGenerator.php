@@ -4,7 +4,7 @@ namespace PhpIntegrator\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -28,19 +28,19 @@ class ClassConstFetchNodeTooltipGenerator
     private $nodeTypeDeducer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param ConstantTooltipGenerator $constantTooltipGenerator
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
+     * @param ConstantTooltipGenerator      $constantTooltipGenerator
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
     public function __construct(
         ConstantTooltipGenerator $constantTooltipGenerator,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->constantTooltipGenerator = $constantTooltipGenerator;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
@@ -95,7 +95,7 @@ class ClassConstFetchNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
+    private function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
     {
         $classTypes = [];
 
@@ -118,12 +118,12 @@ class ClassConstFetchNodeTooltipGenerator
      *
      * @return array|null
      */
-    protected function fetchClassConstantInfo(string $classType, string $name): ?array
+    private function fetchClassConstantInfo(string $classType, string $name): ?array
     {
         $classInfo = null;
 
         try {
-            $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classType);
+            $classInfo = $this->classlikeInfoBuilder->build($classType);
         } catch (UnexpectedValueException $e) {
             return null;
         }

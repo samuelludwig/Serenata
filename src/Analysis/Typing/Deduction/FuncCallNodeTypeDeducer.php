@@ -65,7 +65,7 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromFuncCallNode(Node\Expr\FuncCall $node): array
+    private function deduceTypesFromFuncCallNode(Node\Expr\FuncCall $node): array
     {
         if ($node->name instanceof Node\Expr) {
             return []; // Can't currently deduce type of an expression such as "{$foo}()";

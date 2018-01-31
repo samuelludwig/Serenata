@@ -74,7 +74,7 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromConstFetchNode(
+    private function deduceTypesFromConstFetchNode(
         Node\Expr\ConstFetch $node,
         Structures\File $file,
         string $code,

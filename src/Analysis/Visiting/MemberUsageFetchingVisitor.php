@@ -4,7 +4,7 @@ namespace PhpIntegrator\Analysis\Visiting;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -66,20 +66,20 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
     private $typeAnalyzer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param ClasslikeInfoBuilder     $classlikeInfoBuilder
-     * @param TypeAnalyzer             $typeAnalyzer
-     * @param Structures\File          $file
-     * @param string                   $code
+     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @param TypeAnalyzer                  $typeAnalyzer
+     * @param Structures\File               $file
+     * @param string                        $code
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         TypeAnalyzer $typeAnalyzer,
         Structures\File $file,
         string $code
@@ -147,7 +147,7 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
             $classInfo = null;
 
             try {
-                $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($objectType);
+                $classInfo = $this->classlikeInfoBuilder->build($objectType);
             } catch (UnexpectedValueException $e) {
                 // Ignore exception, no class information means we return an error anyhow.
             }
@@ -194,7 +194,7 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    protected function isClassExcluded(string $className): bool
+    private function isClassExcluded(string $className): bool
     {
         $className = $this->typeAnalyzer->getNormalizedFqcn($className);
 

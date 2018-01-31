@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -17,15 +17,15 @@ class DocblockMissingAnalyzerFactory
     private $typeAnalyzer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param TypeAnalyzer         $typeAnalyzer
-     * @param ClasslikeInfoBuilder $classlikeInfoBuilder
+     * @param TypeAnalyzer                  $typeAnalyzer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, ClasslikeInfoBuilder $classlikeInfoBuilder)
+    public function __construct(TypeAnalyzer $typeAnalyzer, ClasslikeInfoBuilderInterface $classlikeInfoBuilder)
     {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;

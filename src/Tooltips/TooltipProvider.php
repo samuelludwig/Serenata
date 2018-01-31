@@ -2,17 +2,14 @@
 
 namespace PhpIntegrator\Tooltips;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
 
 use PhpIntegrator\Indexing\Structures;
 
 use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
 
 /**
  * Provides tooltips.
@@ -20,9 +17,9 @@ use PhpParser\NodeTraverser;
 class TooltipProvider
 {
     /**
-     * @var Parser
+     * @var NodeAtOffsetLocatorInterface
      */
-    private $parser;
+    private $nodeAtOffsetLocator;
 
     /**
      * @var FuncCallNodeTooltipGenerator
@@ -75,7 +72,7 @@ class TooltipProvider
     private $nameNodeTooltipGenerator;
 
     /**
-     * @param Parser                                  $parser
+     * @param NodeAtOffsetLocatorInterface            $nodeAtOffsetLocator
      * @param FuncCallNodeTooltipGenerator            $funcCallNodeTooltipGenerator
      * @param MethodCallNodeTooltipGenerator          $methodCallNodeTooltipGenerator
      * @param StaticMethodCallNodeTooltipGenerator    $staticMethodCallNodeTooltipGenerator
@@ -88,7 +85,7 @@ class TooltipProvider
      * @param NameNodeTooltipGenerator                $nameNodeTooltipGenerator
      */
     public function __construct(
-        Parser $parser,
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         FuncCallNodeTooltipGenerator $funcCallNodeTooltipGenerator,
         MethodCallNodeTooltipGenerator $methodCallNodeTooltipGenerator,
         StaticMethodCallNodeTooltipGenerator $staticMethodCallNodeTooltipGenerator,
@@ -100,7 +97,7 @@ class TooltipProvider
         ClassMethodNodeTooltipGenerator $classMethodNodeTooltipGenerator,
         NameNodeTooltipGenerator $nameNodeTooltipGenerator
     ) {
-        $this->parser = $parser;
+        $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->funcCallNodeTooltipGenerator = $funcCallNodeTooltipGenerator;
         $this->methodCallNodeTooltipGenerator = $methodCallNodeTooltipGenerator;
         $this->staticMethodCallNodeTooltipGenerator = $staticMethodCallNodeTooltipGenerator;
@@ -122,11 +119,8 @@ class TooltipProvider
      */
     public function get(Structures\File $file, string $code, int $position): ?TooltipResult
     {
-        $nodes = [];
-
         try {
-            $nodes = $this->getNodesFromCode($code);
-            $node = $this->getNodeAt($nodes, $position);
+            $node = $this->getNodeAt($code, $position);
 
             $contents = $this->getTooltipForNode($node, $file, $code);
 
@@ -137,23 +131,19 @@ class TooltipProvider
     }
 
     /**
-     * @param array $nodes
-     * @param int   $position
+     * @param string $code
+     * @param int    $position
      *
      * @throws UnexpectedValueException
      *
      * @return Node
      */
-    protected function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(string $code, int $position): Node
     {
-        $visitor = new NodeFetchingVisitor($position);
+        $result = $this->nodeAtOffsetLocator->locate($code, $position);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($nodes);
-
-        $node = $visitor->getNode();
-        $nearestInterestingNode = $visitor->getNearestInterestingNode();
+        $node = $result->getNode();
+        $nearestInterestingNode = $result->getNearestInterestingNode();
 
         if (!$node) {
             throw new UnexpectedValueException('No node found at location ' . $position);
@@ -178,7 +168,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForNode(Node $node, Structures\File $file, string $code): string
+    private function getTooltipForNode(Node $node, Structures\File $file, string $code): string
     {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node);
@@ -192,7 +182,7 @@ class TooltipProvider
             $parentNode = $node->getAttribute('parent', false);
 
             if ($parentNode === false) {
-                throw new LogicException('No parent metadata attached to node');
+                throw new AssertionError('No parent metadata attached to node');
             }
 
             if ($parentNode instanceof Node\Stmt\Function_) {
@@ -242,7 +232,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForFuncCallNode(Node\Expr\FuncCall $node): string
+    private function getTooltipForFuncCallNode(Node\Expr\FuncCall $node): string
     {
         return $this->funcCallNodeTooltipGenerator->generate($node);
     }
@@ -257,7 +247,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForMethodCallNode(
+    private function getTooltipForMethodCallNode(
         Node\Expr\MethodCall $node,
         Structures\File $file,
         string $code,
@@ -276,7 +266,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForStaticMethodCallNode(
+    private function getTooltipForStaticMethodCallNode(
         Node\Expr\StaticCall $node,
         Structures\File $file,
         string $code,
@@ -295,7 +285,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForPropertyFetchNode(
+    private function getTooltipForPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -314,7 +304,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForStaticPropertyFetchNode(
+    private function getTooltipForStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -330,7 +320,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
+    private function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
     {
         return $this->constFetchNodeTooltipGenerator->generate($node);
     }
@@ -344,7 +334,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForClassConstFetchNode(
+    private function getTooltipForClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
         Structures\File $file,
         string $code
@@ -361,12 +351,12 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
+    private function getTooltipForUseUseNode(Node\Stmt\UseUse $node, Structures\File $file, int $line): string
     {
         $parentNode = $node->getAttribute('parent', false);
 
         if ($parentNode === false) {
-            throw new LogicException('Parent node data is required in metadata');
+            throw new AssertionError('Parent node data is required in metadata');
         }
 
         // Use statements are always fully qualified, they aren't resolved.
@@ -386,7 +376,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
+    private function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
     {
         return $this->functionNodeTooltipGenerator->generate($node);
     }
@@ -399,7 +389,7 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, Structures\File $file): string
+    private function getTooltipForClassMethodNode(Node\Stmt\ClassMethod $node, Structures\File $file): string
     {
         return $this->classMethodNodeTooltipGenerator->generate($node, $file);
     }
@@ -413,34 +403,8 @@ class TooltipProvider
      *
      * @return string
      */
-    protected function getTooltipForNameNode(Node\Name $node, Structures\File $file, int $line): string
+    private function getTooltipForNameNode(Node\Name $node, Structures\File $file, int $line): string
     {
         return $this->nameNodeTooltipGenerator->generate($node, $file, $line);
-    }
-
-    /**
-     * @param string $code
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return Node[]
-     */
-    protected function getNodesFromCode(string $code): array
-    {
-        $nodes = $this->parser->parse($code, $this->getErrorHandler());
-
-        if ($nodes === null) {
-            throw new UnexpectedValueException('No nodes returned after parsing code');
-        }
-
-        return $nodes;
-    }
-
-    /**
-     * @return ErrorHandler\Collecting
-     */
-    protected function getErrorHandler(): ErrorHandler\Collecting
-    {
-        return new ErrorHandler\Collecting();
     }
 }

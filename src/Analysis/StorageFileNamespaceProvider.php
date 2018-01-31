@@ -43,7 +43,7 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
      *
      * @return Namespace_[]
      */
-    protected function mapNamespaces(array $namespaces): array
+    private function mapNamespaces(array $namespaces): array
     {
         $result = [];
 
@@ -59,7 +59,7 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
      *
      * @return Namespace_
      */
-    protected function mapNamespace(Structures\FileNamespace $namespace): Namespace_
+    private function mapNamespace(Structures\FileNamespace $namespace): Namespace_
     {
         $range = new Range(
             new Position($namespace->getStartLine(), 0),
@@ -76,7 +76,7 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
      *
      * @return Import[]
      */
-    protected function mapImports(array $imports): array
+    private function mapImports(array $imports): array
     {
         return array_map(function (Structures\FileNamespaceImport $import): Import {
             return $this->mapImport($import);
@@ -88,7 +88,7 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
      *
      * @return Import
      */
-    protected function mapImport(Structures\FileNamespaceImport $import): Import
+    private function mapImport(Structures\FileNamespaceImport $import): Import
     {
         return new Import(
             $import->getName(),

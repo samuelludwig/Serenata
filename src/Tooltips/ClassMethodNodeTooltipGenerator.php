@@ -2,10 +2,10 @@
 
 namespace PhpIntegrator\Tooltips;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
 
 use PhpIntegrator\Common\Position;
@@ -30,19 +30,19 @@ class ClassMethodNodeTooltipGenerator
     private $filePositionClasslikeDeterminer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator
      * @param FilePositionClasslikeDeterminer $filePositionClasslikeDeterminer
-     * @param ClasslikeInfoBuilder            $classlikeInfoBuilder
+     * @param ClasslikeInfoBuilderInterface   $classlikeInfoBuilder
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
         FilePositionClasslikeDeterminer $filePositionClasslikeDeterminer,
-        ClasslikeInfoBuilder $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
         $this->filePositionClasslikeDeterminer = $filePositionClasslikeDeterminer;
@@ -63,7 +63,7 @@ class ClassMethodNodeTooltipGenerator
         $startLine = $node->getAttribute('startLine');
 
         if ($startLine === null) {
-            throw new LogicException('Nodes must have startLine metadata attached');
+            throw new AssertionError('Nodes must have startLine metadata attached');
         }
 
         $position = new Position($startLine, 0);
@@ -87,12 +87,12 @@ class ClassMethodNodeTooltipGenerator
      *
      * @return array
      */
-    protected function getMethodInfo(string $fqcn, string $method): array
+    private function getMethodInfo(string $fqcn, string $method): array
     {
         $classlikeInfo = null;
 
         try {
-            $classlikeInfo = $this->classlikeInfoBuilder->getClasslikeInfo($fqcn);
+            $classlikeInfo = $this->classlikeInfoBuilder->build($fqcn);
         } catch (UnexpectedValueException $e) {
             throw new UnexpectedValueException(
                 'Could not find class with name ' . $fqcn . ' for method call node',

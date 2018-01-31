@@ -608,7 +608,7 @@ class MethodIndexingTest extends AbstractIntegrationTest
      *
      * @return Structures\Method
      */
-    protected function indexMethod(string $file): Structures\Method
+    private function indexMethod(string $file): Structures\Method
     {
         $path = $this->getPathFor($file);
 
@@ -631,7 +631,7 @@ class MethodIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/MethodIndexingTest/' . $file;
     }

@@ -30,7 +30,7 @@ final class ClosureNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromClosureNode(Node\Expr\Closure $node): array
+    private function deduceTypesFromClosureNode(Node\Expr\Closure $node): array
     {
         return ['\Closure'];
     }

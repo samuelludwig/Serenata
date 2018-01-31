@@ -94,7 +94,7 @@ services:
     tooltipProvider:
         class: PhpIntegrator\Tooltips\TooltipProvider
         arguments:
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@funcCallNodeTooltipGenerator'
             - '@methodCallNodeTooltipGenerator'
             - '@staticMethodCallNodeTooltipGenerator'

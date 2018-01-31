@@ -27,17 +27,17 @@ final class JsonRpcResponse implements JsonSerializable
     private $result;
 
     /**
-     * @var object|null
+     * @var JsonRpcError|null
      */
     private $error;
 
     /**
-     * @param string|int|null $id
-     * @param mixed|null      $result
-     * @param object|null     $error
-     * @param string          $jsonrpc
+     * @param string|int|null   $id
+     * @param mixed|null        $result
+     * @param JsonRpcError|null $error
+     * @param string            $jsonrpc
      */
-    public function __construct($id, $result = null, $error = null, string $jsonrpc = '2.0')
+    public function __construct($id, $result = null, ?JsonRpcError $error = null, string $jsonrpc = '2.0')
     {
         $this->id = $id;
         $this->result = $result;
@@ -70,9 +70,9 @@ final class JsonRpcResponse implements JsonSerializable
     }
 
     /**
-     * @return object|null
+     * @return JsonRpcError|null
      */
-    public function getError()
+    public function getError(): ?JsonRpcError
     {
         return $this->error;
     }

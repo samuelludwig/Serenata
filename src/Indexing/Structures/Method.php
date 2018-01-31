@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 /**
  * Represents a (class) method.
  */
-final class Method extends FunctionLike
+class Method extends FunctionLike
 {
     /**
      * @var Classlike

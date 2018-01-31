@@ -33,7 +33,7 @@ final class ClassLikeNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromClassLikeNode(Node\Stmt\ClassLike $node, Structures\File $file): array
+    private function deduceTypesFromClassLikeNode(Node\Stmt\ClassLike $node, Structures\File $file): array
     {
         if ($node->name === null) {
             return [NodeHelpers::getFqcnForAnonymousClassNode($node, $file->getPath())];

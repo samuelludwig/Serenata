@@ -9,9 +9,9 @@ use PhpIntegrator\Indexing\Structures;
 use PhpIntegrator\Indexing\StorageInterface;
 
 /**
- * Adapts and resolves data from the index as needed to receive an appropriate output data format.
+ * Builds a complete structure of data for a classlike, including children and members.
  */
-class ClasslikeInfoBuilder
+class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
 {
     /**
      * @var Conversion\ConstantConverter
@@ -114,17 +114,8 @@ class ClasslikeInfoBuilder
         $this->typeAnalyzer = $typeAnalyzer;
     }
 
-    /**
-     * Retrieves information about the specified structural element.
-     *
-     * @param string $fqcn
-     *
-     * @throws UnexpectedValueException
-     * @throws CircularDependencyException
-     *
-     * @return array
-     */
-    public function getClasslikeInfo(string $fqcn): array
+    /// @inherited
+    public function build(string $fqcn): array
     {
         $this->resolutionStack = [];
 
@@ -139,7 +130,7 @@ class ClasslikeInfoBuilder
      *
      * @return ArrayObject
      */
-    protected function getCheckedClasslikeInfo(string $fqcn, string $originFqcn): ArrayObject
+    private function getCheckedClasslikeInfo(string $fqcn, string $originFqcn): ArrayObject
     {
         if (in_array($fqcn, $this->resolutionStack)) {
             throw new CircularDependencyException("Circular dependency detected from {$originFqcn} to {$fqcn}!");
@@ -161,7 +152,7 @@ class ClasslikeInfoBuilder
      *
      * @return ArrayObject
      */
-    protected function getUncheckedClasslikeInfo(string $fqcn): ArrayObject
+    private function getUncheckedClasslikeInfo(string $fqcn): ArrayObject
     {
         $classlike = $this->storage->findStructureByFqcn($fqcn);
 
@@ -180,7 +171,7 @@ class ClasslikeInfoBuilder
      *
      * @return ArrayObject
      */
-    protected function fetchFlatClasslikeInfo(Structures\Classlike $classlike): ArrayObject
+    private function fetchFlatClasslikeInfo(Structures\Classlike $classlike): ArrayObject
     {
         $classlikeInfo = new ArrayObject($this->classlikeConverter->convert($classlike) + [
             'parents'            => [],
@@ -224,7 +215,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildDirectChildrenInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildDirectChildrenInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         if (!$classlike instanceof Structures\Class_ && !$classlike instanceof Structures\Interface_) {
             return;
@@ -241,7 +232,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildDirectImplementorsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildDirectImplementorsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         if (!$classlike instanceof Structures\Interface_) {
             return;
@@ -258,7 +249,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildTraitUsersInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildTraitUsersInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         if (!$classlike instanceof Structures\Trait_) {
             return;
@@ -275,7 +266,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildConstantsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildConstantsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         foreach ($classlike->getConstants() as $constant) {
             $classlikeInfo['constants'][$constant->getName()] = $this->classlikeConstantConverter->convertForClass(
@@ -291,7 +282,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildPropertiesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildPropertiesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         foreach ($classlike->getProperties() as $property) {
             $classlikeInfo['properties'][$property->getName()] = $this->propertyConverter->convertForClass(
@@ -307,10 +298,13 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildMethodsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildMethodsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         foreach ($classlike->getMethods() as $method) {
-            $classlikeInfo['methods'][$method->getName()] = $this->methodConverter->convertForClass($method, $classlikeInfo);
+            $classlikeInfo['methods'][$method->getName()] = $this->methodConverter->convertForClass(
+                $method,
+                $classlikeInfo
+            );
         }
     }
 
@@ -320,7 +314,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildTraitsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildTraitsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         if (!$classlike instanceof Structures\Class_ && !$classlike instanceof Structures\Trait_) {
             return;
@@ -351,7 +345,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildParentsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildParentsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         $parentFqcns = [];
 
@@ -383,7 +377,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function buildInterfacesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
+    private function buildInterfacesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
         if (!$classlike instanceof Structures\Class_) {
             return;
@@ -409,13 +403,16 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function resolveSelfTypesTo(ArrayObject $result, $elementFqcn): void
+    private function resolveSelfTypesTo(ArrayObject $result, $elementFqcn): void
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
             if ($type['resolvedType'] !== null) {
-                $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType($type['resolvedType'], $elementFqcn);
+                $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType(
+                    $type['resolvedType'],
+                    $elementFqcn
+                );
             }
         });
     }
@@ -426,7 +423,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function resolveStaticTypesTo(ArrayObject $result, $elementFqcn): void
+    private function resolveStaticTypesTo(ArrayObject $result, $elementFqcn): void
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
@@ -445,7 +442,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function resolveNormalTypes(ArrayObject $result): void
+    private function resolveNormalTypes(ArrayObject $result): void
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
@@ -464,7 +461,7 @@ class ClasslikeInfoBuilder
      *
      * @return void
      */
-    protected function walkTypes(ArrayObject $result, callable $callable): void
+    private function walkTypes(ArrayObject $result, callable $callable): void
     {
         foreach ($result['methods'] as $name => &$method) {
             foreach ($method['parameters'] as &$parameter) {

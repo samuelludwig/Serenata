@@ -1,0 +1,10 @@
+parameters:
+
+
+services:
+    useStatementInsertionCreator:
+        class: PhpIntegrator\Refactoring\UseStatementInsertionCreator
+        arguments:
+            - '@parser'
+            - '@nodeAtOffsetLocator'
+            - '@typeAnalyzer'

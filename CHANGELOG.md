@@ -1,3 +1,32 @@
+## 3.2.0
+### Major Changes
+* [Support autocompletion](https://gitlab.com/php-integrator/core/issues/43)
+  * Fuzzy matching is handled as well. This prevents large amounts of relevant suggestions being sent back to the client that are then filtered out again quickly after, which is very taxing on the socket, the client, as well as the server itself.
+* [Allow cancelling requests](https://gitlab.com/php-integrator/core/issues/144)
+  * As the core is synchronous and single-threaded, requests already being processed cannot be cancelled. However, requests are queued internally, so it is still worthwile to implement this in clients to drop pending requests.
+* [Prioritize latency-sensitive requests](https://gitlab.com/php-integrator/core/issues/143)
+  * As a result, the core can now remain responsive to requests such as autocompletion during large indexing operations, such as initial project indexing. (Note that, during initial indexing, results may not be entirely accurate as the index is still being built.)
+
+### Other Improvements
+* Implement `exit` request to request the server to shutdown safely
+* Improve performance in several area's, including signature help and tooltips, due to additional internal caching that avoid recomputation
+* Reformat tooltip markdown to avoid tables and to improve readability
+  * Tables do not properly support paragraphs without HTML's `<br>`, which is not supported by some markdown libraries such as `marked`.
+* Include parameter list in signature labels in signature help
+  * These were already retrievable via the actual parameters, but some UI's, such as Visual Studio Code and atom-ide-ui, don't explicitly show the parameter label separately at the time of writing.
+
+### Bugs Fixed
+* [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
+* Fix entities being final, resulting in Doctrine not being able to generate proxies for them
+* Exclude (unusable) variables being assigned to at the requested position when providing a list of local variables
+* Fix wonky docblock types such as `@throws |UnexpectedValueException` causing fatal indexing errors when used in class methods
+* Fix same files erroneously being queued for reindexing when their modification date was updated, even if their contents did not change
+  * They were never actually reindexed, but still reevaluated.
+
+### Structural changes (mostly relevant to clients)
+* HTML in docblocks is internally now automatically converted to markdown, so clients can always assume documentation is in markdown format
+  * This is mostly relevant to old code bases and the JetBrains stubs, which use HTML rather than markdown. Newer code bases should prefer markdown as much as possible.
+
 ## 3.1.0
 ### Major Changes
 * [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
@@ -15,7 +44,7 @@
 * Fix core shrugging and bailing whenever the entity manager closed due to a database error
 * [Fix unsupported meta file static method types throwing an error instead of being silently skipped](https://gitlab.com/php-integrator/core/issues/130)
 * Fix some edge case bugs with name (type) resolution by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
-* Fix function and method docblock `@return` tag types not being validated against the actual return type
+* [Fix function and method docblock `@return` tag types not being validated against the actual return type](https://gitlab.com/php-integrator/core/issues/94)
 * [Fix crash with variable expressions in method calls during type deduction of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
 * [Make disk I/O and locked database errors propagate as fatal errors, as they currently can't be recovered from and to notify the user](https://github.com/php-integrator/atom-base/issues/278)
 * [Fix folder scanning occurring twice during indexing, once for counting the total amount of items (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)

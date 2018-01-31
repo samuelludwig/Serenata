@@ -2,17 +2,14 @@
 
 namespace PhpIntegrator\GotoDefinition;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
+use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
 
 use PhpIntegrator\Indexing\Structures;
 
 use PhpParser\Node;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
 
 /**
  * Locates the definition of structural elements.
@@ -20,9 +17,9 @@ use PhpParser\NodeTraverser;
 class DefinitionLocator
 {
     /**
-     * @var Parser
+     * @var NodeAtOffsetLocatorInterface
      */
-    private $parser;
+    private $nodeAtOffsetLocator;
 
     /**
      * @var FuncCallNodeDefinitionLocator
@@ -65,7 +62,7 @@ class DefinitionLocator
     private $staticPropertyFetchNodeDefinitionLocator;
 
     /**
-     * @param Parser                                   $parser
+     * @param NodeAtOffsetLocatorInterface             $nodeAtOffsetLocator
      * @param FuncCallNodeDefinitionLocator            $funcCallNodeDefinitionLocator
      * @param MethodCallNodeDefinitionLocator          $methodCallNodeDefinitionLocator
      * @param ConstFetchNodeDefinitionLocator          $constFetchNodeDefinitionLocator
@@ -76,7 +73,7 @@ class DefinitionLocator
      * @param StaticPropertyFetchNodeDefinitionLocator $staticPropertyFetchNodeDefinitionLocator
      */
     public function __construct(
-        Parser $parser,
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         FuncCallNodeDefinitionLocator $funcCallNodeDefinitionLocator,
         MethodCallNodeDefinitionLocator $methodCallNodeDefinitionLocator,
         ConstFetchNodeDefinitionLocator $constFetchNodeDefinitionLocator,
@@ -86,7 +83,7 @@ class DefinitionLocator
         PropertyFetchDefinitionLocator $propertyFetchDefinitionLocator,
         StaticPropertyFetchNodeDefinitionLocator $staticPropertyFetchNodeDefinitionLocator
     ) {
-        $this->parser = $parser;
+        $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
         $this->methodCallNodeDefinitionLocator = $methodCallNodeDefinitionLocator;
         $this->constFetchNodeDefinitionLocator = $constFetchNodeDefinitionLocator;
@@ -106,11 +103,8 @@ class DefinitionLocator
      */
     public function locate(Structures\File $file, string $code, int $position): ?GotoDefinitionResult
     {
-        $nodes = [];
-
         try {
-            $nodes = $this->getNodesFromCode($code);
-            $node = $this->getNodeAt($nodes, $position);
+            $node = $this->getNodeAt($code, $position);
 
             return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $file, $code);
         } catch (UnexpectedValueException $e) {
@@ -119,23 +113,19 @@ class DefinitionLocator
     }
 
     /**
-     * @param array $nodes
-     * @param int   $position
+     * @param string $code
+     * @param int    $position
      *
      * @throws UnexpectedValueException
      *
      * @return Node
      */
-    protected function getNodeAt(array $nodes, int $position): Node
+    private function getNodeAt(string $code, int $position): Node
     {
-        $visitor = new NodeFetchingVisitor($position);
+        $result = $this->nodeAtOffsetLocator->locate($code, $position);
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor($visitor);
-        $traverser->traverse($nodes);
-
-        $node = $visitor->getNode();
-        $nearestInterestingNode = $visitor->getNearestInterestingNode();
+        $node = $result->getNode();
+        $nearestInterestingNode = $result->getNearestInterestingNode();
 
         if (!$node) {
             throw new UnexpectedValueException('No node found at location ' . $position);
@@ -160,7 +150,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfStructuralElementRepresentedByNode(
+    private function locateDefinitionOfStructuralElementRepresentedByNode(
         Node $node,
         Structures\File $file,
         string $code
@@ -177,7 +167,7 @@ class DefinitionLocator
             $parentNode = $node->getAttribute('parent', false);
 
             if ($parentNode === false) {
-                throw new LogicException('No parent metadata attached to node');
+                throw new AssertionError('No parent metadata attached to node');
             }
 
             if ($parentNode instanceof Node\Expr\ClassConstFetch) {
@@ -223,7 +213,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfFuncCallNode(Node\Expr\FuncCall $node): GotoDefinitionResult
+    private function locateDefinitionOfFuncCallNode(Node\Expr\FuncCall $node): GotoDefinitionResult
     {
         return $this->funcCallNodeDefinitionLocator->locate($node);
     }
@@ -238,7 +228,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfMethodCallNode(
+    private function locateDefinitionOfMethodCallNode(
         Node\Expr\MethodCall $node,
         Structures\File $file,
         string $code,
@@ -257,7 +247,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfStaticMethodCallNode(
+    private function locateDefinitionOfStaticMethodCallNode(
         Node\Expr\StaticCall $node,
         Structures\File $file,
         string $code,
@@ -276,7 +266,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfPropertyFetchNode(
+    private function locateDefinitionOfPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -295,7 +285,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfStaticPropertyFetchNode(
+    private function locateDefinitionOfStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
         Structures\File $file,
         string $code,
@@ -311,7 +301,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfConstFetchNode(Node\Expr\ConstFetch $node): GotoDefinitionResult
+    private function locateDefinitionOfConstFetchNode(Node\Expr\ConstFetch $node): GotoDefinitionResult
     {
         return $this->constFetchNodeDefinitionLocator->generate($node);
     }
@@ -325,7 +315,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfClassConstFetchNode(
+    private function locateDefinitionOfClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
         Structures\File $file,
         string $code
@@ -342,7 +332,7 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfUseUseNode(
+    private function locateDefinitionOfUseUseNode(
         Node\Stmt\UseUse $node,
         Structures\File $file,
         int $line
@@ -350,7 +340,7 @@ class DefinitionLocator
         $parentNode = $node->getAttribute('parent', false);
 
         if ($parentNode === false) {
-            throw new LogicException('Parent node data is required in metadata');
+            throw new AssertionError('Parent node data is required in metadata');
         }
 
         // Use statements are always fully qualified, they aren't resolved.
@@ -372,37 +362,11 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    protected function locateDefinitionOfNameNode(
+    private function locateDefinitionOfNameNode(
         Node\Name $node,
         Structures\File $file,
         int $line
     ): GotoDefinitionResult {
         return $this->nameNodeDefinitionLocator->locate($node, $file, $line);
-    }
-
-    /**
-     * @param string $code
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return Node[]
-     */
-    protected function getNodesFromCode(string $code): array
-    {
-        $nodes = $this->parser->parse($code, $this->getErrorHandler());
-
-        if ($nodes === null) {
-            throw new UnexpectedValueException('No nodes returned after parsing code');
-        }
-
-        return $nodes;
-    }
-
-    /**
-     * @return ErrorHandler\Collecting
-     */
-    protected function getErrorHandler(): ErrorHandler\Collecting
-    {
-        return new ErrorHandler\Collecting();
     }
 }

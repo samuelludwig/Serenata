@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
 
 use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
 
@@ -24,17 +24,20 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
     private $typeAnalyzer;
 
     /**
-     * @var ClasslikeInfoBuilder
+     * @var ClasslikeInfoBuilderInterface
      */
     private $classlikeInfoBuilder;
 
     /**
-     * @param string               $code
-     * @param TypeAnalyzer         $typeAnalyzer
-     * @param ClasslikeInfoBuilder $classlikeInfoBuilder
+     * @param string                        $code
+     * @param TypeAnalyzer                  $typeAnalyzer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
-    public function __construct(string $code, TypeAnalyzer $typeAnalyzer, ClasslikeInfoBuilder $classlikeInfoBuilder)
-    {
+    public function __construct(
+        string $code,
+        TypeAnalyzer $typeAnalyzer,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+    ) {
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
 
         $this->outlineIndexingVisitor = new OutlineFetchingVisitor($typeAnalyzer, $code);
@@ -69,7 +72,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
     /**
      * @return array
      */
-    protected function getMissingDocumentationWarnings(): array
+    private function getMissingDocumentationWarnings(): array
     {
         $warnings = [];
 
@@ -89,11 +92,11 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForStructure(array $classlike): array
+    private function getMissingDocumentationWarningsForStructure(array $classlike): array
     {
         $warnings = [];
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
         if ($classInfo && !$classInfo['hasDocumentation']) {
             $warnings[] = [
@@ -123,7 +126,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForGlobalFunction(array $globalFunction): array
+    private function getMissingDocumentationWarningsForGlobalFunction(array $globalFunction): array
     {
         if ($globalFunction['docComment']) {
             return [];
@@ -144,13 +147,13 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForMethod(array $classlike, array $method): array
+    private function getMissingDocumentationWarningsForMethod(array $classlike, array $method): array
     {
         if ($method['docComment']) {
             return [];
         }
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
         if (!$classInfo ||
             !isset($classInfo['methods'][$method['name']]) ||
@@ -174,13 +177,13 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForProperty(array $classlike, array $property): array
+    private function getMissingDocumentationWarningsForProperty(array $classlike, array $property): array
     {
         if ($property['docComment']) {
             return [];
         }
 
-        $classInfo = $this->classlikeInfoBuilder->getClasslikeInfo($classlike['fqcn']);
+        $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
         if (!$classInfo ||
             !isset($classInfo['properties'][$property['name']]) ||
@@ -204,7 +207,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
      *
      * @return array
      */
-    protected function getMissingDocumentationWarningsForClassConstant(array $classlike, array $constant): array
+    private function getMissingDocumentationWarningsForClassConstant(array $classlike, array $constant): array
     {
         if ($constant['docComment']) {
             return [];

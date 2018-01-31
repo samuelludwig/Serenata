@@ -51,7 +51,7 @@ class ClasslikeIndexingStructureRegistryMediator
     /**
      * @return void
      */
-    protected function setup(): void
+    private function setup(): void
     {
         $this->eventEmitter->on(IndexingEventName::CLASSLIKE_UPDATED, function (Structures\Classlike $classlike) {
             $this->classlikeListRegistry->add($this->classlikeConverter->convert($classlike));

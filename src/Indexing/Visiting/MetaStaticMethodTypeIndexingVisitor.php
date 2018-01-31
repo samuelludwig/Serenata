@@ -78,7 +78,7 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function enterAssignNode(Node\Expr\Assign $node): void
+    private function enterAssignNode(Node\Expr\Assign $node): void
     {
         if ($node->var instanceof Node\Expr\Variable && $node->var->name === 'STATIC_METHOD_TYPES') {
             $this->enterStaticMethodTypesAssignNode($node);
@@ -92,7 +92,7 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function enterStaticMethodTypesAssignNode(Node\Expr\Assign $node): void
+    private function enterStaticMethodTypesAssignNode(Node\Expr\Assign $node): void
     {
         if (!$node->expr instanceof Node\Expr\Array_) {
             throw new UnexpectedValueException('$STATIC_METHOD_TYPES must be an array');
@@ -110,7 +110,7 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function enterStaticMethodTypesElementNode(Node\Expr\ArrayItem $node): void
+    private function enterStaticMethodTypesElementNode(Node\Expr\ArrayItem $node): void
     {
         if (!$node->key instanceof Node\Expr\StaticCall) {
             throw new UnexpectedValueException('Key of each element must be a static method call');
@@ -145,7 +145,7 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function enterStaticMethodTypesValueNode(
+    private function enterStaticMethodTypesValueNode(
         Node\Expr\ArrayItem $item,
         string $fqcn,
         string $name,

@@ -7,6 +7,9 @@
  * Hello!
  *
  * @param string     $first  Testdescription
+ * More text on next line.
+ *
+ * Another paragraph.
  * @param int        $second Test
  * @param \Exception $third Test
  *

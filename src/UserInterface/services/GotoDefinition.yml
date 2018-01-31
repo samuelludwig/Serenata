@@ -5,7 +5,7 @@ services:
     definitionLocator:
         class: PhpIntegrator\GotoDefinition\DefinitionLocator
         arguments:
-            - '@parser'
+            - '@nodeAtOffsetLocator'
             - '@funcCallNodeDefinitionLocator'
             - '@methodCallNodeDefinitionLocator'
             - '@constFetchNodeDefinitionLocator'
@@ -42,7 +42,7 @@ services:
         class: PhpIntegrator\GotoDefinition\NameNodeDefinitionLocator
         arguments:
             - '@nameNodeFqsenDeterminer'
-            - '@ClasslikeInfoBuilder'
+            - '@classlikeInfoBuilder'
 
     staticMethodCallNodeDefinitionLocator:
         class: PhpIntegrator\GotoDefinition\StaticMethodCallNodeDefinitionLocator

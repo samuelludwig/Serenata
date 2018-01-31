@@ -4,8 +4,7 @@ namespace PhpIntegrator\Indexing;
 
 use UnexpectedValueException;
 
-use Ds\Queue;
-
+use PhpIntegrator\Sockets\JsonRpcQueue;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
@@ -24,7 +23,7 @@ final class Indexer implements EventEmitterInterface
     use EventEmitterTrait;
 
     /**
-     * @var Queue
+     * @var JsonRpcQueue
      */
     private $queue;
 
@@ -59,7 +58,7 @@ final class Indexer implements EventEmitterInterface
     private $directoryIndexableFileIteratorFactory;
 
     /**
-     * @param Queue                                 $queue
+     * @param JsonRpcQueue                          $queue
      * @param FileIndexerInterface                  $fileIndexer
      * @param DirectoryIndexRequestDemuxer          $directoryIndexRequestDemuxer
      * @param IndexFilePruner                       $indexFilePruner
@@ -68,7 +67,7 @@ final class Indexer implements EventEmitterInterface
      * @param DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
      */
     public function __construct(
-        Queue $queue,
+        JsonRpcQueue $queue,
         FileIndexerInterface $fileIndexer,
         DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
         IndexFilePruner $indexFilePruner,

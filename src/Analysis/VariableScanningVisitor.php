@@ -6,6 +6,8 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
+use PhpIntegrator\Utility\NodeHelpers;
+
 /**
  * Visitor that queries the nodes for information about available (set) variables.
  */
@@ -41,6 +43,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
+        // NOTE: Position ranges are closed (inclusive).
         if ($node->getAttribute('startFilePos') >= $this->position) {
             // We've gone beyond the requested position, there is nothing here that can still be relevant anymore.
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
@@ -67,7 +70,12 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Node\Expr\Variable) {
-            if ($node->getAttribute('endFilePos') < $this->position) {
+            $parentAssignmentExpression = NodeHelpers::findAncestorOfAnyType($node, Node\Expr\Assign::class);
+
+            if (($node->getAttribute('endFilePos') + 1) < $this->position && (
+                $parentAssignmentExpression === null ||
+                ($parentAssignmentExpression->getAttribute('endFilePos') + 1) < $this->position
+            )) {
                 $this->parseVariable($node);
             }
         } elseif ($node instanceof Node\Expr\ClosureUse) {
@@ -82,7 +90,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseVariable(Node\Expr\Variable $node): void
+    private function parseVariable(Node\Expr\Variable $node): void
     {
         if (is_string($node->name)) {
             $this->variables[] = '$' . $node->name;
@@ -94,7 +102,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseClosureUse(Node\Expr\ClosureUse $node): void
+    private function parseClosureUse(Node\Expr\ClosureUse $node): void
     {
         $this->variables[] = '$' . $node->var->name;
     }
@@ -104,7 +112,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function parseParam(Node\Param $node): void
+    private function parseParam(Node\Param $node): void
     {
         $this->variables[] = '$' . $node->var->name;
     }

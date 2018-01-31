@@ -4,8 +4,7 @@ namespace PhpIntegrator\Indexing;
 
 use SplFileInfo;
 
-use Ds\Queue;
-
+use PhpIntegrator\Sockets\JsonRpcQueue;
 use PhpIntegrator\Sockets\JsonRpcRequest;
 use PhpIntegrator\Sockets\JsonRpcResponse;
 use PhpIntegrator\Sockets\JsonRpcQueueItem;
@@ -17,7 +16,7 @@ use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
 class DirectoryIndexRequestDemuxer
 {
     /**
-     * @var Queue
+     * @var JsonRpcQueue
      */
     private $queue;
 
@@ -27,11 +26,11 @@ class DirectoryIndexRequestDemuxer
     private $directoryIndexableFileIteratorFactory;
 
     /**
-     * @param Queue $queue
+     * @param JsonRpcQueue                          $queue
      * @param DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
      */
     public function __construct(
-        Queue $queue,
+        JsonRpcQueue $queue,
         DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
     ) {
         $this->queue = $queue;
@@ -76,7 +75,7 @@ class DirectoryIndexRequestDemuxer
      * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      */
-    protected function queueIndexRequest(
+    private function queueIndexRequest(
         SplFileInfo $fileInfo,
         array $extensionsToIndex,
         array $globsToExclude,
@@ -97,7 +96,7 @@ class DirectoryIndexRequestDemuxer
      * @param int                            $total
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      */
-    protected function queueProgressRequest(
+    private function queueProgressRequest(
         int $originatingRequestId,
         int $index,
         int $total,

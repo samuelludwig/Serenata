@@ -2,12 +2,60 @@
 
 namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\AvailableVariablesCommand;
-
 use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
 class AvailableVariablesCommandTest extends AbstractIntegrationTest
 {
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariableStartingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariableStartingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariableEndingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariableEndingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariablePartOfAssignmentStartingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariablePartOfAssignmentStartingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariablePartOfAssignmentEndingAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariablePartOfAssignmentEndingAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDoesNotReturnVariableOperatingAsLeftOperandOfAssignmentAtOffset(): void
+    {
+        $output = $this->getAvailableVariables('VariableOperatingAsLeftOperandOfAssignmentAtOffset.phpt');
+
+        static::assertSame([], $output);
+    }
+
     /**
      * @return void
      */
@@ -72,15 +120,20 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     public function testCorrectlyIgnoresVariousStatements(): void
     {
         $file = 'VariousStatements.phpt';
-        $fullPath = $this->getTestFilePath($file);
+        $fullPath = $this->getPathFor($file);
 
-        $command = $this->getCommand($file);
+        $container = $this->createTestContainer();
+
+        $this->indexTestFile($container, $fullPath);
+        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($fullPath);
+
+        $command = $container->get('availableVariablesCommand');
 
         $i = 1;
         $markerOffsets = [];
 
         while (true) {
-            $markerOffset = $this->getMarkerOffset($fullPath, "MARKER_{$i}");
+            $markerOffset = $this->getMarkerOffset($code, "// MARKER_{$i}");
 
             if ($markerOffset === null) {
                 break;
@@ -135,26 +188,11 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string $file
-     * @param bool   $mayFail
-     *
-     * @return AvailableVariablesCommand
-     */
-    protected function getCommand(string $file, bool $mayFail = false): AvailableVariablesCommand
-    {
-        $path = $this->getTestFilePath($file);
-
-        $this->indexTestFile($this->container, $path, $mayFail);
-
-        return $this->container->get('availableVariablesCommand');
-    }
-
-    /**
      * @param string $name
      *
      * @return string
      */
-    protected function getTestFilePath(string $name): string
+    private function getPathFor(string $name): string
     {
         return __DIR__ . '/AvailableVariablesCommandTest/' . $name;
     }
@@ -165,28 +203,35 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      *
      * @return array
      */
-    protected function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
+    private function getAvailableVariables(string $file, bool $mayIndexingFail = false): array
     {
-        $command = $this->getCommand($file, $mayIndexingFail);
+        $path = $this->getPathFor($file);
 
-        $path = $this->getTestFilePath($file);
+        $container = $this->createTestContainer();
 
-        $markerOffset = $this->getMarkerOffset($path, '<MARKER>');
+        $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
 
-        return $command->getAvailableVariables($path, file_get_contents($path), $markerOffset);
+        $markerString = '// <MARKER>';
+
+        $markerOffset = $this->getMarkerOffset($code, $markerString);
+
+        // Strip marker so it does not influence further processing.
+        $code = str_replace($markerString, '', $code);
+
+        $this->indexTestFileWithSource($container, $path, $code);
+
+        return $container->get('availableVariablesCommand')->getAvailableVariables($path, $code, $markerOffset);
     }
 
     /**
-     * @param string $path
+     * @param string $code
      * @param string $marker
      *
      * @return int|null
      */
-    protected function getMarkerOffset(string $path, string $marker): ?int
+    private function getMarkerOffset(string $code, string $marker): ?int
     {
-        $testFileContents = file_get_contents($path);
-
-        $markerOffset = mb_strpos($testFileContents, $marker);
+        $markerOffset = mb_strpos($code, $marker);
 
         return $markerOffset !== false ? $markerOffset : null;
     }

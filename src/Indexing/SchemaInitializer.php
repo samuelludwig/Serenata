@@ -16,7 +16,7 @@ class SchemaInitializer
     /**
      * @var int
      */
-    public const SCHEMA_VERSION = 15;
+    public const SCHEMA_VERSION = 16;
 
     /**
      * @var int
@@ -54,7 +54,7 @@ class SchemaInitializer
     /**
      * @return void
      */
-    protected function loadFixtures(): void
+    private function loadFixtures(): void
     {
         $entityManager = $this->managerRegistry->getManager();
 

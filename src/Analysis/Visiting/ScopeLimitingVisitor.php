@@ -149,7 +149,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function memorizeNodeProperties(Node $node, array $properties): void
+    private function memorizeNodeProperties(Node $node, array $properties): void
     {
         $key = $this->getMemorizedPropertiesKeyForNode($node);
 
@@ -165,7 +165,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
      *
      * @return void
      */
-    protected function restoreNodeProperties(Node $node): void
+    private function restoreNodeProperties(Node $node): void
     {
         $key = $this->getMemorizedPropertiesKeyForNode($node);
 
@@ -185,7 +185,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
      *
      * @return string
      */
-    protected function getMemorizedPropertiesKeyForNode(Node $node): string
+    private function getMemorizedPropertiesKeyForNode(Node $node): string
     {
         return spl_object_hash($node);
     }

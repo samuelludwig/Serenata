@@ -51,7 +51,7 @@ class NamespaceIndexingNamespaceRegistryMediator
     /**
      * @return void
      */
-    protected function setup(): void
+    private function setup(): void
     {
         $this->eventEmitter->on(IndexingEventName::NAMESPACE_UPDATED, function (Structures\FileNamespace $namespace) {
             $this->namespaceListRegistry->add($this->namespaceConverter->convert($namespace));

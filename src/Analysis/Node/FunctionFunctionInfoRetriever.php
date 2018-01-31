@@ -2,7 +2,7 @@
 
 namespace PhpIntegrator\Analysis\Node;
 
-use LogicException;
+use AssertionError;
 use UnexpectedValueException;
 
 use PhpIntegrator\Analysis\FunctionListProviderInterface;
@@ -46,7 +46,7 @@ class FunctionFunctionInfoRetriever
     public function retrieve(Node $node): array
     {
         if (!$node instanceof Node\Expr\FuncCall && !$node instanceof Node\Stmt\Function_) {
-            throw new LogicException('Expected function node, got ' . get_class($node) . ' instead');
+            throw new AssertionError('Expected function node, got ' . get_class($node) . ' instead');
         } elseif ($node->name instanceof Node\Expr) {
             throw new UnexpectedValueException(
                 'Determining the info for dynamic function calls is currently not supported'
@@ -68,7 +68,7 @@ class FunctionFunctionInfoRetriever
      *
      * @return array
      */
-    protected function getFunctionInfo(string $fullyQualifiedName): array
+    private function getFunctionInfo(string $fullyQualifiedName): array
     {
         $functions = $this->functionListProvider->getAll();
 

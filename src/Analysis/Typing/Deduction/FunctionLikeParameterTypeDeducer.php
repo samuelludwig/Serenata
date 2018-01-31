@@ -74,7 +74,7 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromFunctionLikeParameterNode(
+    private function deduceTypesFromFunctionLikeParameterNode(
         Node\Param $node,
         Structures\File $file,
         string $code,

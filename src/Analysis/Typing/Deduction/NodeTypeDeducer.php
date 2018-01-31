@@ -231,7 +231,7 @@ final class NodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return NodeTypeDeducerInterface
      */
-    protected function getTypeDeducerForNode(Node $node): NodeTypeDeducerInterface
+    private function getTypeDeducerForNode(Node $node): NodeTypeDeducerInterface
     {
         return $this->getTypeDeducerForNodeClass(get_class($node));
     }
@@ -243,7 +243,7 @@ final class NodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return NodeTypeDeducerInterface
      */
-    protected function getTypeDeducerForNodeClass(string $class): NodeTypeDeducerInterface
+    private function getTypeDeducerForNodeClass(string $class): NodeTypeDeducerInterface
     {
         $map = [
             Node\Expr\Variable::class            => $this->variableNodeTypeDeducer,

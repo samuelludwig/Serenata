@@ -2,18 +2,17 @@
 
 namespace PhpIntegrator\Tests\Unit\Parsing;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
-
 use PhpIntegrator\DocblockTypeParser\IntDocblockType;
 use PhpIntegrator\DocblockTypeParser\NullDocblockType;
+use PhpIntegrator\DocblockTypeParser\ClassDocblockType;
 use PhpIntegrator\DocblockTypeParser\StringDocblockType;
 use PhpIntegrator\DocblockTypeParser\CompoundDocblockType;
 
 use PhpIntegrator\Parsing\DocblockParser;
 
-use PhpIntegrator\DocblockTypeParser\DocblockTypeParser;
+use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
 
-class DocblockParserTest extends \PHPUnit\Framework\TestCase
+class DocblockParserTest extends AbstractIntegrationTest
 {
     /**
      * @return void
@@ -71,7 +70,7 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
 
         static::assertEquals([
             '$someString' => [
-                'type'        => new CompoundDocblockType(
+                'type' => new CompoundDocblockType(
                     new StringDocblockType(),
                     new NullDocblockType()
                 ),
@@ -150,12 +149,9 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertSame([
-            [
-                'type'        => '\UnexpectedValueException',
-                'description' => 'Some description'
-            ]
-        ], $result['throws']);
+        static::assertCount(1, $result['throws']);
+        static::assertEquals(new ClassDocblockType('\UnexpectedValueException'), $result['throws'][0]['type']);
+        static::assertSame('Some description', $result['throws'][0]['description']);
     }
 
     /**
@@ -170,12 +166,9 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertSame([
-            [
-                'type'        => '\UnexpectedValueException',
-                'description' => null
-            ]
-        ], $result['throws']);
+        static::assertCount(1, $result['throws']);
+        static::assertEquals(new ClassDocblockType('\UnexpectedValueException'), $result['throws'][0]['type']);
+        static::assertSame(null, $result['throws'][0]['description']);
     }
 
     /**
@@ -191,6 +184,26 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
         ', [DocblockParser::VAR_TYPE], '');
 
         static::assertSame([], $result['var']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testVarTagWithClassType(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @var \DateTime
+             */
+        ', [DocblockParser::VAR_TYPE], '');
+
+        static::assertEquals([
+            '$' => [
+                'type'        => '\DateTime',
+                'description' => ''
+            ]
+        ], $result['var']);
     }
 
     /**
@@ -239,29 +252,65 @@ class DocblockParserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testLeavesMarkdownAsIs(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * This *is* _some_ markdown.
+             *
+             * ```
+             * Code sample.
+             * ```
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame('This *is* _some_ markdown.', $result['descriptions']['short']);
+        static::assertSame("```\nCode sample.\n```", $result['descriptions']['long']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testConvertsHtmlToMarkdown(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * This <strong>is</strong> <i>some</i> HTML.
+             *
+             * <p>
+             * Code sample.
+             * </p>
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame('This **is** _some_ HTML.', $result['descriptions']['short']);
+        static::assertSame("Code sample.", $result['descriptions']['long']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStripsUnconvertableHtmlTags(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * This <script>alert("test")</script>
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame('This alert("test")', $result['descriptions']['short']);
+    }
+
+    /**
      * @return DocblockParser
      */
-    protected function getDocblockParser(): DocblockParser
+    private function getDocblockParser(): DocblockParser
     {
-        return new DocblockParser(
-            $this->getDocblockAnalyzer(),
-            $this->getDocblockTypeParser()
-        );
-    }
-
-    /**
-     * @return DocblockAnalyzer
-     */
-    protected function getDocblockAnalyzer(): DocblockAnalyzer
-    {
-        return new DocblockAnalyzer();
-    }
-
-    /**
-     * @return DocblockTypeParser
-     */
-    protected function getDocblockTypeParser(): DocblockTypeParser
-    {
-        return new DocblockTypeParser();
+        return $this->container->get('docblockParser');
     }
 }

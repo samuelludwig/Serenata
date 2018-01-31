@@ -11,7 +11,7 @@ class FileIndexingTest extends AbstractIntegrationTest
      */
     public function testFileTimestampIsUpdatedOnReindexWhenContentChanges(): void
     {
-        $path = $this->getPathFor('TestFile.php');
+        $path = $this->getPathFor('TestFile.phpt');
 
         $code = '<?php class A {}';
 
@@ -38,7 +38,7 @@ class FileIndexingTest extends AbstractIntegrationTest
      */
     public function testFileIndexIsSkippedIfSourceDidNotChange(): void
     {
-        $path = $this->getPathFor('TestFile.php');
+        $path = $this->getPathFor('TestFile.phpt');
 
         $code = '<?php class A {}';
 
@@ -55,7 +55,7 @@ class FileIndexingTest extends AbstractIntegrationTest
         $files = $this->container->get('storage')->getFiles();
 
         static::assertCount(1, $files);
-        static::assertEquals($files[0]->getIndexedOn(), $timestamp);
+        static::assertTrue($files[0]->getIndexedOn() > $timestamp);
     }
 
     /**
@@ -63,7 +63,7 @@ class FileIndexingTest extends AbstractIntegrationTest
      */
     public function testSourceHashIsUpdatedOnIndex(): void
     {
-        $path = $this->getPathFor('TestFile.php');
+        $path = $this->getPathFor('TestFile.phpt');
 
         $code = '<?php class A {}';
 
@@ -80,7 +80,7 @@ class FileIndexingTest extends AbstractIntegrationTest
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/FileIndexingTest/' . $file;
     }

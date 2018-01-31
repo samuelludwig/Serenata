@@ -46,7 +46,7 @@ final class VariableNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromVariableNode(
+    private function deduceTypesFromVariableNode(
         Node\Expr\Variable $node,
         Structures\File $file,
         string $code,

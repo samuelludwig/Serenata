@@ -62,4 +62,9 @@ class JsonRpcErrorCode
      * @var int
      */
     public const DATABASE_VERSION_MISMATCH  = -32002;
+
+    /**
+     * @var int
+     */
+    public const REQUEST_CANCELLED          = -32800;
 }

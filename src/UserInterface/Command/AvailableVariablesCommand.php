@@ -100,7 +100,7 @@ final class AvailableVariablesCommand extends AbstractCommand
     {
         $handler = new ErrorHandler\Collecting();
 
-        $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($filePath, $code);
 
         $nodes = $this->parse($code, $handler);
 

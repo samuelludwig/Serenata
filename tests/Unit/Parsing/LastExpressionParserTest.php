@@ -3,7 +3,6 @@
 namespace PhpIntegrator\Tests\Unit\Parsing;
 
 use PhpIntegrator\Parsing\PartialParser;
-use PhpIntegrator\Parsing\PrettyPrinter;
 use PhpIntegrator\Parsing\ParserTokenHelper;
 use PhpIntegrator\Parsing\LastExpressionParser;
 
@@ -16,23 +15,15 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserFactory
      */
-    protected function createParserFactoryStub(): ParserFactory
+    private function createParserFactoryStub(): ParserFactory
     {
         return new ParserFactory();
     }
 
     /**
-     * @return ParserFactory
+     * @return PartialParser
      */
-    protected function createPrettyPrinterStub(): PrettyPrinter
-    {
-        return new PrettyPrinter();
-    }
-
-    /**
-     * @return ParserFactory
-     */
-    protected function createPartialParserStub(): PartialParser
+    private function createPartialParserStub(): PartialParser
     {
         return new PartialParser($this->createParserFactoryStub(), new Lexer());
     }
@@ -40,7 +31,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return ParserTokenHelper
      */
-    protected function createParserTokenHelperStub(): ParserTokenHelper
+    private function createParserTokenHelperStub(): ParserTokenHelper
     {
         return new ParserTokenHelper();
     }
@@ -48,7 +39,7 @@ class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
     /**
      * @return LastExpressionParser
      */
-    protected function createLastExpressionParser(): LastExpressionParser
+    private function createLastExpressionParser(): LastExpressionParser
     {
         return new LastExpressionParser(
             $this->createPartialParserStub(),
@@ -86,7 +77,7 @@ SOURCE;
                 // More code here.
             }
 
-            Bar::testProperty
+            Bar::TEST_CONSTANT
 SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
@@ -95,7 +86,47 @@ SOURCE;
         static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
         static::assertSame('Bar', $result->expr->class->toString());
         static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('testProperty', $result->expr->name->name);
+        static::assertSame('TEST_CONSTANT', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSeesDoInClassConstFetchAsClassConstFetch(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            Bar::DO
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        static::assertSame('Bar', $result->expr->class->toString());
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('DO', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSeesNewInClassConstFetchAsClassConstFetch(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            self::NEW
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        static::assertSame('self', $result->expr->class->toString());
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('NEW', $result->expr->name->name);
     }
 
     /**
@@ -135,6 +166,46 @@ SOURCE;
             }
 
             return $this->someProperty
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertSame('this', $result->expr->var->name);
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('someProperty', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStopsAtYieldKeyword(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            yield $this->someProperty
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertSame('this', $result->expr->var->name);
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('someProperty', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStopsAtYieldKeyword2(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            yield from $this->someProperty
 SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);

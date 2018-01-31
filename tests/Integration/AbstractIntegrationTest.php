@@ -45,11 +45,20 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected $container;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     public function setUp()
     {
         $this->container = $this->createTestContainer();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function tearDown()
+    {
+        // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
+        gc_collect_cycles();
     }
 
     /**
@@ -200,6 +209,38 @@ abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
     protected function indexTestFile(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
         $this->indexPath($container, $testPath, $mayFail);
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $path
+     * @param string           $source
+     */
+    protected function indexTestFileWithSource(ContainerBuilder $container, string $path, string $source): void
+    {
+        $stream = new TmpFileStream();
+
+        $sourceCodeStreamReader = new SourceCodeStreamReader(
+            $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
+            $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
+            $stream
+        );
+
+        $indexer = new Indexer(
+            $container->get('requestQueue'),
+            $container->get('fileIndexer'),
+            $container->get('directoryIndexRequestDemuxer'),
+            $container->get('indexFilePruner'),
+            $container->get('pathNormalizer'),
+            $sourceCodeStreamReader,
+            $container->get('directoryIndexableFileIteratorFactory')
+        );
+
+        $stream->set($source);
+
+        $this->indexPathViaIndexer($indexer, $path, true);
+
+        $stream->close();
     }
 
     /**

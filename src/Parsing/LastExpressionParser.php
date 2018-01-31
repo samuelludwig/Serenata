@@ -2,11 +2,13 @@
 
 namespace PhpIntegrator\Parsing;
 
-use LogicException;
+use AssertionError;
 
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
+
+use PhpParser\Node\Stmt\Nop;
 
 /**
  * Parser that attempts to parse the last expression in a string of code.
@@ -95,7 +97,7 @@ final class LastExpressionParser implements Parser
                 if ($token['type'] !== T_START_HEREDOC) {
                     return $i + 1;
                 }
-            } else if ($token['type'] === T_START_HEREDOC) {
+            } elseif ($token['type'] === T_START_HEREDOC) {
                 if (!$isWalkingHeredocStart) {
                     ++$hereDocsOpened;
                     $isWalkingHeredocStart = true;
@@ -183,33 +185,40 @@ final class LastExpressionParser implements Parser
                         $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
 
                         // Subscopes can only exist when e.g. a closure is embedded as an argument to a function call,
-                        // in which case they will be inside parentheses or brackets. If we find a subscope outside these
-                        // simbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
+                        // in which case they will be inside parentheses or brackets. If we find a subscope outside
+                        // these symbols, it means we've moved beyond the call stack to e.g. the end of an if statement.
                         if ($nextTokenType !== T_VARIABLE) {
                             return ++$i;
                         }
                     }
-                } elseif (
-                    $parenthesesOpened === $parenthesesClosed &&
+                } elseif ($parenthesesOpened === $parenthesesClosed &&
                     $squareBracketsOpened === $squareBracketsClosed &&
                     $squiggleBracketsOpened === $squiggleBracketsClosed
                 ) {
                     // NOTE: We may have entered a closure.
-                    if (
-                        in_array($token['type'], $expressionBoundaryTokens) ||
-                        (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) ||
-                        ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON)
-                    ) {
+                    if (in_array($token['type'], $expressionBoundaryTokens)) {
+                        $nextToken = $currentTokenIndex > 0 ? $tokens[$currentTokenIndex - 1] : null;
+                        $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
+
+                        if ($nextTokenType !== T_DOUBLE_COLON) {
+                            return ++$i;
+                        }
+                    } elseif (in_array($code[$i], $expressionBoundaryCharacters, true) && $token['type'] === null) {
+                        return ++$i;
+                    } elseif ($code[$i] === ':' && $token['type'] !== T_DOUBLE_COLON) {
                         return ++$i;
                     } elseif ($token['type'] === T_DOUBLE_COLON) {
-                        // For static class names and things like the self and parent keywords, we won't know when to stop.
-                        // These always appear the start of the call stack, so we know we can stop if we find them.
+                        // For static class names and things like the self and parent keywords, we won't know when to
+                        // stop. These always appear the start of the call stack, so we know we can stop if we find
+                        // them.
                         $startedStaticClassName = true;
                     }
                 }
             }
 
-            if ($startedStaticClassName && !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC])) {
+            if ($startedStaticClassName &&
+                !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC])
+            ) {
                 return ++$i;
             }
         }
@@ -246,7 +255,9 @@ final class LastExpressionParser implements Parser
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
-            throw new LogicException('Error handling is not supported as error recovery will be attempted automatically');
+            throw new AssertionError(
+                'Error handling is not supported as error recovery will be attempted automatically'
+            );
         }
 
         $code = $this->getNormalizedCode($code);
@@ -255,13 +266,11 @@ final class LastExpressionParser implements Parser
         $expression = substr($code, $boundary);
         $expression = trim($expression);
 
-        if ($expression === '') {
-            throw new \PhpParser\Error(
-                'Could not parse last expression for code, the last expression was <<<' . $expression . '>>>'
-            );
+        if ($expression !== '') {
+            $nodes = $this->delegate->parse($expression, $errorHandler);
+        } else {
+            $nodes = [new Nop()];
         }
-
-        $nodes = $this->delegate->parse($expression, $errorHandler);
 
         if (empty($nodes)) {
             throw new \PhpParser\Error(
@@ -283,7 +292,7 @@ final class LastExpressionParser implements Parser
      *
      * @return string
      */
-    protected function getNormalizedCode(string $code): string
+    private function getNormalizedCode(string $code): string
     {
         if (mb_substr(trim($code), 0, 5) !== '<?php') {
             return '<?php ' . $code;

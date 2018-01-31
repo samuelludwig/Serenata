@@ -1,0 +1,8 @@
+<?php
+
+// <INJECTION>
+
+function foo()
+{
+    
+}

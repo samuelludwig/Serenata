@@ -47,7 +47,7 @@ final class GlobalConstantUsageFetchingVisitor extends NameResolver
     *
     * @return bool
     */
-   protected function isConstantExcluded(string $name): bool
+   private function isConstantExcluded(string $name): bool
    {
        return in_array(mb_strtolower($name), ['null', 'true', 'false'], true);
    }

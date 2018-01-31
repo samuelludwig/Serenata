@@ -1,0 +1,41 @@
+imports:
+    - { resource: Autocompletion/ApplicabilityChecking.yml }
+    - { resource: Autocompletion/ApproximateStringMatching.yml }
+    - { resource: Autocompletion/Providers.yml }
+
+parameters:
+
+
+services:
+    defaultAutocompletionPrefixBoundaryTokenRetriever:
+        class: PhpIntegrator\Autocompletion\DefaultAutocompletionPrefixBoundaryTokenRetriever
+
+    docblockAutocompletionPrefixBoundaryTokenRetriever:
+        class: PhpIntegrator\Autocompletion\DocblockAutocompletionPrefixBoundaryTokenRetriever
+        arguments:
+            - '@defaultAutocompletionPrefixBoundaryTokenRetriever'
+
+    defaultAutocompletionPrefixDeterminer:
+        class: PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminer
+        arguments:
+            - '@defaultAutocompletionPrefixBoundaryTokenRetriever'
+
+    docblockAutocompletionPrefixDeterminer:
+        class: PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminer
+        arguments:
+            - '@docblockAutocompletionPrefixBoundaryTokenRetriever'
+
+    levenshteinApproximateStringMatcher:
+        class: PhpIntegrator\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher
+
+    autocompletionApproximateStringMatcher:
+        alias: levenshteinApproximateStringMatcher
+
+    autocompletionSuggestionTypeFormatter:
+        class: PhpIntegrator\Autocompletion\AutocompletionSuggestionTypeFormatter
+
+    functionAutocompletionSuggestionLabelCreator:
+        class: PhpIntegrator\Autocompletion\FunctionAutocompletionSuggestionLabelCreator
+
+    functionAutocompletionSuggestionParanthesesNecessityEvaluator:
+        class: PhpIntegrator\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator

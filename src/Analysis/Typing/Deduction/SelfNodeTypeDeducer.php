@@ -47,7 +47,7 @@ final class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
      *
      * @return string[]
      */
-    protected function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
     {
         $node = new Node\Name('self');
 

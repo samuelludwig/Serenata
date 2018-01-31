@@ -2,6 +2,11 @@ parameters:
 
 
 services:
+    cancelRequestCommand:
+        class: PhpIntegrator\UserInterface\Command\CancelRequestCommand
+        arguments:
+            - '@requestQueue'
+
     initializeCommand:
         class: PhpIntegrator\UserInterface\Command\InitializeCommand
         arguments:
@@ -9,6 +14,11 @@ services:
             - '@managerRegistry'
             - '@indexer'
             - '@cache'
+
+    exitCommand:
+        class: PhpIntegrator\UserInterface\Command\ExitCommand
+        arguments:
+            - '@managerRegistry'
 
     reindexCommand:
         class: PhpIntegrator\UserInterface\Command\ReindexCommand
@@ -92,11 +102,9 @@ services:
         class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
         arguments:
             - '@storage'
-            - '@nodeTypeDeducer'
-            - '@lastExpressionParser'
             - '@sourceCodeStreamReader'
-            - '@positionalNamespaceDeterminer'
             - '@fileIndexer'
+            - '@expressionTypeDeducer'
 
     signatureHelpCommand:
         class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
@@ -112,6 +120,14 @@ services:
             - '@storage'
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'
+
+    autocompleteCommand:
+        class: PhpIntegrator\UserInterface\Command\AutocompleteCommand
+        arguments:
+            - '@autocompletionProvider'
+            - '@sourceCodeStreamReader'
+            - '@storage'
+            - '@fileIndexer'
 
     gotoDefinitionCommand:
         class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand

@@ -6,6 +6,9 @@ use Throwable;
 
 use Ds\Vector;
 
+use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
 use PhpIntegrator\Analysis\ClearableCacheInterface;
 
 use PhpIntegrator\Indexing\ManagerRegistry;
@@ -13,7 +16,7 @@ use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
 
 use PhpIntegrator\UserInterface\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use PhpIntegrator\UserInterface\Command\InvalidArgumentsException;
 
 /**
  * Processes {@see JsonRpcQueueItem}s.
@@ -21,14 +24,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class JsonRpcQueueItemProcessor
 {
     /**
-     * @var ContainerBuilder
+     * @var ContainerInterface
      */
     private $container;
 
     /**
-     * @param ContainerBuilder $container
+     * @param ContainerInterface $container
      */
-    public function __construct(ContainerBuilder $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -41,25 +44,29 @@ class JsonRpcQueueItemProcessor
         $error = null;
         $response = null;
 
-        try {
-            $response = $this->handle($queueItem);
-        } catch (RequestParsingException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-        } catch (Command\InvalidArgumentsException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-        } catch (IncorrectDatabaseVersionException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
-        } catch (\RuntimeException $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
-        } catch (\Throwable $e) {
-            $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                'line'      => $e->getLine(),
-                'file'      => $e->getFile(),
-                'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
-            ]);
+        if (!$queueItem->getIsCancelled()) {
+            try {
+                $response = $this->handle($queueItem);
+            } catch (RequestParsingException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
+            } catch (Command\InvalidArgumentsException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
+            } catch (IncorrectDatabaseVersionException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
+            } catch (\RuntimeException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
+            } catch (\Throwable $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
+                    'line'      => $e->getLine(),
+                    'file'      => $e->getFile(),
+                    'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
+                ]);
+            }
+        } else {
+            $error = new JsonRpcError(JsonRpcErrorCode::REQUEST_CANCELLED, 'Request was cancelled');
         }
 
-        if (/*$response === null &&*/ $error !== null) {
+        if ($error !== null) {
             $response = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
         }
 
@@ -72,10 +79,12 @@ class JsonRpcQueueItemProcessor
      * @param JsonRpcQueueItem $queueItem
      *
      * @throws RequestParsingException
+     * @throws InvalidArgumentsException
+     * @throws Throwable
      *
      * @return JsonRpcResponse|null
      */
-    protected function handle(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    private function handle(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
         $params = $queueItem->getRequest()->getParams();
 
@@ -98,15 +107,13 @@ class JsonRpcQueueItemProcessor
      *
      * @return Command\CommandInterface
      */
-    protected function getCommandByMethod(string $method): Command\CommandInterface
+    private function getCommandByMethod(string $method): Command\CommandInterface
     {
         try {
             return $this->container->get($method . 'Command');
-        } catch (ServiceNotFoundException $e) {
+        } catch (NotFoundExceptionInterface $e) {
             throw new RequestParsingException('Method "' . $method . '" was not found');
         }
-
-        throw new AssertionError('Should not be reached');
     }
 
     /**
@@ -114,7 +121,7 @@ class JsonRpcQueueItemProcessor
      *
      * @return string
      */
-    protected function getCompleteBacktraceFromThrowable(Throwable $throwable): string
+    private function getCompleteBacktraceFromThrowable(Throwable $throwable): string
     {
         $counter = 1;
 
@@ -145,7 +152,7 @@ class JsonRpcQueueItemProcessor
      *
      * @return Vector
      */
-    protected function getThrowableVector(Throwable $throwable): Vector
+    private function getThrowableVector(Throwable $throwable): Vector
     {
         $vector = new Vector();
 
@@ -163,7 +170,7 @@ class JsonRpcQueueItemProcessor
     /**
      * @param string $databaseFile
      */
-    protected function setDatabaseFile(string $databaseFile): void
+    private function setDatabaseFile(string $databaseFile): void
     {
         /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = $this->container->get('managerRegistry');

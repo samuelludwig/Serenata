@@ -15,28 +15,38 @@ class TooltipProviderTest extends AbstractIntegrationTest
      */
     public function testFuncCallContainsAllSections(): void
     {
-        $this->performTooltipTest('FuncCallAllSections.phpt', 435, 440, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
+        $this->performTooltipTest('FuncCallAllSections.phpt', 487, 492, 'Hi! *Bold text* **Italic** ~~Strikethrough~~
 
 # Description
 ## Header
 Hello!
 
 # Parameters
-   |   |   ' . '
---- | --- | ---
-**•&nbsp;$first** | *string* | Testdescription
-**•&nbsp;$second** | *int* | Test
-**•&nbsp;$third** | *\Exception* | Test
+#### • **$first** — *string*
+Testdescription More text on next line.
+
+ Another paragraph.
+
+#### • **$second** — *int*
+Test
+
+#### • **$third** — *\Exception*
+Test
+
 
 # Returns
 *string&#124;bool*
 
 # Throws
-   |   |   ' . '
---- | --- | ---
-•&nbsp;**\Exception** | When something happens
-•&nbsp;**\LogicException** | When something else happens.
-•&nbsp;**\RuntimeException** |  ');
+#### • **\Exception**
+When something happens
+
+#### • **\LogicException**
+When something else happens.
+
+#### • **\RuntimeException**
+(No context available)
+');
     }
 
     /**
@@ -397,10 +407,12 @@ Hello!
         $this->performTooltipTest($fileName, 46, 49, 'This is a summary.
 
 # Parameters
-   |   |   ' . '
---- | --- | ---
-**•&nbsp;$param1** | *int* |  ' . '
-**•&nbsp;$param2** | *bool* |  ' . '
+#### • **$param1** — *int*
+(No documentation available)
+
+#### • **$param2** — *bool*
+(No documentation available)
+
 
 # Returns
 *void*');
@@ -430,7 +442,7 @@ Hello!
      *
      * @return void
      */
-    protected function performTooltipTest(string $fileName, int $start, int $end, string $contents): void
+    private function performTooltipTest(string $fileName, int $start, int $end, string $contents): void
     {
         $path = $this->getPathFor($fileName);
 
@@ -470,7 +482,7 @@ Hello!
      *
      * @return TooltipResult|null
      */
-    protected function getTooltip(Structures\File $file, int $position): ?TooltipResult
+    private function getTooltip(Structures\File $file, int $position): ?TooltipResult
     {
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($file->getPath());
 
@@ -482,7 +494,7 @@ Hello!
      *
      * @return string
      */
-    protected function getPathFor(string $file): string
+    private function getPathFor(string $file): string
     {
         return __DIR__ . '/TooltipProviderTest/' . $file;
     }
