@@ -1,31 +1,31 @@
 ## 3.2.0
 ### Major Changes
-* [Autocompletion is now supported via the `Autocomplete` command](https://gitlab.com/php-integrator/core/issues/43)
-  * Fuzzy matching happens in the core itself. This is necessary to prevent large amounts of relevant suggestions being sent back to the client solely so the client can filter them by itself, which is very taxing on the socket connection, the client, as well as the server itself as it must prepare these results for transmission.
-* [Requests can now be cancelled via the `CancelRequest` command](https://gitlab.com/php-integrator/core/issues/144)
-  * Note that, as the core is synchronous and single-threaded, requests that are already being processed cannot be cancelled. Requests are queued internally before they are processed, so it is still worhtwile to try and cancel requests where applicable (in these cases the core will be able to skip the processing part of the request).
-* [Certain requests are now prioritized internally](https://gitlab.com/php-integrator/core/issues/143)
-  * This means the core can remain responsive to requests such as autocompletion during large indexing operations, such as initial project indexing.
-  * The results of requests may not be entirely accurate as the index is still being updated, but it is an improvement over the previous denial of service until it completed.
-* Performance has improved in several area's, including signature help and tooltips, due to additional internal caching that avoid recomputation
+* [Support autocompletion](https://gitlab.com/php-integrator/core/issues/43)
+  * Fuzzy matching is handled as well. This prevents large amounts of relevant suggestions being sent back to the client that are then filtered out again quickly after, which is very taxing on the socket, the client, as well as the server itself.
+* [Allow cancelling requests](https://gitlab.com/php-integrator/core/issues/144)
+  * As the core is synchronous and single-threaded, requests already being processed cannot be cancelled. However, requests are queued internally, so it is still worthwile to implement this in clients to drop pending requests.
+* [Prioritize latency-sensitive requests](https://gitlab.com/php-integrator/core/issues/143)
+  * As a result, the core can now remain responsive to requests such as autocompletion during large indexing operations, such as initial project indexing. (Note that, during initial indexing, results may not be entirely accurate as the index is still being built.)
 
 ### Other Improvements
-* A new `exit` command was added that allows to request the server to shutdown cleanly
-* Signature help signature labels now include the parameter list as well
-  * These were already retrievable via the actual parameters, but some UI's such as Visual Studio Code and atom-ide-ui don't explicitly show the parameter label separately at the time of writing
-* Tooltip markdown was restructured and no longer uses tables
-  * Tables do not properly support paragraphs, which are commonly used in docblocks, without HTML's `<br>`, which is not supported by some markdown libraries such as `marked`. Additionally, this turned out to improve readability when there is a lot of information.
+* Implement `exit` request to request the server to shutdown safely
+* Improve performance in several area's, including signature help and tooltips, due to additional internal caching that avoid recomputation
+* Reformat tooltip markdown to avoid tables and to improve readability
+  * Tables do not properly support paragraphs without HTML's `<br>`, which is not supported by some markdown libraries such as `marked`.
+* Include parameter list in signature labels in signature help
+  * These were already retrievable via the actual parameters, but some UI's, such as Visual Studio Code and atom-ide-ui, don't explicitly show the parameter label separately at the time of writing.
 
 ### Bugs Fixed
 * [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
-* Fix entity classes being final, resulting in Doctrine not being able to generate proxies for them
+* Fix entities being final, resulting in Doctrine not being able to generate proxies for them
+* Exclude (unusable) variables being assigned to at the requested position when providing a list of local variables
 * Fix wonky docblock types such as `@throws |UnexpectedValueException` causing fatal indexing errors when used in class methods
-* Fetching local variables will no longer include variables that aren't actually available yet at the offset because they are being assigned to
-* Fix same files erroneously being queued for reindexing when their modification date was updated, even if their contents did not change (they were never actually reindexed, but still reevaluated)
+* Fix same files erroneously being queued for reindexing when their modification date was updated, even if their contents did not change
+  * They were never actually reindexed, but still reevaluated.
 
 ### Structural changes (mostly relevant to clients)
 * HTML in docblocks is internally now automatically converted to markdown, so clients can always assume documentation is in markdown format
-  * This is mostly relevant to old code bases and the JetBrains stubs, which use HTML rather than markdown.
+  * This is mostly relevant to old code bases and the JetBrains stubs, which use HTML rather than markdown. Newer code bases should prefer markdown as much as possible.
 
 ## 3.1.0
 ### Major Changes
