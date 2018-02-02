@@ -20,7 +20,7 @@ use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
 /**
- * Handles indexation of PHP code in a single file.
+ * Handles indexing PHP code in a single file.
  *
  * The index only contains "direct" data, meaning that it only contains data that is directly attached to an element.
  * For example, classes will only have their direct members attached in the index. The index will also keep track of
