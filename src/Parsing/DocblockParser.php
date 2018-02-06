@@ -155,15 +155,7 @@ class DocblockParser
         $docblock = is_string($docblock) ? $docblock : null;
 
         if ($docblock) {
-            // Strip off the start and end of the docblock.
-            $docblock = trim($docblock);
-            $docblock = mb_substr($docblock, 2);
-            $docblock = mb_substr($docblock, 0, -2);
-            $docblock = trim($docblock);
-
-            // Remove delimiters at the start of each line.
-            $docblock = preg_replace('/^[\t ]*\**[\t ]*/m', '', $docblock);
-
+            $docblock = $this->stripDocblockDelimiters($docblock);
             $docblock = $this->htmlToMarkdownConverter->convert($docblock);
 
             preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
@@ -243,6 +235,52 @@ class DocblockParser
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockDelimiters(string $docblock): string
+    {
+        $docblock = trim($docblock);
+
+        $docblock = $this->stripDocblockStartDelimiter($docblock);
+        $docblock = $this->stripDocblockEndDelimiter($docblock);
+        $docblock = $this->stripDocblockLineDelimiters($docblock);
+
+        return trim($docblock);
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockStartDelimiter(string $docblock): string
+    {
+        return mb_substr($docblock, 2);
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockEndDelimiter(string $docblock): string
+    {
+        return mb_substr($docblock, 0, -2);
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockLineDelimiters(string $docblock): string
+    {
+        return preg_replace('/^[\t ]*\**[\t ]*/m', '', $docblock);
     }
 
     /**
