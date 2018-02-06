@@ -3,6 +3,7 @@
 namespace PhpIntegrator\Tests\Unit\Parsing;
 
 use PhpIntegrator\DocblockTypeParser\IntDocblockType;
+use PhpIntegrator\DocblockTypeParser\BoolDocblockType;
 use PhpIntegrator\DocblockTypeParser\NullDocblockType;
 use PhpIntegrator\DocblockTypeParser\ClassDocblockType;
 use PhpIntegrator\DocblockTypeParser\StringDocblockType;
@@ -304,6 +305,44 @@ class DocblockParserTest extends AbstractIntegrationTest
         ', [DocblockParser::DESCRIPTION], '');
 
         static::assertSame('This alert("test")', $result['descriptions']['short']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testProperlyDealsWithTabs(): void
+    {
+        $parser = $this->getDocblockParser();
+
+        $result = $parser->parse(
+            "/**\n\t * Summary.\n\t *\n\t * Description.\n\t *\n\t * @param string \$test\n\t *\n\t * @return bool\n\t*/",
+            [
+                DocblockParser::DESCRIPTION,
+                DocblockParser::PARAM_TYPE,
+                DocblockParser::RETURN_VALUE
+            ],
+            ''
+        );
+
+        static::assertSame('Summary.', $result['descriptions']['short']);
+        static::assertSame('Description.', $result['descriptions']['long']);
+
+        static::assertEquals(
+            [
+                '$test' => [
+                    'type'        => new StringDocblockType(),
+                    'description' => null,
+                    'isVariadic'  => false,
+                    'isReference' => false
+                ]
+            ],
+            $result['params']
+        );
+
+        static::assertEquals([
+            'type'        => new BoolDocblockType(),
+            'description' => null
+        ], $result['return']);
     }
 
     /**

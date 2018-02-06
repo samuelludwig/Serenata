@@ -161,9 +161,9 @@ class DocblockParser
             $docblock = mb_substr($docblock, 0, -2);
 
             // Remove the delimiters of the docblock itself at the start of each line, if any.
-            $docblock = preg_replace('/^ +/m', '', $docblock);
+            $docblock = preg_replace('/^[\t ]+/m', '', $docblock);
             $docblock = preg_replace('/^\*+/m', '', $docblock);
-            $docblock = preg_replace('/^ +/m', '', $docblock);
+            $docblock = preg_replace('/^[\t ]+/m', '', $docblock);
             $docblock = trim($docblock);
 
             $docblock = $this->htmlToMarkdownConverter->convert($docblock);
