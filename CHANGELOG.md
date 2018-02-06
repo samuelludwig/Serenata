@@ -1,5 +1,6 @@
 ## 3.2.1
 * Properly handle macOS newlines in docblocks
+* Remove unnecessarily pedantic docblock sanitization
 * Fix docblocks containing tabs instead of spaces not processing properly
 
 ## 3.2.0

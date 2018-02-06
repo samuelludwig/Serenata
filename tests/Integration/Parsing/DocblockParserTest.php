@@ -240,6 +240,28 @@ class DocblockParserTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testParamTagWithMultipleSpaces(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * @param   string     $test    A description.
+             */
+        ', [DocblockParser::PARAM_TYPE], '');
+
+        static::assertEquals([
+            '$test' => [
+                'type'        => new StringDocblockType(),
+                'description' => 'A description.',
+                'isVariadic'  => false,
+                'isReference' => false
+            ]
+        ], $result['params']);
+    }
+
+    /**
+     * @return void
+     */
     public function testReturnTagWithoutType(): void
     {
         $parser = $this->getDocblockParser();
@@ -305,6 +327,48 @@ class DocblockParserTest extends AbstractIntegrationTest
         ', [DocblockParser::DESCRIPTION], '');
 
         static::assertSame('This alert("test")', $result['descriptions']['short']);
+    }
+
+    // /**
+    //  * @return void
+    //  */
+    // public function testCollapsesMultipleSpaces(): void
+    // {
+    //     $result = $this->getDocblockParser()->parse(
+    //         "/**\n\t * Multiple  spaces\t with\t\ttabs.\n\t*/",
+    //         [DocblockParser::DESCRIPTION],
+    //         ''
+    //     );
+    //
+    //     static::assertSame('Multiple spaces with tabs.', $result['descriptions']['short']);
+    // }
+
+    /**
+     * @return void
+     */
+    public function testConvertsWindowsLineEndings(): void
+    {
+        $result = $this->getDocblockParser()->parse(
+            "/**\r\n * Summary\r\n\r\nDescription\r\n\r\nTest\r\n*/",
+            [DocblockParser::DESCRIPTION],
+            ''
+        );
+
+        static::assertSame("Description\n\nTest", $result['descriptions']['long']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testConvertsMacosLineEndings(): void
+    {
+        $result = $this->getDocblockParser()->parse(
+            "/**\r * Summary\r\rDescription\r\rTest\r*/",
+            [DocblockParser::DESCRIPTION],
+            ''
+        );
+
+        static::assertSame("Description\n\nTest", $result['descriptions']['long']);
     }
 
     /**
