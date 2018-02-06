@@ -950,7 +950,7 @@ class DocblockParser
      */
     private function replaceNewlines(string $string, string $replacement): string
     {
-        return str_replace(["\n", "\r\n", PHP_EOL], $replacement, $string);
+        return str_replace(["\n", "\r\n", "\r", "\n\r", PHP_EOL], $replacement, $string);
     }
 
     /**
