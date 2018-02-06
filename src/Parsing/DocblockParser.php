@@ -155,7 +155,7 @@ class DocblockParser
         $docblock = is_string($docblock) ? $docblock : null;
 
         if ($docblock) {
-            // Strip off the start and en of the docblock.
+            // Strip off the start and end of the docblock.
             $docblock = trim($docblock);
             $docblock = mb_substr($docblock, 2);
             $docblock = mb_substr($docblock, 0, -2);
