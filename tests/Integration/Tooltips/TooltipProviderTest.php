@@ -23,9 +23,10 @@ Hello!
 
 # Parameters
 #### • **$first** — *string*
-Testdescription More text on next line.
+Testdescription
+More text on next line.
 
- Another paragraph.
+Another paragraph.
 
 #### • **$second** — *int*
 Test

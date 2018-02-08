@@ -155,17 +155,7 @@ class DocblockParser
         $docblock = is_string($docblock) ? $docblock : null;
 
         if ($docblock) {
-            // Strip off the start and en of the docblock.
-            $docblock = trim($docblock);
-            $docblock = mb_substr($docblock, 2);
-            $docblock = mb_substr($docblock, 0, -2);
-
-            // Remove the delimiters of the docblock itself at the start of each line, if any.
-            $docblock = preg_replace('/^ +/m', '', $docblock);
-            $docblock = preg_replace('/^\*+/m', '', $docblock);
-            $docblock = preg_replace('/^ +/m', '', $docblock);
-            $docblock = trim($docblock);
-
+            $docblock = $this->stripDocblockDelimiters($docblock);
             $docblock = $this->htmlToMarkdownConverter->convert($docblock);
 
             preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
@@ -189,26 +179,16 @@ class DocblockParser
 
                 if (!$tag) {
                     continue;
-                }
-
-                if (!isset($tags[$tag])) {
+                } elseif (!isset($tags[$tag])) {
                     $tags[$tag] = [];
                 }
 
-                $tagValue = substr($docblock, $start, $end - $start);
-                $tagValue = substr($tagValue, strlen($tag));
-                $tagValue = $this->normalizeNewlines($tagValue);
-
-                // Multiple spaces are collapsed, like Markdown and HTML.
-                $tagValue = preg_replace('/ +/', ' ', $tagValue);
-
-                // Newlines are treated as spaces if there is only one (seen as programmatic wrap).
-                $tagValue = preg_replace('/\n(?!\n)/', ' ', $tagValue);
-
-                // Two or more newlines signify a new paragraph, which is maintained.
-                $tagValue = preg_replace('/\n+/', "\n\n", $tagValue);
-
-                $tags[$tag][] = trim($tagValue);
+                $tags[$tag][] = $this->sanitizeText(
+                    substr(
+                        substr($docblock, $start, $end - $start),
+                        strlen($tag)
+                    )
+                );
             }
         }
 
@@ -245,6 +225,52 @@ class DocblockParser
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockDelimiters(string $docblock): string
+    {
+        $docblock = trim($docblock);
+
+        $docblock = $this->stripDocblockStartDelimiter($docblock);
+        $docblock = $this->stripDocblockEndDelimiter($docblock);
+        $docblock = $this->stripDocblockLineDelimiters($docblock);
+
+        return trim($docblock);
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockStartDelimiter(string $docblock): string
+    {
+        return mb_substr($docblock, 2);
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockEndDelimiter(string $docblock): string
+    {
+        return mb_substr($docblock, 0, -2);
+    }
+
+    /**
+     * @param string $docblock
+     *
+     * @return string
+     */
+    private function stripDocblockLineDelimiters(string $docblock): string
+    {
+        return preg_replace('/^[\t ]*\**[\t ]*/m', '', $docblock);
     }
 
     /**
@@ -354,7 +380,7 @@ class DocblockParser
     private function filterParameterTag(string $value, int $partCount): array
     {
         $segments = [];
-        $parts = explode(' ', $value);
+        $parts = preg_split('/[\t ]+/', $value);
 
         while ($partCount--) {
             if (!empty($parts)) {
@@ -441,9 +467,9 @@ class DocblockParser
                     $variableName = mb_substr($variableName, mb_strlen('...'));
                 }
 
-                if (mb_strpos($variableName, '&amp;') === 0) {
+                if (mb_strpos($variableName, '&') === 0) {
                     $isReference = true;
-                    $variableName = mb_substr($variableName, mb_strlen('&amp;'));
+                    $variableName = mb_substr($variableName, mb_strlen('&'));
                 }
 
                 $params[$variableName] = [
@@ -869,39 +895,31 @@ class DocblockParser
                 break; // Found the start of a tag, the summary and description are finished.
             }
 
-            // Remove the opening and closing tags.
-            $line = preg_replace('/^\s*(?:\/)?\*+(?:\/)?/', '', $line);
-            $line = preg_replace('/\s*\*+\/$/', '', $line);
-
-            $line = trim($line);
-
             if ($isReadingSummary && empty($line) && !empty($summary)) {
                 $isReadingSummary = false;
             } elseif ($isReadingSummary) {
-                $summary = empty($summary) ? $line : ($summary . "\n" . $line);
+                $summary .= "\n" . trim($line);
             } else {
-                $description = empty($description) ? $line : ($description . "\n" . $line);
+                $description .= "\n" . trim($line);
             }
         }
 
         return [
             'descriptions' => [
-                'short' => trim($summary, "\n"),
-                'long'  => trim($description, "\n")
+                'short' => $this->sanitizeText($summary),
+                'long'  => $this->sanitizeText($description)
             ]
         ];
     }
 
     /**
-     * Sanitizes text, trimming it and encoding HTML entities.
-     *
      * @param string $text
      *
      * @return string
      */
     private function sanitizeText(string $text): string
     {
-        return trim(htmlentities($text));
+        return trim($this->normalizeNewlines($text));
     }
 
     /**
@@ -914,7 +932,7 @@ class DocblockParser
      */
     private function replaceNewlines(string $string, string $replacement): string
     {
-        return str_replace(["\n", "\r\n", PHP_EOL], $replacement, $string);
+        return str_replace(["\n", "\r\n", "\r", "\n\r", PHP_EOL], $replacement, $string);
     }
 
     /**

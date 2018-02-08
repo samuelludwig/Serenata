@@ -1,3 +1,8 @@
+## 3.2.1
+* Properly handle macOS newlines in docblocks
+* Remove unnecessarily pedantic docblock sanitization
+* Fix docblocks containing tabs instead of spaces not processing properly
+
 ## 3.2.0
 ### Major Changes
 * [Support autocompletion](https://gitlab.com/php-integrator/core/issues/43)
