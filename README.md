@@ -15,10 +15,6 @@
     <a href="https://liberapay.com/Gert-dev/donate">
         <img src="https://img.shields.io/badge/send_coffee_beans-Liberapay-blue.svg?&amp;style=flat">
     </a>
-
-    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ">
-        <img src="https://img.shields.io/badge/send_coffee_beans-PayPal-blue.svg?&amp;style=flat">
-    </a>
 </div>
 
 PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and can retrieve information about your code to clients by communicating over sockets. Clients can use this information to provide various functionalities, such as autocompletion, code navigation and tooltips.
