@@ -9,7 +9,7 @@ Working on the code base but encountered something that seems off, (too) complex
 ## Coding Guidelines
 The code base follows the PSR-2 coding style and the PSR-4 standard for namespacing. If you'd like to make changes, but are not familiar with PSR-2, [PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) is a tool that you can integrate with most IDE's and editors that will show styling problems to you early on.
 
-There is also a `.editorconfig` file in the root of the project. If you don't have an editor that directly supports them, make sure you match its settings to it before you submit the code in a merge request.
+There is also an `.editorconfig` file in the root of the project. If you don't have an editor that directly supports them, make sure you match its settings to it before you submit the code in a merge request.
 
 ## Tests
 Most area's of the code contain either unit tests or integration tests. If you fix a bug with an existing feature or add a new feature, please also provide the appropriate tests for them.
