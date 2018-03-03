@@ -64,6 +64,6 @@ Note that the core was designed primarily as an application and not as a library
 You may also be interested in [other libraries that are part of the php-integrator suite](https://gitlab.com/php-integrator). In the future, more code may be split from the core into proper, separate libraries.
 
 ## Contributing
-See [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
+As this project is inherently large in scope, there is a lot of potential and a lot of area's to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
 
 ![GPLv3 Logo](https://gitlab.com/php-integrator/core/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)
