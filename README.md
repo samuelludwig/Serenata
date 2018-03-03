@@ -1,8 +1,8 @@
 <div align="center">
     <a href="https://gitlab.com/php-integrator/core"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="PHP Integrator" title="PHP Integrator" width="258"></a>
 
-    <h1>PHP Integrator - Core</h1>
-    <h4>A server providing IDE-like features for PHP code bases to clients</h4>
+    <h1>PHP Integrator</h1>
+    <h4>Free and open source server providing code assistance for PHP code</h4>
 
     <a href="https://gitlab.com/php-integrator/core/commits/development">
         <img src="https://gitlab.com/php-integrator/core/badges/development/pipeline.svg">
@@ -17,7 +17,7 @@
     </a>
 </div>
 
-PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and can retrieve information about your code to clients by communicating over sockets. Clients can use this information to provide various functionalities, such as autocompletion, code navigation and tooltips.
+PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
 
 More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/php-integrator/core/wikis/home) as well as [the website](https://php-integrator.github.io/).
 
