@@ -40,8 +40,11 @@ class SocketServer
      *
      * @throws RuntimeException when setting up the server is impossible (e.g. the socket is already in use).
      */
-    public function __construct(int $port, LoopInterface $loop, ConnectionHandlerFactoryInterface $connectionHandlerFactory)
-    {
+    public function __construct(
+        int $port,
+        LoopInterface $loop,
+        ConnectionHandlerFactoryInterface $connectionHandlerFactory
+    ) {
         $this->server = new Server($port, $loop);
 
         $this->connectionMap = new SplObjectStorage();
