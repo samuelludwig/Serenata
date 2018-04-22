@@ -231,15 +231,9 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
             $node instanceof Node\Expr\BinaryOp\LogicalXor
         ) {
             $this->processConditionLogicalOperators($node, $types);
-        } elseif (
-            $node instanceof Node\Expr\BinaryOp\Equal ||
-            $node instanceof Node\Expr\BinaryOp\Identical
-        ) {
+        } elseif ($node instanceof Node\Expr\BinaryOp\Equal || $node instanceof Node\Expr\BinaryOp\Identical) {
             $this->processConditionEqualityOperators($node, $types);
-        } elseif (
-            $node instanceof Node\Expr\BinaryOp\NotEqual ||
-            $node instanceof Node\Expr\BinaryOp\NotIdentical
-        ) {
+        } elseif ($node instanceof Node\Expr\BinaryOp\NotEqual || $node instanceof Node\Expr\BinaryOp\NotIdentical) {
             $this->processConditionInequalityOperators($node, $types);
         } elseif ($this->isExpressionSubjectToTypePossibilities($node)) {
             $this->processConditionBoolean($node, $types);
@@ -358,7 +352,12 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
             foreach ($subTypes as $variable => $typePossibilityMap) {
                 foreach ($typePossibilityMap->getAll() as $subType => $possibility) {
-                    $this->setTypePossibilityForExpression($types, $variable, $subType, TypePossibility::getReverse($possibility));
+                    $this->setTypePossibilityForExpression(
+                        $types,
+                        $variable,
+                        $subType,
+                        TypePossibility::getReverse($possibility)
+                    );
                 }
             }
         }
@@ -376,7 +375,12 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
             if ($node->class instanceof Node\Name) {
                 $key = $this->getExpressionString($node->expr);
 
-                $this->setTypePossibilityForExpression($types, $key, NodeHelpers::fetchClassName($node->class), TypePossibility::TYPE_GUARANTEED);
+                $this->setTypePossibilityForExpression(
+                    $types,
+                    $key,
+                    NodeHelpers::fetchClassName($node->class),
+                    TypePossibility::TYPE_GUARANTEED
+                );
             } else {
                 // This is an expression, we could fetch its return type, but that still won't tell us what
                 // the actual class is, so it's useless at the moment.
@@ -416,8 +420,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
         if (!isset($variableHandlingFunctionTypeMap[$node->name->toString()])) {
             return;
-        } elseif (
-            empty($node->args) ||
+        } elseif (empty($node->args) ||
             $node->args[0]->unpack ||
             !$this->isExpressionSubjectToTypePossibilities($node->args[0]->value)
         ) {
@@ -507,7 +510,9 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
             return true;
         } elseif ($expression instanceof Node\Expr\PropertyFetch && $expression->name instanceof Node\Identifier) {
             return true;
-        } elseif ($expression instanceof Node\Expr\StaticPropertyFetch && $expression->name instanceof Node\Identifier) {
+        } elseif ($expression instanceof Node\Expr\StaticPropertyFetch &&
+            $expression->name instanceof Node\Identifier
+        ) {
             return true;
         }
 
