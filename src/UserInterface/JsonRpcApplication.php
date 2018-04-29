@@ -17,6 +17,13 @@ use React\EventLoop\LoopInterface;
 
 use React\EventLoop\Timer\Timer;
 
+use Symfony\Component\Console\Application;
+
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Application extension that can handle JSON-RPC requests.
  */
@@ -47,28 +54,18 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     public function run()
     {
-        $options = getopt('p:', [
-            'port:'
-        ]);
+        $consoleApplication = new Application('PHP Integrator Core');
+        $consoleApplication
+            ->register('start')
+                ->addOption('port', 'p', InputOption::VALUE_REQUIRED, 'The port to run on', null)
+                ->setCode(\Closure::fromCallable([$this, 'runEventLoop']))
+            ->getApplication()
+            ->setDefaultCommand('start', true)
+            ->run();
 
-        $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
+        $this->setDefaultCommand();
 
-        $this->loop = React\EventLoop\Factory::create();
-
-        try {
-            $this->setupRequestHandlingSocketServer($this->loop, $requestHandlingPort);
-        } catch (RuntimeException $e) {
-            fwrite(STDERR, 'Socket already in use!');
-            return 2;
-        }
-
-        echo "Starting socket server on port {$requestHandlingPort}...\n";
-
-        $this->instantiateRequiredServices($this->getContainer());
-
-        $this->loop->run();
-
-        return 0;
+        parent::run();
     }
 
     /**
@@ -79,6 +76,40 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
         $this->ensurePeriodicQueueProcessingTimerIsInstalled();
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
+    private function runEventLoop(InputInterface $input, OutputInterface $output): int
+    {
+        $requestHandlingPort = $input->getOption('port');
+
+        if ($requestHandlingPort === null) {
+            throw new UnexpectedValueException('A socket port for handling requests must be specified');
+        }
+
+        $this->loop = React\EventLoop\Factory::create();
+
+        $uri = $requestHandlingPort;
+
+        try {
+            $this->setupRequestHandlingSocketServer($this->loop, $uri);
+        } catch (RuntimeException $e) {
+            $output->writeln("<error>Could not bind to socket on URI {$uri}</>");
+            return 2;
+        }
+
+        $output->writeln("<info>Starting server bound to socket on URI {$uri}...</>");
+
+        $this->instantiateRequiredServices($this->getContainer());
+
+        $this->loop->run();
+
+        return 0;
     }
 
     /**
@@ -131,36 +162,18 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     }
 
     /**
-     * @param array $options
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return int
-     */
-    private function getRequestHandlingPortFromOptions(array $options): int
-    {
-        if (isset($options['p'])) {
-            return (int) $options['p'];
-        } elseif (isset($options['port'])) {
-            return (int) $options['port'];
-        }
-
-        throw new UnexpectedValueException('A socket port for handling requests must be specified');
-    }
-
-    /**
      * @param React\EventLoop\LoopInterface $loop
-     * @param int                           $port
+     * @param string                        $uri
      *
      * @throws RuntimeException
      *
      * @return void
      */
-    private function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
+    private function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, string $uri): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
-        $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
+        $requestHandlingSocketServer = new SocketServer($uri, $loop, $connectionHandlerFactory);
 
         $this->loop->addPeriodicTimer(
             self::CYCLE_COLLECTION_FREQUENCY_SECONDS,

@@ -16,7 +16,7 @@ use React\Socket\Connection;
  * This class simply requests a configured factory to create a handler for each new connection and does not handle any
  * communication itself.
  */
-class SocketServer
+final class SocketServer
 {
     /**
      * @var Server
@@ -34,19 +34,18 @@ class SocketServer
     private $connectionHandlerFactory;
 
     /**
-     * @param int                               $port
+     * @param string                            $uri
      * @param LoopInterface                     $loop
      * @param ConnectionHandlerFactoryInterface $connectionHandlerFactory
      *
      * @throws RuntimeException when setting up the server is impossible (e.g. the socket is already in use).
      */
     public function __construct(
-        int $port,
+        string $uri,
         LoopInterface $loop,
         ConnectionHandlerFactoryInterface $connectionHandlerFactory
     ) {
-        $this->server = new Server($port, $loop);
-
+        $this->server = new Server($uri, $loop);
         $this->connectionMap = new SplObjectStorage();
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 
