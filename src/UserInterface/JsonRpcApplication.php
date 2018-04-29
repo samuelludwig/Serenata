@@ -54,8 +54,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     public function run()
     {
-        $consoleApplication = new Application('PHP Integrator Core');
-        $consoleApplication
+        $consoleApplication = (new Application('PHP Integrator Core'))
             ->register('start')
                 ->addOption('port', 'p', InputOption::VALUE_REQUIRED, 'The port to run on', null)
                 ->setCode(\Closure::fromCallable([$this, 'runEventLoop']))
