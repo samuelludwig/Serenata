@@ -1,4 +1,4 @@
-## 3.3.0 (Unreleased)
+## 3.3.0
 * [Autocompletion doesn't work in incomplete foreach](https://gitlab.com/php-integrator/core/issues/176)
 * Support specifying full URI to bind to via `--uri` parameter
   * Specifying only the port is now deprecated and will be removed in 4.0.
