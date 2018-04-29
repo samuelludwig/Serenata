@@ -5,6 +5,8 @@
 // confirmed in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Performance.markdown
 if (function_exists('xdebug_disable')) {
     xdebug_disable();
+
+    echo 'You have the xdebug extension loaded, expect severely degraded performance!' . PHP_EOL;
 }
 
 require __DIR__ . '/Bootstrap.php';

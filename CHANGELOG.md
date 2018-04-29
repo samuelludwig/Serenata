@@ -1,3 +1,6 @@
+## 3.4.0 (Unreleased)
+* Print warning when xdebug extension is loaded as to warn the user
+
 ## 3.3.0
 * [Autocompletion doesn't work in incomplete foreach](https://gitlab.com/php-integrator/core/issues/176)
 * Support specifying full URI to bind to via `--uri` parameter
