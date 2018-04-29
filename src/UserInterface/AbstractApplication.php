@@ -2,15 +2,10 @@
 
 namespace PhpIntegrator\UserInterface;
 
-use PhpIntegrator\Analysis\ClearableCacheInterface;
-
 use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
-
-use PhpIntegrator\Indexing\ManagerRegistry;
 
 use Symfony\Component\Config\FileLocator;
 
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
