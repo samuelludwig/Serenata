@@ -1,8 +1,8 @@
 <div align="center">
     <a href="https://gitlab.com/php-integrator/core"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="PHP Integrator" title="PHP Integrator" width="258"></a>
 
-    <h1>PHP Integrator - Core</h1>
-    <h4>A server providing IDE-like features for PHP code bases to clients</h4>
+    <h1>PHP Integrator</h1>
+    <h4>Free and open source server providing code assistance for PHP code</h4>
 
     <a href="https://gitlab.com/php-integrator/core/commits/development">
         <img src="https://gitlab.com/php-integrator/core/badges/development/pipeline.svg">
@@ -15,13 +15,9 @@
     <a href="https://liberapay.com/Gert-dev/donate">
         <img src="https://img.shields.io/badge/send_coffee_beans-Liberapay-blue.svg?&amp;style=flat">
     </a>
-
-    <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YKTNLZCRHMRTJ">
-        <img src="https://img.shields.io/badge/send_coffee_beans-PayPal-blue.svg?&amp;style=flat">
-    </a>
 </div>
 
-PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and can retrieve information about your code to clients by communicating over sockets. Clients can use this information to provide various functionalities, such as autocompletion, code navigation and tooltips.
+PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
 
 More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/php-integrator/core/wikis/home) as well as [the website](https://php-integrator.github.io/).
 
@@ -49,8 +45,10 @@ composer create-project "php-integrator/core" "php-integrator-core" --prefer-dis
 You can then run it with:
 
 ```sh
-php -d memory_limit=1024M src/Main.php --port=11111
+php -d memory_limit=1024M src/Main.php --uri=tcp://127.0.0.1:11111
 ```
+
+Using `0.0.0.0` as host allows the server to be reachable when located on a different machine, such as across the network or inside a Docker container.
 
 You can select any port you desire, as long as it is not in use on your system.
 
@@ -68,6 +66,6 @@ Note that the core was designed primarily as an application and not as a library
 You may also be interested in [other libraries that are part of the php-integrator suite](https://gitlab.com/php-integrator). In the future, more code may be split from the core into proper, separate libraries.
 
 ## Contributing
-See [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
+As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
 
 ![GPLv3 Logo](https://gitlab.com/php-integrator/core/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)

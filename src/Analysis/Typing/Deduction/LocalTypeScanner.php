@@ -274,7 +274,13 @@ class LocalTypeScanner
         $types = $defaultTypes;
 
         if ($expressionTypeInfo->hasBestMatch()) {
-            $types = $this->getTypesForBestMatchNode($expression, $expressionTypeInfo->getBestMatch(), $file, $code, $offset);
+            $types = $this->getTypesForBestMatchNode(
+                $expression,
+                $expressionTypeInfo->getBestMatch(),
+                $file,
+                $code,
+                $offset
+            );
         }
 
         return $expressionTypeInfo->getTypePossibilityMap()->determineApplicableTypes($types);
