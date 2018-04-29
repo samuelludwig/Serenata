@@ -64,8 +64,6 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
             ->run();
 
         $this->setDefaultCommand();
-
-        parent::run();
     }
 
     /**
