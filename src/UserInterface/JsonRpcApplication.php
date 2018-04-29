@@ -47,22 +47,23 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     public function run()
     {
-        $options = getopt('p:', [
-            'port:'
+        $options = getopt('pu::', [
+            'port::',
+            'uri::'
         ]);
 
-        $requestHandlingPort = $this->getRequestHandlingPortFromOptions($options);
+        $uri = $this->getRequestHandlingUriFromOptions($options);
 
         $this->loop = React\EventLoop\Factory::create();
 
         try {
-            $this->setupRequestHandlingSocketServer($this->loop, $requestHandlingPort);
+            $this->setupRequestHandlingSocketServer($this->loop, $uri);
         } catch (RuntimeException $e) {
-            fwrite(STDERR, 'Socket already in use!');
+            fwrite(STDERR, "Could not bind to socket at URI {$uri}\n");
             return 2;
         }
 
-        echo "Starting socket server on port {$requestHandlingPort}...\n";
+        echo "Starting socket server and binding to URI {$uri}...\n";
 
         $this->instantiateRequiredServices($this->getContainer());
 
@@ -135,32 +136,41 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      *
      * @throws UnexpectedValueException
      *
-     * @return int
+     * @return string
      */
-    private function getRequestHandlingPortFromOptions(array $options): int
+    private function getRequestHandlingUriFromOptions(array $options): string
     {
+        if (isset($options['u'])) {
+            return $options['u'];
+        } elseif (isset($options['uri'])) {
+            return $options['uri'];
+        }
+
+        // TODO: Specifying ports only is deprecated, will be removed in 4.0.
         if (isset($options['p'])) {
             return (int) $options['p'];
         } elseif (isset($options['port'])) {
             return (int) $options['port'];
         }
 
-        throw new UnexpectedValueException('A socket port for handling requests must be specified');
+        throw new UnexpectedValueException(
+            'Missing socket URI (--uri) or port (--port) to listen to for handling requests'
+        );
     }
 
     /**
      * @param React\EventLoop\LoopInterface $loop
-     * @param int                           $port
+     * @param string                        $uri
      *
      * @throws RuntimeException
      *
      * @return void
      */
-    private function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, int $port): void
+    private function setupRequestHandlingSocketServer(React\EventLoop\LoopInterface $loop, string $uri): void
     {
         $connectionHandlerFactory = new JsonRpcConnectionHandlerFactory($this);
 
-        $requestHandlingSocketServer = new SocketServer($port, $loop, $connectionHandlerFactory);
+        $requestHandlingSocketServer = new SocketServer($uri, $loop, $connectionHandlerFactory);
 
         $this->loop->addPeriodicTimer(
             self::CYCLE_COLLECTION_FREQUENCY_SECONDS,

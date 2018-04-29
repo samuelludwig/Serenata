@@ -45,8 +45,10 @@ composer create-project "php-integrator/core" "php-integrator-core" --prefer-dis
 You can then run it with:
 
 ```sh
-php -d memory_limit=1024M src/Main.php --port=11111
+php -d memory_limit=1024M src/Main.php --uri=tcp://127.0.0.1:11111
 ```
+
+Using `0.0.0.0` as host allows the server to be reachable when located on a different machine, such as across the network or inside a Docker container.
 
 You can select any port you desire, as long as it is not in use on your system.
 
