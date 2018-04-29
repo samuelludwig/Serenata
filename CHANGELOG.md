@@ -1,3 +1,6 @@
+## 3.2.2
+* [Autocompletion doesn't work in incomplete foreach](https://gitlab.com/php-integrator/core/issues/176)
+
 ## 3.2.1
 * Properly handle macOS newlines in docblocks
 * Remove unnecessarily pedantic docblock sanitization
