@@ -45,7 +45,7 @@ composer create-project "php-integrator/core" "php-integrator-core" --prefer-dis
 You can then run it with:
 
 ```sh
-php -d memory_limit=1024M src/Main.php --port=11111
+php -d memory_limit=1024M bin/console --port=11111
 ```
 
 You can select any port you desire, as long as it is not in use on your system.

@@ -1,5 +1,6 @@
 ## 3.3.0 (Unreleased)
 * Use Symfony Console for processing command line arguments
+* Add a `bin/console` file for more straightforward starting
 * [Autocompletion doesn't work in incomplete foreach](https://gitlab.com/php-integrator/core/issues/176)
 
 ## 3.2.1
