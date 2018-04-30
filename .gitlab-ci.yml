@@ -22,11 +22,11 @@ stages:
             - vendor/
 
 build:php-7.1:
-    image: php:7.1-alpine
+    image: php:7.1-cli-alpine3.7
     <<: *build-job-shared
 
 build:php-7.2:
-    image: php:7.2-alpine
+    image: php:7.2-cli-alpine3.7
     <<: *build-job-shared
 
 # ----- Test stage
@@ -39,13 +39,13 @@ build:php-7.2:
     <<: *test-run-phpunit
 
 test:php-7.1:
-    image: php:7.1-alpine
+    image: php:7.1-cli-alpine3.7
     <<: *test-job-shared
     dependencies:
         - build:php-7.1
 
 test:php-7.2:
-    image: php:7.2-alpine
+    image: php:7.2-cli-alpine3.7
     <<: *test-job-shared
     dependencies:
         - build:php-7.2
