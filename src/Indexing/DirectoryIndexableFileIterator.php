@@ -10,10 +10,10 @@ use IteratorIterator;
 final class DirectoryIndexableFileIterator extends IteratorIterator
 {
     /**
-     * @param Structures\File $filesInIndex
-     * @param string[]        $paths
-     * @param string[]        $extensionsToIndex
-     * @param string[]        $globsToExclude
+     * @param Structures\File[] $filesInIndex
+     * @param string[]          $paths
+     * @param string[]          $extensionsToIndex
+     * @param string[]          $globsToExclude
      */
     public function __construct(
         array $filesInIndex,
