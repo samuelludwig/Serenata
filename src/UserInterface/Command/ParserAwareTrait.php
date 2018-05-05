@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
 use UnexpectedValueException;
 

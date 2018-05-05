@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Parsing;
+namespace Serenata\Tests\Unit\Parsing;
 
-use PhpIntegrator\Parsing\PartialParser;
-use PhpIntegrator\Parsing\ParserTokenHelper;
-use PhpIntegrator\Parsing\LastExpressionParser;
+use Serenata\Parsing\PartialParser;
+use Serenata\Parsing\ParserTokenHelper;
+use Serenata\Parsing\LastExpressionParser;
 
 use PhpParser\Node;
 use PhpParser\Lexer;

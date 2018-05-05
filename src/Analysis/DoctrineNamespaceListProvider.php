@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 use RuntimeException;
 
 use Doctrine\DBAL\Exception\DriverException;
 
-use PhpIntegrator\Analysis\Conversion\NamespaceConverter;
+use Serenata\Analysis\Conversion\NamespaceConverter;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\ManagerRegistry;
 
 /**
  * Retrieves a list of available classlikes via Doctrine.

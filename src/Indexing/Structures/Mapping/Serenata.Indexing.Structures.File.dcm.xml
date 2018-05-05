@@ -5,42 +5,42 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\File" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="Serenata\Indexing\Structures\File" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
         <field name="path"                  type="string"   nullable="false" length="512" unique="true" />
         <field name="lastIndexedSourceHash" type="string"   nullable="true"  length="255" />
         <field name="indexedOn"             type="datetime" nullable="false" />
 
-        <one-to-many field="constants" target-entity="PhpIntegrator\Indexing\Structures\Constant" mapped-by="file">
+        <one-to-many field="constants" target-entity="Serenata\Indexing\Structures\Constant" mapped-by="file">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileConstants</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="functions" target-entity="PhpIntegrator\Indexing\Structures\Function_" mapped-by="file">
+        <one-to-many field="functions" target-entity="Serenata\Indexing\Structures\Function_" mapped-by="file">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileFunctions</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="classlikes" target-entity="PhpIntegrator\Indexing\Structures\Classlike" mapped-by="file">
+        <one-to-many field="classlikes" target-entity="Serenata\Indexing\Structures\Classlike" mapped-by="file">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileFunctions</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="namespaces" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace" mapped-by="file">
+        <one-to-many field="namespaces" target-entity="Serenata\Indexing\Structures\FileNamespace" mapped-by="file">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileNamespaces</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="metaStaticMethodTypes" target-entity="PhpIntegrator\Indexing\Structures\MetaStaticMethodType" mapped-by="file">
+        <one-to-many field="metaStaticMethodTypes" target-entity="Serenata\Indexing\Structures\MetaStaticMethodType" mapped-by="file">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>fileMetaStaticMethodTypes</region>

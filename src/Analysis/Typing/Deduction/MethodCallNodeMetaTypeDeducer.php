@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\MetadataProviderInterface;
+use Serenata\Analysis\MetadataProviderInterface;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

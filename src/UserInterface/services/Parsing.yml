@@ -25,12 +25,12 @@ services:
             - '@lexer'
 
     parser.metadataAttachingParser:
-        class: PhpIntegrator\Parsing\MetadataAttachingParser
+        class: Serenata\Parsing\MetadataAttachingParser
         arguments:
             - '@parser.phpParser'
 
     parser.cachingParser:
-        class: PhpIntegrator\Parsing\CachingParser
+        class: Serenata\Parsing\CachingParser
         arguments:
             - '@parser.metadataAttachingParser'
 
@@ -38,22 +38,22 @@ services:
         alias: parser.cachingParser
 
     partialParser:
-        class: PhpIntegrator\Parsing\PartialParser
+        class: Serenata\Parsing\PartialParser
         arguments:
             - '@parser.phpParserFactory'
             - '@lexer'
 
     parserTokenHelper:
-        class: PhpIntegrator\Parsing\ParserTokenHelper
+        class: Serenata\Parsing\ParserTokenHelper
 
     lastExpressionParser:
-        class: PhpIntegrator\Parsing\LastExpressionParser
+        class: Serenata\Parsing\LastExpressionParser
         arguments:
             - '@partialParser'
             - '@parserTokenHelper'
 
     docblockHtmlToMarkdownConverterFactory:
-        class: PhpIntegrator\Parsing\DocblockHtmlToMarkdownConverterFactory
+        class: Serenata\Parsing\DocblockHtmlToMarkdownConverterFactory
 
     docblockHtmlToMarkdownConverter:
         class: League\HTMLToMarkdown\HtmlConverter
@@ -62,11 +62,11 @@ services:
             - 'create'
 
     docblockParser:
-        class: PhpIntegrator\Parsing\DocblockParser
+        class: Serenata\Parsing\DocblockParser
         arguments:
             - '@docblockAnalyzer'
             - '@docblockTypeParser'
             - '@docblockHtmlToMarkdownConverter'
 
     docblockTypeParser:
-        class: PhpIntegrator\DocblockTypeParser\DocblockTypeParser
+        class: Serenata\DocblockTypeParser\DocblockTypeParser

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 /**
  * Retrieves tokens that should act as boundary tokens for autocompletion prefixes (the part of the word that is being

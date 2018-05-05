@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis;
+namespace Serenata\Tests\Unit\Analysis;
 
-use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 use PhpParser\Node;
 

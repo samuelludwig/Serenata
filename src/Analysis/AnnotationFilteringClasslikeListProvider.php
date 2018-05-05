@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 /**
  * Retrieves a list of classlikes that are annotations.

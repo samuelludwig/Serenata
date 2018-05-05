@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Structures;
+namespace Serenata\Indexing\Structures;
 
 /**
  * Represents a function-like parameter.

@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
+use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 /**
  * Determines in which class a position (offset) in a file is located.

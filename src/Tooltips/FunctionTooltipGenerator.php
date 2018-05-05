@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
-use PhpIntegrator\PrettyPrinting\ParameterNamePrettyPrinter;
+use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
 
 /**
  * Generates tooltips for functions.

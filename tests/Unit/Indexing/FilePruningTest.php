@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Indexing;
+namespace Serenata\Tests\Unit\Indexing;
 
 use DateTime;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\IndexFilePruner;
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\FileExistenceCheckerInterface;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\IndexFilePruner;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileExistenceCheckerInterface;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class FilePruningTest extends AbstractIntegrationTest
 {

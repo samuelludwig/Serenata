@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
 
-use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 /**
  * Looks for unknown global function names (i.e. used during calls).

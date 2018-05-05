@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\PrettyPrinting;
+namespace Serenata\PrettyPrinting;
 
 /**
  * Pretty prints types.

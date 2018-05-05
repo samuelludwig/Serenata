@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
-use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 /**
  * Looks for unknown global constant names.

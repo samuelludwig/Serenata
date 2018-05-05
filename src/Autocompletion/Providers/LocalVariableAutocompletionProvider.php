@@ -1,26 +1,26 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
 use UnexpectedValueException;
 
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Utility\TextEdit;
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\TextEdit;
+use Serenata\Utility\SourceCodeHelpers;
 
-use PhpIntegrator\Analysis\VariableScanner;
+use Serenata\Analysis\VariableScanner;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestionTypeFormatter;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Provides local variable autocompletion suggestions at a specific location in a file.

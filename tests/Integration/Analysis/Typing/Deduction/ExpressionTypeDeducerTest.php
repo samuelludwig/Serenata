@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Analysis\Typing\Deduction;
+namespace Serenata\Tests\Integration\Analysis\Typing\Deduction;
 
 use ReflectionClass;
 
-use PhpIntegrator\Indexing\FileNotFoundStorageException;
+use Serenata\Indexing\FileNotFoundStorageException;
 
-use PhpIntegrator\UserInterface\Command\DeduceTypesCommand;
+use Serenata\UserInterface\Command\DeduceTypesCommand;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 {

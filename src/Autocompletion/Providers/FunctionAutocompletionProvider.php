@@ -1,19 +1,19 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Analysis\FunctionListProviderInterface;
+use Serenata\Analysis\FunctionListProviderInterface;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestionTypeFormatter;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
-use PhpIntegrator\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
-use PhpIntegrator\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
+use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**
  * Provides function autocompletion suggestions at a specific location in a file.

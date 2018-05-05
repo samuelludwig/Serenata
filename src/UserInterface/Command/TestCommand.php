@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Indexing\StorageVersionChecker;
+use Serenata\Indexing\StorageVersionChecker;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that tests a project to see if it is in a properly usable state.

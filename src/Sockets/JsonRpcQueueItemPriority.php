@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 /**
  * Enumeration of priorities for {@see JsonRpcQueueItem}s.

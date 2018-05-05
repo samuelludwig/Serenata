@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 use ArrayObject;
 use UnexpectedValueException;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
 
 /**
  * Builds a complete structure of data for a classlike, including children and members.

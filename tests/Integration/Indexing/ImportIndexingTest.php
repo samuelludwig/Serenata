@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Tooltips;
+namespace Serenata\Tests\Integration\Tooltips;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

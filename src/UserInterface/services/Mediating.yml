@@ -3,7 +3,7 @@ parameters:
 
 services:
     cacheClearingEventMediator.clearableCache:
-        class: PhpIntegrator\Analysis\ClearableCacheCollection
+        class: Serenata\Analysis\ClearableCacheCollection
         arguments:
             -
                 - '@classlikeExistenceChecker'
@@ -13,74 +13,74 @@ services:
                 - '@fileClasslikeListProvider.cachingDecorator'
 
     cacheClearingEventMediator1:
-        class: PhpIntegrator\Mediating\CacheClearingEventMediator
+        class: Serenata\Mediating\CacheClearingEventMediator
         arguments:
             - '@cacheClearingEventMediator.clearableCache'
             - '@indexer'
-            - !php/const:PhpIntegrator\Indexing\IndexingEventName::INDEXING_SUCCEEDED_EVENT
+            - !php/const:Serenata\Indexing\IndexingEventName::INDEXING_SUCCEEDED_EVENT
 
     cacheClearingEventMediator2:
-        class: PhpIntegrator\Mediating\CacheClearingEventMediator
+        class: Serenata\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:PhpIntegrator\Indexing\IndexingEventName::NAMESPACE_UPDATED
+            - !php/const:Serenata\Indexing\IndexingEventName::NAMESPACE_UPDATED
 
     cacheClearingEventMediator3:
-        class: PhpIntegrator\Mediating\CacheClearingEventMediator
+        class: Serenata\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:PhpIntegrator\Indexing\IndexingEventName::IMPORT_INSERTED
+            - !php/const:Serenata\Indexing\IndexingEventName::IMPORT_INSERTED
 
     constantIndexingConstantRegistryMediator:
-        class: PhpIntegrator\Mediating\ConstantIndexingConstantRegistryMediator
+        class: Serenata\Mediating\ConstantIndexingConstantRegistryMediator
         arguments:
             - '@constantListProvider.registry'
             - '@constantConverter'
             - '@storage.eventEmittingStorage'
 
     functionIndexingFunctionRegistryMediator:
-        class: PhpIntegrator\Mediating\FunctionIndexingFunctionRegistryMediator
+        class: Serenata\Mediating\FunctionIndexingFunctionRegistryMediator
         arguments:
             - '@functionListProvider.registry'
             - '@functionConverter'
             - '@storage.eventEmittingStorage'
 
     classlikeIndexingStructureRegistryMediator:
-        class: PhpIntegrator\Mediating\ClasslikeIndexingStructureRegistryMediator
+        class: Serenata\Mediating\ClasslikeIndexingStructureRegistryMediator
         arguments:
             - '@classlikeListProvider.registry'
             - '@classlikeConverter'
             - '@storage.eventEmittingStorage'
 
     namespaceIndexingNamespaceRegistryMediator:
-        class: PhpIntegrator\Mediating\NamespaceIndexingNamespaceRegistryMediator
+        class: Serenata\Mediating\NamespaceIndexingNamespaceRegistryMediator
         arguments:
             - '@namespaceListProvider.registry'
             - '@namespaceConverter'
             - '@storage.eventEmittingStorage'
 
     workspaceEventConstantRegistryMediator:
-        class: PhpIntegrator\Mediating\WorkspaceEventConstantRegistryMediator
+        class: Serenata\Mediating\WorkspaceEventConstantRegistryMediator
         arguments:
             - '@constantListProvider.registry'
             - '@managerRegistry'
 
     workspaceEventFunctionRegistryMediator:
-        class: PhpIntegrator\Mediating\WorkspaceEventFunctionRegistryMediator
+        class: Serenata\Mediating\WorkspaceEventFunctionRegistryMediator
         arguments:
             - '@functionListProvider.registry'
             - '@managerRegistry'
 
     workspaceEventClasslikeRegistryMediator:
-        class: PhpIntegrator\Mediating\WorkspaceEventStructureRegistryMediator
+        class: Serenata\Mediating\WorkspaceEventStructureRegistryMediator
         arguments:
             - '@classlikeListProvider.registry'
             - '@managerRegistry'
 
     workspaceEventNamespaceRegistryMediator:
-        class: PhpIntegrator\Mediating\WorkspaceEventNamespaceRegistryMediator
+        class: Serenata\Mediating\WorkspaceEventNamespaceRegistryMediator
         arguments:
             - '@namespaceListProvider.registry'
             - '@managerRegistry'

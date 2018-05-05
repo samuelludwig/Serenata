@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 /**
  * Queue item for the JSON RPC application queue.

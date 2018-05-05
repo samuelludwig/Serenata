@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Analysis\NamespaceListProviderInterface;
-use PhpIntegrator\Analysis\FileNamespaceListProviderInterface;
+use Serenata\Analysis\NamespaceListProviderInterface;
+use Serenata\Analysis\FileNamespaceListProviderInterface;
 
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\StorageInterface;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available namespace.

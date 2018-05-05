@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Autocompletion\ApplicabilityChecking\AutocompletionApplicabilityCheckerInterface;
+use Serenata\Autocompletion\ApplicabilityChecking\AutocompletionApplicabilityCheckerInterface;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,

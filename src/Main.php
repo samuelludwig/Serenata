@@ -11,6 +11,6 @@ if (function_exists('xdebug_disable')) {
 
 require __DIR__ . '/Bootstrap.php';
 
-$applicationJsonRpcRequestHandler = new \PhpIntegrator\UserInterface\JsonRpcApplication();
+$applicationJsonRpcRequestHandler = new \Serenata\UserInterface\JsonRpcApplication();
 
 return $applicationJsonRpcRequestHandler->run();

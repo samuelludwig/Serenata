@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Node;
+namespace Serenata\Analysis\Node;
 
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\FunctionListProviderInterface;
+use Serenata\Analysis\FunctionListProviderInterface;
 
 use PhpParser\Node;
 

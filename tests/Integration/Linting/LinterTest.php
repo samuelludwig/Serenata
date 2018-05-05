@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Linting\LintingSettings;
+use Serenata\Linting\LintingSettings;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class LinterTest extends AbstractIntegrationTest
 {

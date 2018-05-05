@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Indexing;
+namespace Serenata\Tests\Unit\Indexing;
 
 use DateTime;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\IndexingEventName;
-use PhpIntegrator\Indexing\EventEmittingStorage;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\IndexingEventName;
+use Serenata\Indexing\EventEmittingStorage;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class EventEmittingStorageTest extends AbstractIntegrationTest
 {

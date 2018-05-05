@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 /**
  * Visitor that queries the nodes for information about available (set) variables.

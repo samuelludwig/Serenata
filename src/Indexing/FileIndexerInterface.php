@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 /**
  * Handles indexation of PHP code in a single file.

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 /**
  * Creates labels for autocompletion suggestions for functions.

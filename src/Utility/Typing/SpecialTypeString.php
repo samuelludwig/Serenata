@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Utility\Typing;
+namespace Serenata\Utility\Typing;
 
 /**
  * Enumeration of string values for special types (that properties, constants, parameters, ...) can have.

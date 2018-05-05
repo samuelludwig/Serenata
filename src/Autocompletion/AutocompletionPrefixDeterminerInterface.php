@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 /**
  * Interface for classes that determine the prefix (the part of the word that is being typed) for autocompletion

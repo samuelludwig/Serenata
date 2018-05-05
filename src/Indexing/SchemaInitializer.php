@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Doctrine\ORM\Tools\SchemaTool;
 
-use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+use Serenata\Indexing\Structures\AccessModifierNameValue;
 
 /**
  * Initializes the database schema.

@@ -8,7 +8,7 @@ parameters:
 
 services:
     parameterDocblockTypeSemanticEqualityChecker:
-        class: PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker
+        class: Serenata\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@classlikeInfoBuilder'

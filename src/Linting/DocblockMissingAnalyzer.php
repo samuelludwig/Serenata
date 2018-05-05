@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
+use Serenata\Analysis\Visiting\OutlineFetchingVisitor;
 
 /**
  * Analyzes code to search for missing docblocks.

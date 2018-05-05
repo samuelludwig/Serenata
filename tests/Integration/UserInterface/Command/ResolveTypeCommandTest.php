@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Indexing\FileNotFoundStorageException;
+use Serenata\Indexing\FileNotFoundStorageException;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class ResolveTypeCommandTest extends AbstractIntegrationTest
 {

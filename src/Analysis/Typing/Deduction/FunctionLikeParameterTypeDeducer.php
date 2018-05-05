@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 

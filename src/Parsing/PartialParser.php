@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Parsing;
+namespace Serenata\Parsing;
 
 use AssertionError;
 
-use PhpIntegrator\Parsing\Node\Expr;
+use Serenata\Parsing\Node\Expr;
 
 use PhpParser\Node;
 use PhpParser\Lexer;
@@ -95,11 +95,11 @@ final class PartialParser implements Parser
     private function tryParseWithKeywordCorrection(string $code): ?array
     {
         if (mb_strrpos($code, 'self') === (mb_strlen($code) - mb_strlen('self'))) {
-            return [new \PhpIntegrator\Parsing\Node\Keyword\Self_()];
+            return [new \Serenata\Parsing\Node\Keyword\Self_()];
         } elseif (mb_strrpos($code, 'static') === (mb_strlen($code) - mb_strlen('static'))) {
-            return [new \PhpIntegrator\Parsing\Node\Keyword\Static_()];
+            return [new \Serenata\Parsing\Node\Keyword\Static_()];
         } elseif (mb_strrpos($code, 'parent') === (mb_strlen($code) - mb_strlen('parent'))) {
-            return [new \PhpIntegrator\Parsing\Node\Keyword\Parent_()];
+            return [new \Serenata\Parsing\Node\Keyword\Parent_()];
         }
 
         return null;

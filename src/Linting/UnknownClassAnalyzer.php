@@ -1,22 +1,22 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeExistenceCheckerInterface;
+use Serenata\Analysis\ClasslikeExistenceCheckerInterface;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Resolving\FileTypeResolverInterface;
+use Serenata\Analysis\Typing\Resolving\FileTypeResolverInterface;
 
-use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\ClassUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 /**
  * Looks for unknown class names.

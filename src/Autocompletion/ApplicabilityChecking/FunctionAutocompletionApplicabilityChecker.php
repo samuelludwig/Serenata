@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApplicabilityChecking;
+namespace Serenata\Autocompletion\ApplicabilityChecking;
 
 use PhpParser\Node;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
+use Serenata\Analysis\NodeAtOffsetLocatorResult;
 
 /**
  * Checks if function autocompletion applies for a specific node.

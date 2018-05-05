@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Structures;
+namespace Serenata\Indexing\Structures;
 
 /**
  * Represents information about a type that a structural element can have.

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
 /**
  * Generates tooltips for properties.

@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Autocompletion\ApproximateStringMatching;
+namespace Serenata\Tests\Unit\Autocompletion\ApproximateStringMatching;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher;
+use Serenata\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher;
 
 class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCase
 {

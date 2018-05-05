@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\SourceCodeReading;
+namespace Serenata\Analysis\SourceCodeReading;
 
 /**
  * Factory that creates instances of {@see FileSourceCodeFileReader}.

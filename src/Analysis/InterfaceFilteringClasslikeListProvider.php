@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Indexing\Structures\ClasslikeTypeNameValue;
+use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
 /**
  * Retrieves a list of classlikes that are interfaces.

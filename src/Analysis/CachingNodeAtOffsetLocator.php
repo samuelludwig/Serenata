@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 /**
  * Caching locator that delegates to another object and caches the result.

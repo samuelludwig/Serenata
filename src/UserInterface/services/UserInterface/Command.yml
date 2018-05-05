@@ -3,12 +3,12 @@ parameters:
 
 services:
     cancelRequestCommand:
-        class: PhpIntegrator\UserInterface\Command\CancelRequestCommand
+        class: Serenata\UserInterface\Command\CancelRequestCommand
         arguments:
             - '@requestQueue'
 
     initializeCommand:
-        class: PhpIntegrator\UserInterface\Command\InitializeCommand
+        class: Serenata\UserInterface\Command\InitializeCommand
         arguments:
             - '@schemaInitializer'
             - '@managerRegistry'
@@ -16,30 +16,30 @@ services:
             - '@cache'
 
     exitCommand:
-        class: PhpIntegrator\UserInterface\Command\ExitCommand
+        class: Serenata\UserInterface\Command\ExitCommand
         arguments:
             - '@managerRegistry'
 
     reindexCommand:
-        class: PhpIntegrator\UserInterface\Command\ReindexCommand
+        class: Serenata\UserInterface\Command\ReindexCommand
         arguments:
             - '@indexer'
 
     echoResponseCommand:
-        class: PhpIntegrator\UserInterface\Command\EchoResponseCommand
+        class: Serenata\UserInterface\Command\EchoResponseCommand
 
     vacuumCommand:
-        class: PhpIntegrator\UserInterface\Command\VacuumCommand
+        class: Serenata\UserInterface\Command\VacuumCommand
         arguments:
             - '@indexFilePruner'
 
     testCommand:
-        class: PhpIntegrator\UserInterface\Command\TestCommand
+        class: Serenata\UserInterface\Command\TestCommand
         arguments:
             - '@storageVersionChecker'
 
     tooltipCommand:
-        class: PhpIntegrator\UserInterface\Command\TooltipCommand
+        class: Serenata\UserInterface\Command\TooltipCommand
         arguments:
             - '@storage'
             - '@tooltipProvider'
@@ -47,42 +47,42 @@ services:
             - '@fileIndexer'
 
     classListCommand:
-        class: PhpIntegrator\UserInterface\Command\ClassListCommand
+        class: Serenata\UserInterface\Command\ClassListCommand
         arguments:
             - '@storage'
             - '@classlikeListProvider'
             - '@fileClasslikeListProvider.instance'
 
     classInfoCommand:
-        class: PhpIntegrator\UserInterface\Command\ClassInfoCommand
+        class: Serenata\UserInterface\Command\ClassInfoCommand
         arguments:
             - '@typeAnalyzer'
             - '@classlikeInfoBuilder'
 
     globalFunctionsCommand:
-        class: PhpIntegrator\UserInterface\Command\GlobalFunctionsCommand
+        class: Serenata\UserInterface\Command\GlobalFunctionsCommand
         arguments:
             - '@functionListProvider'
 
     globalConstantsCommand:
-        class: PhpIntegrator\UserInterface\Command\GlobalConstantsCommand
+        class: Serenata\UserInterface\Command\GlobalConstantsCommand
         arguments:
             - '@constantListProvider'
 
     resolveTypeCommand:
-        class: PhpIntegrator\UserInterface\Command\ResolveTypeCommand
+        class: Serenata\UserInterface\Command\ResolveTypeCommand
         arguments:
             - '@storage'
             - '@structureAwareNameResolverFactory'
 
     localizeTypeCommand:
-        class: PhpIntegrator\UserInterface\Command\LocalizeTypeCommand
+        class: Serenata\UserInterface\Command\LocalizeTypeCommand
         arguments:
             - '@storage'
             - '@positionalNameLocalizerFactory'
 
     lintCommand:
-        class: PhpIntegrator\UserInterface\Command\LintCommand
+        class: Serenata\UserInterface\Command\LintCommand
         arguments:
             - '@storage'
             - '@sourceCodeStreamReader'
@@ -90,7 +90,7 @@ services:
             - '@fileIndexer'
 
     availableVariablesCommand:
-        class: PhpIntegrator\UserInterface\Command\AvailableVariablesCommand
+        class: Serenata\UserInterface\Command\AvailableVariablesCommand
         arguments:
             - '@variableScanner'
             - '@sourceCodeStreamReader'
@@ -99,7 +99,7 @@ services:
             - '@fileIndexer'
 
     deduceTypesCommand:
-        class: PhpIntegrator\UserInterface\Command\DeduceTypesCommand
+        class: Serenata\UserInterface\Command\DeduceTypesCommand
         arguments:
             - '@storage'
             - '@sourceCodeStreamReader'
@@ -107,7 +107,7 @@ services:
             - '@expressionTypeDeducer'
 
     signatureHelpCommand:
-        class: PhpIntegrator\UserInterface\Command\SignatureHelpCommand
+        class: Serenata\UserInterface\Command\SignatureHelpCommand
         arguments:
             - '@storage'
             - '@signatureHelpRetriever'
@@ -115,14 +115,14 @@ services:
             - '@fileIndexer'
 
     namespaceListCommand:
-        class: PhpIntegrator\UserInterface\Command\NamespaceListCommand
+        class: Serenata\UserInterface\Command\NamespaceListCommand
         arguments:
             - '@storage'
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'
 
     autocompleteCommand:
-        class: PhpIntegrator\UserInterface\Command\AutocompleteCommand
+        class: Serenata\UserInterface\Command\AutocompleteCommand
         arguments:
             - '@autocompletionProvider'
             - '@sourceCodeStreamReader'
@@ -130,7 +130,7 @@ services:
             - '@fileIndexer'
 
     gotoDefinitionCommand:
-        class: PhpIntegrator\UserInterface\Command\GotoDefinitionCommand
+        class: Serenata\UserInterface\Command\GotoDefinitionCommand
         arguments:
             - '@storage'
             - '@definitionLocator'

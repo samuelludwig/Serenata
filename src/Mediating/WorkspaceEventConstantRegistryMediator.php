@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\ConstantListRegistry;
+use Serenata\Analysis\ConstantListRegistry;
 
-use PhpIntegrator\Indexing\WorkspaceEventName;
+use Serenata\Indexing\WorkspaceEventName;
 
 /**
  * Mediator that updates the constant registry when workspace events happen.

@@ -3,7 +3,7 @@ parameters:
 
 services:
     docblockCorrectnessAnalyzerFactory:
-        class: PhpIntegrator\Linting\DocblockCorrectnessAnalyzerFactory
+        class: Serenata\Linting\DocblockCorrectnessAnalyzerFactory
         arguments:
             - '@parameterDocblockTypeSemanticEqualityChecker'
             - '@docblockParser'
@@ -11,7 +11,7 @@ services:
             - '@docblockAnalyzer'
 
     unknownClassAnalyzerFactory:
-        class: PhpIntegrator\Linting\UnknownClassAnalyzerFactory
+        class: Serenata\Linting\UnknownClassAnalyzerFactory
         arguments:
             - '@classlikeExistenceChecker'
             - '@structureAwareNameResolverFactory'
@@ -19,36 +19,36 @@ services:
             - '@docblockParser'
 
     unknownGlobalConstantAnalyzerFactory:
-        class: PhpIntegrator\Linting\UnknownGlobalConstantAnalyzerFactory
+        class: Serenata\Linting\UnknownGlobalConstantAnalyzerFactory
         arguments:
             - '@globalConstantExistenceChecker'
 
     unknownGlobalFunctionAnalyzerFactory:
-        class: PhpIntegrator\Linting\UnknownGlobalFunctionAnalyzerFactory
+        class: Serenata\Linting\UnknownGlobalFunctionAnalyzerFactory
         arguments:
             - '@globalFunctionExistenceChecker'
 
     unknownMemberAnalyzerFactory:
-        class: PhpIntegrator\Linting\UnknownMemberAnalyzerFactory
+        class: Serenata\Linting\UnknownMemberAnalyzerFactory
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@typeAnalyzer'
 
     unusedUseStatementAnalyzerFactory:
-        class: PhpIntegrator\Linting\UnusedUseStatementAnalyzerFactory
+        class: Serenata\Linting\UnusedUseStatementAnalyzerFactory
         arguments:
             - '@typeAnalyzer'
             - '@docblockParser'
 
     docblockMissingAnalyzerFactory:
-        class: PhpIntegrator\Linting\DocblockMissingAnalyzerFactory
+        class: Serenata\Linting\DocblockMissingAnalyzerFactory
         arguments:
             - '@typeAnalyzer'
             - '@classlikeInfoBuilder'
 
     linter:
-        class: PhpIntegrator\Linting\Linter
+        class: Serenata\Linting\Linter
         arguments:
             - '@parser'
             - '@docblockCorrectnessAnalyzerFactory'

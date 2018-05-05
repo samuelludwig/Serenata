@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\FileIndexerInterface;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileIndexerInterface;
 
-use PhpIntegrator\Linting\Linter;
-use PhpIntegrator\Linting\LintingSettings;
+use Serenata\Linting\Linter;
+use Serenata\Linting\LintingSettings;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Command that lints a file for various problems.

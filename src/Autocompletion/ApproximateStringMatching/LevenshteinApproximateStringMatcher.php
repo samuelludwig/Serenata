@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApproximateStringMatching;
+namespace Serenata\Autocompletion\ApproximateStringMatching;
 
 /**
  * Perform approximate string matching using the {@see levenshtein} algorithm and function.

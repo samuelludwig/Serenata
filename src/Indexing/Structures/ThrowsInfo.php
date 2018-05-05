@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Structures;
+namespace Serenata\Indexing\Structures;
 
 /**
  * Represents information about an exception that can be thrown by a function-like structural element.

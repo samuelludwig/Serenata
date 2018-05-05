@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\NameQualificationUtilities\NameKind;
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use Serenata\NameQualificationUtilities\NameKind;
+use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
 
 /**
  * Name resolver that can resolve docblock names to their FQCN.

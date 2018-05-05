@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 /**
  * Delegates classlike existence checking to another object and adds a caching wrapper.

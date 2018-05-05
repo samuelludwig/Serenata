@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Structures;
+namespace Serenata\Indexing\Structures;
 
 /**
  * Contains common properties for constant-like structural elements.

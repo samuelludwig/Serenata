@@ -3,11 +3,11 @@ parameters:
 
 services:
     sourceCodeStreamReader:
-        class: PhpIntegrator\Utility\SourceCodeStreamReader
+        class: Serenata\Utility\SourceCodeStreamReader
         arguments:
             - '@fileSourceCodeFileReader.fileReaderFactory'
             - '@fileSourceCodeFileReader.streamReaderFactory'
             - '@stdinStream'
 
     stdinStream:
-        class: PhpIntegrator\Utility\StdinStream
+        class: Serenata\Utility\StdinStream

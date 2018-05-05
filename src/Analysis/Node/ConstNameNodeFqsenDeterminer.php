@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Node;
+namespace Serenata\Analysis\Node;
 
 use AssertionError;
 
-use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 

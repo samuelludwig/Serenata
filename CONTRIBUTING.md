@@ -2,12 +2,12 @@
 A PHP static analyzer and server on top of that are both projects with a rather large scope. As such, pull or merge requests are most welcome to improve any area that you'd like.
 
 ## What Should I Do?
-If you don't have any itch of your own to scratch, [the issue list](https://gitlab.com/php-integrator/core/issues) provides an overview of open issues and feature requests that could benefit from new development.
+If you don't have any itch of your own to scratch, [the issue list](https://gitlab.com/Serenata/Serenata/issues) provides an overview of open issues and feature requests that could benefit from new development.
 
 Relatedly, there may also be improvements [in the Atom packages](https://github.com/php-integrator) that require work in the core itself.
 
 ## But I Need Help!
-Working on the code base but encountered something that seems off, (too) complex, or you're not sure what direction to take? Just reply to the relevant issue or [open a new one](https://gitlab.com/php-integrator/core/issues/new) in order to spark a discussion or get a maintainer to guide you through the process! _(Note that the time it takes for a reply to appear may vary, due to most maintainers working a voluntary basis and in their spare time.)_
+Working on the code base but encountered something that seems off, (too) complex, or you're not sure what direction to take? Just reply to the relevant issue or [open a new one](https://gitlab.com/Serenata/Serenata/issues/new) in order to spark a discussion or get a maintainer to guide you through the process! _(Note that the time it takes for a reply to appear may vary, due to most maintainers working a voluntary basis and in their spare time.)_
 
 ## Coding Guidelines
 The code base follows the PSR-2 coding style and the PSR-4 standard for namespacing. If you'd like to make changes, but are not familiar with PSR-2, [PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) is a tool that you can integrate with most IDE's and editors that will show styling problems to you early on.

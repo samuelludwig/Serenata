@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 /**
  * Factory that produces instances of {@see UnknownGlobalConstantAnalyzer}.

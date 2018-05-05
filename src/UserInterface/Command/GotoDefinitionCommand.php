@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\GotoDefinition\DefinitionLocator;
-use PhpIntegrator\GotoDefinition\GotoDefinitionResult;
+use Serenata\GotoDefinition\DefinitionLocator;
+use Serenata\GotoDefinition\GotoDefinitionResult;
 
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\FileIndexerInterface;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileIndexerInterface;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Allows navigating to the definition of a structural element by returning the location of its definition.

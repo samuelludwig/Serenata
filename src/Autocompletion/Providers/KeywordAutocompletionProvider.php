@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Provides keyword autocompletion suggestions at a specific location in a file.

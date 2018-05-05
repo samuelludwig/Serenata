@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\SourceCodeReading;
+namespace Serenata\Analysis\SourceCodeReading;
 
 /**
  * Source code reader that reads the source code for a file from a stream.

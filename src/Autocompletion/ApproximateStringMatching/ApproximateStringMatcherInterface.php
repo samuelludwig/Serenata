@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApproximateStringMatching;
+namespace Serenata\Autocompletion\ApproximateStringMatching;
 
 /**
  * Interface for classes that can perform approximate string matching.

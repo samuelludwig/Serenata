@@ -6,12 +6,12 @@ parameters:
 
 services:
     fileNamespaceProvider.storageBackend:
-        class: PhpIntegrator\Analysis\StorageFileNamespaceProvider
+        class: Serenata\Analysis\StorageFileNamespaceProvider
         arguments:
             - '@storage'
 
     fileNamespaceProvider.cachingFileNamespaceProvider:
-        class: PhpIntegrator\Analysis\CachingFileNamespaceProvider
+        class: Serenata\Analysis\CachingFileNamespaceProvider
         arguments:
             - '@fileNamespaceProvider.storageBackend'
 
@@ -22,17 +22,17 @@ services:
         alias: fileNamespaceProvider.cachingFileNamespaceProvider
 
     positionalNamespaceDeterminer:
-        class: PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminer
+        class: Serenata\NameQualificationUtilities\PositionalNamespaceDeterminer
         arguments:
             - '@fileNamespaceProvider'
 
     positionalNameResolverFactory:
-        class: PhpIntegrator\NameQualificationUtilities\PositionalNameResolverFactory
+        class: Serenata\NameQualificationUtilities\PositionalNameResolverFactory
         arguments:
             - '@positionalNamespaceDeterminer'
 
     structureAwareNameResolverFactory.structureAwareNameResolverBackend:
-        class: PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactory
+        class: Serenata\NameQualificationUtilities\StructureAwareNameResolverFactory
         arguments:
             - '@positionalNameResolverFactory'
             - '@positionalNamespaceDeterminer'
@@ -40,13 +40,13 @@ services:
             - '@globalFunctionExistenceChecker'
 
     structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend:
-        class: PhpIntegrator\Analysis\SpecialNameIgnoringPositionalNameResolverFactory
+        class: Serenata\Analysis\SpecialNameIgnoringPositionalNameResolverFactory
         arguments:
             - '@structureAwareNameResolverFactory.structureAwareNameResolverBackend'
             - '@typeAnalyzer'
 
     structureAwareNameResolverFactory.docblockPositionalNameResolverBackend:
-        class: PhpIntegrator\Analysis\DocblockPositionalNameResolverFactory
+        class: Serenata\Analysis\DocblockPositionalNameResolverFactory
         arguments:
             - '@structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend'
             - '@typeAnalyzer'
@@ -55,42 +55,42 @@ services:
         alias: structureAwareNameResolverFactory.docblockPositionalNameResolverBackend
 
     variableScanner:
-        class: PhpIntegrator\Analysis\VariableScanner
+        class: Serenata\Analysis\VariableScanner
 
     typeAnalyzer:
-        class: PhpIntegrator\Analysis\Typing\TypeAnalyzer
+        class: Serenata\Analysis\Typing\TypeAnalyzer
 
     docblockAnalyzer:
-        class: PhpIntegrator\Analysis\DocblockAnalyzer
+        class: Serenata\Analysis\DocblockAnalyzer
 
     constantConverter:
-        class: PhpIntegrator\Analysis\Conversion\ConstantConverter
+        class: Serenata\Analysis\Conversion\ConstantConverter
 
     classlikeConstantConverter:
-        class: PhpIntegrator\Analysis\Conversion\ClasslikeConstantConverter
+        class: Serenata\Analysis\Conversion\ClasslikeConstantConverter
         arguments:
             - '@constantConverter'
 
     propertyConverter:
-        class: PhpIntegrator\Analysis\Conversion\PropertyConverter
+        class: Serenata\Analysis\Conversion\PropertyConverter
 
     classlikeConverter:
-        class: PhpIntegrator\Analysis\Conversion\ClasslikeConverter
+        class: Serenata\Analysis\Conversion\ClasslikeConverter
 
     functionConverter:
-        class: PhpIntegrator\Analysis\Conversion\FunctionConverter
+        class: Serenata\Analysis\Conversion\FunctionConverter
 
     methodConverter:
-        class: PhpIntegrator\Analysis\Conversion\MethodConverter
+        class: Serenata\Analysis\Conversion\MethodConverter
 
     namespaceConverter:
-        class: PhpIntegrator\Analysis\Conversion\NamespaceConverter
+        class: Serenata\Analysis\Conversion\NamespaceConverter
 
     fileClasslikeListProvider.instance:
         alias: classlikeListProvider.doctrineBackend
 
     fileClasslikeListProvider.cachingDecorator:
-        class: PhpIntegrator\Analysis\Typing\FileClasslikeListProviderCachingDecorator
+        class: Serenata\Analysis\Typing\FileClasslikeListProviderCachingDecorator
         arguments:
             - '@fileClasslikeListProvider.instance'
 
@@ -101,35 +101,35 @@ services:
         alias: namespaceListProvider.doctrineBackend
 
     filePositionClasslikeDeterminer:
-        class: PhpIntegrator\Analysis\FilePositionClasslikeDeterminer
+        class: Serenata\Analysis\FilePositionClasslikeDeterminer
         arguments:
             - '@fileClasslikeListProvider'
 
     inheritanceResolver:
-        class: PhpIntegrator\Analysis\Relations\InheritanceResolver
+        class: Serenata\Analysis\Relations\InheritanceResolver
         arguments:
             - '@docblockAnalyzer'
             - '@typeAnalyzer'
 
     interfaceImplementationResolver:
-        class: PhpIntegrator\Analysis\Relations\InterfaceImplementationResolver
+        class: Serenata\Analysis\Relations\InterfaceImplementationResolver
         arguments:
             - '@docblockAnalyzer'
             - '@typeAnalyzer'
 
     traitUsageResolver:
-        class: PhpIntegrator\Analysis\Relations\TraitUsageResolver
+        class: Serenata\Analysis\Relations\TraitUsageResolver
         arguments:
             - '@docblockAnalyzer'
             - '@typeAnalyzer'
 
     classlikeExistenceChecker.doctrine:
-        class: PhpIntegrator\Analysis\DoctrineClasslikeExistenceChecker
+        class: Serenata\Analysis\DoctrineClasslikeExistenceChecker
         arguments:
             - '@managerRegistry'
 
     classlikeExistenceChecker.arrayCachingDecorator:
-        class: PhpIntegrator\Analysis\ArrayCachingClasslikeExistenceChecker
+        class: Serenata\Analysis\ArrayCachingClasslikeExistenceChecker
         arguments:
             - '@classlikeExistenceChecker.doctrine'
 
@@ -137,12 +137,12 @@ services:
         alias: classlikeExistenceChecker.arrayCachingDecorator
 
     globalFunctionExistenceChecker.doctrine:
-        class: PhpIntegrator\Analysis\DoctrineGlobalFunctionExistenceChecker
+        class: Serenata\Analysis\DoctrineGlobalFunctionExistenceChecker
         arguments:
             - '@managerRegistry'
 
     globalFunctionExistenceChecker.arrayCachingDecorator:
-        class: PhpIntegrator\Analysis\ArrayCachingGlobalFunctionExistenceChecker
+        class: Serenata\Analysis\ArrayCachingGlobalFunctionExistenceChecker
         arguments:
             - '@globalFunctionExistenceChecker.doctrine'
 
@@ -150,12 +150,12 @@ services:
         alias: globalFunctionExistenceChecker.arrayCachingDecorator
 
     globalConstantExistenceChecker.doctrine:
-        class: PhpIntegrator\Analysis\DoctrineGlobalConstantExistenceChecker
+        class: Serenata\Analysis\DoctrineGlobalConstantExistenceChecker
         arguments:
             - '@managerRegistry'
 
     globalConstantExistenceChecker.arrayCachingDecorator:
-        class: PhpIntegrator\Analysis\ArrayCachingGlobalConstantExistenceChecker
+        class: Serenata\Analysis\ArrayCachingGlobalConstantExistenceChecker
         arguments:
             - '@globalConstantExistenceChecker.doctrine'
 
@@ -163,13 +163,13 @@ services:
         alias: globalConstantExistenceChecker.arrayCachingDecorator
 
     functionListProvider.doctrineBackend:
-        class: PhpIntegrator\Analysis\DoctrineFunctionListProvider
+        class: Serenata\Analysis\DoctrineFunctionListProvider
         arguments:
             - '@functionConverter'
             - '@managerRegistry'
 
     functionListProvider.registry:
-        class: PhpIntegrator\Analysis\FunctionListRegistry
+        class: Serenata\Analysis\FunctionListRegistry
         arguments:
             - '@functionListProvider.doctrineBackend'
 
@@ -177,13 +177,13 @@ services:
         alias: functionListProvider.registry
 
     constantListProvider.doctrineBackend:
-        class: PhpIntegrator\Analysis\DoctrineConstantListProvider
+        class: Serenata\Analysis\DoctrineConstantListProvider
         arguments:
             - '@constantConverter'
             - '@managerRegistry'
 
     constantListProvider.registry:
-        class: PhpIntegrator\Analysis\ConstantListRegistry
+        class: Serenata\Analysis\ConstantListRegistry
         arguments:
             - '@constantListProvider.doctrineBackend'
 
@@ -191,13 +191,13 @@ services:
         alias: constantListProvider.registry
 
     classlikeListProvider.doctrineBackend:
-        class: PhpIntegrator\Analysis\DoctrineClasslikeListProvider
+        class: Serenata\Analysis\DoctrineClasslikeListProvider
         arguments:
             - '@classlikeConverter'
             - '@managerRegistry'
 
     classlikeListProvider.registry:
-        class: PhpIntegrator\Analysis\ClasslikeListRegistry
+        class: Serenata\Analysis\ClasslikeListRegistry
         arguments:
             - '@classlikeListProvider.doctrineBackend'
 
@@ -205,33 +205,33 @@ services:
         alias: classlikeListProvider.registry
 
     annotationFilteringClasslikeListProvider:
-        class: PhpIntegrator\Analysis\AnnotationFilteringClasslikeListProvider
+        class: Serenata\Analysis\AnnotationFilteringClasslikeListProvider
         arguments:
             - '@classlikeListProvider'
 
     classFilteringClasslikeListProvider:
-        class: PhpIntegrator\Analysis\ClassFilteringClasslikeListProvider
+        class: Serenata\Analysis\ClassFilteringClasslikeListProvider
         arguments:
             - '@classlikeListProvider'
 
     interfaceFilteringClasslikeListProvider:
-        class: PhpIntegrator\Analysis\InterfaceFilteringClasslikeListProvider
+        class: Serenata\Analysis\InterfaceFilteringClasslikeListProvider
         arguments:
             - '@classlikeListProvider'
 
     traitFilteringClasslikeListProvider:
-        class: PhpIntegrator\Analysis\TraitFilteringClasslikeListProvider
+        class: Serenata\Analysis\TraitFilteringClasslikeListProvider
         arguments:
             - '@classlikeListProvider'
 
     namespaceListProvider.doctrineBackend:
-        class: PhpIntegrator\Analysis\DoctrineNamespaceListProvider
+        class: Serenata\Analysis\DoctrineNamespaceListProvider
         arguments:
             - '@namespaceConverter'
             - '@managerRegistry'
 
     namespaceListProvider.registry:
-        class: PhpIntegrator\Analysis\NamespaceListRegistry
+        class: Serenata\Analysis\NamespaceListRegistry
         arguments:
             - '@namespaceListProvider.doctrineBackend'
 
@@ -239,7 +239,7 @@ services:
         alias: namespaceListProvider.registry
 
     classlikeInfoBuilder:
-        class: PhpIntegrator\Analysis\ClasslikeInfoBuilder
+        class: Serenata\Analysis\ClasslikeInfoBuilder
         arguments:
             - '@constantConverter'
             - '@classlikeConstantConverter'
@@ -254,12 +254,12 @@ services:
             - '@typeAnalyzer'
 
     nodeAtOffsetLocator.raw:
-        class: PhpIntegrator\Analysis\NodeAtOffsetLocator
+        class: Serenata\Analysis\NodeAtOffsetLocator
         arguments:
             - '@parser'
 
     nodeAtOffsetLocator.cachingDecorator:
-        class: PhpIntegrator\Analysis\CachingNodeAtOffsetLocator
+        class: Serenata\Analysis\CachingNodeAtOffsetLocator
         arguments:
             - '@nodeAtOffsetLocator.raw'
 
@@ -267,34 +267,34 @@ services:
         alias: nodeAtOffsetLocator.cachingDecorator
 
     functionNameNodeFqsenDeterminer:
-        class: PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer
+        class: Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer
         arguments:
             - '@globalFunctionExistenceChecker'
 
     constFetchNodeFqsenDeterminer:
-        class: PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer
+        class: Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer
         arguments:
             - '@globalConstantExistenceChecker'
 
     nameNodeFqsenDeterminer:
-        class: PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer
+        class: Serenata\Analysis\Node\NameNodeFqsenDeterminer
         arguments:
             - '@structureAwareNameResolverFactory'
 
     propertyFetchPropertyInfoRetriever:
-        class: PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever
+        class: Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
 
     functionFunctionInfoRetriever:
-        class: PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever
+        class: Serenata\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
             - '@functionNameNodeFqsenDeterminer'
             - '@functionListProvider'
 
     methodCallMethodInfoRetriever:
-        class: PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever
+        class: Serenata\Analysis\Node\MethodCallMethodInfoRetriever
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'

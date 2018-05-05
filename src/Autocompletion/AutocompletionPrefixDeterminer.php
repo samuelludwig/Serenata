@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 /**
  * Determines the prefix (the part of the word that is being typed) for autocompletion purposes at a specific location.

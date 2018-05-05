@@ -1,23 +1,23 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace Serenata\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use PhpIntegrator\DocblockTypeParser;
+use Serenata\DocblockTypeParser;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Utility\Typing\Type;
-use PhpIntegrator\Utility\Typing\TypeList;
-use PhpIntegrator\Utility\Typing\ClassType;
-use PhpIntegrator\Utility\Typing\SpecialTypeString;
+use Serenata\Utility\Typing\Type;
+use Serenata\Utility\Typing\TypeList;
+use Serenata\Utility\Typing\ClassType;
+use Serenata\Utility\Typing\SpecialTypeString;
 
 /**
  * Checks if a specified (normal parameter) type is semantically equal to a docblock type specification.

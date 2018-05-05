@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeExistenceCheckerInterface;
+use Serenata\Analysis\ClasslikeExistenceCheckerInterface;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 /**
  * Factory that produces instances of {@see UnknownClassAnalyzer}.

@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis\Typing;
+namespace Serenata\Tests\Unit\Analysis\Typing;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilder;
+use Serenata\Analysis\ClasslikeInfoBuilder;
 
-use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
+use Serenata\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
-use PhpIntegrator\DocblockTypeParser;
+use Serenata\DocblockTypeParser;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framework\TestCase
 {

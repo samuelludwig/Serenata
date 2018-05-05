@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Indexing\FileNotFoundStorageException;
+use Serenata\Indexing\FileNotFoundStorageException;
 
-use PhpIntegrator\Linting\LintingSettings;
+use Serenata\Linting\LintingSettings;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class LintCommandTest extends AbstractIntegrationTest
 {

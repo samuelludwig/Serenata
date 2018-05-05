@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Sockets;
+namespace Serenata\Tests\Unit\Sockets;
 
-use PhpIntegrator\Sockets\JsonRpcQueue;
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
-use PhpIntegrator\Sockets\JsonRpcRequestPriorityDeterminerInterface;
+use Serenata\Sockets\JsonRpcQueue;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcRequestPriorityDeterminerInterface;
 
 use PHPUnit\Framework\MockObject\MockObject;
 

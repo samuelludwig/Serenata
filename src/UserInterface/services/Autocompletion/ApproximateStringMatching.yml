@@ -3,7 +3,7 @@ parameters:
 
 services:
     approximateStringMatchingBestStringApproximationDeterminer:
-        class: PhpIntegrator\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer
+        class: Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer
         arguments:
             - '@autocompletionApproximateStringMatcher'
 

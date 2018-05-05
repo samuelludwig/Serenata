@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Visiting;
+namespace Serenata\Analysis\Visiting;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

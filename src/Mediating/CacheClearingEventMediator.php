@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\ClearableCacheInterface;
+use Serenata\Analysis\ClearableCacheInterface;
 
 /**
  * Mediator that invokes a cache clear when an event happens.

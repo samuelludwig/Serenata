@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
 use JsonSerializable;
 
-use PhpIntegrator\Common\Range;
+use Serenata\Common\Range;
 
 /**
  * Represents the result of a tooltip provision.

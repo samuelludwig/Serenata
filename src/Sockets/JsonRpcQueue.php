@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 use Ds;
 use UnderflowException;

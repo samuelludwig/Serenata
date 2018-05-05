@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace Serenata\Analysis\Typing;
 
 /**
  * Normalizes types and FQCN's.

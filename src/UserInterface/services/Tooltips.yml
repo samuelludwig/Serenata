@@ -3,96 +3,96 @@ parameters:
 
 services:
     tooltipTypeListPrettyPrinter:
-        class: PhpIntegrator\Tooltips\TooltipTypeListPrettyPrinter
+        class: Serenata\Tooltips\TooltipTypeListPrettyPrinter
         arguments:
             - '@typeListPrettyPrinter'
 
     functionTooltipGenerator:
-        class: PhpIntegrator\Tooltips\FunctionTooltipGenerator
+        class: Serenata\Tooltips\FunctionTooltipGenerator
         arguments:
             - '@parameterNamePrettyPrinter'
             - '@tooltipTypeListPrettyPrinter'
 
     propertyTooltipGenerator:
-        class: PhpIntegrator\Tooltips\PropertyTooltipGenerator
+        class: Serenata\Tooltips\PropertyTooltipGenerator
         arguments:
             - '@tooltipTypeListPrettyPrinter'
 
     constantTooltipGenerator:
-        class: PhpIntegrator\Tooltips\ConstantTooltipGenerator
+        class: Serenata\Tooltips\ConstantTooltipGenerator
         arguments:
             - '@tooltipTypeListPrettyPrinter'
 
     classLikeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\ClassLikeTooltipGenerator
+        class: Serenata\Tooltips\ClassLikeTooltipGenerator
 
     funcCallNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\FuncCallNodeTooltipGenerator
+        class: Serenata\Tooltips\FuncCallNodeTooltipGenerator
         arguments:
             - '@functionTooltipGenerator'
             - '@functionNameNodeFqsenDeterminer'
             - '@functionListProvider'
 
     methodCallNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\MethodCallNodeTooltipGenerator
+        class: Serenata\Tooltips\MethodCallNodeTooltipGenerator
         arguments:
             - '@methodCallMethodInfoRetriever'
             - '@functionTooltipGenerator'
 
     staticMethodCallNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\StaticMethodCallNodeTooltipGenerator
+        class: Serenata\Tooltips\StaticMethodCallNodeTooltipGenerator
         arguments:
             - '@methodCallMethodInfoRetriever'
             - '@functionTooltipGenerator'
 
     propertyFetchNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\PropertyFetchNodeTooltipGenerator
+        class: Serenata\Tooltips\PropertyFetchNodeTooltipGenerator
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
             - '@propertyTooltipGenerator'
 
     staticPropertyFetchNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\StaticPropertyFetchNodeTooltipGenerator
+        class: Serenata\Tooltips\StaticPropertyFetchNodeTooltipGenerator
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
             - '@propertyTooltipGenerator'
 
     constFetchNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\ConstFetchNodeTooltipGenerator
+        class: Serenata\Tooltips\ConstFetchNodeTooltipGenerator
         arguments:
             - '@constantTooltipGenerator'
             - '@constFetchNodeFqsenDeterminer'
             - '@constantListProvider'
 
     classConstFetchNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\ClassConstFetchNodeTooltipGenerator
+        class: Serenata\Tooltips\ClassConstFetchNodeTooltipGenerator
         arguments:
             - '@constantTooltipGenerator'
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
 
     functionNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\FunctionNodeTooltipGenerator
+        class: Serenata\Tooltips\FunctionNodeTooltipGenerator
         arguments:
             - '@functionTooltipGenerator'
             - '@functionFunctionInfoRetriever'
 
     classMethodNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\ClassMethodNodeTooltipGenerator
+        class: Serenata\Tooltips\ClassMethodNodeTooltipGenerator
         arguments:
             - '@functionTooltipGenerator'
             - '@filePositionClasslikeDeterminer'
             - '@classlikeInfoBuilder'
 
     nameNodeTooltipGenerator:
-        class: PhpIntegrator\Tooltips\NameNodeTooltipGenerator
+        class: Serenata\Tooltips\NameNodeTooltipGenerator
         arguments:
             - '@classLikeTooltipGenerator'
             - '@nameNodeFqsenDeterminer'
             - '@classlikeInfoBuilder'
 
     tooltipProvider:
-        class: PhpIntegrator\Tooltips\TooltipProvider
+        class: Serenata\Tooltips\TooltipProvider
         arguments:
             - '@nodeAtOffsetLocator'
             - '@funcCallNodeTooltipGenerator'

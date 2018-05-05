@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\FileNamespaceImport" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="Serenata\Indexing\Structures\FileNamespaceImport" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
         <field name="line"  type="integer" nullable="false" />
@@ -13,7 +13,7 @@
         <field name="name"  type="string"  nullable="false" length="255" />
         <field name="kind"  type="string"  nullable="false" length="255" />
 
-        <many-to-one field="namespace" target-entity="PhpIntegrator\Indexing\Structures\FileNamespace" inversed-by="imports">
+        <many-to-one field="namespace" target-entity="Serenata\Indexing\Structures\FileNamespace" inversed-by="imports">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
             <!-- <cache>

@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Analysis\NamespaceListProviderInterface;
+use Serenata\Analysis\NamespaceListProviderInterface;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**
  * Provides namespace autocompletion suggestions at a specific location in a file.

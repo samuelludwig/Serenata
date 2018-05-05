@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Visiting\TypeQueryingVisitor;
-use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
-use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;
+use Serenata\Analysis\Visiting\TypeQueryingVisitor;
+use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
+use Serenata\Analysis\Visiting\ExpressionTypeInfoMap;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;

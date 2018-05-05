@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Analysis\Typing;
+namespace Serenata\Tests\Integration\Analysis\Typing;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class FileClasslikeListProviderTest extends AbstractIntegrationTest
 {

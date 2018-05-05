@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Relations;
+namespace Serenata\Analysis\Relations;
 
 use ArrayObject;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
+use Serenata\Analysis\DocblockAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 /**
  * Base class for resolvers.

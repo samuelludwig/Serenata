@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Structures;
+namespace Serenata\Indexing\Structures;
 
 /**
  * Base class for trait method precedences in a classlike.

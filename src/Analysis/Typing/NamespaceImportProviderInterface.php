@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace Serenata\Analysis\Typing;
 
-use PhpIntegrator\Utility\NamespaceData;
+use Serenata\Utility\NamespaceData;
 
 /**
  * Interface for classes that can provide information about the namespaces and imports (use statements) in a file.

@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class GlobalConstantsCommandTest extends AbstractIntegrationTest
 {

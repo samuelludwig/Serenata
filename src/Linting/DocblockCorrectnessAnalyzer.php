@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
+use Serenata\Analysis\DocblockAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
+use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
-use PhpIntegrator\Analysis\Visiting\OutlineFetchingVisitor;
+use Serenata\Analysis\Visiting\OutlineFetchingVisitor;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 /**
  * Analyzes the correctness of docblocks.

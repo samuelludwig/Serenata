@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 /**
  * Creates instances of {@see DirectoryIndexableFileIterator}.

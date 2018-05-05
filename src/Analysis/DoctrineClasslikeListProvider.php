@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 use RuntimeException;
 
 use Doctrine\DBAL\Exception\DriverException;
 
-use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
+use Serenata\Analysis\Conversion\ClasslikeConverter;
 
-use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
+use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\ManagerRegistry;
 
 /**
  * Retrieves a list of available classlikes via Doctrine.

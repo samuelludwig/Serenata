@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\SignatureHelp;
+namespace Serenata\Tests\Unit\SignatureHelp;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\GotoDefinition\GotoDefinitionResult;
+use Serenata\GotoDefinition\GotoDefinitionResult;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class DefinitionLocatorTest extends AbstractIntegrationTest
 {

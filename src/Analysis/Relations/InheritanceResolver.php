@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Relations;
+namespace Serenata\Analysis\Relations;
 
 use ArrayObject;
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Visiting;
+namespace Serenata\Indexing\Visiting;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

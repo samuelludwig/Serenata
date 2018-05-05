@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\FunctionListRegistry;
+use Serenata\Analysis\FunctionListRegistry;
 
-use PhpIntegrator\Indexing\WorkspaceEventName;
+use Serenata\Indexing\WorkspaceEventName;
 
 /**
  * Mediator that updates the function registry when workspace events happen.

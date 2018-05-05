@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace Serenata\Analysis\Typing;
 
-use PhpIntegrator\Analysis\ClearableCacheInterface;
+use Serenata\Analysis\ClearableCacheInterface;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
  /**
   * Decorator for classes implementing {@see FileClasslikeListProviderInterface} that performs caching.

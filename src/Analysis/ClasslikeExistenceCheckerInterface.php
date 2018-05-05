@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 /**
  * Inerface for classes that can check if a classlike exists.

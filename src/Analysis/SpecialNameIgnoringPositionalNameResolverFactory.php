@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 /**
  * Factory that creates instances of a {@see SpecialNameIgnoringPositionalNameResolver}.

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\SignatureHelp;
+namespace Serenata\SignatureHelp;
 
 use JsonSerializable;
 

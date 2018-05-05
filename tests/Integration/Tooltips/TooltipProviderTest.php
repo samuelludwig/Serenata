@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Tooltips;
+namespace Serenata\Tests\Integration\Tooltips;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-use PhpIntegrator\Tooltips\TooltipResult;
+use Serenata\Tooltips\TooltipResult;
 
 class TooltipProviderTest extends AbstractIntegrationTest
 {

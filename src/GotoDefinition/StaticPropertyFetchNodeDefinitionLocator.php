@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\GotoDefinition;
+namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
+use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

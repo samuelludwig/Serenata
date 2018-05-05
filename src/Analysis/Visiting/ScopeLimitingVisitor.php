@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Visiting;
+namespace Serenata\Analysis\Visiting;
 
-use PhpIntegrator\Parsing\Node\Expr\Dummy;
+use Serenata\Parsing\Node\Expr\Dummy;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

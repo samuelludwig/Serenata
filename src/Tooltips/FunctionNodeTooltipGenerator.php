@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
+use Serenata\Analysis\Node\FunctionFunctionInfoRetriever;
 
 use PhpParser\Node;
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Node;
+namespace Serenata\Analysis\Node;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 

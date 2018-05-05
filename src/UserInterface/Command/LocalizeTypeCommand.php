@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\StorageInterface;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
+use Serenata\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that makes a FQCN relative to local use statements in a file.

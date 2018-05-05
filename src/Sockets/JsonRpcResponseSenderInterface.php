@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 /**
  * Interface for classes that can send {@see JsonRpcResponse} objects (to a stream, socket, file, ...).

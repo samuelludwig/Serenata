@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Parsing;
+namespace Serenata\Tests\Unit\Parsing;
 
-use PhpIntegrator\DocblockTypeParser\IntDocblockType;
-use PhpIntegrator\DocblockTypeParser\BoolDocblockType;
-use PhpIntegrator\DocblockTypeParser\NullDocblockType;
-use PhpIntegrator\DocblockTypeParser\ClassDocblockType;
-use PhpIntegrator\DocblockTypeParser\StringDocblockType;
-use PhpIntegrator\DocblockTypeParser\CompoundDocblockType;
+use Serenata\DocblockTypeParser\IntDocblockType;
+use Serenata\DocblockTypeParser\BoolDocblockType;
+use Serenata\DocblockTypeParser\NullDocblockType;
+use Serenata\DocblockTypeParser\ClassDocblockType;
+use Serenata\DocblockTypeParser\StringDocblockType;
+use Serenata\DocblockTypeParser\CompoundDocblockType;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class DocblockParserTest extends AbstractIntegrationTest
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Conversion;
+namespace Serenata\Analysis\Conversion;
 
 use ArrayAccess;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+use Serenata\Indexing\Structures\AccessModifierNameValue;
 
 /**
  * Converts raw property data from the index to more useful data.

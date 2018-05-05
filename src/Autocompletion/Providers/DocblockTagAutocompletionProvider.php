@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Utility\TextEdit;
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\TextEdit;
+use Serenata\Utility\SourceCodeHelpers;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Provides docblock tag autocompletion suggestions at a specific location in a file.

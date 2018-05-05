@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Performance;
+namespace Serenata\Tests\Performance;
 
 /**
  * @group Performance

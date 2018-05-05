@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\FunctionListRegistry;
+use Serenata\Analysis\FunctionListRegistry;
 
-use PhpIntegrator\Analysis\Conversion\FunctionConverter;
+use Serenata\Analysis\Conversion\FunctionConverter;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\IndexingEventName;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the function registry when function indexing events happen.

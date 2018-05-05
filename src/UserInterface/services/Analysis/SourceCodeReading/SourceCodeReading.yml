@@ -3,7 +3,7 @@ parameters:
 
 services:
     textEncodingConverter.textToUtf8Converter:
-        class: PhpIntegrator\Analysis\SourceCodeReading\TextToUtf8Converter
+        class: Serenata\Analysis\SourceCodeReading\TextToUtf8Converter
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@classlikeInfoBuilder'
@@ -12,11 +12,11 @@ services:
         alias: textEncodingConverter.textToUtf8Converter
 
     fileSourceCodeFileReader.fileReaderFactory:
-        class: PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory
+        class: Serenata\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory
         arguments:
             - '@fileSourceCodeFileReader.textEncodingConverter'
 
     fileSourceCodeFileReader.streamReaderFactory:
-        class: PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory
+        class: Serenata\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory
         arguments:
             - '@fileSourceCodeFileReader.textEncodingConverter'

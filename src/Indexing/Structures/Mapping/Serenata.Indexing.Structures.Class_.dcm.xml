@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\Class_" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="Serenata\Indexing\Structures\Class_" change-tracking-policy="DEFERRED_EXPLICIT">
         <field name="isAnonymous"        type="boolean" nullable="false" />
         <field name="isAbstract"         type="boolean" nullable="false" />
         <field name="isFinal"            type="boolean" nullable="false" />
@@ -18,14 +18,14 @@
         <field name="interfaceFqcns"     type="array"   nullable="false" />
         <field name="traitFqcns"         type="array"   nullable="false" />
 
-        <one-to-many field="traitAliases" target-entity="PhpIntegrator\Indexing\Structures\ClassTraitAlias" mapped-by="class">
+        <one-to-many field="traitAliases" target-entity="Serenata\Indexing\Structures\ClassTraitAlias" mapped-by="class">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classTraitAliases</region>
             </cache> -->
         </one-to-many>
 
-        <one-to-many field="traitPrecedences" target-entity="PhpIntegrator\Indexing\Structures\ClassTraitPrecedence" mapped-by="class">
+        <one-to-many field="traitPrecedences" target-entity="Serenata\Indexing\Structures\ClassTraitPrecedence" mapped-by="class">
             <!-- <cache>
                 <usage>READ_ONLY</usage>
                 <region>classTraitPrecedences</region>

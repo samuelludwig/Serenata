@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\GotoDefinition;
+namespace Serenata\GotoDefinition;
 
 use JsonSerializable;
 

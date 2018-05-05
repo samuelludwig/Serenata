@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Visiting;
+namespace Serenata\Indexing\Visiting;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
+use Serenata\Analysis\Visiting\UseStatementFetchingVisitor;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;

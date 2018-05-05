@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 /**
  * Aids in formatting types for autocompletion suggestions.

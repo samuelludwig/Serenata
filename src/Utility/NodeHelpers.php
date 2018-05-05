@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Utility;
+namespace Serenata\Utility;
 
 use AssertionError;
 

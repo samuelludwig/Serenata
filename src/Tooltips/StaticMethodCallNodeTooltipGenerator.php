@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
+use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

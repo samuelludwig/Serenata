@@ -3,14 +3,14 @@ parameters:
 
 services:
     expressionLocalTypeAnalyzer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ExpressionLocalTypeAnalyzer
+        class: Serenata\Analysis\Typing\Deduction\ExpressionLocalTypeAnalyzer
         arguments:
             - '@parser'
             - '@docblockParser'
             - '@nodePrettyPrinter'
 
     localTypeScanner:
-        class: PhpIntegrator\Analysis\Typing\Deduction\LocalTypeScanner
+        class: Serenata\Analysis\Typing\Deduction\LocalTypeScanner
         arguments:
             - '@docblockParser'
             - '@structureAwareNameResolverFactory'
@@ -21,65 +21,65 @@ services:
             - '@expressionLocalTypeAnalyzer'
 
     variableNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\VariableNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\VariableNodeTypeDeducer
         arguments:
             - '@localTypeScanner'
 
     lNumberNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\LNumberNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\LNumberNodeTypeDeducer
 
     dNumberNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\DNumberNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\DNumberNodeTypeDeducer
 
     stringNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\StringNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\StringNodeTypeDeducer
 
     constFetchNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ConstFetchNodeTypeDeducer
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@managerRegistry'
             - '@constantConverter'
 
     arrayDimFetchNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer
         arguments:
             - '@typeAnalyzer'
             - '@nodeTypeDeducer'
 
     closureNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ClosureNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ClosureNodeTypeDeducer
 
     newNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\NewNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\NewNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     cloneNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\CloneNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\CloneNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     arrayNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ArrayNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ArrayNodeTypeDeducer
 
     selfNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\SelfNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\SelfNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     staticNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\StaticNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\StaticNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     parentNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ParentNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ParentNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     nameNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\NameNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\NameNodeTypeDeducer
         arguments:
             - '@typeAnalyzer'
             - '@classlikeInfoBuilder'
@@ -87,19 +87,19 @@ services:
             - '@structureAwareNameResolverFactory'
 
     funcCallNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer
         arguments:
             - '@managerRegistry'
             - '@functionConverter'
             - '@functionNameNodeFqsenDeterminer'
 
     methodCallNodeTypeDeducer.delegate:
-        class: PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer
         arguments:
             - '@methodCallMethodInfoRetriever'
 
     methodCallNodeMetaTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\MethodCallNodeMetaTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\MethodCallNodeMetaTypeDeducer
         arguments:
             - '@methodCallNodeTypeDeducer.delegate'
             - '@nodeTypeDeducer'
@@ -109,56 +109,56 @@ services:
         alias: methodCallNodeMetaTypeDeducer
 
     propertyFetchNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\PropertyFetchNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\PropertyFetchNodeTypeDeducer
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
             - '@localTypeScanner'
             - '@nodePrettyPrinter'
 
     classConstFetchNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
 
     assignNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\AssignNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\AssignNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     ternaryNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\TernaryNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\TernaryNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     classLikeNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer
 
     catchNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\CatchNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\CatchNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     foreachNodeLoopValueTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ForeachNodeLoopValueTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ForeachNodeLoopValueTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
             - '@typeAnalyzer'
 
     functionLikeParameterTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
             - '@typeAnalyzer'
             - '@docblockParser'
 
     expressionNodeTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ExpressionNodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ExpressionNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
 
     nodeTypeDeducer.instance:
-        class: PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\NodeTypeDeducer
         arguments:
             - '@variableNodeTypeDeducer'
             - '@lNumberNodeTypeDeducer'
@@ -188,7 +188,7 @@ services:
         alias: nodeTypeDeducer.configurableDelegator
 
     expressionTypeDeducer:
-        class: PhpIntegrator\Analysis\Typing\Deduction\ExpressionTypeDeducer
+        class: Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
             - '@lastExpressionParser'

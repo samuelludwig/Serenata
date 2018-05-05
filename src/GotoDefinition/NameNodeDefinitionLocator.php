@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\GotoDefinition;
+namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use PhpIntegrator\Analysis\Node\NameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\NameNodeFqsenDeterminer;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

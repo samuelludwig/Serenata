@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 /**
  * Interface for classes that locate the node at the specified offset in code.

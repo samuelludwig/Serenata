@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Autocompletion;
+namespace Serenata\Tests\Unit\Autocompletion;
 
 use PHPUnit_Framework_MockObject_MockObject;
 
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminer;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixBoundaryTokenRetrieverInterface;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminer;
+use Serenata\Autocompletion\AutocompletionPrefixBoundaryTokenRetrieverInterface;
 
 class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
 {

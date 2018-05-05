@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Parsing\Node\Keyword;
+namespace Serenata\Parsing\Node\Keyword;
 
 use PhpParser\Node\Expr;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use Throwable;
 use AssertionError;
@@ -10,7 +10,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Exception\DriverException;
 use Doctrine\DBAL\Exception\LockWaitTimeoutException;
 
-use PhpIntegrator\Analysis\MetadataProviderInterface;
+use Serenata\Analysis\MetadataProviderInterface;
 
 /**
  * Storage backend that uses Doctrine.

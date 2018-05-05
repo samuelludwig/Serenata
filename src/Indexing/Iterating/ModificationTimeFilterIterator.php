@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Iterating;
+namespace Serenata\Indexing\Iterating;
 
 use Iterator;
 use FilterIterator;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 /**
  * Filters out {@see \SplFileInfo} values that haven't been modified since a preconfigured time.

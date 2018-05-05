@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\ManagerRegistry;
 
-use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 /**
  * Checks if a function exists via Doctrine.

@@ -3,7 +3,7 @@ parameters:
 
 services:
     signatureHelpRetriever:
-        class: PhpIntegrator\SignatureHelp\SignatureHelpRetriever
+        class: Serenata\SignatureHelp\SignatureHelpRetriever
         arguments:
             - '@nodeAtOffsetLocator'
             - '@parserTokenHelper'

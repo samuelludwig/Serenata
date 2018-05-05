@@ -3,14 +3,14 @@ parameters:
 
 services:
     requestQueue:
-        class: PhpIntegrator\Sockets\JsonRpcQueue
+        class: Serenata\Sockets\JsonRpcQueue
         arguments:
             - '@jsonRpcRequestPriorityDeterminer'
 
     jsonRpcQueueItemProcessor:
-        class: PhpIntegrator\Sockets\JsonRpcQueueItemProcessor
+        class: Serenata\Sockets\JsonRpcQueueItemProcessor
         arguments:
             - '@service_container'
 
     jsonRpcRequestPriorityDeterminer:
-        class: PhpIntegrator\Sockets\JsonRpcRequestPriorityDeterminer
+        class: Serenata\Sockets\JsonRpcRequestPriorityDeterminer

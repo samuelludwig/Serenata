@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Visiting;
+namespace Serenata\Indexing\Visiting;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitor;

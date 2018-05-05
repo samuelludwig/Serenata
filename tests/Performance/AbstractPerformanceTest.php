@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Performance;
+namespace Serenata\Tests\Performance;
 
 use Closure;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 /**
  * @group Performance

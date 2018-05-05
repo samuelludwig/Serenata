@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Utility;
+namespace Serenata\Utility;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeReaderException;
-use PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory;
-use PhpIntegrator\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory;
+use Serenata\Analysis\SourceCodeReading\FileSourceCodeReaderException;
+use Serenata\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory;
+use Serenata\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory;
 
 /**
  * Deals with reading (not analyzing or parsing) source code.

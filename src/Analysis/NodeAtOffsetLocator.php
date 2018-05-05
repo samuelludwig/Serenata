@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Visiting\NodeFetchingVisitor;
+use Serenata\Analysis\Visiting\NodeFetchingVisitor;
 
 use PhpParser\Node;
 use PhpParser\Parser;

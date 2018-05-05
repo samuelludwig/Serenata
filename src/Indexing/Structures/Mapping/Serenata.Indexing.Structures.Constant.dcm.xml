@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\Constant" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="Serenata\Indexing\Structures\Constant" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
         <field name="name"             type="string"     nullable="false" length="255" />
@@ -20,7 +20,7 @@
         <field name="typeDescription"  type="text"       nullable="true"  length="15000" />
         <field name="types"            type="array"      nullable="false" />
 
-        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File" inversed-by="constants">
+        <many-to-one field="file" target-entity="Serenata\Indexing\Structures\File" inversed-by="constants">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
             <!-- <cache>

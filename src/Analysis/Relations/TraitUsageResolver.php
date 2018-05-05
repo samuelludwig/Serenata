@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Relations;
+namespace Serenata\Analysis\Relations;
 
 use ArrayObject;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+use Serenata\Indexing\Structures\AccessModifierNameValue;
 
 /**
  * Deals with resolving trait usage for classlikes.

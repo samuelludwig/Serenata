@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**
  * Autocompletion provider that delegates to another provider and then fuzzy matches the suggestions based on what was

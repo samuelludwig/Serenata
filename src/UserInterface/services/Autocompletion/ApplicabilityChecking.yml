@@ -3,49 +3,49 @@ parameters:
 
 services:
     keywordAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\KeywordAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\KeywordAutocompletionApplicabilityChecker
 
     docblockTagAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\DocblockTagAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\DocblockTagAutocompletionApplicabilityChecker
 
     superglobalAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\SuperglobalAutocompletionProvider
+        class: Serenata\Autocompletion\ApplicabilityChecking\SuperglobalAutocompletionProvider
 
     classAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\ClassAutocompletionApplicabilityChecker
 
     interfaceAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\InterfaceAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\InterfaceAutocompletionApplicabilityChecker
 
     traitAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\TraitAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\TraitAutocompletionApplicabilityChecker
 
     namespaceAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NamespaceAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\NamespaceAutocompletionApplicabilityChecker
 
     functionAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\FunctionAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\FunctionAutocompletionApplicabilityChecker
 
     constantAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ConstantAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\ConstantAutocompletionApplicabilityChecker
 
     nonStaticMethodAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NonStaticMethodAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\NonStaticMethodAutocompletionApplicabilityChecker
 
     staticMethodAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\StaticMethodAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\StaticMethodAutocompletionApplicabilityChecker
 
     nonStaticPropertyAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\NonStaticPropertyAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\NonStaticPropertyAutocompletionApplicabilityChecker
 
     staticPropertyAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\StaticPropertyAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\StaticPropertyAutocompletionApplicabilityChecker
 
     classConstantAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ClassConstantAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\ClassConstantAutocompletionApplicabilityChecker
 
     localVariableAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\LocalVariableAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\LocalVariableAutocompletionApplicabilityChecker
 
     parameterNameAutocompletionApplicabilityChecker:
-        class: PhpIntegrator\Autocompletion\ApplicabilityChecking\ParameterNameAutocompletionApplicabilityChecker
+        class: Serenata\Autocompletion\ApplicabilityChecking\ParameterNameAutocompletionApplicabilityChecker

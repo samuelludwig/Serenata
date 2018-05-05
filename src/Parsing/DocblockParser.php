@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Parsing;
+namespace Serenata\Parsing;
 
 use League\HTMLToMarkdown\HtmlConverter;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
+use Serenata\Analysis\DocblockAnalyzer;
 
-use PhpIntegrator\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
 
 /**
  * Parser for PHP docblocks.

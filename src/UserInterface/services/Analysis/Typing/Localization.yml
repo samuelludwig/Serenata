@@ -3,6 +3,6 @@ parameters:
 
 services:
     positionalNameLocalizerFactory:
-        class: PhpIntegrator\NameQualificationUtilities\PositionalNameLocalizerFactory
+        class: Serenata\NameQualificationUtilities\PositionalNameLocalizerFactory
         arguments:
             - '@positionalNamespaceDeterminer'

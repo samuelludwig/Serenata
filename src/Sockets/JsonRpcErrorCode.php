@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 /**
  * An enumeration of JSON-RPC 2.0 error codes.

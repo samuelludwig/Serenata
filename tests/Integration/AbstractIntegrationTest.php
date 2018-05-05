@@ -1,19 +1,19 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration;
+namespace Serenata\Tests\Integration;
 
 use Closure;
 use ReflectionClass;
 
-use PhpIntegrator\Indexing\Indexer;
+use Serenata\Indexing\Indexer;
 
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
-use PhpIntegrator\UserInterface\JsonRpcApplication;
-use PhpIntegrator\UserInterface\AbstractApplication;
+use Serenata\UserInterface\JsonRpcApplication;
+use Serenata\UserInterface\AbstractApplication;
 
-use PhpIntegrator\Utility\TmpFileStream;
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\TmpFileStream;
+use Serenata\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

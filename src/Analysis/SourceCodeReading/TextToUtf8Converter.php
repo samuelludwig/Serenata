@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\SourceCodeReading;
+namespace Serenata\Analysis\SourceCodeReading;
 
 /**
  * Converts text to UTF-8.

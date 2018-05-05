@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 use Throwable;
 
@@ -9,14 +9,14 @@ use Ds\Vector;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-use PhpIntegrator\Analysis\ClearableCacheInterface;
+use Serenata\Analysis\ClearableCacheInterface;
 
-use PhpIntegrator\Indexing\ManagerRegistry;
-use PhpIntegrator\Indexing\IncorrectDatabaseVersionException;
+use Serenata\Indexing\ManagerRegistry;
+use Serenata\Indexing\IncorrectDatabaseVersionException;
 
-use PhpIntegrator\UserInterface\Command;
+use Serenata\UserInterface\Command;
 
-use PhpIntegrator\UserInterface\Command\InvalidArgumentsException;
+use Serenata\UserInterface\Command\InvalidArgumentsException;
 
 /**
  * Processes {@see JsonRpcQueueItem}s.

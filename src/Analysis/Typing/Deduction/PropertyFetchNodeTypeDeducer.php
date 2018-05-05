@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Node\PropertyFetchPropertyInfoRetriever;
+use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 use PhpParser\PrettyPrinterAbstract;

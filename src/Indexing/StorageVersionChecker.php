@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 

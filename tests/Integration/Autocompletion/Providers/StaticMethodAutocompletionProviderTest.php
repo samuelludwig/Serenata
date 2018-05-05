@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Autocompletion\Providers;
+namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
 
 class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {

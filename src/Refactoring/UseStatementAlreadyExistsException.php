@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Refactoring;
+namespace Serenata\Refactoring;
 
 /**
  * Indicates an appropriate use statement already exists.

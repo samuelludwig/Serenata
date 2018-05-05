@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApproximateStringMatching;
+namespace Serenata\Autocompletion\ApproximateStringMatching;
 
 use ArrayAccess;
 

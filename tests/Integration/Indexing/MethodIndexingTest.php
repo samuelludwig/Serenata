@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Tooltips;
+namespace Serenata\Tests\Integration\Tooltips;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Indexing\Structures\AccessModifierNameValue;
+use Serenata\Indexing\Structures\AccessModifierNameValue;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

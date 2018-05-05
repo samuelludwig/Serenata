@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis\Visiting;
+namespace Serenata\Tests\Unit\Analysis\Visiting;
 
-use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
+use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
 
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;

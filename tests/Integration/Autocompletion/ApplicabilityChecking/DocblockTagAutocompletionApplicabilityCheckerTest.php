@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Autocompletion\ApplicabilityChecking;
+namespace Serenata\Tests\Integration\Autocompletion\ApplicabilityChecking;
 
 class DocblockTagAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionApplicabilityCheckerTest
 {

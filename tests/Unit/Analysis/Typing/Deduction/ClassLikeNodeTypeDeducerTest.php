@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis\Typing\Deduction;
+namespace Serenata\Tests\Unit\Analysis\Typing\Deduction;
 
 use DateTime;
 
-use PhpIntegrator\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
+use Serenata\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

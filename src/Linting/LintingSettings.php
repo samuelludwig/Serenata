@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
 /**
  * Describes settings to pass to a lint operation.

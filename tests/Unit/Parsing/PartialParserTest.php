@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Parsing;
+namespace Serenata\Tests\Unit\Parsing;
 
-use PhpIntegrator\Parsing\PartialParser;
+use Serenata\Parsing\PartialParser;
 
-use PhpIntegrator\Parsing\Node\Expr;
+use Serenata\Parsing\Node\Expr;
 
 use PhpParser\Node;
 use PhpParser\Lexer;

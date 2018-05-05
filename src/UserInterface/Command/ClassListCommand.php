@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Analysis\ClasslikeListProviderInterface;
+use Serenata\Analysis\ClasslikeListProviderInterface;
 
-use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
+use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\StorageInterface;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.

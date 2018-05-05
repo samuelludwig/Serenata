@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Visiting;
+namespace Serenata\Analysis\Visiting;
 
 /**
  * Holds possibilities for a list of types.

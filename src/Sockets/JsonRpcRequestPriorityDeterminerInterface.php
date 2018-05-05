@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Sockets;
+namespace Serenata\Sockets;
 
 /**
  * Interface for classes that determine the appropriate priority for {@see JsonRpcRequest}s

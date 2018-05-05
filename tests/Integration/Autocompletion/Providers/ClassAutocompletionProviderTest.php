@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Autocompletion\Providers;
+namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Indexing\Structures\ClasslikeTypeNameValue;
+use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
-use PhpIntegrator\Utility\TextEdit;
+use Serenata\Utility\TextEdit;
 
 class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {

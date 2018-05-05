@@ -1,24 +1,24 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
-use PhpIntegrator\Parsing;
+use Serenata\Parsing;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfo;
-use PhpIntegrator\Analysis\Visiting\ExpressionTypeInfoMap;
+use Serenata\Analysis\Visiting\ExpressionTypeInfo;
+use Serenata\Analysis\Visiting\ExpressionTypeInfoMap;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 

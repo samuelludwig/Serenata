@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace Serenata\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\DocblockTypeParser\SpecialDocblockTypeString;
+use Serenata\DocblockTypeParser\SpecialDocblockTypeString;
 
 /**
  * Provides functionality for analyzing type names.

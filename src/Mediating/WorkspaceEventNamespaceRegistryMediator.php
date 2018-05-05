@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\NamespaceListRegistry;
+use Serenata\Analysis\NamespaceListRegistry;
 
-use PhpIntegrator\Indexing\WorkspaceEventName;
+use Serenata\Indexing\WorkspaceEventName;
 
 /**
  * Mediator that updates the namespace registry when workspace events happen.

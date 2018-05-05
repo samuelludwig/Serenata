@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
+use Serenata\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
-use PhpIntegrator\Parsing\LastExpressionParser;
+use Serenata\Parsing\LastExpressionParser;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

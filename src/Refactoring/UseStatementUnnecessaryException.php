@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Refactoring;
+namespace Serenata\Refactoring;
 
 /**
  * Indicates the use statement is unnecessary in the active namespace.

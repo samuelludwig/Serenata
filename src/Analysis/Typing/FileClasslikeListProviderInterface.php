@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing;
+namespace Serenata\Analysis\Typing;
 
 use RuntimeException;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 /**
  * Interface for classes that can retrieve a classlike list for a specific file.

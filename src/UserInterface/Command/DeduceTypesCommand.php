@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Analysis\Typing\Deduction\ExpressionTypeDeducer;
+use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\FileIndexerInterface;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileIndexerInterface;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).

@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Analysis;
+namespace Serenata\Tests\Unit\Analysis;
 
-use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
-use PhpIntegrator\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 use PhpParser\Node;
 

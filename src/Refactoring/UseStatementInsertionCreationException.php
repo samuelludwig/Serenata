@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Refactoring;
+namespace Serenata\Refactoring;
 
 use RuntimeException;
 

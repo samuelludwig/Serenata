@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Autocompletion\Providers;
+namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Utility\TextEdit;
+use Serenata\Utility\TextEdit;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
 
 class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {

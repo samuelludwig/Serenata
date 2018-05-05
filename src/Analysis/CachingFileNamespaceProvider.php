@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\NameQualificationUtilities\FileNamespaceProviderInterface;
+use Serenata\NameQualificationUtilities\FileNamespaceProviderInterface;
 
 /**
  * Delegates namespace provision to a delegate and adds a caching layer on top of it.

@@ -1,20 +1,20 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Refactoring;
+namespace Serenata\Tests\Integration\Refactoring;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Refactoring\UseStatementUnnecessaryException;
-use PhpIntegrator\Refactoring\UseStatementAlreadyExistsException;
-use PhpIntegrator\Refactoring\UseStatementEqualsNamespaceException;
-use PhpIntegrator\Refactoring\NonCompoundNameInAnonymousNamespaceException;
+use Serenata\Refactoring\UseStatementUnnecessaryException;
+use Serenata\Refactoring\UseStatementAlreadyExistsException;
+use Serenata\Refactoring\UseStatementEqualsNamespaceException;
+use Serenata\Refactoring\NonCompoundNameInAnonymousNamespaceException;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-use PhpIntegrator\Utility\TextEdit;
+use Serenata\Utility\TextEdit;
 
 class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
 {

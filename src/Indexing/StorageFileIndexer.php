@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use DateTime;
 use Exception;
 use AssertionError;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 use PhpParser\Error;
 use PhpParser\Parser;

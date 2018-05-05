@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\GotoDefinition;
+namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\FunctionListProviderInterface;
+use Serenata\Analysis\FunctionListProviderInterface;
 
-use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 

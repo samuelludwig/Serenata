@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\UserInterface\Command;
 
-use PhpIntegrator\Indexing\FileNotFoundStorageException;
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Indexing\FileNotFoundStorageException;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class NamespaceListCommandTest extends AbstractIntegrationTest
 {

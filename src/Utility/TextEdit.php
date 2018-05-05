@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Utility;
+namespace Serenata\Utility;
 
 use JsonSerializable;
 
-use PhpIntegrator\Common\Range;
+use Serenata\Common\Range;
 
 /**
  * Represents a textual edit to a document.

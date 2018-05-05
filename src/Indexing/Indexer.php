@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Sockets\JsonRpcQueue;
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcQueue;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\SourceCodeStreamReader;
 
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;

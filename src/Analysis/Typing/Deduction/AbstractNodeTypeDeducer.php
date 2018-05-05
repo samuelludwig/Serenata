@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 /**
  * Abstract base class for node type deducers.

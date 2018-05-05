@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\SignatureHelp;
+namespace Serenata\Tests\Integration\SignatureHelp;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\SignatureHelp\SignatureHelp;
-use PhpIntegrator\SignatureHelp\ParameterInformation;
-use PhpIntegrator\SignatureHelp\SignatureInformation;
+use Serenata\SignatureHelp\SignatureHelp;
+use Serenata\SignatureHelp\ParameterInformation;
+use Serenata\SignatureHelp\SignatureInformation;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 {

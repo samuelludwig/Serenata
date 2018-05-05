@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
-use PhpIntegrator\Indexing\Indexer;
+use Serenata\Indexing\Indexer;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcRequest;
 
 /**
  * Normalizes paths.

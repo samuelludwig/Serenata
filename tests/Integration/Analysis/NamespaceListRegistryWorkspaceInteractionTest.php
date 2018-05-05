@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Analysis;
+namespace Serenata\Tests\Integration\Analysis;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 /**
  * Contains tests that test whether the registry properly interacts with workspace changes.

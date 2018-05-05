@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\ClearableCache;
 
-use PhpIntegrator\Indexing\Indexer;
-use PhpIntegrator\Indexing\ManagerRegistry;
-use PhpIntegrator\Indexing\SchemaInitializer;
+use Serenata\Indexing\Indexer;
+use Serenata\Indexing\ManagerRegistry;
+use Serenata\Indexing\SchemaInitializer;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Command that initializes a project.

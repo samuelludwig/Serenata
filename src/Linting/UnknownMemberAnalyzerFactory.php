@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 /**
  * Factory that produces instances of {@see UnknownMemberAnalyzer}.

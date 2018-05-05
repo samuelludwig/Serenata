@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 /**
  * Delegates classlike existence checking to another object and adds a caching wrapper.

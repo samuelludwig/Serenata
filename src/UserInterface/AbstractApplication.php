@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\UserInterface;
+namespace Serenata\UserInterface;
 
-use PhpIntegrator\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
+use Serenata\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use Symfony\Component\Config\FileLocator;
 

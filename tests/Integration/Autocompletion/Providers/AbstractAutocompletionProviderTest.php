@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Autocompletion\Providers;
+namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 /**
  * Abstract base class for autocompletion provider integration tests.

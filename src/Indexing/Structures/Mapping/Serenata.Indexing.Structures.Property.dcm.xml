@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\Property" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="Serenata\Indexing\Structures\Property" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
         <field name="name"               type="string"     nullable="false" length="255" />
@@ -21,11 +21,11 @@
         <field name="typeDescription"    type="text"       nullable="true"  length="15000" />
         <field name="types"              type="array"      nullable="false" />
 
-        <many-to-one field="file" target-entity="PhpIntegrator\Indexing\Structures\File">
+        <many-to-one field="file" target-entity="Serenata\Indexing\Structures\File">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
         </many-to-one>
 
-        <many-to-one field="classlike" target-entity="PhpIntegrator\Indexing\Structures\Classlike" inversed-by="properties">
+        <many-to-one field="classlike" target-entity="Serenata\Indexing\Structures\Classlike" inversed-by="properties">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />
 
             <!-- <cache>
@@ -34,7 +34,7 @@
             </cache> -->
         </many-to-one>
 
-        <many-to-one field="accessModifier" target-entity="PhpIntegrator\Indexing\Structures\AccessModifier">
+        <many-to-one field="accessModifier" target-entity="Serenata\Indexing\Structures\AccessModifier">
             <join-column on-delete="RESTRICT" on-update="RESTRICT" nullable="true" />
 
             <!-- <cache>

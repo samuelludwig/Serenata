@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Visiting;
+namespace Serenata\Analysis\Visiting;
 
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
+use Serenata\Analysis\Typing\TypeNormalizerInterface;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

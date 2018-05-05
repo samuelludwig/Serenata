@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
-use PhpIntegrator\PrettyPrinting\TypeListPrettyPrinter;
+use Serenata\PrettyPrinting\TypeListPrettyPrinter;
 
 /**
  * Pretty prints type lists for use in tooltips.

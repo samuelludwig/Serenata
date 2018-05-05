@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Conversion\FunctionConverter;
+use Serenata\Analysis\Conversion\FunctionConverter;
 
-use PhpIntegrator\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\ManagerRegistry;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\ManagerRegistry;
 
 use PhpParser\Node;
 

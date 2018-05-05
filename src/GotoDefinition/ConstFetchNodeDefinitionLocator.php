@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\GotoDefinition;
+namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ConstantListProviderInterface;
+use Serenata\Analysis\ConstantListProviderInterface;
 
-use PhpIntegrator\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer;
 
 use PhpParser\Node;
 

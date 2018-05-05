@@ -1,22 +1,22 @@
 <?php
 
-namespace PhpIntegrator\SignatureHelp;
+namespace Serenata\SignatureHelp;
 
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use PhpIntegrator\Analysis\Node\FunctionFunctionInfoRetriever;
-use PhpIntegrator\Analysis\Node\MethodCallMethodInfoRetriever;
+use Serenata\Analysis\Node\FunctionFunctionInfoRetriever;
+use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Parsing\ParserTokenHelper;
+use Serenata\Parsing\ParserTokenHelper;
 
-use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
+use Serenata\PrettyPrinting\FunctionParameterPrettyPrinter;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 

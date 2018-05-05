@@ -1,15 +1,15 @@
 <div align="center">
-    <a href="https://gitlab.com/php-integrator/core"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="PHP Integrator" title="PHP Integrator" width="258"></a>
+    <a href="https://gitlab.com/Serenata/Serenata"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="PHP Integrator" title="PHP Integrator" width="258"></a>
 
     <h1>PHP Integrator</h1>
     <h4>Free and open source server providing code assistance for PHP code</h4>
 
-    <a href="https://gitlab.com/php-integrator/core/commits/development">
-        <img src="https://gitlab.com/php-integrator/core/badges/development/pipeline.svg">
+    <a href="https://gitlab.com/Serenata/Serenata/commits/development">
+        <img src="https://gitlab.com/Serenata/Serenata/badges/development/pipeline.svg">
     </a>
 
-    <a href="https://gitlab.com/php-integrator/core/commits/development">
-        <img src="https://gitlab.com/php-integrator/core/badges/development/coverage.svg">
+    <a href="https://gitlab.com/Serenata/Serenata/commits/development">
+        <img src="https://gitlab.com/Serenata/Serenata/badges/development/coverage.svg">
     </a>
 
     <a href="https://liberapay.com/Gert-dev/donate">
@@ -19,7 +19,7 @@
 
 PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
 
-More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/php-integrator/core/wikis/home) as well as [the website](https://php-integrator.github.io/).
+More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://Serenata.github.io/).
 
 ## What Features Are Supported?
 * Autocompletion
@@ -31,15 +31,15 @@ More information for users, both developers looking to implement the core in oth
 There are also other requests clients can send to extract information about a code base. However, we are in the process of slowly migrating to become a [language server](https://microsoft.github.io/language-server-protocol/) for PHP, so these may be replaced by compliant requests in the future.
 
 ## Where Is It Used?
-Currently the core package is used to power the php-integrator-* packages for the Atom editor. See also
-[the list of projects](https://github.com/php-integrator).
+Currently the core package is used to power the Serenata-* packages for the Atom editor. See also
+[the list of projects](https://github.com/Serenata).
 
 ## Installation
 ### Runtime
 If you want to use the core directly, i.e. just to be able to fire it up and communicate with it over a socket, such as when you want to integrate it into an editor:
 
 ```sh
-composer create-project "php-integrator/core" "php-integrator-core" --prefer-dist --no-dev
+composer create-project "serenata/serenata" serenata --prefer-dist --no-dev
 ```
 
 You can then run it with:
@@ -58,14 +58,14 @@ The memory limit can also be freely set. The memory needed very much depends on 
 If you want to make the core part of your (existing) project and use the classes contained inside it for your own purposes:
 
 ```sh
-composer require "php-integrator/core"
+composer require "serenata/serenata"
 ```
 
 Note that the core was designed primarily as an application and not as a library. However, it is still very much possible to instantiate the classes you need yourself.
 
-You may also be interested in [other libraries that are part of the php-integrator suite](https://gitlab.com/php-integrator). In the future, more code may be split from the core into proper, separate libraries.
+You may also be interested in [other libraries that are part of the Serenata suite](https://gitlab.com/Serenata). In the future, more code may be split from the core into proper, separate libraries.
 
 ## Contributing
-As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/php-integrator/core/blob/development/CONTRIBUTING.md).
+As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/Serenata/Serenata/blob/development/CONTRIBUTING.md).
 
-![GPLv3 Logo](https://gitlab.com/php-integrator/core/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)
+![GPLv3 Logo](https://gitlab.com/Serenata/Serenata/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)

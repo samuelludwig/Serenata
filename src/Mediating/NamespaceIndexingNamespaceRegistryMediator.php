@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\NamespaceListRegistry;
+use Serenata\Analysis\NamespaceListRegistry;
 
-use PhpIntegrator\Analysis\Conversion\NamespaceConverter;
+use Serenata\Analysis\Conversion\NamespaceConverter;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\IndexingEventName;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the namespace registry when namespace indexing events happen.

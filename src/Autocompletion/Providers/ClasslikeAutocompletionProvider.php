@@ -1,31 +1,31 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
 use AssertionError;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeHelpers;
 
-use PhpIntegrator\Analysis\ClasslikeListProviderInterface;
+use Serenata\Analysis\ClasslikeListProviderInterface;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
-use PhpIntegrator\Indexing\Structures\File;
-use PhpIntegrator\Indexing\Structures\ClasslikeTypeNameValue;
+use Serenata\Indexing\Structures\File;
+use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
-use PhpIntegrator\Refactoring\UseStatementInsertionCreator;
-use PhpIntegrator\Refactoring\UseStatementInsertionCreationException;
+use Serenata\Refactoring\UseStatementInsertionCreator;
+use Serenata\Refactoring\UseStatementInsertionCreationException;
 
-use PhpIntegrator\Utility\TextEdit;
+use Serenata\Utility\TextEdit;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**
  * Provides classlike autocompletion suggestions at a specific location in a file.

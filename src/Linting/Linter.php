@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Error;
 use PhpParser\Parser;

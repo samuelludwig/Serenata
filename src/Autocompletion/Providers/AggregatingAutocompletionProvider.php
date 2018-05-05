@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Provides autocompletion suggestions at a specific location in a file by aggregating results from delegates.

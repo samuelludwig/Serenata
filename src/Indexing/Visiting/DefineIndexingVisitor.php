@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Visiting;
+namespace Serenata\Indexing\Visiting;
 
-use PhpIntegrator\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
 
-use PhpIntegrator\Utility\NodeHelpers;
+use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;

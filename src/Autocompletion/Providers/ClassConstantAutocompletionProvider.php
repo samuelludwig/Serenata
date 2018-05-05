@@ -1,21 +1,21 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
 use Generator;
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
-use PhpIntegrator\Analysis\CircularDependencyException;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\CircularDependencyException;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
-use PhpIntegrator\Analysis\Typing\Deduction\ExpressionTypeDeducer;
+use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Provides member constant autocompletion suggestions at a specific location in a file.

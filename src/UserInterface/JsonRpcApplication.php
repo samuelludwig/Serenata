@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\UserInterface;
+namespace Serenata\UserInterface;
 
 use React;
 use RuntimeException;
 use UnexpectedValueException;
 
-use PhpIntegrator\Sockets\SocketServer;
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
-use PhpIntegrator\Sockets\JsonRpcRequestHandlerInterface;
-use PhpIntegrator\Sockets\JsonRpcConnectionHandlerFactory;
+use Serenata\Sockets\SocketServer;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcRequestHandlerInterface;
+use Serenata\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\EventLoop\LoopInterface;
 

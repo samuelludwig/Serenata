@@ -5,7 +5,7 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd"
 >
 
-    <entity name="PhpIntegrator\Indexing\Structures\Interface_" change-tracking-policy="DEFERRED_EXPLICIT">
+    <entity name="Serenata\Indexing\Structures\Interface_" change-tracking-policy="DEFERRED_EXPLICIT">
         <!-- These can't be join tables as the associations may not disappear if the other end is removed, otherwise -->
         <!-- we'd need to traverse the entire class list to update items when a missing classlike is added. -->
         <field name="parentFqcns"        type="array"   nullable="false" />

@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

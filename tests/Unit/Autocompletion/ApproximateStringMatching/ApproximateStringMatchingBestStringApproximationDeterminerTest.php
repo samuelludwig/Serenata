@@ -1,11 +1,11 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Autocompletion\ApproximateStringMatching;
+namespace Serenata\Tests\Unit\Autocompletion\ApproximateStringMatching;
 
 use ArrayObject;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\ApproximateStringMatcherInterface;
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer;
+use Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatcherInterface;
+use Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer;
 
 class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PHPUnit\Framework\TestCase
 {

@@ -4,10 +4,10 @@ parameters:
 
 services:
     keywordAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\KeywordAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\KeywordAutocompletionProvider
 
     applicabilityCheckingKeywordAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@keywordAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -15,12 +15,12 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     docblockTagAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\DocblockTagAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\DocblockTagAutocompletionProvider
         arguments:
             - '@docblockAutocompletionPrefixDeterminer'
 
     applicabilityCheckingDocblockTagAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@docblockTagAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -28,10 +28,10 @@ services:
             - '@docblockAutocompletionPrefixDeterminer'
 
     superglobalAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\SuperglobalAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\SuperglobalAutocompletionProvider
 
     applicabilityCheckingSuperglobalAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@superglobalAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -39,7 +39,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     classAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ClasslikeAutocompletionProvider
         arguments:
             - '@classFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
@@ -48,7 +48,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingClassAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@classAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -56,7 +56,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     interfaceAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ClasslikeAutocompletionProvider
         arguments:
             - '@interfaceFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
@@ -65,7 +65,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingInterfaceAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@interfaceAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -73,7 +73,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     traitAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ClasslikeAutocompletionProvider
         arguments:
             - '@traitFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
@@ -82,7 +82,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingTraitAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@traitAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -90,7 +90,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     docblockAnnotationAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ClasslikeAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ClasslikeAutocompletionProvider
         arguments:
             - '@annotationFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
@@ -99,7 +99,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingDocblockAnnotationAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@docblockAnnotationAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -107,7 +107,7 @@ services:
             - '@docblockAutocompletionPrefixDeterminer'
 
     namespaceAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\NamespaceAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\NamespaceAutocompletionProvider
         arguments:
             - '@namespaceListProvider'
             - '@defaultAutocompletionPrefixDeterminer'
@@ -115,7 +115,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingNamespaceAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@namespaceAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -123,7 +123,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     functionAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\FunctionAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\FunctionAutocompletionProvider
         arguments:
             - '@functionListProvider'
             - '@defaultAutocompletionPrefixDeterminer'
@@ -134,7 +134,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingFunctionAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@functionAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -142,7 +142,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     constantAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ConstantAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ConstantAutocompletionProvider
         arguments:
             - '@constantListProvider'
             - '@defaultAutocompletionPrefixDeterminer'
@@ -151,7 +151,7 @@ services:
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingConstantAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@constantAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -159,7 +159,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     nonStaticMethodAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\NonStaticMethodAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\NonStaticMethodAutocompletionProvider
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
@@ -168,7 +168,7 @@ services:
             - '@autocompletionSuggestionTypeFormatter'
 
     applicabilityCheckingNonStaticMethodAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@nonStaticMethodAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -176,7 +176,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     staticMethodAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\StaticMethodAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\StaticMethodAutocompletionProvider
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
@@ -185,7 +185,7 @@ services:
             - '@autocompletionSuggestionTypeFormatter'
 
     applicabilityCheckingStaticMethodAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@staticMethodAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -193,14 +193,14 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     nonStaticPropertyAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\NonStaticPropertyAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\NonStaticPropertyAutocompletionProvider
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@autocompletionSuggestionTypeFormatter'
 
     applicabilityCheckingNonStaticPropertyAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@nonStaticPropertyAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -208,14 +208,14 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     staticPropertyAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\StaticPropertyAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\StaticPropertyAutocompletionProvider
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@autocompletionSuggestionTypeFormatter'
 
     applicabilityCheckingStaticPropertyAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@staticPropertyAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -223,14 +223,14 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     classConstantAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ClassConstantAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ClassConstantAutocompletionProvider
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@autocompletionSuggestionTypeFormatter'
 
     applicabilityCheckingClassConstantAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@classConstantAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -238,7 +238,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     localVariableAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\LocalVariableAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\LocalVariableAutocompletionProvider
         arguments:
             - '@variableScanner'
             - '@parser'
@@ -246,7 +246,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingLocalVariableAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@localVariableAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -254,13 +254,13 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     parameterNameAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ParameterNameAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ParameterNameAutocompletionProvider
         arguments:
             - '@nodeAtOffsetLocator'
             - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingParameterNameAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
             - '@parameterNameAutocompletionProvider'
             - '@nodeAtOffsetLocator'
@@ -268,7 +268,7 @@ services:
             - '@defaultAutocompletionPrefixDeterminer'
 
     aggregatingAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\AggregatingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\AggregatingAutocompletionProvider
         arguments:
             - '@applicabilityCheckingKeywordAutocompletionProvider'
             - '@applicabilityCheckingDocblockTagAutocompletionProvider'
@@ -289,7 +289,7 @@ services:
             - '@applicabilityCheckingParameterNameAutocompletionProvider'
 
     fuzzyMatchingAutocompletionProvider:
-        class: PhpIntegrator\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider
+        class: Serenata\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider
         arguments:
             - '@aggregatingAutocompletionProvider'
             - '@defaultAutocompletionPrefixDeterminer'

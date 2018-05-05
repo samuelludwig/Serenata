@@ -1,22 +1,22 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Sockets;
+namespace Serenata\Tests\Unit\Sockets;
 
 use AssertionError;
 use UnexpectedValueException;
 
 use Psr\Container\ContainerInterface;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcErrorCode;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\JsonRpcQueueItemProcessor;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcErrorCode;
+use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcQueueItemProcessor;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
 use PHPUnit\Framework\MockObject\MockObject;
 
-use PhpIntegrator\UserInterface\Command\CommandInterface;
+use Serenata\UserInterface\Command\CommandInterface;
 
 class JsonRpcQueueItemProcessorTest extends \PHPUnit\Framework\TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;

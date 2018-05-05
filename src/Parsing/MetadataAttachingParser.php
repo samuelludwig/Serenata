@@ -1,9 +1,9 @@
 <?php
 
-namespace PhpIntegrator\Parsing;
+namespace Serenata\Parsing;
 
-use PhpIntegrator\Analysis\Visiting\ParentAttachingVisitor;
-use PhpIntegrator\Analysis\Visiting\NamespaceAttachingVisitor;
+use Serenata\Analysis\Visiting\ParentAttachingVisitor;
+use Serenata\Analysis\Visiting\NamespaceAttachingVisitor;
 
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;

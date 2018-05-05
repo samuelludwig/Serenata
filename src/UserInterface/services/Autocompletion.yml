@@ -8,34 +8,34 @@ parameters:
 
 services:
     defaultAutocompletionPrefixBoundaryTokenRetriever:
-        class: PhpIntegrator\Autocompletion\DefaultAutocompletionPrefixBoundaryTokenRetriever
+        class: Serenata\Autocompletion\DefaultAutocompletionPrefixBoundaryTokenRetriever
 
     docblockAutocompletionPrefixBoundaryTokenRetriever:
-        class: PhpIntegrator\Autocompletion\DocblockAutocompletionPrefixBoundaryTokenRetriever
+        class: Serenata\Autocompletion\DocblockAutocompletionPrefixBoundaryTokenRetriever
         arguments:
             - '@defaultAutocompletionPrefixBoundaryTokenRetriever'
 
     defaultAutocompletionPrefixDeterminer:
-        class: PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminer
+        class: Serenata\Autocompletion\AutocompletionPrefixDeterminer
         arguments:
             - '@defaultAutocompletionPrefixBoundaryTokenRetriever'
 
     docblockAutocompletionPrefixDeterminer:
-        class: PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminer
+        class: Serenata\Autocompletion\AutocompletionPrefixDeterminer
         arguments:
             - '@docblockAutocompletionPrefixBoundaryTokenRetriever'
 
     levenshteinApproximateStringMatcher:
-        class: PhpIntegrator\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher
+        class: Serenata\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher
 
     autocompletionApproximateStringMatcher:
         alias: levenshteinApproximateStringMatcher
 
     autocompletionSuggestionTypeFormatter:
-        class: PhpIntegrator\Autocompletion\AutocompletionSuggestionTypeFormatter
+        class: Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter
 
     functionAutocompletionSuggestionLabelCreator:
-        class: PhpIntegrator\Autocompletion\FunctionAutocompletionSuggestionLabelCreator
+        class: Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator
 
     functionAutocompletionSuggestionParanthesesNecessityEvaluator:
-        class: PhpIntegrator\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator
+        class: Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator

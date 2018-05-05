@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\ConstantListRegistry;
+use Serenata\Analysis\ConstantListRegistry;
 
-use PhpIntegrator\Analysis\Conversion\ConstantConverter;
+use Serenata\Analysis\Conversion\ConstantConverter;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\IndexingEventName;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the constant registry when constant indexing events happen.

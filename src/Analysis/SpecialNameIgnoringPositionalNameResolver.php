@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\NameQualificationUtilities\NameKind;
-use PhpIntegrator\NameQualificationUtilities\PositionalNameResolverInterface;
+use Serenata\NameQualificationUtilities\NameKind;
+use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
 
 /**
  * Positional name resolver that ignores special names (Such as scalar type names).

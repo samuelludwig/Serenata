@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\StorageInterface;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
 
-use PhpIntegrator\NameQualificationUtilities\Import;
-use PhpIntegrator\NameQualificationUtilities\Namespace_;
-use PhpIntegrator\NameQualificationUtilities\FileNamespaceProviderInterface;
+use Serenata\NameQualificationUtilities\Import;
+use Serenata\NameQualificationUtilities\Namespace_;
+use Serenata\NameQualificationUtilities\FileNamespaceProviderInterface;
 
 /**
  * Provides a list of namespaces and imports for a file based on data provided by a storage provider.

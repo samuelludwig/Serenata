@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApplicabilityChecking;
+namespace Serenata\Autocompletion\ApplicabilityChecking;
 
 use PhpParser\Comment;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
+use Serenata\Analysis\NodeAtOffsetLocatorResult;
 
 /**
  * Checks if docblock tag autocompletion applies for a specific node.

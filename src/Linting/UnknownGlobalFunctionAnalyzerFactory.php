@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
+use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 /**
  * Factory that produces instances of {@see UnknownGlobalFunctionAnalyzer}.

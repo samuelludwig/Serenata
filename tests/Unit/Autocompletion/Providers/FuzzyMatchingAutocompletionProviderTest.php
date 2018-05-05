@@ -1,17 +1,17 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Autocompletion\Providers;
+namespace Serenata\Tests\Unit\Autocompletion\Providers;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Autocompletion\Providers\AutocompletionProviderInterface;
-use PhpIntegrator\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider;
+use Serenata\Autocompletion\Providers\AutocompletionProviderInterface;
+use Serenata\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider;
 
-use PhpIntegrator\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
 {

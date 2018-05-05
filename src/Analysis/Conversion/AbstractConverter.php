@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Conversion;
+namespace Serenata\Analysis\Conversion;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 /**
  * Base class for converters.

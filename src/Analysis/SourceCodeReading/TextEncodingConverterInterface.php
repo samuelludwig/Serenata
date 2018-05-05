@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\SourceCodeReading;
+namespace Serenata\Analysis\SourceCodeReading;
 
 /**
  * Interface for classes that can convert the encoding of text.

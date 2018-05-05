@@ -3,7 +3,7 @@ parameters:
 
 services:
     definitionLocator:
-        class: PhpIntegrator\GotoDefinition\DefinitionLocator
+        class: Serenata\GotoDefinition\DefinitionLocator
         arguments:
             - '@nodeAtOffsetLocator'
             - '@funcCallNodeDefinitionLocator'
@@ -16,45 +16,45 @@ services:
             - '@staticPropertyFetchNodeDefinitionLocator'
 
     funcCallNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\FuncCallNodeDefinitionLocator
+        class: Serenata\GotoDefinition\FuncCallNodeDefinitionLocator
         arguments:
             - '@functionNameNodeFqsenDeterminer'
             - '@functionListProvider'
 
     methodCallNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\MethodCallNodeDefinitionLocator
+        class: Serenata\GotoDefinition\MethodCallNodeDefinitionLocator
         arguments:
             - '@methodCallMethodInfoRetriever'
 
     constFetchNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\ConstFetchNodeDefinitionLocator
+        class: Serenata\GotoDefinition\ConstFetchNodeDefinitionLocator
         arguments:
             - '@constFetchNodeFqsenDeterminer'
             - '@constantListProvider'
 
     classConstFetchNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\ClassConstFetchNodeDefinitionLocator
+        class: Serenata\GotoDefinition\ClassConstFetchNodeDefinitionLocator
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
 
     nameNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\NameNodeDefinitionLocator
+        class: Serenata\GotoDefinition\NameNodeDefinitionLocator
         arguments:
             - '@nameNodeFqsenDeterminer'
             - '@classlikeInfoBuilder'
 
     staticMethodCallNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\StaticMethodCallNodeDefinitionLocator
+        class: Serenata\GotoDefinition\StaticMethodCallNodeDefinitionLocator
         arguments:
             - '@methodCallMethodInfoRetriever'
 
     propertyFetchDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\PropertyFetchDefinitionLocator
+        class: Serenata\GotoDefinition\PropertyFetchDefinitionLocator
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
 
     staticPropertyFetchNodeDefinitionLocator:
-        class: PhpIntegrator\GotoDefinition\StaticPropertyFetchNodeDefinitionLocator
+        class: Serenata\GotoDefinition\StaticPropertyFetchNodeDefinitionLocator
         arguments:
             - '@propertyFetchPropertyInfoRetriever'

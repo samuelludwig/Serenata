@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Refactoring;
+namespace Serenata\Refactoring;
 
 use AssertionError;
 use UnexpectedValueException;
@@ -9,16 +9,16 @@ use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Utility\TextEdit;
+use Serenata\Utility\TextEdit;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use PhpIntegrator\Analysis\Typing\TypeNormalizerInterface;
+use Serenata\Analysis\Typing\TypeNormalizerInterface;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\UseStatementKind;
 
 /**
  * Creates {@see TextEdit}s that insert use statements (imports).

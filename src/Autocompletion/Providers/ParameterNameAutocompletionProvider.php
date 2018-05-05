@@ -1,22 +1,22 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\Providers;
+namespace Serenata\Autocompletion\Providers;
 
 use PhpParser\Node;
 
-use PhpIntegrator\Common\Range;
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Utility\TextEdit;
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\TextEdit;
+use Serenata\Utility\SourceCodeHelpers;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorInterface;
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use PhpIntegrator\Autocompletion\SuggestionKind;
-use PhpIntegrator\Autocompletion\AutocompletionSuggestion;
-use PhpIntegrator\Autocompletion\AutocompletionPrefixDeterminerInterface;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use PhpIntegrator\Indexing\Structures\File;
+use Serenata\Indexing\Structures\File;
 
 /**
  * Provides parameter name autocompletion suggestions at a specific location in a file.

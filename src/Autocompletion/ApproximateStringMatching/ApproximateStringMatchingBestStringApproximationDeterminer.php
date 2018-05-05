@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApproximateStringMatching;
+namespace Serenata\Autocompletion\ApproximateStringMatching;
 
 /**
  * Performs string approximation on a list of items and return only the best result(s) by using a

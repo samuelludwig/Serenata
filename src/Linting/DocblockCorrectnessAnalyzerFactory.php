@@ -1,13 +1,13 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
-use PhpIntegrator\Analysis\DocblockAnalyzer;
+use Serenata\Analysis\DocblockAnalyzer;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
+use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
 /**
  * Factory that produces instances of {@see DocblockCorrectnessAnalyzer}.

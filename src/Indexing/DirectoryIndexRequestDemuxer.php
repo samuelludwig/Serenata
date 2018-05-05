@@ -1,14 +1,14 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 use SplFileInfo;
 
-use PhpIntegrator\Sockets\JsonRpcQueue;
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
-use PhpIntegrator\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcQueue;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
 /**
  * Indexes directories by generating one or more file index requests for each encountered file.

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing\Iterating;
+namespace Serenata\Indexing\Iterating;
 
 use Iterator;
 use FilterIterator;

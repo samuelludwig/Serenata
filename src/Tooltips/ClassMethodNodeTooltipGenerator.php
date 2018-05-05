@@ -1,16 +1,16 @@
 <?php
 
-namespace PhpIntegrator\Tooltips;
+namespace Serenata\Tooltips;
 
 use AssertionError;
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
-use PhpIntegrator\Analysis\FilePositionClasslikeDeterminer;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\FilePositionClasslikeDeterminer;
 
-use PhpIntegrator\Common\Position;
+use Serenata\Common\Position;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

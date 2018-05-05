@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\Visiting\ScopeLimitingVisitor;
+use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

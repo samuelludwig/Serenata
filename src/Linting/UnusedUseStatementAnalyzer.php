@@ -1,19 +1,19 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
 use AssertionError;
 
-use PhpIntegrator\Analysis\Visiting\UseStatementKind;
-use PhpIntegrator\Analysis\Visiting\ClassUsageFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\UseStatementFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
-use PhpIntegrator\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\UseStatementKind;
+use Serenata\Analysis\Visiting\ClassUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\UseStatementFetchingVisitor;
+use Serenata\Analysis\Visiting\DocblockClassUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
+use Serenata\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
-use PhpIntegrator\Parsing\DocblockParser;
+use Serenata\Parsing\DocblockParser;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeAnalyzer;
 
 /**
  * Looks for unused use statements.

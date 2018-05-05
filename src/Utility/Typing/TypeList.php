@@ -1,8 +1,8 @@
 <?php
 
-namespace PhpIntegrator\Utility\Typing;
+namespace Serenata\Utility\Typing;
 
-use PhpIntegrator\Utility\ImmutableSet;
+use Serenata\Utility\ImmutableSet;
 
 /**
  * Represents a list of (parameter, property, constant) types.

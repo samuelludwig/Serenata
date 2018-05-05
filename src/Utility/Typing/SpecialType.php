@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Utility\Typing;
+namespace Serenata\Utility\Typing;
 
 /**
  * Represents a special (non-class) type.

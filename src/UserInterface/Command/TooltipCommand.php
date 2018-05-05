@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\FileIndexerInterface;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileIndexerInterface;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
-use PhpIntegrator\Tooltips\TooltipResult;
-use PhpIntegrator\Tooltips\TooltipProvider;
+use Serenata\Tooltips\TooltipResult;
+use Serenata\Tooltips\TooltipProvider;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Command that fetches tooltip information for a specific location.

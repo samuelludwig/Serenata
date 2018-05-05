@@ -1,15 +1,15 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\ClasslikeListRegistry;
+use Serenata\Analysis\ClasslikeListRegistry;
 
-use PhpIntegrator\Analysis\Conversion\ClasslikeConverter;
+use Serenata\Analysis\Conversion\ClasslikeConverter;
 
-use PhpIntegrator\Indexing\Structures;
-use PhpIntegrator\Indexing\IndexingEventName;
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\IndexingEventName;
 
 /**
  * Mediator that updates the classlike registry when classlike indexing events happen.

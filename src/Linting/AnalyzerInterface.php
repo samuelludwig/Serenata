@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Linting;
+namespace Serenata\Linting;
 
 /**
  * Interface for analyzers.

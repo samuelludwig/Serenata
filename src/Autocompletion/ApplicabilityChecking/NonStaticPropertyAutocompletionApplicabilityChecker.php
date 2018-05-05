@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion\ApplicabilityChecking;
+namespace Serenata\Autocompletion\ApplicabilityChecking;
 
 use PhpParser\Node;
 
-use PhpIntegrator\Analysis\NodeAtOffsetLocatorResult;
+use Serenata\Analysis\NodeAtOffsetLocatorResult;
 
 /**
  * Checks if non-static property autocompletion applies for a specific node.

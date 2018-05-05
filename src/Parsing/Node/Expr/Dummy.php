@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Parsing\Node\Expr;
+namespace Serenata\Parsing\Node\Expr;
 
 use PhpParser\Node;
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\PrettyPrinting;
+namespace Serenata\Tests\Unit\PrettyPrinting;
 
-use PhpIntegrator\PrettyPrinting\TypePrettyPrinter;
-use PhpIntegrator\PrettyPrinting\TypeListPrettyPrinter;
-use PhpIntegrator\PrettyPrinting\ParameterNamePrettyPrinter;
-use PhpIntegrator\PrettyPrinting\FunctionParameterPrettyPrinter;
-use PhpIntegrator\PrettyPrinting\ParameterDefaultValuePrettyPrinter;
+use Serenata\PrettyPrinting\TypePrettyPrinter;
+use Serenata\PrettyPrinting\TypeListPrettyPrinter;
+use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
+use Serenata\PrettyPrinting\FunctionParameterPrettyPrinter;
+use Serenata\PrettyPrinting\ParameterDefaultValuePrettyPrinter;
 
 class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
 {

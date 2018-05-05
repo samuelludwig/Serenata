@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis;
+namespace Serenata\Analysis;
 
 /**
  * Collections of clearable cache objects that simply delegates clear cache commands to its elements (aggregate).

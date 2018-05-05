@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 /**
  * Interface for classes that retrieve tokens that should act as boundary tokens for autocompletion prefixes (the part

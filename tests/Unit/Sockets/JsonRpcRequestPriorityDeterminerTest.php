@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Unit\Sockets;
+namespace Serenata\Tests\Unit\Sockets;
 
-use PhpIntegrator\Sockets\JsonRpcRequest;
-use PhpIntegrator\Sockets\JsonRpcQueueItemPriority;
-use PhpIntegrator\Sockets\JsonRpcRequestPriorityDeterminer;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcQueueItemPriority;
+use Serenata\Sockets\JsonRpcRequestPriorityDeterminer;
 
 class JsonRpcRequestPriorityDeterminerTest extends \PHPUnit\Framework\TestCase
 {

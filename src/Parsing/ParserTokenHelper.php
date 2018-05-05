@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Parsing;
+namespace Serenata\Parsing;
 
 /**
  * Aids in dealing with PHP parser tokens.

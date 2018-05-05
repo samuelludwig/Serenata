@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Analysis\SourceCodeReading;
+namespace Serenata\Analysis\SourceCodeReading;
 
 /**
  * Interface for classes that can provide the source code of files.

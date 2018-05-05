@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Indexing;
+namespace Serenata\Indexing;
 
 /**
  * Decorator for {@see FileIndexerInterface} objects that only updates indexed files and fails on files that aren't in

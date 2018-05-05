@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Autocompletion;
+namespace Serenata\Autocompletion;
 
 use ArrayAccess;
 use AssertionError;
 use JsonSerializable;
 
-use PhpIntegrator\Utility\TextEdit;
+use Serenata\Utility\TextEdit;
 
 /**
  * Represents a single autocompletion suggestion.

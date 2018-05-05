@@ -1,23 +1,23 @@
 <?php
 
-namespace PhpIntegrator\Analysis\Typing\Deduction;
+namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use PhpIntegrator\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use PhpIntegrator\Analysis\Typing\TypeAnalyzer;
-use PhpIntegrator\Analysis\Typing\FileClasslikeListProviderInterface;
+use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use PhpIntegrator\Common\Position;
-use PhpIntegrator\Common\FilePosition;
+use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
 
-use PhpIntegrator\Indexing\Structures;
+use Serenata\Indexing\Structures;
 
-use PhpIntegrator\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
-use PhpIntegrator\Utility\NodeHelpers;
-use PhpIntegrator\Utility\SourceCodeHelpers;
+use Serenata\Utility\NodeHelpers;
+use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 

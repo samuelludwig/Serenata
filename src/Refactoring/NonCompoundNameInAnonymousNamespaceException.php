@@ -1,6 +1,6 @@
 <?php
 
-namespace PhpIntegrator\Refactoring;
+namespace Serenata\Refactoring;
 
 /**
  * Indicates a use statement cannot be added for a non-compound name (e.g. "DateTime") in an (implicitly or explicitly)

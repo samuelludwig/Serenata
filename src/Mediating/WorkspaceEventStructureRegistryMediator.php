@@ -1,12 +1,12 @@
 <?php
 
-namespace PhpIntegrator\Mediating;
+namespace Serenata\Mediating;
 
 use Evenement\EventEmitterInterface;
 
-use PhpIntegrator\Analysis\ClasslikeListRegistry;
+use Serenata\Analysis\ClasslikeListRegistry;
 
-use PhpIntegrator\Indexing\WorkspaceEventName;
+use Serenata\Indexing\WorkspaceEventName;
 
 /**
  * Mediator that updates the structure registry when workspace events happen.

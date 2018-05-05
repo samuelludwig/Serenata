@@ -1,10 +1,10 @@
 <?php
 
-namespace PhpIntegrator\Tests\Integration\Tooltips;
+namespace Serenata\Tests\Integration\Tooltips;
 
-use PhpIntegrator\Indexing\Structures\MetaStaticMethodType;
+use Serenata\Indexing\Structures\MetaStaticMethodType;
 
-use PhpIntegrator\Tests\Integration\AbstractIntegrationTest;
+use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use PhpParser\Node;
 

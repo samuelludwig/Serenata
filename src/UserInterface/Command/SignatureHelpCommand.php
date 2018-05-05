@@ -1,18 +1,18 @@
 <?php
 
-namespace PhpIntegrator\UserInterface\Command;
+namespace Serenata\UserInterface\Command;
 
-use PhpIntegrator\Indexing\StorageInterface;
-use PhpIntegrator\Indexing\FileIndexerInterface;
+use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileIndexerInterface;
 
-use PhpIntegrator\SignatureHelp\SignatureHelp;
-use PhpIntegrator\SignatureHelp\SignatureHelpRetriever;
+use Serenata\SignatureHelp\SignatureHelp;
+use Serenata\SignatureHelp\SignatureHelpRetriever;
 
-use PhpIntegrator\Sockets\JsonRpcResponse;
-use PhpIntegrator\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcQueueItem;
 
-use PhpIntegrator\Utility\SourceCodeHelpers;
-use PhpIntegrator\Utility\SourceCodeStreamReader;
+use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Allows fetching signature help (call tips) for a method or function call.
