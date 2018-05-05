@@ -1,4 +1,5 @@
-## 3.4.0 (Unreleased)
+## 4.0.0
+* PHP Integrator is now called Serenata
 * Print warning when xdebug extension is loaded as to warn the user
 
 ## 3.3.0
