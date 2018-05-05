@@ -1,7 +1,7 @@
 <div align="center">
-    <a href="https://gitlab.com/Serenata/Serenata"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="PHP Integrator" title="PHP Integrator" width="258"></a>
+    <a href="https://gitlab.com/Serenata/Serenata"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="Serenata" title="Serenata" width="258"></a>
 
-    <h1>PHP Integrator</h1>
+    <h1>Serenata</h1>
     <h4>Free and open source server providing code assistance for PHP code</h4>
 
     <a href="https://gitlab.com/Serenata/Serenata/commits/development">
@@ -17,7 +17,7 @@
     </a>
 </div>
 
-PHP Integrator is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
+Serenata is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
 
 More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://Serenata.github.io/).
 
