@@ -3,7 +3,7 @@
 * Print warning when xdebug extension is loaded as to warn the user
 
 ## 3.3.0
-* [Autocompletion doesn't work in incomplete foreach](https://gitlab.com/php-integrator/core/issues/176)
+* [Autocompletion doesn't work in incomplete foreach](https://gitlab.com/Serenata/Serenata/issues/176)
 * Support specifying full URI to bind to via `--uri` parameter
   * Specifying only the port is now deprecated and will be removed in 4.0.
   * Using 0.0.0.0 as host allows sending requests to the server from across the network or inside a container, such as using Docker.
@@ -15,11 +15,11 @@
 
 ## 3.2.0
 ### Major Changes
-* [Support autocompletion](https://gitlab.com/php-integrator/core/issues/43)
+* [Support autocompletion](https://gitlab.com/Serenata/Serenata/issues/43)
   * Fuzzy matching is handled as well. This prevents large amounts of relevant suggestions being sent back to the client that are then filtered out again quickly after, which is very taxing on the socket, the client, as well as the server itself.
-* [Allow cancelling requests](https://gitlab.com/php-integrator/core/issues/144)
+* [Allow cancelling requests](https://gitlab.com/Serenata/Serenata/issues/144)
   * As the core is synchronous and single-threaded, requests already being processed cannot be cancelled. However, requests are queued internally, so it is still worthwile to implement this in clients to drop pending requests.
-* [Prioritize latency-sensitive requests](https://gitlab.com/php-integrator/core/issues/143)
+* [Prioritize latency-sensitive requests](https://gitlab.com/Serenata/Serenata/issues/143)
   * As a result, the core can now remain responsive to requests such as autocompletion during large indexing operations, such as initial project indexing. (Note that, during initial indexing, results may not be entirely accurate as the index is still being built.)
 
 ### Other Improvements
@@ -31,7 +31,7 @@
   * These were already retrievable via the actual parameters, but some UI's, such as Visual Studio Code and atom-ide-ui, don't explicitly show the parameter label separately at the time of writing.
 
 ### Bugs Fixed
-* [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/php-integrator/core/issues/149)
+* [Fix keywords used as static members being seen as the former instead of the latter](https://gitlab.com/Serenata/Serenata/issues/149)
 * Fix entities being final, resulting in Doctrine not being able to generate proxies for them
 * Exclude (unusable) variables being assigned to at the requested position when providing a list of local variables
 * Fix wonky docblock types such as `@throws |UnexpectedValueException` causing fatal indexing errors when used in class methods
@@ -44,29 +44,29 @@
 
 ## 3.1.0
 ### Major Changes
-* [Anonymous classes are now properly supported](https://gitlab.com/php-integrator/core/issues/8)
-* [Indexing performance has been improved in various ways, for both small and large files](https://gitlab.com/php-integrator/core/issues/139)
-* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/php-integrator/core/issues/42)
-  * Class names inside comments are currently no longer supported, [but this may change in the future](https://gitlab.com/php-integrator/core/issues/141). This should however pose less of a problem now, as docblock types should be accompanied by type hints, which are clickable.
+* [Anonymous classes are now properly supported](https://gitlab.com/Serenata/Serenata/issues/8)
+* [Indexing performance has been improved in various ways, for both small and large files](https://gitlab.com/Serenata/Serenata/issues/139)
+* [A new command `GotoDefinition` to provide code navigation has been added](https://gitlab.com/Serenata/Serenata/issues/42)
+  * Class names inside comments are currently no longer supported, [but this may change in the future](https://gitlab.com/Serenata/Serenata/issues/141). This should however pose less of a problem now, as docblock types should be accompanied by type hints, which are clickable.
   * This moves us one step closer to becoming a language server in the long run.
-* [Folder indexing requests are now transparently split up into multiple file index requests](https://gitlab.com/php-integrator/core/issues/123)
+* [Folder indexing requests are now transparently split up into multiple file index requests](https://gitlab.com/Serenata/Serenata/issues/123)
   * This will allow for request cancelation and prioritization in the future.
 
 ### Bugs Fixed
-* [Fix using traits in interfaces crashing the server](https://gitlab.com/php-integrator/core/issues/133)
-* [Fix tooltips not working on grouped use statements](https://gitlab.com/php-integrator/core/issues/136)
-* [Fix project paths containing the tilde not being expanded to the user's home folder](https://gitlab.com/php-integrator/core/merge_requests/72)
+* [Fix using traits in interfaces crashing the server](https://gitlab.com/Serenata/Serenata/issues/133)
+* [Fix tooltips not working on grouped use statements](https://gitlab.com/Serenata/Serenata/issues/136)
+* [Fix project paths containing the tilde not being expanded to the user's home folder](https://gitlab.com/Serenata/Serenata/merge_requests/72)
 * Fix core shrugging and bailing whenever the entity manager closed due to a database error
-* [Fix unsupported meta file static method types throwing an error instead of being silently skipped](https://gitlab.com/php-integrator/core/issues/130)
-* Fix some edge case bugs with name (type) resolution by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/php-integrator/name-qualification-utilities/blob/master/CHANGELOG.md#020)
-* [Fix function and method docblock `@return` tag types not being validated against the actual return type](https://gitlab.com/php-integrator/core/issues/94)
-* [Fix crash with variable expressions in method calls during type deduction of the expression based on meta files](https://gitlab.com/php-integrator/core/issues/134)
-* [Make disk I/O and locked database errors propagate as fatal errors, as they currently can't be recovered from and to notify the user](https://github.com/php-integrator/atom-base/issues/278)
-* [Fix folder scanning occurring twice during indexing, once for counting the total amount of items (for progress streaming) and once for actual indexing](https://github.com/php-integrator/atom-base/issues/314#issuecomment-320315228)
-* [Fix occasional "Position out of bounds" logic exception during requests, such as signature help, containing code not explicitly indexed beforehand](https://gitlab.com/php-integrator/core/issues/126)
+* [Fix unsupported meta file static method types throwing an error instead of being silently skipped](https://gitlab.com/Serenata/Serenata/issues/130)
+* Fix some edge case bugs with name (type) resolution by upgrading to [name-qualification-utilities 0.2.0](https://gitlab.com/Serenata/name-qualification-utilities/blob/master/CHANGELOG.md#020)
+* [Fix function and method docblock `@return` tag types not being validated against the actual return type](https://gitlab.com/Serenata/Serenata/issues/94)
+* [Fix crash with variable expressions in method calls during type deduction of the expression based on meta files](https://gitlab.com/Serenata/Serenata/issues/134)
+* [Make disk I/O and locked database errors propagate as fatal errors, as they currently can't be recovered from and to notify the user](https://github.com/Gert-dev/php-ide-serenata/issues/278)
+* [Fix folder scanning occurring twice during indexing, once for counting the total amount of items (for progress streaming) and once for actual indexing](https://github.com/Gert-dev/php-ide-serenata/issues/314#issuecomment-320315228)
+* [Fix occasional "Position out of bounds" logic exception during requests, such as signature help, containing code not explicitly indexed beforehand](https://gitlab.com/Serenata/Serenata/issues/126)
 * Fix bodies of anonymous classes not being subject to any parsing or linting
   * This fixes use statements not being identified as used, among other issues
-* [Fix initialize command failing to reinitialize when database was locked or I/O errors occurred](https://github.com/php-integrator/atom-base/issues/278)
+* [Fix initialize command failing to reinitialize when database was locked or I/O errors occurred](https://github.com/Gert-dev/php-ide-serenata/issues/278)
   * This happened in spite of the original database connection being closed and the database itself completely being removed due to the WAL and SHM files lingering. This seems to cause sqlite to try and reuse them for the new database during schema creation afterwards, which in turn resulted in never being able to break the chain of errors without removing all database files manually.
 
 ### Structural changes (mostly relevant to clients)
@@ -79,20 +79,20 @@
 
 ## 3.0.0
 ### Major changes
-* [PHP 7.1 is now required to _run_ the core](https://gitlab.com/php-integrator/core/issues/81)
+* [PHP 7.1 is now required to _run_ the core](https://gitlab.com/Serenata/Serenata/issues/81)
   * Code that is analyzed can still be anything from PHP 5.2 all the way up to 7.1.
-* [PHP 7.1 is now properly supported](https://gitlab.com/php-integrator/core/issues/40)
+* [PHP 7.1 is now properly supported](https://gitlab.com/Serenata/Serenata/issues/40)
   * It already parsed before, but this involves properly detecting the new scalar types, multiple exception types, ...
-* [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked](https://gitlab.com/php-integrator/core/issues/122)
+* [Various lists containing large data, such as the constant, function, structure and namespace list are no longer rebuilt every time a command to fetch them was invoked](https://gitlab.com/Serenata/Serenata/issues/122)
   * This is primarily used by the autocompletion Atom package, which will benefit from an improvement in response times and fewer minor hiccups.
-* [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/php-integrator/core/issues/7)
+* [HTML will no longer be stripped from docblock descriptions and text (except in places where it's not allowed, such as in types)](https://gitlab.com/Serenata/Serenata/issues/7)
   * This means you can use HTML as well as markdown in docblocks and the client side is now able to properly format it.
-*  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/php-integrator/core/issues/2)
+*  [PhpStorm's open source stubs are now used for indexing built-in structural elements](https://gitlab.com/Serenata/Serenata/issues/2)
   * Reflection in combination with PHP documentation data is no longer used to index built-in items.
   * These provide more accurate parameter type, return type and default value information than the documentation for the purpose of static analysis (e.g. `DateTime::createFromFormat`).
   * This reduces the maintenance burden of having two separate indexing procedures and lowers the test surface.
   * `isBuiltin` was removed for classlikes, global functions and global constants. This could previously be used for features such as code navigation since there was no physical file for the built-in items. Clients can now remove conditional code checking for this property as bulit-in items are indexed like any other code.
-* [(PhpStorm) Meta files are now supported in a very rudimentary way, albeit with some restrictions (which may be lifted in the future)](https://gitlab.com/php-integrator/core/issues/10)
+* [(PhpStorm) Meta files are now supported in a very rudimentary way, albeit with some restrictions (which may be lifted in the future)](https://gitlab.com/Serenata/Serenata/issues/10)
   * Only the `STATIC_METHOD_TYPES` setting is supported.
   * Only [the first version of the format](https://confluence.jetbrains.com/display/PhpStorm/PhpStorm+Advanced+Metadata#PhpStormAdvancedMetadata-Deprecated:Legacymetadataformat(2016.1andearlier)) is supported, as this is likely the most widely used variant.
   * The settings must be located in a namespace called `PHPSTORM_META`. It is recommended to place it in a file called `.phpstorm.meta.php` for compatibility with PhpStorm, but in theory any PHP file can contain this namespace.
@@ -136,10 +136,10 @@ $serviceLocator->get('someService')-> // Autocompletion for App\SomeService
 ```
 
 ### Linting
-* [Some docblock warnings have been promoted to errors](https://gitlab.com/php-integrator/core/issues/33)
-* [Complain about missing ampersand signs for reference parameters in docblocks](https://gitlab.com/php-integrator/core/issues/32)
-* [Don't complain about type mismatches in docblocks when the qualifications of the types are different](https://gitlab.com/php-integrator/core/issues/89)
-* [For docblock parameters, specializations of the type hint are now allowed to narrow down class types](https://gitlab.com/php-integrator/core/issues/35)
+* [Some docblock warnings have been promoted to errors](https://gitlab.com/Serenata/Serenata/issues/33)
+* [Complain about missing ampersand signs for reference parameters in docblocks](https://gitlab.com/Serenata/Serenata/issues/32)
+* [Don't complain about type mismatches in docblocks when the qualifications of the types are different](https://gitlab.com/Serenata/Serenata/issues/89)
+* [For docblock parameters, specializations of the type hint are now allowed to narrow down class types](https://gitlab.com/Serenata/Serenata/issues/35)
 
 ```php
 <?php
@@ -165,7 +165,7 @@ class B extends C {}
 function foo(C $c) {}
 ```
 
-* [Processing more complex docblock types, such as compound types containing multiple array specializations and null, has substantially improved and should complain less about valid combinations](https://gitlab.com/php-integrator/core/issues/11)
+* [Processing more complex docblock types, such as compound types containing multiple array specializations and null, has substantially improved and should complain less about valid combinations](https://gitlab.com/Serenata/Serenata/issues/11)
 * Linting messages for classlikes, functions and methods will now be properly shown over their name instead of on the first character of their definition
 * Disabling unknown global constant linting now works again
 * For docblock parameters, compound types containing class types will now be resolved properly (previously, only a single type was resolved)
@@ -188,10 +188,10 @@ function foo(C $c) {}
 * Parsing default values of structural elements now doesn't happen twice during indexing anymore, improving indexing performance
 
 ### Various bugfixes
-* [Fix incorrect type deduction for global functions without leading slash](https://github.com/php-integrator/atom-base/issues/284)
-* [Deducing the type of anonymous classes no longer generates errors](https://gitlab.com/php-integrator/core/issues/106)
-* [Requests for files that are not in the index will now be properly denied where applicable instead of resulting in a logic exception being thrown](https://gitlab.com/php-integrator/core/issues/104)
-* [When a circular dependency or reference occurs, requests for the culprit class should now continue working, albeit without the duplicate information](https://gitlab.com/php-integrator/core/issues/79)
+* [Fix incorrect type deduction for global functions without leading slash](https://github.com/Gert-dev/php-ide-serenata/issues/284)
+* [Deducing the type of anonymous classes no longer generates errors](https://gitlab.com/Serenata/Serenata/issues/106)
+* [Requests for files that are not in the index will now be properly denied where applicable instead of resulting in a logic exception being thrown](https://gitlab.com/Serenata/Serenata/issues/104)
+* [When a circular dependency or reference occurs, requests for the culprit class should now continue working, albeit without the duplicate information](https://gitlab.com/Serenata/Serenata/issues/79)
 * Fixed the type of defines not being properly deduced from their value
 * Fix not being able to use the same namespace multiple times in a file
 * Fix no namespace (i.e. before the first namespace declaration) being confused for an anonymous namespace when present
@@ -200,8 +200,8 @@ function foo(C $c) {}
 * The variable defined in a `catch` block wasn't always being returned in the variable list
 
 ### Structural changes (mostly relevant to clients)
-* [A new command `Tooltips` to provide tooltips has been added](https://gitlab.com/php-integrator/core/issues/86)
-* [The invocation info command has been reworked into the `SignatureHelp` command (call tips)](https://gitlab.com/php-integrator/core/issues/92)
+* [A new command `Tooltips` to provide tooltips has been added](https://gitlab.com/Serenata/Serenata/issues/86)
+* [The invocation info command has been reworked into the `SignatureHelp` command (call tips)](https://gitlab.com/Serenata/Serenata/issues/92)
   * This command operates in a similar fashion, but provides full information over the available signatures instead of just information about the invocation, leaving the caller to handle further type determination and handling.
 * `SemanticLint` has been renamed to just `Lint`, as it also lints syntax errors
 * The class list will now only provide fields directly relevant to the class.
@@ -245,7 +245,7 @@ function foo(C $c) {}
 * Lock php-parser at 3.0.5 to avoid recent PHP 7 requirement in its master due to Composer limitation.
 
 ## 2.1.6
-* Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/php-integrator/core/issues/87).
+* Fix error with incomplete default values for define expressions causing the error `ConfigurableDelegatingNodeTypeDeducer::deduce() must implement interface PhpParser\Node, null given` (https://gitlab.com/Serenata/Serenata/issues/87).
 * Fix this snippet of code causing php-parser to generate a fatal error:
 
 ```php
@@ -261,13 +261,13 @@ function foo()
 
 ## 2.1.5
 * Indexing performance was slightly improved.
-* Fix regression where complex strings with more complex interpolated values wrapped in parantheses were failing to parse, causing indexing to fail for files containing them (https://gitlab.com/php-integrator/core/issues/83).
+* Fix regression where complex strings with more complex interpolated values wrapped in parantheses were failing to parse, causing indexing to fail for files containing them (https://gitlab.com/Serenata/Serenata/issues/83).
 
 ## 2.1.4
-* Fix corner case with strings containing more complex interpolated values, such as with method calls and property fetches, failing to parse, causing indexing to fail for files containing them (https://gitlab.com/php-integrator/core/issues/83).
+* Fix corner case with strings containing more complex interpolated values, such as with method calls and property fetches, failing to parse, causing indexing to fail for files containing them (https://gitlab.com/Serenata/Serenata/issues/83).
 
 ## 2.1.3
-* Fix corner case with HEREDOCs containing interpolated values failing to parse, causing indexing to fail for files containg them (https://gitlab.com/php-integrator/core/issues/82).
+* Fix corner case with HEREDOCs containing interpolated values failing to parse, causing indexing to fail for files containg them (https://gitlab.com/Serenata/Serenata/issues/82).
 * Default value parsing failures will now throw `LogicException`s.
   * This will cause them to crash the server, but that way they can be debugged as parsing valid PHP code should never fail.
 
@@ -418,4 +418,4 @@ $foo[0]-> // The type is \DateTime.
   * Built-in interface methods also had `isAbstract` set to `true` instead of `false`.
 
 ## 1.2.0
-* Initial split from the [php-integrator/atom-base](https://github.com/php-integrator/atom-base) repository. See [its changelog](https://github.com/php-integrator/atom-base/blob/master/CHANGELOG.md) for what changed in older versions.
+* Initial split from the [Gert-dev/php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata) repository. See [its changelog](https://github.com/Gert-dev/php-ide-serenata/blob/master/CHANGELOG.md) for what changed in older versions.

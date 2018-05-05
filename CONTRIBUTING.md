@@ -4,7 +4,7 @@ A PHP static analyzer and server on top of that are both projects with a rather 
 ## What Should I Do?
 If you don't have any itch of your own to scratch, [the issue list](https://gitlab.com/Serenata/Serenata/issues) provides an overview of open issues and feature requests that could benefit from new development.
 
-Relatedly, there may also be improvements [in the Atom packages](https://github.com/php-integrator) that require work in the core itself.
+Relatedly, there may also be improvements [in the Atom package](https://github.com/Gert-dev/php-ide-serenata) that require work in the core itself.
 
 ## But I Need Help!
 Working on the code base but encountered something that seems off, (too) complex, or you're not sure what direction to take? Just reply to the relevant issue or [open a new one](https://gitlab.com/Serenata/Serenata/issues/new) in order to spark a discussion or get a maintainer to guide you through the process! _(Note that the time it takes for a reply to appear may vary, due to most maintainers working a voluntary basis and in their spare time.)_
@@ -49,7 +49,7 @@ Unit tests usually much more exhaustively test all parts of a single class, so t
 
 ## Debugging And Profiling (xdebug)
 ### Using Atom
-Take a look inside [`~/.atom/packages/php-integrator-base/lib/Proxy.coffee`in the base package](https://github.com/php-integrator/atom-base/blob/master/lib/Proxy.coffee#L100). You will find some commented out code here that you can uncomment and modify to enable xdebug.
+Take a look inside [`~/.atom/packages/php-ide-serenata/lib/Proxy.coffee`in the base package](https://github.com/Gert-dev/php-ide-serenata/blob/c28338769b91d05155fe52ba7fbc2a137e8ae15c/lib/Proxy.coffee#L108). You will find some commented out code here that you can uncomment and modify to enable xdebug.
 
 ### Manually (CLI)
 ```sh
@@ -70,8 +70,8 @@ It can seem challenging to develop the core and test the changes in a real world
 1. Set up the core from Git somewhere (install composer dependencies, ensure tests work, ...)
 2. Set up the Atom packages from Git in `~/.atom/packages` and run `apm install` in their folders to install their dependencies
   * Optionally, you can also just clone them somewhere else and symlink these folders into the Atom packages directory.
-3. Go into the base package's `core` subfolder and symlink the core's Git repository folder to a new folder symlink with the name of [the core version specification used by the base package](https://github.com/php-integrator/atom-base/blob/master/lib/Main.coffee#L161)
-  * To put this more plainly, symlink e.g. `php-integrator-base/core/3.0.0`, or whatever the version used by the base package is, to the core folder you pulled from Git
+3. Go into the base package's `core` subfolder and symlink the core's Git repository folder to a new folder symlink with the name of [the core version specification used by the base package](https://github.com/Gert-dev/php-ide-serenata/blob/c346e67c2d29b803df693a870dab64698d5b2755/lib/Main.coffee#L286)
+  * To put this more plainly, symlink e.g. `php-ide-serenata/core/3.0.0`, or whatever the version used by the base package is, to the core folder you pulled from Git
 
 To summarize all of this, just replace the packages that are installed by Atom with their Git variants and replace the core the base package automatically downloads with the core from Git. Alternatively, you can set up a Git repository with the appropriate remotes in the existing folders.
 
