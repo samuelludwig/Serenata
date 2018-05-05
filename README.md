@@ -4,12 +4,12 @@
     <h1>Serenata</h1>
     <h4>Free and open source server providing code assistance for PHP code</h4>
 
-    <a href="https://gitlab.com/Serenata/Serenata/commits/development">
-        <img src="https://gitlab.com/Serenata/Serenata/badges/development/pipeline.svg">
+    <a href="https://gitlab.com/Serenata/Serenata/commits/master">
+        <img src="https://gitlab.com/Serenata/Serenata/badges/master/pipeline.svg">
     </a>
 
-    <a href="https://gitlab.com/Serenata/Serenata/commits/development">
-        <img src="https://gitlab.com/Serenata/Serenata/badges/development/coverage.svg">
+    <a href="https://gitlab.com/Serenata/Serenata/commits/master">
+        <img src="https://gitlab.com/Serenata/Serenata/badges/master/coverage.svg">
     </a>
 
     <a href="https://liberapay.com/Gert-dev/donate">
@@ -66,6 +66,6 @@ Note that the core was designed primarily as an application and not as a library
 You may also be interested in [other libraries that are part of the Serenata suite](https://gitlab.com/Serenata). In the future, more code may be split from the core into proper, separate libraries.
 
 ## Contributing
-As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/Serenata/Serenata/blob/development/CONTRIBUTING.md).
+As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/Serenata/Serenata/blob/master/CONTRIBUTING.md).
 
 ![GPLv3 Logo](https://gitlab.com/Serenata/Serenata/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)
