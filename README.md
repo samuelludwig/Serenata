@@ -2,7 +2,7 @@
     <a href="https://gitlab.com/Serenata/Serenata"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="Serenata" title="Serenata" width="258"></a>
 
     <h1>Serenata</h1>
-    <h4>Free and open source server providing code assistance for PHP code</h4>
+    <h4>Free and open source server providing code assistance for PHP</h4>
 
     <a href="https://gitlab.com/Serenata/Serenata/commits/master">
         <img src="https://gitlab.com/Serenata/Serenata/badges/master/pipeline.svg">
