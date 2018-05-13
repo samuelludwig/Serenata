@@ -815,7 +815,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $parameter = new Structures\MethodParameter(
                 $method,
-                $param->var->name,
+                $param->var instanceof Node\Expr\Variable ? $param->var->name : '',
                 $typeHint,
                 $types,
                 $parameterDoc ? $parameterDoc['description'] : null,
