@@ -30,17 +30,19 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
 
     /**
      * @param string                        $code
+     * @param string                        $file
      * @param TypeAnalyzer                  $typeAnalyzer
      * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
     public function __construct(
         string $code,
+        string $file,
         TypeAnalyzer $typeAnalyzer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder
     ) {
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
 
-        $this->outlineIndexingVisitor = new OutlineFetchingVisitor($typeAnalyzer, $code);
+        $this->outlineIndexingVisitor = new OutlineFetchingVisitor($typeAnalyzer, $code, $file);
     }
 
     /**
@@ -98,7 +100,7 @@ final class DocblockMissingAnalyzer implements AnalyzerInterface
 
         $classInfo = $this->classlikeInfoBuilder->build($classlike['fqcn']);
 
-        if ($classInfo && !$classInfo['hasDocumentation']) {
+        if ($classInfo && !$classInfo['hasDocumentation'] && !$classlike['isAnonymous']) {
             $warnings[] = [
                 'message' => "Documentation for classlike is missing.",
                 'start'   => $classlike['startPosName'],

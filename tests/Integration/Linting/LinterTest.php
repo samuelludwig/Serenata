@@ -667,6 +667,16 @@ class LinterTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testProperlyProcessesAnonymousClass(): void
+    {
+        $output = $this->lintFile('AnonymousClass.phpt');
+
+        static::assertSame([], $output['warnings']);
+    }
+
+    /**
      * @param string $filePath
      * @param bool   $indexingMayFail
      *

@@ -192,7 +192,7 @@ class Linter
         }
 
         if ($settings->getLintMissingDocumentation()) {
-            $analyzers[] = $this->docblockMissingAnalyzerFactory->create($code);
+            $analyzers[] = $this->docblockMissingAnalyzerFactory->create($code, $file->getPath());
         }
 
         return $analyzers;

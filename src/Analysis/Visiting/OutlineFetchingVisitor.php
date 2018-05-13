@@ -7,7 +7,6 @@ use Serenata\Analysis\Typing\TypeNormalizerInterface;
 use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -52,13 +51,20 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
+     * @var string
+     */
+    private $file;
+
+    /**
      * @param TypeNormalizerInterface $typeNormalizer
      * @param string                  $code
+     * @param string                  $file
      */
-    public function __construct(TypeNormalizerInterface $typeNormalizer, string $code)
+    public function __construct(TypeNormalizerInterface $typeNormalizer, string $code, string $file)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->code = $code;
+        $this->file = $file;
     }
 
     /**
@@ -79,11 +85,6 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\Const_) {
             $this->parseConstantNode($node);
         } elseif ($node instanceof Node\Stmt\Class_) {
-            if ($node->isAnonymous()) {
-                // Ticket #45 - Skip PHP 7 anonymous classes.
-                return;
-            }
-
             $this->parseClassNode($node);
         } elseif ($node instanceof Node\Stmt\Interface_) {
             $this->parseInterfaceNode($node);
@@ -115,16 +116,17 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             $interfaces[] = NodeHelpers::fetchClassName($implementedName->getAttribute('resolvedName'));
         }
 
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
+        $fqcn = $this->getCurrentStructureFqcn();
 
         $this->classlikes[$fqcn] = [
-            'name'           => $node->name->name,
+            'name'           => $this->getCurrentStructureName(),
             'fqcn'           => $fqcn,
             'type'           => 'class',
             'startLine'      => $node->getLine(),
             'endLine'        => $node->getAttribute('endLine'),
-            'startPosName'   => $node->name->getAttribute('startFilePos') ? $node->name->getAttribute('startFilePos') : null,
-            'endPosName'     => $node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null,
+            'startPosName'   => $node->name ? ($node->name->getAttribute('startFilePos') ? $node->name->getAttribute('startFilePos') : null) : null,
+            'endPosName'     => $node->name ? ($node->name->getAttribute('endFilePos') ? ($node->name->getAttribute('endFilePos') + 1) : null) : null,
+            'isAnonymous'    => $node->isAnonymous(),
             'isAbstract'     => $node->isAbstract(),
             'isFinal'        => $node->isFinal(),
             'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
@@ -212,7 +214,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     private function parseTraitUseNode(Node\Stmt\TraitUse $node): void
     {
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
+        $fqcn = $this->getCurrentStructureFqcn();
 
         foreach ($node->traits as $traitName) {
             $this->classlikes[$fqcn]['traits'][] =
@@ -246,7 +248,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     private function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
+        $fqcn = $this->getCurrentStructureFqcn();
 
         foreach ($node->props as $property) {
             $this->classlikes[$fqcn]['properties'][$property->name->name] = [
@@ -302,7 +304,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
+        $fqcn = $this->getCurrentStructureFqcn();
 
         $this->classlikes[$fqcn]['methods'][$node->name->name] = $this->extractFunctionLikeNodeData($node) + [
             'isPublic'       => $node->isPublic(),
@@ -407,7 +409,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     private function parseClassConstantNode(Node\Stmt\ClassConst $node): void
     {
-        $fqcn = $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
+        $fqcn = $this->getCurrentStructureFqcn();
 
         foreach ($node->consts as $const) {
             $this->classlikes[$fqcn]['constants'][$const->name->name] = [
@@ -551,5 +553,33 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     public function getGlobalDefines(): array
     {
         return $this->globalDefines;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getCurrentStructureFqcn(): ?string
+    {
+        if (!$this->currentStructure) {
+            return null;
+        } elseif ($this->currentStructure->isAnonymous()) {
+            return NodeHelpers::getFqcnForAnonymousClassNode($this->currentStructure, $this->file);
+        }
+
+        return $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getCurrentStructureName(): ?string
+    {
+        if (!$this->currentStructure) {
+            return null;
+        } elseif ($this->currentStructure->isAnonymous()) {
+            return mb_substr($this->getCurrentStructureFqcn(), 1);
+        }
+
+        return $this->currentStructure->name->name;
     }
 }

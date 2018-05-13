@@ -68,7 +68,7 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockAnalyzer = $docblockAnalyzer;
 
-        $this->outlineIndexingVisitor = new OutlineFetchingVisitor($typeAnalyzer, $code);
+        $this->outlineIndexingVisitor = new OutlineFetchingVisitor($typeAnalyzer, $code, $file);
     }
 
     /**

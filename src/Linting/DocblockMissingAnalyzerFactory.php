@@ -33,13 +33,15 @@ class DocblockMissingAnalyzerFactory
 
     /**
      * @param string $code
+     * @param string $file
      *
      * @return DocblockMissingAnalyzer
      */
-    public function create(string $code): DocblockMissingAnalyzer
+    public function create(string $code, string $file): DocblockMissingAnalyzer
     {
         return new DocblockMissingAnalyzer(
             $code,
+            $file,
             $this->typeAnalyzer,
             $this->classlikeInfoBuilder
         );
