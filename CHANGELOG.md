@@ -3,7 +3,6 @@
 * [Fix error "Call to a member function toString() on null" inside anonymous classes](https://gitlab.com/Serenata/Serenata/issues/203)
 * [Autocompletion doesn't add imports when function parameter name is missing](https://gitlab.com/Serenata/Serenata/issues/204)
 
-
 ## 4.0.0
 * PHP Integrator is now called Serenata
 * Print warning when xdebug extension is loaded as to warn the user
