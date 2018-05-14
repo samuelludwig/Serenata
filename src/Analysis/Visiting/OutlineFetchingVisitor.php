@@ -92,8 +92,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             $this->parseTraitNode($node);
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->parseTraitUseNode($node);
-        } elseif (
-            $node instanceof Node\Expr\FuncCall &&
+        } elseif ($node instanceof Node\Expr\FuncCall &&
             $node->name instanceof Node\Name &&
             $node->name->toString() === 'define'
         ) {
