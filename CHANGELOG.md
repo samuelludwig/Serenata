@@ -1,5 +1,7 @@
 ## 4.0.2
 * Fix error "Call to undefined method PhpParser\Node\Stmt\Trait_::isAnonymous()" in traits and interfaces
+* Autocompletion doesn't add imports when function body is missing (but parantheses must be present)
+    * [Related to #204](https://gitlab.com/Serenata/Serenata/issues/204)
 
 ## 4.0.1
 * Fix anonymous classes not being subject to various linting inspections
