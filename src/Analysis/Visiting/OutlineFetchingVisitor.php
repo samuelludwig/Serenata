@@ -36,7 +36,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     private $globalDefines = [];
 
     /**
-     * @var Node\Stmt\Class_|null
+     * @var Node\Stmt\ClassLike|null
      */
     private $currentStructure;
 
@@ -561,7 +561,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     {
         if (!$this->currentStructure) {
             return null;
-        } elseif ($this->currentStructure->isAnonymous()) {
+        } elseif ($this->currentStructure instanceof Node\Stmt\Class_ && $this->currentStructure->isAnonymous()) {
             return NodeHelpers::getFqcnForAnonymousClassNode($this->currentStructure, $this->file);
         }
 
@@ -575,7 +575,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     {
         if (!$this->currentStructure) {
             return null;
-        } elseif ($this->currentStructure->isAnonymous()) {
+        } elseif ($this->currentStructure instanceof Node\Stmt\Class_ && $this->currentStructure->isAnonymous()) {
             return mb_substr($this->getCurrentStructureFqcn(), 1);
         }
 

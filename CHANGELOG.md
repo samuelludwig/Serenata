@@ -1,3 +1,6 @@
+## 4.0.2
+* Fix error "Call to undefined method PhpParser\Node\Stmt\Trait_::isAnonymous()" in traits and interfaces
+
 ## 4.0.1
 * Fix anonymous classes not being subject to various linting inspections
 * [Fix error "Call to a member function toString() on null" inside anonymous classes](https://gitlab.com/Serenata/Serenata/issues/203)

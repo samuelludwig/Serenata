@@ -677,6 +677,16 @@ class LinterTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testProperlyProcessesTrait(): void
+    {
+        $output = $this->lintFile('Trait.phpt');
+
+        static::assertSame([], $output['warnings']);
+    }
+
+    /**
      * @param string $filePath
      * @param bool   $indexingMayFail
      *
