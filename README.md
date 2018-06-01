@@ -31,8 +31,7 @@ More information for users, both developers looking to implement the core in oth
 There are also other requests clients can send to extract information about a code base. However, we are in the process of slowly migrating to become a [language server](https://microsoft.github.io/language-server-protocol/) for PHP, so these may be replaced by compliant requests in the future.
 
 ## Where Is It Used?
-Currently the core package is used to power the Serenata-* packages for the Atom editor. See also
-[the list of projects](https://github.com/Serenata).
+The [php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata/) package integrates Serenata into the Atom editor via Atom-IDE.
 
 ## Installation
 ### Runtime
