@@ -8,6 +8,7 @@
         "php": "^7.1",
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
+        "composer/xdebug-handler": "^1.1",
         "doctrine/cache": "^1.7",
         "doctrine/orm": "^2.6",
         "evenement/evenement": "^3.0",

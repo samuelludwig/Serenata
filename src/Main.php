@@ -1,15 +1,19 @@
 <?php
 
-// xdebug will only slow down indexing. Very strangely enough, disabling xdebug doesn't seem to disable this nesting
-// level in all cases. See also https://github.com/Gert-dev/php-ide-serenata/issues/101 . This appears to be
-// confirmed in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Performance.markdown
-if (function_exists('xdebug_disable')) {
-    xdebug_disable();
-
-    echo 'You have the xdebug extension loaded, expect severely degraded performance!' . PHP_EOL;
-}
+use Composer\XdebugHandler\XdebugHandler;
 
 require __DIR__ . '/Bootstrap.php';
+
+$xdebug = new XdebugHandler('Serenata');
+$xdebug->setMainScript(__DIR__ . '/Main.php');
+$xdebug->check();
+
+unset($xdebug);
+
+if (XdebugHandler::getRestartSettings()) {
+    echo 'Warning: You have the Xdebug extension loaded and enabled. The server has restarted itself without it to ' .
+        'avoid severely degraded performance...' . PHP_EOL;
+}
 
 $applicationJsonRpcRequestHandler = new \Serenata\UserInterface\JsonRpcApplication();
 
