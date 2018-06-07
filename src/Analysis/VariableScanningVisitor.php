@@ -114,6 +114,10 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      */
     private function parseParam(Node\Param $node): void
     {
+        if (!$node->var instanceof Node\Expr\Variable) {
+            return;
+        }
+
         $this->variables[] = '$' . $node->var->name;
     }
 

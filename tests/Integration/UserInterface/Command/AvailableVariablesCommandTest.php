@@ -188,6 +188,14 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testIgnoresErrorsInParameterNames(): void
+    {
+        static::assertSame([], $this->getAvailableVariables('ErrorInParameterName.phpt'));
+    }
+
+    /**
      * @param string $name
      *
      * @return string
