@@ -13,7 +13,7 @@
         "evenement/evenement": "^3.0",
         "jetbrains/phpstorm-stubs": "dev-master",
         "league/html-to-markdown": "^4.6",
-        "nikic/php-parser": "dev-master#7b201b63d2cef4ec795d52044a31d20e79e871fb as v4.0.1",
+        "nikic/php-parser": "^4.0.2",
         "php-ds/php-ds": "^1.2",
         "serenata/common": "^0.2",
         "serenata/docblock-type-parser": "^0.3.1",
