@@ -15,11 +15,11 @@
         "league/html-to-markdown": "^4.6",
         "nikic/php-parser": "^4.0.2",
         "php-ds/php-ds": "^1.2",
+        "ramsey/uuid": "^3.7",
+        "react/socket": "^0.8",
         "serenata/common": "^0.2",
         "serenata/docblock-type-parser": "^0.3.1",
         "serenata/name-qualification-utilities": "^0.4.1",
-        "ramsey/uuid": "^3.7",
-        "react/socket": "^0.8",
         "symfony/config": "^4.0",
         "symfony/dependency-injection": "^3.4",
         "symfony/yaml": "^3.4"
