@@ -19,6 +19,9 @@ services:
         arguments:
             - '@docblockAutocompletionPrefixDeterminer'
 
+    functionParametersEvaluator:
+        class: Serenata\Autocompletion\FunctionParametersEvaluator
+
     applicabilityCheckingDocblockTagAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
         arguments:
@@ -127,6 +130,7 @@ services:
         arguments:
             - '@functionListProvider'
             - '@defaultAutocompletionPrefixDeterminer'
+            - '@functionParametersEvaluator'
             - '@bestStringApproximationDeterminer'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
@@ -163,6 +167,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@functionParametersEvaluator'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
             - '@autocompletionSuggestionTypeFormatter'
@@ -180,6 +185,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@functionParametersEvaluator'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
             - '@autocompletionSuggestionTypeFormatter'

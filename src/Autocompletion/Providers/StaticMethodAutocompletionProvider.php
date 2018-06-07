@@ -4,6 +4,7 @@ namespace Serenata\Autocompletion\Providers;
 
 use Generator;
 use AssertionError;
+use Serenata\Autocompletion\FunctionParametersEvaluator;
 use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
@@ -50,21 +51,29 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     private $autocompletionSuggestionTypeFormatter;
 
     /**
-     * @param ExpressionTypeDeducer                                         $expressionTypeDeducer
-     * @param ClasslikeInfoBuilderInterface                                 $classlikeInfoBuilder
-     * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
+     * @var FunctionParametersEvaluator
+     */
+    private $functionParametersEvaluator;
+
+    /**
+     * @param ExpressionTypeDeducer $expressionTypeDeducer
+     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @param FunctionParametersEvaluator $functionParametersEvaluator
+     * @param FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
-     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
+     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
+        FunctionParametersEvaluator $functionParametersEvaluator,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
         AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->functionParametersEvaluator = $functionParametersEvaluator;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
         $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
@@ -134,7 +143,11 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
         $insertText = $method['name'];
 
         if ($shouldIncludeParanthesesInInsertText) {
-            $insertText .= '($0)';
+            if ($this->functionParametersEvaluator->hasRequiredParameters($method)) {
+                $insertText .= '($0)';
+            } else {
+                $insertText .= '()$0';
+            }
         }
 
         return new AutocompletionSuggestion(
