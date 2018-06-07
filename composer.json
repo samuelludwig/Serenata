@@ -23,7 +23,7 @@
         "serenata/name-qualification-utilities": "^0.4.1",
         "symfony/config": "^4.1",
         "symfony/dependency-injection": "^4.1",
-        "symfony/yaml": "^3.4"
+        "symfony/yaml": "^4.1"
     },
     "require-dev": {
         "brianium/paratest": "^1.1",

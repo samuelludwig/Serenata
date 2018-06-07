@@ -21,7 +21,7 @@ services:
             - '@parser.phpParserFactory'
             - 'create'
         arguments:
-            - !php/const:PhpParser\ParserFactory::PREFER_PHP7
+            - !php/const PhpParser\ParserFactory::PREFER_PHP7
             - '@lexer'
 
     parser.metadataAttachingParser:

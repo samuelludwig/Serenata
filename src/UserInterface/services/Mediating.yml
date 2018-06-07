@@ -17,21 +17,21 @@ services:
         arguments:
             - '@cacheClearingEventMediator.clearableCache'
             - '@indexer'
-            - !php/const:Serenata\Indexing\IndexingEventName::INDEXING_SUCCEEDED_EVENT
+            - !php/const Serenata\Indexing\IndexingEventName::INDEXING_SUCCEEDED_EVENT
 
     cacheClearingEventMediator2:
         class: Serenata\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:Serenata\Indexing\IndexingEventName::NAMESPACE_UPDATED
+            - !php/const Serenata\Indexing\IndexingEventName::NAMESPACE_UPDATED
 
     cacheClearingEventMediator3:
         class: Serenata\Mediating\CacheClearingEventMediator
         arguments:
             - '@fileNamespaceProvider.cachingFileNamespaceProvider'
             - '@storage'
-            - !php/const:Serenata\Indexing\IndexingEventName::IMPORT_INSERTED
+            - !php/const Serenata\Indexing\IndexingEventName::IMPORT_INSERTED
 
     constantIndexingConstantRegistryMediator:
         class: Serenata\Mediating\ConstantIndexingConstantRegistryMediator
