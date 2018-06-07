@@ -36,9 +36,9 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     private $globalDefines = [];
 
     /**
-     * @var Node\Stmt\ClassLike|null
+     * @var Node\Stmt\ClassLike[]
      */
-    private $currentStructure;
+    private $currentStructureStack = [];
 
     /**
      * @var TypeNormalizerInterface
@@ -101,13 +101,23 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     }
 
     /**
+     * @inheritDoc
+     */
+    public function leaveNode(Node $node)
+    {
+        if (!empty($this->currentStructureStack) && $this->currentStructureStack[0] === $node) {
+            array_shift($this->currentStructureStack);
+        }
+    }
+
+    /**
      * @param Node\Stmt\Class_ $node
      *
      * @return void
      */
     private function parseClassNode(Node\Stmt\Class_ $node): void
     {
-        $this->currentStructure = $node;
+        array_unshift($this->currentStructureStack, $node);
 
         $interfaces = [];
 
@@ -149,7 +159,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->currentStructure = $node;
+        array_unshift($this->currentStructureStack, $node);
 
         $extendedInterfaces = [];
 
@@ -187,7 +197,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        $this->currentStructure = $node;
+        array_unshift($this->currentStructureStack, $node);
 
         $fqcn = $this->typeNormalizer->getNormalizedFqcn($node->namespacedName->toString());
 
@@ -299,7 +309,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     private function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
-        if (!isset($this->currentStructure->namespacedName)) {
+        if (!isset($this->currentStructureStack[0]->namespacedName)) {
             return;
         }
 
@@ -505,16 +515,6 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @inheritDoc
-     */
-    public function leaveNode(Node $node)
-    {
-        if ($this->currentStructure === $node) {
-            $this->currentStructure = null;
-        }
-    }
-
-    /**
      * Retrieves the list of structural elements.
      *
      * @return array
@@ -559,13 +559,17 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     private function getCurrentStructureFqcn(): ?string
     {
-        if (!$this->currentStructure) {
+        if (empty($this->currentStructureStack)) {
             return null;
-        } elseif ($this->currentStructure instanceof Node\Stmt\Class_ && $this->currentStructure->isAnonymous()) {
-            return NodeHelpers::getFqcnForAnonymousClassNode($this->currentStructure, $this->file);
         }
 
-        return $this->typeNormalizer->getNormalizedFqcn($this->currentStructure->namespacedName->toString());
+        $currentStructure = $this->currentStructureStack[0];
+
+        if ($currentStructure instanceof Node\Stmt\Class_ && $currentStructure->isAnonymous()) {
+            return NodeHelpers::getFqcnForAnonymousClassNode($currentStructure, $this->file);
+        }
+
+        return $this->typeNormalizer->getNormalizedFqcn($currentStructure->namespacedName->toString());
     }
 
     /**
@@ -573,12 +577,16 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
      */
     private function getCurrentStructureName(): ?string
     {
-        if (!$this->currentStructure) {
+        if (empty($this->currentStructureStack)) {
             return null;
-        } elseif ($this->currentStructure instanceof Node\Stmt\Class_ && $this->currentStructure->isAnonymous()) {
+        }
+
+        $currentStructure = $this->currentStructureStack[0];
+
+        if ($currentStructure instanceof Node\Stmt\Class_ && $currentStructure->isAnonymous()) {
             return mb_substr($this->getCurrentStructureFqcn(), 1);
         }
 
-        return $this->currentStructure->name->name;
+        return $currentStructure->name->name;
     }
 }
