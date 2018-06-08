@@ -76,6 +76,40 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
     }
 
     /**
+     * @return void
+     */
+    public function testMovesCursorOutsideOfParanthesesIfNoRequiredParametersExist(): void
+    {
+        $output = $this->provide('NoRequiredParameters.phpt');
+
+        $suggestions = [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo([$i])', null, [
+                'isDeprecated' => false,
+                'returnTypes'  => ''
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMovesCursorInsideOfParanthesesIfRequiredParametersExist(): void
+    {
+        $output = $this->provide('RequiredParameters.phpt');
+
+        $suggestions = [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo($0)', null, 'foo($test)', null, [
+                'isDeprecated' => false,
+                'returnTypes'  => ''
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getFolderName(): string

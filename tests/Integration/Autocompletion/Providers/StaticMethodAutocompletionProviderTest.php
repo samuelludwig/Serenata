@@ -126,6 +126,64 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
     /**
      * @return void
      */
+    public function testMovesCursorOutsideOfParanthesesIfNoRequiredParametersExist(): void
+    {
+        $fileName = 'NoRequiredParameters.phpt';
+
+        $output = $this->provide($fileName);
+
+        $suggestions = [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo([$i])', null, [
+                'isDeprecated' => false,
+                'returnTypes'  => '',
+                'protectionLevel'               => 'public',
+                'declaringStructure'            => [
+                    'fqcn'            => '\A',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 3,
+                    'endLine'         => 9,
+                    'type'            => 'class',
+                    'startLineMember' => 5,
+                    'endLineMember'   => 8,
+                ]
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testMovesCursorInsideOfParanthesesIfRequiredParametersExist(): void
+    {
+        $fileName = 'RequiredParameters.phpt';
+
+        $output = $this->provide($fileName);
+
+        $suggestions = [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo($test)', null, [
+                'isDeprecated' => false,
+                'returnTypes'  => '',
+                'protectionLevel'               => 'public',
+                'declaringStructure'            => [
+                    'fqcn'            => '\A',
+                    'filename'        => $this->getPathFor($fileName),
+                    'startLine'       => 3,
+                    'endLine'         => 9,
+                    'type'            => 'class',
+                    'startLineMember' => 5,
+                    'endLineMember'   => 8,
+                ],
+            ])
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testDoesNotReturnNonStaticMethod(): void
     {
         $fileName = 'Method.phpt';
