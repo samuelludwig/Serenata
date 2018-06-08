@@ -17,7 +17,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo()', null, [
                 'isDeprecated'                  => false,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [
@@ -104,7 +104,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo()', null, [
                 'isDeprecated'                  => true,
                 'protectionLevel'               => 'public',
                 'declaringStructure'            => [

@@ -4,6 +4,7 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Analysis\FunctionListProviderInterface;
 
+use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
@@ -56,17 +57,24 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     private $resultLimit;
 
     /**
-     * @param FunctionListProviderInterface                                 $functionListProvider
-     * @param AutocompletionPrefixDeterminerInterface                       $autocompletionPrefixDeterminer
-     * @param BestStringApproximationDeterminerInterface                    $bestStringApproximationDeterminer
-     * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
+     * @var FunctionParametersEvaluator
+     */
+    private $functionParametersEvaluator;
+
+    /**
+     * @param FunctionListProviderInterface $functionListProvider
+     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+     * @param FunctionParametersEvaluator $functionParametersEvaluator
+     * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
-     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
-     * @param int                                                           $resultLimit
+     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+     * @param int $resultLimit
      */
     public function __construct(
         FunctionListProviderInterface $functionListProvider,
         AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
+        FunctionParametersEvaluator $functionParametersEvaluator,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
@@ -75,6 +83,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     ) {
         $this->functionListProvider = $functionListProvider;
         $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->functionParametersEvaluator = $functionParametersEvaluator;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
@@ -115,7 +124,11 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         $insertText = $function['name'];
 
         if ($shouldIncludeParanthesesInInsertText) {
-            $insertText .= '($0)';
+            if ($this->functionParametersEvaluator->hasRequiredParameters($function)) {
+                $insertText .= '($0)';
+            } else {
+                $insertText .= '()$0';
+            }
         }
 
         return new AutocompletionSuggestion(
