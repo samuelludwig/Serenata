@@ -4,21 +4,21 @@ namespace Serenata\Autocompletion\Providers;
 
 use Generator;
 use AssertionError;
-use Serenata\Autocompletion\FunctionParametersEvaluator;
 use UnexpectedValueException;
 
-use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\CircularDependencyException;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
-use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
-
 use Serenata\Indexing\Structures\File;
+
+use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 /**
  * Provides static member method autocompletion suggestions at a specific location in a file.

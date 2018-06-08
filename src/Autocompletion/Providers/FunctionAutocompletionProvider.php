@@ -4,9 +4,9 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Analysis\FunctionListProviderInterface;
 
-use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
