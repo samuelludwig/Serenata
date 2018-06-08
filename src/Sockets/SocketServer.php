@@ -16,7 +16,7 @@ use React\Socket\Connection;
  * This class simply requests a configured factory to create a handler for each new connection and does not handle any
  * communication itself.
  */
-class SocketServer
+final class SocketServer
 {
     /**
      * @var Server
@@ -46,7 +46,6 @@ class SocketServer
         ConnectionHandlerFactoryInterface $connectionHandlerFactory
     ) {
         $this->server = new Server($uri, $loop);
-
         $this->connectionMap = new SplObjectStorage();
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 

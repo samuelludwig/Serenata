@@ -17,6 +17,13 @@ use React\EventLoop\LoopInterface;
 
 use React\EventLoop\Timer\Timer;
 
+use Symfony\Component\Console\Application;
+
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Application extension that can handle JSON-RPC requests.
  */
@@ -47,29 +54,16 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     public function run()
     {
-        $options = getopt('pu::', [
-            'port::',
-            'uri::'
-        ]);
+        $application = (new Application('PHP Integrator Core'))
+            ->register('start')
+                ->addOption('port', 'p', InputOption::VALUE_REQUIRED, 'The port to run on', null)
+                ->setCode(\Closure::fromCallable([$this, 'runEventLoop']))
+            ->getApplication();
 
-        $uri = $this->getRequestHandlingUriFromOptions($options);
+        $application->setAutoExit(false);
+        $application->setDefaultCommand('start', true);
 
-        $this->loop = React\EventLoop\Factory::create();
-
-        try {
-            $this->setupRequestHandlingSocketServer($this->loop, $uri);
-        } catch (RuntimeException $e) {
-            fwrite(STDERR, "Could not bind to socket at URI {$uri}\n");
-            return 2;
-        }
-
-        echo "Starting socket server and binding to URI {$uri}...\n";
-
-        $this->instantiateRequiredServices($this->getContainer());
-
-        $this->loop->run();
-
-        return 0;
+        return $application->run();
     }
 
     /**
@@ -80,6 +74,40 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
 
         $this->ensurePeriodicQueueProcessingTimerIsInstalled();
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
+    private function runEventLoop(InputInterface $input, OutputInterface $output): int
+    {
+        $requestHandlingPort = $input->getOption('port');
+
+        if ($requestHandlingPort === null) {
+            throw new UnexpectedValueException('A socket port for handling requests must be specified');
+        }
+
+        $this->loop = React\EventLoop\Factory::create();
+
+        $uri = $requestHandlingPort;
+
+        try {
+            $this->setupRequestHandlingSocketServer($this->loop, $uri);
+        } catch (RuntimeException $e) {
+            $output->writeln("<error>Could not bind to socket on URI {$uri}</>");
+            return 2;
+        }
+
+        $output->writeln("<info>Starting server bound to socket on URI {$uri}...</>");
+
+        $this->instantiateRequiredServices($this->getContainer());
+
+        $this->loop->run();
+
+        return 0;
     }
 
     /**
@@ -128,33 +156,6 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     {
         $this->getContainer()->get('jsonRpcQueueItemProcessor')->process(
             $this->getContainer()->get('requestQueue')->pop()
-        );
-    }
-
-    /**
-     * @param array $options
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return string
-     */
-    private function getRequestHandlingUriFromOptions(array $options): string
-    {
-        if (isset($options['u'])) {
-            return $options['u'];
-        } elseif (isset($options['uri'])) {
-            return $options['uri'];
-        }
-
-        // TODO: Specifying ports only is deprecated, will be removed in 4.0.
-        if (isset($options['p'])) {
-            return (int) $options['p'];
-        } elseif (isset($options['port'])) {
-            return (int) $options['port'];
-        }
-
-        throw new UnexpectedValueException(
-            'Missing socket URI (--uri) or port (--port) to listen to for handling requests'
         );
     }
 

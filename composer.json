@@ -22,6 +22,7 @@
         "serenata/docblock-type-parser": "^0.3.1",
         "serenata/name-qualification-utilities": "^0.4.1",
         "symfony/config": "^4.1",
+        "symfony/console": "^4.1",
         "symfony/dependency-injection": "^4.1",
         "symfony/yaml": "^4.1"
     },

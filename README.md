@@ -44,7 +44,7 @@ composer create-project "serenata/serenata" serenata --prefer-dist --no-dev
 You can then run it with:
 
 ```sh
-php -d memory_limit=1024M src/Main.php --uri=tcp://127.0.0.1:11111
+php -d memory_limit=1024M bin/console --uri=tcp://127.0.0.1:11111
 ```
 
 Using `0.0.0.0` as host allows the server to be reachable when located on a different machine, such as across the network or inside a Docker container.
