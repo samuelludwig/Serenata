@@ -56,12 +56,12 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
     private $functionParametersEvaluator;
 
     /**
-     * @param ExpressionTypeDeducer $expressionTypeDeducer
-     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
-     * @param FunctionParametersEvaluator $functionParametersEvaluator
-     * @param FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator
+     * @param ExpressionTypeDeducer                                         $expressionTypeDeducer
+     * @param ClasslikeInfoBuilderInterface                                 $classlikeInfoBuilder
+     * @param FunctionParametersEvaluator                                   $functionParametersEvaluator
+     * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
-     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,

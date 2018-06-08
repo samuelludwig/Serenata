@@ -62,14 +62,14 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     private $functionParametersEvaluator;
 
     /**
-     * @param FunctionListProviderInterface $functionListProvider
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
-     * @param FunctionParametersEvaluator $functionParametersEvaluator
-     * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
-     * @param FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator
+     * @param FunctionListProviderInterface                                 $functionListProvider
+     * @param AutocompletionPrefixDeterminerInterface                       $autocompletionPrefixDeterminer
+     * @param FunctionParametersEvaluator                                   $functionParametersEvaluator
+     * @param BestStringApproximationDeterminerInterface                    $bestStringApproximationDeterminer
+     * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
-     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
-     * @param int $resultLimit
+     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
+     * @param int                                                           $resultLimit
      */
     public function __construct(
         FunctionListProviderInterface $functionListProvider,
