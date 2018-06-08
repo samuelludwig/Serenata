@@ -18,9 +18,9 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo()', null, [
-                'isDeprecated'                  => false,
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
+                'isDeprecated'       => false,
+                'protectionLevel'    => 'public',
+                'declaringStructure' => [
                     'fqcn'            => '\A',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 3,
@@ -47,9 +47,9 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', null, 'foo()', null, [
-                'isDeprecated'                  => false,
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
+                'isDeprecated'       => false,
+                'protectionLevel'    => 'public',
+                'declaringStructure' => [
                     'fqcn'            => '\A',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 3,
@@ -76,9 +76,9 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', null, 'foo()', null, [
-                'isDeprecated'                  => false,
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
+                'isDeprecated'       => false,
+                'protectionLevel'    => 'public',
+                'declaringStructure' => [
                     'fqcn'            => '\A',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 3,
@@ -105,9 +105,9 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo()', null, [
-                'isDeprecated'                  => true,
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
+                'isDeprecated'       => true,
+                'protectionLevel'    => 'public',
+                'declaringStructure' => [
                         'fqcn'            => '\A',
                         'filename'        => $this->getPathFor($fileName),
                         'startLine'       => 3,
@@ -134,10 +134,10 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo([$i])', null, [
-                'isDeprecated' => false,
-                'returnTypes'  => '',
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
+                'isDeprecated'       => false,
+                'returnTypes'        => '',
+                'protectionLevel'    => 'public',
+                'declaringStructure' => [
                     'fqcn'            => '\A',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 3,
@@ -163,10 +163,10 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo($test)', null, [
-                'isDeprecated' => false,
-                'returnTypes'  => '',
-                'protectionLevel'               => 'public',
-                'declaringStructure'            => [
+                'isDeprecated'       => false,
+                'returnTypes'        => '',
+                'protectionLevel'    => 'public',
+                'declaringStructure' => [
                     'fqcn'            => '\A',
                     'filename'        => $this->getPathFor($fileName),
                     'startLine'       => 3,
