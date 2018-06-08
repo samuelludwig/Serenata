@@ -2,7 +2,7 @@
 * [Fix autocompletion not working immediately after a dot or the splat operator](https://gitlab.com/Serenata/Serenata/issues/187)
 * [Fix notice `Undefined property $name in src/Analysis/VariableScanningVisitor.php on line 117`](https://gitlab.com/Serenata/Serenata/issues/208)
 * [Autocompletion doesn't add imports when function body is missing (but parantheses must be present)](https://gitlab.com/Serenata/Serenata/issues/204)
-* [Fix error `Call to undefined method PhpParser\Node\Stmt\Trait_::isAnonymous()`` in traits and interfaces](https://gitlab.com/Serenata/Serenata/issues/206)
+* [Fix error `Call to undefined method PhpParser\Node\Stmt\Trait_::isAnonymous()` in traits and interfaces](https://gitlab.com/Serenata/Serenata/issues/206)
 * [Place cursor after autocompletion insertion for functions and methods if there are no required parameters](https://gitlab.com/Serenata/Serenata/merge_requests/76) (thanks to @hultberg)
 * [Automatically restart without Xdebug enabled if it is present instead of just warning that performance will be degraded](https://gitlab.com/Serenata/Serenata/issues/209)
 * [Fix error `Argument 3 passed to Serenata\Parsing\DocblockParser::parse() must be of the type string, null given, called in .../src/Linting/DocblockCorrectnessAnalyzer.php on line 634`](https://gitlab.com/Serenata/Serenata/issues/205)
