@@ -15,7 +15,7 @@ class FunctionParametersEvaluator
     public function hasRequiredParameters(array $function): bool
     {
         foreach ($function['parameters'] as $parameter) {
-            if (!array_key_exists('isOptional', $parameter) || !$parameter['isOptional']) {
+            if (!$parameter['isOptional']) {
                 return true;
             }
         }
