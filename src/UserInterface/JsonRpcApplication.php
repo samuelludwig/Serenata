@@ -56,7 +56,8 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     {
         $application = (new Application('PHP Integrator Core'))
             ->register('start')
-                ->addOption('port', 'p', InputOption::VALUE_REQUIRED, 'The port to run on', null)
+                ->addOption('uri', 'u', InputOption::VALUE_OPTIONAL, 'The URI to run on', null)
+                ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'The port to run on', null)
                 ->setCode(\Closure::fromCallable([$this, 'runEventLoop']))
             ->getApplication();
 
@@ -84,15 +85,18 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     private function runEventLoop(InputInterface $input, OutputInterface $output): int
     {
-        $requestHandlingPort = $input->getOption('port');
+        $uri = $input->getOption('uri');
+        $port = $input->getOption('port');
 
-        if ($requestHandlingPort === null) {
-            throw new UnexpectedValueException('A socket port for handling requests must be specified');
+        if ($port) {
+            $uri = 'tcp://127.0.0.1:' . $port;
+        }
+
+        if ($uri === null) {
+            throw new UnexpectedValueException('A URI for handling requests must be specified');
         }
 
         $this->loop = React\EventLoop\Factory::create();
-
-        $uri = $requestHandlingPort;
 
         try {
             $this->setupRequestHandlingSocketServer($this->loop, $uri);
