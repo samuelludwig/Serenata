@@ -15,7 +15,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Functions.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo($0)', null, 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo()', null, [
                 'isDeprecated' => false,
                 'returnTypes'  => 'int|string'
             ])
@@ -66,7 +66,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedFunction.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo($0)', null, 'foo()', null, [
+            new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo()', null, [
                 'isDeprecated' => true,
                 'returnTypes'  => 'void'
             ])
