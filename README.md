@@ -19,7 +19,7 @@
 
 Serenata (previously "PHP Integrator") is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
 
-More information for users, both developers looking to implement the core in other editors as well as programmers using it via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://Serenata.github.io/).
+More information for users, both developers looking to implement clients for other editors as well as programmers using the server via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://Serenata.github.io/).
 
 ## What Features Are Supported?
 * Autocompletion
@@ -35,7 +35,7 @@ The [php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata/) package in
 
 ## Installation
 ### Runtime
-If you want to use the core directly, i.e. just to be able to fire it up and communicate with it over a socket, such as when you want to integrate it into an editor:
+If you want to use the server directly, i.e. just to be able to fire it up and communicate with it over a socket, such as when you want to integrate it into an editor:
 
 ```sh
 composer create-project "serenata/serenata" serenata --prefer-dist --no-dev
@@ -51,18 +51,18 @@ Using `0.0.0.0` as host allows the server to be reachable when located on a diff
 
 You can select any port you desire, as long as it is not in use on your system.
 
-The memory limit can also be freely set. The memory needed very much depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the core on itself, it sits at around 150 MB on a 64-bit Linux system with PHP 7.1.
+The memory limit can also be freely set. The memory needed very much depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the server on itself, it sits at around 150 MB on a 64-bit Linux system with PHP 7.1.
 
 ### Development
-If you want to make the core part of your (existing) project and use the classes contained inside it for your own purposes:
+If you want to make the server part of your (existing) project and use the classes contained inside it for your own purposes:
 
 ```sh
 composer require "serenata/serenata"
 ```
 
-Note that the core was designed primarily as an application and not as a library. However, it is still very much possible to instantiate the classes you need yourself.
+Note that the server was designed primarily as an application and not as a library. However, it is still very much possible to instantiate the classes you need yourself.
 
-You may also be interested in [other libraries that are part of the Serenata suite](https://gitlab.com/Serenata). In the future, more code may be split from the core into proper, separate libraries.
+You may also be interested in [other libraries that are part of the Serenata suite](https://gitlab.com/Serenata). In the future, more code may be split from the server into proper, separate libraries.
 
 ## Contributing
 As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/Serenata/Serenata/blob/master/CONTRIBUTING.md).
