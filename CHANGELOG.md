@@ -1,4 +1,4 @@
-## 4.1.0 (Unreleased)
+## 4.1.0
 * Use Symfony Console for processing command line arguments
     * You can now use `bin/console` file for more straightforward starting
 * [Fix autocompletion not working immediately after a dot or the splat operator](https://gitlab.com/Serenata/Serenata/issues/187)
