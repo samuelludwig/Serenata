@@ -12,7 +12,7 @@
         <img src="https://gitlab.com/Serenata/Serenata/badges/master/coverage.svg">
     </a>
 
-    <a href="https://liberapay.com/Gert-dev/donate">
+    <a href="https://liberapay.com/Gert-dev">
         <img src="https://img.shields.io/badge/send_coffee_beans-Liberapay-blue.svg?&amp;style=flat">
     </a>
 </div>
