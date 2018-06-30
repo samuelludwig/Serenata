@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents an access modifier.
  */
@@ -24,7 +22,7 @@ class AccessModifier
      */
     public function __construct(string $name)
     {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
     }
 

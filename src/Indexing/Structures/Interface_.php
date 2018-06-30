@@ -4,8 +4,6 @@ namespace Serenata\Indexing\Structures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents an interface.
  */
@@ -53,7 +51,7 @@ class Interface_ extends Classlike
         bool $isDeprecated,
         bool $hasDocblock
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;

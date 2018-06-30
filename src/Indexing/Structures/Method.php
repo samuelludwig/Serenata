@@ -4,8 +4,6 @@ namespace Serenata\Indexing\Structures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a (class) method.
  */
@@ -81,7 +79,7 @@ class Method extends FunctionLike
         array $throws,
         array $returnTypes
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->file = $file;
         $this->startLine = $startLine;

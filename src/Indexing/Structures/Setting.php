@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a generic setting.
  */
@@ -30,7 +28,7 @@ class Setting
      */
     public function __construct(string $name, $value)
     {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->value = $value;
     }

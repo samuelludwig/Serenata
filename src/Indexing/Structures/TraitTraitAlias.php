@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents an aliased trait method in a trait.
  */
@@ -28,7 +26,7 @@ class TraitTraitAlias extends ClasslikeTraitAlias
         string $name,
         ?string $alias
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->trait = $trait;
         $this->traitFqcn = $traitFqcn;
         $this->accessModifier = $accessModifier;

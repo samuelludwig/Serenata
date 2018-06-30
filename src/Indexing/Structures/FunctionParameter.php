@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a function parameter.
  */
@@ -36,7 +34,7 @@ class FunctionParameter extends FunctionLikeParameter
         bool $isOptional,
         bool $isVariadic
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->function = $function;
         $this->name = $name;
         $this->typeHint = $typeHint;

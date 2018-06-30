@@ -4,8 +4,6 @@ namespace Serenata\Indexing\Structures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a namespace in a file.
  */
@@ -55,7 +53,7 @@ class FileNamespace
         File $file,
         array $imports
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->startLine = $startLine;
         $this->endLine = $endLine;
         $this->name = $name;

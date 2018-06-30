@@ -7,8 +7,6 @@ use OutOfRangeException;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a file.
  */
@@ -66,7 +64,7 @@ class File
      */
     public function __construct(string $path, DateTime $indexedOn, array $namespaces)
     {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->path = $path;
         $this->lastIndexedSourceHash = null;
         $this->indexedOn = $indexedOn;

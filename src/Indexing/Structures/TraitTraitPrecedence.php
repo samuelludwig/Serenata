@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents trait method precedence in a trait.
  */
@@ -21,7 +19,7 @@ class TraitTraitPrecedence extends ClasslikeTraitPrecedence
      */
     public function __construct(Trait_ $trait, string $traitFqcn, string $name)
     {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->trait = $trait;
         $this->traitFqcn = $traitFqcn;
         $this->name = $name;

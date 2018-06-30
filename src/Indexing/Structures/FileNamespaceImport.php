@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents an import in a namespace inside a file.
  */
@@ -48,7 +46,7 @@ class FileNamespaceImport
      */
     public function __construct(int $line, string $alias, string $name, string $kind, FileNamespace $namespace)
     {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->line = $line;
         $this->alias = $alias;
         $this->name = $name;

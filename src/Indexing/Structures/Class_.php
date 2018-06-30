@@ -6,8 +6,6 @@ use AssertionError;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a class.
  */
@@ -105,7 +103,7 @@ class Class_ extends Classlike
         bool $hasDocblock,
         ?Class_ $parent
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;

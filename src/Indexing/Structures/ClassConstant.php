@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a class constant.
  */
@@ -49,7 +47,7 @@ class ClassConstant extends ConstantLike
         Classlike $classlike,
         AccessModifier $accessModifier
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->file = $file;
         $this->startLine = $startLine;

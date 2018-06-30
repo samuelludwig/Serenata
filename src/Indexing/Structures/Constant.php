@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a (global) constant.
  */
@@ -42,7 +40,7 @@ class Constant extends ConstantLike
         ?string $typeDescription,
         array $types
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;

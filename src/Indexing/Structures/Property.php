@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents a property.
  */
@@ -123,7 +121,7 @@ class Property
         AccessModifier $accessModifier,
         array $types
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->name = $name;
         $this->file = $file;
         $this->startLine = $startLine;

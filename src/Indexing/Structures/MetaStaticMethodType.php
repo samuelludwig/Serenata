@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Ramsey\Uuid\Uuid;
-
 /**
  * Represents metadata related to static method types.
  */
@@ -67,7 +65,7 @@ class MetaStaticMethodType
         string $valueNodeType,
         string $returnType
     ) {
-        $this->id = (string) Uuid::uuid4();
+        $this->id = uniqid('', true);
         $this->file = $file;
         $this->fqcn = $fqcn;
         $this->name = $name;
