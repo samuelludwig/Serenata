@@ -12,6 +12,7 @@ use Serenata\Analysis\CircularDependencyException;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
@@ -38,18 +39,26 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     private $autocompletionSuggestionTypeFormatter;
 
     /**
+     * @var AutocompletionPrefixDeterminerInterface
+     */
+    private $autocompletionPrefixDeterminer;
+
+    /**
      * @param ExpressionTypeDeducer                 $expressionTypeDeducer
      * @param ClasslikeInfoBuilderInterface         $classlikeInfoBuilder
      * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
+        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
@@ -57,6 +66,8 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
      */
     public function provide(File $file, string $code, int $offset): iterable
     {
+        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+
         $types = $this->expressionTypeDeducer->deduce(
             $file,
             $code,
@@ -76,30 +87,32 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
-            yield from $this->createSuggestionsForClasslikeInfo($classlikeInfoElement);
+            yield from $this->createSuggestionsForClasslikeInfo($classlikeInfoElement, $prefix);
         }
     }
 
     /**
-     * @param array $classlikeInfo
+     * @param array  $classlikeInfo
+     * @param string $prefix
      *
      * @return Generator
      */
-    private function createSuggestionsForClasslikeInfo(array $classlikeInfo): Generator
+    private function createSuggestionsForClasslikeInfo(array $classlikeInfo, string $prefix): Generator
     {
         foreach ($classlikeInfo['properties'] as $property) {
             if ($property['isStatic']) {
-                yield $this->createSuggestion($property);
+                yield $this->createSuggestion($property, $prefix);
             }
         }
     }
 
     /**
-     * @param array $property
+     * @param array  $property
+     * @param string $prefix
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $property): AutocompletionSuggestion
+    private function createSuggestion(array $property, string $prefix): AutocompletionSuggestion
     {
         return new AutocompletionSuggestion(
             '$' . $property['name'],
@@ -112,7 +125,8 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
                 'isDeprecated'       => $property['isDeprecated'],
                 'declaringStructure' => $property['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($property['types']),
-                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property)
+                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property),
+                'prefix'             => $prefix
             ]
         );
     }

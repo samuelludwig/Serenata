@@ -219,6 +219,7 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@autocompletionSuggestionTypeFormatter'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingStaticPropertyAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider

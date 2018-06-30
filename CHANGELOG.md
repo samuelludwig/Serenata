@@ -1,6 +1,7 @@
 ## 4.2.0 (Unreleased)
 * Replace UUID's in database with simpler unique id via `uniqid`
     * This avoids the unnecessarily expensive generation of UUID's as well as a depednency; we just need a mostly unique identifier anyway, not anything secure
+* [Fix autocompleting static properties not removing existing text (prefix)](https://gitlab.com/Serenata/Serenata/issues/212)
 
 ## 4.1.0
 * Use Symfony Console for processing command line arguments
