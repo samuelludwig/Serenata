@@ -29,7 +29,7 @@ class AccessModifier
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getId(): string
     {
