@@ -17,7 +17,8 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $suggestions = [
             new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
                 'isDeprecated' => false,
-                'returnTypes'  => 'namespace'
+                'returnTypes'  => 'namespace',
+                'prefix'       => 'F'
             ])
         ];
 
@@ -44,7 +45,8 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $suggestions = [
             new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
                 'isDeprecated' => false,
-                'returnTypes'  => 'namespace'
+                'returnTypes'  => 'namespace',
+                'prefix'       => 'F'
             ])
         ];
 

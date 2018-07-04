@@ -77,24 +77,27 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             }
         );
 
+        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $namespaceArrays,
-            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            $prefix,
             'name',
             $this->resultLimit
         );
 
         foreach ($bestApproximations as $namespace) {
-            yield $this->createSuggestion($namespace);
+            yield $this->createSuggestion($namespace, $prefix);
         }
     }
 
     /**
      * @param array $namespace
+     * @param string $prefix
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $namespace): AutocompletionSuggestion
+    private function createSuggestion(array $namespace, string $prefix): AutocompletionSuggestion
     {
         $fqcnWithoutLeadingSlash = $namespace['name'];
 
@@ -111,7 +114,8 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             null,
             [
                 'isDeprecated' => false,
-                'returnTypes'  => 'namespace'
+                'returnTypes'  => 'namespace',
+                'prefix'       => $prefix
             ]
         );
     }
