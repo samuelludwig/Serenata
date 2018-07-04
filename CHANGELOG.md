@@ -2,6 +2,7 @@
 * Replace UUID's in database with simpler unique id via `uniqid`
     * This avoids the unnecessarily expensive generation of UUID's as well as a depednency; we just need a mostly unique identifier anyway, not anything secure
 * [Fix autocompleting static properties not removing existing text (prefix)](https://gitlab.com/Serenata/Serenata/issues/212)
+* Update `league/html-to-markdown` to at least [4.7.0](https://github.com/thephpleague/html-to-markdown/releases/tag/4.7.0)
 
 ## 4.1.0
 * Use Symfony Console for processing command line arguments
