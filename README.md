@@ -1,20 +1,20 @@
 <div align="center">
-    <a href="https://gitlab.com/Serenata/Serenata"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="Serenata" title="Serenata" width="258"></a>
+<a href="https://gitlab.com/Serenata/Serenata"><img src="https://assets.gitlab-static.net/uploads/-/system/project/avatar/2815601/PHP_Integrator.png" alt="Serenata" title="Serenata" width="258"></a>
 
-    <h1>Serenata</h1>
-    <h4>Free and open source server providing code assistance for PHP</h4>
+<h1>Serenata</h1>
+<h4>Free and open source server providing code assistance for PHP</h4>
 
-    <a href="https://gitlab.com/Serenata/Serenata/commits/master">
-        <img src="https://gitlab.com/Serenata/Serenata/badges/master/pipeline.svg">
-    </a>
+<a href="https://gitlab.com/Serenata/Serenata/commits/master">
+    <img src="https://gitlab.com/Serenata/Serenata/badges/master/pipeline.svg">
+</a>
 
-    <a href="https://gitlab.com/Serenata/Serenata/commits/master">
-        <img src="https://gitlab.com/Serenata/Serenata/badges/master/coverage.svg">
-    </a>
+<a href="https://gitlab.com/Serenata/Serenata/commits/master">
+    <img src="https://gitlab.com/Serenata/Serenata/badges/master/coverage.svg">
+</a>
 
-    <a href="https://liberapay.com/Gert-dev">
-        <img src="https://img.shields.io/badge/send_coffee_beans-Liberapay-blue.svg?&amp;style=flat">
-    </a>
+<a href="https://liberapay.com/Gert-dev">
+    <img src="https://img.shields.io/badge/send_coffee_beans-Liberapay-blue.svg?&amp;style=flat">
+</a>
 </div>
 
 Serenata (previously "PHP Integrator") is a free and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
