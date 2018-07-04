@@ -42,7 +42,8 @@ final class DefaultAutocompletionPrefixBoundaryTokenRetriever implements
             "=",
             ",",
             ".",
-            ";"
+            ";",
+            '~'
         ];
     }
 }
