@@ -2,11 +2,15 @@
 
 namespace Serenata\Autocompletion\Providers;
 
+use PhpParser\Node;
+
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
+use Serenata\Utility\NodeHelpers;
 use Serenata\Utility\SourceCodeHelpers;
 
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 use Serenata\Analysis\ClasslikeListProviderInterface;
 
 use Serenata\Autocompletion\SuggestionKind;
@@ -51,6 +55,11 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     private $bestStringApproximationDeterminer;
 
     /**
+     * @var NodeAtOffsetLocatorInterface
+     */
+    private $nodeAtOffsetLocator;
+
+    /**
      * @var int
      */
     private $resultLimit;
@@ -60,6 +69,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      * @param UseStatementInsertionCreator               $useStatementInsertionCreator
      * @param AutocompletionPrefixDeterminerInterface    $autocompletionPrefixDeterminer
      * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
+     * @param NodeAtOffsetLocatorInterface               $nodeAtOffsetLocator
      * @param int                                        $resultLimit
      */
     public function __construct(
@@ -67,12 +77,14 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         UseStatementInsertionCreator $useStatementInsertionCreator,
         AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
+        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         int $resultLimit
     ) {
         $this->classlikeListProvider = $classlikeListProvider;
         $this->useStatementInsertionCreator = $useStatementInsertionCreator;
         $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
+        $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->resultLimit = $resultLimit;
     }
 
@@ -180,6 +192,8 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
 
         if ($prefix !== '' && $prefix[0] === '\\') {
             return $classlike['fqcn'];
+        } elseif ($this->isInsideUseStatement($code, $offset)) {
+            return mb_substr($classlike['fqcn'], 1);
         }
 
         // We try to add an import that has only as many parts of the namespace as needed, for example, if the user
@@ -208,6 +222,8 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
 
         if ($prefix !== '' && $prefix[0] === '\\') {
             return [];
+        } elseif ($this->isInsideUseStatement($code, $offset)) {
+            return [];
         }
 
         $partsToSlice = (count(explode('\\', $prefix)) - 1);
@@ -225,5 +241,25 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         } catch (UseStatementInsertionCreationException $e) {
             return [];
         }
+    }
+
+    /**
+     * @param string $code
+     * @param int    $offset
+     *
+     * @return bool
+     */
+    private function isInsideUseStatement(string $code, int $offset): bool
+    {
+        // The position the position is at may already be the start of another node. We're interested in what's just
+        // before the position (usually the cursor), not what is "at" or "just to the right" of the cursor, hence the
+        // -1.
+        $nodeAtOffset = $this->nodeAtOffsetLocator->locate($code, $offset - 1);
+
+        if ($nodeAtOffset->getNode() === null) {
+            return false;
+        }
+
+        return NodeHelpers::findAncestorOfAnyType($nodeAtOffset->getNode(), Node\Stmt\Use_::class) !== null;
     }
 }

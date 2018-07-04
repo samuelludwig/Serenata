@@ -48,6 +48,7 @@ services:
             - '@useStatementInsertionCreator'
             - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
+            - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingClassAutocompletionProvider:
@@ -65,6 +66,7 @@ services:
             - '@useStatementInsertionCreator'
             - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
+            - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingInterfaceAutocompletionProvider:
@@ -82,6 +84,7 @@ services:
             - '@useStatementInsertionCreator'
             - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
+            - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingTraitAutocompletionProvider:
@@ -99,6 +102,7 @@ services:
             - '@useStatementInsertionCreator'
             - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
+            - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingDocblockAnnotationAutocompletionProvider:

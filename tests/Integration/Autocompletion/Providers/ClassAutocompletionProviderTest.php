@@ -137,6 +137,36 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
     }
 
     /**
+     * @return void
+     */
+    public function testSkipsUseStatementImportWhenAutocompletingUseStatement(): void
+    {
+        $output = $this->provide('UseStatement.phpt');
+
+        $suggestions = [
+            new AutocompletionSuggestion(
+                '\Foo\Bar\Baz\Qux',
+                SuggestionKind::CLASS_,
+                'Foo\Bar\Baz\Qux',
+                new TextEdit(
+                    new Range(new Position(10, 8), new Position(10, 15)),
+                    'Foo\Bar\Baz\Qux'
+                ),
+                'Foo\Bar\Baz\Qux',
+                null,
+                [
+                    'isDeprecated' => false,
+                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
+                    'prefix'       => 'Foo\Bar'
+                ],
+                []
+            )
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getFolderName(): string
