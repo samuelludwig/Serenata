@@ -2,8 +2,6 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use AssertionError;
-
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
@@ -227,7 +225,5 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         } catch (UseStatementInsertionCreationException $e) {
             return [];
         }
-
-        throw new AssertionError('Should never be reached');
     }
 }
