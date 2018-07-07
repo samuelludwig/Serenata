@@ -32,11 +32,11 @@ final class DocumentSymbolRetriever
      */
     public function retrieve(File $file): ?array
     {
-        return array_merge(
+        return $this->sortSymbolListByLocation(array_merge(
             $this->getConstantSymbolsForFile($file),
             $this->getFunctionSymbolsForFile($file),
             $this->getClasslikeSymbolsForFile($file)
-        );
+        ));
     }
 
     /**
@@ -237,5 +237,25 @@ final class DocumentSymbolRetriever
             ),
             $containerName
         );
+    }
+
+    /**
+     * @param array $symbolList
+     *
+     * @return array
+     */
+    private function sortSymbolListByLocation(array $symbolList): array
+    {
+        usort($symbolList, function (SymbolInformation $a, SymbolInformation $b) {
+            if ($a->getLocation()->getRange()->getStart()->liesAfter($b->getLocation()->getRange()->getStart())) {
+                return 1;
+            } elseif ($a->getLocation()->getRange()->getStart()->liesBefore($b->getLocation()->getRange()->getStart())) {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        return $symbolList;
     }
 }

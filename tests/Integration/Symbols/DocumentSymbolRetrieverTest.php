@@ -247,6 +247,28 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testSortsSymbolsByLocation(): void
+    {
+        $filePath = $this->getTestFilePath('MultipleClassMembers.phpt');
+
+        /** @var SymbolInformation[] $symbols */
+        $symbols = $this->getSymbolsForFile($filePath);
+
+        static::assertCount(8, $symbols);
+
+        static::assertSame('Class1', $symbols[0]->getName());
+        static::assertSame('property1', $symbols[1]->getName());
+        static::assertSame('method1', $symbols[2]->getName());
+        static::assertSame('CONSTANT1', $symbols[3]->getName());
+        static::assertSame('Class2', $symbols[4]->getName());
+        static::assertSame('CONSTANT2', $symbols[5]->getName());
+        static::assertSame('method2', $symbols[6]->getName());
+        static::assertSame('property2', $symbols[7]->getName());
+    }
+
+    /**
      * @param string $filePath
      *
      * @return array
