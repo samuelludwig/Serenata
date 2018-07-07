@@ -1,14 +1,19 @@
 ## 4.2.0 (Unreleased)
+### Major Changes
 * [Add support for fetching document symbols via the `documentSymbols` request](https://gitlab.com/Serenata/Serenata/issues/173)
+
+### Other improvements
+* Update `serenata/common` to at least `0.2.1`
+* Update `league/html-to-markdown` to at least [4.7.0](https://github.com/thephpleague/html-to-markdown/releases/tag/4.7.0)
 * Replace UUID's in database with simpler unique id via `uniqid`
     * This avoids the unnecessarily expensive generation of UUID's as well as a depednency; we just need a mostly unique identifier anyway, not anything secure
+
+### Bugs Fixed
 * [Fix tilde `~` being replaced during autocompletion](https://gitlab.com/Serenata/Serenata/issues/184)
-* [Update php-parser to fix autocompletion failing with erroneous code when updating arrays to improve convenience](https://github.com/nikic/PHP-Parser/issues/512)
 * [Fix autocompleting static properties not removing existing text (prefix)](https://gitlab.com/Serenata/Serenata/issues/212)
 * [Fix autocompleting classlike (classes, interfaces and traits) inside use statements causing more use statements to be generated](https://gitlab.com/Serenata/Serenata/issues/202)
+* [Update php-parser to fix autocompletion failing with erroneous code when updating arrays to improve convenience](https://github.com/nikic/PHP-Parser/issues/512)
 * Fix autocompleting qualified namespaces inside use statements not returning a prefix, which didn't allow clients to replace it properly
-* Update `league/html-to-markdown` to at least [4.7.0](https://github.com/thephpleague/html-to-markdown/releases/tag/4.7.0)
-* Update `serenata/common` to at least `0.2.1`
 
 ## 4.1.0
 * Use Symfony Console for processing command line arguments
