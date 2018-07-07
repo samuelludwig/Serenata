@@ -7,6 +7,7 @@
 * [Fix autocompleting classlike (classes, interfaces and traits) inside use statements causing more use statements to be generated](https://gitlab.com/Serenata/Serenata/issues/202)
 * Fix autocompleting qualified namespaces inside use statements not returning a prefix, which didn't allow clients to replace it properly
 * Update `league/html-to-markdown` to at least [4.7.0](https://github.com/thephpleague/html-to-markdown/releases/tag/4.7.0)
+* Update `serenata/common` to at least `0.2.1`
 
 ## 4.1.0
 * Use Symfony Console for processing command line arguments
