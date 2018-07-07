@@ -2,7 +2,7 @@
 ### Major Changes
 * [Add support for fetching document symbols via the `documentSymbols` request](https://gitlab.com/Serenata/Serenata/issues/173)
 
-### Other improvements
+### Other Improvements
 * Update `serenata/common` to at least `0.2.1`
 * Update `league/html-to-markdown` to at least [4.7.0](https://github.com/thephpleague/html-to-markdown/releases/tag/4.7.0)
 * Replace UUID's in database with simpler unique id via `uniqid`
