@@ -136,3 +136,9 @@ services:
             - '@definitionLocator'
             - '@sourceCodeStreamReader'
             - '@fileIndexer'
+
+    documentSymbolsCommand:
+        class: Serenata\UserInterface\Command\DocumentSymbolsCommand
+        arguments:
+            - '@storage'
+            - '@documentSymbolRetriever'

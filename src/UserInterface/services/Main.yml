@@ -10,6 +10,7 @@ imports:
     - { resource: Refactoring.yml }
     - { resource: SignatureHelp.yml }
     - { resource: Sockets.yml }
+    - { resource: Symbols.yml }
     - { resource: Tooltips.yml }
     - { resource: UserInterface.yml }
     - { resource: Utility.yml }

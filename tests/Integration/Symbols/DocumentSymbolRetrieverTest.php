@@ -1,0 +1,272 @@
+<?php
+
+namespace Serenata\Tests\Integration\Symbols;
+
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Symbols\SymbolKind;
+use Serenata\Symbols\SymbolInformation;
+
+use Serenata\Utility\Location;
+
+use Serenata\Tests\Integration\AbstractIntegrationTest;
+
+class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
+{
+    /**
+     * @return void
+     */
+    public function testRetrievesConstant(): void
+    {
+        $filePath = $this->getTestFilePath('Constant.phpt');
+
+        static::assertEquals([
+            new SymbolInformation(
+                'CONSTANT',
+                SymbolKind::CONSTANT,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(2, 0),
+                        new Position(3, 0)
+                    )
+                ),
+                null
+            )
+        ], $this->getSymbolsForFile($filePath));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesFunction(): void
+    {
+        $filePath = $this->getTestFilePath('Function.phpt');
+
+        static::assertEquals([
+            new SymbolInformation(
+                'foo',
+                SymbolKind::FUNCTION_,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(2, 0),
+                        new Position(6, 0)
+                    )
+                ),
+                null
+            )
+        ], $this->getSymbolsForFile($filePath));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesClass(): void
+    {
+        $filePath = $this->getTestFilePath('Class.phpt');
+
+        static::assertEquals([
+            new SymbolInformation(
+                'A',
+                SymbolKind::CLASS_,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(2, 0),
+                        new Position(6, 0)
+                    )
+                ),
+                null
+            )
+        ], $this->getSymbolsForFile($filePath));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesInterface(): void
+    {
+        $filePath = $this->getTestFilePath('Interface.phpt');
+
+        static::assertEquals([
+            new SymbolInformation(
+                'I',
+                SymbolKind::INTERFACE_,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(2, 0),
+                        new Position(6, 0)
+                    )
+                ),
+                null
+            )
+        ], $this->getSymbolsForFile($filePath));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesTrait(): void
+    {
+        $filePath = $this->getTestFilePath('Trait.phpt');
+
+        static::assertEquals([
+            new SymbolInformation(
+                'T',
+                SymbolKind::CLASS_,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(2, 0),
+                        new Position(6, 0)
+                    )
+                ),
+                null
+            )
+        ], $this->getSymbolsForFile($filePath));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesClassConstants(): void
+    {
+        $filePath = $this->getTestFilePath('ClassConstant.phpt');
+
+        $symbols = $this->getSymbolsForFile($filePath);
+
+        static::assertCount(2, $symbols);
+        static::assertEquals(
+            new SymbolInformation(
+                'CONSTANT',
+                SymbolKind::CONSTANT,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(4, 0),
+                        new Position(5, 0)
+                    )
+                ),
+                'A'
+            ),
+            $symbols[1]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesClassMethods(): void
+    {
+        $filePath = $this->getTestFilePath('Method.phpt');
+
+        $symbols = $this->getSymbolsForFile($filePath);
+
+        static::assertCount(2, $symbols);
+        static::assertEquals(
+            new SymbolInformation(
+                'foo',
+                SymbolKind::METHOD,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(4, 0),
+                        new Position(8, 0)
+                    )
+                ),
+                'A'
+            ),
+            $symbols[1]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesClassConstructors(): void
+    {
+        $filePath = $this->getTestFilePath('ConstructorMethod.phpt');
+
+        $symbols = $this->getSymbolsForFile($filePath);
+
+        static::assertCount(2, $symbols);
+        static::assertEquals(
+            new SymbolInformation(
+                '__construct',
+                SymbolKind::CONSTRUCTOR,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(4, 0),
+                        new Position(8, 0)
+                    )
+                ),
+                'A'
+            ),
+            $symbols[1]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testRetrievesClassProperties(): void
+    {
+        $filePath = $this->getTestFilePath('Property.phpt');
+
+        $symbols = $this->getSymbolsForFile($filePath);
+
+        static::assertCount(2, $symbols);
+        static::assertEquals(
+            new SymbolInformation(
+                'bar',
+                SymbolKind::PROPERTY,
+                false,
+                new Location(
+                    'file://' . $filePath,
+                    new Range(
+                        new Position(4, 0),
+                        new Position(5, 0)
+                    )
+                ),
+                'A'
+            ),
+            $symbols[1]
+        );
+    }
+
+    /**
+     * @param string $filePath
+     *
+     * @return array
+     */
+    private function getSymbolsForFile(string $filePath): array
+    {
+        $this->indexTestFile($this->container, $filePath);
+
+        $documentSymbolRetriever = $this->container->get('documentSymbolRetriever');
+
+        return $documentSymbolRetriever->retrieve($this->container->get('storage')->getFileByPath($filePath));
+    }
+
+    /**
+     * @param string $fileName
+     *
+     * @return string
+     */
+    private function getTestFilePath(string $fileName): string
+    {
+        return __DIR__ . '/DocumentSymbolRetrieverTest/' . $fileName;
+    }
+}
