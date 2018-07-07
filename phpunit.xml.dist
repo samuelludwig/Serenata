@@ -1,18 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         beStrictAboutTestsThatDoNotTestAnything="true"
-         beStrictAboutOutputDuringTests="true"
-         bootstrap="src/Bootstrap.php"
+<phpunit bootstrap="src/Bootstrap.php"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         failOnRisky="true"
-         failOnWarning="true"
-         processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
          verbose="true"
 >
     <testsuites>
