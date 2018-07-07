@@ -23,8 +23,8 @@ More information for users, both developers looking to implement clients for oth
 
 ## What Features Are Supported?
 * Autocompletion
-* Goto Definition (code navigation)
-* Signature help (call tips)
+* Goto Definition (Code Navigation)
+* Signature Help (Call Tips)
 * Tooltips
 * Symbols
 * Linting
