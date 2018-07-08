@@ -647,7 +647,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                             -1,
                             $this->code,
                             PositionEncoding::VALUE
-                        )
+                        ) + 2
                     )
                 ),
                 $defaultValue,
