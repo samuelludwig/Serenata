@@ -16,7 +16,7 @@ class SchemaInitializer
     /**
      * @var int
      */
-    public const SCHEMA_VERSION = 21;
+    public const SCHEMA_VERSION = 22;
 
     /**
      * @var int

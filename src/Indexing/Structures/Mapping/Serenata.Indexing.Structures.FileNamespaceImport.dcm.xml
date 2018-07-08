@@ -8,10 +8,11 @@
     <entity name="Serenata\Indexing\Structures\FileNamespaceImport" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
-        <field name="line"  type="integer" nullable="false" />
         <field name="alias" type="string"  nullable="false" length="255" />
         <field name="name"  type="string"  nullable="false" length="255" />
         <field name="kind"  type="string"  nullable="false" length="255" />
+
+        <embedded name="range" class="Serenata\Common\Range" />
 
         <many-to-one field="namespace" target-entity="Serenata\Indexing\Structures\FileNamespace" inversed-by="imports">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />

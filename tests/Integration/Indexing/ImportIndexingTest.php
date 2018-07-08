@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Analysis\Visiting\UseStatementKind;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
@@ -28,7 +31,14 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertSame(3, $import->getLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(2, 8)
+            ),
+            $import->getRange()
+        );
+
         static::assertSame('A', $import->getAlias());
         static::assertSame('N\A', $import->getName());
         static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
@@ -53,7 +63,14 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertSame(3, $import->getLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(2, 13)
+            ),
+            $import->getRange()
+        );
+
         static::assertSame('B', $import->getAlias());
         static::assertSame('N\A', $import->getName());
         static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
@@ -78,7 +95,14 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertSame(3, $import->getLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(2, 17)
+            ),
+            $import->getRange()
+        );
+
         static::assertSame('A', $import->getAlias());
         static::assertSame('N\A', $import->getName());
         static::assertSame(UseStatementKind::TYPE_FUNCTION, $import->getKind());
@@ -103,7 +127,14 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertSame(3, $import->getLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(2, 14)
+            ),
+            $import->getRange()
+        );
+
         static::assertSame('A', $import->getAlias());
         static::assertSame('N\A', $import->getName());
         static::assertSame(UseStatementKind::TYPE_CONSTANT, $import->getKind());
@@ -128,7 +159,14 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertSame(3, $import->getLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(5, 1)
+            ),
+            $import->getRange()
+        );
+
         static::assertSame('A', $import->getAlias());
         static::assertSame('N\A', $import->getName());
         static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
@@ -136,7 +174,14 @@ class ImportIndexingTest extends AbstractIntegrationTest
 
         $import = $namespaces[0]->getImports()[1];
 
-        static::assertSame(3, $import->getLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(5, 1)
+            ),
+            $import->getRange()
+        );
+
         static::assertSame('C', $import->getAlias());
         static::assertSame('N\B', $import->getName());
         static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());

@@ -194,7 +194,24 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
             'name'  => $prefix . ((string) $use->name),
             'alias' => $use->getAlias()->name,
             'kind'  => $kindMap[$type],
-            'line'  => $node->getLine(),
+            'range' => new Range(
+                new Position(
+                    $node->getLine() - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('startFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    )
+                ),
+                new Position(
+                    $node->getEndLine() - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('endFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    ) + 1
+                )
+            ),        
             'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,
             'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null
         ];

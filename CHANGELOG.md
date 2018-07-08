@@ -8,7 +8,7 @@
 * Replace UUID's in database with simpler unique id via `uniqid`
     * This avoids the unnecessarily expensive generation of UUID's as well as a depednency; we just need a mostly unique identifier anyway, not anything secure
 * Internal (backwards-compatible) refactoring towards language server support
-    * Property, function, constant and namespace entities now remember whole (language server) ranges with positions instead of just start and end lines
+    * Property, function, constant, namespace and import entities now remember whole (language server) ranges with positions instead of just start and end lines
 
 ### Bugs Fixed
 * [Fix tilde `~` being replaced during autocompletion](https://gitlab.com/Serenata/Serenata/issues/184)

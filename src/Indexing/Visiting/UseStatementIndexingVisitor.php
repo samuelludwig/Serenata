@@ -115,7 +115,7 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     private function indexUseStatement(array $useStatement, Structures\FileNamespace $namespace): void
     {
         $import = new Structures\FileNamespaceImport(
-            $useStatement['line'],
+            $useStatement['range'],
             $useStatement['alias'] ?: null,
             $useStatement['name'],
             $useStatement['kind'],

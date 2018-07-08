@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 /**
  * Represents an import in a namespace inside a file.
  */
@@ -13,9 +15,9 @@ class FileNamespaceImport
     private $id;
 
     /**
-     * @var int
+     * @var Range
      */
-    private $line;
+    private $range;
 
     /**
      * @var string
@@ -38,16 +40,16 @@ class FileNamespaceImport
     private $namespace;
 
     /**
-     * @param int           $line
+     * @param Range         $range
      * @param string        $alias
      * @param string        $name
      * @param string        $kind
      * @param FileNamespace $namespace
      */
-    public function __construct(int $line, string $alias, string $name, string $kind, FileNamespace $namespace)
+    public function __construct(Range $range, string $alias, string $name, string $kind, FileNamespace $namespace)
     {
         $this->id = uniqid('', true);
-        $this->line = $line;
+        $this->range = $range;
         $this->alias = $alias;
         $this->name = $name;
         $this->kind = $kind;
@@ -65,11 +67,11 @@ class FileNamespaceImport
     }
 
     /**
-     * @return int
+     * @return Range
      */
-    public function getLine(): int
+    public function getRange(): Range
     {
-        return $this->line;
+        return $this->range;
     }
 
     /**

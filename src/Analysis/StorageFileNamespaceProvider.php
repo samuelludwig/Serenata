@@ -89,7 +89,7 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
             $import->getName(),
             $import->getAlias(),
             $import->getKind(),
-            new Position($import->getLine(), 0)
+            $import->getRange()->getStart()
         );
     }
 }
