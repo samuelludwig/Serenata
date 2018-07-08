@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -15,14 +17,9 @@ class FileNamespace
     private $id;
 
     /**
-     * @var int
+     * @var Range
      */
-    private $startLine;
-
-    /**
-     * @var int
-     */
-    private $endLine;
+    private $range;
 
     /**
      * @var string|null
@@ -40,22 +37,19 @@ class FileNamespace
     private $imports;
 
     /**
-     * @param int                   $startLine
-     * @param int                   $endLine
+     * @param Range                 $range
      * @param string|null           $name
      * @param File                  $file
      * @param FileNamespaceImport[] $imports
      */
     public function __construct(
-        int $startLine,
-        int $endLine,
+        Range $range,
         string $name = null,
         File $file,
         array $imports
     ) {
         $this->id = uniqid('', true);
-        $this->startLine = $startLine;
-        $this->endLine = $endLine;
+        $this->range = $range;
         $this->name = $name;
         $this->file = $file;
         $this->imports = new ArrayCollection($imports);
@@ -72,19 +66,11 @@ class FileNamespace
     }
 
     /**
-     * @return int
+     * @return Range
      */
-    public function getStartLine(): int
+    public function getRange(): Range
     {
-        return $this->startLine;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEndLine(): int
-    {
-        return $this->endLine;
+        return $this->range;
     }
 
     /**

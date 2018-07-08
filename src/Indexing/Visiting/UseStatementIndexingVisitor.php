@@ -93,8 +93,7 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     private function indexNamespace(array $namespace): void
     {
         $namespaceEntity = new Structures\FileNamespace(
-            $namespace['startLine'],
-            $namespace['endLine'],
+            $namespace['range'],
             $namespace['name'],
             $this->file,
             []

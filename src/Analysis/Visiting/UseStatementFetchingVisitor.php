@@ -7,6 +7,12 @@ use DomainException;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\SourceCodeHelpers;
+
 /**
  * Node visitor that fetches namespaces and their use statements.
  */
@@ -23,21 +29,30 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
     private $lastNamespaceIndex = 0;
 
     /**
-     * @var int
+     * @var string
      */
-    private $lastLine;
+    private $code;
 
     /**
      * @param string $code
      */
     public function __construct(string $code)
     {
-        $this->lastLine = mb_substr_count($code, "\n");
+        $this->code = $code;
 
         $this->namespaces[0] = [
             'name'          => null,
-            'startLine'     => 0,
-            'endLine'       => $this->lastLine + 1,
+            'range'         => new Range(
+                new Position(0, 0),
+                new Position(
+                    mb_substr_count($code, "\n") + 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        strlen($code),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    ) + 1
+                )
+            ),
             'useStatements' => []
         ];
 
@@ -71,7 +86,17 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
     public function afterTraverse(array $nodes)
     {
         if (isset($this->namespaces[$this->lastNamespaceIndex])) {
-            $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $this->lastLine + 1;
+            $this->namespaces[$this->lastNamespaceIndex]['range'] = new Range(
+                $this->namespaces[$this->lastNamespaceIndex]['range']->getStart(),
+                new Position(
+                    mb_substr_count($this->code, "\n") + 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        strlen($this->code),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    )
+                )
+            );
         }
     }
 
@@ -90,11 +115,38 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
      */
     private function beginNamespace(Node\Stmt\Namespace_ $node): void
     {
-        $this->namespaces[$this->lastNamespaceIndex]['endLine'] = $node->getLine() - 1;
+        $this->namespaces[$this->lastNamespaceIndex]['range'] = new Range(
+            $this->namespaces[$this->lastNamespaceIndex]['range']->getStart(),
+            new Position(
+                $node->getLine() - 1,
+                SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
+                )
+            )
+        );
+        
         $this->namespaces[++$this->lastNamespaceIndex] = [
             'name'          => $node->name ? (string) $node->name : null,
-            'startLine'     => $node->getLine(),
-            'endLine'       => $node->getLine() + 1,
+            'range'         => new Range(
+                new Position(
+                    $node->getLine() - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('startFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    )
+                ),
+                new Position(
+                    $node->getLine(),
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('endFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    ) + 1
+                )
+            ),
             'useStatements' => []
         ];
     }

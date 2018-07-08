@@ -8,9 +8,9 @@
     <entity name="Serenata\Indexing\Structures\FileNamespace" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
-        <field name="startLine"        type="integer" nullable="false" />
-        <field name="endLine"          type="integer" nullable="false" />
-        <field name="name"             type="string"  nullable="true"  length="255" />
+        <field name="name" type="string"  nullable="true"  length="255" />
+
+        <embedded name="range" class="Serenata\Common\Range" />
 
         <many-to-one field="file" target-entity="Serenata\Indexing\Structures\File" inversed-by="namespaces">
             <join-column on-delete="CASCADE" on-update="CASCADE" />

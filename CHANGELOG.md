@@ -8,7 +8,7 @@
 * Replace UUID's in database with simpler unique id via `uniqid`
     * This avoids the unnecessarily expensive generation of UUID's as well as a depednency; we just need a mostly unique identifier anyway, not anything secure
 * Internal (backwards-compatible) refactoring towards language server support
-    * Property, function and constant entities now remember whole (language server) ranges with positions instead of just start and end lines
+    * Property, function, constant and namespace entities now remember whole (language server) ranges with positions instead of just start and end lines
 
 ### Bugs Fixed
 * [Fix tilde `~` being replaced during autocompletion](https://gitlab.com/Serenata/Serenata/issues/184)
@@ -16,6 +16,8 @@
 * [Update php-parser to fix autocompletion failing with erroneous code when updating arrays to improve convenience](https://github.com/nikic/PHP-Parser/issues/512)
 * [Fix autocompleting classlike (classes, interfaces and traits) inside use statements causing more use statements to be generated](https://gitlab.com/Serenata/Serenata/issues/202)
 * Fix autocompleting qualified namespaces inside use statements not returning a prefix, which didn't allow clients to replace it properly
+* Fix namespace list command returning slightly off lines for namespaces
+    * It is 0-indexed, but some lines weren't - the other requests return 1-indexed data, but this inconsistency can't be fixed without a BC break
 
 ## 4.1.0
 * Use Symfony Console for processing command line arguments

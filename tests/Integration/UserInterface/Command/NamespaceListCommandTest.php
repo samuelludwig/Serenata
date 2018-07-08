@@ -61,7 +61,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
 
         static::assertSame('NamespaceA', $secondItem['name']);
         static::assertSame($path . 'NamespaceA.phpt', $secondItem['file']);
-        static::assertSame(3, $secondItem['startLine']);
+        static::assertSame(2, $secondItem['startLine']);
         static::assertSame(9, $secondItem['endLine']);
     }
 

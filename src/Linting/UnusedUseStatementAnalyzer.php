@@ -264,8 +264,8 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
     private function lineLiesWithinNamespaceRange(int $line, array $namespace): bool
     {
         return (
-            $line >= $namespace['startLine'] &&
-            ($line <= $namespace['endLine'] || $namespace['endLine'] === null)
+            $line >= ($namespace['range']->getStart()->getLine() + 1) &&
+            $line <= ($namespace['range']->getEnd()->getLine() + 1)
         );
     }
 }

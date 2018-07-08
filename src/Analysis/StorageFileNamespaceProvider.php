@@ -61,14 +61,9 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
      */
     private function mapNamespace(Structures\FileNamespace $namespace): Namespace_
     {
-        $range = new Range(
-            new Position($namespace->getStartLine(), 0),
-            new Position($namespace->getEndLine() + 1, 0)
-        );
-
         $imports = $this->mapImports($namespace->getImports());
 
-        return new Namespace_($namespace->getName(), $imports, $range);
+        return new Namespace_($namespace->getName(), $imports, $namespace->getRange());
     }
 
     /**

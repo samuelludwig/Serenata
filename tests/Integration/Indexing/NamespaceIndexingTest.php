@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,8 +26,14 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         static::assertCount(1, $namespaces);
 
-        static::assertSame(0, $namespaces[0]->getStartLine());
-        static::assertSame(2, $namespaces[0]->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(0, 0),
+                new Position(2, 0)
+            ),
+            $namespaces[0]->getRange()
+        );
+
         static::assertSame(null, $namespaces[0]->getName());
         static::assertSame($path, $namespaces[0]->getFile()->getPath());
         static::assertEmpty($namespaces[0]->getImports());
@@ -45,8 +54,14 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         static::assertCount(2, $namespaces);
 
-        static::assertSame(3, $namespaces[1]->getStartLine());
-        static::assertSame(6, $namespaces[1]->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(6, 0)
+            ),
+            $namespaces[1]->getRange()
+        );
+
         static::assertSame('N', $namespaces[1]->getName());
         static::assertSame($path, $namespaces[1]->getFile()->getPath());
         static::assertEmpty($namespaces[1]->getImports());
@@ -67,8 +82,14 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         static::assertCount(2, $namespaces);
 
-        static::assertSame(3, $namespaces[1]->getStartLine());
-        static::assertSame(6, $namespaces[1]->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(6, 0)
+            ),
+            $namespaces[1]->getRange()
+        );
+
         static::assertSame(null, $namespaces[1]->getName());
         static::assertSame($path, $namespaces[1]->getFile()->getPath());
         static::assertCount(1, $namespaces[1]->getImports());
