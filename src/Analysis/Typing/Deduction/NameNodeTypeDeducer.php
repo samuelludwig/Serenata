@@ -6,7 +6,7 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeNormalizerInterface;
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use Serenata\Common\Position;
@@ -27,9 +27,9 @@ use PhpParser\Node;
 final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var TypeAnalyzer
+     * @var TypeNormalizerInterface
      */
-    private $typeAnalyzer;
+    private $typeNormalizer;
 
     /**
      * @var ClasslikeInfoBuilderInterface
@@ -47,18 +47,18 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $structureAwareNameResolverFactory;
 
     /**
-     * @param TypeAnalyzer                               $typeAnalyzer
+     * @param TypeNormalizerInterface                    $typeNormalizer
      * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
      * @param FileClasslikeListProviderInterface         $fileClasslikeListProvider
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      */
     public function __construct(
-        TypeAnalyzer $typeAnalyzer,
+        TypeNormalizerInterface $typeNormalizer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         FileClasslikeListProviderInterface $fileClasslikeListProvider,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->typeNormalizer = $typeNormalizer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->fileClasslikeListProvider = $fileClasslikeListProvider;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
@@ -95,7 +95,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
                 return [];
             }
 
-            return [$this->typeAnalyzer->getNormalizedFqcn($currentClass)];
+            return [$this->typeNormalizer->getNormalizedFqcn($currentClass)];
         } elseif ($nameString === 'parent') {
             $currentClassName = $this->findCurrentClassAt($file, $code, $offset);
 
@@ -111,7 +111,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             $type = $classInfo['parents'][0];
 
-            return [$this->typeAnalyzer->getNormalizedFqcn($type)];
+            return [$this->typeNormalizer->getNormalizedFqcn($type)];
         }
 
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
