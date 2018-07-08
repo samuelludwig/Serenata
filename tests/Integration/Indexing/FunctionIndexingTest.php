@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
@@ -20,8 +23,13 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         static::assertSame('foo', $function->getName());
         static::assertSame('\foo', $function->getFqcn());
         static::assertSame($this->getPathFor('SimpleFunction.phpt'), $function->getFile()->getPath());
-        static::assertSame(3, $function->getStartLine());
-        static::assertSame(6, $function->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(5, 2)
+            ),
+            $function->getRange()
+        );
         static::assertFalse($function->getIsDeprecated());
         static::assertNull($function->getShortDescription());
         static::assertNull($function->getLongDescription());
