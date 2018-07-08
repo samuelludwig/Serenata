@@ -2,11 +2,7 @@
 
 namespace Serenata\Tests\Integration\Analysis\Typing\Deduction;
 
-use ReflectionClass;
-
 use Serenata\Indexing\FileNotFoundStorageException;
-
-use Serenata\UserInterface\Command\DeduceTypesCommand;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
