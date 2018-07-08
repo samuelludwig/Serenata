@@ -74,19 +74,19 @@ class Class_ extends Classlike
     private $isAddingInterface = false;
 
     /**
-     * @param string        $name
-     * @param string        $fqcn
-     * @param File          $file
-     * @param Range         $range
-     * @param string|null   $shortDescription
-     * @param string|null   $longDescription
-     * @param bool          $isAnonymous
-     * @param bool          $isAbstract
-     * @param bool          $isFinal
-     * @param bool          $isAnnotation
-     * @param bool          $isDeprecated
-     * @param bool          $hasDocblock
-     * @param Class_|null   $parent
+     * @param string      $name
+     * @param string      $fqcn
+     * @param File        $file
+     * @param Range       $range
+     * @param string|null $shortDescription
+     * @param string|null $longDescription
+     * @param bool        $isAnonymous
+     * @param bool        $isAbstract
+     * @param bool        $isFinal
+     * @param bool        $isAnnotation
+     * @param bool        $isDeprecated
+     * @param bool        $hasDocblock
+     * @param Class_|null $parent
      */
     public function __construct(
         string $name,

@@ -17,18 +17,18 @@ class Function_ extends FunctionLike
     private $fqcn;
 
     /**
-     * @param string              $name
-     * @param string              $fqcn
-     * @param File                $file
-     * @param Range               $range
-     * @param bool                $isDeprecated
-     * @param string|null         $shortDescription
-     * @param string|null         $longDescription
-     * @param string|null         $returnDescription
-     * @param string|null         $returnTypeHint
-     * @param bool                $hasDocblock
-     * @param array[]             $throws
-     * @param TypeInfo[]          $returnTypes
+     * @param string      $name
+     * @param string      $fqcn
+     * @param File        $file
+     * @param Range       $range
+     * @param bool        $isDeprecated
+     * @param string|null $shortDescription
+     * @param string|null $longDescription
+     * @param string|null $returnDescription
+     * @param string|null $returnTypeHint
+     * @param bool        $hasDocblock
+     * @param array[]     $throws
+     * @param TypeInfo[]  $returnTypes
      */
     public function __construct(
         string $name,

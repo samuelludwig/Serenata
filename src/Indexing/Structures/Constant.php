@@ -15,17 +15,17 @@ class Constant extends ConstantLike
     private $fqcn;
 
     /**
-     * @param string              $name
-     * @param string              $fqcn
-     * @param File                $file
-     * @param Range               $range
-     * @param string              $defaultValue
-     * @param bool                $isDeprecated
-     * @param bool                $hasDocblock
-     * @param string|null         $shortDescription
-     * @param string|null         $longDescription
-     * @param string|null         $typeDescription
-     * @param TypeInfo[]          $types
+     * @param string      $name
+     * @param string      $fqcn
+     * @param File        $file
+     * @param Range       $range
+     * @param string      $defaultValue
+     * @param bool        $isDeprecated
+     * @param bool        $hasDocblock
+     * @param string|null $shortDescription
+     * @param string|null $longDescription
+     * @param string|null $typeDescription
+     * @param TypeInfo[]  $types
      */
     public function __construct(
         string $name,

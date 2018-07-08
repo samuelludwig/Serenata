@@ -13,7 +13,7 @@ class ClassTraitAlias extends ClasslikeTraitAlias
     private $class;
 
     /**
-     * @param Class_           $class
+     * @param Class_              $class
      * @param string|null         $traitFqcn
      * @param AccessModifier|null $accessModifier
      * @param string              $name

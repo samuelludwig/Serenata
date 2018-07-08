@@ -32,14 +32,14 @@ class Interface_ extends Classlike
     private $isAddingImplementor = false;
 
     /**
-     * @param string        $name
-     * @param string        $fqcn
-     * @param File          $file
-     * @param Range         $range
-     * @param string|null   $shortDescription
-     * @param string|null   $longDescription
-     * @param bool          $isDeprecated
-     * @param bool          $hasDocblock
+     * @param string      $name
+     * @param string      $fqcn
+     * @param File        $file
+     * @param Range       $range
+     * @param string|null $shortDescription
+     * @param string|null $longDescription
+     * @param bool        $isDeprecated
+     * @param bool        $hasDocblock
      */
     public function __construct(
         string $name,
