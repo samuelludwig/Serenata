@@ -151,12 +151,14 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     {
         $classes = $this->fileClasslikeListProvider->getAllForFile($file);
 
+        $bestMatch = null;
+
         foreach ($classes as $fqcn => $class) {
             if ($line >= $class['startLine'] && $line <= $class['endLine']) {
-                return $fqcn;
+                $bestMatch = $fqcn;
             }
         }
 
-        return null;
+        return $bestMatch;
     }
 }

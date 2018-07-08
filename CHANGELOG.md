@@ -15,6 +15,7 @@
 * [Fix autocompleting static properties not removing existing text (prefix)](https://gitlab.com/Serenata/Serenata/issues/212)
 * [Update php-parser to fix autocompletion failing with erroneous code when updating arrays to improve convenience](https://github.com/nikic/PHP-Parser/issues/512)
 * [Fix autocompleting classlike (classes, interfaces and traits) inside use statements causing more use statements to be generated](https://gitlab.com/Serenata/Serenata/issues/202)
+* [Fix `self`, `parent` and `static` resolving to outer class (if present) instead of actual parent class for anonymous classes](https://gitlab.com/Serenata/Serenata/issues/192)
 * Fix autocompleting qualified namespaces inside use statements not returning a prefix, which didn't allow clients to replace it properly
 * Fix namespace list command returning slightly off lines for namespaces
     * It is 0-indexed, but some lines weren't - the other requests return 1-indexed data, but this inconsistency can't be fixed without a BC break
