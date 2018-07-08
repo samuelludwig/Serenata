@@ -522,7 +522,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         foreach ($node->adaptations as $adaptation) {
             if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
-                $traitFqcn = $adaptation->trait ? NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) : null;
+                $traitFqcn = $adaptation->trait ?
+                    NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) :
+                    null;
+
                 $traitFqcn = $traitFqcn !== null ? $this->typeAnalyzer->getNormalizedFqcn($traitFqcn) : null;
 
                 $accessModifier = null;
@@ -595,7 +598,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 substr(
                     $this->code,
                     $property->default->getAttribute('startFilePos'),
-                    $property->default->getAttribute('endFilePos') - $property->default->getAttribute('startFilePos') + 1
+                    $property->default->getAttribute('endFilePos') -
+                        $property->default->getAttribute('startFilePos') +
+                        1
                 ) :
                 null;
 
