@@ -981,8 +981,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $rawData['name'],
             $this->file,
             new Range(
-                new Position($filePosition->getPosition()->getLine(), 0),
-                new Position($filePosition->getPosition()->getLine(), 0)
+                new Position($filePosition->getPosition()->getLine() - 1, 0),
+                new Position($filePosition->getPosition()->getLine() - 1, 0)
             ),
             null,
             false,
