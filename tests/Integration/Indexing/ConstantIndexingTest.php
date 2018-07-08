@@ -26,7 +26,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
         static::assertEquals(
             new Range(
                 new Position(2, 6),
-                new Position(2, 24)
+                new Position(2, 23)
             ),
             $constant->getRange()
         );

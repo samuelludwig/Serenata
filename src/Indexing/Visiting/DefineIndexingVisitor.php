@@ -131,7 +131,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
                         $node->getAttribute('endFilePos'),
                         $this->code,
                         PositionEncoding::VALUE
-                    ) + 2
+                    ) + 1
                 )
             ),
             $defaultValue,

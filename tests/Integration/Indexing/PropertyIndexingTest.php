@@ -27,7 +27,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
         static::assertEquals(
             new Range(
                 new Position(4, 11),
-                new Position(4, 25)
+                new Position(4, 24)
             ),
             $property->getRange()
         );

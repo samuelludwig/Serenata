@@ -26,7 +26,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
         static::assertEquals(
             new Range(
                 new Position(2, 0),
-                new Position(2, 26)
+                new Position(2, 25)
             ),
             $define->getRange()
         );

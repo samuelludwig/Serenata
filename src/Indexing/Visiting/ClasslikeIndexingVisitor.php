@@ -666,7 +666,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                             $property->getAttribute('endFilePos'),
                             $this->code,
                             PositionEncoding::VALUE
-                        ) + 2
+                        ) + 1
                     )
                 ),
                 $defaultValue,
@@ -783,7 +783,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $node->getAttribute('endFilePos'),
                         $this->code,
                         PositionEncoding::VALUE
-                    ) + 2
+                    ) + 1
                 )
             ),
             $documentation['deprecated'],
@@ -977,7 +977,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $node->getAttribute('endFilePos'),
                         $this->code,
                         PositionEncoding::VALUE
-                    ) + 2
+                    ) + 1
                 )
             ),
             $defaultValue,

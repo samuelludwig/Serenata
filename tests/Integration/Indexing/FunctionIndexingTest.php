@@ -26,7 +26,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         static::assertEquals(
             new Range(
                 new Position(2, 0),
-                new Position(5, 2)
+                new Position(5, 1)
             ),
             $function->getRange()
         );

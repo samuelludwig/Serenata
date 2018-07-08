@@ -200,7 +200,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                         $node->getAttribute('endFilePos'),
                         $this->code,
                         PositionEncoding::VALUE
-                    ) + 2
+                    ) + 1
                 )
             ),
             $documentation['deprecated'],

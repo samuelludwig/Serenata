@@ -27,7 +27,7 @@ class MethodIndexingTest extends AbstractIntegrationTest
         static::assertEquals(
             new Range(
                 new Position(4, 4),
-                new Position(7, 6)
+                new Position(7, 5)
             ),
             $method->getRange()
         );

@@ -30,7 +30,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(2, 6),
-                        new Position(2, 19)
+                        new Position(2, 18)
                     )
                 ),
                 null
@@ -54,7 +54,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(2, 0),
-                        new Position(5, 2)
+                        new Position(5, 1)
                     )
                 ),
                 null
@@ -153,7 +153,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(4, 17),
-                        new Position(4, 35)
+                        new Position(4, 34)
                     )
                 ),
                 'A'
@@ -181,7 +181,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(4, 4),
-                        new Position(7, 6)
+                        new Position(7, 5)
                     )
                 ),
                 'A'
@@ -209,7 +209,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(4, 4),
-                        new Position(7, 6)
+                        new Position(7, 5)
                     )
                 ),
                 'A'
@@ -237,7 +237,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(4, 12),
-                        new Position(4, 22)
+                        new Position(4, 21)
                     )
                 ),
                 'A'
