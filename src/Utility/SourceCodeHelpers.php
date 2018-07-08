@@ -72,7 +72,6 @@ class SourceCodeHelpers
      * byte offset.
      *
      * @param int    $byteOffset
-     * @param int    $line
      * @param string $string
      * @param string $encoding
      *
@@ -80,7 +79,6 @@ class SourceCodeHelpers
      */
     public static function getCharacterOnLineFromByteOffset(
         int $byteOffset,
-        int $line,
         string $string,
         string $encoding = 'UTF-8'
     ): int {

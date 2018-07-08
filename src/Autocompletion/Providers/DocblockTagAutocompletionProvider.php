@@ -87,7 +87,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
     private function getTextEditForSuggestion(array $tag, string $code, int $offset, string $prefix): TextEdit
     {
         $line = SourceCodeHelpers::calculateLineByOffset($code, $offset) - 1;
-        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $line, $code);
+        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $code);
 
         return new TextEdit(
             new Range(new Position($line, $character - mb_strlen($prefix)), new Position($line, $character)),

@@ -635,7 +635,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $property->getLine() - 1,
                         SourceCodeHelpers::getCharacterOnLineFromByteOffset(
                             $property->getAttribute('startFilePos'),
-                            -1,
                             $this->code,
                             PositionEncoding::VALUE
                         )
@@ -644,7 +643,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $property->getAttribute('endLine') - 1,
                         SourceCodeHelpers::getCharacterOnLineFromByteOffset(
                             $property->getAttribute('endFilePos'),
-                            -1,
                             $this->code,
                             PositionEncoding::VALUE
                         ) + 2
