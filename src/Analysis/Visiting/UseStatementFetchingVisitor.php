@@ -211,7 +211,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
                         PositionEncoding::VALUE
                     ) + 1
                 )
-            ),        
+            ),
             'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,
             'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null
         ];
