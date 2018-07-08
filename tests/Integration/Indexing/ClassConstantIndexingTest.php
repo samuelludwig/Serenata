@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\Indexing\Structures\AccessModifierNameValue;
@@ -21,8 +24,13 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('CONSTANT', $constant->getName());
         static::assertSame($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getPath());
-        static::assertSame(5, $constant->getStartLine());
-        static::assertSame(5, $constant->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(4, 10),
+                new Position(4, 28)
+            ),
+            $constant->getRange()
+        );
         static::assertSame("'test'", $constant->getDefaultValue());
         static::assertFalse($constant->getIsDeprecated());
         static::assertFalse($constant->getHasDocblock());
@@ -56,8 +64,13 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('class', $constant->getName());
         static::assertSame($this->getPathFor('ClassKeywordConstant.phpt'), $constant->getFile()->getPath());
-        static::assertSame(3, $constant->getStartLine());
-        static::assertSame(3, $constant->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(2, 0)
+            ),
+            $constant->getRange()
+        );
         static::assertSame("'Test'", $constant->getDefaultValue());
         static::assertFalse($constant->getIsDeprecated());
         static::assertFalse($constant->getHasDocblock());

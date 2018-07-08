@@ -58,8 +58,9 @@ final class ClasslikeConstantConverter
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
-                'startLineMember' => $constant->getStartLine(),
-                'endLineMember'   => $constant->getEndLine()
+                // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
+                'startLineMember' => $constant->getRange()->getStart()->getLine() + 1,
+                'endLineMember'   => $constant->getRange()->getEnd()->getLine() + 1
             ]
         ]);
     }

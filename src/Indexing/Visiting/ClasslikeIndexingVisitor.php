@@ -941,8 +941,24 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $constant = new Structures\ClassConstant(
             $node->name->name,
             $this->file,
-            $node->getLine(),
-            $node->getAttribute('endLine'),
+            new Range(
+                new Position(
+                    $node->getLine() - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('startFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    )
+                ),
+                new Position(
+                    $node->getAttribute('endLine') - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('endFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    ) + 2
+                )
+            ),
             $defaultValue,
             $documentation['deprecated'] ? 1 : 0,
             !empty($docComment),
@@ -1100,8 +1116,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $constant = new Structures\ClassConstant(
             'class',
             $this->file,
-            $classlike->getStartLine(),
-            $classlike->getStartLine(),
+            new Range(
+                new Position($classlike->getStartLine() - 1, 0),
+                new Position($classlike->getStartLine() - 1, 0)
+            ),
             '\'' . mb_substr($classlike->getFqcn(), 1) . '\'',
             false,
             false,

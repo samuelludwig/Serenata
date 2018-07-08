@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 /**
  * Represents a class constant.
  */
@@ -20,8 +22,7 @@ class ClassConstant extends ConstantLike
     /**
      * @param string              $name
      * @param File                $file
-     * @param int                 $startLine
-     * @param int                 $endLine
+     * @param Range               $range
      * @param string              $defaultValue
      * @param bool                $isDeprecated
      * @param bool                $hasDocblock
@@ -35,8 +36,7 @@ class ClassConstant extends ConstantLike
     public function __construct(
         string $name,
         File $file,
-        int $startLine,
-        int $endLine,
+        Range $range,
         string $defaultValue,
         bool $isDeprecated,
         bool $hasDocblock,
@@ -50,8 +50,7 @@ class ClassConstant extends ConstantLike
         $this->id = uniqid('', true);
         $this->name = $name;
         $this->file = $file;
-        $this->startLine = $startLine;
-        $this->endLine = $endLine;
+        $this->range = $range;
         $this->defaultValue = $defaultValue;
         $this->isDeprecated = $isDeprecated;
         $this->hasDocblock = $hasDocblock;

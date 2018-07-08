@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 /**
  * Represents a (global) constant.
  */
@@ -16,8 +18,7 @@ class Constant extends ConstantLike
      * @param string              $name
      * @param string              $fqcn
      * @param File                $file
-     * @param int                 $startLine
-     * @param int                 $endLine
+     * @param Range               $range
      * @param string              $defaultValue
      * @param bool                $isDeprecated
      * @param bool                $hasDocblock
@@ -30,8 +31,7 @@ class Constant extends ConstantLike
         string $name,
         string $fqcn,
         File $file,
-        int $startLine,
-        int $endLine,
+        Range $range,
         string $defaultValue,
         bool $isDeprecated,
         bool $hasDocblock,
@@ -44,8 +44,7 @@ class Constant extends ConstantLike
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;
-        $this->startLine = $startLine;
-        $this->endLine = $endLine;
+        $this->range = $range;
         $this->defaultValue = $defaultValue;
         $this->isDeprecated = $isDeprecated;
         $this->hasDocblock = $hasDocblock;

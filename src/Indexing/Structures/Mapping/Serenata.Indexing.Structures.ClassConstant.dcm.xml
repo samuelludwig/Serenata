@@ -9,8 +9,6 @@
         <id name="id" type="string"></id>
 
         <field name="name"             type="string"     nullable="false" length="255" />
-        <field name="startLine"        type="integer"    nullable="false" />
-        <field name="endLine"          type="integer"    nullable="false" />
         <field name="defaultValue"     type="string"     nullable="false" length="255" />
         <field name="isDeprecated"     type="boolean"    nullable="false" />
         <field name="hasDocblock"      type="boolean"    nullable="false" />
@@ -18,6 +16,8 @@
         <field name="longDescription"  type="text"       nullable="true"  length="15000" />
         <field name="typeDescription"  type="text"       nullable="true"  length="15000" />
         <field name="types"            type="array"      nullable="false" />
+
+        <embedded name="range" class="Serenata\Common\Range" />
 
         <many-to-one field="file" target-entity="Serenata\Indexing\Structures\File">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />

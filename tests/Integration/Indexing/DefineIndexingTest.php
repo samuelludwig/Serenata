@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
@@ -20,8 +23,13 @@ class DefineIndexingTest extends AbstractIntegrationTest
         static::assertSame('DEFINE', $define->getName());
         static::assertSame('\DEFINE', $define->getFqcn());
         static::assertSame($this->getPathFor('SimpleDefine.phpt'), $define->getFile()->getPath());
-        static::assertSame(3, $define->getStartLine());
-        static::assertSame(3, $define->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(2, 26)
+            ),
+            $define->getRange()
+        );
         static::assertSame("'VALUE'", $define->getDefaultValue());
         static::assertFalse($define->getIsDeprecated());
         static::assertFalse($define->getHasDocblock());
