@@ -137,10 +137,7 @@ final class DocumentSymbolRetriever
             $classlike->getIsDeprecated(),
             new Location(
                 'file://' . $file->getPath(),
-                new Range(
-                    new Position($classlike->getStartLine() - 1, 0),
-                    new Position($classlike->getEndLine(), 0)
-                )
+                $classlike->getRange()
             ),
             null
         );

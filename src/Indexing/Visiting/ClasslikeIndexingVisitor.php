@@ -269,6 +269,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $classlike = null;
 
+        $range = new Range(
+            new Position(
+                $node->getLine() - 1,
+                SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
+                )
+            ),
+            new Position(
+                $node->getAttribute('endLine') - 1,
+                SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                    $node->getAttribute('endFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
+                ) + 1
+            )
+        );
+
         if ($node instanceof Node\Stmt\Class_) {
             $fqcn = null;
             $classlikeName = null;
@@ -285,8 +304,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $classlikeName,
                 $fqcn,
                 $this->file,
-                $node->getLine(),
-                $node->getAttribute('endLine'),
+                $range,
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $node->isAnonymous(),
@@ -302,8 +320,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $node->name->name,
                 '\\' . $node->namespacedName->toString(),
                 $this->file,
-                $node->getLine(),
-                $node->getAttribute('endLine'),
+                $range,
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $documentation['deprecated'],
@@ -314,8 +331,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $node->name->name,
                 '\\' . $node->namespacedName->toString(),
                 $this->file,
-                $node->getLine(),
-                $node->getAttribute('endLine'),
+                $range,
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $documentation['deprecated'],
@@ -1117,8 +1133,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             'class',
             $this->file,
             new Range(
-                new Position($classlike->getStartLine() - 1, 0),
-                new Position($classlike->getStartLine() - 1, 0)
+                new Position($classlike->getRange()->getStart()->getLine(), 0),
+                new Position($classlike->getRange()->getStart()->getLine(), 0)
             ),
             '\'' . mb_substr($classlike->getFqcn(), 1) . '\'',
             false,

@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -30,14 +32,9 @@ abstract class Classlike
     protected $file;
 
     /**
-     * @var int
+     * @var Range
      */
-    protected $startLine;
-
-    /**
-     * @var int
-     */
-    protected $endLine;
+    protected $range;
 
     /**
      * @var string|null
@@ -107,19 +104,11 @@ abstract class Classlike
     }
 
     /**
-     * @return int
+     * @return Range
      */
-    public function getStartLine(): int
+    public function getRange(): Range
     {
-        return $this->startLine;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEndLine(): int
-    {
-        return $this->endLine;
+        return $this->range;
     }
 
     /**

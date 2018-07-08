@@ -18,12 +18,12 @@
 
         <field name="name"               type="string"  nullable="false" length="255" />
         <field name="fqcn"               type="string"  nullable="false" length="255" />
-        <field name="startLine"          type="integer" nullable="false" />
-        <field name="endLine"            type="integer" nullable="false" />
         <field name="shortDescription"   type="text"    nullable="true"  length="15000" />
         <field name="longDescription"    type="text"    nullable="true"  length="15000" />
         <field name="isDeprecated"       type="boolean" nullable="false" />
         <field name="hasDocblock"        type="boolean" nullable="false" />
+
+        <embedded name="range" class="Serenata\Common\Range" />
 
         <many-to-one field="file" target-entity="Serenata\Indexing\Structures\File" inversed-by="classlikes">
             <join-column on-delete="CASCADE" on-update="CASCADE" nullable="false" />

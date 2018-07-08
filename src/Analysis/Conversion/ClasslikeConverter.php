@@ -19,8 +19,9 @@ final class ClasslikeConverter extends AbstractConverter
         $data = [
             'name'               => $classlike->getName(),
             'fqcn'               => $classlike->getFqcn(),
-            'startLine'          => $classlike->getStartLine(),
-            'endLine'            => $classlike->getEndLine(),
+            // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
+            'startLine'          => $classlike->getRange()->getStart()->getLine() + 1,
+            'endLine'            => $classlike->getRange()->getEnd()->getLine() + 1,
             'filename'           => $classlike->getFile()->getPath(),
             'type'               => $classlike->getTypeName(),
             'isDeprecated'       => $classlike->getIsDeprecated(),

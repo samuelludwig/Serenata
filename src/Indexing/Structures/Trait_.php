@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 use DomainException;
 
+use Serenata\Common\Range;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -45,8 +47,7 @@ class Trait_ extends Classlike
      * @param string        $name
      * @param string        $fqcn
      * @param File          $file
-     * @param int           $startLine
-     * @param int           $endLine
+     * @param Range         $range
      * @param string|null   $shortDescription
      * @param string|null   $longDescription
      * @param bool          $isDeprecated
@@ -56,8 +57,7 @@ class Trait_ extends Classlike
         string $name,
         string $fqcn,
         File $file,
-        int $startLine,
-        int $endLine,
+        Range $range,
         ?string $shortDescription,
         ?string $longDescription,
         bool $isDeprecated,
@@ -67,8 +67,7 @@ class Trait_ extends Classlike
         $this->name = $name;
         $this->fqcn = $fqcn;
         $this->file = $file;
-        $this->startLine = $startLine;
-        $this->endLine = $endLine;
+        $this->range = $range;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
         $this->isDeprecated = $isDeprecated;

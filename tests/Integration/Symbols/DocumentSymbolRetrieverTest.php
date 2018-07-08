@@ -78,7 +78,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(2, 0),
-                        new Position(6, 0)
+                        new Position(5, 1)
                     )
                 ),
                 null
@@ -102,7 +102,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(2, 0),
-                        new Position(6, 0)
+                        new Position(5, 1)
                     )
                 ),
                 null
@@ -126,7 +126,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     'file://' . $filePath,
                     new Range(
                         new Position(2, 0),
-                        new Position(6, 0)
+                        new Position(5, 1)
                     )
                 ),
                 null
