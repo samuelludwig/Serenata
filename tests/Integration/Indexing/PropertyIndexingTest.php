@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\Indexing\Structures\AccessModifierNameValue;
@@ -21,8 +24,13 @@ class PropertyIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('foo', $property->getName());
         static::assertSame($this->getPathFor('SimpleProperty.phpt'), $property->getFile()->getPath());
-        static::assertSame(5, $property->getStartLine());
-        static::assertSame(5, $property->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(4, 11),
+                new Position(4, 23)
+            ),
+            $property->getRange()
+        );
         static::assertSame("'test'", $property->getDefaultValue());
         static::assertFalse($property->getIsDeprecated());
         static::assertFalse($property->getIsMagic());

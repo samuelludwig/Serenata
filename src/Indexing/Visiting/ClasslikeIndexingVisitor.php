@@ -7,6 +7,11 @@ use SplObjectStorage;
 
 use Ds\Stack;
 
+use Serenata\Common\Range;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\SourceCodeHelpers;
+
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -625,8 +630,26 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $property = new Structures\Property(
                 $property->name,
                 $this->file,
-                $property->getLine(),
-                $property->getAttribute('endLine'),
+                new Range(
+                    new Position(
+                        $property->getLine() - 1,
+                        SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                            $property->getAttribute('startFilePos'),
+                            -1,
+                            $this->code,
+                            'UTF-8' // PositionEncoding::VALUE
+                        )
+                    ),
+                    new Position(
+                        $property->getAttribute('endLine') - 1,
+                        SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                            $property->getAttribute('endFilePos'),
+                            -1,
+                            $this->code,
+                            'UTF-8' // PositionEncoding::VALUE
+                        )
+                    )
+                ),
                 $defaultValue,
                 $documentation['deprecated'],
                 false,
@@ -943,8 +966,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $property = new Structures\Property(
             $rawData['name'],
             $this->file,
-            $filePosition->getPosition()->getLine(),
-            $filePosition->getPosition()->getLine(),
+            new Range(
+                new Position($filePosition->getPosition()->getLine(), 0),
+                new Position($filePosition->getPosition()->getLine(), 0)
+            ),
             null,
             false,
             true,

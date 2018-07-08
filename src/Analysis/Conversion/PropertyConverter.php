@@ -23,8 +23,9 @@ final class PropertyConverter extends AbstractConverter
     {
         $data = [
             'name'               => $property->getName(),
-            'startLine'          => $property->getStartLine(),
-            'endLine'            => $property->getEndLine(),
+            // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
+            'startLine'          => $property->getRange()->getStart()->getLine() + 1,
+            'endLine'            => $property->getRange()->getEnd()->getLine() + 1,
             'filename'           => $property->getFile()->getPath(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
@@ -60,8 +61,9 @@ final class PropertyConverter extends AbstractConverter
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
-                'startLineMember' => $property->getStartLine(),
-                'endLineMember'   => $property->getEndLine()
+                // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
+                'startLineMember' => $property->getRange()->getStart()->getLine() + 1,
+                'endLineMember'   => $property->getRange()->getEnd()->getLine() + 1,
             ]
         ]);
     }

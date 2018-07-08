@@ -236,8 +236,8 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 new Location(
                     'file://' . $filePath,
                     new Range(
-                        new Position(4, 0),
-                        new Position(5, 0)
+                        new Position(4, 12),
+                        new Position(4, 20)
                     )
                 ),
                 'A'
