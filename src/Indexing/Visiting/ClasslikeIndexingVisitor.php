@@ -637,7 +637,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                             $property->getAttribute('startFilePos'),
                             -1,
                             $this->code,
-                            'UTF-8' // PositionEncoding::VALUE
+                            PositionEncoding::VALUE
                         )
                     ),
                     new Position(
@@ -646,7 +646,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                             $property->getAttribute('endFilePos'),
                             -1,
                             $this->code,
-                            'UTF-8' // PositionEncoding::VALUE
+                            PositionEncoding::VALUE
                         )
                     )
                 ),
