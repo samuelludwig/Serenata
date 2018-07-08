@@ -74,24 +74,30 @@ class SourceCodeHelpers
      * @param int    $byteOffset
      * @param int    $line
      * @param string $string
+     * @param string $encoding
      *
      * @return int
      */
-    public static function getCharacterOnLineFromByteOffset(int $byteOffset, int $line, string $string): int
-    {
+    public static function getCharacterOnLineFromByteOffset(
+        int $byteOffset,
+        int $line,
+        string $string,
+        string $encoding = 'UTF-8'
+    ): int {
         $part = substr($string, 0, $byteOffset);
 
-        $i = $byteOffset;
+        $byteOffsetOfLineStart = $byteOffset;
 
-        while (--$i >= 0) {
-            if ($part[$i] === "\n") {
+        while (--$byteOffsetOfLineStart >= 0) {
+            if ($part[$byteOffsetOfLineStart] === "\n") {
+                ++$byteOffsetOfLineStart;
                 break;
             }
         }
 
-        $characterByteOffset = $byteOffset - $i - 1;
-
-        return static::getCharacterOffsetFromByteOffset($characterByteOffset, $string);
+        return
+            static::getCharacterOffsetFromByteOffset($byteOffset, $string, $encoding) -
+            static::getCharacterOffsetFromByteOffset($byteOffsetOfLineStart, $string, $encoding);
     }
 
     /**
@@ -100,12 +106,13 @@ class SourceCodeHelpers
      *
      * @param int    $byteOffset
      * @param string $string
+     * @param string $encoding
      *
      * @return int
      */
-    private static function getCharacterOffsetFromByteOffset(int $byteOffset, string $string): int
+    private static function getCharacterOffsetFromByteOffset(int $byteOffset, string $string, string $encoding): int
     {
-        return mb_strlen(mb_strcut($string, 0, $byteOffset));
+        return mb_strlen(mb_strcut($string, 0, $byteOffset, $encoding), $encoding);
     }
 
     /**
