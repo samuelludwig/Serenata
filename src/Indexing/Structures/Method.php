@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -42,8 +44,7 @@ class Method extends FunctionLike
     /**
      * @param string         $name
      * @param File           $file
-     * @param int            $startLine
-     * @param int            $endLine
+     * @param Range          $range
      * @param bool           $isDeprecated
      * @param string|null    $shortDescription
      * @param string|null    $longDescription
@@ -62,8 +63,7 @@ class Method extends FunctionLike
     public function __construct(
         string $name,
         File $file,
-        int $startLine,
-        int $endLine,
+        Range $range,
         bool $isDeprecated,
         ?string $shortDescription,
         ?string $longDescription,
@@ -82,8 +82,7 @@ class Method extends FunctionLike
         $this->id = uniqid('', true);
         $this->name = $name;
         $this->file = $file;
-        $this->startLine = $startLine;
-        $this->endLine = $endLine;
+        $this->range = $range;
         $this->isDeprecated = $isDeprecated;
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;

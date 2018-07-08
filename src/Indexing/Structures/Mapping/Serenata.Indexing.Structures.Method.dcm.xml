@@ -9,8 +9,6 @@
         <id name="id" type="string"></id>
 
         <field name="name"               type="string"     nullable="false" length="255" />
-        <field name="startLine"          type="integer"    nullable="false" />
-        <field name="endLine"            type="integer"    nullable="false" />
         <field name="isDeprecated"       type="boolean"    nullable="false" />
         <field name="shortDescription"   type="text"       nullable="true"  length="15000" />
         <field name="longDescription"    type="text"       nullable="true"  length="15000" />
@@ -22,6 +20,8 @@
         <field name="hasDocblock"        type="boolean"    nullable="false" />
         <field name="throws"             type="array"      nullable="false" />
         <field name="returnTypes"        type="array"      nullable="false" />
+
+        <embedded name="range" class="Serenata\Common\Range" />
 
         <one-to-many field="parameters" target-entity="Serenata\Indexing\Structures\MethodParameter" mapped-by="method">
 

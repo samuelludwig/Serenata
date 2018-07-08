@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\Common\Range;
+
 /**
  * Contains common properties for function-like structural elements.
  */
@@ -23,14 +25,9 @@ abstract class FunctionLike
     protected $file;
 
     /**
-     * @var int
+     * @var Range
      */
-    protected $startLine;
-
-    /**
-     * @var int
-     */
-    protected $endLine;
+    protected $range;
 
     /**
      * @var bool
@@ -102,19 +99,11 @@ abstract class FunctionLike
     }
 
     /**
-     * @return int
+     * @return Range
      */
-    public function getStartLine(): int
+    public function getRange(): Range
     {
-        return $this->startLine;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEndLine(): int
-    {
-        return $this->endLine;
+        return $this->range;
     }
 
     /**

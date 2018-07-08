@@ -42,8 +42,9 @@ class FunctionConverter extends AbstractConverter
 
         $data = [
             'name'              => $function->getName(),
-            'startLine'         => $function->getStartLine(),
-            'endLine'           => $function->getEndLine(),
+            // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
+            'startLine'         => $function->getRange()->getStart()->getLine() + 1,
+            'endLine'           => $function->getRange()->getEnd()->getLine() + 1,
             'filename'          => $function->getFile()->getPath(),
 
             'parameters'        => $parameters,

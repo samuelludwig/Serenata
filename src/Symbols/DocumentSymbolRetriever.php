@@ -203,10 +203,7 @@ final class DocumentSymbolRetriever
             $function->getIsDeprecated(),
             new Location(
                 'file://' . $file->getPath(),
-                new Range(
-                    new Position($function->getStartLine() - 1, 0),
-                    new Position($function->getEndLine(), 0)
-                )
+                $function->getRange()
             ),
             $containerName
         );

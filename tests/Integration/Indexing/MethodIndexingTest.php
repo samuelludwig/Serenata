@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\Indexing\Structures\AccessModifierNameValue;
@@ -21,8 +24,13 @@ class MethodIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('foo', $method->getName());
         static::assertSame($this->getPathFor('SimpleMethod.phpt'), $method->getFile()->getPath());
-        static::assertSame(5, $method->getStartLine());
-        static::assertSame(8, $method->getEndLine());
+        static::assertEquals(
+            new Range(
+                new Position(4, 4),
+                new Position(7, 6)
+            ),
+            $method->getRange()
+        );
         static::assertFalse($method->getIsDeprecated());
         static::assertNull($method->getShortDescription());
         static::assertNull($method->getLongDescription());

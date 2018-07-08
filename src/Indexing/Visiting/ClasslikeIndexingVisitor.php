@@ -747,8 +747,24 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $method = new Structures\Method(
             $node->name->name,
             $this->file,
-            $node->getLine(),
-            $node->getAttribute('endLine'),
+            new Range(
+                new Position(
+                    $node->getLine() - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('startFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    )
+                ),
+                new Position(
+                    $node->getAttribute('endLine') - 1,
+                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
+                        $node->getAttribute('endFilePos'),
+                        $this->code,
+                        PositionEncoding::VALUE
+                    ) + 2
+                )
+            ),
             $documentation['deprecated'],
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
@@ -1007,8 +1023,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $method = new Structures\Method(
             $rawData['name'],
             $this->file,
-            $filePosition->getPosition()->getLine(),
-            $filePosition->getPosition()->getLine(),
+            new Range(
+                new Position($filePosition->getPosition()->getLine() - 1, 0),
+                new Position($filePosition->getPosition()->getLine() - 1, 0)
+            ),
             false,
             $rawData['description'],
             null,
