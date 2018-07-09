@@ -1,4 +1,4 @@
-## 4.2.0 (Unreleased)
+## 4.2.0
 ### Major Changes
 * [Add support for fetching document symbols via the `documentSymbols` request](https://gitlab.com/Serenata/Serenata/issues/173)
 
