@@ -1,3 +1,3 @@
 <?php
 
-// <MARKER>
+$// <MARKER>

@@ -2,6 +2,11 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextEdit;
+
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
@@ -14,11 +19,24 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
     {
         $output = $this->provide('Superglobals.phpt');
 
-        $firstSuggestion =
-            new AutocompletionSuggestion('$argc', SuggestionKind::VARIABLE, '$argc', null, '$argc', 'PHP superglobal', [
+        $firstSuggestion = new AutocompletionSuggestion(
+            '$argc',
+            SuggestionKind::VARIABLE,
+            '$argc',
+            new TextEdit(
+                new Range(
+                    new Position(2, 0),
+                    new Position(2, 1)
+                ),
+                '$argc'
+            ),
+            '$argc',
+            'PHP superglobal',
+            [
                 'isDeprecated' => false,
                 'returnTypes'  => 'int'
-            ]);
+            ]
+        );
 
         static::assertEquals($firstSuggestion, $output[0]);
     }

@@ -32,6 +32,8 @@ services:
 
     superglobalAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\SuperglobalAutocompletionProvider
+        arguments:
+            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingSuperglobalAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider

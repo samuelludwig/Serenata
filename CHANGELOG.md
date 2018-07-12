@@ -1,3 +1,7 @@
+## 4.3.0 (Unreleased)
+### Bugs Fixed
+* [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)
+
 ## 4.2.0
 ### Major Changes
 * [Add support for fetching document symbols via the `documentSymbols` request](https://gitlab.com/Serenata/Serenata/issues/173)
