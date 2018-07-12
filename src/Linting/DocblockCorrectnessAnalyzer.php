@@ -153,9 +153,15 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             return [];
         }
 
-        $result = $this->docblockParser->parse($property['docComment'], [DocblockParser::VAR_TYPE], $property['name']);
+        $result = $this->docblockParser->parse(
+            $property['docComment'],
+            [DocblockParser::VAR_TYPE, DocblockParser::DESCRIPTION],
+            $property['name']
+        );
 
         if (isset($result['var']['$' . $property['name']]['type'])) {
+            return [];
+        } elseif ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
             return [];
         }
 
@@ -180,9 +186,15 @@ final class DocblockCorrectnessAnalyzer implements AnalyzerInterface
             return [];
         }
 
-        $result = $this->docblockParser->parse($constant['docComment'], [DocblockParser::VAR_TYPE], $constant['name']);
+        $result = $this->docblockParser->parse(
+            $constant['docComment'],
+            [DocblockParser::VAR_TYPE, DocblockParser::DESCRIPTION],
+            $constant['name']
+        );
 
         if (isset($result['var']['$' . $constant['name']]['type'])) {
+            return [];
+        } elseif ($this->docblockAnalyzer->isFullInheritDocSyntax($result['descriptions']['short'])) {
             return [];
         }
 

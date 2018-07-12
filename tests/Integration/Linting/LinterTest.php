@@ -621,6 +621,22 @@ class LinterTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testIdentifiesDocblockMissingVarTagWithExplicitDocblockInheritance(): void
+    {
+        $output = $this->lintFile('DocblockCorrectnessMissingVarTagExplicitDocblockInheritance.phpt');
+
+        static::assertSame([
+            [
+                'message' => 'Property docblock is missing @var tag.',
+                'start'   => 190,
+                'end'     => 195
+            ]
+        ], $output['errors']);
+    }
+
+    /**
+     * @return void
+     */
     public function testIdentifiesDeprecatedCategoryTag(): void
     {
         $output = $this->lintFile('DocblockCorrectnessDeprecatedCategoryTag.phpt');

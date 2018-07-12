@@ -1,6 +1,7 @@
 ## 4.3.0 (Unreleased)
 ### Bugs Fixed
 * [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)
+* [Fix linter complaining about missing `@var` tag for properties with explicit docblock inheritance via `@inheritDoc` or variants](https://gitlab.com/Serenata/Serenata/issues/190)
 
 ## 4.2.0
 ### Major Changes
