@@ -62,7 +62,7 @@ code-quality:code-coverage:
         - pecl install xdebug
         - docker-php-ext-enable xdebug
     script:
-        - php -d memory_limit=512M vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
+        - php -d memory_limit=1024M vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
     artifacts:
         expire_in: 1 weeks
         paths:
