@@ -158,12 +158,14 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
             $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
             [
+                // TODO: Deprecated, replaced with "detail". Remove in the next major version.
                 'declaringStructure' => $method['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method)
             ],
             [],
-            $method['isDeprecated']
+            $method['isDeprecated'],
+            array_slice(explode('\\', $method['declaringStructure']['fqcn']), -1)[0]
         );
     }
 

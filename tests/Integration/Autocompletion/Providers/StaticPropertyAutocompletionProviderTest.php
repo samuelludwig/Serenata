@@ -30,7 +30,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                 ],
                 'returnTypes'        => 'int|string',
                 'prefix'             => ''
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -59,7 +59,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                     ],
                 'returnTypes'        => '',
                 'prefix'             => ''
-            ], [], true)
+            ], [], true, 'A')
         ];
 
         static::assertEquals($suggestions, $output);

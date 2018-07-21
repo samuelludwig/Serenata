@@ -61,6 +61,11 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $deprecated;
 
     /**
+     * @var string|null
+     */
+    private $detail;
+
+    /**
      * @param string        $filterText
      * @param string        $kind
      * @param string|null   $insertText
@@ -70,6 +75,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      * @param array         $extraData
      * @param TextEdit[]    $additionalTextEdits
      * @param bool          $deprecated
+     * @param string|null   $detail
      */
     public function __construct(
         string $filterText,
@@ -80,7 +86,8 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         ?string $documentation,
         array $extraData = [],
         array $additionalTextEdits = [],
-        bool $deprecated = false
+        bool $deprecated = false,
+        ?string $detail = null
     ) {
         $this->filterText = $filterText;
         $this->kind = $kind;
@@ -91,6 +98,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         $this->extraData = $extraData;
         $this->additionalTextEdits = $additionalTextEdits;
         $this->deprecated = $deprecated;
+        $this->detail = $detail;
 
         if ($insertText === null && $textEdit === null) {
             throw new AssertionError('Either an insertText or a textEdit must be provided');
@@ -170,6 +178,14 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     }
 
     /**
+     * @return string|null
+     */
+    public function getDetail(): ?string
+    {
+        return $this->detail;
+    }
+
+    /**
      * @inheritDoc
      */
     public function jsonSerialize()
@@ -188,7 +204,8 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
             ]),
 
             'additionalTextEdits' => $this->getAdditionalTextEdits(),
-            'deprecated'          => $this->getDeprecated()
+            'deprecated'          => $this->getDeprecated(),
+            'detail'              => $this->getDetail()
         ];
     }
 

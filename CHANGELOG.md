@@ -1,5 +1,7 @@
 ## 4.3.0 (Unreleased)
 ### Other Improvements
+* Autocompletion suggestions now give back a `detail` property as specified in the language server protocol
+    * The `extraData.declaringStructure` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version as it is now directly used to generate the `detail` property rather than leaving that to clients.
 * Autocompletion suggestions now give back a `deprecated` property as specified in the language server protocol
     * The `extraData.isDeprecated` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version.
 

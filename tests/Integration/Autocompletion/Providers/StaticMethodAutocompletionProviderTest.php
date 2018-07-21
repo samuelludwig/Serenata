@@ -29,7 +29,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'endLineMember'   => 11,
                 ],
                 'returnTypes' => 'int|string'
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -57,7 +57,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'endLineMember'   => 8,
                 ],
                 'returnTypes' => ''
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -85,7 +85,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'endLineMember'   => 8,
                 ],
                 'returnTypes' => ''
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -113,7 +113,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                         'endLineMember'   => 11,
                     ],
                 'returnTypes' => 'void'
-            ], [], true)
+            ], [], true, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -141,7 +141,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ]
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -169,7 +169,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);

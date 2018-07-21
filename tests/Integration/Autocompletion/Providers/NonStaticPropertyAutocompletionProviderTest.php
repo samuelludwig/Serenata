@@ -29,7 +29,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                     'endLineMember'   => 8,
                 ],
                 'returnTypes'        => 'int|string'
-            ], [], false)
+            ], [], false, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
@@ -57,7 +57,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                         'endLineMember'   => 8,
                     ],
                 'returnTypes'        => ''
-            ], [], true)
+            ], [], true, 'A')
         ];
 
         static::assertEquals($suggestions, $output);
