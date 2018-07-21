@@ -11,7 +11,7 @@
 * Update `serenata/common` to at least `0.2.1`
 * Update `league/html-to-markdown` to at least [4.7.0](https://github.com/thephpleague/html-to-markdown/releases/tag/4.7.0)
 * Replace UUID's in database with simpler unique id via `uniqid`
-    * This avoids the unnecessarily expensive generation of UUID's as well as a depednency; we just need a mostly unique identifier anyway, not anything secure
+    * This avoids the unnecessarily expensive generation of UUID's as well as a dependency; we just need a mostly unique identifier anyway, not anything secure
 * Internal (backwards-compatible) refactoring towards language server support
     * Entities now remember whole (language server) ranges with positions instead of just start and end lines and use character offsets instead of byte offsets
 
