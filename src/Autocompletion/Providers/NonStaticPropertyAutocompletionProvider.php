@@ -109,11 +109,12 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
             $property['name'],
             $property['shortDescription'],
             [
-                'isDeprecated'       => $property['isDeprecated'],
                 'declaringStructure' => $property['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($property['types']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property)
-            ]
+            ],
+            [],
+            $property['isDeprecated']
         );
     }
 

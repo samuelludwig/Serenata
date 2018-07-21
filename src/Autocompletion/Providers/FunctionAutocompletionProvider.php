@@ -139,9 +139,10 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $this->functionAutocompletionSuggestionLabelCreator->create($function),
             $function['shortDescription'],
             [
-                'isDeprecated' => $function['isDeprecated'],
                 'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes'])
-            ]
+            ],
+            [],
+            $function['isDeprecated']
         );
     }
 }

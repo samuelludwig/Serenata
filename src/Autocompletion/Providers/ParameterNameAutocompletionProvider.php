@@ -187,7 +187,9 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             null,
             [
                 'prefix' => $prefix
-            ]
+            ],
+            [],
+            false
         );
     }
 

@@ -33,10 +33,11 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
                     'prefix'       => 'F'
-                ]
+                ],
+                [],
+                false
             )
         ];
 
@@ -62,10 +63,11 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo',
                 null,
                 [
-                    'isDeprecated' => true,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
                     'prefix'       => 'F'
-                ]
+                ],
+                [],
+                true
             )
         ];
 
@@ -91,10 +93,11 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
                     'prefix'       => '\F'
-                ]
+                ],
+                [],
+                false
             )
         ];
 
@@ -120,7 +123,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo\Bar\Baz',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
                     'prefix'       => 'F'
                 ],
@@ -129,7 +131,8 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                         new Range(new Position(10, 0), new Position(10, 0)),
                         "use Foo\Bar\Baz;\n\n"
                     )
-                ]
+                ],
+                false
             )
         ];
 
@@ -155,11 +158,11 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo\Bar\Baz\Qux',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
                     'prefix'       => 'Foo\Bar'
                 ],
-                []
+                [],
+                false
             )
         ];
 

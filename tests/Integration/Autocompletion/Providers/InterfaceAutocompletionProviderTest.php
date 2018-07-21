@@ -33,10 +33,11 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 'Foo',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::INTERFACE_,
                     'prefix'       => 'F'
-                ]
+                ],
+                [],
+                false
             )
         ];
 

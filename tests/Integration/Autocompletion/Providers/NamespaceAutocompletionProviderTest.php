@@ -16,10 +16,9 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => 'namespace',
                 'prefix'       => 'F'
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -44,10 +43,9 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
 
         $suggestions = [
             new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => 'namespace',
                 'prefix'       => 'F'
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);

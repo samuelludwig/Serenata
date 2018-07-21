@@ -33,9 +33,10 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
             '$argc',
             'PHP superglobal',
             [
-                'isDeprecated' => false,
                 'returnTypes'  => 'int'
-            ]
+            ],
+            [],
+            false
         );
 
         static::assertEquals($firstSuggestion, $output[0]);

@@ -129,11 +129,11 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
             $this->getFqcnWithoutLeadingSlash($classlike),
             $classlike['shortDescription'],
             [
-                'isDeprecated' => $classlike['isDeprecated'],
                 'returnTypes'  => $classlike['type'],
                 'prefix'       => $prefix
             ],
-            $this->createAdditionalTextEditsForSuggestion($classlike, $code, $offset)
+            $this->createAdditionalTextEditsForSuggestion($classlike, $code, $offset),
+            $classlike['isDeprecated']
         );
     }
 

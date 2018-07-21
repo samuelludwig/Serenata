@@ -16,9 +16,8 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => 'int|string'
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -33,9 +32,8 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
-                'isDeprecated' => true,
                 'returnTypes'  => 'int'
-            ])
+            ], [], true)
         ];
 
         static::assertEquals($suggestions, $output);

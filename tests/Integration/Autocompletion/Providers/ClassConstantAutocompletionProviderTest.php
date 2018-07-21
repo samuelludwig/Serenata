@@ -18,7 +18,6 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
 
         $suggestions = [
             new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
-                'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',
@@ -30,7 +29,7 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                     'endLineMember'   => 8,
                 ],
                 'returnTypes'        => 'int|string'
-            ])
+            ], [], false)
         ];
 
         static::assertCount(2, $output);
@@ -48,7 +47,6 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
 
         $suggestions = [
             new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
-                'isDeprecated'       => true,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                         'fqcn'            => '\A',
@@ -60,7 +58,7 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                         'endLineMember'   => 8,
                     ],
                 'returnTypes'        => 'int'
-            ])
+            ], [], true)
         ];
 
         static::assertCount(2, $output);

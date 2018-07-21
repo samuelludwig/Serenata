@@ -96,9 +96,10 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $constant['name'],
             $constant['shortDescription'],
             [
-                'isDeprecated' => $constant['isDeprecated'],
                 'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($constant['types'])
-            ]
+            ],
+            [],
+            $constant['isDeprecated']
         );
     }
 }

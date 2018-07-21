@@ -80,9 +80,10 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             $superGlobal['name'],
             'PHP superglobal',
             [
-                'isDeprecated' => false,
                 'returnTypes'  => $superGlobal['type']
-            ]
+            ],
+            [],
+            false
         );
     }
 

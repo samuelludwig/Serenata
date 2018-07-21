@@ -16,9 +16,8 @@ class KeywordAutocompletionProviderTest extends AbstractAutocompletionProviderTe
 
         $firstSuggestion =
             new AutocompletionSuggestion('self', SuggestionKind::KEYWORD, 'self', null, 'self', 'PHP keyword', [
-                'isDeprecated' => false,
                 'returnTypes'  => ''
-            ]);
+            ], [], false);
 
         static::assertEquals($firstSuggestion, $output[0]);
     }

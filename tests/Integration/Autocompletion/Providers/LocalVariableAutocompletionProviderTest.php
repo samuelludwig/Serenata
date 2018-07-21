@@ -31,10 +31,11 @@ class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$foo',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => '',
                     'prefix'       => ''
-                ]
+                ],
+                [],
+                false
             )
         ];
 

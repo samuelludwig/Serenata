@@ -56,6 +56,11 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $additionalTextEdits;
 
     /**
+     * @var bool
+     */
+    private $deprecated;
+
+    /**
      * @param string        $filterText
      * @param string        $kind
      * @param string|null   $insertText
@@ -64,6 +69,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      * @param string|null   $documentation
      * @param array         $extraData
      * @param TextEdit[]    $additionalTextEdits
+     * @param bool          $deprecated
      */
     public function __construct(
         string $filterText,
@@ -73,7 +79,8 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         string $label,
         ?string $documentation,
         array $extraData = [],
-        array $additionalTextEdits = []
+        array $additionalTextEdits = [],
+        bool $deprecated = false
     ) {
         $this->filterText = $filterText;
         $this->kind = $kind;
@@ -83,6 +90,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         $this->documentation = $documentation;
         $this->extraData = $extraData;
         $this->additionalTextEdits = $additionalTextEdits;
+        $this->deprecated = $deprecated;
 
         if ($insertText === null && $textEdit === null) {
             throw new AssertionError('Either an insertText or a textEdit must be provided');
@@ -154,6 +162,14 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     }
 
     /**
+     * @return bool
+     */
+    public function getDeprecated(): bool
+    {
+        return $this->deprecated;
+    }
+
+    /**
      * @inheritDoc
      */
     public function jsonSerialize()
@@ -165,8 +181,14 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
             'textEdit'            => $this->getTextEdit(),
             'label'               => $this->getLabel(),
             'documentation'       => $this->getDocumentation(),
-            'extraData'           => $this->getExtraData(),
-            'additionalTextEdits' => $this->getAdditionalTextEdits()
+
+            'extraData' => array_merge($this->getExtraData(), [
+                // TODO: Deprecated, kept for backwards compatibility. Remove in next major version.
+                'isDeprecated' => $this->getDeprecated()
+            ]),
+
+            'additionalTextEdits' => $this->getAdditionalTextEdits(),
+            'deprecated'          => $this->getDeprecated()
         ];
     }
 

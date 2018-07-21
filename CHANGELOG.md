@@ -1,4 +1,8 @@
 ## 4.3.0 (Unreleased)
+### Other Improvements
+* Autocompletion suggestions now give back a `deprecated` property as specified in the language server protocol
+    * The `extraData.isDeprecated` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version.
+
 ### Bugs Fixed
 * [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)
 * [Fix linter complaining about missing `@var` tag for properties with explicit docblock inheritance via `@inheritDoc` or variants](https://gitlab.com/Serenata/Serenata/issues/190)

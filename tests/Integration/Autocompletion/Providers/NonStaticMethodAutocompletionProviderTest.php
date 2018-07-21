@@ -18,7 +18,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo()', null, [
-                'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',
@@ -30,7 +29,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'endLineMember'   => 11,
                 ],
                 'returnTypes' => 'int|string'
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -47,7 +46,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', null, 'foo()', null, [
-                'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',
@@ -59,7 +57,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'endLineMember'   => 8,
                 ],
                 'returnTypes' => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -76,7 +74,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo', null, 'foo()', null, [
-                'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',
@@ -88,7 +85,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'endLineMember'   => 8,
                 ],
                 'returnTypes' => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -105,7 +102,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo()', null, [
-                'isDeprecated'       => true,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                         'fqcn'            => '\A',
@@ -117,7 +113,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                         'endLineMember'   => 11,
                     ],
                 'returnTypes' => 'void'
-            ])
+            ], [], true)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -134,7 +130,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo([$i])', null, [
-                'isDeprecated'       => false,
                 'returnTypes'        => '',
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
@@ -146,7 +141,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -163,7 +158,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo($test)', null, [
-                'isDeprecated'       => false,
                 'returnTypes'        => '',
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
@@ -175,7 +169,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);

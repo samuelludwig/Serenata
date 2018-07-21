@@ -113,10 +113,11 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             $variable['name'],
             null,
             [
-                'isDeprecated' => false,
                 'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($typeArray),
                 'prefix'       => $prefix
-            ]
+            ],
+            [],
+            false
         );
     }
 

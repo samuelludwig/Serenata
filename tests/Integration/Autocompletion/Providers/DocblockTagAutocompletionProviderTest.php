@@ -31,10 +31,11 @@ class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProvid
                 '@api',
                 'PHP docblock tag',
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => '',
                     'prefix'       => '@'
-                ]
+                ],
+                [],
+                false
             );
 
         static::assertEquals($firstSuggestion, $output[0]);

@@ -113,10 +113,11 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             $fqcnWithoutLeadingSlash,
             null,
             [
-                'isDeprecated' => false,
                 'returnTypes'  => 'namespace',
                 'prefix'       => $prefix
-            ]
+            ],
+            [],
+            false
         );
     }
 }

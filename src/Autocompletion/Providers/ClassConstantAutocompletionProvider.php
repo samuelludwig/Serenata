@@ -107,11 +107,12 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
             $constant['name'],
             $constant['shortDescription'],
             [
-                'isDeprecated'       => $constant['isDeprecated'],
                 'declaringStructure' => $constant['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($constant['types']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($constant)
-            ]
+            ],
+            [],
+            $constant['isDeprecated']
         );
     }
 

@@ -16,9 +16,8 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo()', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => 'int|string'
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -33,9 +32,8 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', null, 'foo()', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -50,9 +48,8 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', null, 'foo()', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -67,9 +64,8 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo()', null, [
-                'isDeprecated' => true,
                 'returnTypes'  => 'void'
-            ])
+            ], [], true)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -84,9 +80,8 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo([$i])', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -101,9 +96,8 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo($0)', null, 'foo($test)', null, [
-                'isDeprecated' => false,
                 'returnTypes'  => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);

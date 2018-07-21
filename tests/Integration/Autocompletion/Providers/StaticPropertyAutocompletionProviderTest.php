@@ -18,7 +18,6 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
 
         $suggestions = [
             new AutocompletionSuggestion('$foo', SuggestionKind::PROPERTY, '$foo', null, 'foo', null, [
-                'isDeprecated'       => false,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',
@@ -31,7 +30,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                 ],
                 'returnTypes'        => 'int|string',
                 'prefix'             => ''
-            ])
+            ], [], false)
         ];
 
         static::assertEquals($suggestions, $output);
@@ -48,7 +47,6 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
 
         $suggestions = [
             new AutocompletionSuggestion('$foo', SuggestionKind::PROPERTY, '$foo', null, 'foo', null, [
-                'isDeprecated'       => true,
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                         'fqcn'            => '\A',
@@ -61,7 +59,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                     ],
                 'returnTypes'        => '',
                 'prefix'             => ''
-            ])
+            ], [], true)
         ];
 
         static::assertEquals($suggestions, $output);

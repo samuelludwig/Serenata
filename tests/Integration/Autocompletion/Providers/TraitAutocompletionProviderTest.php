@@ -33,10 +33,11 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo',
                 null,
                 [
-                    'isDeprecated' => false,
                     'returnTypes'  => ClasslikeTypeNameValue::TRAIT_,
                     'prefix'       => 'F'
-                ]
+                ],
+                [],
+                false
             )
         ];
 
