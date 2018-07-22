@@ -8,7 +8,6 @@ use Serenata\Indexing\FileIndexerInterface;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
-use Serenata\Utility\SourceCodeHelpers;
 use Serenata\Utility\SourceCodeStreamReader;
 
 use Serenata\Autocompletion\Providers\AutocompletionProviderInterface;
@@ -78,7 +77,7 @@ class AutocompleteCommand extends AbstractCommand
         $offset = $arguments['offset'];
 
         if (isset($arguments['charoffset']) && $arguments['charoffset'] == true) {
-            $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
+            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
         }
 
         $result = $this->getAutocompletionSuggestions($arguments['file'], $code, $offset);

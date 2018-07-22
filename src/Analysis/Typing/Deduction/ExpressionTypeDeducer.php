@@ -5,13 +5,13 @@ namespace Serenata\Analysis\Typing\Deduction;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
+use Serenata\Utility\PositionEncoding;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
 use Serenata\Parsing\LastExpressionParser;
-
-use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
@@ -114,11 +114,13 @@ final class ExpressionTypeDeducer
      */
     private function deduceTypesFromNode(Structures\File $file, string $code, Node $node, int $offset): array
     {
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
         // We're dealing with partial code, its context may be lost because of it being invalid, so we can't rely on
         // the namespace attaching visitor here.
-        $this->attachRelevantNamespaceToNode($node, $file, $line);
+        $this->attachRelevantNamespaceToNode(
+            $node,
+            $file,
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+        );
 
         return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
     }
@@ -126,16 +128,16 @@ final class ExpressionTypeDeducer
     /**
      * @param Node            $node
      * @param Structures\File $file
-     * @param int             $line
+     * @param Position        $position
      *
      * @return void
      */
-    private function attachRelevantNamespaceToNode(Node $node, Structures\File $file, int $line): void
+    private function attachRelevantNamespaceToNode(Node $node, Structures\File $file, Position $position): void
     {
         $namespace = null;
         $namespaceNode = null;
 
-        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
+        $filePosition = new FilePosition($file->getPath(), $position);
 
         $namespace = $this->positionalNamespaceDeterminer->determine($filePosition);
 

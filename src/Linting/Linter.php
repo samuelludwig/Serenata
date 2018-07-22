@@ -2,9 +2,11 @@
 
 namespace Serenata\Linting;
 
-use Serenata\Indexing\Structures;
+use Serenata\Common\Position;
 
-use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\PositionEncoding;
+
+use Serenata\Indexing\Structures;
 
 use PhpParser\Error;
 use PhpParser\Parser;
@@ -116,9 +118,14 @@ class Linter
             $endColumn   = $e->hasColumnInfo() ? ($e->getEndColumn($code) - 1) : 0;
 
             $output['errors'][] = [
-                'message'     => $e->getMessage(),
-                'start'       => SourceCodeHelpers::calculateOffsetByLineCharacter($code, $startLine, $startColumn),
-                'end'         => SourceCodeHelpers::calculateOffsetByLineCharacter($code, $endLine, $endColumn)
+                'message' =>
+                    $e->getMessage(),
+
+                'start' =>
+                    (new Position($startLine, $startColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE),
+
+                'end' =>
+                    (new Position($endLine, $endColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE)
             ];
         }
 

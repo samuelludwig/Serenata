@@ -6,7 +6,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
-use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\PositionEncoding;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
@@ -61,13 +61,12 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
         int $offset,
         string $prefix
     ): AutocompletionSuggestion {
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset) - 1;
-        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $code);
+        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
 
         $textEdit = new TextEdit(
             new Range(
-                new Position($line, $character - mb_strlen($prefix)),
-                new Position($line, $character)
+                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
+                $endPosition
             ),
             $superGlobal['name']
         );

@@ -6,7 +6,6 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\PositionEncoding;
-use Serenata\Utility\SourceCodeHelpers;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
@@ -117,21 +116,15 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
             '\\' . NodeHelpers::fetchClassName($name),
             $this->file,
             new Range(
-                new Position(
-                    $node->getLine() - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('startFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    )
+                Position::createFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
                 ),
-                new Position(
-                    $node->getAttribute('endLine') - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('endFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    ) + 1
+                Position::createFromByteOffset(
+                    $node->getAttribute('endFilePos') + 1,
+                    $this->code,
+                    PositionEncoding::VALUE
                 )
             ),
             $defaultValue,

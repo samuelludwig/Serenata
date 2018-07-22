@@ -4,6 +4,8 @@
     * The `extraData.declaringStructure` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version as it is now directly used to generate the `detail` property rather than leaving that to clients.
 * Autocompletion suggestions now give back a `deprecated` property as specified in the language server protocol
     * The `extraData.isDeprecated` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version.
+* Internal (backwards-compatible) refactoring towards language server support
+    * Use (language server) positions with character offsets in more places rather than old byte offsets
 
 ### Bugs Fixed
 * [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)

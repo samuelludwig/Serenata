@@ -9,7 +9,6 @@ use Serenata\Indexing\FileIndexerInterface;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
-use Serenata\Utility\SourceCodeHelpers;
 use Serenata\Utility\SourceCodeStreamReader;
 
 use PhpParser\Parser;
@@ -79,7 +78,7 @@ final class AvailableVariablesCommand extends AbstractCommand
         $offset = $arguments['offset'];
 
         if (isset($arguments['charoffset']) && $arguments['charoffset'] == true) {
-            $offset = SourceCodeHelpers::getByteOffsetFromCharacterOffset($offset, $code);
+            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
         }
 
         return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAvailableVariables(

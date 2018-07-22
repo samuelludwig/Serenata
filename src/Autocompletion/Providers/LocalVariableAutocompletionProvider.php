@@ -11,7 +11,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
-use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\PositionEncoding;
 
 use Serenata\Analysis\VariableScanner;
 
@@ -138,11 +138,13 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      */
     private function getTextEditForSuggestion(array $variable, string $code, int $offset, string $prefix): TextEdit
     {
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset) - 1;
-        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $code);
+        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
 
         return new TextEdit(
-            new Range(new Position($line, $character - mb_strlen($prefix)), new Position($line, $character)),
+            new Range(
+                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
+                $endPosition
+            ),
             $variable['name']
         );
     }

@@ -11,7 +11,6 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\PositionEncoding;
-use Serenata\Utility\SourceCodeHelpers;
 
 /**
  * Node visitor that fetches namespaces and their use statements.
@@ -44,14 +43,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
             'name'          => null,
             'range'         => new Range(
                 new Position(0, 0),
-                new Position(
-                    mb_substr_count($code, "\n") + 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        strlen($code),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    ) + 1
-                )
+                new Position(mb_substr_count($code, "\n") + 1, 0)
             ),
             'useStatements' => []
         ];
@@ -88,14 +80,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
         if (isset($this->namespaces[$this->lastNamespaceIndex])) {
             $this->namespaces[$this->lastNamespaceIndex]['range'] = new Range(
                 $this->namespaces[$this->lastNamespaceIndex]['range']->getStart(),
-                new Position(
-                    mb_substr_count($this->code, "\n") + 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        strlen($this->code),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    )
-                )
+                new Position(mb_substr_count($this->code, "\n") + 1, 0)
             );
         }
     }
@@ -117,34 +102,21 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
     {
         $this->namespaces[$this->lastNamespaceIndex]['range'] = new Range(
             $this->namespaces[$this->lastNamespaceIndex]['range']->getStart(),
-            new Position(
-                $node->getLine() - 1,
-                SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                    $node->getAttribute('startFilePos'),
-                    $this->code,
-                    PositionEncoding::VALUE
-                )
-            )
+            Position::createFromByteOffset($node->getAttribute('startFilePos'), $this->code, PositionEncoding::VALUE)
         );
-        
+
         $this->namespaces[++$this->lastNamespaceIndex] = [
             'name'          => $node->name ? (string) $node->name : null,
             'range'         => new Range(
-                new Position(
-                    $node->getLine() - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('startFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    )
+                Position::createFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
                 ),
-                new Position(
-                    $node->getLine(),
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('endFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    ) + 1
+                Position::createFromByteOffset(
+                    $node->getAttribute('endFilePos') + 1,
+                    $this->code,
+                    PositionEncoding::VALUE
                 )
             ),
             'useStatements' => []
@@ -195,21 +167,15 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
             'alias' => $use->getAlias()->name,
             'kind'  => $kindMap[$type],
             'range' => new Range(
-                new Position(
-                    $node->getLine() - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('startFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    )
+                Position::createFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
                 ),
-                new Position(
-                    $node->getEndLine() - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('endFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    ) + 1
+                Position::createFromByteOffset(
+                    $node->getAttribute('endFilePos') + 1,
+                    $this->code,
+                    PositionEncoding::VALUE
                 )
             ),
             'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,

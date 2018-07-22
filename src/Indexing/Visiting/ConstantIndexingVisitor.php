@@ -5,7 +5,6 @@ namespace Serenata\Indexing\Visiting;
 use Serenata\Common\Range;
 
 use Serenata\Utility\PositionEncoding;
-use Serenata\Utility\SourceCodeHelpers;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
@@ -178,21 +177,15 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             '\\' . $node->namespacedName->toString(),
             $this->file,
             new Range(
-                new Position(
-                    $node->getLine() - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('startFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    )
+                Position::createFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
                 ),
-                new Position(
-                    $node->getAttribute('endLine') - 1,
-                    SourceCodeHelpers::getCharacterOnLineFromByteOffset(
-                        $node->getAttribute('endFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    ) + 1
+                Position::createFromByteOffset(
+                    $node->getAttribute('endFilePos') + 1,
+                    $this->code,
+                    PositionEncoding::VALUE
                 )
             ),
             $defaultValue,

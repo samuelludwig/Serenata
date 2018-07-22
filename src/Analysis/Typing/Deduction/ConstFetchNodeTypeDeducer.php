@@ -4,6 +4,8 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use Serenata\Utility\PositionEncoding;
+
 use Serenata\Analysis\Conversion\ConstantConverter;
 
 use Serenata\Common\Position;
@@ -15,7 +17,6 @@ use Serenata\Indexing\ManagerRegistry;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\NodeHelpers;
-use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 
@@ -90,7 +91,7 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $filePosition = new FilePosition(
             $file->getPath(),
-            new Position(SourceCodeHelpers::calculateLineByOffset($code, $offset), 0)
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
         );
 
         $fqsen = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);

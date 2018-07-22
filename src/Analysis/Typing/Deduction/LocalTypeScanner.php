@@ -4,6 +4,8 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use Serenata\Parsing;
 
+use Serenata\Utility\PositionEncoding;
+
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
 use Serenata\Analysis\Visiting\ExpressionTypeInfo;
@@ -17,8 +19,6 @@ use Serenata\Indexing\Structures;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Parsing\DocblockParser;
-
-use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 
@@ -114,7 +114,6 @@ class LocalTypeScanner
         array $defaultTypes = []
     ): array {
         $expressionTypeInfoMap = $this->expressionLocalTypeAnalyzer->analyze($code, $offset);
-        $offsetLine = SourceCodeHelpers::calculateLineByOffset($code, $offset);
 
         if (!$expressionTypeInfoMap->has($expression)) {
             return [];
@@ -124,9 +123,8 @@ class LocalTypeScanner
             $expressionTypeInfoMap,
             $expression,
             $file,
-            $offsetLine,
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE),
             $code,
-            $offset,
             $defaultTypes
         );
     }
@@ -137,9 +135,8 @@ class LocalTypeScanner
      * @param ExpressionTypeInfoMap $expressionTypeInfoMap
      * @param string                $expression
      * @param Structures\File       $file
-     * @param int                   $line
+     * @param Position              $position
      * @param string                $code
-     * @param int                   $offset
      * @param string[]              $defaultTypes
      *
      * @return string[]
@@ -148,12 +145,18 @@ class LocalTypeScanner
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
         Structures\File $file,
-        int $line,
+        Position $position,
         string $code,
-        int $offset,
         array $defaultTypes = []
     ): array {
-        $types = $this->getUnreferencedTypes($expressionTypeInfoMap, $expression, $file, $code, $offset, $defaultTypes);
+        $types = $this->getUnreferencedTypes(
+            $expressionTypeInfoMap,
+            $expression,
+            $file,
+            $code,
+            $position->getAsByteOffsetInString($code, PositionEncoding::VALUE),
+            $defaultTypes
+        );
 
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
@@ -162,7 +165,7 @@ class LocalTypeScanner
         foreach ($types as $type) {
             $typeLine = $expressionTypeInfo->hasBestTypeOverrideMatch() ?
                 $expressionTypeInfo->getBestTypeOverrideMatchLine() :
-                $line;
+                $position->getLine();
 
             $filePosition = new FilePosition($file->getPath(), new Position($typeLine, 0));
 

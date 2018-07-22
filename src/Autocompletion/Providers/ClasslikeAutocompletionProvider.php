@@ -8,7 +8,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\NodeHelpers;
-use Serenata\Utility\SourceCodeHelpers;
+use Serenata\Utility\PositionEncoding;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 use Serenata\Analysis\ClasslikeListProviderInterface;
@@ -170,11 +170,13 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      */
     private function getTextEditForSuggestion(array $classlike, string $code, int $offset, string $prefix): TextEdit
     {
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset) - 1;
-        $character = SourceCodeHelpers::getCharacterOnLineFromByteOffset($offset, $code);
+        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
 
         return new TextEdit(
-            new Range(new Position($line, $character - mb_strlen($prefix)), new Position($line, $character)),
+            new Range(
+                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
+                $endPosition
+            ),
             $this->getInsertTextForSuggestion($classlike, $code, $offset)
         );
     }

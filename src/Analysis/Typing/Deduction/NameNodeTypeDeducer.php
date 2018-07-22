@@ -4,6 +4,8 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use Serenata\Utility\PositionEncoding;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
@@ -17,7 +19,6 @@ use Serenata\Indexing\Structures;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\NodeHelpers;
-use Serenata\Utility\SourceCodeHelpers;
 
 use PhpParser\Node;
 
@@ -114,11 +115,9 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
             return [$this->typeNormalizer->getNormalizedFqcn($type)];
         }
 
-        $line = SourceCodeHelpers::calculateLineByOffset($code, $offset);
-
         $filePosition = new FilePosition(
             $file->getPath(),
-            new Position($line, 0)
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
         );
 
         $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($nameString, $filePosition);
@@ -135,9 +134,11 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     private function findCurrentClassAt(Structures\File $file, string $source, int $offset): ?string
     {
-        $line = SourceCodeHelpers::calculateLineByOffset($source, $offset);
-
-        return $this->findCurrentClassAtLine($file, $source, $line);
+        return $this->findCurrentClassAtLine(
+            $file,
+            $source,
+            Position::createFromByteOffset($offset, $source, PositionEncoding::VALUE)->getLine()
+        );
     }
 
     /**
