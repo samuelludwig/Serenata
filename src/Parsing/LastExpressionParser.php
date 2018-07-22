@@ -2,7 +2,7 @@
 
 namespace Serenata\Parsing;
 
-use AssertionError;
+use LogicException;
 
 use PhpParser\Node;
 use PhpParser\Parser;
@@ -255,7 +255,7 @@ final class LastExpressionParser implements Parser
     public function parse(string $code, ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
-            throw new AssertionError(
+            throw new LogicException(
                 'Error handling is not supported as error recovery will be attempted automatically'
             );
         }

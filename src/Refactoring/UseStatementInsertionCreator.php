@@ -2,7 +2,7 @@
 
 namespace Serenata\Refactoring;
 
-use AssertionError;
+use LogicException;
 use UnexpectedValueException;
 
 use PhpParser\Node;
@@ -410,7 +410,7 @@ class UseStatementInsertionCreator
                 }
             }
 
-            throw new AssertionError('Both names are identical, which should not happen');
+            throw new LogicException('Both names are identical, which should not happen');
         }
 
         if (mb_strlen($firstClassName) === mb_strlen($secondClassName)) {
@@ -441,7 +441,7 @@ class UseStatementInsertionCreator
             $node = $node->getAttribute('parent', false);
 
             if ($node === false) {
-                throw new AssertionError('No required parent metadata attached to node');
+                throw new LogicException('No required parent metadata attached to node');
             }
         }
 

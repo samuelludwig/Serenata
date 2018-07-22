@@ -2,7 +2,7 @@
 
 namespace Serenata\Linting;
 
-use AssertionError;
+use LogicException;
 
 use Serenata\Analysis\Visiting\UseStatementKind;
 use Serenata\Analysis\Visiting\ClassUsageFetchingVisitor;
@@ -252,7 +252,7 @@ final class UnusedUseStatementAnalyzer implements AnalyzerInterface
             }
         }
 
-        throw new AssertionError('Sanity check failed: should always have at least one namespace structure');
+        throw new LogicException('Sanity check failed: should always have at least one namespace structure');
     }
 
     /**

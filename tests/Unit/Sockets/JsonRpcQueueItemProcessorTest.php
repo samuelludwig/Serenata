@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Unit\Sockets;
 
-use AssertionError;
+use LogicException;
 use UnexpectedValueException;
 
 use Psr\Container\ContainerInterface;
@@ -119,7 +119,7 @@ class JsonRpcQueueItemProcessorTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->will($this->throwException(
-            new AssertionError('Exception message')
+            new LogicException('Exception message')
         ));
 
         $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(

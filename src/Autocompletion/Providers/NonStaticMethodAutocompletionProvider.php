@@ -3,7 +3,7 @@
 namespace Serenata\Autocompletion\Providers;
 
 use Generator;
-use AssertionError;
+use LogicException;
 use UnexpectedValueException;
 
 use Serenata\Analysis\CircularDependencyException;
@@ -184,6 +184,6 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             return 'private';
         }
 
-        throw new AssertionError('Unknown protection level encountered');
+        throw new LogicException('Unknown protection level encountered');
     }
 }

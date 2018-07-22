@@ -3,7 +3,7 @@
 namespace Serenata\Indexing;
 
 use DateTime;
-use AssertionError;
+use LogicException;
 
 /**
  * Decorator for {@see FileIndexerInterface} objects that skips indexing entirely if the source was not modified.
@@ -51,7 +51,7 @@ final class UnmodifiedFileSkippingIndexer implements FileIndexerInterface
             try {
                 $file = $this->storage->getFileByPath($filePath);
             } catch (FileNotFoundStorageException $e) {
-                throw new AssertionError("File {$filePath} is not in index, even though it was just indexed", 0, $e);
+                throw new LogicException("File {$filePath} is not in index, even though it was just indexed", 0, $e);
             }
         }
 

@@ -2,7 +2,7 @@
 
 namespace Serenata\Indexing\Structures;
 
-use AssertionError;
+use LogicException;
 
 use Serenata\Common\Range;
 
@@ -191,7 +191,7 @@ class Class_ extends Classlike
     public function setParent(?Class_ $parent): void
     {
         if ($this->parentFqcn !== null) {
-            throw new AssertionError('Moving an item to another parent is not supported');
+            throw new LogicException('Moving an item to another parent is not supported');
         }
 
         if ($parent === null) {

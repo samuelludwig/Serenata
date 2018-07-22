@@ -3,7 +3,7 @@
 namespace Serenata\Autocompletion;
 
 use ArrayAccess;
-use AssertionError;
+use LogicException;
 use JsonSerializable;
 
 use Serenata\Utility\TextEdit;
@@ -101,7 +101,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         $this->detail = $detail;
 
         if ($insertText === null && $textEdit === null) {
-            throw new AssertionError('Either an insertText or a textEdit must be provided');
+            throw new LogicException('Either an insertText or a textEdit must be provided');
         }
     }
 
@@ -214,7 +214,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        throw new AssertionError('Setting properties directly is not allowed, use setters instead');
+        throw new LogicException('Setting properties directly is not allowed, use setters instead');
     }
 
     /**
@@ -232,7 +232,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      */
     public function offsetUnset($offset)
     {
-        throw new AssertionError('Unsetting properties is not allowed');
+        throw new LogicException('Unsetting properties is not allowed');
     }
 
     /**

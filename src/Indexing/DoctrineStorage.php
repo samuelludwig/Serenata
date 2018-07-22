@@ -3,7 +3,7 @@
 namespace Serenata\Indexing;
 
 use Throwable;
-use AssertionError;
+use LogicException;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -41,7 +41,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new AssertionError('Should never be reached');
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -55,7 +55,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new AssertionError('Should never be reached');
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -71,7 +71,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new AssertionError('Should never be reached');
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -171,7 +171,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             $this->handleThrowable($t);
         }
 
-        throw new AssertionError('Should never be reached');
+        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -185,10 +185,10 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             if ($throwable instanceof LockWaitTimeoutException) {
                 // Not strictly a bug in the code, but this kind of error is fatal and currently not automagically
                 // fixed, so the user should know about it, rather than have the server not work properly.
-                throw new AssertionError($throwable->getMessage(), 0, $throwable);
+                throw new LogicException($throwable->getMessage(), 0, $throwable);
             } elseif (mb_strpos($throwable->getMessage(), 'disk I/O error') !== false) {
                 // Same as above.
-                throw new AssertionError($throwable->getMessage(), 0, $throwable);
+                throw new LogicException($throwable->getMessage(), 0, $throwable);
             }
 
             throw new StorageException($throwable->getMessage(), 0, $throwable);

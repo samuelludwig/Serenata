@@ -2,7 +2,7 @@
 
 namespace Serenata\Utility;
 
-use AssertionError;
+use LogicException;
 
 use PhpParser\Node;
 
@@ -22,7 +22,7 @@ class NodeHelpers
         $startFilePos = $node->getAttribute('startFilePos');
 
         if ($startFilePos === null) {
-            throw new AssertionError('Anonymous class node must have "startFilePos" attribute set');
+            throw new LogicException('Anonymous class node must have "startFilePos" attribute set');
         }
 
         return '\\' . sprintf('(anonymous_%s_%s)', md5($filePath), $startFilePos);
@@ -80,7 +80,7 @@ class NodeHelpers
         $parent = $node->getAttribute('parent', false);
 
         if ($parent === false) {
-            throw new AssertionError("Can't find ancestor without node parent data being attached");
+            throw new LogicException("Can't find ancestor without node parent data being attached");
         }
 
         while ($parent) {

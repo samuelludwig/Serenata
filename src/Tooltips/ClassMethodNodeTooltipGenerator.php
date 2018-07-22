@@ -2,7 +2,7 @@
 
 namespace Serenata\Tooltips;
 
-use AssertionError;
+use LogicException;
 use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
@@ -63,7 +63,7 @@ class ClassMethodNodeTooltipGenerator
         $startLine = $node->getAttribute('startLine');
 
         if ($startLine === null) {
-            throw new AssertionError('Nodes must have startLine metadata attached');
+            throw new LogicException('Nodes must have startLine metadata attached');
         }
 
         $position = new Position($startLine, 0);

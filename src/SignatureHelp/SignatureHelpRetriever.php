@@ -2,7 +2,7 @@
 
 namespace Serenata\SignatureHelp;
 
-use AssertionError;
+use LogicException;
 use UnexpectedValueException;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
@@ -164,7 +164,7 @@ class SignatureHelpRetriever
             ) {
                 $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
             } else {
-                throw new AssertionError(
+                throw new LogicException(
                     'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
                 );
             }

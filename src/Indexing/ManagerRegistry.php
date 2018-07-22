@@ -2,7 +2,7 @@
 
 namespace Serenata\Indexing;
 
-use AssertionError;
+use LogicException;
 
 use Doctrine\ORM;
 
@@ -86,7 +86,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
             return $this->getEntityManagerInstance();
         }
 
-        throw new AssertionError('Unknown manager service requested with name ' . $name);
+        throw new LogicException('Unknown manager service requested with name ' . $name);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Serenata\Tooltips;
 
-use AssertionError;
+use LogicException;
 use UnexpectedValueException;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
@@ -182,7 +182,7 @@ class TooltipProvider
             $parentNode = $node->getAttribute('parent', false);
 
             if ($parentNode === false) {
-                throw new AssertionError('No parent metadata attached to node');
+                throw new LogicException('No parent metadata attached to node');
             }
 
             if ($parentNode instanceof Node\Stmt\Function_) {
@@ -356,7 +356,7 @@ class TooltipProvider
         $parentNode = $node->getAttribute('parent', false);
 
         if ($parentNode === false) {
-            throw new AssertionError('Parent node data is required in metadata');
+            throw new LogicException('Parent node data is required in metadata');
         }
 
         // Use statements are always fully qualified, they aren't resolved.
