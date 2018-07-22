@@ -4,7 +4,7 @@ namespace Serenata\Indexing;
 
 use DateTime;
 use Exception;
-use AssertionError;
+use LogicException;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
@@ -127,7 +127,7 @@ final class StorageFileIndexer implements FileIndexerInterface
         } catch (Exception $e) {
             $this->storage->rollbackTransaction();
 
-            throw new AssertionError(
+            throw new LogicException(
                 'Could not index file due to an internal exception. This likely means an exception should be caught ' .
                 'at a deeper level (if it is acceptable) or there is a bug. The file is "' . $filePath . '" and the ' .
                 'exact exception message: "' . $e->getMessage() . '"',
