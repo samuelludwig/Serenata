@@ -383,42 +383,40 @@ class UseStatementInsertionCreator
      */
     private function scoreClassName(string $firstClassName, string $secondClassName): float
     {
-        $maxLength = 0;
-        $totalScore = 0;
-
         $firstClassNameParts = explode('\\', $firstClassName);
         $secondClassNameParts = explode('\\', $secondClassName);
 
         $maxLength = min(count($firstClassNameParts), count($secondClassNameParts));
 
-        // At this point, both FQSEN's share a common namespace, e.g. A\B and A\B\C\D, or XMLElement and XMLDocument.
-        // The one with the most namespace parts ends up last.
-        if (count($firstClassNameParts) < count($secondClassNameParts)) {
-            return -1;
-        } elseif (count($firstClassNameParts) > count($secondClassNameParts)) {
-            return 1;
+        // Always sort unqualified imports before everything else.
+        if (count($firstClassNameParts) !== count($secondClassNameParts)) {
+            if (count($firstClassNameParts) <= 2) {
+                return -1;
+            } elseif (count($secondClassNameParts) <= 2) {
+                return 1;
+            }
         }
 
-        if ($maxLength >= 3) {
-            for ($i = 0; $i < $maxLength; ++$i) {
-                if ($firstClassNameParts[$i] !== $secondClassNameParts[$i]) {
-                    if (mb_strlen($firstClassNameParts[$i]) === mb_strlen($secondClassNameParts[$i])) {
-                        return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
-                    }
-
-                    return mb_strlen($firstClassNameParts[$i]) <=> mb_strlen($secondClassNameParts[$i]);
-                }
+        for ($i = 0; $i < $maxLength; ++$i) {
+            if ($firstClassNameParts[$i] === $secondClassNameParts[$i]) {
+                continue;
+            } elseif (mb_strlen($firstClassNameParts[$i]) !== mb_strlen($secondClassNameParts[$i]) &&
+                count($firstClassNameParts) === count($secondClassNameParts) &&
+                $i === $maxLength - 1
+            ) {
+                // For use statements that only differ in the last segment (with a common namespace segment),
+                // sort the last part by length so we get a neat gradually expanding half of a christmas tree.
+                return mb_strlen($firstClassNameParts[$i]) <=> mb_strlen($secondClassNameParts[$i]);
             }
 
-            throw new LogicException('Both names are identical, which should not happen');
+            return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
         }
 
-        if (mb_strlen($firstClassName) === mb_strlen($secondClassName)) {
-            return substr_compare($firstClassName, $secondClassName, 0);
-        }
-
-        // Both items have share the same namespace, sort from shortest to longest last word (class, interface, ...).
-        return mb_strlen($firstClassName) <=> mb_strlen($secondClassName);
+        assert(
+            false,
+            'Should never be reached as it would mean specified class names are identical, which should have been ' .
+            'handled early'
+        );
     }
 
     /**

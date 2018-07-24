@@ -51,10 +51,25 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testSortsNewImportHigherWhenItHasFewerNamespaceSegmentsThanTheOther(): void
+    public function testSortsNewImportHigherWhenItsFirstSegmentIsAlphabeticallyFirst(): void
+    {
+        $name = 'Aab\Cdd';
+        $insertionPoint = new Position(2, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testSortsNewImportLowerWhenItsFirstSegmentIsAlphabeticallyLast(): void
     {
         $name = 'Foo\Bar';
-        $insertionPoint = new Position(2, 0);
+        $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
         static::assertEquals(
@@ -126,6 +141,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testAlwaysSortsUnqualifiedImportsBeforeQualifiedImports(): void
+    {
+        $name = 'Cabcdefghijklmnopqrstuvwxyz';
+        $insertionPoint = new Position(4, 0);
+        $file = 'TODO.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testSortsNewImportLowerWhenItHasSimilarNamespaceSegmentsAsTheOtherAndIsNotTheSameLengthAndIsLonger(): void
     {
         $name = 'Bar\Baz\Quux';
@@ -144,7 +174,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     public function testGroupsUseStatementsWithSimilarNamespaceSegmentsTogetherByAttachingToTopOfGroup(): void
     {
         $name = 'Three\Segments\Bar';
-        $insertionPoint = new Position(6, 0);
+        $insertionPoint = new Position(8, 0);
         $file = 'ExistingUseStatementWithSurroundingDifferentlySegmentedOnes.phpt';
 
         static::assertEquals(
@@ -159,7 +189,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     public function testGroupsUseStatementsWithSimilarNamespaceSegmentsTogetherByAttachingToBottomOfGroup(): void
     {
         $name = 'Three\Segments\Qux';
-        $insertionPoint = new Position(7, 0);
+        $insertionPoint = new Position(9, 0);
         $file = 'ExistingUseStatementWithSurroundingDifferentlySegmentedOnes.phpt';
 
         static::assertEquals(
