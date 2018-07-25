@@ -379,9 +379,9 @@ class UseStatementInsertionCreator
      * @param string $firstClassName
      * @param string $secondClassName
      *
-     * @return float A floating point number that represents the score.
+     * @return int
      */
-    private function scoreClassName(string $firstClassName, string $secondClassName): float
+    private function scoreClassName(string $firstClassName, string $secondClassName): int
     {
         $firstClassNameParts = array_values(array_filter(explode('\\', $firstClassName)));
         $secondClassNameParts = array_values(array_filter(explode('\\', $secondClassName)));
@@ -409,7 +409,7 @@ class UseStatementInsertionCreator
                 return mb_strlen($firstClassNameParts[$i]) <=> mb_strlen($secondClassNameParts[$i]);
             }
 
-            return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
+            return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0) ?: 0;
         }
 
         return count($firstClassNameParts) <=> count($secondClassNameParts);
