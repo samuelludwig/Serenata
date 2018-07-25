@@ -171,6 +171,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testSortsNewImportThatContainsExistingImportLower(): void
+    {
+        $name = 'Bar\Baz\Qux\Another';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingUseStatement.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testGroupsUseStatementsWithSimilarNamespaceSegmentsTogetherByAttachingToTopOfGroup(): void
     {
         $name = 'Three\Segments\Bar';

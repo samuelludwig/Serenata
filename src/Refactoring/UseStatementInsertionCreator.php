@@ -412,11 +412,7 @@ class UseStatementInsertionCreator
             return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
         }
 
-        assert(
-            false,
-            'Should never be reached as it would mean specified class names are identical, which should have been ' .
-            'handled early'
-        );
+        return count($firstClassNameParts) <=> count($secondClassNameParts);
     }
 
     /**
