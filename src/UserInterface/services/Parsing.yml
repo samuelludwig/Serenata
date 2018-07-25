@@ -70,3 +70,6 @@ services:
 
     docblockTypeParser:
         class: Serenata\DocblockTypeParser\DocblockTypeParser
+
+    docblockTypeEquivalenceComparator:
+        class: Serenata\DocblockTypeParser\DocblockTypeEquivalenceComparator

@@ -18,7 +18,7 @@
         "php-ds/php-ds": "^1.2",
         "react/socket": "^1.0",
         "serenata/common": "^0.3.2",
-        "serenata/docblock-type-parser": "^0.3.1",
+        "serenata/docblock-type-parser": "^0.4",
         "serenata/name-qualification-utilities": "^0.5",
         "symfony/config": "^4.1",
         "symfony/console": "^4.1",

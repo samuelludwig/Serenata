@@ -12,3 +12,5 @@ services:
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@classlikeInfoBuilder'
+            - '@docblockTypeParser'
+            - '@docblockTypeEquivalenceComparator'

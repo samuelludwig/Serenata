@@ -6,10 +6,10 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use Serenata\DocblockTypeParser;
-
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
+
+use Serenata\DocblockTypeParser;
 
 use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
@@ -18,6 +18,9 @@ use Serenata\Utility\Typing\Type;
 use Serenata\Utility\Typing\TypeList;
 use Serenata\Utility\Typing\ClassType;
 use Serenata\Utility\Typing\SpecialTypeString;
+
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\DocblockTypeParser\DocblockTypeEquivalenceComparatorInterface;
 
 /**
  * Checks if a specified (normal parameter) type is semantically equal to a docblock type specification.
@@ -35,15 +38,31 @@ class ParameterDocblockTypeSemanticEqualityChecker
     private $classlikeInfoBuilder;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
+     * @var DocblockTypeEquivalenceComparatorInterface
+     */
+    private $docblockTypeEquivalenceComparator;
+
+    /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
+     * @param DocblockTypeParserInterface                $docblockTypeParser
+     * @param DocblockTypeEquivalenceComparatorInterface $docblockTypeEquivalenceComparator
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
+        DocblockTypeParserInterface $docblockTypeParser,
+        DocblockTypeEquivalenceComparatorInterface $docblockTypeEquivalenceComparator
     ) {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->docblockTypeEquivalenceComparator = $docblockTypeEquivalenceComparator;
     }
 
     /**
@@ -177,11 +196,10 @@ class ParameterDocblockTypeSemanticEqualityChecker
             return $type->toString();
         }, $parameterTypeList->toArray()));
 
-        if ($docblockType->toString() === $parameterTypeListAsCompoundTypeString) {
-            return true;
-        }
-
-        return false;
+        return $this->docblockTypeEquivalenceComparator->areEquivalent(
+            $this->docblockTypeParser->parse($parameterTypeListAsCompoundTypeString),
+            $docblockType
+        );
     }
 
     /**
