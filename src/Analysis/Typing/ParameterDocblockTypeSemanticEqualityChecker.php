@@ -61,7 +61,12 @@ class ParameterDocblockTypeSemanticEqualityChecker
         $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
         $parameterTypeList = $this->calculateParameterTypeList($parameter, $filePosition, $positionalNameResolver);
-        $docblockType = $this->getResolvedDocblockParameterType($docblockParameter['type'], $filePosition, $positionalNameResolver);
+
+        $docblockType = $this->getResolvedDocblockParameterType(
+            $docblockParameter['type'],
+            $filePosition,
+            $positionalNameResolver
+        );
 
         if (!$this->doesParameterTypeListMatchDocblockTypeList($parameterTypeList, $docblockType)) {
             return false;
@@ -112,11 +117,20 @@ class ParameterDocblockTypeSemanticEqualityChecker
         PositionalNameResolverInterface $positionalNameResolver
     ): DocblockTypeParser\DocblockType {
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
-            return new DocblockTypeParser\CompoundDocblockType(...array_map(function (DocblockTypeParser\DocblockType $type) use ($filePosition, $positionalNameResolver) {
-                return $this->getResolvedDocblockParameterType($type, $filePosition, $positionalNameResolver);
-            }, $docblockType->getParts()));
+            return new DocblockTypeParser\CompoundDocblockType(
+                ...array_map(
+                    function (DocblockTypeParser\DocblockType $type) use ($filePosition, $positionalNameResolver) {
+                        return $this->getResolvedDocblockParameterType($type, $filePosition, $positionalNameResolver);
+                    },
+                    $docblockType->getParts()
+                )
+            );
         } elseif ($docblockType instanceof DocblockTypeParser\SpecializedArrayDocblockType) {
-            $resolvedType = $this->getResolvedDocblockParameterType($docblockType->getType(), $filePosition, $positionalNameResolver);
+            $resolvedType = $this->getResolvedDocblockParameterType(
+                $docblockType->getType(),
+                $filePosition,
+                $positionalNameResolver
+            );
 
             return new DocblockTypeParser\SpecializedArrayDocblockType($resolvedType);
         } elseif ($docblockType instanceof DocblockTypeParser\ClassDocblockType) {
@@ -201,11 +215,13 @@ class ParameterDocblockTypeSemanticEqualityChecker
         }
 
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
-            $docblockTypesThatAreNotArrayTypes = $docblockType->filter(function (DocblockTypeParser\DocblockType $docblockType) {
-                return
-                    !$docblockType instanceof DocblockTypeParser\ArrayDocblockType &&
-                    !$docblockType instanceof DocblockTypeParser\NullDocblockType;
-            });
+            $docblockTypesThatAreNotArrayTypes = $docblockType->filter(
+                function (DocblockTypeParser\DocblockType $docblockType) {
+                    return
+                        !$docblockType instanceof DocblockTypeParser\ArrayDocblockType &&
+                        !$docblockType instanceof DocblockTypeParser\NullDocblockType;
+                }
+            );
 
             return empty($docblockTypesThatAreNotArrayTypes);
         }
@@ -236,19 +252,23 @@ class ParameterDocblockTypeSemanticEqualityChecker
         $docblockTypesThatAreClassTypes = null;
 
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
-            $docblockTypesThatAreNotClassTypes = $docblockType->filter(function (DocblockTypeParser\DocblockType $docblockType) {
-                return
-                    !$docblockType instanceof DocblockTypeParser\ClassDocblockType &&
-                    !$docblockType instanceof DocblockTypeParser\NullDocblockType;
-            });
+            $docblockTypesThatAreNotClassTypes = $docblockType->filter(
+                function (DocblockTypeParser\DocblockType $docblockType) {
+                    return
+                        !$docblockType instanceof DocblockTypeParser\ClassDocblockType &&
+                        !$docblockType instanceof DocblockTypeParser\NullDocblockType;
+                }
+            );
 
             if (!empty($docblockTypesThatAreNotClassTypes)) {
                 return false;
             }
 
-            $docblockTypesThatAreClassTypes = $docblockType->filter(function (DocblockTypeParser\DocblockType $docblockType) {
-                return $docblockType instanceof DocblockTypeParser\ClassDocblockType;
-            });
+            $docblockTypesThatAreClassTypes = $docblockType->filter(
+                function (DocblockTypeParser\DocblockType $docblockType) {
+                    return $docblockType instanceof DocblockTypeParser\ClassDocblockType;
+                }
+            );
         } elseif (!$docblockType instanceof DocblockTypeParser\ClassDocblockType) {
             return false;
         } else {
@@ -262,7 +282,12 @@ class ParameterDocblockTypeSemanticEqualityChecker
         $parameterClassType = $parameterClassTypes->toArray()[0];
 
         foreach ($docblockTypesThatAreClassTypes as $docblockTypeThatIsClassType) {
-            if (!$this->doesDocblockClassSatisfyTypeParameterClassType($docblockTypeThatIsClassType, $parameterClassType)) {
+            $isSatisfied = $this->doesDocblockClassSatisfyTypeParameterClassType(
+                $docblockTypeThatIsClassType,
+                $parameterClassType
+            );
+
+            if (!$isSatisfied) {
                 return false;
             }
         }
