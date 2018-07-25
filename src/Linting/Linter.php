@@ -133,6 +133,7 @@ class Linter
             return $output;
         }
 
+        // TODO: Deprecated, remove semantic linting in the next major version.
         $traverser = new NodeTraverser();
         $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
 

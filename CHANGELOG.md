@@ -6,6 +6,9 @@
     * The `extraData.isDeprecated` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version.
 * Internal (backwards-compatible) refactoring towards language server support
     * Use (language server) positions with character offsets in more places rather than old byte offsets
+* Semantic linting support is now deprecated and will likely be removed in a future release
+    * Syntax linting will remain supported
+    * The reasoning for this is that writing linters and these kind of comparisons is a whole project of its own; other tools such as [PHPStan](https://github.com/phpstan/phpstan) do most of what we do, _much_ more and will likely get even more in the future - in the meantime, I'd rather spend my time focusing on areas that aren't already (adequately) covered by other tools, such as autocompletion and especially refactoring
 
 ### Bugs Fixed
 * [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)
