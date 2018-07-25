@@ -145,7 +145,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     {
         $name = 'Cabcdefghijklmnopqrstuvwxyz';
         $insertionPoint = new Position(4, 0);
-        $file = 'TODO.phpt';
+        $file = 'QualifiedImportWithUnqualifiedImport.phpt';
 
         static::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
