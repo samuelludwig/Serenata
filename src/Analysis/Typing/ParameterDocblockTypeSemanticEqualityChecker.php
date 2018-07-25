@@ -77,7 +77,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
      * @param FilePosition                    $filePosition
      * @param PositionalNameResolverInterface $positionalNameResolver
      *
-     * @return array
+     * @return TypeList
      */
     private function calculateParameterTypeList(
         array $parameter,
