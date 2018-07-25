@@ -9,16 +9,16 @@ use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
-use Serenata\Utility\TextEdit;
-
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
 
 use Serenata\Analysis\Visiting\UseStatementKind;
+
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextEdit;
 
 /**
  * Creates {@see TextEdit}s that insert use statements (imports).
