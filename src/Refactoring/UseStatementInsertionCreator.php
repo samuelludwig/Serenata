@@ -383,16 +383,16 @@ class UseStatementInsertionCreator
      */
     private function scoreClassName(string $firstClassName, string $secondClassName): float
     {
-        $firstClassNameParts = explode('\\', $firstClassName);
-        $secondClassNameParts = explode('\\', $secondClassName);
+        $firstClassNameParts = array_values(array_filter(explode('\\', $firstClassName)));
+        $secondClassNameParts = array_values(array_filter(explode('\\', $secondClassName)));
 
         $maxLength = min(count($firstClassNameParts), count($secondClassNameParts));
 
         // Always sort unqualified imports before everything else.
         if (count($firstClassNameParts) !== count($secondClassNameParts)) {
-            if (count($firstClassNameParts) <= 2) {
+            if (count($firstClassNameParts) === 1) {
                 return -1;
-            } elseif (count($secondClassNameParts) <= 2) {
+            } elseif (count($secondClassNameParts) === 1) {
                 return 1;
             }
         }
