@@ -2,14 +2,14 @@
 
 namespace Serenata\Indexing\Visiting;
 
-use Serenata\Common\Range;
-
-use Serenata\Utility\PositionEncoding;
-
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use Serenata\Analysis\Typing\TypeAnalyzer;
+
+use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
@@ -21,9 +21,7 @@ use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterfa
 use Serenata\Parsing\DocblockParser;
 
 use Serenata\Utility\NodeHelpers;
-
-use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Visitor that traverses a set of nodes, indexing (global) functions in the process.
