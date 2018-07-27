@@ -363,6 +363,16 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testFunctionOnLastLineDoesNotGenerateAnyProblems(): void
+    {
+        $function = $this->indexFunction('FunctionOnLastLine.phpt');
+
+        static::assertSame('foo', $function->getName());
+    }
+
+    /**
+     * @return void
+     */
     public function testChangesArePickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {

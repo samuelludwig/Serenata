@@ -154,6 +154,19 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             $node->value->getAttribute('endFilePos') - $node->value->getAttribute('startFilePos') + 1
         );
 
+        $range = new Range(
+            Position::createFromByteOffset(
+                $node->getAttribute('startFilePos'),
+                $this->code,
+                PositionEncoding::VALUE
+            ),
+            Position::createFromByteOffset(
+                $node->getAttribute('endFilePos') + 1,
+                $this->code,
+                PositionEncoding::VALUE
+            )
+        );
+
         if ($varDocumentation) {
             // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
             // from the latter to the former.
@@ -161,7 +174,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription = $varDocumentation['description'];
             }
 
-            $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
+            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
             $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
         } elseif ($node->value) {
@@ -176,18 +189,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             $node->name,
             '\\' . $node->namespacedName->toString(),
             $this->file,
-            new Range(
-                Position::createFromByteOffset(
-                    $node->getAttribute('startFilePos'),
-                    $this->code,
-                    PositionEncoding::VALUE
-                ),
-                Position::createFromByteOffset(
-                    $node->getAttribute('endFilePos') + 1,
-                    $this->code,
-                    PositionEncoding::VALUE
-                )
-            ),
+            $range,
             $defaultValue,
             $documentation['deprecated'],
             !empty($docComment),

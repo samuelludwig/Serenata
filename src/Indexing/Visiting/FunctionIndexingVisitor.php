@@ -141,7 +141,20 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
-        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
+        $range = new Range(
+            Position::createFromByteOffset(
+                $node->getAttribute('startFilePos'),
+                $this->code,
+                PositionEncoding::VALUE
+            ),
+            Position::createFromByteOffset(
+                $node->getAttribute('endFilePos') + 1,
+                $this->code,
+                PositionEncoding::VALUE
+            )
+        );
+
+        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::THROWS,
@@ -182,18 +195,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $node->name,
             '\\' . $node->namespacedName->toString(),
             $this->file,
-            new Range(
-                Position::createFromByteOffset(
-                    $node->getAttribute('startFilePos'),
-                    $this->code,
-                    PositionEncoding::VALUE
-                ),
-                Position::createFromByteOffset(
-                    $node->getAttribute('endFilePos') + 1,
-                    $this->code,
-                    PositionEncoding::VALUE
-                )
-            ),
+            $range,
             $documentation['deprecated'],
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
@@ -203,7 +205,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $throws,
             $returnTypes
         );
-
+    
         $this->storage->persist($function);
 
         foreach ($node->getParams() as $param) {

@@ -347,7 +347,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['propertiesWriteOnly']
         );
 
-        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
+        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
         foreach ($magicProperties as $propertyName => $propertyData) {
             // Use the same line as the class definition, it matters for e.g. type resolution.
@@ -584,9 +584,22 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
-        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
-
         foreach ($node->props as $property) {
+            $range = new Range(
+                Position::createFromByteOffset(
+                    $property->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
+                ),
+                Position::createFromByteOffset(
+                    $property->getAttribute('endFilePos') + 1,
+                    $this->code,
+                    PositionEncoding::VALUE
+                )
+            );
+
+            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
             $defaultValue = $property->default ?
                 substr(
                     $this->code,
@@ -644,18 +657,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $property = new Structures\Property(
                 $property->name,
                 $this->file,
-                new Range(
-                    Position::createFromByteOffset(
-                        $property->getAttribute('startFilePos'),
-                        $this->code,
-                        PositionEncoding::VALUE
-                    ),
-                    Position::createFromByteOffset(
-                        $property->getAttribute('endFilePos') + 1,
-                        $this->code,
-                        PositionEncoding::VALUE
-                    )
-                ),
+                $range,
                 $defaultValue,
                 $documentation['deprecated'],
                 false,
@@ -700,7 +702,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $returnTypeHint .= $resolvedType;
         }
 
-        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
+        $range = new Range(
+            Position::createFromByteOffset(
+                $node->getAttribute('startFilePos'),
+                $this->code,
+                PositionEncoding::VALUE
+            ),
+            Position::createFromByteOffset(
+                $node->getAttribute('endFilePos') + 1,
+                $this->code,
+                PositionEncoding::VALUE
+            )
+        );
+
+        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
         $isReturnTypeNullable = ($node->getReturnType() instanceof Node\NullableType);
         $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
@@ -755,18 +770,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $method = new Structures\Method(
             $node->name->name,
             $this->file,
-            new Range(
-                Position::createFromByteOffset(
-                    $node->getAttribute('startFilePos'),
-                    $this->code,
-                    PositionEncoding::VALUE
-                ),
-                Position::createFromByteOffset(
-                    $node->getAttribute('endFilePos') + 1,
-                    $this->code,
-                    PositionEncoding::VALUE
-                )
-            ),
+            $range,
             $documentation['deprecated'],
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
@@ -888,7 +892,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function parseClassConstantNode(Node\Const_ $node, Node\Stmt\ClassConst $classConst): void
     {
-        $filePosition = new FilePosition($this->file->getPath(), new Position($node->getLine(), 0));
+        $range = new Range(
+            Position::createFromByteOffset(
+                $node->getAttribute('startFilePos'),
+                $this->code,
+                PositionEncoding::VALUE
+            ),
+            Position::createFromByteOffset(
+                $node->getAttribute('endFilePos') + 1,
+                $this->code,
+                PositionEncoding::VALUE
+            )
+        );
+
+        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
         $docComment = $classConst->getDocComment() ? $classConst->getDocComment()->getText() : null;
 
@@ -943,18 +960,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $constant = new Structures\ClassConstant(
             $node->name->name,
             $this->file,
-            new Range(
-                Position::createFromByteOffset(
-                    $node->getAttribute('startFilePos'),
-                    $this->code,
-                    PositionEncoding::VALUE
-                ),
-                Position::createFromByteOffset(
-                    $node->getAttribute('endFilePos') + 1,
-                    $this->code,
-                    PositionEncoding::VALUE
-                )
-            ),
+            $range,
             $defaultValue,
             $documentation['deprecated'] ? 1 : 0,
             !empty($docComment),
