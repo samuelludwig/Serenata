@@ -32,7 +32,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @var float
      */
-    private const REQUEST_HANDLE_FREQUENCY_SECONDS = 0.00001;
+    private const REQUEST_HANDLE_FREQUENCY_SECONDS = 0;
 
     /**
      * @var int

@@ -10,6 +10,8 @@
 * Semantic linting support is now deprecated and will likely be removed in a future release
     * Syntax linting will remain supported
     * You can also read more about the reasoning [here](https://gitlab.com/Serenata/Serenata/wikis/Linting)
+* Request processing will now use the smallest available time to process requests to maximize throughput (performance)
+    * This will likely only be noticeable during large amounts of request processing, such as project indexing
 
 ### Bugs Fixed
 * [Spaces are stripped in markdown code blocks inside tooltips](https://gitlab.com/Serenata/Serenata/issues/194)
