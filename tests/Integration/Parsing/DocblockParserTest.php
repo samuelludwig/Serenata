@@ -317,6 +317,25 @@ class DocblockParserTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testLeavesSpacesInMarkdownCodeBlocksIntact(): void
+    {
+        $parser = $this->getDocblockParser();
+        $result = $parser->parse('
+            /**
+             * Long description.
+             *
+             * ```php
+             *     // Some indentation.
+             * ```
+             */
+        ', [DocblockParser::DESCRIPTION], '');
+
+        static::assertSame("```php\n    // Some indentation.\n```", $result['descriptions']['long']);
+    }
+
+    /**
+     * @return void
+     */
     public function testStripsInconvertableHtmlTags(): void
     {
         $parser = $this->getDocblockParser();

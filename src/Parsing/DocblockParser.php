@@ -277,7 +277,7 @@ class DocblockParser
      */
     private function stripDocblockLineDelimiters(string $docblock): string
     {
-        return preg_replace('/^[\t ]*\**[\t ]*/m', '', $docblock);
+        return preg_replace('/^[\t ]*\**[\t ]{0,1}/m', '', $docblock);
     }
 
     /**
@@ -907,7 +907,7 @@ class DocblockParser
             } elseif ($isReadingSummary) {
                 $summary .= "\n" . trim($line);
             } else {
-                $description .= "\n" . trim($line);
+                $description .= "\n" . $line;
             }
         }
 
