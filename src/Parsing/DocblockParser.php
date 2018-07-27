@@ -156,39 +156,46 @@ class DocblockParser
 
         if ($docblock) {
             $docblock = $this->stripDocblockDelimiters($docblock);
-            $docblock = $this->htmlToMarkdownConverter->convert($docblock);
 
-            preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
-
-            $segments = [];
-            $previousMatch = null;
-
-            // Build a list of 'segments', which are just a collection of ranges indicating where each detected tag
-            // starts and stops.
-            foreach ($matches as $match) {
-                $segments[] = [$previousMatch[0][0], $previousMatch[0][1], $match[0][1]];
-
-                $previousMatch = $match;
+            try {
+                $docblock = $this->htmlToMarkdownConverter->convert($docblock);
+            } catch (\InvalidArgumentException $e) {
+                $docblock = null;
             }
 
-            // NOTE: preg_match_all returns byte offsets, not character offsets.
-            $segments[] = [$previousMatch[0][0], $previousMatch[0][1], strlen($docblock)];
+            if ($docblock !== null) {
+                preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
-            foreach ($segments as $segment) {
-                list($tag, $start, $end) = $segment;
+                $segments = [];
+                $previousMatch = null;
 
-                if (!$tag) {
-                    continue;
-                } elseif (!isset($tags[$tag])) {
-                    $tags[$tag] = [];
+                // Build a list of 'segments', which are just a collection of ranges indicating where each detected tag
+                // starts and stops.
+                foreach ($matches as $match) {
+                    $segments[] = [$previousMatch[0][0], $previousMatch[0][1], $match[0][1]];
+
+                    $previousMatch = $match;
                 }
 
-                $tags[$tag][] = $this->sanitizeText(
-                    substr(
-                        substr($docblock, $start, $end - $start),
-                        strlen($tag)
-                    )
-                );
+                // NOTE: preg_match_all returns byte offsets, not character offsets.
+                $segments[] = [$previousMatch[0][0], $previousMatch[0][1], strlen($docblock)];
+
+                foreach ($segments as $segment) {
+                    list($tag, $start, $end) = $segment;
+
+                    if (!$tag) {
+                        continue;
+                    } elseif (!isset($tags[$tag])) {
+                        $tags[$tag] = [];
+                    }
+
+                    $tags[$tag][] = $this->sanitizeText(
+                        substr(
+                            substr($docblock, $start, $end - $start),
+                            strlen($tag)
+                        )
+                    );
+                }
             }
         }
 

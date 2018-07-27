@@ -12,6 +12,7 @@
 
 ### Bugs Fixed
 * [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)
+* [Fix internal indexing exception in rare circumstances when docblock contains invalid HTML](https://gitlab.com/Serenata/Serenata/issues/191)
 * [Fix linter complaining about mismatching docblock and parameter types when ordering differs](https://gitlab.com/Serenata/Serenata/issues/137)
 * [Fix linter complaining about missing `@var` tag for properties with explicit docblock inheritance via `@inheritDoc` or variants](https://gitlab.com/Serenata/Serenata/issues/190)
 * [Fix error relating to `calculateOffsetByLineCharacter` in rare circumstances](https://gitlab.com/Serenata/Serenata/issues/167)
