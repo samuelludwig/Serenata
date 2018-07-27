@@ -317,7 +317,7 @@ class DocblockParserTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testStripsUnconvertableHtmlTags(): void
+    public function testStripsInconvertableHtmlTags(): void
     {
         $parser = $this->getDocblockParser();
         $result = $parser->parse('
