@@ -5,6 +5,7 @@
 * Autocompletion suggestions now give back a `deprecated` property as specified in the language server protocol
     * The `extraData.isDeprecated` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version.
 * Internal (backwards-compatible) refactoring towards language server support
+    * Improve autocompletion command's adherence to LSPv3
     * Use (language server) positions with character offsets in more places rather than old byte offsets
 * Semantic linting support is now deprecated and will likely be removed in a future release
     * Syntax linting will remain supported
