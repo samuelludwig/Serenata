@@ -6,6 +6,8 @@ use React;
 use RuntimeException;
 use UnexpectedValueException;
 
+use React\EventLoop\TimerInterface;
+
 use Serenata\Sockets\SocketServer;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -14,8 +16,6 @@ use Serenata\Sockets\JsonRpcRequestHandlerInterface;
 use Serenata\Sockets\JsonRpcConnectionHandlerFactory;
 
 use React\EventLoop\LoopInterface;
-
-use React\EventLoop\Timer\Timer;
 
 use Symfony\Component\Console\Application;
 
@@ -45,7 +45,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     private $loop;
 
     /**
-     * @var Timer|null
+     * @var TimerInterface|null
      */
     private $periodicQueueProcessingTimer;
 
