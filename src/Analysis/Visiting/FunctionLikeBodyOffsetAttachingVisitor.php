@@ -2,8 +2,6 @@
 
 namespace Serenata\Analysis\Visiting;
 
-use LogicException;
-
 use PhpParser\Node;
 
 use PhpParser\NodeVisitorAbstract;
@@ -49,9 +47,9 @@ final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
     /**
      * @param Node\FunctionLike $node
      *
-     * @return int
+     * @return int|null
      */
-    private function locateBodyStartByteOffset(Node\FunctionLike $node): int
+    private function locateBodyStartByteOffset(Node\FunctionLike $node): ?int
     {
         $byteOffset = $node->getAttribute('startFilePos');
 
@@ -63,15 +61,16 @@ final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
             $byteOffset += strlen(is_array($this->tokens[$i]) ? $this->tokens[$i][1] : $this->tokens[$i]);
         }
 
-        throw new LogicException('Could not detect body start for node of type "' . get_class($node) . '"');
+        // Can actually happen in erroneous code where the body isn't written yet in real-world scenarios.
+        return null;
     }
 
     /**
      * @param Node\FunctionLike $node
      *
-     * @return int
+     * @return int|null
      */
-    private function locateBodyEndByteOffset(Node\FunctionLike $node): int
+    private function locateBodyEndByteOffset(Node\FunctionLike $node): ?int
     {
         $byteOffset = $node->getAttribute('endFilePos');
 
@@ -83,6 +82,7 @@ final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
             $byteOffset -= strlen(is_array($this->tokens[$i]) ? $this->tokens[$i][1] : $this->tokens[$i]);
         }
 
-        throw new LogicException('Could not detect body end for node of type "' . get_class($node) . '"');
+        // Can actually happen in erroneous code where the body isn't written yet in real-world scenarios.
+        return null;
     }
 }
