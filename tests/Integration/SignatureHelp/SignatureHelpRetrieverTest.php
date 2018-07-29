@@ -88,43 +88,35 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         static::assertSignatureHelpActiveParameterEquals($fileName, 144, 144, 1);
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testFunctionCallDoesNotWorkWhenInsideClosureArgumentBody(): void
-    // {
-    //     $expectedSignaturesResult = [
-    //         new SignatureInformation('test(\Closure $a)', null, [
-    //             new ParameterInformation('\Closure $a', null)
-    //         ])
-    //     ];
-    //
-    //     $fileName = 'FunctionCallClosureArgumentBody.phpt';
-    //
-    //     static::assertSignatureHelpSignaturesEquals($fileName, 80, 94, $expectedSignaturesResult);
-    //
-    //     $hadException = false;
-    //
-    //     try {
-    //         static::assertSignatureHelpSignaturesEquals($fileName, 95, 95, $expectedSignaturesResult);
-    //     } catch (UnexpectedValueException $e) {
-    //         $hadException = true;
-    //     }
-    //
-    //     static::assertTrue($hadException, 'Signature help should not trigger inside the body of closure arguments');
-    //
-    //     $hadException = false;
-    //
-    //     try {
-    //         static::assertSignatureHelpSignaturesEquals($fileName, 101, 101, $expectedSignaturesResult);
-    //     } catch (UnexpectedValueException $e) {
-    //         $hadException = true;
-    //     }
-    //
-    //     static::assertTrue($hadException, 'Signature help should not trigger inside the body of closure arguments');
-    //
-    //     static::assertSignatureHelpSignaturesEquals($fileName, 102, 102, $expectedSignaturesResult);
-    // }
+    /**
+     * @return void
+     */
+    public function testFunctionCallDoesNotWorkWhenInsideClosureArgumentBody(): void
+    {
+        $expectedSignaturesResult = [
+            new SignatureInformation('test(\Closure $a)', null, [
+                new ParameterInformation('\Closure $a', null)
+            ])
+        ];
+
+        $fileName = 'FunctionCallClosureArgumentBody.phpt';
+
+        static::assertSignatureHelpSignaturesEquals($fileName, 80, 104, $expectedSignaturesResult);
+
+        for ($i = 105; $i <= 118; ++$i) {
+            $hadException = false;
+
+            try {
+                static::assertSignatureHelpSignaturesEquals($fileName, $i, $i, $expectedSignaturesResult);
+            } catch (UnexpectedValueException $e) {
+                $hadException = true;
+            }
+
+            static::assertTrue($hadException, 'Signature help should not trigger inside the body of closure arguments');
+        }
+
+        static::assertSignatureHelpSignaturesEquals($fileName, 119, 119, $expectedSignaturesResult);
+    }
 
     /**
      * @return void

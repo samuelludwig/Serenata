@@ -11,6 +11,8 @@ services:
                 - endLine
                 - startFilePos
                 - endFilePos
+                - startTokenPos
+                - endTokenPos
 
     parser.phpParserFactory:
         class: PhpParser\ParserFactory
@@ -28,6 +30,7 @@ services:
         class: Serenata\Parsing\MetadataAttachingParser
         arguments:
             - '@parser.phpParser'
+            - '@lexer'
 
     parser.cachingParser:
         class: Serenata\Parsing\CachingParser

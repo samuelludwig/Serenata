@@ -2,6 +2,8 @@
 
 namespace Serenata\Parsing;
 
+use PhpParser\Lexer;
+
 use Serenata\Analysis\Visiting\ParentAttachingVisitor;
 use Serenata\Analysis\Visiting\NamespaceAttachingVisitor;
 
@@ -10,6 +12,8 @@ use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
 use PhpParser\NodeVisitor\NameResolver;
+
+use Serenata\Analysis\Visiting\FunctionLikeBodyOffsetAttachingVisitor;
 
 /**
  * Parser that delegates parsing to another parser and attaches metadata to the nodes.
@@ -22,11 +26,18 @@ final class MetadataAttachingParser implements Parser
     private $delegate;
 
     /**
-     * @param Parser $delegate
+     * @var Lexer
      */
-    public function __construct(Parser $delegate)
+    private $lexer;
+
+    /**
+     * @param Parser $delegate
+     * @param Lexer  $lexer
+     */
+    public function __construct(Parser $delegate, Lexer $lexer)
     {
         $this->delegate = $delegate;
+        $this->lexer = $lexer;
     }
 
     /**
@@ -48,6 +59,7 @@ final class MetadataAttachingParser implements Parser
 
         $traverser->addVisitor(new NamespaceAttachingVisitor());
         $traverser->addVisitor(new ParentAttachingVisitor());
+        $traverser->addVisitor(new FunctionLikeBodyOffsetAttachingVisitor($this->lexer->getTokens()));
 
         $traverser->traverse($nodes);
 

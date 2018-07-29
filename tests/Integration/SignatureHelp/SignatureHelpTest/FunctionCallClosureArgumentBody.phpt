@@ -7,7 +7,7 @@ namespace A;
  */
 function test($a)
 {
-    test(function ($a) {
+    test(function ($a) /* {}{ */ {
 
-    });
+    /* } */});
 }

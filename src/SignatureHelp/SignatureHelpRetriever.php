@@ -147,30 +147,45 @@ class SignatureHelpRetriever
         }
 
         $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Arg::class);
+        $closureNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Expr\Closure::class);
 
-        if ($argumentNode && $argumentNode->getAttribute('parent') !== $invocationNode) {
-            // Usually the invocationNode will be the parent, but in case we're on the name of a nested function call,
-            // we may have received the wrong node instead. We also can't fetch the argument beforehand, as we may be
-            // at a location in between arguments where $argumentNode will be null (as its range only spans the actual
-            // argument, without whitespace and optional comma).
-            $nodeNameEndFilePosition = null;
+        if ($argumentNode) {
+            if ($argumentNode->getAttribute('parent') !== $invocationNode) {
+                // Usually the invocationNode will be the parent, but in case we're on the name of a nested function
+                // call, we may have received the wrong node instead. We also can't fetch the argument beforehand, as
+                // we may be at a location in between arguments where $argumentNode will be null (as its range only
+                // spans the actual argument, without whitespace and optional comma).
+                //
+                // For example: foo(ba|r('blah')) where "|" is where the requested position is at.
+                $nodeNameEndFilePosition = null;
 
-            if ($invocationNode instanceof Node\Expr\FuncCall) {
-                $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
-            } elseif ($invocationNode instanceof Node\Expr\New_) {
-                $nodeNameEndFilePosition = $invocationNode->class->getAttribute('endFilePos') + 1;
-            } elseif ($invocationNode instanceof Node\Expr\MethodCall ||
-                $invocationNode instanceof Node\Expr\StaticCall
-            ) {
-                $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
-            } else {
-                throw new LogicException(
-                    'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
-                );
-            }
+                if ($invocationNode instanceof Node\Expr\FuncCall) {
+                    $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
+                } elseif ($invocationNode instanceof Node\Expr\New_) {
+                    $nodeNameEndFilePosition = $invocationNode->class->getAttribute('endFilePos') + 1;
+                } elseif ($invocationNode instanceof Node\Expr\MethodCall ||
+                    $invocationNode instanceof Node\Expr\StaticCall
+                ) {
+                    $nodeNameEndFilePosition = $invocationNode->name->getAttribute('endFilePos') + 1;
+                } else {
+                    throw new LogicException(
+                        'Unexpected invocation node type "' . get_class($invocationNode) . '" encountered'
+                    );
+                }
 
-            if ($position <= $nodeNameEndFilePosition) {
-                $invocationNode = $argumentNode->getAttribute('parent');
+                if ($position <= $nodeNameEndFilePosition) {
+                    $invocationNode = $argumentNode->getAttribute('parent');
+                }
+            } elseif ($closureNode) {
+                // When a closure is used as an argument to a call, we may still show signature help for the call, but
+                // not inside the closure's body, as a new scope begins there.
+                if ($position > $closureNode->getAttribute('bodyStartFilePos') &&
+                    $position <= $closureNode->getAttribute('bodyEndFilePos')
+                ) {
+                    throw new UnexpectedValueException(
+                        'No node supporting signature help found inside closure at location ' . $position
+                    );
+                }
             }
         }
 

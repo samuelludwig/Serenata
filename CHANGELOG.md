@@ -15,6 +15,7 @@
 
 ### Bugs Fixed
 * [Spaces are stripped in markdown code blocks inside tooltips](https://gitlab.com/Serenata/Serenata/issues/194)
+* [Signature help shows for outer function call when entering closure](https://gitlab.com/Serenata/Serenata/issues/150)
 * [Pass back `textEdit` in superglobal autocompletion suggestions to inform clients how to replace existing text](https://gitlab.com/Serenata/Serenata/issues/214)
 * [Fix internal indexing exception in rare circumstances when docblock contains invalid HTML](https://gitlab.com/Serenata/Serenata/issues/191)
 * [Fix linter complaining about mismatching docblock and parameter types when ordering differs](https://gitlab.com/Serenata/Serenata/issues/137)
