@@ -18,6 +18,8 @@ class StaticMethodAutocompletionApplicabilityCheckerTest extends AbstractAutocom
     public function getFileNamesWhereShouldApply(): array
     {
         return [
+            'PropertyFetch.phpt',
+            'MethodCall.phpt',
             'StaticMethodCall.phpt',
             'StaticMethodCallSelf.phpt',
             'StaticMethodCallParent.phpt',

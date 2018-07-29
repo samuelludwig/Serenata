@@ -49,6 +49,8 @@ final class StaticPropertyAutocompletionApplicabilityChecker implements Autocomp
         }
 
         return
+            $node instanceof Node\Expr\MethodCall ||
+            $node instanceof Node\Expr\PropertyFetch ||
             $node instanceof Node\Expr\StaticCall ||
             $node instanceof Node\Expr\StaticPropertyFetch ||
             $node instanceof Node\Expr\ClassConstFetch;

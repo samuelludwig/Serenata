@@ -58,6 +58,9 @@ final class StaticMethodAutocompletionApplicabilityChecker implements Autocomple
             return true;
         }
 
-        return $node instanceof Node\Expr\ClassConstFetch;
+        return
+            $node instanceof Node\Expr\MethodCall ||
+            $node instanceof Node\Expr\PropertyFetch ||
+            $node instanceof Node\Expr\ClassConstFetch;
     }
 }
