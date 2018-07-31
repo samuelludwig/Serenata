@@ -59,10 +59,8 @@ code-quality:code-coverage:
         - apk add --no-cache gcc
         - apk add --no-cache g++
         - apk add --no-cache make
-        - pecl install xdebug
-        - docker-php-ext-enable xdebug
     script:
-        - php -d memory_limit=1024M vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
+        - phpdbg -d memory_limit=2048M -qrr vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
     artifacts:
         expire_in: 1 weeks
         paths:
