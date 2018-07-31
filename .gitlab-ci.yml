@@ -54,11 +54,6 @@ test:php-7.2:
 code-quality:code-coverage:
     image: php:7.1-alpine
     stage: code-quality
-    before_script:
-        - apk add --no-cache autoconf
-        - apk add --no-cache gcc
-        - apk add --no-cache g++
-        - apk add --no-cache make
     script:
         - phpdbg -d memory_limit=2048M -qrr vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
     artifacts:
