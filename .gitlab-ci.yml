@@ -52,7 +52,7 @@ test:php-7.2:
 
 # ----- Code quality analysis stage
 code-quality:code-coverage:
-    image: php:7.2-alpine
+    image: php:7.2-cli-alpine
     stage: code-quality
     script:
         - phpdbg -d memory_limit=2048M -qrr vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
