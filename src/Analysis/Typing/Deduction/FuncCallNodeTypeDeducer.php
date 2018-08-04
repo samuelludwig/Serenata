@@ -73,6 +73,7 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $fqsen = $this->functionNameNodeFqsenDeterminer->determine($node->name);
 
+        /** @var Structures\Function_|null $globalFunction */
         $globalFunction = $this->managerRegistry->getRepository(Structures\Function_::class)->findOneBy([
             'fqcn' => $fqsen
         ]);
