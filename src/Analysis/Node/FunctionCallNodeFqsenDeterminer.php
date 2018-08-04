@@ -20,7 +20,7 @@ use Serenata\Utility\NodeHelpers;
 /**
  * Determines the FQSEN of a function call node.
  */
-class FunctionCallNodeFqsenDeterminer
+final class FunctionCallNodeFqsenDeterminer
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface
