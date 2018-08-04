@@ -173,7 +173,7 @@ class TooltipProvider
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->getTooltipForFuncCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
-            return $this->getTooltipForConstFetchNode($node);
+            return $this->getTooltipForConstFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Stmt\UseUse) {
             return $this->getTooltipForUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Name) {
@@ -322,14 +322,21 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\ConstFetch $node
+     * @param Structures\File      $file
+     * @param string               $code
+     * @param int                  $offset
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    private function getTooltipForConstFetchNode(Node\Expr\ConstFetch $node): string
-    {
-        return $this->constFetchNodeTooltipGenerator->generate($node);
+    private function getTooltipForConstFetchNode(
+        Node\Expr\ConstFetch $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): string {
+        return $this->constFetchNodeTooltipGenerator->generate($node, $file, $code, $offset);
     }
 
     /**

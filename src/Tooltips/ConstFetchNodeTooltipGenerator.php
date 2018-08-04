@@ -6,9 +6,15 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\ConstantListProviderInterface;
 
-use Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
 
 use PhpParser\Node;
+
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides tooltips for {@see Node\Expr\ConstFetch} nodes.
@@ -21,7 +27,7 @@ class ConstFetchNodeTooltipGenerator
     private $constantTooltipGenerator;
 
     /**
-     * @var ConstNameNodeFqsenDeterminer
+     * @var ConstFetchNodeFqsenDeterminer
      */
     private $constFetchNodeFqsenDeterminer;
 
@@ -32,12 +38,12 @@ class ConstFetchNodeTooltipGenerator
 
     /**
      * @param ConstantTooltipGenerator      $constantTooltipGenerator
-     * @param ConstNameNodeFqsenDeterminer  $constFetchNodeFqsenDeterminer
+     * @param ConstFetchNodeFqsenDeterminer  $constFetchNodeFqsenDeterminer
      * @param ConstantListProviderInterface $constantListProvider
      */
     public function __construct(
         ConstantTooltipGenerator $constantTooltipGenerator,
-        ConstNameNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
+        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
         ConstantListProviderInterface $constantListProvider
     ) {
         $this->constantTooltipGenerator = $constantTooltipGenerator;
@@ -52,9 +58,17 @@ class ConstFetchNodeTooltipGenerator
      *
      * @return string
      */
-    public function generate(Node\Expr\ConstFetch $node): string
-    {
-        $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node->name);
+    public function generate(
+        Node\Expr\ConstFetch $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): string {
+        $fqsen = $this->constFetchNodeFqsenDeterminer->determine(
+            $node,
+            $file,
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+        );
 
         $info = $this->getConstantInfo($fqsen);
 

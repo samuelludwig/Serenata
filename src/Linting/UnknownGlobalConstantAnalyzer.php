@@ -2,11 +2,17 @@
 
 namespace Serenata\Linting;
 
-use Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
 
 use Serenata\Analysis\Visiting\GlobalConstantUsageFetchingVisitor;
 
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
 use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Looks for unknown global constant names.
@@ -19,16 +25,41 @@ final class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
     private $constantPresenceIndicator;
 
     /**
+     * @var ConstFetchNodeFqsenDeterminer
+     */
+    private $constFetchNodeFqsenDeterminer;
+
+    /**
+     * @var Structures\File
+     */
+    private $file;
+
+    /**
+     * @var string
+     */
+    private $code;
+
+    /**
      * @var GlobalConstantUsageFetchingVisitor
      */
     private $globalConstantUsageFetchingVisitor;
 
     /**
      * @param ConstantPresenceIndicatorInterface $constantPresenceIndicator
+     * @param ConstFetchNodeFqsenDeterminer      $constFetchNodeFqsenDeterminer
+     * @param Structures\File                    $file
+     * @param string                             $code
      */
-    public function __construct(ConstantPresenceIndicatorInterface $constantPresenceIndicator)
-    {
+    public function __construct(
+        ConstantPresenceIndicatorInterface $constantPresenceIndicator,
+        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
+        Structures\File $file,
+        string $code
+    ) {
         $this->constantPresenceIndicator = $constantPresenceIndicator;
+        $this->constFetchNodeFqsenDeterminer = $constFetchNodeFqsenDeterminer;
+        $this->file = $file;
+        $this->code = $code;
 
         $this->globalConstantUsageFetchingVisitor = new GlobalConstantUsageFetchingVisitor();
     }
@@ -52,11 +83,16 @@ final class UnknownGlobalConstantAnalyzer implements AnalyzerInterface
 
         $unknownGlobalConstants = [];
 
-        // TODO: Inject this.
-        $determiner = new ConstNameNodeFqsenDeterminer($this->constantPresenceIndicator);
-
         foreach ($globalConstants as $node) {
-            $fqsen = $determiner->determine($node->name);
+            $fqsen = $this->constFetchNodeFqsenDeterminer->determine(
+                $node,
+                $this->file,
+                Position::createFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
+                )
+            );
 
             if ($this->constantPresenceIndicator->isPresent($fqsen)) {
                 continue;

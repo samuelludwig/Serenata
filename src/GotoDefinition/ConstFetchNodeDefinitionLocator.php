@@ -6,9 +6,15 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\ConstantListProviderInterface;
 
-use Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
 
 use PhpParser\Node;
+
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Locates the definition of the constant called in {@see Node\Expr\ConstFetch} nodes.
@@ -16,7 +22,7 @@ use PhpParser\Node;
 class ConstFetchNodeDefinitionLocator
 {
     /**
-     * @var ConstNameNodeFqsenDeterminer
+     * @var ConstFetchNodeFqsenDeterminer
      */
     private $constFetchNodeFqsenDeterminer;
 
@@ -26,11 +32,11 @@ class ConstFetchNodeDefinitionLocator
     private $constantListProvider;
 
     /**
-     * @param ConstNameNodeFqsenDeterminer  $constFetchNodeFqsenDeterminer
+     * @param ConstFetchNodeFqsenDeterminer  $constFetchNodeFqsenDeterminer
      * @param ConstantListProviderInterface $constantListProvider
      */
     public function __construct(
-        ConstNameNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
+        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer,
         ConstantListProviderInterface $constantListProvider
     ) {
         $this->constFetchNodeFqsenDeterminer = $constFetchNodeFqsenDeterminer;
@@ -39,14 +45,25 @@ class ConstFetchNodeDefinitionLocator
 
     /**
      * @param Node\Expr\ConstFetch $node
+     * @param Structures\File      $file
+     * @param string               $code
+     * @param int                  $offset
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
      * @return GotoDefinitionResult
      */
-    public function generate(Node\Expr\ConstFetch $node): GotoDefinitionResult
-    {
-        $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node->name);
+    public function generate(
+        Node\Expr\ConstFetch $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
+        $fqsen = $this->constFetchNodeFqsenDeterminer->determine(
+            $node,
+            $file,
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+        );
 
         $info = $this->getConstantInfo($fqsen);
 

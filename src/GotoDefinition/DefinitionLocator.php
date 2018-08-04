@@ -158,7 +158,7 @@ class DefinitionLocator
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->locateDefinitionOfFuncCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
-            return $this->locateDefinitionOfConstFetchNode($node);
+            return $this->locateDefinitionOfConstFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Stmt\UseUse) {
             return $this->locateDefinitionOfUseUseNode($node, $file, $node->getAttribute('startLine'));
         } elseif ($node instanceof Node\Name) {
@@ -308,9 +308,13 @@ class DefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    private function locateDefinitionOfConstFetchNode(Node\Expr\ConstFetch $node): GotoDefinitionResult
-    {
-        return $this->constFetchNodeDefinitionLocator->generate($node);
+    private function locateDefinitionOfConstFetchNode(
+        Node\Expr\ConstFetch $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
+        return $this->constFetchNodeDefinitionLocator->generate($node, $file, $code, $offset);
     }
 
     /**

@@ -2,6 +2,12 @@
 
 namespace Serenata\Linting;
 
+use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
+
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
 use Serenata\NameQualificationUtilities\ConstantPresenceIndicatorInterface;
 
 /**
@@ -12,23 +18,38 @@ class UnknownGlobalConstantAnalyzerFactory
     /**
      * @var ConstantPresenceIndicatorInterface
      */
-    private $constantPresenceIndicatorInterface;
+    private $constantPresenceIndicator;
 
     /**
-     * @param ConstantPresenceIndicatorInterface $constantPresenceIndicatorInterface
+     * @var ConstFetchNodeFqsenDeterminer
      */
-    public function __construct(ConstantPresenceIndicatorInterface $constantPresenceIndicatorInterface)
-    {
-        $this->constantPresenceIndicatorInterface = $constantPresenceIndicatorInterface;
+    private $constFetchNodeFqsenDeterminer;
+
+    /**
+     * @param ConstantPresenceIndicatorInterface $constantPresenceIndicator
+     * @param ConstFetchNodeFqsenDeterminer      $constFetchNodeFqsenDeterminer
+     */
+    public function __construct(
+        ConstantPresenceIndicatorInterface $constantPresenceIndicator,
+        ConstFetchNodeFqsenDeterminer $constFetchNodeFqsenDeterminer
+    ) {
+        $this->constantPresenceIndicator = $constantPresenceIndicator;
+        $this->constFetchNodeFqsenDeterminer = $constFetchNodeFqsenDeterminer;
     }
 
     /**
+     * @param Structures\File $file
+     * @param string          $code
+     *
      * @return UnknownGlobalConstantAnalyzer
      */
-    public function create(): UnknownGlobalConstantAnalyzer
+    public function create(Structures\File $file, string $code): UnknownGlobalConstantAnalyzer
     {
         return new UnknownGlobalConstantAnalyzer(
-            $this->constantPresenceIndicatorInterface
+            $this->constantPresenceIndicator,
+            $this->constFetchNodeFqsenDeterminer,
+            $file,
+            $code
         );
     }
 }

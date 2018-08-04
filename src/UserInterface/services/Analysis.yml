@@ -272,9 +272,9 @@ services:
             - '@structureAwareNameResolverFactory'
 
     constFetchNodeFqsenDeterminer:
-        class: Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer
+        class: Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer
         arguments:
-            - '@globalConstantExistenceChecker'
+            - '@structureAwareNameResolverFactory'
 
     nameNodeFqsenDeterminer:
         class: Serenata\Analysis\Node\NameNodeFqsenDeterminer

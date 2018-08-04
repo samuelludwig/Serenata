@@ -22,6 +22,7 @@ services:
         class: Serenata\Linting\UnknownGlobalConstantAnalyzerFactory
         arguments:
             - '@globalConstantExistenceChecker'
+            - '@constFetchNodeFqsenDeterminer'
 
     unknownGlobalFunctionAnalyzerFactory:
         class: Serenata\Linting\UnknownGlobalFunctionAnalyzerFactory

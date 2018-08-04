@@ -192,7 +192,7 @@ class Linter
         }
 
         if ($settings->getLintUnknownGlobalConstants()) {
-            $analyzers[] = $this->unknownGlobalConstantAnalyzerFactory->create();
+            $analyzers[] = $this->unknownGlobalConstantAnalyzerFactory->create($file, $code);
         }
 
         if ($settings->getLintUnknownGlobalFunctions()) {
