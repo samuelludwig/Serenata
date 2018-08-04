@@ -6,9 +6,15 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\FunctionListProviderInterface;
 
-use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
 
 use PhpParser\Node;
+
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Locates the definition of the function called in {@see Node\Expr\FuncCall} nodes.
@@ -16,7 +22,7 @@ use PhpParser\Node;
 class FuncCallNodeDefinitionLocator
 {
     /**
-     * @var FunctionNameNodeFqsenDeterminer
+     * @var FunctionCallNodeFqsenDeterminer
      */
     private $functionCallNodeFqsenDeterminer;
 
@@ -26,11 +32,11 @@ class FuncCallNodeDefinitionLocator
     private $functionListProvider;
 
     /**
-     * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+     * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      * @param FunctionListProviderInterface   $functionListProvider
      */
     public function __construct(
-        FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
         FunctionListProviderInterface $functionListProvider
     ) {
         $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
@@ -39,19 +45,30 @@ class FuncCallNodeDefinitionLocator
 
     /**
      * @param Node\Expr\FuncCall $node
+     * @param Structures\File    $file
+     * @param string             $code
+     * @param int                $offset
      *
      * @throws UnexpectedValueException when the function was not found.
      * @throws UnexpectedValueException when a dynamic function call is passed.
      *
      * @return GotoDefinitionResult
      */
-    public function locate(Node\Expr\FuncCall $node): GotoDefinitionResult
-    {
+    public function locate(
+        Node\Expr\FuncCall $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
         if (!$node->name instanceof Node\Name) {
             throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
         }
 
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node->name);
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
+            $offset,
+            $code,
+            PositionEncoding::VALUE
+        ));
 
         $info = $this->getFunctionInfo($fqsen);
 

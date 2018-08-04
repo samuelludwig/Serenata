@@ -2,11 +2,17 @@
 
 namespace Serenata\Linting;
 
-use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
 
 use Serenata\Analysis\Visiting\GlobalFunctionUsageFetchingVisitor;
 
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
 use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Looks for unknown global function names (i.e. used during calls).
@@ -14,21 +20,46 @@ use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 final class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
 {
     /**
-     * @var GlobalFunctionUsageFetchingVisitor
-     */
-    private $globalFunctionUsageFetchingVisitor;
-
-    /**
      * @var FunctionPresenceIndicatorInterface
      */
     private $functionPresenceIndicator;
 
     /**
-     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicator
+     * @var FunctionCallNodeFqsenDeterminer
      */
-    public function __construct(FunctionPresenceIndicatorInterface $functionPresenceIndicator)
-    {
+    private $functionCallNodeFqsenDeterminer;
+
+    /**
+     * @var Structures\File
+     */
+    private $file;
+
+    /**
+     * @var string
+     */
+    private $code;
+
+    /**
+     * @var GlobalFunctionUsageFetchingVisitor
+     */
+    private $globalFunctionUsageFetchingVisitor;
+
+    /**
+     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicator
+     * @param FunctionCallNodeFqsenDeterminer    $functionCallNodeFqsenDeterminer
+     * @param Structures\File                    $file
+     * @param string                             $code
+     */
+    public function __construct(
+        FunctionPresenceIndicatorInterface $functionPresenceIndicator,
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        Structures\File $file,
+        string $code
+    ) {
         $this->functionPresenceIndicator = $functionPresenceIndicator;
+        $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
+        $this->file = $file;
+        $this->code = $code;
 
         $this->globalFunctionUsageFetchingVisitor = new GlobalFunctionUsageFetchingVisitor();
     }
@@ -52,11 +83,16 @@ final class UnknownGlobalFunctionAnalyzer implements AnalyzerInterface
 
         $unknownGlobalFunctions = [];
 
-        // TODO: Inject this.
-        $determiner = new FunctionNameNodeFqsenDeterminer($this->functionPresenceIndicator);
-
         foreach ($globalFunctions as $node) {
-            $fqsen = $determiner->determine($node->name);
+            $fqsen = $this->functionCallNodeFqsenDeterminer->determine(
+                $node,
+                $this->file,
+                Position::createFromByteOffset(
+                    $node->getAttribute('startFilePos'),
+                    $this->code,
+                    PositionEncoding::VALUE
+                )
+            );
 
             if ($this->functionPresenceIndicator->isPresent($fqsen)) {
                 continue;

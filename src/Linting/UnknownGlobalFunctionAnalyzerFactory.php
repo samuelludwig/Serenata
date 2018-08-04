@@ -2,6 +2,10 @@
 
 namespace Serenata\Linting;
 
+use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
+
+use Serenata\Indexing\Structures;
+
 use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 
 /**
@@ -12,23 +16,35 @@ class UnknownGlobalFunctionAnalyzerFactory
     /**
      * @var FunctionPresenceIndicatorInterface
      */
-    private $functionPresenceIndicatorInterface;
+    private $functionPresenceIndicator;
 
     /**
-     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicatorInterface
+     * @var FunctionCallNodeFqsenDeterminer
      */
-    public function __construct(FunctionPresenceIndicatorInterface $functionPresenceIndicatorInterface)
-    {
-        $this->functionPresenceIndicatorInterface = $functionPresenceIndicatorInterface;
+    private $functionCallNodeFqsenDeterminer;
+
+    /**
+     * @param FunctionPresenceIndicatorInterface $functionPresenceIndicator
+     * @param FunctionCallNodeFqsenDeterminer    $functionCallNodeFqsenDeterminer
+     */
+    public function __construct(
+        FunctionPresenceIndicatorInterface $functionPresenceIndicator,
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+    ) {
+        $this->functionPresenceIndicator = $functionPresenceIndicator;
+        $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
     }
 
     /**
      * @return UnknownGlobalFunctionAnalyzer
      */
-    public function create(): UnknownGlobalFunctionAnalyzer
+    public function create(Structures\File $file, string $code): UnknownGlobalFunctionAnalyzer
     {
         return new UnknownGlobalFunctionAnalyzer(
-            $this->functionPresenceIndicatorInterface
+            $this->functionPresenceIndicator,
+            $this->functionCallNodeFqsenDeterminer,
+            $file,
+            $code
         );
     }
 }

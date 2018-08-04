@@ -6,12 +6,16 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\Conversion\FunctionConverter;
 
-use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
+
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\ManagerRegistry;
 
 use PhpParser\Node;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\FuncCall} node.
@@ -29,23 +33,23 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $functionConverter;
 
     /**
-     * @var FunctionNameNodeFqsenDeterminer
+     * @var FunctionCallNodeFqsenDeterminer
      */
-    private $functionNameNodeFqsenDeterminer;
+    private $functionCallNodeFqsenDeterminer;
 
     /**
-     * @param ManagerRegistry                   $managerRegistry
+     * @param ManagerRegistry                 $managerRegistry
      * @param FunctionConverter               $functionConverter
-     * @param FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
+     * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      */
     public function __construct(
         ManagerRegistry $managerRegistry,
         FunctionConverter $functionConverter,
-        FunctionNameNodeFqsenDeterminer $functionNameNodeFqsenDeterminer
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->functionConverter = $functionConverter;
-        $this->functionNameNodeFqsenDeterminer = $functionNameNodeFqsenDeterminer;
+        $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
     }
 
     /**
@@ -57,21 +61,32 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
             throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
         }
 
-        return $this->deduceTypesFromFuncCallNode($node);
+        return $this->deduceTypesFromFuncCallNode($node, $file, $code, $offset);
     }
 
     /**
      * @param Node\Expr\FuncCall $node
+     * @param Structures\File    $file
+     * @param string             $code
+     * @param int                $offset
      *
-     * @return string[]
+     * @return array
      */
-    private function deduceTypesFromFuncCallNode(Node\Expr\FuncCall $node): array
-    {
+    private function deduceTypesFromFuncCallNode(
+        Node\Expr\FuncCall $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): array {
         if ($node->name instanceof Node\Expr) {
             return []; // Can't currently deduce type of an expression such as "{$foo}()";
         }
 
-        $fqsen = $this->functionNameNodeFqsenDeterminer->determine($node->name);
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
+            $offset,
+            $code,
+            PositionEncoding::VALUE
+        ));
 
         /** @var Structures\Function_|null $globalFunction */
         $globalFunction = $this->managerRegistry->getRepository(Structures\Function_::class)->findOneBy([

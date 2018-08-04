@@ -30,7 +30,7 @@ services:
         class: Serenata\Tooltips\FuncCallNodeTooltipGenerator
         arguments:
             - '@functionTooltipGenerator'
-            - '@functionNameNodeFqsenDeterminer'
+            - '@functionCallNodeFqsenDeterminer'
             - '@functionListProvider'
 
     methodCallNodeTooltipGenerator:

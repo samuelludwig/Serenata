@@ -8,6 +8,8 @@ use Serenata\Analysis\Node\FunctionFunctionInfoRetriever;
 
 use PhpParser\Node;
 
+use Serenata\Indexing\Structures;
+
 /**
  * Provides tooltips for {@see Node\Stmt\Function_} nodes.
  */
@@ -21,18 +23,18 @@ class FunctionNodeTooltipGenerator
     /**
      * @var FunctionFunctionInfoRetriever
      */
-    private $functionCallFunctionInfoRetriever;
+    private $functionFunctionInfoRetriever;
 
     /**
      * @param FunctionTooltipGenerator      $functionTooltipGenerator
-     * @param FunctionFunctionInfoRetriever $functionCallFunctionInfoRetriever
+     * @param FunctionFunctionInfoRetriever $functionFunctionInfoRetriever
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
-        FunctionFunctionInfoRetriever $functionCallFunctionInfoRetriever
+        FunctionFunctionInfoRetriever $functionFunctionInfoRetriever
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
-        $this->functionCallFunctionInfoRetriever = $functionCallFunctionInfoRetriever;
+        $this->functionFunctionInfoRetriever = $functionFunctionInfoRetriever;
     }
 
     /**
@@ -42,9 +44,13 @@ class FunctionNodeTooltipGenerator
      *
      * @return string
      */
-    public function generate(Node\Stmt\Function_ $node): string
-    {
-        $info = $this->functionCallFunctionInfoRetriever->retrieve($node);
+    public function generate(
+        Node\Stmt\Function_ $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): string {
+        $info = $this->functionFunctionInfoRetriever->retrieve($node, $file, $code, $offset);
 
         return $this->functionTooltipGenerator->generate($info);
     }

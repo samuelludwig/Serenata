@@ -951,6 +951,16 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesQualifiedFunctionCallRelativeToImport(): void
+    {
+        $output = $this->deduceTypesFromExpression('QualifiedFunctionCallRelativeToImport.phpt', '$test');
+
+        static::assertSame(['string'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyProcessesStaticMethodCallAssignedToVariableWithFqcnWithLeadingSlash(): void
     {
         $result = $this->deduceTypesFromExpression(

@@ -6,9 +6,15 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\FunctionListProviderInterface;
 
-use Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer;
+use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
 
 use PhpParser\Node;
+
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides tooltips for {@see Node\Expr\FuncCall} nodes.
@@ -21,7 +27,7 @@ class FuncCallNodeTooltipGenerator
     private $functionTooltipGenerator;
 
     /**
-     * @var FunctionNameNodeFqsenDeterminer
+     * @var FunctionCallNodeFqsenDeterminer
      */
     private $functionCallNodeFqsenDeterminer;
 
@@ -32,12 +38,12 @@ class FuncCallNodeTooltipGenerator
 
     /**
      * @param FunctionTooltipGenerator        $functionTooltipGenerator
-     * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+     * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      * @param FunctionListProviderInterface   $functionListProvider
      */
     public function __construct(
         FunctionTooltipGenerator $functionTooltipGenerator,
-        FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
         FunctionListProviderInterface $functionListProvider
     ) {
         $this->functionTooltipGenerator = $functionTooltipGenerator;
@@ -45,21 +51,28 @@ class FuncCallNodeTooltipGenerator
         $this->functionListProvider = $functionListProvider;
     }
 
-    /**
-     * @param Node\Expr\FuncCall $node
-     *
-     * @throws UnexpectedValueException when the function was not found.
-     * @throws UnexpectedValueException when a dynamic function call is passed.
-     *
-     * @return string
-     */
-    public function generate(Node\Expr\FuncCall $node): string
+     /**
+      * @param Node\Expr\FuncCall $node
+      * @param Structures\File      $file
+      * @param string               $code
+      * @param int                  $offset
+      *
+      * @throws UnexpectedValueException when the function was not found.
+      * @throws UnexpectedValueException when a dynamic function call is passed.
+      *
+      * @return string
+      */
+    public function generate(Node\Expr\FuncCall $node, Structures\File $file, string $code, int $offset): string
     {
         if (!$node->name instanceof Node\Name) {
             throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
         }
 
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node->name);
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
+            $offset,
+            $code,
+            PositionEncoding::VALUE
+        ));
 
         $info = $this->getFunctionInfo($fqsen);
 

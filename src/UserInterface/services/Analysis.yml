@@ -266,10 +266,10 @@ services:
     nodeAtOffsetLocator:
         alias: nodeAtOffsetLocator.cachingDecorator
 
-    functionNameNodeFqsenDeterminer:
-        class: Serenata\Analysis\Node\FunctionNameNodeFqsenDeterminer
+    functionCallNodeFqsenDeterminer:
+        class: Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer
         arguments:
-            - '@globalFunctionExistenceChecker'
+            - '@structureAwareNameResolverFactory'
 
     constFetchNodeFqsenDeterminer:
         class: Serenata\Analysis\Node\ConstNameNodeFqsenDeterminer
@@ -290,7 +290,7 @@ services:
     functionFunctionInfoRetriever:
         class: Serenata\Analysis\Node\FunctionFunctionInfoRetriever
         arguments:
-            - '@functionNameNodeFqsenDeterminer'
+            - '@functionCallNodeFqsenDeterminer'
             - '@functionListProvider'
 
     methodCallMethodInfoRetriever:

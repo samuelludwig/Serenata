@@ -156,7 +156,7 @@ class DefinitionLocator
         string $code
     ): GotoDefinitionResult {
         if ($node instanceof Node\Expr\FuncCall) {
-            return $this->locateDefinitionOfFuncCallNode($node);
+            return $this->locateDefinitionOfFuncCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->locateDefinitionOfConstFetchNode($node);
         } elseif ($node instanceof Node\Stmt\UseUse) {
@@ -208,14 +208,21 @@ class DefinitionLocator
 
     /**
      * @param Node\Expr\FuncCall $node
+     * @param Structures\File    $file
+     * @param string             $code
+     * @param int                $offset
      *
      * @throws UnexpectedValueException
      *
      * @return GotoDefinitionResult
      */
-    private function locateDefinitionOfFuncCallNode(Node\Expr\FuncCall $node): GotoDefinitionResult
-    {
-        return $this->funcCallNodeDefinitionLocator->locate($node);
+    private function locateDefinitionOfFuncCallNode(
+        Node\Expr\FuncCall $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): GotoDefinitionResult {
+        return $this->funcCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
     }
 
     /**

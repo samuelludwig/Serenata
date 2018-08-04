@@ -91,7 +91,7 @@ services:
         arguments:
             - '@managerRegistry'
             - '@functionConverter'
-            - '@functionNameNodeFqsenDeterminer'
+            - '@functionCallNodeFqsenDeterminer'
 
     methodCallNodeTypeDeducer.delegate:
         class: Serenata\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer

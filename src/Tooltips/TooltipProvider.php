@@ -171,7 +171,7 @@ class TooltipProvider
     private function getTooltipForNode(Node $node, Structures\File $file, string $code): string
     {
         if ($node instanceof Node\Expr\FuncCall) {
-            return $this->getTooltipForFuncCallNode($node);
+            return $this->getTooltipForFuncCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
         } elseif ($node instanceof Node\Expr\ConstFetch) {
             return $this->getTooltipForConstFetchNode($node);
         } elseif ($node instanceof Node\Stmt\UseUse) {
@@ -186,7 +186,7 @@ class TooltipProvider
             }
 
             if ($parentNode instanceof Node\Stmt\Function_) {
-                return $this->getTooltipForFunctionNode($parentNode);
+                return $this->getTooltipForFunctionNode($parentNode, $file, $code);
             } elseif ($parentNode instanceof Node\Stmt\ClassMethod) {
                 return $this->getTooltipForClassMethodNode($parentNode, $file);
             } elseif ($parentNode instanceof Node\Expr\ClassConstFetch) {
@@ -227,14 +227,21 @@ class TooltipProvider
 
     /**
      * @param Node\Expr\FuncCall $node
+     * @param Structures\File    $file
+     * @param string             $code
+     * @param int                $offset
      *
-     * @throws UnexpectedValueException
+     * @throws unexpectedValueException
      *
      * @return string
      */
-    private function getTooltipForFuncCallNode(Node\Expr\FuncCall $node): string
-    {
-        return $this->funcCallNodeTooltipGenerator->generate($node);
+    private function getTooltipForFuncCallNode(
+        Node\Expr\FuncCall $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): string {
+        return $this->funcCallNodeTooltipGenerator->generate($node, $file, $code, $offset);
     }
 
     /**
@@ -371,14 +378,16 @@ class TooltipProvider
 
     /**
      * @param Node\Stmt\Function_ $node
+     * @param Structures\File     $file
+     * @param string              $source
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    private function getTooltipForFunctionNode(Node\Stmt\Function_ $node): string
+    private function getTooltipForFunctionNode(Node\Stmt\Function_ $node, Structures\File $file, string $source): string
     {
-        return $this->functionNodeTooltipGenerator->generate($node);
+        return $this->functionNodeTooltipGenerator->generate($node, $file, $source, $node->getAttribute('startFilePos'));
     }
 
     /**

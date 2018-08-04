@@ -314,7 +314,7 @@ class SignatureHelpRetriever
 
             return $this->generateResponseFromFunctionInfo($methodInfo, $argumentIndex);
         } elseif ($node instanceof Node\Expr\FuncCall) {
-            $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node);
+            $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node, $file, $code, $offset);
 
             return $this->generateResponseFromFunctionInfo($functionInfo, $argumentIndex);
         }

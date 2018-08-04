@@ -9,13 +9,19 @@ use Serenata\Analysis\FunctionListProviderInterface;
 
 use PhpParser\Node;
 
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+
+use Serenata\Utility\PositionEncoding;
+
 /**
  * Fetches method information from a {@see Node\Expr\FuncCall} or a {@see Node\Stmt\Function_} node.
  */
 class FunctionFunctionInfoRetriever
 {
     /**
-     * @var FunctionNameNodeFqsenDeterminer
+     * @var FunctionCallNodeFqsenDeterminer
      */
     private $functionCallNodeFqsenDeterminer;
 
@@ -25,11 +31,11 @@ class FunctionFunctionInfoRetriever
     private $functionListProvider;
 
     /**
-     * @param FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
+     * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      * @param FunctionListProviderInterface   $functionListProvider
      */
     public function __construct(
-        FunctionNameNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
+        FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer,
         FunctionListProviderInterface $functionListProvider
     ) {
         $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
@@ -38,15 +44,26 @@ class FunctionFunctionInfoRetriever
 
     /**
      * @param Node\Expr\FuncCall|Node\Stmt\Function_ $node
+     * @param Structures\File                        $file
+     * @param string                                 $code
+     * @param int                                    $offset
      *
      * @throws UnexpectedValueException when the function wasn't found.
      *
      * @return array
      */
-    public function retrieve(Node $node): array
-    {
-        if (!$node instanceof Node\Expr\FuncCall && !$node instanceof Node\Stmt\Function_) {
-            throw new LogicException('Expected function node, got ' . get_class($node) . ' instead');
+    public function retrieve(
+        Node $node,
+        Structures\File $file,
+        string $code,
+        int $offset
+    ): array {
+        if ($node instanceof Node\Stmt\Function_) {
+            return $this->getFunctionInfo('\\' . $node->namespacedName->toString());
+        } elseif (!$node instanceof Node\Expr\FuncCall) {
+            throw new LogicException(
+                'Expected function definition node or function call node, got ' . get_class($node) . ' instead'
+            );
         } elseif ($node->name instanceof Node\Expr) {
             throw new UnexpectedValueException(
                 'Determining the info for dynamic function calls is currently not supported'
@@ -56,7 +73,11 @@ class FunctionFunctionInfoRetriever
         $nameNode = new Node\Name\Relative((string) $node->name);
         $nameNode->setAttribute('namespace', $node->getAttribute('namespace'));
 
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($nameNode);
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
+            $offset,
+            $code,
+            PositionEncoding::VALUE
+        ));
 
         return $this->getFunctionInfo($fqsen);
     }

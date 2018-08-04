@@ -17,6 +17,7 @@
 ### Bugs Fixed
 * [Spaces are stripped in markdown code blocks inside tooltips](https://gitlab.com/Serenata/Serenata/issues/194)
 * [Signature help shows for outer function call when entering closure](https://gitlab.com/Serenata/Serenata/issues/150)
+* [Fix qualified function calls not being resolved according to use statements, causing incorrect linting as unknown function call](https://gitlab.com/Serenata/Serenata/issues/151)
 * [Fix error relating to `calculateOffsetByLineCharacter` in rare circumstances](https://gitlab.com/Serenata/Serenata/issues/167)
 * [Fix internal indexing exception in rare circumstances when docblock contains invalid HTML](https://gitlab.com/Serenata/Serenata/issues/191)
 * [Fix linter complaining about mismatching docblock and parameter types when ordering differs](https://gitlab.com/Serenata/Serenata/issues/137)
