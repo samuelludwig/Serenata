@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a function parameter.
  */
@@ -13,21 +15,21 @@ class FunctionParameter extends FunctionLikeParameter
     private $function;
 
     /**
-     * @param Function_   $function
-     * @param string      $name
-     * @param string|null $typeHint
-     * @param TypeInfo[]  $types
-     * @param string|null $description
-     * @param string|null $defaultValue
-     * @param bool        $isReference
-     * @param bool        $isOptional
-     * @param bool        $isVariadic
+     * @param Function_    $function
+     * @param string       $name
+     * @param string|null  $typeHint
+     * @param DocblockType $type
+     * @param string|null  $description
+     * @param string|null  $defaultValue
+     * @param bool         $isReference
+     * @param bool         $isOptional
+     * @param bool         $isVariadic
      */
     public function __construct(
         Function_ $function,
         string $name,
         ?string $typeHint,
-        array $types,
+        DocblockType $type,
         ?string $description,
         ?string $defaultValue,
         bool $isReference,
@@ -38,7 +40,7 @@ class FunctionParameter extends FunctionLikeParameter
         $this->function = $function;
         $this->name = $name;
         $this->typeHint = $typeHint;
-        $this->types = $types;
+        $this->type = $type;
         $this->description = $description;
         $this->defaultValue = $defaultValue;
         $this->isReference = $isReference;

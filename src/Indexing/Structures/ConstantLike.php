@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 use Serenata\Common\Range;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Contains common properties for constant-like structural elements.
  */
@@ -60,9 +62,9 @@ abstract class ConstantLike
     protected $typeDescription;
 
     /**
-     * @var TypeInfo[]
+     * @var DocblockType
      */
-    protected $types;
+    protected $type;
 
     /**
      * @return string
@@ -145,10 +147,10 @@ abstract class ConstantLike
     }
 
     /**
-     * @return TypeInfo[]
+     * @return DocblockType
      */
-    public function getTypes(): array
+    public function getType(): DocblockType
     {
-        return $this->types;
+        return $this->type;
     }
 }

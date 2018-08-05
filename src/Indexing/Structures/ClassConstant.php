@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 use Serenata\Common\Range;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a class constant.
  */
@@ -29,7 +31,7 @@ class ClassConstant extends ConstantLike
      * @param string|null    $shortDescription
      * @param string|null    $longDescription
      * @param string|null    $typeDescription
-     * @param TypeInfo[]     $types
+     * @param DocblockType   $type
      * @param Classlike      $classlike
      * @param AccessModifier $accessModifier
      */
@@ -43,7 +45,7 @@ class ClassConstant extends ConstantLike
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        array $types,
+        DocblockType $type,
         Classlike $classlike,
         AccessModifier $accessModifier
     ) {
@@ -57,7 +59,7 @@ class ClassConstant extends ConstantLike
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
-        $this->types = $types;
+        $this->type = $type;
         $this->classlike = $classlike;
         $this->accessModifier = $accessModifier;
 

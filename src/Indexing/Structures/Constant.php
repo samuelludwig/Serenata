@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 use Serenata\Common\Range;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a (global) constant.
  */
@@ -15,17 +17,17 @@ class Constant extends ConstantLike
     private $fqcn;
 
     /**
-     * @param string      $name
-     * @param string      $fqcn
-     * @param File        $file
-     * @param Range       $range
-     * @param string      $defaultValue
-     * @param bool        $isDeprecated
-     * @param bool        $hasDocblock
-     * @param string|null $shortDescription
-     * @param string|null $longDescription
-     * @param string|null $typeDescription
-     * @param TypeInfo[]  $types
+     * @param string       $name
+     * @param string       $fqcn
+     * @param File         $file
+     * @param Range        $range
+     * @param string       $defaultValue
+     * @param bool         $isDeprecated
+     * @param bool         $hasDocblock
+     * @param string|null  $shortDescription
+     * @param string|null  $longDescription
+     * @param string|null  $typeDescription
+     * @param DocblockType $type
      */
     public function __construct(
         string $name,
@@ -38,7 +40,7 @@ class Constant extends ConstantLike
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        array $types
+        DocblockType $type
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;
@@ -51,7 +53,7 @@ class Constant extends ConstantLike
         $this->shortDescription = $shortDescription;
         $this->longDescription = $longDescription;
         $this->typeDescription = $typeDescription;
-        $this->types = $types;
+        $this->type = $type;
 
         $file->addConstant($this);
     }

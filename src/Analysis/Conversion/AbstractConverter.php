@@ -2,7 +2,9 @@
 
 namespace Serenata\Analysis\Conversion;
 
-use Serenata\Indexing\Structures;
+use Serenata\DocblockTypeParser\DocblockType;
+use Serenata\DocblockTypeParser\CompoundDocblockType;
+use Serenata\DocblockTypeParser\DocblockTypeTransformer;
 
 /**
  * Base class for converters.
@@ -10,21 +12,26 @@ use Serenata\Indexing\Structures;
 abstract class AbstractConverter
 {
     /**
-     * @param Structures\TypeInfo[] $rawTypes
+     * @param DocblockType $type
      *
      * @return array[]
      */
-    protected function convertTypes(array $rawTypes): array
+    protected function convertDocblockType(DocblockType $type): array
     {
         $types = [];
 
-        foreach ($rawTypes as $rawType) {
-            $types[] = [
-                'type'         => $rawType->getType(),
-                'fqcn'         => $rawType->getFqcn(),
-                'resolvedType' => $rawType->getFqcn()
-            ];
-        }
+        $docblockTypeTransformer = new DocblockTypeTransformer();
+        $docblockTypeTransformer->transform($type, function (DocblockType $type) use (&$types) {
+            if (!$type instanceof CompoundDocblockType) {
+                $types[] = [
+                    'type'         => $type->toString(),
+                    'fqcn'         => $type->toString(),
+                    'resolvedType' => $type->toString()
+                ];
+            }
+
+            return $type;
+        });
 
         return $types;
     }

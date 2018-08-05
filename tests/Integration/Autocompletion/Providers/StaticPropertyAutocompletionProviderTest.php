@@ -57,7 +57,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                         'startLineMember' => 8,
                         'endLineMember'   => 8,
                     ],
-                'returnTypes'        => '',
+                'returnTypes'        => 'mixed',
                 'prefix'             => ''
             ], [], true, 'A')
         ];

@@ -22,7 +22,7 @@ class FunctionConverter extends AbstractConverter
             $parameters[] = [
                 'name'         => $parameter->getName(),
                 'typeHint'     => $parameter->getTypeHint(),
-                'types'        => $this->convertTypes($parameter->getTypes()),
+                'types'        => $this->convertDocblockType($parameter->getType()),
                 'description'  => $parameter->getDescription(),
                 'defaultValue' => $parameter->getDefaultValue(),
                 'isReference'  => $parameter->getIsReference(),
@@ -58,7 +58,7 @@ class FunctionConverter extends AbstractConverter
             'returnDescription' => $function->getReturnDescription(),
 
             'returnTypeHint'    => $function->getReturnTypeHint(),
-            'returnTypes'       => $this->convertTypes($function->getReturnTypes())
+            'returnTypes'       => $this->convertDocblockType($function->getReturnType())
         ];
 
         if ($function instanceof Structures\Function_) {

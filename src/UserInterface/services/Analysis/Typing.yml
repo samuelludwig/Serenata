@@ -14,3 +14,12 @@ services:
             - '@classlikeInfoBuilder'
             - '@docblockTypeParser'
             - '@docblockTypeEquivalenceComparator'
+
+    docblockTypeTransformer:
+        class: Serenata\DocblockTypeParser\DocblockTypeTransformer
+
+    typeResolvingDocblockTypeTransformer:
+        class: Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer
+        arguments:
+            - '@docblockTypeTransformer'
+            - '@structureAwareNameResolverFactory'

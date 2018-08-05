@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 use Serenata\Common\Range;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Contains common properties for function-like structural elements.
  */
@@ -70,9 +72,9 @@ abstract class FunctionLike
     protected $parameters;
 
     /**
-     * @var TypeInfo[]
+     * @var DocblockType
      */
-    protected $returnTypes;
+    protected $returnType;
 
     /**
      * @return string
@@ -181,10 +183,10 @@ abstract class FunctionLike
     }
 
     /**
-     * @return TypeInfo[]
+     * @return DocblockType
      */
-    public function getReturnTypes(): array
+    public function getReturnType(): DocblockType
     {
-        return $this->returnTypes;
+        return $this->returnType;
     }
 }

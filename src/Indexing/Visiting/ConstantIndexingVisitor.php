@@ -7,16 +7,16 @@ use PhpParser\NodeVisitorAbstract;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
-
-use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Parsing\DocblockParser;
 
@@ -38,14 +38,14 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     private $docblockParser;
 
     /**
-     * @var StructureAwareNameResolverFactoryInterface
+     * @var DocblockTypeParserInterface
      */
-    private $structureAwareNameResolverFactory;
+    private $docblockTypeParser;
 
     /**
-     * @var TypeAnalyzer
+     * @var TypeResolvingDocblockTypeTransformer
      */
-    private $typeAnalyzer;
+    private $typeResolvingDocblockTypeTransformer;
 
     /**
      * @var NodeTypeDeducerInterface
@@ -63,27 +63,27 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @param StorageInterface                           $storage
-     * @param DocblockParser                             $docblockParser
-     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-     * @param TypeAnalyzer                               $typeAnalyzer
-     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
-     * @param Structures\File                            $file
-     * @param string                                     $code
+     * @param StorageInterface                     $storage
+     * @param DocblockParser                       $docblockParser
+     * @param DocblockTypeParserInterface          $docblockTypeParser
+     * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
+     * @param NodeTypeDeducerInterface             $nodeTypeDeducer
+     * @param Structures\File                      $file
+     * @param string                               $code
      */
     public function __construct(
         StorageInterface $storage,
         DocblockParser $docblockParser,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        TypeAnalyzer $typeAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
         string $code
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
-        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
         $this->code = $code;
@@ -166,6 +166,8 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             )
         );
 
+        $typeStringSpecification = null;
+
         if ($varDocumentation) {
             // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
             // from the latter to the former.
@@ -173,16 +175,18 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription = $varDocumentation['description'];
             }
 
-            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
-
-            $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
+            $typeStringSpecification = $varDocumentation['type'];
         } else {
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $this->code, 0);
 
-            $types = array_map(function (string $type) {
-                return new Structures\TypeInfo($type, $type);
-            }, $typeList);
+            $typeStringSpecification = implode('|', $typeList);
         }
+
+        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+        $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+        $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
 
         $constant = new Structures\Constant(
             $node->name,
@@ -195,41 +199,9 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             $shortDescription ? $shortDescription : null,
             $documentation['descriptions']['long'] ? $documentation['descriptions']['long'] : null,
             $varDocumentation ? $varDocumentation['description'] : null,
-            $types
+            $type
         );
 
         $this->storage->persist($constant);
-    }
-
-    /**
-     * @param string       $typeSpecification
-     * @param FilePosition $filePosition
-     *
-     * @return array[]
-     */
-    private function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
-    {
-        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->getTypeDataForTypeList($typeList, $filePosition);
-    }
-
-    /**
-     * @param string[]     $typeList
-     * @param FilePosition $filePosition
-     *
-     * @return Structures\TypeInfo[]
-     */
-    private function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
-    {
-        $types = [];
-
-        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
-
-        foreach ($typeList as $type) {
-            $types[] = new Structures\TypeInfo($type, $positionalNameResolver->resolve($type, $filePosition));
-        }
-
-        return $types;
     }
 }

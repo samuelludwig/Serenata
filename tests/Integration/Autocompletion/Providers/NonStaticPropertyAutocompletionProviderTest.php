@@ -56,7 +56,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                         'startLineMember' => 8,
                         'endLineMember'   => 8,
                     ],
-                'returnTypes'        => ''
+                'returnTypes'        => 'mixed'
             ], [], true, 'A')
         ];
 

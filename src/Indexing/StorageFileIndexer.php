@@ -6,18 +6,19 @@ use DateTime;
 use Exception;
 use LogicException;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
-
-use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
-
-use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
-
-use Serenata\Parsing\DocblockParser;
-
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
+
+use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+
+use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
+
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+
+use Serenata\Parsing\DocblockParser;
 
 /**
  * Handles indexing PHP code in a single file.
@@ -65,17 +66,23 @@ final class StorageFileIndexer implements FileIndexerInterface
     private $accessModifierMap;
 
     /**
-     * @var StructureAwareNameResolverFactoryInterface
+     * @var DocblockTypeParserInterface
      */
-    private $structureAwareNameResolverFactory;
+    private $docblockTypeParser;
 
     /**
-     * @param StorageInterface                           $storage
-     * @param TypeAnalyzer                               $typeAnalyzer
-     * @param DocblockParser                             $docblockParser
-     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
-     * @param Parser                                     $parser
-     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @var TypeResolvingDocblockTypeTransformer
+     */
+    private $typeResolvingDocblockTypeTransformer;
+
+    /**
+     * @param StorageInterface                     $storage
+     * @param TypeAnalyzer                         $typeAnalyzer
+     * @param DocblockParser                       $docblockParser
+     * @param NodeTypeDeducerInterface             $nodeTypeDeducer
+     * @param Parser                               $parser
+     * @param DocblockTypeParserInterface          $docblockTypeParser
+     * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
      */
     public function __construct(
         StorageInterface $storage,
@@ -83,14 +90,16 @@ final class StorageFileIndexer implements FileIndexerInterface
         DocblockParser $docblockParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Parser $parser,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+        DocblockTypeParserInterface $docblockTypeParser,
+        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockParser = $docblockParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->parser = $parser;
-        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
     }
 
     /**
@@ -226,8 +235,8 @@ final class StorageFileIndexer implements FileIndexerInterface
             new Visiting\ConstantIndexingVisitor(
                 $this->storage,
                 $this->docblockParser,
-                $this->structureAwareNameResolverFactory,
-                $this->typeAnalyzer,
+                $this->docblockTypeParser,
+                $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
                 $file,
                 $code
@@ -236,15 +245,17 @@ final class StorageFileIndexer implements FileIndexerInterface
             new Visiting\DefineIndexingVisitor(
                 $this->storage,
                 $this->nodeTypeDeducer,
+                $this->docblockTypeParser,
+                $this->typeResolvingDocblockTypeTransformer,
                 $file,
                 $code
             ),
 
             new Visiting\FunctionIndexingVisitor(
-                $this->structureAwareNameResolverFactory,
                 $this->storage,
                 $this->docblockParser,
-                $this->typeAnalyzer,
+                $this->docblockTypeParser,
+                $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
                 $file,
                 $code
@@ -254,8 +265,9 @@ final class StorageFileIndexer implements FileIndexerInterface
                 $this->storage,
                 $this->typeAnalyzer,
                 $this->docblockParser,
+                $this->docblockTypeParser,
+                $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
-                $this->structureAwareNameResolverFactory,
                 $file,
                 $code
             ),

@@ -39,9 +39,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
         static::assertNull($property->getShortDescription());
         static::assertNull($property->getLongDescription());
         static::assertNull($property->getTypeDescription());
-        static::assertCount(1, $property->getTypes());
-        static::assertSame('string', $property->getTypes()[0]->getType());
-        static::assertSame('string', $property->getTypes()[0]->getFqcn());
+        static::assertSame('string', $property->getType()->toString());
         static::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
     }
 
@@ -102,8 +100,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicPropertyTypeResolution.phpt');
 
-        static::assertSame('A', $property->getTypes()[0]->getType());
-        static::assertSame('\N\A', $property->getTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $property->getType()->toString());
     }
 
     /**
@@ -183,8 +180,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeFromDocblock.phpt');
 
-        static::assertSame('int', $property->getTypes()[0]->getType());
-        static::assertSame('int', $property->getTypes()[0]->getFqcn());
+        static::assertSame('int', $property->getType()->toString());
     }
 
     /**
@@ -194,8 +190,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('A', $property->getTypes()[0]->getType());
-        static::assertSame('\N\A', $property->getTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $property->getType()->toString());
     }
 
     /**
@@ -308,13 +303,11 @@ class PropertyIndexingTest extends AbstractIntegrationTest
         static::assertCount(1, $classes);
         static::assertCount(2, $classes[0]->getProperties());
 
-        static::assertCount(1, $classes[0]->getProperties()[0]->getTypes());
-        static::assertSame('string', $classes[0]->getProperties()[0]->getTypes()[0]->getType());
+        static::assertSame('string', $classes[0]->getProperties()[0]->getType()->toString());
         static::assertSame('First description.', $classes[0]->getProperties()[0]->getTypeDescription());
         static::assertSame('First description.', $classes[0]->getProperties()[0]->getShortDescription());
 
-        static::assertCount(1, $classes[0]->getProperties()[1]->getTypes());
-        static::assertSame('int', $classes[0]->getProperties()[1]->getTypes()[0]->getType());
+        static::assertSame('int', $classes[0]->getProperties()[1]->getType()->toString());
         static::assertSame('Second description.', $classes[0]->getProperties()[1]->getTypeDescription());
         static::assertSame('Second description.', $classes[0]->getProperties()[1]->getShortDescription());
     }

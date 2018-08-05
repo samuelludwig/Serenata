@@ -17,7 +17,7 @@
         <field name="shortDescription"   type="text"       nullable="true"  length="15000" />
         <field name="longDescription"    type="text"       nullable="true"  length="15000" />
         <field name="typeDescription"    type="text"       nullable="true"  length="15000" />
-        <field name="types"              type="array"      nullable="false" />
+        <field name="type"               type="object"     nullable="false" />
 
         <embedded name="range" class="Serenata\Common\Range" />
 

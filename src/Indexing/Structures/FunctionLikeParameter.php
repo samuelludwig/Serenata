@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a function-like parameter.
  */
@@ -23,9 +25,9 @@ abstract class FunctionLikeParameter
     protected $typeHint;
 
     /**
-     * @var TypeInfo[]
+     * @var DocblockType
      */
-    protected $types;
+    protected $type;
 
     /**
      * @var string|null
@@ -77,11 +79,11 @@ abstract class FunctionLikeParameter
     }
 
     /**
-     * @return TypeInfo[]
+     * @return DocblockType
      */
-    public function getTypes(): array
+    public function getType(): DocblockType
     {
-        return $this->types;
+        return $this->type;
     }
 
     /**

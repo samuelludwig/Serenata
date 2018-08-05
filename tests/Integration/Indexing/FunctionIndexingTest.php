@@ -38,7 +38,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         static::assertFalse($function->getHasDocblock());
         static::assertEmpty($function->getThrows());
         static::assertEmpty($function->getParameters());
-        static::assertEmpty($function->getReturnTypes());
+        static::assertSame('mixed', $function->getReturnType()->toString());
     }
 
     /**
@@ -88,8 +88,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionReturnTypeFromDocblock.phpt');
 
-        static::assertSame('int', $function->getReturnTypes()[0]->getType());
-        static::assertSame('int', $function->getReturnTypes()[0]->getFqcn());
+        static::assertSame('int', $function->getReturnType()->toString());
     }
 
     /**
@@ -99,8 +98,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionReturnTypeFromTypeHint.phpt');
 
-        static::assertSame('string', $function->getReturnTypes()[0]->getType());
-        static::assertSame('string', $function->getReturnTypes()[0]->getFqcn());
+        static::assertSame('string', $function->getReturnType()->toString());
     }
 
     /**
@@ -110,7 +108,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionReturnTypeHint.phpt');
 
-        static::assertSame('string', $function->getReturnTypeHint());
+        static::assertSame('string', $function->getReturnType()->toString());
     }
 
     /**
@@ -121,11 +119,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         $function = $this->indexFunction('FunctionExplicitlyNullableReturnTypeHint.phpt');
 
         static::assertSame('?string', $function->getReturnTypeHint());
-        static::assertCount(2, $function->getReturnTypes());
-        static::assertSame('string', $function->getReturnTypes()[0]->getType());
-        static::assertSame('string', $function->getReturnTypes()[0]->getFqcn());
-        static::assertSame('null', $function->getReturnTypes()[1]->getType());
-        static::assertSame('null', $function->getReturnTypes()[1]->getFqcn());
+        static::assertSame('string|null', $function->getReturnType()->toString());
     }
 
     /**
@@ -145,8 +139,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionReturnTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('A', $function->getReturnTypes()[0]->getType());
-        static::assertSame('\N\A', $function->getReturnTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $function->getReturnType()->toString());
     }
 
     /**
@@ -156,8 +149,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionReturnTypeInReturnTypeHintIsResolved.phpt');
 
-        static::assertSame('A', $function->getReturnTypes()[0]->getType());
-        static::assertSame('\N\A', $function->getReturnTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $function->getReturnType()->toString());
         static::assertSame('\N\A', $function->getReturnTypeHint());
     }
 
@@ -193,7 +185,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         static::assertSame($function, $parameter->getFunction());
         static::assertSame('a', $parameter->getName());
         static::assertNull($parameter->getTypeHint());
-        static::assertEmpty($parameter->getTypes());
+        static::assertSame('mixed', $parameter->getType()->toString());
         static::assertNull($parameter->getDescription());
         static::assertNull($parameter->getDefaultValue());
         static::assertFalse($parameter->getIsReference());
@@ -205,7 +197,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         static::assertSame($function, $parameter->getFunction());
         static::assertSame('b', $parameter->getName());
         static::assertNull($parameter->getTypeHint());
-        static::assertEmpty($parameter->getTypes());
+        static::assertSame('mixed', $parameter->getType()->toString());
         static::assertNull($parameter->getDescription());
         static::assertNull($parameter->getDefaultValue());
         static::assertFalse($parameter->getIsReference());
@@ -220,9 +212,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterTypeHint.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('int', $function->getParameters()[0]->getType()->toString());
         static::assertSame('int', $function->getParameters()[0]->getTypeHint());
     }
 
@@ -233,9 +223,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterTypeHintIsResolved.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('A', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('\N\A', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $function->getParameters()[0]->getType()->toString());
         static::assertSame('\N\A', $function->getParameters()[0]->getTypeHint());
     }
 
@@ -246,9 +234,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterDocblockType.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('int', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -258,9 +244,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterDocblockTypeIsResolved.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('A', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('\N\A', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -270,9 +254,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterDocblockTypePrecedenceOverTypeHint.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('int', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -292,9 +274,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterDefaultValueTypeDeduction.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('int', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -304,9 +284,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
     {
         $function = $this->indexFunction('FunctionParameterTypeHintGetsPrecedenceOverDefaultValueTypeDeduction.phpt');
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getFqcn());
+        static::assertSame('int', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -317,10 +295,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         $function = $this->indexFunction('FunctionParameterExplicitNullability.phpt');
 
         static::assertSame('?int', $function->getParameters()[0]->getTypeHint());
-
-        static::assertCount(2, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('null', $function->getParameters()[0]->getTypes()[1]->getType());
+        static::assertSame('int|null', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -331,10 +306,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
         $function = $this->indexFunction('FunctionParameterImplicitNullability.phpt');
 
         static::assertSame('int', $function->getParameters()[0]->getTypeHint());
-
-        static::assertCount(2, $function->getParameters()[0]->getTypes());
-        static::assertSame('int', $function->getParameters()[0]->getTypes()[0]->getType());
-        static::assertSame('null', $function->getParameters()[0]->getTypes()[1]->getType());
+        static::assertSame('int|null', $function->getParameters()[0]->getType()->toString());
     }
 
     /**
@@ -356,8 +328,7 @@ class FunctionIndexingTest extends AbstractIntegrationTest
 
         static::assertTrue($function->getParameters()[0]->getIsVariadic());
 
-        static::assertCount(1, $function->getParameters()[0]->getTypes());
-        static::assertSame('int[]', $function->getParameters()[0]->getTypes()[0]->getType());
+        static::assertSame('int[]', $function->getParameters()[0]->getType()->toString());
     }
 
     /**

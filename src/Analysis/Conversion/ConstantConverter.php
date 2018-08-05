@@ -33,7 +33,7 @@ final class ConstantConverter extends AbstractConverter
             'longDescription'   => $constant->getLongDescription(),
             'typeDescription'   => $constant->getTypeDescription(),
 
-            'types'             => $this->convertTypes($constant->getTypes())
+            'types'             => $this->convertDocblockType($constant->getType())
         ];
 
         if ($constant instanceof Structures\Constant) {

@@ -7,16 +7,19 @@ use PhpParser\NodeVisitorAbstract;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
+use Serenata\DocblockTypeParser\VoidDocblockType;
+use Serenata\DocblockTypeParser\MixedDocblockType;
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\DocblockTypeParser\SpecializedArrayDocblockType;
+
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
-
-use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Parsing\DocblockParser;
 
@@ -29,11 +32,6 @@ use Serenata\Utility\PositionEncoding;
 final class FunctionIndexingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var StructureAwareNameResolverFactoryInterface
-     */
-    private $structureAwareNameResolverFactory;
-
-    /**
      * @var StorageInterface
      */
     private $storage;
@@ -44,9 +42,14 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     private $docblockParser;
 
     /**
-     * @var TypeAnalyzer
+     * @var DocblockTypeParserInterface
      */
-    private $typeAnalyzer;
+    private $docblockTypeParser;
+
+    /**
+     * @var TypeResolvingDocblockTypeTransformer
+     */
+    private $typeResolvingDocblockTypeTransformer;
 
     /**
      * @var NodeTypeDeducerInterface
@@ -64,27 +67,27 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-     * @param StorageInterface                           $storage
-     * @param DocblockParser                             $docblockParser
-     * @param TypeAnalyzer                               $typeAnalyzer
-     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
-     * @param Structures\File                            $file
-     * @param string                                     $code
+     * @param StorageInterface                     $storage
+     * @param DocblockParser                       $docblockParser
+     * @param DocblockTypeParserInterface          $docblockTypeParser
+     * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
+     * @param NodeTypeDeducerInterface             $nodeTypeDeducer
+     * @param Structures\File                      $file
+     * @param string                               $code
      */
     public function __construct(
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         StorageInterface $storage,
         DocblockParser $docblockParser,
-        TypeAnalyzer $typeAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
         string $code
     ) {
-        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
         $this->code = $code;
@@ -119,27 +122,22 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      */
     private function indexFunction(Node\Stmt\Function_ $node): void
     {
-        $localType = null;
-        $resolvedType = null;
+        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+
         $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
-            $nodeType = $nodeType->type;
             $returnTypeHint = '?';
+            $nodeType = $nodeType->type;
         }
 
         if ($nodeType instanceof Node\Name) {
-            $localType = NodeHelpers::fetchClassName($nodeType);
-            $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
-            $returnTypeHint .= $resolvedType;
+            $returnTypeHint .= NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
         } elseif ($nodeType instanceof Node\Identifier) {
-            $localType = $nodeType->name;
-            $resolvedType = $nodeType->name;
-            $returnTypeHint .= $resolvedType;
+            $returnTypeHint .= $nodeType->name;
         }
 
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
 
         $range = new Range(
             Position::createFromByteOffset(
@@ -164,29 +162,56 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::RETURN_VALUE
         ], $node->name);
 
-        $returnTypes = [];
+        $typeStringSpecification = null;
 
         if ($documentation && $documentation['return']['type']) {
-            $returnTypes = $this->getTypeDataForTypeSpecification($documentation['return']['type'], $filePosition);
-        } elseif ($resolvedType) {
-            $returnTypes = [
-                new Structures\TypeInfo($localType, $resolvedType ?: $localType)
-            ];
+            $typeStringSpecification = $documentation['return']['type'];
+        } elseif ($node->getReturnType()) {
+            $nodeType = $node->getReturnType();
+
+            if ($nodeType instanceof Node\NullableType) {
+                $nodeType = $nodeType->type;
+            }
+
+            if ($nodeType instanceof Node\Name) {
+                $typeStringSpecification = NodeHelpers::fetchClassName($nodeType);
+            } elseif ($nodeType instanceof Node\Identifier) {
+                $typeStringSpecification = $nodeType->name;
+            }
+
+            $typeStringSpecification = $nodeType->toString();
 
             if ($node->getReturnType() instanceof Node\NullableType) {
-                $returnTypes[] = new Structures\TypeInfo('null', 'null');
+                $typeStringSpecification .= '|null';
             }
+        }
+
+        if ($typeStringSpecification) {
+            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+            $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+            $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+        } elseif ($docComment) {
+            $returnType = new VoidDocblockType();
+        } else {
+            $returnType = new MixedDocblockType();
         }
 
         $throws = [];
 
         foreach ($documentation['throws'] as $throw) {
-            $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition);
-            $typeData = array_shift($typeData);
+            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+            $docblockType = $this->docblockTypeParser->parse($throw['type']);
+
+            $localType = $docblockType->toString();
+
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
 
             $throws[] = new Structures\ThrowsInfo(
-                $typeData->getType(),
-                $typeData->getFqcn(),
+                $localType,
+                $type->toString(),
                 $throw['description'] ?: null
             );
         }
@@ -203,31 +228,24 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $returnTypeHint,
             !empty($docComment),
             $throws,
-            $returnTypes
+            $returnType
         );
-    
+
         $this->storage->persist($function);
 
         foreach ($node->getParams() as $param) {
             $typeHint = null;
-            $localType = null;
-            $resolvedType = null;
-
             $typeNode = $param->type;
 
             if ($typeNode instanceof Node\NullableType) {
-                $typeNode = $typeNode->type;
                 $typeHint = '?';
+                $typeNode = $typeNode->type;
             }
 
             if ($typeNode instanceof Node\Name) {
-                $localType = NodeHelpers::fetchClassName($typeNode);
-                $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
-                $typeHint .= $resolvedType;
+                $typeHint .= NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
             } elseif ($typeNode instanceof Node\Identifier) {
-                $localType = $typeNode->name;
-                $resolvedType = $typeNode->name;
-                $typeHint .= $resolvedType;
+                $typeHint .= $typeNode->name;
             }
 
             $isNullable = (
@@ -248,39 +266,55 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
-            $types = [];
+            $typeStringSpecification = null;
 
             if ($parameterDoc) {
-                $types = $this->getTypeDataForTypeSpecification($parameterDoc['type'], $filePosition);
-            } elseif ($localType) {
-                $parameterType = $localType;
-                $parameterFullType = $resolvedType ?: $parameterType;
+                $typeStringSpecification = $parameterDoc['type'];
+            } elseif ($param->type) {
+                $typeNode = $param->type;
 
-                if ($param->variadic) {
-                    $parameterType .= '[]';
-                    $parameterFullType .= '[]';
+                if ($typeNode instanceof Node\NullableType) {
+                    $typeNode = $typeNode->type;
                 }
 
-                $types = [
-                    new Structures\TypeInfo($parameterType, $parameterFullType)
-                ];
+                if ($typeNode instanceof Node\Name) {
+                    $typeStringSpecification = NodeHelpers::fetchClassName($typeNode);
+                } elseif ($typeNode instanceof Node\Identifier) {
+                    $typeStringSpecification = $typeNode->name;
+                }
 
-                if ($isNullable) {
-                    $types[] = new Structures\TypeInfo('null', 'null');
+                if ($param->type instanceof Node\NullableType) {
+                    $typeStringSpecification .= '|null';
+                } elseif ($param->default instanceof Node\Expr\ConstFetch &&
+                    $param->default->name->toString() === 'null'
+                ) {
+                    $typeStringSpecification .= '|null';
                 }
             } elseif ($param->default !== null) {
                 $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $this->code, 0);
 
-                $types = array_map(function (string $type) {
-                    return new Structures\TypeInfo($type, $type);
-                }, $typeList);
+                $typeStringSpecification = implode('|', $typeList);
+            }
+
+            if ($typeStringSpecification) {
+                $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+            } else {
+                $type = new MixedDocblockType();
+            }
+
+            if ($param->variadic) {
+                $type = new SpecializedArrayDocblockType($type);
             }
 
             $parameter = new Structures\FunctionParameter(
                 $function,
                 $parameterName,
                 $typeHint,
-                $types,
+                $type,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
                 $param->byRef,
@@ -290,37 +324,5 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->persist($parameter);
         }
-    }
-
-    /**
-     * @param string       $typeSpecification
-     * @param FilePosition $filePosition
-     *
-     * @return array[]
-     */
-    private function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
-    {
-        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->getTypeDataForTypeList($typeList, $filePosition);
-    }
-
-    /**
-     * @param string[]     $typeList
-     * @param FilePosition $filePosition
-     *
-     * @return Structures\TypeInfo[]
-     */
-    private function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
-    {
-        $types = [];
-
-        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
-
-        foreach ($typeList as $type) {
-            $types[] = new Structures\TypeInfo($type, $positionalNameResolver->resolve($type, $filePosition));
-        }
-
-        return $types;
     }
 }

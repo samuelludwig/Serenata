@@ -37,10 +37,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
         static::assertNull($constant->getShortDescription());
         static::assertNull($constant->getLongDescription());
         static::assertNull($constant->getTypeDescription());
-        static::assertCount(1, $constant->getTypes());
-        static::assertSame('string', $constant->getTypes()[0]->getType());
-        static::assertSame('string', $constant->getTypes()[0]->getFqcn());
-        static::assertSame('string', $constant->getTypes()[0]->getFqcn());
+        static::assertSame('string', $constant->getType()->toString());
         static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
@@ -77,10 +74,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
         static::assertSame('PHP built-in class constant that evaluates to the FQCN.', $constant->getShortDescription());
         static::assertNull($constant->getLongDescription());
         static::assertNull($constant->getTypeDescription());
-        static::assertCount(1, $constant->getTypes());
-        static::assertSame('string', $constant->getTypes()[0]->getType());
-        static::assertSame('string', $constant->getTypes()[0]->getFqcn());
-        static::assertSame('string', $constant->getTypes()[0]->getFqcn());
+        static::assertSame('string', $constant->getType()->toString());
         static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
@@ -151,8 +145,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeFromDocblock.phpt');
 
-        static::assertSame('int', $constant->getTypes()[0]->getType());
-        static::assertSame('int', $constant->getTypes()[0]->getFqcn());
+        static::assertSame('int', $constant->getType()->toString());
     }
 
     /**
@@ -162,8 +155,7 @@ class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('A', $constant->getTypes()[0]->getType());
-        static::assertSame('\N\A', $constant->getTypes()[0]->getFqcn());
+        static::assertSame('\N\A', $constant->getType()->toString());
     }
 
     /**

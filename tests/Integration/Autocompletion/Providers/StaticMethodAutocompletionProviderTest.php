@@ -56,7 +56,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-                'returnTypes' => ''
+                'returnTypes' => 'mixed'
             ], [], false, 'A')
         ];
 
@@ -84,7 +84,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     'startLineMember' => 5,
                     'endLineMember'   => 8,
                 ],
-                'returnTypes' => ''
+                'returnTypes' => 'mixed'
             ], [], false, 'A')
         ];
 
@@ -130,7 +130,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo()$0', null, 'foo([$i])', null, [
-                'returnTypes'        => '',
+                'returnTypes'        => 'mixed',
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',
@@ -158,7 +158,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::METHOD, 'foo($0)', null, 'foo($test)', null, [
-                'returnTypes'        => '',
+                'returnTypes'        => 'mixed',
                 'protectionLevel'    => 'public',
                 'declaringStructure' => [
                     'fqcn'            => '\A',

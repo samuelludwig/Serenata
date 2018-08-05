@@ -32,7 +32,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', null, 'foo()', null, [
-                'returnTypes'  => ''
+                'returnTypes'  => 'mixed'
             ], [], false)
         ];
 
@@ -48,7 +48,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo', null, 'foo()', null, [
-                'returnTypes'  => ''
+                'returnTypes'  => 'mixed'
             ], [], false)
         ];
 
@@ -80,7 +80,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo()$0', null, 'foo([$i])', null, [
-                'returnTypes'  => ''
+                'returnTypes'  => 'mixed'
             ], [], false)
         ];
 
@@ -96,7 +96,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new AutocompletionSuggestion('foo', SuggestionKind::FUNCTION, 'foo($0)', null, 'foo($test)', null, [
-                'returnTypes'  => ''
+                'returnTypes'  => 'mixed'
             ], [], false)
         ];
 

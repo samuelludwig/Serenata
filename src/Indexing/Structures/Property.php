@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 use Serenata\Common\Range;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a property.
  */
@@ -80,9 +82,9 @@ class Property
     private $accessModifier;
 
     /**
-     * @var TypeInfo[]
+     * @var DocblockType
      */
-    private $types;
+    private $type;
 
     /**
      * @param string         $name
@@ -98,7 +100,7 @@ class Property
      * @param string|null    $typeDescription
      * @param Classlike      $classlike
      * @param AccessModifier $accessModifier
-     * @param TypeInfo[]     $types
+     * @param DocblockType   $type
      */
     public function __construct(
         string $name,
@@ -114,7 +116,7 @@ class Property
         ?string $typeDescription,
         Classlike $classlike,
         AccessModifier $accessModifier,
-        array $types
+        DocblockType $type
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;
@@ -130,7 +132,7 @@ class Property
         $this->typeDescription = $typeDescription;
         $this->classlike = $classlike;
         $this->accessModifier = $accessModifier;
-        $this->types = $types;
+        $this->type = $type;
 
         $classlike->addProperty($this);
     }
@@ -248,10 +250,10 @@ class Property
     }
 
     /**
-     * @return TypeInfo[]
+     * @return DocblockType
      */
-    public function getTypes(): array
+    public function getType(): DocblockType
     {
-        return $this->types;
+        return $this->type;
     }
 }

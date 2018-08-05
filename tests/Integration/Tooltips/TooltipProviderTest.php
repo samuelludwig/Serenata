@@ -384,7 +384,7 @@ Hello!
         $this->performTooltipTest('StaticPropertyFetch.phpt', 90, 94, 'This is a summary.
 
 # Type
-(Not known)');
+*mixed*');
     }
 
     /**

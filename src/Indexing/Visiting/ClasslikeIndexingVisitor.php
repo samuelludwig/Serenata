@@ -7,41 +7,39 @@ use SplObjectStorage;
 
 use Ds\Stack;
 
-use Serenata\Common\Range;
-
-use Serenata\Utility\PositionEncoding;
-
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use PhpParser\Node;
+use PhpParser\NodeVisitorAbstract;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
+use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
+
+use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
+
+use Serenata\DocblockTypeParser\VoidDocblockType;
+use Serenata\DocblockTypeParser\MixedDocblockType;
+use Serenata\DocblockTypeParser\StringDocblockType;
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\DocblockTypeParser\SpecializedArrayDocblockType;
 
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\Indexing\Structures\AccessModifierNameValue;
 
-use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
-
 use Serenata\Parsing\DocblockParser;
 
 use Serenata\Utility\NodeHelpers;
-
-use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Visitor that traverses a set of nodes, indexing classlikes in the process.
  */
 final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 {
-    /**
-     * @var StructureAwareNameResolverFactoryInterface
-     */
-    private $structureAwareNameResolverFactory;
-
     /**
      * @var StorageInterface
      */
@@ -51,6 +49,16 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @var DocblockParser
      */
     private $docblockParser;
+
+    /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
+     * @var TypeResolvingDocblockTypeTransformer
+     */
+    private $typeResolvingDocblockTypeTransformer;
 
     /**
      * @var TypeAnalyzer
@@ -115,8 +123,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * @param StorageInterface                           $storage
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param DocblockParser                             $docblockParser
+     * @param DocblockTypeParserInterface                $docblockTypeParser
+     * @param TypeResolvingDocblockTypeTransformer       $typeResolvingDocblockTypeTransformer
      * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
-     * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param Structures\File                            $file
      * @param string                                     $code
      */
@@ -124,16 +133,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         StorageInterface $storage,
         TypeAnalyzer $typeAnalyzer,
         DocblockParser $docblockParser,
+        DocblockTypeParserInterface $docblockTypeParser,
+        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
         Structures\File $file,
         string $code
     ) {
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockParser = $docblockParser;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->file = $file;
         $this->code = $code;
     }
@@ -624,7 +635,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $shortDescription = $documentation['descriptions']['short'];
 
-            $types = [];
+            $typeStringSpecification = null;
 
             if ($varDocumentation) {
                 // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
@@ -633,13 +644,21 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $shortDescription = $varDocumentation['description'];
                 }
 
-                $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
+                $typeStringSpecification = $varDocumentation['type'];
             } elseif ($property->default) {
                 $typeList = $this->nodeTypeDeducer->deduce($property->default, $this->file, $this->code, 0);
 
-                $types = array_map(function (string $type) {
-                    return new Structures\TypeInfo($type, $type);
-                }, $typeList);
+                $typeStringSpecification = implode('|', $typeList);
+            }
+
+            if ($typeStringSpecification) {
+                $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+            } else {
+                $type = new MixedDocblockType();
             }
 
             $accessModifierMap = $this->getAccessModifierMap();
@@ -668,7 +687,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $varDocumentation ? $varDocumentation['description'] : null,
                 $this->classlikeStack->peek(),
                 $accessModifierMap[$accessModifier],
-                $types
+                $type
             );
 
             $this->storage->persist($property);
@@ -682,24 +701,20 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
-        $localType = null;
-        $resolvedType = null;
+        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+
         $returnTypeHint = null;
         $nodeType = $node->getReturnType();
 
         if ($nodeType instanceof Node\NullableType) {
-            $nodeType = $nodeType->type;
             $returnTypeHint = '?';
+            $nodeType = $nodeType->type;
         }
 
         if ($nodeType instanceof Node\Name) {
-            $localType = NodeHelpers::fetchClassName($nodeType);
-            $resolvedType = NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
-            $returnTypeHint .= $resolvedType;
+            $returnTypeHint .= NodeHelpers::fetchClassName($nodeType->getAttribute('resolvedName'));
         } elseif ($nodeType instanceof Node\Identifier) {
-            $localType = $nodeType->name;
-            $resolvedType = $nodeType->name;
-            $returnTypeHint .= $resolvedType;
+            $returnTypeHint .= $nodeType->name;
         }
 
         $range = new Range(
@@ -717,40 +732,64 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
-        $isReturnTypeNullable = ($node->getReturnType() instanceof Node\NullableType);
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
-
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::THROWS,
             DocblockParser::PARAM_TYPE,
             DocblockParser::DEPRECATED,
             DocblockParser::DESCRIPTION,
             DocblockParser::RETURN_VALUE
-        ], $node->name->name);
+        ], $node->name);
 
-        $returnTypes = [];
+        $typeStringSpecification = null;
 
         if ($documentation && $documentation['return']['type']) {
-            $returnTypes = $this->getTypeDataForTypeSpecification($documentation['return']['type'], $filePosition);
-        } elseif ($localType) {
-            $returnTypes = [
-                new Structures\TypeInfo($localType, $resolvedType ?: $localType)
-            ];
+            $typeStringSpecification = $documentation['return']['type'];
+        } elseif ($node->getReturnType()) {
+            $nodeType = $node->getReturnType();
 
-            if ($isReturnTypeNullable) {
-                $returnTypes[] = new Structures\TypeInfo('null', 'null');
+            if ($nodeType instanceof Node\NullableType) {
+                $nodeType = $nodeType->type;
             }
+
+            if ($nodeType instanceof Node\Name) {
+                $typeStringSpecification = NodeHelpers::fetchClassName($nodeType);
+            } elseif ($nodeType instanceof Node\Identifier) {
+                $typeStringSpecification = $nodeType->name;
+            }
+
+            $typeStringSpecification = $nodeType->toString();
+
+            if ($node->getReturnType() instanceof Node\NullableType) {
+                $typeStringSpecification .= '|null';
+            }
+        }
+
+        if ($typeStringSpecification) {
+            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+            $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+            $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+        } elseif ($docComment) {
+            $returnType = new VoidDocblockType();
+        } else {
+            $returnType = new MixedDocblockType();
         }
 
         $throws = [];
 
         foreach ($documentation['throws'] as $throw) {
-            $typeData = $this->getTypeDataForTypeSpecification($throw['type'], $filePosition);
-            $typeData = array_shift($typeData);
+            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+            $docblockType = $this->docblockTypeParser->parse($throw['type']);
+
+            $localType = $docblockType->toString();
+
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
 
             $throws[] = new Structures\ThrowsInfo(
-                $typeData->getType(),
-                $typeData->getFqcn(),
+                $localType,
+                $type->toString(),
                 $throw['description'] ?: null
             );
         }
@@ -784,31 +823,24 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $node->isFinal(),
             !empty($docComment),
             $throws,
-            $returnTypes
+            $returnType
         );
 
         $this->storage->persist($method);
 
         foreach ($node->getParams() as $param) {
             $typeHint = null;
-            $localType = null;
-            $resolvedType = null;
-
             $typeNode = $param->type;
 
             if ($typeNode instanceof Node\NullableType) {
-                $typeNode = $typeNode->type;
                 $typeHint = '?';
+                $typeNode = $typeNode->type;
             }
 
             if ($typeNode instanceof Node\Name) {
-                $localType = NodeHelpers::fetchClassName($typeNode);
-                $resolvedType = NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
-                $typeHint .= $resolvedType;
+                $typeHint .= NodeHelpers::fetchClassName($typeNode->getAttribute('resolvedName'));
             } elseif ($typeNode instanceof Node\Identifier) {
-                $localType = $typeNode->name;
-                $resolvedType = $typeNode->name;
-                $typeHint .= $resolvedType;
+                $typeHint .= $typeNode->name;
             }
 
             $isNullable = (
@@ -824,43 +856,60 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 ) :
                 null;
 
-            $parameterKey = '$' . $param->var->name;
+            $parameterName = ($param->var instanceof Node\Expr\Variable ? $param->var->name : '');
+            $parameterKey = '$' . $parameterName;
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
-            $types = [];
+            $typeStringSpecification = null;
 
             if ($parameterDoc) {
-                $types = $this->getTypeDataForTypeSpecification($parameterDoc['type'], $filePosition);
-            } elseif ($localType) {
-                $parameterType = $localType;
-                $parameterFullType = $resolvedType ?: $parameterType;
+                $typeStringSpecification = $parameterDoc['type'];
+            } elseif ($param->type) {
+                $typeNode = $param->type;
 
-                if ($param->variadic) {
-                    $parameterType .= '[]';
-                    $parameterFullType .= '[]';
+                if ($typeNode instanceof Node\NullableType) {
+                    $typeNode = $typeNode->type;
                 }
 
-                $types = [
-                    new Structures\TypeInfo($parameterType, $parameterFullType)
-                ];
+                if ($typeNode instanceof Node\Name) {
+                    $typeStringSpecification = NodeHelpers::fetchClassName($typeNode);
+                } elseif ($typeNode instanceof Node\Identifier) {
+                    $typeStringSpecification = $typeNode->name;
+                }
 
-                if ($isNullable) {
-                    $types[] = new Structures\TypeInfo('null', 'null');
+                if ($param->type instanceof Node\NullableType) {
+                    $typeStringSpecification .= '|null';
+                } elseif ($param->default instanceof Node\Expr\ConstFetch &&
+                    $param->default->name->toString() === 'null'
+                ) {
+                    $typeStringSpecification .= '|null';
                 }
             } elseif ($param->default !== null) {
                 $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $this->code, 0);
 
-                $types = array_map(function (string $type) {
-                    return new Structures\TypeInfo($type, $type);
-                }, $typeList);
+                $typeStringSpecification = implode('|', $typeList);
+            }
+
+            if ($typeStringSpecification) {
+                $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+            } else {
+                $type = new MixedDocblockType();
+            }
+
+            if ($param->variadic) {
+                $type = new SpecializedArrayDocblockType($type);
             }
 
             $parameter = new Structures\MethodParameter(
                 $method,
                 $param->var instanceof Node\Expr\Variable ? $param->var->name : '',
                 $typeHint,
-                $types,
+                $type,
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
                 $param->byRef,
@@ -921,13 +970,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $shortDescription = $documentation['descriptions']['short'];
 
-        $types = [];
-
         $defaultValue = substr(
             $this->code,
             $node->value->getAttribute('startFilePos'),
             $node->value->getAttribute('endFilePos') - $node->value->getAttribute('startFilePos') + 1
         );
+
+        $typeStringSpecification = null;
 
         if ($varDocumentation) {
             // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
@@ -936,14 +985,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription = $varDocumentation['description'];
             }
 
-            $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
-        } elseif ($node->value) {
+            $typeStringSpecification = $varDocumentation['type'];
+        } else {
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $this->code, 0);
 
-            $types = array_map(function (string $type) {
-                return new Structures\TypeInfo($type, $type);
-            }, $typeList);
+            $typeStringSpecification = implode('|', $typeList);
         }
+
+        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+        $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+        $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
 
         $accessModifierMap = $this->getAccessModifierMap();
 
@@ -967,7 +1020,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $shortDescription ?: null,
             $documentation['descriptions']['long'] ?: null,
             $varDocumentation ? $varDocumentation['description'] : null,
-            $types,
+            $type,
             $this->classlikeStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null
         );
@@ -989,10 +1042,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
-        $types = [];
+        $type = new MixedDocblockType();
 
         if ($rawData['type']) {
-            $types = $this->getTypeDataForTypeSpecification($rawData['type'], $filePosition);
+            $docblockType = $this->docblockTypeParser->parse($rawData['type']);
+
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
         }
 
         $property = new Structures\Property(
@@ -1012,7 +1067,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             null,
             $classlike,
             $accessModifier,
-            $types
+            $type
         );
 
         $this->storage->persist($property);
@@ -1032,10 +1087,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
-        $returnTypes = [];
+        $returnType = new MixedDocblockType();
 
         if ($rawData['type']) {
-            $returnTypes = $this->getTypeDataForTypeSpecification($rawData['type'], $filePosition);
+            $docblockType = $this->docblockTypeParser->parse($rawData['type']);
+
+            $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
         }
 
         $method = new Structures\Method(
@@ -1058,23 +1115,25 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             false,
             false,
             [],
-            $returnTypes
+            $returnType
         );
 
         $this->storage->persist($method);
 
         foreach ($rawData['requiredParameters'] as $parameterName => $parameter) {
-            $types = [];
+            $type = new MixedDocblockType();
 
             if ($parameter['type']) {
-                $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
+                $docblockType = $this->docblockTypeParser->parse($parameter['type']);
+
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
             }
 
             $parameter = new Structures\MethodParameter(
                 $method,
                 mb_substr($parameterName, 1),
                 null,
-                $types,
+                $type,
                 null,
                 null,
                 false,
@@ -1086,17 +1145,19 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         foreach ($rawData['optionalParameters'] as $parameterName => $parameter) {
-            $types = [];
+            $type = new MixedDocblockType();
 
             if ($parameter['type']) {
-                $types = $this->getTypeDataForTypeSpecification($parameter['type'], $filePosition);
+                $docblockType = $this->docblockTypeParser->parse($parameter['type']);
+
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
             }
 
             $parameter = new Structures\MethodParameter(
                 $method,
                 mb_substr($parameterName, 1),
                 null,
-                $types,
+                $type,
                 null,
                 null,
                 false,
@@ -1128,44 +1189,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             'PHP built-in class constant that evaluates to the FQCN.',
             null,
             null,
-            [new Structures\TypeInfo('string', 'string')],
+            new StringDocblockType(),
             $classlike,
             $this->getAccessModifierMap()[AccessModifierNameValue::PUBLIC_]
         );
 
         $this->storage->persist($constant);
-    }
-
-    /**
-     * @param string       $typeSpecification
-     * @param FilePosition $filePosition
-     *
-     * @return Structures\TypeInfo[]
-     */
-    private function getTypeDataForTypeSpecification(string $typeSpecification, FilePosition $filePosition): array
-    {
-        $typeList = $this->typeAnalyzer->getTypesForTypeSpecification($typeSpecification);
-
-        return $this->getTypeDataForTypeList($typeList, $filePosition);
-    }
-
-    /**
-     * @param string[]     $typeList
-     * @param FilePosition $filePosition
-     *
-     * @return Structures\TypeInfo[]
-     */
-    private function getTypeDataForTypeList(array $typeList, FilePosition $filePosition): array
-    {
-        $types = [];
-
-        $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
-
-        foreach ($typeList as $type) {
-            $types[] = new Structures\TypeInfo($type, $positionalNameResolver->resolve($type, $filePosition));
-        }
-
-        return $types;
     }
 
     /**

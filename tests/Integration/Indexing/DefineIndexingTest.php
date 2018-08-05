@@ -36,9 +36,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
         static::assertNull($define->getShortDescription());
         static::assertNull($define->getLongDescription());
         static::assertNull($define->getTypeDescription());
-        static::assertCount(1, $define->getTypes());
-        static::assertSame('string', $define->getTypes()[0]->getType());
-        static::assertSame('string', $define->getTypes()[0]->getFqcn());
+        static::assertSame('string', $define->getType()->toString());
     }
 
     /**

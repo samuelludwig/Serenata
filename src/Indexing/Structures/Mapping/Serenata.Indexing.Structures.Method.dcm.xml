@@ -19,7 +19,7 @@
         <field name="isFinal"            type="boolean"    nullable="false" />
         <field name="hasDocblock"        type="boolean"    nullable="false" />
         <field name="throws"             type="array"      nullable="false" />
-        <field name="returnTypes"        type="array"      nullable="false" />
+        <field name="returnType"         type="object"     nullable="false" />
 
         <embedded name="range" class="Serenata\Common\Range" />
 

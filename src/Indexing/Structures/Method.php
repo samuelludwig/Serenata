@@ -6,6 +6,8 @@ use Serenata\Common\Range;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a (class) method.
  */
@@ -58,7 +60,7 @@ class Method extends FunctionLike
      * @param bool           $isFinal
      * @param bool           $hasDocblock
      * @param array[]        $throws
-     * @param TypeInfo[]     $returnTypes
+     * @param DocblockType   $returnType
      */
     public function __construct(
         string $name,
@@ -77,7 +79,7 @@ class Method extends FunctionLike
         bool $isFinal,
         bool $hasDocblock,
         array $throws,
-        array $returnTypes
+        DocblockType $returnType
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;
@@ -96,7 +98,7 @@ class Method extends FunctionLike
         $this->isFinal = $isFinal;
         $this->hasDocblock = $hasDocblock;
         $this->throws = $throws;
-        $this->returnTypes = $returnTypes;
+        $this->returnType = $returnType;
 
         $this->parameters = new ArrayCollection();
 

@@ -72,7 +72,8 @@ services:
             - '@docblockParser'
             - '@nodeTypeDeducer'
             - '@parser'
-            - '@structureAwareNameResolverFactory'
+            - '@docblockTypeParser'
+            - '@typeResolvingDocblockTypeTransformer'
 
     unmodifiedFileSkippingIndexer:
         class: Serenata\Indexing\UnmodifiedFileSkippingIndexer

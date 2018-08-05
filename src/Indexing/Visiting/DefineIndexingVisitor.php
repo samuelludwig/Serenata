@@ -2,8 +2,14 @@
 
 namespace Serenata\Indexing\Visiting;
 
+use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
+
 use Serenata\Common\Range;
 use Serenata\Common\Position;
+use Serenata\Common\FilePosition;
+
+use Serenata\DocblockTypeParser\MixedDocblockType;
+use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
 
 use Serenata\Utility\PositionEncoding;
 
@@ -33,6 +39,16 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     private $nodeTypeDeducer;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
+     * @var TypeResolvingDocblockTypeTransformer
+     */
+    private $typeResolvingDocblockTypeTransformer;
+
+    /**
      * @var Structures\File
      */
     private $file;
@@ -43,19 +59,25 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     private $code;
 
     /**
-     * @param StorageInterface         $storage
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param Structures\File          $file
-     * @param string                   $code
+     * @param StorageInterface                     $storage
+     * @param NodeTypeDeducerInterface             $nodeTypeDeducer
+     * @param DocblockTypeParserInterface          $docblockTypeParser
+     * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
+     * @param Structures\File                      $file
+     * @param string                               $code
      */
     public function __construct(
         StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         Structures\File $file,
         string $code
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->file = $file;
         $this->code = $code;
     }
@@ -95,7 +117,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         // https://php.net/manual/en/function.define.php#90282
         $name = new Node\Name((string) $nameValue->value);
 
-        $types = [];
+        $type = new MixedDocblockType();
 
         $defaultValue = substr(
             $this->code,
@@ -103,37 +125,45 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
             $node->args[1]->getAttribute('endFilePos') - $node->args[1]->getAttribute('startFilePos') + 1
         );
 
-        if ($node->args[1]) {
+        $range = new Range(
+            Position::createFromByteOffset(
+                $node->getAttribute('startFilePos'),
+                $this->code,
+                PositionEncoding::VALUE
+            ),
+            Position::createFromByteOffset(
+                $node->getAttribute('endFilePos') + 1,
+                $this->code,
+                PositionEncoding::VALUE
+            )
+        );
+
+        if (isset($node->args[1])) {
             $typeList = $this->nodeTypeDeducer->deduce($node->args[1]->value, $this->file, $this->code, 0);
 
-            $types = array_map(function (string $type) {
-                return new Structures\TypeInfo($type, $type);
-            }, $typeList);
+            if (count($typeList) !== 0) {
+                $typeStringSpecification = implode('|', $typeList);
+
+                $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+
+                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+            }
         }
 
         $constant = new Structures\Constant(
             $name->getLast(),
             '\\' . NodeHelpers::fetchClassName($name),
             $this->file,
-            new Range(
-                Position::createFromByteOffset(
-                    $node->getAttribute('startFilePos'),
-                    $this->code,
-                    PositionEncoding::VALUE
-                ),
-                Position::createFromByteOffset(
-                    $node->getAttribute('endFilePos') + 1,
-                    $this->code,
-                    PositionEncoding::VALUE
-                )
-            ),
+            $range,
             $defaultValue,
             false,
             false,
             null,
             null,
             null,
-            $types
+            $type
         );
 
         $this->storage->persist($constant);

@@ -41,7 +41,7 @@ final class PropertyConverter extends AbstractConverter
             'longDescription'   => $property->getLongDescription(),
             'typeDescription'   => $property->getTypeDescription(),
 
-            'types'             => $this->convertTypes($property->getTypes()),
+            'types'             => $this->convertDocblockType($property->getType())
         ];
 
         return array_merge($data, [

@@ -6,6 +6,8 @@ use Serenata\Common\Range;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Serenata\DocblockTypeParser\DocblockType;
+
 /**
  * Represents a (global) function.
  */
@@ -17,18 +19,18 @@ class Function_ extends FunctionLike
     private $fqcn;
 
     /**
-     * @param string      $name
-     * @param string      $fqcn
-     * @param File        $file
-     * @param Range       $range
-     * @param bool        $isDeprecated
-     * @param string|null $shortDescription
-     * @param string|null $longDescription
-     * @param string|null $returnDescription
-     * @param string|null $returnTypeHint
-     * @param bool        $hasDocblock
-     * @param array[]     $throws
-     * @param TypeInfo[]  $returnTypes
+     * @param string       $name
+     * @param string       $fqcn
+     * @param File         $file
+     * @param Range        $range
+     * @param bool         $isDeprecated
+     * @param string|null  $shortDescription
+     * @param string|null  $longDescription
+     * @param string|null  $returnDescription
+     * @param string|null  $returnTypeHint
+     * @param bool         $hasDocblock
+     * @param array[]      $throws
+     * @param DocblockType $returnType
      */
     public function __construct(
         string $name,
@@ -42,7 +44,7 @@ class Function_ extends FunctionLike
         ?string $returnTypeHint,
         bool $hasDocblock,
         array $throws,
-        array $returnTypes
+        DocblockType $returnType
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;
@@ -56,7 +58,7 @@ class Function_ extends FunctionLike
         $this->returnTypeHint = $returnTypeHint;
         $this->hasDocblock = $hasDocblock;
         $this->throws = $throws;
-        $this->returnTypes = $returnTypes;
+        $this->returnType = $returnType;
 
         $this->parameters = new ArrayCollection();
 
