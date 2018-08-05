@@ -481,8 +481,8 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
             }
         }
 
-        foreach ($result['constants'] as $name => &$constants) {
-            foreach ($constants['types'] as &$type) {
+        foreach ($result['constants'] as $name => &$constant) {
+            foreach ($constant['types'] as &$type) {
                 $callable($type);
             }
         }
