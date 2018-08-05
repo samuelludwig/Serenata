@@ -177,7 +177,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
 
             $types = $this->getTypeDataForTypeSpecification($varDocumentation['type'], $filePosition);
-        } elseif ($node->value) {
+        } else {
             $typeList = $this->nodeTypeDeducer->deduce($node->value, $this->file, $this->code, 0);
 
             $types = array_map(function (string $type) {
