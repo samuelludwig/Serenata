@@ -4,8 +4,6 @@ namespace Serenata\Tests\Integration\UserInterface\Command;
 
 use Serenata\Indexing\FileNotFoundStorageException;
 
-use Serenata\Linting\LintingSettings;
-
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class LintCommandTest extends AbstractIntegrationTest
@@ -19,14 +17,6 @@ class LintCommandTest extends AbstractIntegrationTest
 
         $this->expectException(FileNotFoundStorageException::class);
 
-        $command->lint('DoesNotExist.phpt', 'Code', new LintingSettings(
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false
-        ));
+        $command->lint('DoesNotExist.phpt', 'Code');
     }
 }

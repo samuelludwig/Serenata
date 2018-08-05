@@ -2,16 +2,14 @@
 
 namespace Serenata\Linting;
 
-use Serenata\Common\Position;
+use PhpParser\Parser;
+use PhpParser\ErrorHandler;
 
-use Serenata\Utility\PositionEncoding;
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures;
 
-use PhpParser\Error;
-use PhpParser\Parser;
-use PhpParser\ErrorHandler;
-use PhpParser\NodeTraverser;
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Lints a file syntactically as well as semantically to indicate various problems with its contents.
@@ -24,78 +22,19 @@ class Linter
     private $parser;
 
     /**
-     * @var DocblockCorrectnessAnalyzerFactory
+     * @param Parser $parser
      */
-    private $docblockCorrectnessAnalyzerFactory;
-
-    /**
-     * @var UnknownClassAnalyzerFactory
-     */
-    private $unknownClassAnalyzerFactory;
-
-    /**
-     * @var UnknownGlobalConstantAnalyzerFactory
-     */
-    private $unknownGlobalConstantAnalyzerFactory;
-
-    /**
-     * @var UnknownGlobalFunctionAnalyzerFactory
-     */
-    private $unknownGlobalFunctionAnalyzerFactory;
-
-    /**
-     * @var UnknownMemberAnalyzerFactory
-     */
-    private $unknownMemberAnalyzerFactory;
-
-    /**
-     * @var UnusedUseStatementAnalyzerFactory
-     */
-    private $unusedUseStatementAnalyzerFactory;
-
-    /**
-     * @var DocblockMissingAnalyzerFactory
-     */
-    private $docblockMissingAnalyzerFactory;
-
-    /**
-     * @param Parser                               $parser
-     * @param DocblockCorrectnessAnalyzerFactory   $docblockCorrectnessAnalyzerFactory
-     * @param UnknownClassAnalyzerFactory          $unknownClassAnalyzerFactory
-     * @param UnknownGlobalConstantAnalyzerFactory $unknownGlobalConstantAnalyzerFactory
-     * @param UnknownGlobalFunctionAnalyzerFactory $unknownGlobalFunctionAnalyzerFactory
-     * @param UnknownMemberAnalyzerFactory         $unknownMemberAnalyzerFactory
-     * @param UnusedUseStatementAnalyzerFactory    $unusedUseStatementAnalyzerFactory
-     * @param DocblockMissingAnalyzerFactory       $docblockMissingAnalyzerFactory
-     */
-    public function __construct(
-        Parser $parser,
-        DocblockCorrectnessAnalyzerFactory $docblockCorrectnessAnalyzerFactory,
-        UnknownClassAnalyzerFactory $unknownClassAnalyzerFactory,
-        UnknownGlobalConstantAnalyzerFactory $unknownGlobalConstantAnalyzerFactory,
-        UnknownGlobalFunctionAnalyzerFactory $unknownGlobalFunctionAnalyzerFactory,
-        UnknownMemberAnalyzerFactory $unknownMemberAnalyzerFactory,
-        UnusedUseStatementAnalyzerFactory $unusedUseStatementAnalyzerFactory,
-        DocblockMissingAnalyzerFactory $docblockMissingAnalyzerFactory
-    ) {
+    public function __construct(Parser $parser)
+    {
         $this->parser = $parser;
-        $this->docblockCorrectnessAnalyzerFactory = $docblockCorrectnessAnalyzerFactory;
-        $this->unknownClassAnalyzerFactory = $unknownClassAnalyzerFactory;
-        $this->unknownGlobalConstantAnalyzerFactory = $unknownGlobalConstantAnalyzerFactory;
-        $this->unknownGlobalFunctionAnalyzerFactory = $unknownGlobalFunctionAnalyzerFactory;
-        $this->unknownMemberAnalyzerFactory = $unknownMemberAnalyzerFactory;
-        $this->unusedUseStatementAnalyzerFactory = $unusedUseStatementAnalyzerFactory;
-        $this->docblockMissingAnalyzerFactory = $docblockMissingAnalyzerFactory;
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param LintingSettings $settings
+     * @param string $code
      *
      * @return array
      */
-    public function lint(Structures\File $file, string $code, LintingSettings $settings): array
+    public function lint(string $code): array
     {
         // Parse the file to fetch the information we need.
         $nodes = [];
@@ -133,76 +72,6 @@ class Linter
             return $output;
         }
 
-        // TODO: Deprecated, remove semantic linting in the next major version.
-        $traverser = new NodeTraverser();
-        $analyzers = $this->getAnalyzersForRequest($file, $code, $settings);
-
-        foreach ($analyzers as $analyzer) {
-            foreach ($analyzer->getVisitors() as $visitor) {
-                $traverser->addVisitor($visitor);
-            }
-        }
-
-        try {
-            $traverser->traverse($nodes);
-        } catch (Error $e) {
-            $output['errors'][] = [
-                'message' => "Something is semantically wrong. Is there perhaps a duplicate use statement?",
-                'start'   => 0,
-                'end'     => 0
-            ];
-
-            return $output;
-        }
-
-        foreach ($analyzers as $analyzer) {
-            $output['errors']   = array_merge($output['errors'], $analyzer->getErrors());
-            $output['warnings'] = array_merge($output['warnings'], $analyzer->getWarnings());
-        }
-
         return $output;
-    }
-
-    /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param LintingSettings $settings
-     *
-     * @return AnalyzerInterface[]
-     */
-    private function getAnalyzersForRequest(Structures\File $file, string $code, LintingSettings $settings): array
-    {
-        /** @var AnalyzerInterface[] $analyzers */
-        $analyzers = [];
-
-        if ($settings->getLintUnknownClasses()) {
-            $analyzers[] = $this->unknownClassAnalyzerFactory->create($file->getPath());
-        }
-
-        if ($settings->getLintUnknownMembers()) {
-            $analyzers[] = $this->unknownMemberAnalyzerFactory->create($file, $code);
-        }
-
-        if ($settings->getLintUnusedUseStatements()) {
-            $analyzers[] = $this->unusedUseStatementAnalyzerFactory->create($code);
-        }
-
-        if ($settings->getLintDocblockCorrectness()) {
-            $analyzers[] = $this->docblockCorrectnessAnalyzerFactory->create($file->getPath(), $code);
-        }
-
-        if ($settings->getLintUnknownGlobalConstants()) {
-            $analyzers[] = $this->unknownGlobalConstantAnalyzerFactory->create($file, $code);
-        }
-
-        if ($settings->getLintUnknownGlobalFunctions()) {
-            $analyzers[] = $this->unknownGlobalFunctionAnalyzerFactory->create($file, $code);
-        }
-
-        if ($settings->getLintMissingDocumentation()) {
-            $analyzers[] = $this->docblockMissingAnalyzerFactory->create($code, $file->getPath());
-        }
-
-        return $analyzers;
     }
 }

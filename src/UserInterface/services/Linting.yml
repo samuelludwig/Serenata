@@ -2,61 +2,7 @@ parameters:
 
 
 services:
-    docblockCorrectnessAnalyzerFactory:
-        class: Serenata\Linting\DocblockCorrectnessAnalyzerFactory
-        arguments:
-            - '@parameterDocblockTypeSemanticEqualityChecker'
-            - '@docblockParser'
-            - '@typeAnalyzer'
-            - '@docblockAnalyzer'
-
-    unknownClassAnalyzerFactory:
-        class: Serenata\Linting\UnknownClassAnalyzerFactory
-        arguments:
-            - '@classlikeExistenceChecker'
-            - '@structureAwareNameResolverFactory'
-            - '@typeAnalyzer'
-            - '@docblockParser'
-
-    unknownGlobalConstantAnalyzerFactory:
-        class: Serenata\Linting\UnknownGlobalConstantAnalyzerFactory
-        arguments:
-            - '@globalConstantExistenceChecker'
-            - '@constFetchNodeFqsenDeterminer'
-
-    unknownGlobalFunctionAnalyzerFactory:
-        class: Serenata\Linting\UnknownGlobalFunctionAnalyzerFactory
-        arguments:
-            - '@globalFunctionExistenceChecker'
-            - '@functionCallNodeFqsenDeterminer'
-
-    unknownMemberAnalyzerFactory:
-        class: Serenata\Linting\UnknownMemberAnalyzerFactory
-        arguments:
-            - '@nodeTypeDeducer'
-            - '@classlikeInfoBuilder'
-            - '@typeAnalyzer'
-
-    unusedUseStatementAnalyzerFactory:
-        class: Serenata\Linting\UnusedUseStatementAnalyzerFactory
-        arguments:
-            - '@typeAnalyzer'
-            - '@docblockParser'
-
-    docblockMissingAnalyzerFactory:
-        class: Serenata\Linting\DocblockMissingAnalyzerFactory
-        arguments:
-            - '@typeAnalyzer'
-            - '@classlikeInfoBuilder'
-
     linter:
         class: Serenata\Linting\Linter
         arguments:
             - '@parser'
-            - '@docblockCorrectnessAnalyzerFactory'
-            - '@unknownClassAnalyzerFactory'
-            - '@unknownGlobalConstantAnalyzerFactory'
-            - '@unknownGlobalFunctionAnalyzerFactory'
-            - '@unknownMemberAnalyzerFactory'
-            - '@unusedUseStatementAnalyzerFactory'
-            - '@docblockMissingAnalyzerFactory'

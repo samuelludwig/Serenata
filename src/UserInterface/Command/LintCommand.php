@@ -6,7 +6,6 @@ use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileIndexerInterface;
 
 use Serenata\Linting\Linter;
-use Serenata\Linting\LintingSettings;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -75,35 +74,25 @@ final class LintCommand extends AbstractCommand
             $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
         }
 
-        $settings = new LintingSettings(
-            !isset($arguments['no-unknown-classes']) || !$arguments['no-unknown-classes'],
-            !isset($arguments['no-unknown-members']) || !$arguments['no-unknown-members'],
-            !isset($arguments['no-unknown-global-functions']) || !$arguments['no-unknown-global-functions'],
-            !isset($arguments['no-unknown-global-constants']) || !$arguments['no-unknown-global-constants'],
-            !isset($arguments['no-docblock-correctness']) || !$arguments['no-docblock-correctness'],
-            !isset($arguments['no-unused-use-statements']) || !$arguments['no-unused-use-statements'],
-            !isset($arguments['no-missing-documentation']) || !$arguments['no-missing-documentation']
-        );
-
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->lint($arguments['file'], $code, $settings)
+            $this->lint($arguments['file'], $code)
         );
     }
 
     /**
-     * @param string          $filePath
-     * @param string          $code
-     * @param LintingSettings $settings
+     * @param string $filePath
+     * @param string $code
      *
      * @return array
      */
-    public function lint(string $filePath, string $code, LintingSettings $settings): array
+    public function lint(string $filePath, string $code): array
     {
+        // Not used (yet), but still throws an exception when file is in index.
         $file = $this->storage->getFileByPath($filePath);
 
         // $this->fileIndexer->index($filePath, $code);
 
-        return $this->linter->lint($file, $code, $settings);
+        return $this->linter->lint($code);
     }
 }

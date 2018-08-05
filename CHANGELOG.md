@@ -1,3 +1,7 @@
+## 5.0.0 (Unreleased)
+### Removals
+* Semantic linting support has been removed as it was previously deprecated
+
 ## 4.3.0 (Unreleased)
 ### Other Improvements
 * [Static members will now also be shown during non-static access](https://gitlab.com/Serenata/Serenata/issues/199)
