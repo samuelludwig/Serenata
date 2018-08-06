@@ -14,6 +14,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
+use Serenata\DocblockTypeParser\MixedDocblockType;
 use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
 
 use Serenata\Indexing\Structures;
@@ -189,9 +190,13 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
 
         $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-        $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+        if ($typeStringSpecification) {
+            $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 
-        $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+        } else {
+            $type = new MixedDocblockType();
+        }
 
         $constant = new Structures\Constant(
             $node->name,

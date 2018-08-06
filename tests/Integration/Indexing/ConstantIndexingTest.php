@@ -132,6 +132,16 @@ class ConstantIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testConstantWithoutTypeSpecificationGetsMixedType(): void
+    {
+        $constant = $this->indexConstant('ConstantNoTypeSpecification.phpt');
+
+        static::assertSame('mixed', $constant->getType()->toString());
+    }
+
+    /**
+     * @return void
+     */
     public function testChangesArePickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
