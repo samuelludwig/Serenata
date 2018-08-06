@@ -1005,9 +1005,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-        $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
+        if ($typeStringSpecification) {
+            $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 
-        $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+        } else {
+            $type = new MixedDocblockType();
+        }
 
         $accessModifierMap = $this->getAccessModifierMap();
 
