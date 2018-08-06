@@ -2,6 +2,10 @@
 
 namespace Serenata\Autocompletion;
 
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Interface for classes that determine the prefix (the part of the word that is being typed) for autocompletion
  * purposes at a specific location.
@@ -9,10 +13,10 @@ namespace Serenata\Autocompletion;
 interface AutocompletionPrefixDeterminerInterface
 {
     /**
-     * @param string $code
-     * @param int    $offset
+     * @param string   $source
+     * @param Position $position
      *
      * @return string
      */
-    public function determine(string $code, int $offset): string;
+    public function determine(string $source, Position $position): string;
 }

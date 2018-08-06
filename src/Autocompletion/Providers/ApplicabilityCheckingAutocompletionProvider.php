@@ -63,7 +63,10 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
     {
         $offset = $context->getPositionAsByteOffset();
 
-        $prefix = $this->autocompletionPrefixDeterminer->determine($context->getTextDocumentItem()->getText(), $offset);
+        $prefix = $this->autocompletionPrefixDeterminer->determine(
+            $context->getTextDocumentItem()->getText(),
+            $context->getPosition()
+        );
 
         if (!$this->autocompletionApplicabilityChecker->doesApplyToPrefix($prefix)) {
             return [];

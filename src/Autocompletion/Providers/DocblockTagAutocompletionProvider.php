@@ -39,7 +39,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
     {
         $prefixOverride = $this->autocompletionPrefixDeterminer->determine(
             $context->getTextDocumentItem()->getText(),
-            $context->getPositionAsByteOffset()
+            $context->getPosition()
         );
 
         foreach ($this->getTags() as $tag) {

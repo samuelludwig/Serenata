@@ -60,11 +60,12 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
         $this->indexTestFileWithSource($container, $path, $code);
 
         $provider = $container->get($this->getProviderName());
+        $position = Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE);
 
         $results = $provider->provide(new AutocompletionProviderContext(
             new TextDocumentItem($path, $code),
-            Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
-            $container->get('defaultAutocompletionPrefixDeterminer')->determine($code, $markerOffset)
+            $position,
+            $container->get('defaultAutocompletionPrefixDeterminer')->determine($code, $position)
         ));
 
         if (is_array($results)) {

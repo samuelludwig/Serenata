@@ -113,10 +113,12 @@ class AutocompleteCommand extends AbstractCommand
 
         // $this->fileIndexer->index($filePath, $code);
 
+        $position = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
+
         return $this->autocompletionProvider->provide(new AutocompletionProviderContext(
             new TextDocumentItem($filePath, $code),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE),
-            $this->autocompletionPrefixDeterminer->determine($code, $offset)
+            $position,
+            $this->autocompletionPrefixDeterminer->determine($code, $position)
         ));
     }
 }

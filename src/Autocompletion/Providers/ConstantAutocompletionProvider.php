@@ -7,7 +7,6 @@ use Serenata\Analysis\ConstantListProviderInterface;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Indexing\Structures\File;
 

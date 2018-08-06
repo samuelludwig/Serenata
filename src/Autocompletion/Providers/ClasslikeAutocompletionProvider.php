@@ -13,7 +13,6 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;

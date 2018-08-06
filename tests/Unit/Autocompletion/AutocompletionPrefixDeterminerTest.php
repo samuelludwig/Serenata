@@ -7,6 +7,8 @@ use PHPUnit_Framework_MockObject_MockObject;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminer;
 use Serenata\Autocompletion\AutocompletionPrefixBoundaryTokenRetrieverInterface;
 
+use Serenata\Common\Position;
+
 class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -33,10 +35,10 @@ class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
 
         $determiner = new AutocompletionPrefixDeterminer($this->boundaryTokenRetrieverMock);
 
-        static::assertSame('', $determiner->determine('hello', 0));
-        static::assertSame('hell', $determiner->determine('hello', 4));
-        static::assertSame('hello', $determiner->determine('hello', 5));
-        static::assertSame('lo', $determiner->determine('hel+lo', 6));
+        static::assertSame('', $determiner->determine('hello', new Position(0, 0)));
+        static::assertSame('hell', $determiner->determine('hello', new Position(0, 4)));
+        static::assertSame('hello', $determiner->determine('hello', new Position(0, 5)));
+        static::assertSame('lo', $determiner->determine('hel+lo', new Position(0, 6)));
     }
 
     /**
@@ -48,6 +50,6 @@ class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
 
         $determiner = new AutocompletionPrefixDeterminer($this->boundaryTokenRetrieverMock);
 
-        static::assertSame('hel\lo', $determiner->determine('hel\lo', 6));
+        static::assertSame('hel\lo', $determiner->determine('hel\lo', new Position(0, 6)));
     }
 }
