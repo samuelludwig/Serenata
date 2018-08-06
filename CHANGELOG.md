@@ -5,6 +5,7 @@
     * Use `TextDocumentItem` almost everywhere instead of using a `File` entity
     * Use (language server) positions with character offsets in almost all places rather than old byte offsets
     * Replace several [data clumps](https://en.wikipedia.org/wiki/Data_Clump_(Code_Smell)) with proper classes
+* Properties, constants, function parameters will now return a `mixed` type instead of no type at all if the type is not known
 
 ## 4.3.0 (Unreleased)
 ### Improvements
