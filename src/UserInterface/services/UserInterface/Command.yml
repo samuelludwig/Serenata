@@ -128,6 +128,7 @@ services:
             - '@sourceCodeStreamReader'
             - '@storage'
             - '@fileIndexer'
+            - '@defaultAutocompletionPrefixDeterminer'
 
     gotoDefinitionCommand:
         class: Serenata\UserInterface\Command\GotoDefinitionCommand
