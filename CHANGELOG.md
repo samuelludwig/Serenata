@@ -7,7 +7,7 @@
     * Replace several [data clumps](https://en.wikipedia.org/wiki/Data_Clump_(Code_Smell)) with proper classes
 
 ## 4.3.0 (Unreleased)
-### Other Improvements
+### Improvements
 * [Static members will now also be shown during non-static access](https://gitlab.com/Serenata/Serenata/issues/199)
 * Autocompletion suggestions now give back a `detail` property as specified in the language server protocol
     * The `extraData.declaringStructure` properly will temporarily remain as an alias but is now deprecated and will be removed in a future version as it is now directly used to generate the `detail` property rather than leaving that to clients.
