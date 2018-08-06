@@ -1,6 +1,10 @@
 ## 5.0.0 (Unreleased)
-### Removals
+### Improvements
 * Semantic linting support has been removed as it was previously deprecated
+* Major internal refactoring work to becoming more compliant with the language server protocol
+    * Use `TextDocumentItem` almost everywhere instead of using a `File` entity
+    * Use (language server) positions with character offsets in almost all places rather than old byte offsets
+    * Replace several [data clumps](https://en.wikipedia.org/wiki/Data_Clump_(Code_Smell)) with proper classes
 
 ## 4.3.0 (Unreleased)
 ### Other Improvements
