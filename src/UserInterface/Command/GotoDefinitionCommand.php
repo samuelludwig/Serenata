@@ -2,6 +2,8 @@
 
 namespace Serenata\UserInterface\Command;
 
+use Serenata\Common\Position;
+
 use Serenata\GotoDefinition\DefinitionLocator;
 use Serenata\GotoDefinition\GotoDefinitionResult;
 
@@ -11,6 +13,8 @@ use Serenata\Indexing\FileIndexerInterface;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
 /**
@@ -100,6 +104,9 @@ final class GotoDefinitionCommand extends AbstractCommand
 
         // $this->fileIndexer->index($filePath, $code);
 
-        return $this->definitionLocator->locate($file, $code, $offset);
+        return $this->definitionLocator->locate(
+            new TextDocumentItem($filePath, $code),
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+        );
     }
 }
