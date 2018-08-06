@@ -2,11 +2,16 @@
 
 namespace Serenata\Tests\Integration\Tooltips;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Tooltips\TooltipResult;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 class TooltipProviderTest extends AbstractIntegrationTest
 {
@@ -487,7 +492,10 @@ Hello!
     {
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($file->getPath());
 
-        return $this->container->get('tooltipProvider')->get($file, $code, $position);
+        return $this->container->get('tooltipProvider')->get(
+            new TextDocumentItem($file->getPath(), $code),
+            Position::createFromByteOffset($position, $code, PositionEncoding::VALUE)
+        );
     }
 
     /**

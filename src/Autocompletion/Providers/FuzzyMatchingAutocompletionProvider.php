@@ -2,8 +2,6 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
-
 use Serenata\Indexing\Structures\File;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
@@ -20,11 +18,6 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
     private $delegate;
 
     /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
-
-    /**
      * @var BestStringApproximationDeterminerInterface
      */
     private $bestStringApproximationDeterminer;
@@ -36,18 +29,15 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
 
     /**
      * @param AutocompletionProviderInterface            $delegate
-     * @param AutocompletionPrefixDeterminerInterface    $autocompletionPrefixDeterminer
      * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
      * @param int                                        $resultLimit
      */
     public function __construct(
         AutocompletionProviderInterface $delegate,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         int $resultLimit
     ) {
         $this->delegate = $delegate;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->resultLimit = $resultLimit;
     }
@@ -55,11 +45,11 @@ final class FuzzyMatchingAutocompletionProvider implements AutocompletionProvide
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         return $this->bestStringApproximationDeterminer->determine(
-            $this->delegate->provide($file, $code, $offset),
-            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            $this->delegate->provide($context),
+            $context->getPrefix(),
             'filterText',
             $this->resultLimit
         );

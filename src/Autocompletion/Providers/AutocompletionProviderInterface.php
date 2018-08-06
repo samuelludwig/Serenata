@@ -10,11 +10,9 @@ use Serenata\Indexing\Structures\File;
 interface AutocompletionProviderInterface
 {
     /**
-     * @param File   $file
-     * @param string $code
-     * @param int    $offset
+     * @param AutocompletionProviderContext $context
      *
      * @return iterable iterable<AutocompletionSuggestion>
      */
-    public function provide(File $file, string $code, int $offset): iterable;
+    public function provide(AutocompletionProviderContext $context): iterable;
 }

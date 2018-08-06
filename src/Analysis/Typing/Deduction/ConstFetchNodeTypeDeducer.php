@@ -2,13 +2,10 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Utility\PositionEncoding;
+use PhpParser\Node;
 
 use Serenata\Analysis\Conversion\ConstantConverter;
 
-use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
 use Serenata\Indexing\Structures;
@@ -17,8 +14,6 @@ use Serenata\Indexing\ManagerRegistry;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\NodeHelpers;
-
-use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ConstFetch} node.
@@ -58,30 +53,13 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\ConstFetch) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\ConstFetch) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromConstFetchNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\ConstFetch $node
-     * @param Structures\File      $file
-     * @param string               $code
-     * @param int                  $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromConstFetchNode(
-        Node\Expr\ConstFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        $name = NodeHelpers::fetchClassName($node->name);
+        $name = NodeHelpers::fetchClassName($context->getNode()->name);
 
         if ($name === 'null') {
             return ['null'];
@@ -90,12 +68,13 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         }
 
         $filePosition = new FilePosition(
-            $file->getPath(),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+            $context->getTextDocumentItem()->getUri(),
+            $context->getPosition()
         );
 
         $fqsen = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($name, $filePosition);
 
+        /** @var Structures\ConstantLike|null $globalConstant */
         $globalConstant = $this->managerRegistry->getRepository(Structures\Constant::class)->findOneBy([
             'fqcn' => $fqsen
         ]);

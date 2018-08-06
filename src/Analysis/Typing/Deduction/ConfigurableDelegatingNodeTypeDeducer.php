@@ -2,12 +2,6 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Indexing\Structures;
-
-use PhpParser\Node;
-
 /**
  * Type deducer that can deduce the type of a {@see Node} object by delegating it to another (configurable) object.
  */
@@ -21,7 +15,7 @@ final class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeduce
     /**
      * @param NodeTypeDeducerInterface|null $nodeTypeDeducer
      */
-    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer = null)
+    public function __construct(?NodeTypeDeducerInterface $nodeTypeDeducer = null)
     {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
     }
@@ -29,13 +23,13 @@ final class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeduce
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
         if (!$this->nodeTypeDeducer) {
-            throw new UnexpectedValueException('No node type deducer to delegate to configured!');
+            throw new TypeDeductionException('No node type deducer to delegate to configured!');
         }
 
-        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce($context);
     }
 
     /**
@@ -48,12 +42,9 @@ final class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeduce
 
     /**
      * @param NodeTypeDeducerInterface|null $nodeTypeDeducer
-     *
-     * @return static
      */
-    public function setNodeTypeDeducer(NodeTypeDeducerInterface $nodeTypeDeducer = null)
+    public function setNodeTypeDeducer(?NodeTypeDeducerInterface $nodeTypeDeducer): void
     {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        return $this;
     }
 }

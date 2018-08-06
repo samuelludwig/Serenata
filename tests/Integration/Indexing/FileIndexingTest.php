@@ -4,6 +4,8 @@ namespace Serenata\Tests\Integration\Tooltips;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
+use Serenata\Utility\TextDocumentItem;
+
 class FileIndexingTest extends AbstractIntegrationTest
 {
     /**
@@ -15,7 +17,7 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $code = '<?php class A {}';
 
-        $this->container->get('fileIndexer')->index($path, $code);
+        $this->container->get('fileIndexer')->index(new TextDocumentItem($path, $code));
 
         $files = $this->container->get('storage')->getFiles();
 
@@ -25,7 +27,7 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $code = '<?php class B {}';
 
-        $this->container->get('fileIndexer')->index($path, $code);
+        $this->container->get('fileIndexer')->index(new TextDocumentItem($path, $code));
 
         $files = $this->container->get('storage')->getFiles();
 
@@ -42,7 +44,7 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $code = '<?php class A {}';
 
-        $this->container->get('fileIndexer')->index($path, $code);
+        $this->container->get('fileIndexer')->index(new TextDocumentItem($path, $code));
 
         $files = $this->container->get('storage')->getFiles();
 
@@ -50,7 +52,7 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $timestamp = $files[0]->getIndexedOn();
 
-        $this->container->get('fileIndexer')->index($path, $code);
+        $this->container->get('fileIndexer')->index(new TextDocumentItem($path, $code));
 
         $files = $this->container->get('storage')->getFiles();
 
@@ -67,7 +69,7 @@ class FileIndexingTest extends AbstractIntegrationTest
 
         $code = '<?php class A {}';
 
-        $this->container->get('fileIndexer')->index($path, $code);
+        $this->container->get('fileIndexer')->index(new TextDocumentItem($path, $code));
 
         $files = $this->container->get('storage')->getFiles();
 

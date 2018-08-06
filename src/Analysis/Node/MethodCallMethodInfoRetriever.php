@@ -7,11 +7,16 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Fetches method information from a {@see Node\Expr\MethodCall}, {@see Node\Expr\StaticCall} or a {@see Node\Expr\New_}
@@ -43,16 +48,15 @@ class MethodCallMethodInfoRetriever
 
     /**
      * @param Node\Expr\MethodCall|Node\Expr\StaticCall|Node\Expr\New_ $node
-     * @param Structures\File                                          $file
-     * @param string                                                   $code
-     * @param int                                                      $offset
+     * @param TextDocumentItem                                         $textDocumentItem
+     * @param Position                                                 $position
      *
      * @throws UnexpectedValueException when a dynamic method call is passed.
      * @throws UnexpectedValueException when the type the method is called on could not be determined.
      *
      * @return array[]
      */
-    public function retrieve(Node\Expr $node, Structures\File $file, string $code, int $offset): array
+    public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
     {
         if (
             !$node instanceof Node\Expr\MethodCall &&
@@ -75,7 +79,11 @@ class MethodCallMethodInfoRetriever
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
         $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name->name;
 
-        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
+        $typesOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $objectNode,
+            $textDocumentItem,
+            $position
+        ));
 
         $infoElements = [];
 

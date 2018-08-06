@@ -4,11 +4,14 @@ namespace Serenata\Tests\Unit\Analysis\Typing\Deduction;
 
 use DateTime;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
 
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,9 +35,9 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     {
         $node = new Node\Stmt\Class_('A');
 
-        $file = new Structures\File('', new DateTime(), []);
-
-        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce(
+            new TypeDeductionContext($node, new TextDocumentItem('', ''))
+        ));
     }
 
     /**
@@ -46,7 +49,9 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce(
+            new TypeDeductionContext($node, new TextDocumentItem('', ''))
+        ));
     }
 
     /**
@@ -58,7 +63,9 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0));
+        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce(
+            new TypeDeductionContext($node, new TextDocumentItem('', ''))
+        ));
     }
 
     /**
@@ -73,8 +80,8 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
         $file = new Structures\File('/test/path', new DateTime(), []);
 
         static::assertSame(
-            ['\(anonymous_a19f6c462322bef8d3cad086eca0e32a_9)'],
-            $this->classLikeNodeTypeDeducer->deduce($node, $file, '', 0)
+            ['\(anonymous_d41d8cd98f00b204e9800998ecf8427e_9)'],
+            $this->classLikeNodeTypeDeducer->deduce(new TypeDeductionContext($node, new TextDocumentItem('', '')))
         );
     }
 }

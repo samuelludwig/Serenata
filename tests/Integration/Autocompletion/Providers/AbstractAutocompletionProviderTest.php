@@ -2,7 +2,14 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
+use Serenata\Autocompletion\Providers\AutocompletionProviderContext;
+
+use Serenata\Common\Position;
+
 use Serenata\Tests\Integration\AbstractIntegrationTest;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Abstract base class for autocompletion provider integration tests.
@@ -54,11 +61,11 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
         $provider = $container->get($this->getProviderName());
 
-        $results = $provider->provide(
-            $container->get('storage')->getFileByPath($path),
-            $code,
-            $markerOffset
-        );
+        $results = $provider->provide(new AutocompletionProviderContext(
+            new TextDocumentItem($path, $code),
+            Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
+            $container->get('defaultAutocompletionPrefixDeterminer')->determine($code, $markerOffset)
+        ));
 
         if (is_array($results)) {
             return $results;

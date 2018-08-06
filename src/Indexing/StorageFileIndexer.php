@@ -20,6 +20,8 @@ use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
 
 use Serenata\Parsing\DocblockParser;
 
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Handles indexing PHP code in a single file.
  *
@@ -105,28 +107,28 @@ final class StorageFileIndexer implements FileIndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(string $filePath, string $code): void
+    public function index(TextDocumentItem $textDocumentItem): void
     {
         $this->storage->beginTransaction();
 
         try {
-            $file = $this->storage->getFileByPath($filePath);
+            $file = $this->storage->getFileByPath($textDocumentItem->getUri());
             $file->setIndexedOn(new DateTime());
         } catch (FileNotFoundStorageException $e) {
-            $file = new Structures\File($filePath, new DateTime(), []);
+            $file = new Structures\File($textDocumentItem->getUri(), new DateTime(), []);
         }
 
         $this->storage->persist($file);
 
         try {
-            $nodes = $this->getNodes($code);
+            $nodes = $this->getNodes($textDocumentItem->getText());
 
             // NOTE: Traversing twice may seem absurd, but a rewrite of the use statement indexing visitor to support
             // on-the-fly indexing (i.e. not after the traversal, so it does not need to run separately) seemed to make
             // performance worse, because of the constant flushing and entity changes due to the end lines being
             // recalculated, than just traversing twice.
-            $this->indexNamespacesWithUseStatements($file, $nodes, $code);
-            $this->indexCode($file, $nodes, $code);
+            $this->indexNamespacesWithUseStatements($nodes, $file, $textDocumentItem);
+            $this->indexCode($nodes, $file, $textDocumentItem);
 
             $this->storage->commitTransaction();
         } catch (Error $e) {
@@ -134,12 +136,13 @@ final class StorageFileIndexer implements FileIndexerInterface
 
             throw new IndexingFailedException($e->getMessage(), 0, $e);
         } catch (Exception $e) {
+            throw $e;
             $this->storage->rollbackTransaction();
 
             throw new LogicException(
                 'Could not index file due to an internal exception. This likely means an exception should be caught ' .
-                'at a deeper level (if it is acceptable) or there is a bug. The file is "' . $filePath . '" and the ' .
-                'exact exception message: "' . $e->getMessage() . '"',
+                'at a deeper level (if it is acceptable) or there is a bug. The file is "' .
+                $textDocumentItem->getUri() . '" and the exact exception message: "' . $e->getMessage() . '"',
                 0,
                 $e
             );
@@ -167,15 +170,22 @@ final class StorageFileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param array           $nodes
+     * @param array            $nodes
+     * @param Structures\File  $file
+     * @param TextDocumentItem $textDocumentItem
      *
      * @throws Exception
      */
-    private function indexNamespacesWithUseStatements(Structures\File $file, array $nodes, string $code): void
-    {
-        $useStatementIndexingVisitor = new Visiting\UseStatementIndexingVisitor($this->storage, $file, $code);
+    private function indexNamespacesWithUseStatements(
+        array $nodes,
+        Structures\File $file,
+        TextDocumentItem $textDocumentItem
+    ): void {
+        $useStatementIndexingVisitor = new Visiting\UseStatementIndexingVisitor(
+            $this->storage,
+            $file,
+            $textDocumentItem->getText()
+        );
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new Visiting\ClassLikeBodySkippingVisitor());
@@ -196,17 +206,17 @@ final class StorageFileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param Structures\File $file
-     * @param array           $nodes
-     * @param string          $code
+     * @param array            $nodes
+     * @param Structures\File  $file
+     * @param TextDocumentItem $textDocumentItem
      *
      * @throws Exception
      */
-    private function indexCode(Structures\File $file, array $nodes, string $code): void
+    private function indexCode(array $nodes, Structures\File $file, TextDocumentItem $textDocumentItem): void
     {
         $traverser = new NodeTraverser();
 
-        foreach ($this->getIndexingVisitors($code, $file) as $visitor) {
+        foreach ($this->getIndexingVisitors($file, $textDocumentItem) as $visitor) {
             $traverser->addVisitor($visitor);
         }
 
@@ -224,12 +234,12 @@ final class StorageFileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param string          $code
-     * @param Structures\File $file
+     * @param Structures\File  $file
+     * @param TextDocumentItem $textDocumentItem
      *
      * @return array
      */
-    private function getIndexingVisitors(string $code, Structures\File $file): array
+    private function getIndexingVisitors(Structures\File $file, TextDocumentItem $textDocumentItem): array
     {
         return [
             new Visiting\ConstantIndexingVisitor(
@@ -239,7 +249,7 @@ final class StorageFileIndexer implements FileIndexerInterface
                 $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
                 $file,
-                $code
+                $textDocumentItem
             ),
 
             new Visiting\DefineIndexingVisitor(
@@ -248,7 +258,7 @@ final class StorageFileIndexer implements FileIndexerInterface
                 $this->docblockTypeParser,
                 $this->typeResolvingDocblockTypeTransformer,
                 $file,
-                $code
+                $textDocumentItem
             ),
 
             new Visiting\FunctionIndexingVisitor(
@@ -258,7 +268,7 @@ final class StorageFileIndexer implements FileIndexerInterface
                 $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
                 $file,
-                $code
+                $textDocumentItem
             ),
 
             new Visiting\ClasslikeIndexingVisitor(
@@ -269,7 +279,7 @@ final class StorageFileIndexer implements FileIndexerInterface
                 $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
                 $file,
-                $code
+                $textDocumentItem
             ),
 
             new Visiting\MetaStaticMethodTypeIndexingVisitor(

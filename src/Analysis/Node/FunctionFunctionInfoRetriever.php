@@ -14,6 +14,7 @@ use Serenata\Common\Position;
 use Serenata\Indexing\Structures;
 
 use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Fetches method information from a {@see Node\Expr\FuncCall} or a {@see Node\Stmt\Function_} node.
@@ -44,20 +45,15 @@ class FunctionFunctionInfoRetriever
 
     /**
      * @param Node\Expr\FuncCall|Node\Stmt\Function_ $node
-     * @param Structures\File                        $file
-     * @param string                                 $code
-     * @param int                                    $offset
+     * @param TextDocumentItem                       $textDocumentItem
+     * @param Position                               $position
      *
      * @throws UnexpectedValueException when the function wasn't found.
      *
      * @return array
      */
-    public function retrieve(
-        Node $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
+    public function retrieve(Node $node, TextDocumentItem $textDocumentItem, Position $position): array
+    {
         if ($node instanceof Node\Stmt\Function_) {
             return $this->getFunctionInfo('\\' . $node->namespacedName->toString());
         } elseif (!$node instanceof Node\Expr\FuncCall) {
@@ -73,11 +69,7 @@ class FunctionFunctionInfoRetriever
         $nameNode = new Node\Name\Relative((string) $node->name);
         $nameNode->setAttribute('namespace', $node->getAttribute('namespace'));
 
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
-            $offset,
-            $code,
-            PositionEncoding::VALUE
-        ));
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $textDocumentItem->getUri(), $position);
 
         return $this->getFunctionInfo($fqsen);
     }

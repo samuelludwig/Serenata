@@ -6,9 +6,13 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Expr\MethodCall} nodes.
@@ -39,17 +43,16 @@ class MethodCallNodeTooltipGenerator
 
     /**
      * @param Node\Expr\MethodCall $node
-     * @param Structures\File      $file
-     * @param string               $code
-     * @param int                  $offset
+     * @param TextDocumentItem     $textDocumentItem
+     * @param Position             $position
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    public function generate(Node\Expr\MethodCall $node, Structures\File $file, string $code, int $offset): string
+    public function generate(Node\Expr\MethodCall $node, TextDocumentItem $textDocumentItem, Position $position): string
     {
-        $infoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $file, $code, $offset);
+        $infoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         if (empty($infoElements)) {
             throw new UnexpectedValueException('No method call information was found for node');

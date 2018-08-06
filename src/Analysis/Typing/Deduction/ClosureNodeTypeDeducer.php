@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
 
 /**
@@ -16,22 +12,12 @@ final class ClosureNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\Closure) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\Closure) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromClosureNode($node);
-    }
-
-    /**
-     * @param Node\Expr\Closure $node
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromClosureNode(Node\Expr\Closure $node): array
-    {
         return ['\Closure'];
     }
 }

@@ -15,6 +15,8 @@ use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Determines the FQSEN of a name used in a name node.
  */
@@ -34,15 +36,15 @@ class NameNodeFqsenDeterminer
     }
 
     /**
-     * @param Node\Name       $node
-     * @param Structures\File $file
-     * @param int             $line
+     * @param Node\Name        $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return string
      */
-    public function determine(Node\Name $node, Structures\File $file, int $line): string
+    public function determine(Node\Name $node, TextDocumentItem $textDocumentItem, Position $position): string
     {
-        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
+        $filePosition = new FilePosition($textDocumentItem->getUri(), $position);
 
         $fileTypeResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 

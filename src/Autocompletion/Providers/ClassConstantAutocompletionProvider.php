@@ -55,12 +55,11 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         $types = $this->expressionTypeDeducer->deduce(
-            $file,
-            $code,
-            $offset,
+            $context->getTextDocumentItem(),
+            $context->getPosition(),
             null,
             true
         );

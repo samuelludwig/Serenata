@@ -6,9 +6,13 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the definition of the function called in {@see Node\Expr\PropertyFetch} nodes.
@@ -30,9 +34,8 @@ class PropertyFetchDefinitionLocator
 
     /**
      * @param Node\Expr\PropertyFetch $node
-     * @param Structures\File         $file
-     * @param string                  $code
-     * @param int                     $offset
+     * @param TextDocumentItem        $textDocumentItem
+     * @param Position                $position
      *
      * @throws UnexpectedValueException
      *
@@ -40,11 +43,10 @@ class PropertyFetchDefinitionLocator
      */
     public function locate(
         Node\Expr\PropertyFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $file, $code, $offset);
+        $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         if (empty($infoElements)) {
             throw new UnexpectedValueException('No property fetch information was found for node');

@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
 
 /**
@@ -29,42 +25,21 @@ final class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\Ternary) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\Ternary) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromTernaryNode($node, $file, $code, $offset);
-    }
+        $firstOperandTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $context->getNode()->if ?: $context->getNode()->cond,
+            $context->getTextDocumentItem()
+        ));
 
-    /**
-     * @param Node\Expr\Ternary $node
-     * @param Structures\File   $file
-     * @param string            $code
-     * @param int               $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromTernaryNode(
-        Node\Expr\Ternary $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        $firstOperandTypes = $this->nodeTypeDeducer->deduce(
-            $node->if ?: $node->cond,
-            $file,
-            $code,
-            $node->getAttribute('startFilePos')
-        );
-
-        $secondOperandTypes = $this->nodeTypeDeducer->deduce(
-            $node->else,
-            $file,
-            $code,
-            $node->getAttribute('startFilePos')
-        );
+        $secondOperandTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $context->getNode()->else,
+            $context->getTextDocumentItem()
+        ));
 
         return array_unique(array_merge($firstOperandTypes, $secondOperandTypes));
     }

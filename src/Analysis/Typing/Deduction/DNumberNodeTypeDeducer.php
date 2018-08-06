@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
 
 /**
@@ -16,22 +12,12 @@ final class DNumberNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Scalar\DNumber) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Scalar\DNumber) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromDNumberNode($node);
-    }
-
-    /**
-     * @param Node\Scalar\DNumber $node
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromDNumberNode(Node\Scalar\DNumber $node): array
-    {
         return ['float'];
     }
 }

@@ -4,17 +4,18 @@ namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
+
 use Serenata\Analysis\ConstantListProviderInterface;
 
 use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
-
-use PhpParser\Node;
 
 use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures;
 
 use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the definition of the constant called in {@see Node\Expr\ConstFetch} nodes.
@@ -45,9 +46,8 @@ class ConstFetchNodeDefinitionLocator
 
     /**
      * @param Node\Expr\ConstFetch $node
-     * @param Structures\File      $file
-     * @param string               $code
-     * @param int                  $offset
+     * @param TextDocumentItem     $textDocumentItem
+     * @param Position             $position
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
@@ -55,15 +55,10 @@ class ConstFetchNodeDefinitionLocator
      */
     public function generate(
         Node\Expr\ConstFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        $fqsen = $this->constFetchNodeFqsenDeterminer->determine(
-            $node,
-            $file,
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
-        );
+        $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node, $textDocumentItem, $position);
 
         $info = $this->getConstantInfo($fqsen);
 

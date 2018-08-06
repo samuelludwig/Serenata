@@ -2,17 +2,16 @@
 
 namespace Serenata\Autocompletion\Providers;
 
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
+
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
+use Serenata\Indexing\Structures\File;
+
 use Serenata\Utility\TextEdit;
 use Serenata\Utility\PositionEncoding;
-
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
-
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides superglobal autocompletion suggestions at a specific location in a file.
@@ -23,59 +22,33 @@ use Serenata\Indexing\Structures\File;
 final class SuperglobalAutocompletionProvider implements AutocompletionProviderInterface
 {
     /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
-
-    /**
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
-     */
-    public function __construct(AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer)
-    {
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
-    }
-
-    /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
         foreach ($this->getSuperGlobals() as $superGlobal) {
-            yield $this->createSuggestion($superGlobal, $code, $offset, $prefix);
+            yield $this->createSuggestion($superGlobal, $context);
         }
     }
 
     /**
-     * @param array  $superGlobal
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $superGlobal
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
     private function createSuggestion(
         array $superGlobal,
-        string $code,
-        int $offset,
-        string $prefix
+        AutocompletionProviderContext $context
     ): AutocompletionSuggestion {
-        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
-
-        $textEdit = new TextEdit(
-            new Range(
-                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
-                $endPosition
-            ),
-            $superGlobal['name']
-        );
-
         return new AutocompletionSuggestion(
             $superGlobal['name'],
             SuggestionKind::VARIABLE,
             $superGlobal['name'],
-            $textEdit,
+            new TextEdit(
+                $context->getPrefixRange(),
+                $superGlobal['name']
+            ),
             $superGlobal['name'],
             'PHP superglobal',
             [

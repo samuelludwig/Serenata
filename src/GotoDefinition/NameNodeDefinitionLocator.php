@@ -8,9 +8,13 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Node\NameNodeFqsenDeterminer;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the definition of classlikes represented by {@see Node\Name} nodes.
@@ -40,17 +44,20 @@ class NameNodeDefinitionLocator
     }
 
     /**
-     * @param Node\Name       $node
-     * @param Structures\File $file
-     * @param int             $line
+     * @param Node\Name        $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
      * @return GotoDefinitionResult
      */
-    public function locate(Node\Name $node, Structures\File $file, int $line): GotoDefinitionResult
-    {
-        $fqsen = $this->nameNodeFqsenDeterminer->determine($node, $file, $line);
+    public function locate(
+        Node\Name $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): GotoDefinitionResult {
+        $fqsen = $this->nameNodeFqsenDeterminer->determine($node, $textDocumentItem, $position);
 
         $info = $this->getClassLikeInfo($fqsen);
 

@@ -4,13 +4,12 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Analysis\NamespaceListProviderInterface;
 
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Indexing\Structures\File;
-
-use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**
  * Provides namespace autocompletion suggestions at a specific location in a file.
@@ -21,11 +20,6 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      * @var NamespaceListProviderInterface
      */
     private $namespaceListProvider;
-
-    /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
 
     /**
      * @var BestStringApproximationDeterminerInterface
@@ -39,18 +33,15 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
 
     /**
      * @param NamespaceListProviderInterface             $namespaceListProvider
-     * @param AutocompletionPrefixDeterminerInterface    $autocompletionPrefixDeterminer
      * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
      * @param int                                        $resultLimit
      */
     public function __construct(
         NamespaceListProviderInterface $namespaceListProvider,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         int $resultLimit
     ) {
         $this->namespaceListProvider = $namespaceListProvider;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->resultLimit = $resultLimit;
     }
@@ -58,7 +49,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         $existingNames = [];
 
@@ -77,17 +68,15 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             }
         );
 
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $namespaceArrays,
-            $prefix,
+            $context->getPrefix(),
             'name',
             $this->resultLimit
         );
 
         foreach ($bestApproximations as $namespace) {
-            yield $this->createSuggestion($namespace, $prefix);
+            yield $this->createSuggestion($namespace, $context->getPrefix());
         }
     }
 

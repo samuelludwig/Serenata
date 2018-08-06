@@ -6,9 +6,13 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Expr\StaticPropertyFetch} nodes.
@@ -39,17 +43,19 @@ class StaticPropertyFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\StaticPropertyFetch $node
-     * @param Structures\File               $file
-     * @param string                        $code
-     * @param int                           $offset
+     * @param TextDocumentItem              $textDocumentItem
+     * @param Position                      $position
      *
      * @throws UnexpectedValueException
      *
      * @return string
      */
-    public function generate(Node\Expr\StaticPropertyFetch $node, Structures\File $file, string $code, int $offset): string
-    {
-        $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $file, $code, $offset);
+    public function generate(
+        Node\Expr\StaticPropertyFetch $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): string {
+        $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         if (empty($infoElements)) {
             throw new UnexpectedValueException('No property fetch information was found for node');

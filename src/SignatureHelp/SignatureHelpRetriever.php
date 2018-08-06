@@ -5,20 +5,22 @@ namespace Serenata\SignatureHelp;
 use LogicException;
 use UnexpectedValueException;
 
-use Serenata\Analysis\NodeAtOffsetLocatorInterface;
+use PhpParser\Node;
 
 use Serenata\Analysis\Node\FunctionFunctionInfoRetriever;
 use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
-use Serenata\Indexing\Structures;
+use Serenata\Analysis\NodeAtOffsetLocatorInterface;
+
+use Serenata\Common\Position;
 
 use Serenata\Parsing\ParserTokenHelper;
 
 use Serenata\PrettyPrinting\FunctionParameterPrettyPrinter;
 
 use Serenata\Utility\NodeHelpers;
-
-use PhpParser\Node;
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Retrieves invocation information for function and method calls.
@@ -72,26 +74,25 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $position
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException when there is no signature help to be retrieved for the location.
      * @throws UnexpectedValueException when a node type is encountered that this method doesn't know how to handle.
      *
      * @return SignatureHelp
      */
-    public function get(
-        Structures\File $file,
-        string $code,
-        int $position
-    ): SignatureHelp {
+    public function get(TextDocumentItem $textDocumentItem, Position $position): SignatureHelp
+    {
         $nodes = [];
 
         // try {
-            $node = $this->getNodeAt($code, $position);
+            $node = $this->getNodeAt(
+                $textDocumentItem->getText(),
+                $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
+            );
 
-            return $this->getSignatureHelpForNode($node, $file, $code, $position);
+            return $this->getSignatureHelpForNode($node, $textDocumentItem, $position);
         // } catch (UnexpectedValueException $e) {
         //     return null;
         // }
@@ -119,10 +120,9 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node            $node
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $position
+     * @param Node             $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException
      *
@@ -130,9 +130,8 @@ class SignatureHelpRetriever
      */
     private function getSignatureHelpForNode(
         Node $node,
-        Structures\File $file,
-        string $code,
-        int $position
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): SignatureHelp {
         $invocationNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
             $node,
@@ -142,8 +141,10 @@ class SignatureHelpRetriever
             Node\Expr\New_::class
         );
 
+        $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
+
         if (!$invocationNode) {
-            throw new UnexpectedValueException('No node supporting signature help found at location ' . $position);
+            throw new UnexpectedValueException('No node supporting signature help found at location');
         }
 
         $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Arg::class);
@@ -173,43 +174,49 @@ class SignatureHelpRetriever
                     );
                 }
 
-                if ($position <= $nodeNameEndFilePosition) {
+                if ($offset <= $nodeNameEndFilePosition) {
                     $invocationNode = $argumentNode->getAttribute('parent');
                 }
             } elseif ($closureNode) {
                 // When a closure is used as an argument to a call, we may still show signature help for the call, but
                 // not inside the closure's body, as a new scope begins there.
-                if ($position > $closureNode->getAttribute('bodyStartFilePos') &&
-                    $position <= $closureNode->getAttribute('bodyEndFilePos')
+                if ($offset > $closureNode->getAttribute('bodyStartFilePos') &&
+                    $offset <= $closureNode->getAttribute('bodyEndFilePos')
                 ) {
                     throw new UnexpectedValueException(
-                        'No node supporting signature help found inside closure at location ' . $position
+                        'No node supporting signature help found inside closure at location'
                     );
                 }
             }
         }
 
-        $argumentIndex = $this->getArgumentIndex($invocationNode, $code, $position);
+        $argumentIndex = $this->getArgumentIndex($invocationNode, $textDocumentItem, $position);
 
-        return $this->generateResponseFor($invocationNode, $argumentIndex, $file, $code, $position);
+        return $this->generateResponseFor($invocationNode, $argumentIndex, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\FuncCall|Node\Expr\StaticCall|Node\Expr\MethodCall|Node\Expr\New_ $invocationNode
-     * @param string                                                                      $code
-     * @param int                                                                         $position
+     * @parm TextDocumentItem                                                             $textDocumentItem
+     * @parm Position                                                                     $position
      *
      * @return int
      */
-    private function getArgumentIndex(Node $invocationNode, string $code, int $position): int
-    {
+    private function getArgumentIndex(
+        Node $invocationNode,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): int {
         $arguments = $invocationNode->args;
 
+        $code = $textDocumentItem->getText();
+        $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
+
         if (empty($arguments)) {
-            for ($i = $position; $i < $invocationNode->getAttribute('endFilePos'); ++$i) {
+            for ($i = $offset; $i < $invocationNode->getAttribute('endFilePos'); ++$i) {
                 if ($code[$i] === '(') {
                     throw new UnexpectedValueException(
-                        'Found node supporting signature help at location ' . $position . ', but it\'s outside the ' .
+                        'Found node supporting signature help at location ' . $offset . ', but it\'s outside the ' .
                         'range of the argument list'
                     );
                 }
@@ -236,9 +243,9 @@ class SignatureHelpRetriever
             }
         }
 
-        if ($position <= $startOfArgumentList || $position > $endOfArgumentList) {
+        if ($offset <= $startOfArgumentList || $offset > $endOfArgumentList) {
             throw new UnexpectedValueException(
-                'Found node supporting signature help at location ' . $position . ', but it\'s outside the ' .
+                'Found node supporting signature help at location ' . $offset . ', but it\'s outside the ' .
                 'range of the argument list'
             );
         }
@@ -248,11 +255,11 @@ class SignatureHelpRetriever
 
         foreach ($arguments as $argument) {
             // NOTE: Node end positions are inclusive rather than exclusive.
-            if ($position >= ($argument->getAttribute('endFilePos')+1)) {
+            if ($offset >= ($argument->getAttribute('endFilePos')+1)) {
                 $argumentNodeBefore = $argument;
             }
 
-            if (!$argumentNodeAfter && $position <= $argument->getAttribute('startFilePos')) {
+            if (!$argumentNodeAfter && $offset <= $argument->getAttribute('startFilePos')) {
                 $argumentNodeAfter = $argument;
             }
         }
@@ -263,7 +270,7 @@ class SignatureHelpRetriever
 
         $isBeforeComma = true;
 
-        for ($i = $argumentNodeBefore->getAttribute('endFilePos') + 1; $i < $position; ++$i) {
+        for ($i = $argumentNodeBefore->getAttribute('endFilePos') + 1; $i < $offset; ++$i) {
             if ($code[$i] === ',') {
                 $isBeforeComma = false;
                 break;
@@ -278,11 +285,10 @@ class SignatureHelpRetriever
     }
 
     /**
-     * @param Node            $node
-     * @param int             $argumentIndex
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
+     * @param Node             $node
+     * @param int              $argumentIndex
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException
      *
@@ -291,9 +297,8 @@ class SignatureHelpRetriever
     private function generateResponseFor(
         Node $node,
         int $argumentIndex,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): SignatureHelp {
         $name = null;
         $parameters = [];
@@ -303,7 +308,7 @@ class SignatureHelpRetriever
             $node instanceof Node\Expr\StaticCall ||
             $node instanceof Node\Expr\New_
         ) {
-            $methodInfoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $file, $code, $offset);
+            $methodInfoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
             if (empty($methodInfoElements)) {
                 throw new UnexpectedValueException('Method to fetch signature help for was not found');
@@ -314,7 +319,7 @@ class SignatureHelpRetriever
 
             return $this->generateResponseFromFunctionInfo($methodInfo, $argumentIndex);
         } elseif ($node instanceof Node\Expr\FuncCall) {
-            $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node, $file, $code, $offset);
+            $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
             return $this->generateResponseFromFunctionInfo($functionInfo, $argumentIndex);
         }

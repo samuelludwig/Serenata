@@ -6,15 +6,14 @@ use Generator;
 use LogicException;
 use UnexpectedValueException;
 
-use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\CircularDependencyException;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+
+use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
-
-use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Indexing\Structures\File;
 
@@ -39,39 +38,28 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     private $autocompletionSuggestionTypeFormatter;
 
     /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
-
-    /**
      * @param ExpressionTypeDeducer                 $expressionTypeDeducer
      * @param ClasslikeInfoBuilderInterface         $classlikeInfoBuilder
      * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
         $types = $this->expressionTypeDeducer->deduce(
-            $file,
-            $code,
-            $offset,
+            $context->getTextDocumentItem(),
+            $context->getPosition(),
             null,
             true
         );
@@ -87,7 +75,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
-            yield from $this->createSuggestionsForClasslikeInfo($classlikeInfoElement, $prefix);
+            yield from $this->createSuggestionsForClasslikeInfo($classlikeInfoElement, $context->getPrefix());
         }
     }
 

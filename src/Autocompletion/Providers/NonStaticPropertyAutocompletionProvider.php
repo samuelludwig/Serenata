@@ -6,14 +6,14 @@ use Generator;
 use LogicException;
 use UnexpectedValueException;
 
-use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\CircularDependencyException;
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+
+use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
-
-use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Indexing\Structures\File;
 
@@ -55,12 +55,11 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         $types = $this->expressionTypeDeducer->deduce(
-            $file,
-            $code,
-            $offset,
+            $context->getTextDocumentItem(),
+            $context->getPosition(),
             null,
             true
         );

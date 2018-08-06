@@ -4,11 +4,16 @@ namespace Serenata\Tests\Integration\SignatureHelp;
 
 use UnexpectedValueException;
 
+use Serenata\Common\Position;
+
 use Serenata\SignatureHelp\SignatureHelp;
 use Serenata\SignatureHelp\ParameterInformation;
 use Serenata\SignatureHelp\SignatureInformation;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 {
@@ -313,7 +318,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testFunctionCallFailsWhenArgumentIsOutOfBounds(): void
     {
-        $result = $this->getSignatureHelp('FunctionCallTooManyArguments.phpt', 113);
+        $result = $this->getSignatureHelp('FunctionCallTooManyArguments.phpt', 98);
     }
 
     /**
@@ -390,9 +395,10 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
-
-        return $this->container->get('signatureHelpRetriever')->get($file, $code, $position);
+        return $this->container->get('signatureHelpRetriever')->get(
+            new TextDocumentItem($path, $code),
+            Position::createFromByteOffset($position, $code, PositionEncoding::VALUE)
+        );
     }
 
     /**

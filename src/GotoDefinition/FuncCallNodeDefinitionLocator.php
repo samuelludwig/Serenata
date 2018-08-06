@@ -4,22 +4,20 @@ namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
+
 use Serenata\Analysis\FunctionListProviderInterface;
 
 use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
 
-use PhpParser\Node;
-
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
-
-use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the definition of the function called in {@see Node\Expr\FuncCall} nodes.
  */
-class FuncCallNodeDefinitionLocator
+final class FuncCallNodeDefinitionLocator
 {
     /**
      * @var FunctionCallNodeFqsenDeterminer
@@ -45,9 +43,8 @@ class FuncCallNodeDefinitionLocator
 
     /**
      * @param Node\Expr\FuncCall $node
-     * @param Structures\File    $file
-     * @param string             $code
-     * @param int                $offset
+     * @param TextDocumentItem   $textDocumentItem
+     * @param Position           $position
      *
      * @throws UnexpectedValueException when the function was not found.
      * @throws UnexpectedValueException when a dynamic function call is passed.
@@ -56,19 +53,14 @@ class FuncCallNodeDefinitionLocator
      */
     public function locate(
         Node\Expr\FuncCall $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
         if (!$node->name instanceof Node\Name) {
             throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
         }
 
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
-            $offset,
-            $code,
-            PositionEncoding::VALUE
-        ));
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $textDocumentItem->getUri(), $position);
 
         $info = $this->getFunctionInfo($fqsen);
 

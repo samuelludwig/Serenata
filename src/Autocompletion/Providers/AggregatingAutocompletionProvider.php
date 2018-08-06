@@ -25,10 +25,10 @@ final class AggregatingAutocompletionProvider implements AutocompletionProviderI
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         foreach ($this->delegates as $delegate) {
-            yield from $delegate->provide($file, $code, $offset);
+            yield from $delegate->provide($context);
         }
     }
 }

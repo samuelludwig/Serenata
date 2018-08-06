@@ -4,19 +4,18 @@ namespace Serenata\Autocompletion\Providers;
 
 use PhpParser\Node;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
-use Serenata\Utility\TextEdit;
-use Serenata\Utility\PositionEncoding;
-
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
+
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures\File;
+
+use Serenata\Utility\TextEdit;
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides parameter name autocompletion suggestions at a specific location in a file.
@@ -29,47 +28,34 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
     private $nodeAtOffsetLocator;
 
     /**
-     * @var AutocompletionPrefixDeterminerInterface
+     * @param NodeAtOffsetLocatorInterface $nodeAtOffsetLocator
      */
-    private $autocompletionPrefixDeterminer;
-
-    /**
-     * @param NodeAtOffsetLocatorInterface            $nodeAtOffsetLocator
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
-     */
-    public function __construct(
-        NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
-    ) {
+    public function __construct(NodeAtOffsetLocatorInterface $nodeAtOffsetLocator)
+    {
         $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
-        $paramNode = $this->findParamNode($code, $offset);
+        $paramNode = $this->findParamNode($context);
 
         if ($paramNode === null) {
             return [];
         }
 
-        return $this->createSuggestionsForParamNode($paramNode, $code, $offset, $prefix);
+        return $this->createSuggestionsForParamNode($paramNode, $context);
     }
 
     /**
-     * @param Node\Param $node
-     * @param string     $code
-     * @param int        $offset
-     * @param string     $prefix
+     * @param Node\Param                    $node
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion[]
      */
-    private function createSuggestionsForParamNode(Node\Param $node, string $code, int $offset, string $prefix): array
+    private function createSuggestionsForParamNode(Node\Param $node, AutocompletionProviderContext $context): array
     {
         if ($node->type === null) {
             return [];
@@ -77,51 +63,39 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
 
         $typeName = $this->determineTypeNameOfNode($node->type);
 
-        $suggestions = $this->generateSuggestionsForName($typeName, $code, $offset, $prefix);
+        $suggestions = $this->generateSuggestionsForName($typeName, $context);
 
         $typeNameParts = array_filter(explode('\\', $typeName));
 
         if (count($typeNameParts) > 1) {
             $lastTypeNamePart = array_pop($typeNameParts);
 
-            $suggestions = array_merge($suggestions, $this->generateSuggestionsForName(
-                $lastTypeNamePart,
-                $code,
-                $offset,
-                $prefix
-            ));
+            $suggestions = array_merge($suggestions, $this->generateSuggestionsForName($lastTypeNamePart, $context));
         }
 
         return $suggestions;
     }
 
     /**
-     * @param string $name
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param string                        $name
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion[]
      */
-    private function generateSuggestionsForName(string $name, string $code, int $offset, string $prefix): array
+    private function generateSuggestionsForName(string $name, AutocompletionProviderContext $context): array
     {
         $suggestions = [];
 
         // "MyNamespace\Foo" -> "$myNamespaceFoo", "MyClass" -> "$myClass"
         $bestTypeNameApproximation = lcfirst(str_replace('\\', '', $name));
 
-        $suggestions[] = $this->createSuggestion('$' . $bestTypeNameApproximation, $code, $offset, $prefix);
+        $suggestions[] = $this->createSuggestion('$' . $bestTypeNameApproximation, $context);
 
         // "MyNamespace\FooInterface" -> "$myNamespaceFoo", "SomeTrait" -> "Some", "MyClass" -> "$my"
         $bestTypeNameApproximationWithoutLastWord = $this->generateNameWithoutLastWord($bestTypeNameApproximation);
 
         if ($bestTypeNameApproximationWithoutLastWord !== '') {
-            $suggestions[] = $this->createSuggestion(
-                '$' . $bestTypeNameApproximationWithoutLastWord,
-                $code,
-                $offset,
-                $prefix
-            );
+            $suggestions[] = $this->createSuggestion('$' . $bestTypeNameApproximationWithoutLastWord, $context);
         }
 
         return $suggestions;
@@ -169,24 +143,22 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
     }
 
     /**
-     * @param string $name
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param string                        $name
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(string $name, string $code, int $offset, string $prefix): AutocompletionSuggestion
+    private function createSuggestion(string $name, AutocompletionProviderContext $context): AutocompletionSuggestion
     {
         return new AutocompletionSuggestion(
             $name,
             SuggestionKind::VARIABLE,
             $name,
-            $this->getTextEditForSuggestion($name, $code, $offset, $prefix),
+            $this->getTextEditForSuggestion($name, $context),
             $name,
             null,
             [
-                'prefix' => $prefix
+                'prefix' => $context->getPrefix()
             ],
             [],
             false
@@ -201,35 +173,27 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param string $name
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param string                        $name
+     * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
      */
-    private function getTextEditForSuggestion(string $name, string $code, int $offset, string $prefix): TextEdit
+    private function getTextEditForSuggestion(string $name, AutocompletionProviderContext $context): TextEdit
     {
-        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
-
-        return new TextEdit(
-            new Range(
-                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
-                $endPosition
-            ),
-            $name
-        );
+        return new TextEdit($context->getPrefixRange(), $name);
     }
 
     /**
-     * @param string $code
-     * @param int    $offset
+     * @param AutocompletionProviderContext $context
      *
      * @return Node\Param|null
      */
-    private function findParamNode(string $code, int $offset): ?Node\Param
+    private function findParamNode(AutocompletionProviderContext $context): ?Node\Param
     {
-        $nodeResult = $this->nodeAtOffsetLocator->locate($code, $offset - 1);
+        $nodeResult = $this->nodeAtOffsetLocator->locate(
+            $context->getTextDocumentItem()->getText(),
+            $context->getPositionAsByteOffset() - 1
+        );
 
         $node = $nodeResult->getNode();
 

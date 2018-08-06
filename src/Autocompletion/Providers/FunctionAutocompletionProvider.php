@@ -4,17 +4,16 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Analysis\FunctionListProviderInterface;
 
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
 use Serenata\Indexing\Structures\File;
-
-use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**
  * Provides function autocompletion suggestions at a specific location in a file.
@@ -25,11 +24,6 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      * @var FunctionListProviderInterface
      */
     private $functionListProvider;
-
-    /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
 
     /**
      * @var BestStringApproximationDeterminerInterface
@@ -63,7 +57,6 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
 
     /**
      * @param FunctionListProviderInterface                                 $functionListProvider
-     * @param AutocompletionPrefixDeterminerInterface                       $autocompletionPrefixDeterminer
      * @param FunctionParametersEvaluator                                   $functionParametersEvaluator
      * @param BestStringApproximationDeterminerInterface                    $bestStringApproximationDeterminer
      * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
@@ -73,7 +66,6 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      */
     public function __construct(
         FunctionListProviderInterface $functionListProvider,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         FunctionParametersEvaluator $functionParametersEvaluator,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
@@ -82,7 +74,6 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         int $resultLimit
     ) {
         $this->functionListProvider = $functionListProvider;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->functionParametersEvaluator = $functionParametersEvaluator;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
@@ -94,14 +85,17 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         $shouldIncludeParanthesesInInsertText = $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator
-            ->evaluate($code, $offset);
+            ->evaluate(
+                $context->getTextDocumentItem()->getText(),
+                $context->getPositionAsByteOffset()
+            );
 
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $this->functionListProvider->getAll(),
-            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            $context->getPrefix(),
             'name',
             $this->resultLimit
         );

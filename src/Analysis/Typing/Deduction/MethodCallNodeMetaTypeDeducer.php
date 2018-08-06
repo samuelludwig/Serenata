@@ -2,13 +2,9 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
+use PhpParser\Node;
 
 use Serenata\Analysis\MetadataProviderInterface;
-
-use Serenata\Indexing\Structures;
-
-use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node based on
@@ -49,37 +45,28 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\MethodCall && !$node instanceof Node\Expr\StaticCall) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\MethodCall &&
+            !$context->getNode() instanceof Node\Expr\StaticCall
+        ) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromMethodCallNode($node, $file, $code, $offset);
-    }
+        $objectNode = ($context->getNode() instanceof Node\Expr\MethodCall) ?
+            $context->getNode()->var :
+            $context->getNode()->class;
 
-    /**
-     * @param Node\Expr\MethodCall|Node\Expr\StaticCall $node
-     * @param Structures\File                           $file
-     * @param string                                    $code
-     * @param int                                       $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromMethodCallNode(
-        Node\Expr $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
-        $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name;
+        $methodName = $context->getNode()->name;
 
         if (!$methodName instanceof Node\Identifier) {
             return [];
         }
 
-        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
+        $typesOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $objectNode,
+            $context->getTextDocumentItem()
+        ));
 
         $staticTypes = [];
 
@@ -91,17 +78,17 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         }
 
         if (empty($staticTypes)) {
-            return $this->delegate->deduce($node, $file, $code, $offset);
+            return $this->delegate->deduce($context);
         }
 
         $types = [];
 
         foreach ($staticTypes as $staticType) {
-            if (count($node->args) <= $staticType->getArgumentIndex()) {
+            if (count($context->getNode()->args) <= $staticType->getArgumentIndex()) {
                 continue;
             }
 
-            $relevantArgumentNode = $node->args[$staticType->getArgumentIndex()];
+            $relevantArgumentNode = $context->getNode()->args[$staticType->getArgumentIndex()];
 
             if (get_class($relevantArgumentNode->value) !== $staticType->getValueNodeType()) {
                 continue;

@@ -14,6 +14,8 @@ use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Provides tooltips for {@see Node\Stmt\ClassMethod} nodes.
  */
@@ -51,15 +53,18 @@ class ClassMethodNodeTooltipGenerator
 
     /**
      * @param Node\Stmt\ClassMethod $node
-     * @param Structures\File       $file
+     * @param TextDocumentItem      $textDocumentItem
      *
      * @throws UnexpectedValueException when the method was not found.
      * @throws UnexpectedValueException when no class was found at the location of the node.
      *
      * @return string
      */
-    public function generate(Node\Stmt\ClassMethod $node, Structures\File $file): string
-    {
+    public function generate(
+        Node\Stmt\ClassMethod $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): string {
         $startLine = $node->getAttribute('startLine');
 
         if ($startLine === null) {
@@ -68,7 +73,7 @@ class ClassMethodNodeTooltipGenerator
 
         $position = new Position($startLine, 0);
 
-        $fqcn = $this->filePositionClasslikeDeterminer->determine($position, $file);
+        $fqcn = $this->filePositionClasslikeDeterminer->determine($textDocumentItem, $position);
 
         if ($fqcn === null) {
             throw new UnexpectedValueException('No class found at location of method call node');

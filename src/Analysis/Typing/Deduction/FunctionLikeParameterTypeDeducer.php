@@ -2,17 +2,13 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
+use PhpParser\Node;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
-
-use Serenata\Indexing\Structures;
 
 use Serenata\Parsing\DocblockParser;
 
 use Serenata\Utility\NodeHelpers;
-
-use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a parameter of a {@see Node\FunctionLike} node.
@@ -57,60 +53,53 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Param) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Param) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromFunctionLikeParameterNode($node, $file, $code, $offset);
-    }
+        $varNode = $context->getNode()->var;
 
-    /**
-     * @param Node\Param      $node
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromFunctionLikeParameterNode(
-        Node\Param $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
+        if ($varNode instanceof Node\Expr\Error) {
+            return [];
+        } elseif ($varNode->name instanceof Node\Expr) {
+            return [];
+        }
+
         if ($docBlock = $this->getFunctionDocblock()) {
             // Analyze the docblock's @param tags.
-            $result = $this->docblockParser->parse((string) $docBlock, [
+            $result = $this->docblockParser->parse($docBlock, [
                 DocblockParser::PARAM_TYPE
-            ], '', true);
+            ], '');
 
-            if (isset($result['params']['$' . $node->var->name])) {
-                return $this->typeAnalyzer->getTypesForTypeSpecification($result['params']['$' . $node->var->name]['type']);
+            if (isset($result['params']['$' . $varNode->name])) {
+                return $this->typeAnalyzer->getTypesForTypeSpecification(
+                    $result['params']['$' . $varNode->name]['type']
+                );
             }
         }
 
         $isNullable = false;
-        $typeNode = $node->type;
+        $typeNode = $context->getNode()->type;
 
         if ($typeNode instanceof Node\NullableType) {
             $typeNode = $typeNode->type;
             $isNullable = true;
-        } elseif ($node->default instanceof Node\Expr\ConstFetch && $node->default->name->toString() === 'null') {
+        } elseif ($context->getNode()->default instanceof Node\Expr\ConstFetch && $context->getNode()->default->name->toString() === 'null') {
             $isNullable = true;
         }
 
         if ($typeNode instanceof Node\Name) {
             $typeHintType = NodeHelpers::fetchClassName($typeNode);
 
-            if ($node->variadic) {
+            if ($context->getNode()->variadic) {
                 $typeHintType .= '[]';
             }
 
             return $isNullable ? [$typeHintType, 'null'] : [$typeHintType];
-        } elseif ($node->type instanceof Node\Identifier) {
-            return [$node->type->name];
+        } elseif ($context->getNode()->type instanceof Node\Identifier) {
+            return [$context->getNode()->type->name];
         }
 
         return [];
@@ -126,12 +115,9 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
 
     /**
      * @param string|null $functionDocblock
-     *
-     * @return static
      */
-    public function setFunctionDocblock(?string $functionDocblock)
+    public function setFunctionDocblock(?string $functionDocblock): void
     {
         $this->functionDocblock = $functionDocblock;
-        return $this;
     }
 }

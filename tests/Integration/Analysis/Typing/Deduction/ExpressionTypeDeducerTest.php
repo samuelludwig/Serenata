@@ -2,9 +2,14 @@
 
 namespace Serenata\Tests\Integration\Analysis\Typing\Deduction;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 {
@@ -1099,14 +1104,11 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $expressionTypeDeducer = $this->container->get('expressionTypeDeducer');
+        $code = file_get_contents($path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
-
-        return $expressionTypeDeducer->deduce(
-            $file,
-            file_get_contents($path),
-            $markerOffset,
+        return $this->container->get('expressionTypeDeducer')->deduce(
+            new TextDocumentItem($path, $code),
+            Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
             $expression,
             $ignoreLastElement
         );
@@ -1131,12 +1133,11 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 
         $expressionTypeDeducer = $this->container->get('expressionTypeDeducer');
 
-        $file = $this->container->get('storage')->getFileByPath($path);
+        $code = file_get_contents($path);
 
-        return $expressionTypeDeducer->deduce(
-            $file,
-            file_get_contents($path),
-            $markerOffset,
+        return $this->container->get('expressionTypeDeducer')->deduce(
+            new TextDocumentItem($path, $code),
+            Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
             $expression,
             false
         );

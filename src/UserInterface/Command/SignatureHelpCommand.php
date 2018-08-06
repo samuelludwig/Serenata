@@ -2,6 +2,8 @@
 
 namespace Serenata\UserInterface\Command;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileIndexerInterface;
 
@@ -11,6 +13,8 @@ use Serenata\SignatureHelp\SignatureHelpRetriever;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
 /**
@@ -100,6 +104,9 @@ final class SignatureHelpCommand extends AbstractCommand
 
         // $this->fileIndexer->index($filePath, $code);
 
-        return $this->signatureHelpRetriever->get($file, $code, $offset);
+        return $this->signatureHelpRetriever->get(
+            new TextDocumentItem($filePath, $code),
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+        );
     }
 }

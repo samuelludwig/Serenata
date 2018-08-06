@@ -24,11 +24,6 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     private $constantListProvider;
 
     /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
-
-    /**
      * @var BestStringApproximationDeterminerInterface
      */
     private $bestStringApproximationDeterminer;
@@ -45,20 +40,17 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
 
     /**
      * @param ConstantListProviderInterface              $constantListProvider
-     * @param AutocompletionPrefixDeterminerInterface    $autocompletionPrefixDeterminer
      * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
      * @param AutocompletionSuggestionTypeFormatter      $autocompletionSuggestionTypeFormatter
      * @param int                                        $resultLimit
      */
     public function __construct(
         ConstantListProviderInterface $constantListProvider,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
         int $resultLimit
     ) {
         $this->constantListProvider = $constantListProvider;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
         $this->resultLimit = $resultLimit;
@@ -67,11 +59,11 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $this->constantListProvider->getAll(),
-            $this->autocompletionPrefixDeterminer->determine($code, $offset),
+            $context->getPrefix(),
             'name',
             $this->resultLimit
         );

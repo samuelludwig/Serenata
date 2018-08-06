@@ -104,6 +104,7 @@ services:
         class: Serenata\Analysis\FilePositionClasslikeDeterminer
         arguments:
             - '@fileClasslikeListProvider'
+            - '@storage'
 
     inheritanceResolver:
         class: Serenata\Analysis\Relations\InheritanceResolver

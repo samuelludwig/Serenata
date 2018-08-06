@@ -5,18 +5,21 @@ namespace Serenata\Analysis\Node;
 use LogicException;
 use UnexpectedValueException;
 
+use PhpParser\Node;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use Serenata\Indexing\Structures;
+use Serenata\Common\Position;
 
-use PhpParser\Node;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Fetches method information from a {@see Node\Expr\PropertyFetch} or a {@see Node\Expr\StaticPropertyFetch} node.
  */
-class PropertyFetchPropertyInfoRetriever
+final class PropertyFetchPropertyInfoRetriever
 {
     /**
      * @var NodeTypeDeducerInterface
@@ -32,24 +35,25 @@ class PropertyFetchPropertyInfoRetriever
      * @param NodeTypeDeducerInterface      $nodeTypeDeducer
      * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      */
-    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer, ClasslikeInfoBuilderInterface $classlikeInfoBuilder)
-    {
+    public function __construct(
+        NodeTypeDeducerInterface $nodeTypeDeducer,
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+    ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
     }
 
     /**
      * @param Node\Expr\PropertyFetch|Node\Expr\StaticPropertyFetch $node
-     * @param Structures\File                                       $file
-     * @param string                                                $code
-     * @param int                                                   $offset
+     * @param TextDocumentItem                                      $textDocumentItem
+     * @param Position                                              $position
      *
      * @throws UnexpectedValueException when a dynamic property fetch is passed.
      * @throws UnexpectedValueException when the type the property is fetched from could not be determined.
      *
      * @return array[]
      */
-    public function retrieve(Node\Expr $node, Structures\File $file, string $code, int $offset): array
+    public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
     {
         if ($node->name instanceof Node\Expr) {
             // Can't currently deduce type of an expression such as "$this->{$foo}";
@@ -60,7 +64,11 @@ class PropertyFetchPropertyInfoRetriever
 
         $objectNode = ($node instanceof Node\Expr\PropertyFetch) ? $node->var : $node->class;
 
-        $typesOfVar = $this->nodeTypeDeducer->deduce($objectNode, $file, $code, $offset);
+        $typesOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $objectNode,
+            $textDocumentItem,
+            $position
+        ));
 
         $infoElements = [];
 

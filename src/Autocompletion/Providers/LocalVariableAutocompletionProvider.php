@@ -7,20 +7,19 @@ use UnexpectedValueException;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
-use Serenata\Utility\TextEdit;
-use Serenata\Utility\PositionEncoding;
-
 use Serenata\Analysis\VariableScanner;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
-use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
+
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures\File;
+
+use Serenata\Utility\TextEdit;
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides local variable autocompletion suggestions at a specific location in a file.
@@ -43,62 +42,51 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
     private $autocompletionSuggestionTypeFormatter;
 
     /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
-
-    /**
      * @param VariableScanner                         $variableScanner
      * @param Parser                                  $parser
      * @param AutocompletionSuggestionTypeFormatter   $autocompletionSuggestionTypeFormatter
-     * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
      */
     public function __construct(
         VariableScanner $variableScanner,
         Parser $parser,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
     ) {
         $this->variableScanner = $variableScanner;
         $this->parser = $parser;
         $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
         $handler = new ErrorHandler\Collecting();
 
         try {
-            $nodes = $this->parse($code, $handler);
+            $nodes = $this->parse($context->getTextDocumentItem()->getText(), $handler);
         } catch (UnexpectedValueException $e) {
             return [];
         }
 
-        foreach ($this->variableScanner->getAvailableVariables($nodes, $offset) as $variable) {
-            yield $this->createSuggestion($variable, $code, $offset, $prefix);
+        $availableVariables = $this->variableScanner->getAvailableVariables(
+            $nodes,
+            $context->getPositionAsByteOffset()
+        );
+
+        foreach ($availableVariables as $variable) {
+            yield $this->createSuggestion($variable, $context);
         }
     }
 
     /**
-     * @param array  $variable
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $variable
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(
-        array $variable,
-        string $code,
-        int $offset,
-        string $prefix
-    ): AutocompletionSuggestion {
+    private function createSuggestion(array $variable, AutocompletionProviderContext $context): AutocompletionSuggestion
+    {
         $typeArray = array_map(function (string $type) {
             return [
                 'fqcn' => $type
@@ -109,12 +97,12 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             $variable['name'],
             SuggestionKind::VARIABLE,
             $variable['name'],
-            $this->getTextEditForSuggestion($variable, $code, $offset, $prefix),
+            $this->getTextEditForSuggestion($variable, $context),
             $variable['name'],
             null,
             [
                 'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($typeArray),
-                'prefix'       => $prefix
+                'prefix'       => $context->getPrefix()
             ],
             [],
             false
@@ -129,24 +117,14 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array  $variable
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $variable
+     * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
      */
-    private function getTextEditForSuggestion(array $variable, string $code, int $offset, string $prefix): TextEdit
+    private function getTextEditForSuggestion(array $variable, AutocompletionProviderContext $context): TextEdit
     {
-        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
-
-        return new TextEdit(
-            new Range(
-                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
-                $endPosition
-            ),
-            $variable['name']
-        );
+        return new TextEdit($context->getPrefixRange(), $variable['name']);
     }
 
     /**

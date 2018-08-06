@@ -4,20 +4,19 @@ namespace Serenata\Autocompletion\Providers;
 
 use PhpParser\Node;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
-use Serenata\Utility\NodeHelpers;
-use Serenata\Utility\PositionEncoding;
-
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 use Serenata\Analysis\ClasslikeListProviderInterface;
+
+use Serenata\Analysis\Visiting\UseStatementKind;
+
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use Serenata\Analysis\Visiting\UseStatementKind;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures\File;
 use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
@@ -26,8 +25,8 @@ use Serenata\Refactoring\UseStatementInsertionCreator;
 use Serenata\Refactoring\UseStatementInsertionCreationException;
 
 use Serenata\Utility\TextEdit;
-
-use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Utility\NodeHelpers;
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides classlike autocompletion suggestions at a specific location in a file.
@@ -43,11 +42,6 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      * @var UseStatementInsertionCreator
      */
     private $useStatementInsertionCreator;
-
-    /**
-     * @var AutocompletionPrefixDeterminerInterface
-     */
-    private $autocompletionPrefixDeterminer;
 
     /**
      * @var BestStringApproximationDeterminerInterface
@@ -67,7 +61,6 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     /**
      * @param ClasslikeListProviderInterface             $classlikeListProvider
      * @param UseStatementInsertionCreator               $useStatementInsertionCreator
-     * @param AutocompletionPrefixDeterminerInterface    $autocompletionPrefixDeterminer
      * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
      * @param NodeAtOffsetLocatorInterface               $nodeAtOffsetLocator
      * @param int                                        $resultLimit
@@ -75,14 +68,12 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     public function __construct(
         ClasslikeListProviderInterface $classlikeListProvider,
         UseStatementInsertionCreator $useStatementInsertionCreator,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
         int $resultLimit
     ) {
         $this->classlikeListProvider = $classlikeListProvider;
         $this->useStatementInsertionCreator = $useStatementInsertionCreator;
-        $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->resultLimit = $resultLimit;
@@ -91,48 +82,42 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $this->classlikeListProvider->getAll(),
-            $prefix,
+            $context->getPrefix(),
             'fqcn',
             $this->resultLimit
         );
 
         foreach ($bestApproximations as $classlike) {
-            yield $this->createSuggestion($classlike, $code, $offset, $prefix);
+            yield $this->createSuggestion($classlike, $context);
         }
     }
 
     /**
-     * @param array  $classlike
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $classlike
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
     private function createSuggestion(
         array $classlike,
-        string $code,
-        int $offset,
-        string $prefix
+        AutocompletionProviderContext $context
     ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $classlike['fqcn'],
             $classlike['type'] === ClasslikeTypeNameValue::TRAIT_ ? SuggestionKind::MIXIN : SuggestionKind::CLASS_,
-            $this->getInsertTextForSuggestion($classlike, $code, $offset),
-            $this->getTextEditForSuggestion($classlike, $code, $offset, $prefix),
+            $this->getInsertTextForSuggestion($classlike, $context),
+            $this->getTextEditForSuggestion($classlike, $context),
             $this->getFqcnWithoutLeadingSlash($classlike),
             $classlike['shortDescription'],
             [
                 'returnTypes'  => $classlike['type'],
-                'prefix'       => $prefix
+                'prefix'       => $context->getPrefix()
             ],
-            $this->createAdditionalTextEditsForSuggestion($classlike, $code, $offset),
+            $this->createAdditionalTextEditsForSuggestion($classlike, $context),
             $classlike['isDeprecated']
         );
     }
@@ -161,40 +146,27 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array  $classlike
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $classlike
+     * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
      */
-    private function getTextEditForSuggestion(array $classlike, string $code, int $offset, string $prefix): TextEdit
+    private function getTextEditForSuggestion(array $classlike, AutocompletionProviderContext $context): TextEdit
     {
-        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
-
-        return new TextEdit(
-            new Range(
-                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
-                $endPosition
-            ),
-            $this->getInsertTextForSuggestion($classlike, $code, $offset)
-        );
+        return new TextEdit($context->getPrefixRange(), $this->getInsertTextForSuggestion($classlike, $context));
     }
 
     /**
-     * @param array  $classlike
-     * @param string $code
-     * @param int    $offset
+     * @param array                         $classlike
+     * @param AutocompletionProviderContext $context
      *
      * @return string
      */
-    private function getInsertTextForSuggestion(array $classlike, string $code, int $offset): string
+    private function getInsertTextForSuggestion(array $classlike, AutocompletionProviderContext $context): string
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
-        if ($prefix !== '' && $prefix[0] === '\\') {
+        if ($context->getPrefix() !== '' && $context->getPrefix()[0] === '\\') {
             return $classlike['fqcn'];
-        } elseif ($this->isInsideUseStatement($code, $offset)) {
+        } elseif ($this->isInsideUseStatement($context)) {
             return mb_substr($classlike['fqcn'], 1);
         }
 
@@ -203,7 +175,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         // user's code at 'Foo\Class' as a relative import. We only add the full 'My\Foo\Class' if the user were to
         // type just 'Class' and then select 'My\Foo\Class' (i.e. we remove as many segments from the suggestion
         // as the user already has in his code).
-        $partsToSlice = (count(explode('\\', $prefix)) - 1);
+        $partsToSlice = (count(explode('\\', $context->getPrefix())) - 1);
         $parts = explode('\\', $this->getFqcnWithoutLeadingSlash($classlike));
 
         // Don't try to add use statements for class names that the user wants to make absolute by adding a leading
@@ -212,23 +184,20 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param array  $classlike
-     * @param string $code
-     * @param int    $offset
+     * @param array                         $classlike
+     * @param AutocompletionProviderContext $context
      *
      * @return TextEdit[]
      */
-    private function createAdditionalTextEditsForSuggestion(array $classlike, string $code, int $offset): array
+    private function createAdditionalTextEditsForSuggestion(array $classlike, AutocompletionProviderContext $context): array
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
-
-        if ($prefix !== '' && $prefix[0] === '\\') {
+        if ($context->getPrefix() !== '' && $context->getPrefix()[0] === '\\') {
             return [];
-        } elseif ($this->isInsideUseStatement($code, $offset)) {
+        } elseif ($this->isInsideUseStatement($context)) {
             return [];
         }
 
-        $partsToSlice = (count(explode('\\', $prefix)) - 1);
+        $partsToSlice = (count(explode('\\', $context->getPrefix())) - 1);
         $parts = explode('\\', $this->getFqcnWithoutLeadingSlash($classlike));
         $nameToImport = implode('\\', array_slice($parts, 0, count($parts) - $partsToSlice));
 
@@ -236,8 +205,8 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
             return [$this->useStatementInsertionCreator->create(
                 $nameToImport,
                 UseStatementKind::TYPE_CLASSLIKE,
-                $code,
-                $offset,
+                $context->getTextDocumentItem()->getText(),
+                $context->getPositionAsByteOffset(),
                 true
             )];
         } catch (UseStatementInsertionCreationException $e) {
@@ -246,17 +215,19 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param string $code
-     * @param int    $offset
+     * @param AutocompletionProviderContext $context
      *
      * @return bool
      */
-    private function isInsideUseStatement(string $code, int $offset): bool
+    private function isInsideUseStatement(AutocompletionProviderContext $context): bool
     {
         // The position the position is at may already be the start of another node. We're interested in what's just
         // before the position (usually the cursor), not what is "at" or "just to the right" of the cursor, hence the
         // -1.
-        $nodeAtOffset = $this->nodeAtOffsetLocator->locate($code, $offset - 1);
+        $nodeAtOffset = $this->nodeAtOffsetLocator->locate(
+            $context->getTextDocumentItem()->getText(),
+            $context->getPositionAsByteOffset() - 1
+        );
 
         if ($nodeAtOffset->getNode() === null) {
             return false;

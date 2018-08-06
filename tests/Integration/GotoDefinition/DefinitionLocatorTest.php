@@ -4,9 +4,14 @@ namespace Serenata\Tests\Unit\SignatureHelp;
 
 use UnexpectedValueException;
 
+use Serenata\Common\Position;
+
 use Serenata\GotoDefinition\GotoDefinitionResult;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 class DefinitionLocatorTest extends AbstractIntegrationTest
 {
@@ -279,9 +284,10 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
 
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
-
-        return $this->container->get('definitionLocator')->locate($file, $code, $position);
+        return $this->container->get('definitionLocator')->locate(
+            new TextDocumentItem($path, $code),
+            Position::createFromByteOffset($position, $code, PositionEncoding::VALUE)
+        );
     }
 
     /**

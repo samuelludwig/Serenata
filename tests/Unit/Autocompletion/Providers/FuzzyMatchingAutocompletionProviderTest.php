@@ -2,16 +2,22 @@
 
 namespace Serenata\Tests\Unit\Autocompletion\Providers;
 
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
+use Serenata\Autocompletion\Providers\AutocompletionProviderContext;
 use Serenata\Autocompletion\Providers\AutocompletionProviderInterface;
 use Serenata\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider;
 
-use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,10 +30,6 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
             ->setMethods(['provide'])
             ->getMock();
 
-        $prefixDeterminer = $this->getMockBuilder(AutocompletionPrefixDeterminerInterface::class)
-            ->setMethods(['determine'])
-            ->getMock();
-
         $bestStringApproximationDeterminer = $this->getMockBuilder(BestStringApproximationDeterminerInterface::class)
             ->setMethods(['determine'])
             ->getMock();
@@ -38,7 +40,6 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
         ];
 
         $delegate->expects($this->once())->method('provide')->willReturn($suggestions);
-        $prefixDeterminer->expects($this->once())->method('determine')->willReturn('test');
         $bestStringApproximationDeterminer->expects($this->once())->method('determine')->willReturn([
             $suggestions[1],
             $suggestions[0]
@@ -46,22 +47,22 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
 
         $provider = new FuzzyMatchingAutocompletionProvider(
             $delegate,
-            $prefixDeterminer,
             $bestStringApproximationDeterminer,
             15
         );
 
+        $offset = 4;
+        $code = "test";
+
+        $result = $provider->provide(new AutocompletionProviderContext(
+            new TextDocumentItem('TestFile.php', $code),
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE),
+            $code
+        ));
+
         static::assertEquals([
             $suggestions[1],
             $suggestions[0]
-        ], $provider->provide($this->getFileStub(), "test", 4));
-    }
-
-    /**
-     * @return Structures\File
-     */
-    private function getFileStub(): Structures\File
-    {
-        return new Structures\File('TestFile.php', new \DateTime(), []);
+        ], $result);
     }
 }

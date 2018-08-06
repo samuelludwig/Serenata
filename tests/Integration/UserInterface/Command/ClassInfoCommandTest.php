@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\UserInterface\Command;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class ClassInfoCommandTest extends AbstractIntegrationTest
@@ -31,6 +34,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'name'               => 'SimpleClass',
             'fqcn'               => '\A\SimpleClass',
+            'range'              => $output['range'],
             'startLine'          => 10,
             'endLine'            => 13,
             'filename'           => $this->getPathFor($fileName),
@@ -102,6 +106,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'properties'         => [],
             'methods'            => []
         ], $output);
+
+        static::assertEquals(new Range(new Position(9, 0), new Position(12, 1)), $output['range']);
     }
 
     /**

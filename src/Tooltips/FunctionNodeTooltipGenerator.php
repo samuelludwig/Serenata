@@ -8,7 +8,11 @@ use Serenata\Analysis\Node\FunctionFunctionInfoRetriever;
 
 use PhpParser\Node;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Stmt\Function_} nodes.
@@ -39,6 +43,8 @@ class FunctionNodeTooltipGenerator
 
     /**
      * @param Node\Stmt\Function_ $node
+     * @param TextDocumentItem    $textDocumentItem
+     * @param Position            $position
      *
      * @throws UnexpectedValueException when the function was not found.
      *
@@ -46,11 +52,10 @@ class FunctionNodeTooltipGenerator
      */
     public function generate(
         Node\Stmt\Function_ $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): string {
-        $info = $this->functionFunctionInfoRetriever->retrieve($node, $file, $code, $offset);
+        $info = $this->functionFunctionInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         return $this->functionTooltipGenerator->generate($info);
     }

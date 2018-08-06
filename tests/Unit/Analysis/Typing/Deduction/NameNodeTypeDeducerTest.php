@@ -6,18 +6,25 @@ use DateTime;
 
 use PhpParser\Node;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
-use Serenata\Indexing\Structures;
-
-use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
-
-use PHPUnit\Framework\MockObject\MockObject;
+use Serenata\Analysis\Typing\Deduction\NameNodeTypeDeducer;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use Serenata\Analysis\Typing\Deduction\NameNodeTypeDeducer;
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
+
+use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+
+use Serenata\Utility\TextDocumentItem;
 
 class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 {
@@ -47,6 +54,11 @@ class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     private $structureAwareNameResolverFactoryMock;
 
     /**
+     * @var MockObject
+     */
+    private $storageMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -65,11 +77,16 @@ class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
             StructureAwareNameResolverFactoryInterface::class
         )->getMock();
 
+        $this->storageMock = $this->getMockBuilder(
+            StorageInterface::class
+        )->getMock();
+
         $this->nameNodeTypeDeducer = new NameNodeTypeDeducer(
             $this->typeNormalizerMock,
             $this->classlikeInfoBuilderMock,
             $this->fileClasslikeListProviderMock,
-            $this->structureAwareNameResolverFactoryMock
+            $this->structureAwareNameResolverFactoryMock,
+            $this->storageMock
         );
     }
 
@@ -79,8 +96,7 @@ class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     public function testParentInsideAnonymousClassInsideOtherClassSelectsAnonymousClassParent(): void
     {
         $node = new Node\Name('parent');
-
-        $file = new Structures\File('', new DateTime(), []);
+        // $node->setAttribute('startFilePos', 7);
 
         $this->classlikeInfoBuilderMock->expects($this->once())->method('build')->with('AnonymousClass')->willReturn([
             'parents' => ['ParentOfAnonymousClass']
@@ -93,18 +109,23 @@ class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $this->fileClasslikeListProviderMock->method('getAllForFile')->willReturn([
             'OuterClass' => [
-                'startLine' => 1,
-                'endLine'   => 5
+                'range' => new Range(new Position(1, 0), new Position(5, 1))
             ],
 
             'AnonymousClass' => [
-                'startLine' => 2,
-                'endLine'   => 4
+                'range' => new Range(new Position(2, 0), new Position(4, 1))
             ]
         ]);
 
         $code = "<?php\n\n\n\n";
 
-        static::assertSame(['\\ParentOfAnonymousClass'], $this->nameNodeTypeDeducer->deduce($node, $file, $code, 7));
+        $position = new Position(3, 0);
+
+        static::assertSame(
+            ['\\ParentOfAnonymousClass'],
+            $this->nameNodeTypeDeducer->deduce(
+                new TypeDeductionContext($node, new TextDocumentItem('', $code), $position)
+            )
+        );
     }
 }

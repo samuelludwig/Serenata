@@ -20,7 +20,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         foreach ($this->getKeywords() as $keyword) {
             yield $this->createSuggestion($keyword);

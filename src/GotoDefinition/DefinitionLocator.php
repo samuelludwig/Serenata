@@ -7,9 +7,14 @@ use UnexpectedValueException;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the definition of structural elements.
@@ -95,18 +100,20 @@ class DefinitionLocator
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $position The position to analyze and show the tooltip for (byte offset).
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return GotoDefinitionResult|null
      */
-    public function locate(Structures\File $file, string $code, int $position): ?GotoDefinitionResult
+    public function locate(TextDocumentItem $textDocumentItem, Position $position): ?GotoDefinitionResult
     {
         try {
-            $node = $this->getNodeAt($code, $position);
+            $node = $this->getNodeAt(
+                $textDocumentItem->getText(),
+                $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
+            );
 
-            return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $file, $code);
+            return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $textDocumentItem, $position);
         } catch (UnexpectedValueException $e) {
             return null;
         }
@@ -143,8 +150,8 @@ class DefinitionLocator
 
     /**
      * @param Node            $node
-     * @param Structures\File $file
-     * @param string          $code
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException
      *
@@ -152,17 +159,17 @@ class DefinitionLocator
      */
     private function locateDefinitionOfStructuralElementRepresentedByNode(
         Node $node,
-        Structures\File $file,
-        string $code
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
         if ($node instanceof Node\Expr\FuncCall) {
-            return $this->locateDefinitionOfFuncCallNode($node, $file, $code, $node->getAttribute('startFilePos'));
+            return $this->locateDefinitionOfFuncCallNode($node, $textDocumentItem, $position);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
-            return $this->locateDefinitionOfConstFetchNode($node, $file, $code, $node->getAttribute('startFilePos'));
+            return $this->locateDefinitionOfConstFetchNode($node, $textDocumentItem, $position);
         } elseif ($node instanceof Node\Stmt\UseUse) {
-            return $this->locateDefinitionOfUseUseNode($node, $file, $node->getAttribute('startLine'));
+            return $this->locateDefinitionOfUseUseNode($node, $textDocumentItem, $position);
         } elseif ($node instanceof Node\Name) {
-            return $this->locateDefinitionOfNameNode($node, $file, $node->getAttribute('startLine'));
+            return $this->locateDefinitionOfNameNode($node, $textDocumentItem, $position);
         } elseif ($node instanceof Node\Identifier) {
             $parentNode = $node->getAttribute('parent', false);
 
@@ -171,35 +178,15 @@ class DefinitionLocator
             }
 
             if ($parentNode instanceof Node\Expr\ClassConstFetch) {
-                return $this->locateDefinitionOfClassConstFetchNode($parentNode, $file, $code);
+                return $this->locateDefinitionOfClassConstFetchNode($parentNode, $textDocumentItem, $position);
             } elseif ($parentNode instanceof Node\Expr\PropertyFetch) {
-                return $this->locateDefinitionOfPropertyFetchNode(
-                    $parentNode,
-                    $file,
-                    $code,
-                    $parentNode->getAttribute('startFilePos')
-                );
+                return $this->locateDefinitionOfPropertyFetchNode($parentNode, $textDocumentItem, $position);
             } elseif ($parentNode instanceof Node\Expr\StaticPropertyFetch) {
-                return $this->locateDefinitionOfStaticPropertyFetchNode(
-                    $parentNode,
-                    $file,
-                    $code,
-                    $parentNode->getAttribute('startFilePos')
-                );
+                return $this->locateDefinitionOfStaticPropertyFetchNode($parentNode, $textDocumentItem, $position);
             } elseif ($parentNode instanceof Node\Expr\MethodCall) {
-                return $this->locateDefinitionOfMethodCallNode(
-                    $parentNode,
-                    $file,
-                    $code,
-                    $parentNode->getAttribute('startFilePos')
-                );
+                return $this->locateDefinitionOfMethodCallNode($parentNode, $textDocumentItem, $position);
             } elseif ($parentNode instanceof Node\Expr\StaticCall) {
-                return $this->locateDefinitionOfStaticMethodCallNode(
-                    $parentNode,
-                    $file,
-                    $code,
-                    $parentNode->getAttribute('startFilePos')
-                );
+                return $this->locateDefinitionOfStaticMethodCallNode($parentNode, $textDocumentItem, $position);
             }
         }
 
@@ -208,9 +195,8 @@ class DefinitionLocator
 
     /**
      * @param Node\Expr\FuncCall $node
-     * @param Structures\File    $file
-     * @param string             $code
-     * @param int                $offset
+     * @param TextDocumentItem   $textDocumentItem
+     * @param Position           $position
      *
      * @throws UnexpectedValueException
      *
@@ -218,18 +204,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfFuncCallNode(
         Node\Expr\FuncCall $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->funcCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
+        return $this->funcCallNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\MethodCall $node
-     * @param Structures\File      $file
-     * @param string               $code
-     * @param int                  $offset
+     * @param TextDocumentItem     $textDocumentItem
+     * @param Position             $position
      *
      * @throws UnexpectedValueException
      *
@@ -237,18 +221,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfMethodCallNode(
         Node\Expr\MethodCall $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->methodCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
+        return $this->methodCallNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\StaticCall $node
-     * @param Structures\File      $file
-     * @param string               $code
-     * @param int                  $offset
+     * @param TextDocumentItem     $textDocumentItem
+     * @param Position             $position
      *
      * @throws UnexpectedValueException
      *
@@ -256,18 +238,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfStaticMethodCallNode(
         Node\Expr\StaticCall $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->staticMethodCallNodeDefinitionLocator->locate($node, $file, $code, $offset);
+        return $this->staticMethodCallNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\PropertyFetch $node
-     * @param Structures\File         $file
-     * @param string                  $code
-     * @param int                     $offset
+     * @param TextDocumentItem        $textDocumentItem
+     * @param Position                $position
      *
      * @throws UnexpectedValueException
      *
@@ -275,18 +255,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->propertyFetchDefinitionLocator->locate($node, $file, $code, $offset);
+        return $this->propertyFetchDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\StaticPropertyFetch $node
-     * @param Structures\File               $file
-     * @param string                        $code
-     * @param int                           $offset
+     * @param TextDocumentItem              $textDocumentItem
+     * @param Position                      $position
      *
      * @throws UnexpectedValueException
      *
@@ -294,15 +272,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->staticPropertyFetchNodeDefinitionLocator->locate($node, $file, $code, $offset);
+        return $this->staticPropertyFetchNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\ConstFetch $node
+     * @param TextDocumentItem     $textDocumentItem
+     * @param Position             $position
      *
      * @throws UnexpectedValueException
      *
@@ -310,17 +289,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfConstFetchNode(
         Node\Expr\ConstFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->constFetchNodeDefinitionLocator->generate($node, $file, $code, $offset);
+        return $this->constFetchNodeDefinitionLocator->generate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param Structures\File           $file
-     * @param string                    $code
+     * @param TextDocumentItem          $textDocumentItem
+     * @param Position                  $position
      *
      * @throws UnexpectedValueException
      *
@@ -328,16 +306,16 @@ class DefinitionLocator
      */
     private function locateDefinitionOfClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
-        Structures\File $file,
-        string $code
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->classConstFetchNodeDefinitionLocator->locate($node, $file, $code);
+        return $this->classConstFetchNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
     /**
      * @param Node\Stmt\UseUse $node
-     * @param Structures\File  $file
-     * @param int              $line
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException
      *
@@ -345,8 +323,8 @@ class DefinitionLocator
      */
     private function locateDefinitionOfUseUseNode(
         Node\Stmt\UseUse $node,
-        Structures\File $file,
-        int $line
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
         $parentNode = $node->getAttribute('parent', false);
 
@@ -361,13 +339,13 @@ class DefinitionLocator
             $nameNode = new Node\Name\FullyQualified(Node\Name::concat($parentNode->prefix, $nameNode));
         }
 
-        return $this->nameNodeDefinitionLocator->locate($nameNode, $file, $line);
+        return $this->nameNodeDefinitionLocator->locate($nameNode, $textDocumentItem, $position);
     }
 
     /**
-     * @param Node\Name       $node
-     * @param Structures\File $file
-     * @param int             $line
+     * @param Node\Name        $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException
      *
@@ -375,9 +353,9 @@ class DefinitionLocator
      */
     private function locateDefinitionOfNameNode(
         Node\Name $node,
-        Structures\File $file,
-        int $line
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): GotoDefinitionResult {
-        return $this->nameNodeDefinitionLocator->locate($node, $file, $line);
+        return $this->nameNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 }

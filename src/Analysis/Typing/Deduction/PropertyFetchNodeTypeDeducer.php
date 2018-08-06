@@ -4,12 +4,10 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
 use PhpParser\PrettyPrinterAbstract;
+
+use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\PropertyFetch} node.
@@ -49,33 +47,22 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\PropertyFetch && !$node instanceof Node\Expr\StaticPropertyFetch) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\PropertyFetch &&
+            !$context->getNode() instanceof Node\Expr\StaticPropertyFetch
+        ) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromPropertyFetchNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\PropertyFetch|Node\Expr\StaticPropertyFetch $node
-     * @param Structures\File                                       $file
-     * @param string                                                $code
-     * @param int                                                   $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromPropertyFetchNode(
-        Node\Expr $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
         $infoItems = [];
 
         try {
-            $infoItems = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $file, $code, $offset);
+            $infoItems = $this->propertyFetchPropertyInfoRetriever->retrieve(
+                $context->getNode(),
+                $context->getTextDocumentItem(),
+                $context->getPosition()
+            );
         } catch (UnexpectedValueException $e) {
             return [];
         }
@@ -93,13 +80,12 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         // We use an associative array so we automatically avoid duplicate types.
         $types = array_keys($types);
 
-        $expressionString = $this->prettyPrinter->prettyPrintExpr($node);
+        $expressionString = $this->prettyPrinter->prettyPrintExpr($context->getNode());
 
         $localTypes = $this->localTypeScanner->getLocalExpressionTypes(
-            $file,
-            $code,
+            $context->getTextDocumentItem(),
+            $context->getPosition(),
             $expressionString,
-            $offset,
             $types
         );
 

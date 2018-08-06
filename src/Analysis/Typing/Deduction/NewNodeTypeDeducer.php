@@ -2,10 +2,6 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
 
 /**
@@ -29,29 +25,15 @@ final class NewNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\New_) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\New_) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromNewNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\New_  $node
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromNewNode(
-        Node\Expr\New_ $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        return $this->nodeTypeDeducer->deduce($node->class, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $context->getNode()->class,
+            $context->getTextDocumentItem()
+        ));
     }
 }

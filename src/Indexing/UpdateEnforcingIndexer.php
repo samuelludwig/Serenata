@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Decorator for {@see FileIndexerInterface} objects that only updates indexed files and fails on files that aren't in
  * the index yet.
@@ -31,16 +33,16 @@ final class UpdateEnforcingIndexer implements FileIndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(string $filePath, string $code): void
+    public function index(TextDocumentItem $textDocumentItem): void
     {
         $file = null;
 
         try {
-            $file = $this->storage->getFileByPath($filePath);
+            $file = $this->storage->getFileByPath($textDocumentItem->getUri());
         } catch (FileNotFoundStorageException $e) {
             throw new IndexingFailedException('Skipping creation of new file during indexing', 0, $e);
         }
 
-        $this->delegate->index($filePath, $code);
+        $this->delegate->index($textDocumentItem);
     }
 }

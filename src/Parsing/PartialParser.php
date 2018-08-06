@@ -94,12 +94,31 @@ final class PartialParser implements Parser
      */
     private function tryParseWithKeywordCorrection(string $code): ?array
     {
-        if (mb_strrpos($code, 'self') === (mb_strlen($code) - mb_strlen('self'))) {
-            return [new \Serenata\Parsing\Node\Keyword\Self_()];
-        } elseif (mb_strrpos($code, 'static') === (mb_strlen($code) - mb_strlen('static'))) {
-            return [new \Serenata\Parsing\Node\Keyword\Static_()];
-        } elseif (mb_strrpos($code, 'parent') === (mb_strlen($code) - mb_strlen('parent'))) {
-            return [new \Serenata\Parsing\Node\Keyword\Parent_()];
+        $expectedOffset = mb_strlen($code) - mb_strlen('self');
+
+        if (mb_strrpos($code, 'self') === $expectedOffset) {
+            $node = new \Serenata\Parsing\Node\Keyword\Self_();
+            $node->setAttribute('startFilePos', $expectedOffset);
+
+            return [$node];
+        }
+
+        $expectedOffset = mb_strlen($code) - mb_strlen('static');
+
+        if (mb_strrpos($code, 'static') === $expectedOffset) {
+            $node = new \Serenata\Parsing\Node\Keyword\Static_();
+            $node->setAttribute('startFilePos', $expectedOffset);
+
+            return [$node];
+        }
+
+        $expectedOffset = mb_strlen($code) - mb_strlen('parent');
+
+        if (mb_strrpos($code, 'parent') === $expectedOffset) {
+            $node = new \Serenata\Parsing\Node\Keyword\Parent_();
+            $node->setAttribute('startFilePos', $expectedOffset);
+
+            return [$node];
         }
 
         return null;

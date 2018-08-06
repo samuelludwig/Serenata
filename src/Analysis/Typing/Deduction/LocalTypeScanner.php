@@ -2,9 +2,7 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use Serenata\Parsing;
-
-use Serenata\Utility\PositionEncoding;
+use PhpParser\Node;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
@@ -14,13 +12,14 @@ use Serenata\Analysis\Visiting\ExpressionTypeInfoMap;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\Indexing\Structures;
-
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+
+use Serenata\Parsing;
 
 use Serenata\Parsing\DocblockParser;
 
-use PhpParser\Node;
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Scans for types affecting expressions (e.g. variables and properties) in a local scope in a file.
@@ -98,22 +97,20 @@ class LocalTypeScanner
      * This can be used to deduce the type of local variables, class properties, ... that are influenced by local
      * assignments, if statements, ...
      *
-     * @param Structures\File $file
-     * @param string          $code
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position        $position
      * @param string          $expression
-     * @param int             $offset
      * @param string[]        $defaultTypes
      *
      * @return string[]
      */
     public function getLocalExpressionTypes(
-        Structures\File $file,
-        string $code,
+        TextDocumentItem $textDocumentItem,
+        Position $position,
         string $expression,
-        int $offset,
         array $defaultTypes = []
     ): array {
-        $expressionTypeInfoMap = $this->expressionLocalTypeAnalyzer->analyze($code, $offset);
+        $expressionTypeInfoMap = $this->expressionLocalTypeAnalyzer->analyze($textDocumentItem, $position);
 
         if (!$expressionTypeInfoMap->has($expression)) {
             return [];
@@ -122,9 +119,8 @@ class LocalTypeScanner
         return $this->getResolvedTypes(
             $expressionTypeInfoMap,
             $expression,
-            $file,
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE),
-            $code,
+            $textDocumentItem,
+            $position,
             $defaultTypes
         );
     }
@@ -134,9 +130,8 @@ class LocalTypeScanner
      *
      * @param ExpressionTypeInfoMap $expressionTypeInfoMap
      * @param string                $expression
-     * @param Structures\File       $file
+     * @param TextDocumentItem      $textDocumentItem
      * @param Position              $position
-     * @param string                $code
      * @param string[]              $defaultTypes
      *
      * @return string[]
@@ -144,17 +139,15 @@ class LocalTypeScanner
     private function getResolvedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
-        Structures\File $file,
+        TextDocumentItem $textDocumentItem,
         Position $position,
-        string $code,
         array $defaultTypes = []
     ): array {
         $types = $this->getUnreferencedTypes(
             $expressionTypeInfoMap,
             $expression,
-            $file,
-            $code,
-            $position->getAsByteOffsetInString($code, PositionEncoding::VALUE),
+            $textDocumentItem,
+            $position,
             $defaultTypes
         );
 
@@ -167,7 +160,7 @@ class LocalTypeScanner
                 $expressionTypeInfo->getBestTypeOverrideMatchLine() :
                 $position->getLine();
 
-            $filePosition = new FilePosition($file->getPath(), new Position($typeLine, 0));
+            $filePosition = new FilePosition($textDocumentItem->getUri(), new Position($typeLine, 0));
 
             $resolvedTypes[] = $this->structureAwareNameResolverFacotry->create($filePosition)->resolve(
                 $type,
@@ -183,33 +176,31 @@ class LocalTypeScanner
      * resolved to their actual types.
      *
      * @param ExpressionTypeInfoMap $expressionTypeInfoMap
-     * @param string                $expression
-     * @param Structures\File       $file
-     * @param string                $code
-     * @param int                   $offset
-     * @param string[]              $defaultTypes
+     * @param string                    $expression
+     * @param TextDocumentItem          $textDocumentItem
+     * @param Position                  $position
+     * @param string[]                  $defaultTypes
      *
      * @return string[]
      */
     private function getUnreferencedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
         string $expression,
-        Structures\File $file,
-        string $code,
-        int $offset,
+        TextDocumentItem $textDocumentItem,
+        Position $position,
         array $defaultTypes = []
     ): array {
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
-        $types = $this->getTypes($expressionTypeInfo, $expression, $file, $code, $offset, $defaultTypes);
+        $types = $this->getTypes($expressionTypeInfo, $expression, $textDocumentItem, $position, $defaultTypes);
 
         $unreferencedTypes = [];
 
-        $selfType = $this->deduceTypesFromSelf($file, $code, $offset);
+        $selfType = $this->deduceTypesFromSelf($textDocumentItem, $position);
         $selfType = array_shift($selfType);
         $selfType = $selfType ?: '';
 
-        $staticType = $this->deduceTypesFromStatic($file, $code, $offset);
+        $staticType = $this->deduceTypesFromStatic($textDocumentItem, $position);
         $staticType = array_shift($staticType);
         $staticType = $staticType ?: '';
 
@@ -225,39 +216,52 @@ class LocalTypeScanner
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return string[]
      */
-    private function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromSelf(TextDocumentItem $textDocumentItem, Position $position): array
     {
         $dummyNode = new Parsing\Node\Keyword\Self_();
+        $dummyNode->setAttribute(
+            'startFilePos',
+            $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
+        );
 
-        return $this->nodeTypeDeducer->deduce($dummyNode, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $dummyNode,
+            $textDocumentItem,
+            $position
+        ));
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
-     * @return string[]
+     * @return array
      */
-    private function deduceTypesFromStatic(Structures\File $file, string $code, int $offset): array
+    private function deduceTypesFromStatic(TextDocumentItem $textDocumentItem, Position $position): array
     {
         $dummyNode = new Parsing\Node\Keyword\Static_();
+        $dummyNode->setAttribute(
+            'startFilePos',
+            $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
+        );
 
-        return $this->nodeTypeDeducer->deduce($dummyNode, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $dummyNode,
+            $textDocumentItem,
+            $position
+        ));
     }
 
     /**
      * @param ExpressionTypeInfo $expressionTypeInfo
      * @param string             $expression
-     * @param Structures\File    $file
-     * @param string             $code
-     * @param int                $offset
+     * @param TextDocumentItem   $textDocumentItem
+     * @param Position           $position
      * @param string[]           $defaultTypes
      *
      * @return string[]
@@ -265,9 +269,8 @@ class LocalTypeScanner
     private function getTypes(
         ExpressionTypeInfo $expressionTypeInfo,
         string $expression,
-        Structures\File $file,
-        string $code,
-        int $offset,
+        TextDocumentItem $textDocumentItem,
+        Position $position,
         array $defaultTypes = []
     ): array {
         if ($expressionTypeInfo->hasBestTypeOverrideMatch()) {
@@ -280,9 +283,8 @@ class LocalTypeScanner
             $types = $this->getTypesForBestMatchNode(
                 $expression,
                 $expressionTypeInfo->getBestMatch(),
-                $file,
-                $code,
-                $offset
+                $textDocumentItem,
+                $position
             );
         }
 
@@ -290,51 +292,59 @@ class LocalTypeScanner
     }
 
     /**
-     * @param string          $expression
-     * @param Node            $node
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
+     * @param string           $expression
+     * @param Node             $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return string[]
      */
     private function getTypesForBestMatchNode(
         string $expression,
         Node $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): array {
         if ($node instanceof Node\Stmt\Foreach_) {
-            return $this->foreachNodeLoopValueTypeDeducer->deduce($node, $file, $code, $offset);
+            return $this->foreachNodeLoopValueTypeDeducer->deduce(new TypeDeductionContext(
+                $node,
+                $textDocumentItem,
+                $position
+            ));
         } elseif ($node instanceof Node\FunctionLike) {
-            return $this->deduceTypesFromFunctionLikeParameter($node, $expression, $file, $code, $offset);
+            return $this->deduceTypesFromFunctionLikeParameter($node, $expression, $textDocumentItem, $position);
         }
 
-        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $node,
+            $textDocumentItem,
+            $position
+        ));
     }
 
     /**
      * @param Node\FunctionLike $node
      * @param string            $parameterName
-     * @param Structures\File   $file
-     * @param string            $code
-     * @param int               $offset
+     * @param TextDocumentItem  $textDocumentItem
+     * @param Position          $position
      *
      * @return string[]
      */
     private function deduceTypesFromFunctionLikeParameter(
         Node\FunctionLike $node,
         string $parameterName,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): array {
         foreach ($node->getParams() as $param) {
             if ($param->var->name === mb_substr($parameterName, 1)) {
                 $this->functionLikeParameterTypeDeducer->setFunctionDocblock($node->getDocComment());
 
-                return $this->functionLikeParameterTypeDeducer->deduce($param, $file, $code, $offset);
+                return $this->functionLikeParameterTypeDeducer->deduce(new TypeDeductionContext(
+                    $param,
+                    $textDocumentItem,
+                    $position
+                ));
             }
         }
 

@@ -10,6 +10,8 @@ use Serenata\Autocompletion\ApplicabilityChecking\AutocompletionApplicabilityChe
 
 use Serenata\Indexing\Structures\File;
 
+use Serenata\Utility\PositionEncoding;
+
 /**
  * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,
  * delegates to another provider.
@@ -57,9 +59,11 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+        $offset = $context->getPositionAsByteOffset();
+
+        $prefix = $this->autocompletionPrefixDeterminer->determine($context->getTextDocumentItem()->getText(), $offset);
 
         if (!$this->autocompletionApplicabilityChecker->doesApplyToPrefix($prefix)) {
             return [];
@@ -68,10 +72,10 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
         // The position the position is at may already be the start of another node. We're interested in what's just
         // before the position (usually the cursor), not what is "at" or "just to the right" of the cursor, hence the
         // -1.
-        $nodeResult = $this->nodeAtOffsetLocator->locate($code, $offset - 1);
+        $nodeResult = $this->nodeAtOffsetLocator->locate($context->getTextDocumentItem()->getText(), $offset - 1);
 
         return $this->autocompletionApplicabilityChecker->doesApplyTo($nodeResult) ?
-            $this->delegate->provide($file, $code, $offset) :
+            $this->delegate->provide($context) :
             [];
     }
 }

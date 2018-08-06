@@ -2,11 +2,11 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
+
+use Serenata\Common\Position;
+
+use Serenata\Utility\PositionEncoding;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\Assign} node.
@@ -29,29 +29,21 @@ final class AssignNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\Assign) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\Assign) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromAssignNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\Assign $node
-     * @param Structures\File  $file
-     * @param string           $code
-     * @param int              $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromAssignNode(
-        Node\Expr\Assign $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        return $this->nodeTypeDeducer->deduce($node->expr, $file, $code, $node->getAttribute('startFilePos'));
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $context->getNode()->expr,
+            $context->getTextDocumentItem(),
+            // Do not use position of expression node to avoid infinite loop in self-assignment statements.
+            Position::createFromByteOffset(
+                $context->getNode()->getAttribute('startFilePos'),
+                $context->getTextDocumentItem()->getText(),
+                PositionEncoding::VALUE
+            )
+        ));
     }
 }

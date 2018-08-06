@@ -4,13 +4,16 @@ namespace Serenata\Tooltips;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
-use Serenata\Indexing\Structures;
+use Serenata\Common\Position;
 
-use PhpParser\Node;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Expr\ClassConstFetch} nodes.
@@ -49,8 +52,8 @@ class ClassConstFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param Structures\File           $file
-     * @param string                    $code
+     * @param TextDocumentItem          $textDocumentItem
+     * @param Position                  $position
      *
      * @throws UnexpectedValueException when the constant name is not a string (i.e. an error node).
      * @throws UnexpectedValueException when the type of the class could not be determined.
@@ -58,13 +61,16 @@ class ClassConstFetchNodeTooltipGenerator
      *
      * @return string
      */
-    public function generate(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): string
-    {
+    public function generate(
+        Node\Expr\ClassConstFetch $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): string {
         if (!$node->name instanceof Node\Identifier) {
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
 
-        $classTypes = $this->getClassTypes($node, $file, $code);
+        $classTypes = $this->getClassTypes($node, $textDocumentItem, $position);
 
         $tooltips = [];
 
@@ -88,19 +94,25 @@ class ClassConstFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param Structures\File           $file
-     * @param string                    $code
+     * @param TextDocumentItem          $textDocumentItem
+     * @param Position                  $position
      *
      * @throws UnexpectedValueException
      *
      * @return array
      */
-    private function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
-    {
+    private function getClassTypes(
+        Node\Expr\ClassConstFetch $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): array {
         $classTypes = [];
 
         try {
-            $classTypes = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $node->getAttribute('startFilePos'));
+            $classTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $node->class,
+                $textDocumentItem
+            ));
         } catch (UnexpectedValueException $e) {
             throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
         }

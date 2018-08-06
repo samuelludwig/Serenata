@@ -2,25 +2,20 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
-use Serenata\Utility\PositionEncoding;
+use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\Indexing\Structures;
+use Serenata\Indexing\StorageInterface;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\NodeHelpers;
-
-use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Name} node.
@@ -48,49 +43,44 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $structureAwareNameResolverFactory;
 
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * @param TypeNormalizerInterface                    $typeNormalizer
      * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
      * @param FileClasslikeListProviderInterface         $fileClasslikeListProvider
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param StorageInterface                           $storage
      */
     public function __construct(
         TypeNormalizerInterface $typeNormalizer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
         FileClasslikeListProviderInterface $fileClasslikeListProvider,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
+        StorageInterface $storage
     ) {
         $this->typeNormalizer = $typeNormalizer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->fileClasslikeListProvider = $fileClasslikeListProvider;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
+        $this->storage = $storage;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Name) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Name) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromNameNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Name       $node
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromNameNode(Node\Name $node, Structures\File $file, string $code, int $offset): array
-    {
-        $nameString = NodeHelpers::fetchClassName($node);
+        $nameString = NodeHelpers::fetchClassName($context->getNode());
 
         if ($nameString === 'static' || $nameString === 'self') {
-            $currentClass = $this->findCurrentClassAt($file, $code, $offset);
+            $currentClass = $this->findCurrentClassAt($context);
 
             if ($currentClass === null) {
                 return [];
@@ -98,7 +88,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             return [$this->typeNormalizer->getNormalizedFqcn($currentClass)];
         } elseif ($nameString === 'parent') {
-            $currentClassName = $this->findCurrentClassAt($file, $code, $offset);
+            $currentClassName = $this->findCurrentClassAt($context);
 
             if (!$currentClassName) {
                 return [];
@@ -116,8 +106,8 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
         }
 
         $filePosition = new FilePosition(
-            $file->getPath(),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+            $context->getTextDocumentItem()->getUri(),
+            $context->getPosition()
         );
 
         $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($nameString, $filePosition);
@@ -126,36 +116,20 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $source
-     * @param int             $offset
+     * @param \Serenata\Analysis\Typing\Deduction\TypeDeductionContext $context
      *
      * @return string|null
      */
-    private function findCurrentClassAt(Structures\File $file, string $source, int $offset): ?string
+    private function findCurrentClassAt(TypeDeductionContext $context): ?string
     {
-        return $this->findCurrentClassAtLine(
-            $file,
-            $source,
-            Position::createFromByteOffset($offset, $source, PositionEncoding::VALUE)->getLine()
-        );
-    }
-
-    /**
-     * @param Structures\File $file
-     * @param string          $source
-     * @param int             $line
-     *
-     * @return string|null
-     */
-    private function findCurrentClassAtLine(Structures\File $file, string $source, int $line): ?string
-    {
-        $classes = $this->fileClasslikeListProvider->getAllForFile($file);
+        $position = $context->getPosition();
+        $file = $this->storage->getFileByPath($context->getTextDocumentItem()->getUri());
 
         $bestMatch = null;
 
-        foreach ($classes as $fqcn => $class) {
-            if ($line >= $class['startLine'] && $line <= $class['endLine']) {
+        /** @var string $fqcn */
+        foreach ($this->fileClasslikeListProvider->getAllForFile($file) as $fqcn => $class) {
+            if ($class['range']->contains($position)) {
                 $bestMatch = $fqcn;
             }
         }

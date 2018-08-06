@@ -4,11 +4,9 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
+
+use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node.
@@ -31,33 +29,20 @@ final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\MethodCall && !$node instanceof Node\Expr\StaticCall) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\MethodCall && !$context->getNode() instanceof Node\Expr\StaticCall) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromMethodCallNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\MethodCall|Node\Expr\StaticCall $node
-     * @param Structures\File                           $file
-     * @param string                                    $code
-     * @param int                                       $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromMethodCallNode(
-        Node\Expr $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
         $infoItems = null;
 
         try {
-            $infoItems = $this->methodCallMethodInfoRetriever->retrieve($node, $file, $code, $offset);
+            $infoItems = $this->methodCallMethodInfoRetriever->retrieve(
+                $context->getNode(),
+                $context->getTextDocumentItem(),
+                $context->getPosition()
+            );
         } catch (UnexpectedValueException $e) {
             return [];
         }

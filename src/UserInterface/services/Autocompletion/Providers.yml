@@ -32,8 +32,6 @@ services:
 
     superglobalAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\SuperglobalAutocompletionProvider
-        arguments:
-            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingSuperglobalAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -48,7 +46,6 @@ services:
         arguments:
             - '@classFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
@@ -66,7 +63,6 @@ services:
         arguments:
             - '@interfaceFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
@@ -84,7 +80,6 @@ services:
         arguments:
             - '@traitFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
@@ -102,7 +97,6 @@ services:
         arguments:
             - '@annotationFilteringClasslikeListProvider'
             - '@useStatementInsertionCreator'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@nodeAtOffsetLocator'
             - '%autocompletion.largeProviderResultLimit%'
@@ -119,7 +113,6 @@ services:
         class: Serenata\Autocompletion\Providers\NamespaceAutocompletionProvider
         arguments:
             - '@namespaceListProvider'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.largeProviderResultLimit%'
 
@@ -135,7 +128,6 @@ services:
         class: Serenata\Autocompletion\Providers\FunctionAutocompletionProvider
         arguments:
             - '@functionListProvider'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@functionParametersEvaluator'
             - '@bestStringApproximationDeterminer'
             - '@functionAutocompletionSuggestionLabelCreator'
@@ -155,7 +147,6 @@ services:
         class: Serenata\Autocompletion\Providers\ConstantAutocompletionProvider
         arguments:
             - '@constantListProvider'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '@autocompletionSuggestionTypeFormatter'
             - '%autocompletion.largeProviderResultLimit%'
@@ -225,7 +216,6 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@autocompletionSuggestionTypeFormatter'
-            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingStaticPropertyAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -256,7 +246,6 @@ services:
             - '@variableScanner'
             - '@parser'
             - '@autocompletionSuggestionTypeFormatter'
-            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingLocalVariableAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -270,7 +259,6 @@ services:
         class: Serenata\Autocompletion\Providers\ParameterNameAutocompletionProvider
         arguments:
             - '@nodeAtOffsetLocator'
-            - '@defaultAutocompletionPrefixDeterminer'
 
     applicabilityCheckingParameterNameAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -305,7 +293,6 @@ services:
         class: Serenata\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider
         arguments:
             - '@aggregatingAutocompletionProvider'
-            - '@defaultAutocompletionPrefixDeterminer'
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.finalSuggestionsResultLimit%'
 

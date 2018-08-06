@@ -9,6 +9,8 @@ use UnexpectedValueException;
 use Serenata\Analysis\CircularDependencyException;
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
+
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
@@ -17,8 +19,6 @@ use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
 use Serenata\Indexing\Structures\File;
-
-use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 /**
  * Provides static member method autocompletion suggestions at a specific location in a file.
@@ -82,12 +82,11 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
         $types = $this->expressionTypeDeducer->deduce(
-            $file,
-            $code,
-            $offset,
+            $context->getTextDocumentItem(),
+            $context->getPosition(),
             null,
             true
         );
@@ -103,7 +102,10 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         $shouldIncludeParanthesesInInsertText = $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator
-            ->evaluate($code, $offset);
+            ->evaluate(
+                $context->getTextDocumentItem()->getText(),
+                $context->getPositionAsByteOffset()
+            );
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
             yield from $this->createSuggestionsForClasslikeInfo(

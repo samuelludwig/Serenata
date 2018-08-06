@@ -5,6 +5,7 @@ namespace Serenata\Indexing\Visiting;
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
@@ -25,6 +26,7 @@ use Serenata\Parsing\DocblockParser;
 
 use Serenata\Utility\NodeHelpers;
 use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Visitor that traverses a set of nodes, indexing (global) functions in the process.
@@ -62,9 +64,9 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
     private $file;
 
     /**
-     * @var string
+     * @var TextDocumentItem
      */
-    private $code;
+    private $textDocumentItem;
 
     /**
      * @param StorageInterface                     $storage
@@ -73,7 +75,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
      * @param NodeTypeDeducerInterface             $nodeTypeDeducer
      * @param Structures\File                      $file
-     * @param string                               $code
+     * @param TextDocumentItem                     $textDocumentItem
      */
     public function __construct(
         StorageInterface $storage,
@@ -82,7 +84,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
-        string $code
+        TextDocumentItem $textDocumentItem
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
@@ -90,7 +92,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
-        $this->code = $code;
+        $this->textDocumentItem = $textDocumentItem;
     }
 
     /**
@@ -142,17 +144,17 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         $range = new Range(
             Position::createFromByteOffset(
                 $node->getAttribute('startFilePos'),
-                $this->code,
+                $this->textDocumentItem->getText(),
                 PositionEncoding::VALUE
             ),
             Position::createFromByteOffset(
                 $node->getAttribute('endFilePos') + 1,
-                $this->code,
+                $this->textDocumentItem->getText(),
                 PositionEncoding::VALUE
             )
         );
 
-        $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+        $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::THROWS,
@@ -187,7 +189,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         }
 
         if ($typeStringSpecification) {
-            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+            $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
             $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 
@@ -201,7 +203,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         $throws = [];
 
         foreach ($documentation['throws'] as $throw) {
-            $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+            $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
             $docblockType = $this->docblockTypeParser->parse($throw['type']);
 
@@ -255,7 +257,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             $defaultValue = $param->default ?
                 substr(
-                    $this->code,
+                    $this->textDocumentItem->getText(),
                     $param->default->getAttribute('startFilePos'),
                     $param->default->getAttribute('endFilePos') - $param->default->getAttribute('startFilePos') + 1
                 ) :
@@ -291,13 +293,16 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                     $typeStringSpecification .= '|null';
                 }
             } elseif ($param->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce($param->default, $this->file, $this->code, 0);
+                $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                    $param->default,
+                    $this->textDocumentItem
+                ));
 
                 $typeStringSpecification = implode('|', $typeList);
             }
 
             if ($typeStringSpecification) {
-                $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+                $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
                 $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 

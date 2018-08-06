@@ -2,20 +2,19 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitorAbstract;
+
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
-
-use Serenata\Utility\PositionEncoding;
-
-use Serenata\Indexing\Structures;
 
 use Serenata\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
 use Serenata\Parsing\LastExpressionParser;
 
-use PhpParser\Node;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Type deducer that returns the type of an expression at a specific offset in a file.
@@ -53,24 +52,23 @@ final class ExpressionTypeDeducer
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
-     * @param string|null     $expression
-     * @param bool            $ignoreLastElement
+     * @param TextDocumentItem $textDocumentItem,
+     * @param Position         $position
+     * @param string|null      $expression
+     * @param bool             $ignoreLastElement
      *
      * @return string[]
      */
     public function deduce(
-        Structures\File $file,
-        string $code,
-        int $offset,
+        TextDocumentItem $textDocumentItem,
+        Position $position,
         ?string $expression = null,
         bool $ignoreLastElement = false
     ): array {
-        $expression = $expression !== null ? $expression : $code;
-
-        $node = $this->lastExpressionParser->getLastNodeAt($expression, $offset);
+        $node = $this->lastExpressionParser->getLastNodeAt(
+            $expression !== null ? $expression : $textDocumentItem->getText(),
+            $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
+        );
 
         if ($node === null) {
             return [];
@@ -82,7 +80,7 @@ final class ExpressionTypeDeducer
             $node = $this->getNodeWithoutLastElement($node);
         }
 
-        return $this->deduceTypesFromNode($file, $code, $node, $offset);
+        return $this->deduceTypesFromNode($node, $textDocumentItem, $position);
     }
 
     /**
@@ -105,39 +103,37 @@ final class ExpressionTypeDeducer
     }
 
     /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param Node            $node
-     * @param int             $offset
+     * @param Node             $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return string[]
      */
-    private function deduceTypesFromNode(Structures\File $file, string $code, Node $node, int $offset): array
+    private function deduceTypesFromNode(Node $node, TextDocumentItem $textDocumentItem, Position $position): array
     {
         // We're dealing with partial code, its context may be lost because of it being invalid, so we can't rely on
         // the namespace attaching visitor here.
-        $this->attachRelevantNamespaceToNode(
-            $node,
-            $file,
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
-        );
+        $this->attachRelevantNamespaceToNode($node, $textDocumentItem, $position);
 
-        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext($node, $textDocumentItem, $position));
     }
 
     /**
-     * @param Node            $node
-     * @param Structures\File $file
-     * @param Position        $position
+     * @param Node             $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return void
      */
-    private function attachRelevantNamespaceToNode(Node $node, Structures\File $file, Position $position): void
-    {
+    private function attachRelevantNamespaceToNode(
+        Node $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): void {
         $namespace = null;
         $namespaceNode = null;
 
-        $filePosition = new FilePosition($file->getPath(), $position);
+        $filePosition = new FilePosition($textDocumentItem->getUri(), $position);
 
         $namespace = $this->positionalNamespaceDeterminer->determine($filePosition);
 

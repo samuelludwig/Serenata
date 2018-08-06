@@ -11,8 +11,6 @@ use Serenata\Analysis\Visiting\UseStatementKind;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\Indexing\Structures;
-
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\NodeHelpers;
@@ -37,14 +35,14 @@ final class FunctionCallNodeFqsenDeterminer
 
     /**
      * @param Node\Expr\FuncCall $node
-     * @param Structures\File    $file
+     * @param string             $uri
      * @param Position           $position
      *
      * @return string
      */
-    public function determine(Node\Expr\FuncCall $node, Structures\File $file, Position $position): string
+    public function determine(Node\Expr\FuncCall $node, string $uri, Position $position): string
     {
-        $filePosition = new FilePosition($file->getPath(), $position);
+        $filePosition = new FilePosition($uri, $position);
 
         $fileTypeResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 

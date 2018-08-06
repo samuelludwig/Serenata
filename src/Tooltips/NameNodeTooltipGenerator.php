@@ -8,9 +8,13 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Node\NameNodeFqsenDeterminer;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Name} nodes.
@@ -48,17 +52,20 @@ class NameNodeTooltipGenerator
     }
 
     /**
-     * @param Node\Name       $node
-     * @param Structures\File $file
-     * @param int             $line
+     * @param Node\Name        $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
      * @return string
      */
-    public function generate(Node\Name $node, Structures\File $file, int $line): string
-    {
-        $fqsen = $this->nameNodeFqsenDeterminer->determine($node, $file, $line);
+    public function generate(
+        Node\Name $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): string {
+        $fqsen = $this->nameNodeFqsenDeterminer->determine($node, $textDocumentItem, $position);
 
         $info = $this->getClassLikeInfo($fqsen);
 

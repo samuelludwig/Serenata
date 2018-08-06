@@ -2,13 +2,9 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
+use PhpParser\Node;
 
 use Serenata\Parsing;
-
-use Serenata\Indexing\Structures;
-
-use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Parsing\Node\Keyword\Self_} node.
@@ -31,26 +27,19 @@ final class SelfNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Parsing\Node\Keyword\Self_) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Parsing\Node\Keyword\Self_) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromSelf($file, $code, $offset);
-    }
-
-    /**
-     * @param Structures\File $file
-     * @param string          $code
-     * @param int             $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromSelf(Structures\File $file, string $code, int $offset): array
-    {
         $node = new Node\Name('self');
+        $node->setAttribute('startFilePos', $context->getNode()->getAttribute('startFilePos'));
 
-        return $this->nodeTypeDeducer->deduce($node, $file, $code, $offset);
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $node,
+            $context->getTextDocumentItem(),
+            $context->getPosition()
+        ));
     }
 }

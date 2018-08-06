@@ -10,6 +10,7 @@ use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
+use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
 use Evenement\EventEmitterTrait;
@@ -203,7 +204,7 @@ final class Indexer implements EventEmitterInterface
         }
 
         try {
-            $this->fileIndexer->index($path, $code);
+            $this->fileIndexer->index(new TextDocumentItem($path, $code));
         } catch (IndexingFailedException $e) {
             return false;
         }

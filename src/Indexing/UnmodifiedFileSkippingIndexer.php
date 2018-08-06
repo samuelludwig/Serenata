@@ -5,6 +5,8 @@ namespace Serenata\Indexing;
 use DateTime;
 use LogicException;
 
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Decorator for {@see FileIndexerInterface} objects that skips indexing entirely if the source was not modified.
  */
@@ -33,25 +35,29 @@ final class UnmodifiedFileSkippingIndexer implements FileIndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(string $filePath, string $code): void
+    public function index(TextDocumentItem $textDocumentItem): void
     {
         $file = null;
 
         try {
-            $file = $this->storage->getFileByPath($filePath);
+            $file = $this->storage->getFileByPath($textDocumentItem->getUri());
         } catch (FileNotFoundStorageException $e) {
             $file = null;
         }
 
-        $requestedCodeHash = $this->hashSource($code);
+        $requestedCodeHash = $this->hashSource($textDocumentItem->getText());
 
         if ($file === null || $file->getLastIndexedSourceHash() !== $requestedCodeHash) {
-            $this->delegate->index($filePath, $code);
+            $this->delegate->index($textDocumentItem);
 
             try {
-                $file = $this->storage->getFileByPath($filePath);
+                $file = $this->storage->getFileByPath($textDocumentItem->getUri());
             } catch (FileNotFoundStorageException $e) {
-                throw new LogicException("File {$filePath} is not in index, even though it was just indexed", 0, $e);
+                throw new LogicException(
+                    "File {$textDocumentItem->getUri()} is not in index, even though it was just indexed",
+                    0,
+                    $e
+                );
             }
         }
 

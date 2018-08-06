@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Visiting;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
 
 use Serenata\Common\Range;
@@ -22,6 +24,8 @@ use Serenata\Utility\NodeHelpers;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Visitor that traverses a set of nodes, indexing defines in the process.
@@ -54,9 +58,9 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     private $file;
 
     /**
-     * @var string
+     * @var TextDocumentItem
      */
-    private $code;
+    private $textDocumentItem;
 
     /**
      * @param StorageInterface                     $storage
@@ -64,7 +68,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
      * @param DocblockTypeParserInterface          $docblockTypeParser
      * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
      * @param Structures\File                      $file
-     * @param string                               $code
+     * @param TextDocumentItem                     $textDocumentItem
      */
     public function __construct(
         StorageInterface $storage,
@@ -72,14 +76,14 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         DocblockTypeParserInterface $docblockTypeParser,
         TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         Structures\File $file,
-        string $code
+        TextDocumentItem $textDocumentItem
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->docblockTypeParser = $docblockTypeParser;
         $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->file = $file;
-        $this->code = $code;
+        $this->textDocumentItem = $textDocumentItem;
     }
 
     /**
@@ -120,7 +124,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         $type = new MixedDocblockType();
 
         $defaultValue = substr(
-            $this->code,
+            $this->textDocumentItem->getText(),
             $node->args[1]->getAttribute('startFilePos'),
             $node->args[1]->getAttribute('endFilePos') - $node->args[1]->getAttribute('startFilePos') + 1
         );
@@ -128,23 +132,26 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         $range = new Range(
             Position::createFromByteOffset(
                 $node->getAttribute('startFilePos'),
-                $this->code,
+                $this->textDocumentItem->getText(),
                 PositionEncoding::VALUE
             ),
             Position::createFromByteOffset(
                 $node->getAttribute('endFilePos') + 1,
-                $this->code,
+                $this->textDocumentItem->getText(),
                 PositionEncoding::VALUE
             )
         );
 
         if (isset($node->args[1])) {
-            $typeList = $this->nodeTypeDeducer->deduce($node->args[1]->value, $this->file, $this->code, 0);
+            $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $node->args[1]->value,
+                $this->textDocumentItem
+            ));
 
             if (count($typeList) !== 0) {
                 $typeStringSpecification = implode('|', $typeList);
 
-                $filePosition = new FilePosition($this->file->getPath(), $range->getStart());
+                $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
                 $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 

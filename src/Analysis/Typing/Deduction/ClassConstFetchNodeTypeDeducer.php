@@ -4,11 +4,9 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use Serenata\Analysis\ClasslikeInfoBuilderInterface;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
+
+use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ClassConstFetch} node.
@@ -40,30 +38,16 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\ClassConstFetch) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\ClassConstFetch) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromClassConstFetchNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\ClassConstFetch $node
-     * @param Structures\File           $file
-     * @param string                    $code
-     * @param int                       $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromClassConstFetchNode(
-        Node\Expr\ClassConstFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        $typesOfVar = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $offset);
+        $typesOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $context->getNode()->class,
+            $context->getTextDocumentItem()
+        ));
 
         $types = [];
 
@@ -76,8 +60,10 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                 continue;
             }
 
-            if (isset($info['constants'][$node->name->name])) {
-                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['constants'][$node->name->name]['types']);
+            if (isset($info['constants'][$context->getNode()->name->name])) {
+                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays(
+                    $info['constants'][$context->getNode()->name->name]['types']
+                );
 
                 if (!empty($fetchedTypes)) {
                     $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));

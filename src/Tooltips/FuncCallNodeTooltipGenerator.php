@@ -15,6 +15,7 @@ use Serenata\Common\Position;
 use Serenata\Indexing\Structures;
 
 use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Expr\FuncCall} nodes.
@@ -53,26 +54,21 @@ class FuncCallNodeTooltipGenerator
 
      /**
       * @param Node\Expr\FuncCall $node
-      * @param Structures\File      $file
-      * @param string               $code
-      * @param int                  $offset
+      * @param TextDocumentItem   $textDocumentItem
+      * @param Position           $position
       *
       * @throws UnexpectedValueException when the function was not found.
       * @throws UnexpectedValueException when a dynamic function call is passed.
       *
       * @return string
       */
-    public function generate(Node\Expr\FuncCall $node, Structures\File $file, string $code, int $offset): string
+    public function generate(Node\Expr\FuncCall $node, TextDocumentItem $textDocumentItem, Position $position): string
     {
         if (!$node->name instanceof Node\Name) {
             throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
         }
 
-        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $file, Position::createFromByteOffset(
-            $offset,
-            $code,
-            PositionEncoding::VALUE
-        ));
+        $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $textDocumentItem->getUri(), $position);
 
         $info = $this->getFunctionInfo($fqsen);
 

@@ -2,13 +2,9 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
+use PhpParser\Node;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
-
-use Serenata\Indexing\Structures;
-
-use PhpParser\Node;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ArrayDimFetch} node.
@@ -38,30 +34,16 @@ final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
-        if (!$node instanceof Node\Expr\ArrayDimFetch) {
-            throw new UnexpectedValueException("Can't handle node of type " . get_class($node));
+        if (!$context->getNode() instanceof Node\Expr\ArrayDimFetch) {
+            throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        return $this->deduceTypesFromArrayDimFetchNode($node, $file, $code, $offset);
-    }
-
-    /**
-     * @param Node\Expr\ArrayDimFetch $node
-     * @param Structures\File         $file
-     * @param string                  $code
-     * @param int                     $offset
-     *
-     * @return string[]
-     */
-    private function deduceTypesFromArrayDimFetchNode(
-        Node\Expr\ArrayDimFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
-    ): array {
-        $types = $this->nodeTypeDeducer->deduce($node->var, $file, $code, $offset);
+        $types = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $context->getNode()->var,
+            $context->getTextDocumentItem()
+        ));
 
         $elementTypes = [];
 

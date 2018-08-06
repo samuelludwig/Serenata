@@ -4,13 +4,18 @@ namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
+
+use Serenata\Common\Position;
 
 use Serenata\Indexing\Structures;
 
-use PhpParser\Node;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the definition of the class constant called in {@see Node\Expr\ClassConstFetch} nodes.
@@ -41,8 +46,8 @@ class ClassConstFetchNodeDefinitionLocator
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param Structures\File           $file
-     * @param string                    $code
+     * @param TextDocumentItem          $textDocumentItem
+     * @param Position                  $position
      *
      * @throws UnexpectedValueException when the constant name is not a string (i.e. an error node).
      * @throws UnexpectedValueException when the type of the class could not be determined.
@@ -50,13 +55,16 @@ class ClassConstFetchNodeDefinitionLocator
      *
      * @return GotoDefinitionResult
      */
-    public function locate(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): GotoDefinitionResult
-    {
+    public function locate(
+        Node\Expr\ClassConstFetch $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): GotoDefinitionResult {
         if (!$node->name instanceof Node\Identifier) {
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
 
-        $classTypes = $this->getClassTypes($node, $file, $code);
+        $classTypes = $this->getClassTypes($node, $textDocumentItem, $position);
 
         $definitions = [];
 
@@ -80,19 +88,26 @@ class ClassConstFetchNodeDefinitionLocator
 
     /**
      * @param Node\Expr\ClassConstFetch $node
-     * @param Structures\File           $file
-     * @param string                    $code
+     * @param TextDocumentItem          $textDocumentItem
+     * @param Position                  $position
      *
      * @throws UnexpectedValueException
      *
      * @return array
      */
-    private function getClassTypes(Node\Expr\ClassConstFetch $node, Structures\File $file, string $code): array
-    {
+    private function getClassTypes(
+        Node\Expr\ClassConstFetch $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): array {
         $classTypes = [];
 
         try {
-            $classTypes = $this->nodeTypeDeducer->deduce($node->class, $file, $code, $node->getAttribute('startFilePos'));
+            $classTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $node->class,
+                $textDocumentItem,
+                $position
+            ));
         } catch (UnexpectedValueException $e) {
             throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
         }

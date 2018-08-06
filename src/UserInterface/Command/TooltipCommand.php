@@ -2,6 +2,8 @@
 
 namespace Serenata\UserInterface\Command;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileIndexerInterface;
 
@@ -11,6 +13,8 @@ use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Tooltips\TooltipResult;
 use Serenata\Tooltips\TooltipProvider;
 
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
 /**
@@ -96,10 +100,14 @@ final class TooltipCommand extends AbstractCommand
      */
     public function getTooltip(string $filePath, string $code, int $offset): ?TooltipResult
     {
+        // Not used (yet), but will validate if file exists in index.
         $file = $this->storage->getFileByPath($filePath);
 
         // $this->fileIndexer->index($filePath, $code);
 
-        return $this->tooltipProvider->get($file, $code, $offset);
+        return $this->tooltipProvider->get(
+            new TextDocumentItem($filePath, $code),
+            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+        );
     }
 }

@@ -4,16 +4,21 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
-use Serenata\Analysis\Visiting\TypeQueryingVisitor;
-use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
-use Serenata\Analysis\Visiting\ExpressionTypeInfoMap;
-
-use Serenata\Parsing\DocblockParser;
-
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 use PhpParser\PrettyPrinterAbstract;
+
+use Serenata\Analysis\Visiting\TypeQueryingVisitor;
+use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
+use Serenata\Analysis\Visiting\ExpressionTypeInfoMap;
+
+use Serenata\Common\Position;
+
+use Serenata\Parsing\DocblockParser;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Analyzes types affecting expressions (e.g. variables and properties) in a local scope in a file.
@@ -51,34 +56,34 @@ class ExpressionLocalTypeAnalyzer
     }
 
     /**
-     * @param string $code
-     * @param int    $offset
+     * @param \Serenata\Utility\TextDocumentItem $textDocumentItem
+     * @param \Serenata\Common\Position          $position
      *
-     * @return ExpressionTypeInfoMap
+     * @return \Serenata\Analysis\Visiting\ExpressionTypeInfoMap
      */
-    public function analyze(string $code, int $offset): ExpressionTypeInfoMap
+    public function analyze(TextDocumentItem $textDocumentItem, Position $position): ExpressionTypeInfoMap
     {
-        $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($code, $offset);
+        $typeQueryingVisitor = $this->walkTypeQueryingVisitorTo($textDocumentItem, $position);
 
         return $typeQueryingVisitor->getExpressionTypeInfoMap();
     }
 
     /**
-     * @param string $code
-     * @param int    $offset
-     *
-     * @throws UnexpectedValueException
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return TypeQueryingVisitor
      */
-    private function walkTypeQueryingVisitorTo(string $code, int $offset): TypeQueryingVisitor
-    {
+    private function walkTypeQueryingVisitorTo(
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): TypeQueryingVisitor {
         $nodes = null;
 
         $handler = new ErrorHandler\Collecting();
 
         try {
-            $nodes = $this->parser->parse($code, $handler);
+            $nodes = $this->parser->parse($textDocumentItem->getText(), $handler);
         } catch (\PhpParser\Error $e) {
             throw new UnexpectedValueException('Parsing the file failed!');
         }
@@ -88,6 +93,8 @@ class ExpressionLocalTypeAnalyzer
         if ($nodes === null) {
             throw new UnexpectedValueException('Parsing the file failed!');
         }
+
+        $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
 
         $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
         $typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $this->prettyPrinter, $offset);

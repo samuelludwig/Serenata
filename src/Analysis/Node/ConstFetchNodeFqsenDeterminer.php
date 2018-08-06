@@ -14,6 +14,7 @@ use Serenata\Indexing\Structures;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\NodeHelpers;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Determines the FQSEN of a constant fetch node.
@@ -35,14 +36,17 @@ final class ConstFetchNodeFqsenDeterminer
 
     /**
      * @param Node\Expr\ConstFetch $node
-     * @param Structures\File      $file
+     * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
      * @return string
      */
-    public function determine(Node\Expr\ConstFetch $node, Structures\File $file, Position $position): string
-    {
-        $filePosition = new FilePosition($file->getPath(), $position);
+    public function determine(
+        Node\Expr\ConstFetch $node,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): string {
+        $filePosition = new FilePosition($textDocumentItem->getUri(), $position);
 
         $fileTypeResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 

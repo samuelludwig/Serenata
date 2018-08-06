@@ -15,6 +15,7 @@ use Serenata\Common\Position;
 use Serenata\Indexing\Structures;
 
 use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Provides tooltips for {@see Node\Expr\ConstFetch} nodes.
@@ -53,6 +54,8 @@ class ConstFetchNodeTooltipGenerator
 
     /**
      * @param Node\Expr\ConstFetch $node
+     * @param TextDocumentItem     $textDocumentItem
+     * @param Position             $position
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
@@ -60,14 +63,13 @@ class ConstFetchNodeTooltipGenerator
      */
     public function generate(
         Node\Expr\ConstFetch $node,
-        Structures\File $file,
-        string $code,
-        int $offset
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): string {
         $fqsen = $this->constFetchNodeFqsenDeterminer->determine(
             $node,
-            $file,
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
+            $textDocumentItem,
+            $position
         );
 
         $info = $this->getConstantInfo($fqsen);

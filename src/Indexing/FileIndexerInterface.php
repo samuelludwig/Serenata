@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing;
 
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Handles indexation of PHP code in a single file.
  *
@@ -16,12 +18,11 @@ namespace Serenata\Indexing;
 interface FileIndexerInterface
 {
     /**
-     * @param string $filePath
-     * @param string $code
+     * @param TextDocumentItem $textDocumentItem
      *
      * @throws IndexingFailedException
      *
      * @return void
      */
-    public function index(string $filePath, string $code): void;
+    public function index(TextDocumentItem $textDocumentItem): void;
 }

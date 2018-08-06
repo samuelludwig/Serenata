@@ -35,35 +35,40 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
     /**
      * @inheritDoc
      */
-    public function provide(File $file, string $code, int $offset): iterable
+    public function provide(AutocompletionProviderContext $context): iterable
     {
-        $prefix = $this->autocompletionPrefixDeterminer->determine($code, $offset);
+        $prefixOverride = $this->autocompletionPrefixDeterminer->determine(
+            $context->getTextDocumentItem()->getText(),
+            $context->getPositionAsByteOffset()
+        );
 
         foreach ($this->getTags() as $tag) {
-            yield $this->createSuggestion($tag, $code, $offset, $prefix);
+            yield $this->createSuggestion($tag, $context, $prefixOverride);
         }
     }
 
     /**
-     * @param array  $tag
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $tag
+     * @param AutocompletionProviderContext $context
+     * @param string                        $prefixOverride
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $tag, string $code, int $offset, string $prefix): AutocompletionSuggestion
-    {
+    private function createSuggestion(
+        array $tag,
+        AutocompletionProviderContext $context,
+        string $prefixOverride
+    ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $tag['name'],
             SuggestionKind::KEYWORD,
             $tag['insertText'],
-            $this->getTextEditForSuggestion($tag, $code, $offset, $prefix),
+            $this->getTextEditForSuggestion($tag, $context, $prefixOverride),
             $tag['name'],
             'PHP docblock tag',
             [
                 'returnTypes'  => '',
-                'prefix'       => $prefix
+                'prefix'       => $prefixOverride
             ],
             [],
             false
@@ -78,21 +83,24 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array  $tag
-     * @param string $code
-     * @param int    $offset
-     * @param string $prefix
+     * @param array                         $tag
+     * @param AutocompletionProviderContext $context
+     * @param string                        $prefixOverride
      *
      * @return TextEdit
      */
-    private function getTextEditForSuggestion(array $tag, string $code, int $offset, string $prefix): TextEdit
-    {
-        $endPosition = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
-
+    private function getTextEditForSuggestion(
+        array $tag,
+        AutocompletionProviderContext $context,
+        string $prefixOverride
+    ): TextEdit {
         return new TextEdit(
             new Range(
-                new Position($endPosition->getLine(), $endPosition->getCharacter() - mb_strlen($prefix)),
-                $endPosition
+                new Position(
+                    $context->getPosition()->getLine(),
+                    $context->getPosition()->getCharacter() - mb_strlen($prefixOverride)
+                ),
+                $context->getPosition()
             ),
             $tag['insertText']
         );

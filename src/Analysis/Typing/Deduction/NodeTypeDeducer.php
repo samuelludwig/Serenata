@@ -4,11 +4,9 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use DomainException;
 
-use Serenata\Parsing;
-
-use Serenata\Indexing\Structures;
-
 use PhpParser\Node;
+
+use Serenata\Parsing;
 
 /**
  * Type deducer that can deduce the type of a {@see Node} object.
@@ -211,17 +209,17 @@ final class NodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(Node $node, Structures\File $file, string $code, int $offset): array
+    public function deduce(TypeDeductionContext $context): array
     {
         $typeDeducer = null;
 
         try {
-            $typeDeducer = $this->getTypeDeducerForNode($node);
+            $typeDeducer = $this->getTypeDeducerForNode($context->getNode());
         } catch (DomainException $e) {
             return [];
         }
 
-        return $typeDeducer->deduce($node, $file, $code, $offset);
+        return $typeDeducer->deduce($context);
     }
 
     /**
