@@ -79,6 +79,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      */
     public function provide(AutocompletionProviderContext $context): iterable
     {
+        /** @var array[] $bestApproximations */
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $this->classlikeListProvider->getAll(),
             $context->getPrefix(),
