@@ -27,11 +27,12 @@
     },
     "require-dev": {
         "brianium/paratest": "^2.0",
-        "phpunit/phpunit": "^7.3",
         "phpstan/phpstan": "0.10.2",
         "phpstan/phpstan-doctrine": "0.10",
-        "phpstan/phpstan-phpunit": "0.10",
         "phpstan/phpstan-php-parser": "0.10",
+        "phpstan/phpstan-phpunit": "0.10",
+        "phpunit/phpunit": "^7.3",
+        "slevomat/coding-standard": "4.6.3",
         "symfony/var-dumper": "^4.1"
     },
     "autoload": {
