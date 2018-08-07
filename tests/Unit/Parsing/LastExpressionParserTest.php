@@ -2,15 +2,17 @@
 
 namespace Serenata\Tests\Unit\Parsing;
 
-use Serenata\Parsing\PartialParser;
-use Serenata\Parsing\ParserTokenHelper;
-use Serenata\Parsing\LastExpressionParser;
-
 use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 
-class LastExpressionParserTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+use Serenata\Parsing\PartialParser;
+use Serenata\Parsing\ParserTokenHelper;
+use Serenata\Parsing\LastExpressionParser;
+
+class LastExpressionParserTest extends TestCase
 {
     /**
      * @return ParserFactory

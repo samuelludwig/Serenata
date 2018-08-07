@@ -114,7 +114,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
             'Implements.phpt',
             'TraitUse.phpt',
             'TraitAlias.phpt',
-            'TraitPrecedence.phpt'
+            'TraitPrecedence.phpt',
         ];
     }
 

@@ -4,10 +4,12 @@ namespace Serenata\Tests\Unit\Autocompletion\ApproximateStringMatching;
 
 use ArrayObject;
 
+use PHPUnit\Framework\TestCase;
+
 use Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatcherInterface;
 use Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer;
 
-class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PHPUnit\Framework\TestCase
+class ApproximateStringMatchingBestStringApproximationDeterminerTest extends TestCase
 {
     /**
      * @return void
@@ -24,7 +26,7 @@ class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PH
 
         $items = [
             ['key' => 'worstMatch'],
-            ['key' => 'bestMatch']
+            ['key' => 'bestMatch'],
         ];
 
         static::assertSame(
@@ -48,7 +50,7 @@ class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PH
 
         $items = [
             ['key' => 'worstMatch'],
-            ['key' => 'bestMatch']
+            ['key' => 'bestMatch'],
         ];
 
         static::assertSame(
@@ -72,7 +74,7 @@ class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PH
 
         $items = [
             ['key' => 'first'],
-            ['key' => 'second']
+            ['key' => 'second'],
         ];
 
         static::assertSame(
@@ -96,7 +98,7 @@ class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PH
 
         $items = [
             ['key' => 'worstMatch'],
-            ['key' => 'bestMatch']
+            ['key' => 'bestMatch'],
         ];
 
         static::assertSame(
@@ -119,7 +121,7 @@ class ApproximateStringMatchingBestStringApproximationDeterminerTest extends \PH
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
         $items = [
-            new ArrayObject(['key' => 'test'])
+            new ArrayObject(['key' => 'test']),
         ];
 
         static::assertSame(

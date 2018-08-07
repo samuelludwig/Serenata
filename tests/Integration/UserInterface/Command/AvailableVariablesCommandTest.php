@@ -66,7 +66,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
         static::assertSame([
             '$var3' => ['name' => '$var3', 'type' => null],
             '$var2' => ['name' => '$var2', 'type' => null],
-            '$var1' => ['name' => '$var1', 'type' => null]
+            '$var1' => ['name' => '$var1', 'type' => null],
         ], $output);
     }
 
@@ -80,7 +80,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
         static::assertSame([
             '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
-            '$param1'  => ['name' => '$param1',  'type' => null]
+            '$param1'  => ['name' => '$param1',  'type' => null],
         ], $output);
     }
 
@@ -95,7 +95,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
             '$this'    => ['name' => '$this',    'type' => null],
             '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
-            '$param1'  => ['name' => '$param1',  'type' => null]
+            '$param1'  => ['name' => '$param1',  'type' => null],
         ], $output);
     }
 
@@ -110,7 +110,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
             '$this'         => ['name' => '$this',         'type' => null],
             '$test'         => ['name' => '$test',         'type' => null],
             '$something'    => ['name' => '$something',    'type' => null],
-            '$closureParam' => ['name' => '$closureParam', 'type' => null]
+            '$closureParam' => ['name' => '$closureParam', 'type' => null],
         ], $output);
     }
 

@@ -34,11 +34,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo()',
                 null,
                 [
-                    'returnTypes'  => 'int|string'
+                    'returnTypes'  => 'int|string',
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -66,11 +66,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo()',
                 null,
                 [
-                    'returnTypes'  => 'mixed'
+                    'returnTypes'  => 'mixed',
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -98,11 +98,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo()',
                 null,
                 [
-                    'returnTypes'  => 'mixed'
+                    'returnTypes'  => 'mixed',
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -130,11 +130,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo()',
                 null,
                 [
-                    'returnTypes'  => 'void'
+                    'returnTypes'  => 'void',
                 ],
                 [],
                 true
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -162,11 +162,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo([$i])',
                 null,
                 [
-                    'returnTypes'  => 'mixed'
+                    'returnTypes'  => 'mixed',
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -194,11 +194,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo($test)',
                 null,
                 [
-                    'returnTypes'  => 'mixed'
+                    'returnTypes'  => 'mixed',
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

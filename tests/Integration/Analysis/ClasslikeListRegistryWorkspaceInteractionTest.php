@@ -19,7 +19,7 @@ class ClasslikeListRegistryWorkspaceInteractionTest extends AbstractIntegrationT
         static::assertEmpty($registry->getAll());
 
         $registry->add([
-            'fqcn' => '\Test'
+            'fqcn' => '\Test',
         ]);
 
         static::assertCount(1, $registry->getAll());

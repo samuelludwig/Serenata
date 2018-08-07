@@ -51,7 +51,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -96,7 +96,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 [],
                 true,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

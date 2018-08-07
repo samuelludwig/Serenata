@@ -26,8 +26,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
             new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
-                new ParameterInformation('string $c', 'Parameter C.')
-            ])
+                new ParameterInformation('string $c', 'Parameter C.'),
+            ]),
         ];
 
         $fileName = 'FunctionCall.phpt';
@@ -45,8 +45,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $expectedSignaturesResult = [
             new SignatureInformation('test(int $a)', 'Some summary.', [
-                new ParameterInformation('int $a', 'Parameter A.')
-            ])
+                new ParameterInformation('int $a', 'Parameter A.'),
+            ]),
         ];
 
         $fileName = 'FunctionCallWhitespaceBeforeFirstAndOnlyArgument.phpt';
@@ -63,8 +63,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         $expectedSignaturesResult = [
             new SignatureInformation('test(int $a, int $b)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
-                new ParameterInformation('int $b', 'Parameter B.')
-            ])
+                new ParameterInformation('int $b', 'Parameter B.'),
+            ]),
         ];
 
         $fileName = 'FunctionCallWhitespaceBetweenArguments.phpt';
@@ -82,8 +82,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         $expectedSignaturesResult = [
             new SignatureInformation('test(int $a, int $b)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
-                new ParameterInformation('int $b', 'Parameter B.')
-            ])
+                new ParameterInformation('int $b', 'Parameter B.'),
+            ]),
         ];
 
         $fileName = 'FunctionCallWithMissingLastArgumentAfterComma.phpt';
@@ -100,8 +100,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $expectedSignaturesResult = [
             new SignatureInformation('test(\Closure $a)', null, [
-                new ParameterInformation('\Closure $a', null)
-            ])
+                new ParameterInformation('\Closure $a', null),
+            ]),
         ];
 
         $fileName = 'FunctionCallClosureArgumentBody.phpt';
@@ -130,12 +130,12 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $expectedSignaturesResult = [
             new SignatureInformation('foo(int $a)', 'Some summary.', [
-                new ParameterInformation('int $a', 'Parameter A.')
-            ])
+                new ParameterInformation('int $a', 'Parameter A.'),
+            ]),
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('bar()', null, [])
+            new SignatureInformation('bar()', null, []),
         ];
 
         $fileName = 'NestedFunctionCall.phpt';
@@ -157,8 +157,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
             new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
-                new ParameterInformation('string $c', 'Parameter C.')
-            ])
+                new ParameterInformation('string $c', 'Parameter C.'),
+            ]),
         ];
 
         $fileName = 'MethodCall.phpt';
@@ -176,12 +176,12 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $expectedSignaturesResult = [
             new SignatureInformation('foo(int $a)', 'Some summary.', [
-                new ParameterInformation('int $a', 'Parameter A.')
-            ])
+                new ParameterInformation('int $a', 'Parameter A.'),
+            ]),
         ];
 
         $expectedNestedSignaturesResult = [
-            new SignatureInformation('bar()', null, [])
+            new SignatureInformation('bar()', null, []),
         ];
 
         $fileName = 'NestedMethodCall.phpt';
@@ -203,8 +203,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
             new SignatureInformation('test(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
-                new ParameterInformation('string $c', 'Parameter C.')
-            ])
+                new ParameterInformation('string $c', 'Parameter C.'),
+            ]),
         ];
 
         $fileName = 'StaticMethodCall.phpt';
@@ -224,8 +224,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
             new SignatureInformation('__construct(int $a, bool $b = true, string $c)', 'Some summary.', [
                 new ParameterInformation('int $a', 'Parameter A.'),
                 new ParameterInformation('bool $b = true', null),
-                new ParameterInformation('string $c', 'Parameter C.')
-            ])
+                new ParameterInformation('string $c', 'Parameter C.'),
+            ]),
         ];
 
         $fileName = 'Constructor.phpt';
@@ -243,14 +243,14 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $expectedSignaturesResult = [
             new SignatureInformation('__construct(int $a)', null, [
-                new ParameterInformation('int $a', null)
-            ])
+                new ParameterInformation('int $a', null),
+            ]),
         ];
 
         $expectedNestedSignaturesResult = [
             new SignatureInformation('__construct(int $b)', null, [
-                new ParameterInformation('int $b', null)
-            ])
+                new ParameterInformation('int $b', null),
+            ]),
         ];
 
         $fileName = 'NestedConstructor.phpt';
@@ -444,7 +444,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         }
 
         static::assertTrue(
-            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() != $signatures),
+            $gotException === true || ($gotException === false && $resultBeforeRange->getSignatures() !== $signatures),
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
 
@@ -457,7 +457,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         }
 
         static::assertTrue(
-            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() != $signatures),
+            $gotException === true || ($gotException === false && $resultAfterRange->getSignatures() !== $signatures),
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );
     }

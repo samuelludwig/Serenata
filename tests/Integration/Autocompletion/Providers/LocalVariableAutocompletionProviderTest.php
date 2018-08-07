@@ -35,7 +35,7 @@ class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProv
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

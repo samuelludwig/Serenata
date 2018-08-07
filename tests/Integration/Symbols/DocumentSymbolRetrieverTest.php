@@ -34,7 +34,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     )
                 ),
                 null
-            )
+            ),
         ], $this->getSymbolsForFile($filePath));
     }
 
@@ -58,7 +58,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     )
                 ),
                 null
-            )
+            ),
         ], $this->getSymbolsForFile($filePath));
     }
 
@@ -82,7 +82,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     )
                 ),
                 null
-            )
+            ),
         ], $this->getSymbolsForFile($filePath));
     }
 
@@ -106,7 +106,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     )
                 ),
                 null
-            )
+            ),
         ], $this->getSymbolsForFile($filePath));
     }
 
@@ -130,7 +130,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                     )
                 ),
                 null
-            )
+            ),
         ], $this->getSymbolsForFile($filePath));
     }
 

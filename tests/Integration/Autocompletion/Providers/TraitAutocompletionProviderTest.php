@@ -37,7 +37,7 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

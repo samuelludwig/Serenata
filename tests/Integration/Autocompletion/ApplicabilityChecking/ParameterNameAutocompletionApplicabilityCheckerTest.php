@@ -18,7 +18,7 @@ class ParameterNameAutocompletionApplicabilityCheckerTest extends AbstractAutoco
     public function getFileNamesWhereShouldApply(): array
     {
         return [
-            'ParameterName.phpt'
+            'ParameterName.phpt',
         ];
     }
 

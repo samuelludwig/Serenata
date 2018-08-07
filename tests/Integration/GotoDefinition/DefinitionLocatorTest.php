@@ -353,7 +353,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
 
         static::assertTrue(
             $gotException === true ||
-            $resultAfterRange == null ||
+            $resultAfterRange === null ||
             ($gotException === false && (
                 $resultAfterRange->getUri() !== $gotoDefinitionResult->getUri() ||
                 $resultAfterRange->getLine() !== $gotoDefinitionResult->getLine()

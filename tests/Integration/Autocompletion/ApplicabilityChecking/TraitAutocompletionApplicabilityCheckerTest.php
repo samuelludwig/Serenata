@@ -23,7 +23,7 @@ class TraitAutocompletionApplicabilityCheckerTest extends AbstractAutocompletion
             'TraitUse.phpt',
             'UseStatement.phpt',
             'StaticMethodCallClassName.phpt',
-            'ParameterDefaultValue.phpt'
+            'ParameterDefaultValue.phpt',
         ];
     }
 

@@ -27,7 +27,7 @@ class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocompletion
             'UseStatement.phpt',
             'ClassConstFetchClassName.phpt',
             'StaticMethodCallClassName.phpt',
-            'StaticPropertyFetchClassName.phpt'
+            'StaticPropertyFetchClassName.phpt',
         ];
     }
 

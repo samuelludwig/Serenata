@@ -38,7 +38,7 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -80,7 +80,7 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

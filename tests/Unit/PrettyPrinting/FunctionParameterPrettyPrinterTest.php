@@ -2,13 +2,15 @@
 
 namespace Serenata\Tests\Unit\PrettyPrinting;
 
+use PHPUnit\Framework\TestCase;
+
 use Serenata\PrettyPrinting\TypePrettyPrinter;
 use Serenata\PrettyPrinting\TypeListPrettyPrinter;
 use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
 use Serenata\PrettyPrinting\FunctionParameterPrettyPrinter;
 use Serenata\PrettyPrinting\ParameterDefaultValuePrettyPrinter;
 
-class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
+class FunctionParameterPrettyPrinterTest extends TestCase
 {
     /**
      * @return FunctionParameterPrettyPrinter
@@ -34,7 +36,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'isVariadic'   => false,
             'isReference'  => false,
             'defaultValue' => null,
-            'types'        => []
+            'types'        => [],
         ]);
 
         static::assertSame('$test', $result);
@@ -50,7 +52,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'isVariadic'   => false,
             'isReference'  => true,
             'defaultValue' => null,
-            'types'        => []
+            'types'        => [],
         ]);
 
         static::assertSame('&$test', $result);
@@ -66,7 +68,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'isVariadic'   => true,
             'isReference'  => false,
             'defaultValue' => null,
-            'types'        => []
+            'types'        => [],
         ]);
 
         static::assertSame('...$test', $result);
@@ -85,9 +87,9 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
 
             'types' => [
                 [
-                    'type' => 'int'
-                ]
-            ]
+                    'type' => 'int',
+                ],
+            ],
         ]);
 
         static::assertSame('int $test', $result);
@@ -106,13 +108,13 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
 
             'types' => [
                 [
-                    'type' => 'int'
+                    'type' => 'int',
                 ],
 
                 [
-                    'type' => 'bool'
-                ]
-            ]
+                    'type' => 'bool',
+                ],
+            ],
         ]);
 
         static::assertSame('int|bool $test', $result);
@@ -128,7 +130,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'isVariadic'   => false,
             'isReference'  => false,
             'defaultValue' => 'null',
-            'types'        => []
+            'types'        => [],
         ]);
 
         static::assertSame('$test = null', $result);
@@ -144,7 +146,7 @@ class FunctionParameterPrettyPrinterTest extends \PHPUnit\Framework\TestCase
             'isVariadic'   => false,
             'isReference'  => false,
             'defaultValue' => 0,
-            'types'        => []
+            'types'        => [],
         ]);
 
         static::assertSame('$test = 0', $result);

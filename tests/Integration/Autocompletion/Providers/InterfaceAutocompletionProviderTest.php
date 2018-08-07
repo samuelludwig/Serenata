@@ -37,7 +37,7 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

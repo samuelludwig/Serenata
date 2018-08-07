@@ -2,23 +2,23 @@
 
 namespace Serenata\Tests\Unit\Autocompletion\Providers;
 
-use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
+use PHPUnit\Framework\TestCase;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 use Serenata\Autocompletion\Providers\AutocompletionProviderContext;
 use Serenata\Autocompletion\Providers\AutocompletionProviderInterface;
 use Serenata\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider;
 
-use Serenata\Common\Position;
+use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use Serenata\Indexing\Structures;
+use Serenata\Common\Position;
 
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCase
+class FuzzyMatchingAutocompletionProviderTest extends TestCase
 {
     /**
      * @return void
@@ -35,13 +35,13 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
 
         $suggestions = [
             new AutocompletionSuggestion('test1', SuggestionKind::FUNCTION, 'test', null, 'test', null),
-            new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', null, 'test', null)
+            new AutocompletionSuggestion('test12', SuggestionKind::FUNCTION, 'test', null, 'test', null),
         ];
 
         $delegate->expects($this->once())->method('provide')->willReturn($suggestions);
         $bestStringApproximationDeterminer->expects($this->once())->method('determine')->willReturn([
             $suggestions[1],
-            $suggestions[0]
+            $suggestions[0],
         ]);
 
         $provider = new FuzzyMatchingAutocompletionProvider(
@@ -61,7 +61,7 @@ class FuzzyMatchingAutocompletionProviderTest extends \PHPUnit\Framework\TestCas
 
         static::assertEquals([
             $suggestions[1],
-            $suggestions[0]
+            $suggestions[0],
         ], $result);
     }
 }

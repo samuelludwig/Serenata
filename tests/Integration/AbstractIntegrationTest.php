@@ -16,13 +16,14 @@ use Serenata\Utility\TmpFileStream;
 use Serenata\Utility\SourceCodeStreamReader;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Abstract base class for integration tests.
  *
  * Provides functionality using an indexing database and access to the application service container.
  */
-abstract class AbstractIntegrationTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractIntegrationTest extends TestCase
 {
     /**
      * @var JsonRpcApplication

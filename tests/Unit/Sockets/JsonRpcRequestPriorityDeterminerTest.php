@@ -2,11 +2,13 @@
 
 namespace Serenata\Tests\Unit\Sockets;
 
+use PHPUnit\Framework\TestCase;
+
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItemPriority;
 use Serenata\Sockets\JsonRpcRequestPriorityDeterminer;
 
-class JsonRpcRequestPriorityDeterminerTest extends \PHPUnit\Framework\TestCase
+class JsonRpcRequestPriorityDeterminerTest extends TestCase
 {
     /**
      * @return void

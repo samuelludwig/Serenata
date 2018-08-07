@@ -32,8 +32,8 @@ class DocblockParserTest extends AbstractIntegrationTest
                 'type'        => new StringDocblockType(),
                 'description' => 'Test description.',
                 'isVariadic'  => false,
-                'isReference' => false
-            ]
+                'isReference' => false,
+            ],
         ], $result['params']);
     }
 
@@ -54,8 +54,8 @@ class DocblockParserTest extends AbstractIntegrationTest
                 'type'        => new StringDocblockType(),
                 'description' => 'Test description with @ sign.',
                 'isVariadic'  => false,
-                'isReference' => false
-            ]
+                'isReference' => false,
+            ],
         ], $result['params']);
     }
 
@@ -78,8 +78,8 @@ class DocblockParserTest extends AbstractIntegrationTest
 
                 'description' => 'Имя файла пат',
                 'isVariadic'  => false,
-                'isReference' => false
-            ]
+                'isReference' => false,
+            ],
         ], $result['params']);
     }
 
@@ -100,8 +100,8 @@ class DocblockParserTest extends AbstractIntegrationTest
         static::assertEquals([
             '$someProperty' => [
                 'type'        => new IntDocblockType(),
-                'description' => ''
-            ]
+                'description' => '',
+            ],
         ], $result['var']);
     }
 
@@ -118,8 +118,8 @@ class DocblockParserTest extends AbstractIntegrationTest
         static::assertEquals([
             '$someProperty' => [
                 'type'        => new IntDocblockType(),
-                'description' => 'Some description'
-            ]
+                'description' => 'Some description',
+            ],
         ], $result['var']);
     }
 
@@ -202,8 +202,8 @@ class DocblockParserTest extends AbstractIntegrationTest
         static::assertEquals([
             '$' => [
                 'type'        => '\DateTime',
-                'description' => ''
-            ]
+                'description' => '',
+            ],
         ], $result['var']);
     }
 
@@ -254,8 +254,8 @@ class DocblockParserTest extends AbstractIntegrationTest
                 'type'        => new StringDocblockType(),
                 'description' => 'A description.',
                 'isVariadic'  => false,
-                'isReference' => false
-            ]
+                'isReference' => false,
+            ],
         ], $result['params']);
     }
 
@@ -402,7 +402,7 @@ class DocblockParserTest extends AbstractIntegrationTest
             [
                 DocblockParser::DESCRIPTION,
                 DocblockParser::PARAM_TYPE,
-                DocblockParser::RETURN_VALUE
+                DocblockParser::RETURN_VALUE,
             ],
             ''
         );
@@ -416,15 +416,15 @@ class DocblockParserTest extends AbstractIntegrationTest
                     'type'        => new StringDocblockType(),
                     'description' => null,
                     'isVariadic'  => false,
-                    'isReference' => false
-                ]
+                    'isReference' => false,
+                ],
             ],
             $result['params']
         );
 
         static::assertEquals([
             'type'        => new BoolDocblockType(),
-            'description' => null
+            'description' => null,
         ], $result['return']);
     }
 

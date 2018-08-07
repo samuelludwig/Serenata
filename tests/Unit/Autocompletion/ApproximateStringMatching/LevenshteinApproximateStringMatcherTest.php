@@ -2,9 +2,11 @@
 
 namespace Serenata\Tests\Unit\Autocompletion\ApproximateStringMatching;
 
+use PHPUnit\Framework\TestCase;
+
 use Serenata\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher;
 
-class LevenshteinApproximateStringMatcherTest extends \PHPUnit\Framework\TestCase
+class LevenshteinApproximateStringMatcherTest extends TestCase
 {
     /**
      * @return void

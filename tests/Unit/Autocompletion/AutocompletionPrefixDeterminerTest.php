@@ -4,12 +4,14 @@ namespace Serenata\Tests\Unit\Autocompletion;
 
 use PHPUnit_Framework_MockObject_MockObject;
 
+use PHPUnit\Framework\TestCase;
+
 use Serenata\Autocompletion\AutocompletionPrefixDeterminer;
 use Serenata\Autocompletion\AutocompletionPrefixBoundaryTokenRetrieverInterface;
 
 use Serenata\Common\Position;
 
-class AutocompletionPrefixDeterminerTest extends \PHPUnit\Framework\TestCase
+class AutocompletionPrefixDeterminerTest extends TestCase
 {
     /**
      * @var PHPUnit_Framework_MockObject_MockObject

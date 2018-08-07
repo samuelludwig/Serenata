@@ -19,7 +19,7 @@ class NonStaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAu
     {
         return [
             'PropertyFetch.phpt',
-            'MethodCall.phpt'
+            'MethodCall.phpt',
         ];
     }
 

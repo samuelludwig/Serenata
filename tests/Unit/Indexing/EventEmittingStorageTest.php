@@ -2,8 +2,6 @@
 
 namespace Serenata\Tests\Unit\Indexing;
 
-use DateTime;
-
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\IndexingEventName;

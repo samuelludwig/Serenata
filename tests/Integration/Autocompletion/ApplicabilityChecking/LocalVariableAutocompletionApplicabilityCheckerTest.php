@@ -22,7 +22,7 @@ class LocalVariableAutocompletionApplicabilityCheckerTest extends AbstractAutoco
             'FunctionLike.phpt',
             'VariableName.phpt',
             'New.phpt',
-            'Clone.phpt'
+            'Clone.phpt',
         ];
     }
 

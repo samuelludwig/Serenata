@@ -37,7 +37,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -66,7 +66,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ],
                 [],
                 true
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -95,7 +95,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -126,10 +126,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                     new TextEdit(
                         new Range(new Position(10, 0), new Position(10, 0)),
                         "use Foo\Bar\Baz;\n\n"
-                    )
+                    ),
                 ],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -158,7 +158,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

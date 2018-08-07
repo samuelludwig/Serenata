@@ -18,7 +18,7 @@ class DocblockTagAutocompletionApplicabilityCheckerTest extends AbstractAutocomp
     public function getFileNamesWhereShouldApply(): array
     {
         return [
-            'DocblockTag.phpt'
+            'DocblockTag.phpt',
         ];
     }
 

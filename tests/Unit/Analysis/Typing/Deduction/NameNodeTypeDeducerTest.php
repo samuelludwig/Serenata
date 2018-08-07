@@ -2,11 +2,11 @@
 
 namespace Serenata\Tests\Unit\Analysis\Typing\Deduction;
 
-use DateTime;
-
 use PhpParser\Node;
 
 use PHPUnit\Framework\MockObject\MockObject;
+
+use PHPUnit\Framework\TestCase;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
@@ -19,14 +19,13 @@ use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Utility\TextDocumentItem;
 
-class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
+class NameNodeTypeDeducerTest extends TestCase
 {
     /**
      * @var NameNodeTypeDeducer
@@ -99,7 +98,7 @@ class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
         // $node->setAttribute('startFilePos', 7);
 
         $this->classlikeInfoBuilderMock->expects($this->once())->method('build')->with('AnonymousClass')->willReturn([
-            'parents' => ['ParentOfAnonymousClass']
+            'parents' => ['ParentOfAnonymousClass'],
         ]);
 
         $this->typeNormalizerMock
@@ -109,12 +108,12 @@ class NameNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
 
         $this->fileClasslikeListProviderMock->method('getAllForFile')->willReturn([
             'OuterClass' => [
-                'range' => new Range(new Position(1, 0), new Position(5, 1))
+                'range' => new Range(new Position(1, 0), new Position(5, 1)),
             ],
 
             'AnonymousClass' => [
-                'range' => new Range(new Position(2, 0), new Position(4, 1))
-            ]
+                'range' => new Range(new Position(2, 0), new Position(4, 1)),
+            ],
         ]);
 
         $code = "<?php\n\n\n\n";

@@ -46,12 +46,12 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                         'startLineMember' => 8,
                         'endLineMember'   => 11,
                     ],
-                    'returnTypes' => 'int|string'
+                    'returnTypes' => 'int|string',
                 ],
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -91,12 +91,12 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                         'startLineMember' => 5,
                         'endLineMember'   => 8,
                     ],
-                    'returnTypes' => 'mixed'
+                    'returnTypes' => 'mixed',
                 ],
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -136,12 +136,12 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                         'startLineMember' => 5,
                         'endLineMember'   => 8,
                     ],
-                    'returnTypes' => 'mixed'
+                    'returnTypes' => 'mixed',
                 ],
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -181,12 +181,12 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                         'startLineMember' => 8,
                         'endLineMember'   => 11,
                     ],
-                    'returnTypes' => 'void'
+                    'returnTypes' => 'void',
                 ],
                 [],
                 true,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -231,7 +231,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -276,7 +276,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

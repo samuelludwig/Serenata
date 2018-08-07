@@ -76,8 +76,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                         [
                             'type'         => 'string',
                             'fqcn'         => 'string',
-                            'resolvedType' => 'string'
-                        ]
+                            'resolvedType' => 'string',
+                        ],
                     ],
 
                     'isPublic'           => true,
@@ -89,7 +89,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                         'filename'  => $this->getPathFor($fileName),
                         'startLine' => 10,
                         'endLine'   => 13,
-                        'type'      => 'class'
+                        'type'      => 'class',
                     ],
 
                     'declaringStructure' => [
@@ -99,12 +99,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                         'endLine'         => 13,
                         'type'            => 'class',
                         'startLineMember' => 10,
-                        'endLineMember'   => 10
-                    ]
-                ]
+                        'endLineMember'   => 10,
+                    ],
+                ],
             ],
             'properties'         => [],
-            'methods'            => []
+            'methods'            => [],
         ], $output);
 
         static::assertEquals(new Range(new Position(9, 0), new Position(12, 1)), $output['range']);
@@ -141,14 +141,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 [
                     'type'         => '\A\MyType',
                     'fqcn'         => '\A\MyType',
-                    'resolvedType' => '\A\MyType'
+                    'resolvedType' => '\A\MyType',
                 ],
 
                 [
                     'type'         => 'string',
                     'fqcn'         => 'string',
-                    'resolvedType' => 'string'
-                ]
+                    'resolvedType' => 'string',
+                ],
             ],
 
             'override'           => null,
@@ -158,7 +158,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 5,
                 'endLine'   => 15,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -168,8 +168,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 15,
                 'type'            => 'class',
                 'startLineMember' => 14,
-                'endLineMember'   => 14
-            ]
+                'endLineMember'   => 14,
+            ],
         ], $output['properties']['testProperty']);
     }
 
@@ -196,21 +196,21 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                         [
                             'type'         => '\DateTimeInterface',
                             'fqcn'         => '\DateTimeInterface',
-                            'resolvedType' => '\DateTimeInterface'
+                            'resolvedType' => '\DateTimeInterface',
                         ],
 
                         [
                             'type'         => '\DateTime',
                             'fqcn'         => '\DateTime',
-                            'resolvedType' => '\DateTime'
-                        ]
+                            'resolvedType' => '\DateTime',
+                        ],
                     ],
 
                     'description'  => 'First parameter description.',
                     'defaultValue' => 'null',
                     'isReference'  => false,
                     'isVariadic'   => false,
-                    'isOptional'   => true
+                    'isOptional'   => true,
                 ],
 
                 [
@@ -220,15 +220,15 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                         [
                             'type'         => 'bool',
                             'fqcn'         => 'bool',
-                            'resolvedType' => 'bool'
-                        ]
+                            'resolvedType' => 'bool',
+                        ],
                     ],
 
                     'description'  => null,
                     'defaultValue' => 'true',
                     'isReference'  => true,
                     'isVariadic'   => false,
-                    'isOptional'   => true
+                    'isOptional'   => true,
                 ],
 
                 [
@@ -238,27 +238,27 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                         [
                             'type'         => 'mixed[]',
                             'fqcn'         => 'mixed[]',
-                            'resolvedType' => 'mixed[]'
-                        ]
+                            'resolvedType' => 'mixed[]',
+                        ],
                     ],
                     'description'  => null,
                     'defaultValue' => null,
                     'isReference'  => false,
                     'isVariadic'   => true,
-                    'isOptional'   => false
-                ]
+                    'isOptional'   => false,
+                ],
             ],
 
             'throws'             => [
                 [
                     'type'        => '\UnexpectedValueException',
-                    'description' => 'when something goes wrong.'
+                    'description' => 'when something goes wrong.',
                 ],
 
                 [
                     'type'        => '\LogicException',
-                    'description' => 'when something is wrong.'
-                ]
+                    'description' => 'when something is wrong.',
+                ],
             ],
 
             'isDeprecated'       => false,
@@ -274,14 +274,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 [
                     'type'         => 'mixed',
                     'fqcn'         => 'mixed',
-                    'resolvedType' => 'mixed'
+                    'resolvedType' => 'mixed',
                 ],
 
                 [
                     'type'         => 'bool',
                     'fqcn'         => 'bool',
-                    'resolvedType' => 'bool'
-                ]
+                    'resolvedType' => 'bool',
+                ],
             ],
 
             'isMagic'            => false,
@@ -299,7 +299,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 5,
                 'endLine'   => 23,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -309,8 +309,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 23,
                 'type'            => 'class',
                 'startLineMember' => 19,
-                'endLineMember'   => 22
-            ]
+                'endLineMember'   => 22,
+            ],
         ], $output['methods']['testMethod']);
     }
 
@@ -341,14 +341,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 [
                     'type'         => '\A\MyType',
                     'fqcn'         => '\A\MyType',
-                    'resolvedType' => '\A\MyType'
+                    'resolvedType' => '\A\MyType',
                 ],
 
                 [
                     'type'         => 'string',
                     'fqcn'         => 'string',
-                    'resolvedType' => 'string'
-                ]
+                    'resolvedType' => 'string',
+                ],
             ],
 
             'isPublic'           => true,
@@ -360,7 +360,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 5,
                 'endLine'   => 15,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -370,8 +370,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 15,
                 'type'            => 'class',
                 'startLineMember' => 14,
-                'endLineMember'   => 14
-            ]
+                'endLineMember'   => 14,
+            ],
         ], $output['constants']['TEST_CONSTANT']);
     }
 
@@ -414,7 +414,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'shortDescription',
             'returnTypes',
             'parameters',
-            'throws'
+            'throws',
         ];
 
         foreach ($keysToTestForEquality as $key) {
@@ -467,7 +467,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'shortDescription',
             'longDescription',
             'typeDescription',
-            'types'
+            'types',
         ];
 
         foreach ($keysToTestForEquality as $key) {
@@ -510,16 +510,16 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     [
                         'type'         => '\A\Foo',
                         'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
-                    ]
+                        'resolvedType' => '\A\Foo',
+                    ],
                 ],
 
                 'description'  => null,
                 'defaultValue' => null,
                 'isReference'  => false,
                 'isVariadic'   => false,
-                'isOptional'   => false
-            ]
+                'isOptional'   => false,
+            ],
         ], $output['methods']['__construct']['parameters']);
 
         static::assertSame([
@@ -528,7 +528,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -538,12 +538,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 39,
                 'type'            => 'class',
                 'startLineMember' => 25,
-                'endLineMember'   => 28
+                'endLineMember'   => 28,
             ],
 
             'startLine'   => 25,
             'endLine'     => 28,
-            'wasAbstract' => false
+            'wasAbstract' => false,
         ], $output['methods']['__construct']['override']);
 
         static::assertSame(55, $output['methods']['__construct']['startLine']);
@@ -557,22 +557,22 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     [
                         'type'         => '\A\Foo',
                         'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
+                        'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
                         'fqcn'         => 'null',
-                        'resolvedType' => 'null'
-                    ]
+                        'resolvedType' => 'null',
+                    ],
                 ],
 
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isReference'  => false,
                 'isVariadic'   => false,
-                'isOptional'   => true
-            ]
+                'isOptional'   => true,
+            ],
         ], $output['methods']['parentTraitMethod']['parameters']);
 
         static::assertSame([
@@ -581,7 +581,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -591,12 +591,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 19,
                 'type'            => 'trait',
                 'startLineMember' => 15,
-                'endLineMember'   => 18
+                'endLineMember'   => 18,
             ],
 
             'startLine'   => 15,
             'endLine'     => 18,
-            'wasAbstract' => false
+            'wasAbstract' => false,
         ], $output['methods']['parentTraitMethod']['override']);
 
         static::assertSame(65, $output['methods']['parentTraitMethod']['startLine']);
@@ -611,22 +611,22 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     [
                         'type'         => '\A\Foo',
                         'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
+                        'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
                         'fqcn'         => 'null',
-                        'resolvedType' => 'null'
-                    ]
+                        'resolvedType' => 'null',
+                    ],
                 ],
 
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isReference'  => false,
                 'isVariadic'   => false,
-                'isOptional'   => true
-            ]
+                'isOptional'   => true,
+            ],
         ], $output['methods']['parentMethod']['parameters']);
 
         static::assertSame([
@@ -635,7 +635,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -645,12 +645,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 39,
                 'type'            => 'class',
                 'startLineMember' => 30,
-                'endLineMember'   => 33
+                'endLineMember'   => 33,
             ],
 
             'startLine'   => 30,
             'endLine'     => 33,
-            'wasAbstract' => false
+            'wasAbstract' => false,
         ], $output['methods']['parentMethod']['override']);
 
         static::assertSame(70, $output['methods']['parentMethod']['startLine']);
@@ -662,7 +662,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 21,
                 'endLine'   => 39,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -672,12 +672,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 39,
                 'type'            => 'class',
                 'startLineMember' => 35,
-                'endLineMember'   => 38
+                'endLineMember'   => 38,
             ],
 
             'startLine'   => 35,
             'endLine'     => 38,
-            'wasAbstract' => false
+            'wasAbstract' => false,
         ], $output['methods']['ancestorMethod']['override']);
 
         static::assertSame(60, $output['methods']['ancestorMethod']['startLine']);
@@ -692,22 +692,22 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     [
                         'type'         => '\A\Foo',
                         'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
+                        'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
                         'fqcn'         => 'null',
-                        'resolvedType' => 'null'
-                    ]
+                        'resolvedType' => 'null',
+                    ],
                 ],
 
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isReference'  => false,
                 'isVariadic'   => false,
-                'isOptional'   => true
-            ]
+                'isOptional'   => true,
+            ],
         ], $output['methods']['traitMethod']['parameters']);
 
         static::assertSame([
@@ -716,7 +716,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  =>  $this->getPathFor($fileName),
                 'startLine' => 41,
                 'endLine'   => 49,
-                'type'      => 'trait'
+                'type'      => 'trait',
             ],
 
             'declaringStructure' => [
@@ -726,12 +726,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 49,
                 'type'            => 'trait',
                 'startLineMember' => 43,
-                'endLineMember'   => 46
+                'endLineMember'   => 46,
             ],
 
             'startLine'   => 43,
             'endLine'     => 46,
-            'wasAbstract' => false
+            'wasAbstract' => false,
         ], $output['methods']['traitMethod']['override']);
 
         static::assertSame(75, $output['methods']['traitMethod']['startLine']);
@@ -746,22 +746,22 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     [
                         'type'         => '\A\Foo',
                         'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
+                        'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
                         'fqcn'         => 'null',
-                        'resolvedType' => 'null'
-                    ]
+                        'resolvedType' => 'null',
+                    ],
                 ],
 
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isReference'  => false,
                 'isVariadic'   => false,
-                'isOptional'   => true
-            ]
+                'isOptional'   => true,
+            ],
         ], $output['methods']['abstractMethod']['parameters']);
 
         static::assertSame($output['methods']['abstractMethod']['override']['wasAbstract'], true);
@@ -782,7 +782,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  =>  $this->getPathFor($fileName),
                 'startLine' => 10,
                 'endLine'   => 16,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -792,7 +792,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 16,
                 'type'            => 'class',
                 'startLineMember' => 12,
-                'endLineMember'   => 15
+                'endLineMember'   => 15,
             ],
 
             'startLine'   => 12,
@@ -822,7 +822,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  =>  $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
-                    'type'      => 'interface'
+                    'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
@@ -832,12 +832,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
-            ]
+                'endLine'   => 7,
+            ],
         ], $output['methods']['interfaceMethod']['implementations']);
 
         static::assertSame([
@@ -846,7 +846,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  =>  $this->getPathFor($fileName),
                 'startLine' => 10,
                 'endLine'   => 16,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -856,12 +856,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 16,
                 'type'            => 'class',
                 'startLineMember' => 12,
-                'endLineMember'   => 15
+                'endLineMember'   => 15,
             ],
 
             'startLine'   => 12,
             'endLine'     => 15,
-            'wasAbstract' => false
+            'wasAbstract' => false,
         ], $output['methods']['interfaceMethod']['override']);
 
         static::assertSame(20, $output['methods']['interfaceMethod']['startLine']);
@@ -883,7 +883,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 15,
                 'endLine'   => 21,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -893,11 +893,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 13,
                 'type'            => 'trait',
                 'startLineMember' => 12,
-                'endLineMember'   => 12
+                'endLineMember'   => 12,
             ],
 
             'startLine' => 12,
-            'endLine'   => 12
+            'endLine'   => 12,
         ], $output['properties']['parentTraitProperty']['override']);
 
         static::assertSame([
@@ -906,7 +906,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 15,
                 'endLine'   => 21,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -916,11 +916,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 21,
                 'type'            => 'class',
                 'startLineMember' => 19,
-                'endLineMember'   => 19
+                'endLineMember'   => 19,
             ],
 
             'startLine' => 19,
-            'endLine'   => 19
+            'endLine'   => 19,
         ], $output['properties']['parentProperty']['override']);
 
         static::assertSame([
@@ -929,7 +929,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'filename'  => $this->getPathFor($fileName),
                 'startLine' => 15,
                 'endLine'   => 21,
-                'type'      => 'class'
+                'type'      => 'class',
             ],
 
             'declaringStructure' => [
@@ -939,11 +939,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLine'         => 21,
                 'type'            => 'class',
                 'startLineMember' => 20,
-                'endLineMember'   => 20
+                'endLineMember'   => 20,
             ],
 
             'startLine' => 20,
-            'endLine'   => 20
+            'endLine'   => 20,
         ], $output['properties']['ancestorProperty']['override']);
     }
 
@@ -964,22 +964,22 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     [
                         'type'         => '\A\Foo',
                         'fqcn'         => '\A\Foo',
-                        'resolvedType' => '\A\Foo'
+                        'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
                         'fqcn'         => 'null',
-                        'resolvedType' => 'null'
-                    ]
+                        'resolvedType' => 'null',
+                    ],
                 ],
 
                 'description'  => null,
                 'defaultValue' => 'null',
                 'isReference'  => false,
                 'isVariadic'   => false,
-                'isOptional'   => true
-            ]
+                'isOptional'   => true,
+            ],
         ], $output['methods']['parentInterfaceMethod']['parameters']);
 
         static::assertSame([
@@ -989,7 +989,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 10,
                     'endLine'   => 13,
-                    'type'      => 'class'
+                    'type'      => 'class',
                 ],
 
                 'declaringStructure' => [
@@ -999,12 +999,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
-            ]
+                'endLine'   => 7,
+            ],
         ], $output['methods']['parentInterfaceMethod']['implementations']);
 
         static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
@@ -1027,7 +1027,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
-                    'type'      => 'interface'
+                    'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
@@ -1037,12 +1037,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
-            ]
+                'endLine'   => 7,
+            ],
         ], $output['methods']['interfaceParentMethod']['implementations']);
 
         static::assertNull($output['methods']['interfaceParentMethod']['override']);
@@ -1067,7 +1067,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
-                    'type'      => 'interface'
+                    'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
@@ -1077,12 +1077,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
-            ]
+                'endLine'   => 7,
+            ],
         ], $output['methods']['interfaceMethod']['implementations']);
 
         static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
@@ -1453,7 +1453,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
-                    'type'      => 'interface'
+                    'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
@@ -1463,11 +1463,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
+                'endLine'   => 7,
             ],
 
             [
@@ -1486,12 +1486,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 13,
                     'type'            => 'interface',
                     'startLineMember' => 12,
-                    'endLineMember'   => 12
+                    'endLineMember'   => 12,
                 ],
 
                 'startLine' => 12,
-                'endLine'   => 12
-            ]
+                'endLine'   => 12,
+            ],
         ], $output['methods']['someMethod']['implementations']);
 
         static::assertNull($output['methods']['someMethod']['override']);
@@ -1516,7 +1516,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
-                    'type'      => 'interface'
+                    'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
@@ -1526,11 +1526,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
+                'endLine'   => 7,
             ],
 
             [
@@ -1549,12 +1549,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 13,
                     'type'            => 'interface',
                     'startLineMember' => 12,
-                    'endLineMember'   => 12
+                    'endLineMember'   => 12,
                 ],
 
                 'startLine' => 12,
-                'endLine'   => 12
-            ]
+                'endLine'   => 12,
+            ],
         ], $output['methods']['someMethod']['implementations']);
 
         static::assertNull($output['methods']['someMethod']['override']);
@@ -1579,7 +1579,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'filename'  => $this->getPathFor($fileName),
                     'startLine' => 5,
                     'endLine'   => 8,
-                    'type'      => 'interface'
+                    'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
@@ -1589,11 +1589,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 8,
                     'type'            => 'interface',
                     'startLineMember' => 7,
-                    'endLineMember'   => 7
+                    'endLineMember'   => 7,
                 ],
 
                 'startLine' => 7,
-                'endLine'   => 7
+                'endLine'   => 7,
             ],
 
             [
@@ -1612,12 +1612,12 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'endLine'         => 13,
                     'type'            => 'interface',
                     'startLineMember' => 12,
-                    'endLineMember'   => 12
+                    'endLineMember'   => 12,
                 ],
 
                 'startLine' => 12,
-                'endLine'   => 12
-            ]
+                'endLine'   => 12,
+            ],
         ], $output['methods']['someMethod']['implementations']);
 
         static::assertNull($output['methods']['someMethod']['override']);
@@ -1636,128 +1636,128 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['properties']['basePropSelf']['types']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['properties']['basePropStatic']['types']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['properties']['basePropThis']['types']);
 
         static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['properties']['propSelf']['types']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['properties']['propStatic']['types']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['properties']['propThis']['types']);
 
         static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['methods']['baseMethodSelf']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['baseMethodStatic']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['baseMethodThis']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['methodSelf']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['methodStatic']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['methodThis']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => '\A\childClass',
                 'fqcn'         => '\A\childClass',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['methodOwnClassName']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][0]['types']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][1]['types']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\childClass'
-            ]
+                'resolvedType' => '\A\childClass',
+            ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][2]['types']);
 
         $output = $this->getClassInfo($fileName, 'A\ParentClass');
@@ -1766,48 +1766,48 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['properties']['basePropSelf']['types']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['properties']['basePropStatic']['types']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['properties']['basePropThis']['types']);
 
         static::assertSame([
             [
                 'type'         => 'self',
                 'fqcn'         => 'self',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['methods']['baseMethodSelf']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => 'static',
                 'fqcn'         => 'static',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['methods']['baseMethodStatic']['returnTypes']);
 
         static::assertSame([
             [
                 'type'         => '$this',
                 'fqcn'         => '$this',
-                'resolvedType' => '\A\ParentClass'
-            ]
+                'resolvedType' => '\A\ParentClass',
+            ],
         ], $output['methods']['baseMethodThis']['returnTypes']);
     }
 
@@ -1860,8 +1860,8 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'type'         => '\DateTime',
                 'fqcn'         => '\DateTime',
-                'resolvedType' => '\DateTime'
-            ]
+                'resolvedType' => '\DateTime',
+            ],
         ], $output['methods']['foo']['returnTypes']);
     }
 

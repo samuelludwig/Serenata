@@ -19,7 +19,7 @@ class KeywordAutocompletionApplicabilityCheckerTest extends AbstractAutocompleti
     {
         return [
             'TopLevelNamespace.phpt',
-            'FunctionLike.phpt'
+            'FunctionLike.phpt',
         ];
     }
 

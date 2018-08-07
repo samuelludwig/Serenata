@@ -12,8 +12,9 @@ use Serenata\Indexing\Structures;
 use PhpParser\Node;
 
 use Serenata\Utility\TextDocumentItem;
+use PHPUnit\Framework\TestCase;
 
-class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
+class ClassLikeNodeTypeDeducerTest extends TestCase
 {
     /**
      * @var ClassLikeNodeTypeDeducer
@@ -74,7 +75,7 @@ class ClassLikeNodeTypeDeducerTest extends \PHPUnit\Framework\TestCase
     public function testAnonymousClassNode(): void
     {
         $node = new Node\Stmt\Class_(null, [], [
-            'startFilePos' => 9
+            'startFilePos' => 9,
         ]);
 
         $file = new Structures\File('/test/path', new DateTime(), []);

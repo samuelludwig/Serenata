@@ -14,8 +14,9 @@ use Serenata\DocblockTypeParser\DocblockTypeEquivalenceComparator;
 
 use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+use PHPUnit\Framework\TestCase;
 
-class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framework\TestCase
+class ParameterDocblockTypeSemanticEqualityCheckerTest extends TestCase
 {
     /**
      * @var MockObject
@@ -64,14 +65,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'int'
+            'type'        => 'int',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('int');
@@ -94,14 +95,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'bool'
+            'type'        => 'bool',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('bool');
@@ -124,7 +125,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'int'
+            'type'        => 'int',
         ];
 
         $docblockParameter = [
@@ -134,7 +135,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('int');
@@ -157,14 +158,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'int'
+            'type'        => 'int',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('int');
@@ -187,14 +188,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ClassDocblockType('A'),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\A');
@@ -217,14 +218,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ClassDocblockType('\A\B'),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\B\A', '\B\A');
@@ -240,13 +241,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\A',
                     'parents'    => [],
-                    'interfaces' => []
-                ]
+                    'interfaces' => [],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -256,14 +257,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ClassDocblockType('B'),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\B');
@@ -279,13 +280,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\B',
                     'parents'    => ['\A'],
-                    'interfaces' => []
-                ]
+                    'interfaces' => [],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -295,14 +296,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ClassDocblockType('B'),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\B');
@@ -318,13 +319,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\B',
                     'parents'    => [],
-                    'interfaces' => ['\A']
-                ]
+                    'interfaces' => ['\A'],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -334,14 +335,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ClassDocblockType('B'),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\B');
@@ -357,21 +358,21 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\B',
                     'parents'    => ['\A'],
-                    'interfaces' => []
+                    'interfaces' => [],
                 ],
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\C',
                     'parents'    => [],
-                    'interfaces' => ['\A']
-                ]
+                    'interfaces' => ['\A'],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -381,7 +382,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
@@ -391,7 +392,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\B', '\C');
@@ -407,13 +408,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\A',
                     'parents'    => [],
-                    'interfaces' => []
-                ]
+                    'interfaces' => [],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -423,7 +424,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => true,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
@@ -432,7 +433,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => true,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\A');
@@ -448,13 +449,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\A',
                     'parents'    => [],
-                    'interfaces' => []
-                ]
+                    'interfaces' => [],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -464,14 +465,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => true,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ClassDocblockType('A'),
             'description' => null,
             'isVariadic'  => true,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\A');
@@ -487,13 +488,13 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\B\A'
+                    'fqcn'       => '\B\A',
                 ],
                 [
                     'fqcn'       => '\B\A',
                     'parents'    => [],
-                    'interfaces' => []
-                ]
+                    'interfaces' => [],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -503,7 +504,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => true,
             'isNullable'  => false,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
@@ -512,7 +513,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => true,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\B\A', '\B\A');
@@ -535,7 +536,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -544,7 +545,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -567,14 +568,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -597,7 +598,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -607,7 +608,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -656,21 +657,21 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             $this->mockStructureAwareNameResolverFactory($this->positionalNameResolverMock),
             $this->getClasslikeInfoBuilderMock([
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\B',
                     'parents'    => ['\A'],
-                    'interfaces' => []
+                    'interfaces' => [],
                 ],
                 [
-                    'fqcn'       => '\A'
+                    'fqcn'       => '\A',
                 ],
                 [
                     'fqcn'       => '\C',
                     'parents'    => ['\A'],
-                    'interfaces' => []
-                ]
+                    'interfaces' => [],
+                ],
             ]),
             $this->docblockTypeParserMock,
             $this->docblockTypeEquivalenceComparatorMock
@@ -680,7 +681,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'A'
+            'type'        => 'A',
         ];
 
         $docblockParameter = [
@@ -691,7 +692,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('\A', '\B', '\C');
@@ -714,7 +715,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'bool'
+            'type'        => 'bool',
         ];
 
         $docblockParameter = [
@@ -724,7 +725,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('bool');
@@ -747,14 +748,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\ArrayDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -777,7 +778,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -787,7 +788,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -810,7 +811,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -822,7 +823,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -845,7 +846,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -859,7 +860,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -882,7 +883,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -897,7 +898,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -920,7 +921,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -935,7 +936,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -958,7 +959,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -973,7 +974,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -996,7 +997,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -1011,7 +1012,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -1034,14 +1035,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => true,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'int'
+            'type'        => 'int',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => true
+            'isReference' => true,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('int');
@@ -1064,14 +1065,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => true,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'int'
+            'type'        => 'int',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\IntDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('int');
@@ -1094,7 +1095,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -1106,7 +1107,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -1129,7 +1130,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => true,
-            'type'        => 'array'
+            'type'        => 'array',
         ];
 
         $docblockParameter = [
@@ -1144,7 +1145,7 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             ),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('array');
@@ -1167,14 +1168,14 @@ class ParameterDocblockTypeSemanticEqualityCheckerTest extends \PHPUnit\Framewor
             'isReference' => false,
             'isVariadic'  => false,
             'isNullable'  => false,
-            'type'        => 'Foo'
+            'type'        => 'Foo',
         ];
 
         $docblockParameter = [
             'type'        => new DocblockTypeParser\StringDocblockType(),
             'description' => null,
             'isVariadic'  => false,
-            'isReference' => false
+            'isReference' => false,
         ];
 
         $this->positionalNameResolverMock->method('resolve')->willReturn('Foo');

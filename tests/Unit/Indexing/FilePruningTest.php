@@ -22,7 +22,7 @@ class FilePruningTest extends AbstractIntegrationTest
         $fileExistenceChecker = $this->getMockBuilder(FileExistenceCheckerInterface::class)->getMock();
 
         $storage->expects($this->once())->method('getFiles')->willReturn([
-            new Structures\File('testPath.php', new DateTime(), [])
+            new Structures\File('testPath.php', new DateTime(), []),
         ]);
 
         $pruner = new IndexFilePruner($storage, $fileExistenceChecker);
@@ -42,7 +42,7 @@ class FilePruningTest extends AbstractIntegrationTest
         $fileExistenceChecker = $this->getMockBuilder(FileExistenceCheckerInterface::class)->getMock();
 
         $storage->expects($this->once())->method('getFiles')->willReturn([
-            new Structures\File('testPath.php', new DateTime(), [])
+            new Structures\File('testPath.php', new DateTime(), []),
         ]);
 
         $pruner = new IndexFilePruner($storage, $fileExistenceChecker);

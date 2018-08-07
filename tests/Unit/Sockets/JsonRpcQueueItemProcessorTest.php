@@ -5,6 +5,10 @@ namespace Serenata\Tests\Unit\Sockets;
 use LogicException;
 use UnexpectedValueException;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
+use PHPUnit\Framework\TestCase;
+
 use Psr\Container\ContainerInterface;
 
 use Serenata\Sockets\JsonRpcRequest;
@@ -14,11 +18,9 @@ use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcQueueItemProcessor;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
-use PHPUnit\Framework\MockObject\MockObject;
-
 use Serenata\UserInterface\Command\CommandInterface;
 
-class JsonRpcQueueItemProcessorTest extends \PHPUnit\Framework\TestCase
+class JsonRpcQueueItemProcessorTest extends TestCase
 {
     /**
      * @var MockObject

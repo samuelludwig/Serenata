@@ -2,13 +2,15 @@
 
 namespace Serenata\Tests\Unit\Analysis\Visiting;
 
-use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
-
 use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 
-class ScopeLimitingVisitorTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
+
+class ScopeLimitingVisitorTest extends TestCase
 {
     /**
      * @return void
@@ -41,8 +43,8 @@ SOURCE;
 
         $lexer = new Lexer([
             'usedAttributes' => [
-                'comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos'
-            ]
+                'comments', 'startLine', 'endLine', 'startFilePos', 'endFilePos',
+            ],
         ]);
 
         $parserFactory = new ParserFactory();

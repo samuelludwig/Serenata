@@ -9,8 +9,9 @@ use Serenata\Parsing\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Lexer;
 use PhpParser\ParserFactory;
+use PHPUnit\Framework\TestCase;
 
-class PartialParserTest extends \PHPUnit\Framework\TestCase
+class PartialParserTest extends TestCase
 {
     /**
      * @return ParserFactory

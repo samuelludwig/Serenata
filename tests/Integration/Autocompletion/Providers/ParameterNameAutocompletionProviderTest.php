@@ -41,7 +41,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$int',
                 null,
                 []
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -79,7 +79,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$some',
                 null,
                 []
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -130,7 +130,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$classlike',
                 null,
                 []
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -181,7 +181,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$classlike',
                 null,
                 []
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -245,7 +245,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 '$classlike',
                 null,
                 []
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

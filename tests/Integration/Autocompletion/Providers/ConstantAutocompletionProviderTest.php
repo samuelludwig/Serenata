@@ -34,11 +34,11 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'FOO',
                 null,
                 [
-                    'returnTypes'  => 'int|string'
+                    'returnTypes'  => 'int|string',
                 ],
                 [],
                 false
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -66,11 +66,11 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'FOO',
                 null,
                 [
-                    'returnTypes'  => 'int'
+                    'returnTypes'  => 'int',
                 ],
                 [],
                 true
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

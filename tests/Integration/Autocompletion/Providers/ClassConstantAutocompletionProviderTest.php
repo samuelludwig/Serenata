@@ -46,12 +46,12 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                         'startLineMember' => 8,
                         'endLineMember'   => 8,
                     ],
-                    'returnTypes'        => 'int|string'
+                    'returnTypes'        => 'int|string',
                 ],
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertCount(2, $output);
@@ -92,12 +92,12 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                             'startLineMember' => 8,
                             'endLineMember'   => 8,
                         ],
-                    'returnTypes'        => 'int'
+                    'returnTypes'        => 'int',
                 ],
                 [],
                 true,
                 'A'
-            )
+            ),
         ];
 
         static::assertCount(2, $output);

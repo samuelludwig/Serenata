@@ -51,7 +51,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -96,7 +96,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -141,7 +141,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -186,7 +186,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                 [],
                 true,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -231,7 +231,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -276,7 +276,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

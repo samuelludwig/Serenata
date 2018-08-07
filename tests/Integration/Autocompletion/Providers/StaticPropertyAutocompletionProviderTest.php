@@ -51,7 +51,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                 [],
                 false,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);
@@ -96,7 +96,7 @@ class StaticPropertyAutocompletionProviderTest extends AbstractAutocompletionPro
                 [],
                 true,
                 'A'
-            )
+            ),
         ];
 
         static::assertEquals($suggestions, $output);

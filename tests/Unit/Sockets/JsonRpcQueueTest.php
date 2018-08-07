@@ -9,8 +9,9 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 use Serenata\Sockets\JsonRpcRequestPriorityDeterminerInterface;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class JsonRpcQueueTest extends \PHPUnit\Framework\TestCase
+class JsonRpcQueueTest extends TestCase
 {
     /**
      * @var MockObject

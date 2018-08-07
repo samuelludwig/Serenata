@@ -382,7 +382,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'null',
             'string',
             'object',
-            'resource'
+            'resource',
         ], $output);
     }
 
@@ -1000,7 +1000,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'string',
             'int',
             '\Foo',
-            '\Bar'
+            '\Bar',
         ], $result);
     }
 
@@ -1016,7 +1016,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
         $filePath = $this->getFilePath($fileName);
 
         static::assertSame([
-            '\\(anonymous_' . md5($filePath) . '_19)'
+            '\\(anonymous_' . md5($filePath) . '_19)',
         ], $result);
     }
 
@@ -1032,7 +1032,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 
         static::assertSame([
             '\Exception',
-            '\Throwable'
+            '\Throwable',
         ], $result);
     }
 

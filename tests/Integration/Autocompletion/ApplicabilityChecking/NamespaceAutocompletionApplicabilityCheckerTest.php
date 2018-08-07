@@ -19,7 +19,7 @@ class NamespaceAutocompletionApplicabilityCheckerTest extends AbstractAutocomple
     {
         return [
             'Namespace.phpt',
-            'UseStatement.phpt'
+            'UseStatement.phpt',
         ];
     }
 

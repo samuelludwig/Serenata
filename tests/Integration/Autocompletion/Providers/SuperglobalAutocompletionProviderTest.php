@@ -33,7 +33,7 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
             '$argc',
             'PHP superglobal',
             [
-                'returnTypes'  => 'int'
+                'returnTypes'  => 'int',
             ],
             [],
             false
