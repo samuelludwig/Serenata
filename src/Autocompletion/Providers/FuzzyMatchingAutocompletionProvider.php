@@ -2,8 +2,6 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use Serenata\Indexing\Structures\File;
-
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
 /**

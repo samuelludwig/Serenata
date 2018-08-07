@@ -20,7 +20,7 @@ class ClassLikeTooltipGenerator
             $this->generateSummary($info),
             $this->generateLongDescription($info),
             $this->generateFullName($info),
-            $this->generateType($info)
+            $this->generateType($info),
         ];
 
         return implode("\n\n", array_filter($sections));

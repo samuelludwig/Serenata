@@ -6,7 +6,6 @@ use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\Utility\TextDocumentItem;

@@ -66,7 +66,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             'mimeType'         => null,
             'wasBoundaryFound' => false,
             'bytesRead'        => 0,
-            'content'          => ''
+            'content'          => '',
         ];
     }
 
@@ -140,7 +140,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             $this->request['content'] .= substr($data, 0, $bytesRead);
             $this->request['bytesRead'] += $bytesRead;
 
-            if ($this->request['bytesRead'] == $this->request['length']) {
+            if ($this->request['bytesRead'] === $this->request['length']) {
                 $this->processRequest();
             }
         }
@@ -153,7 +153,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     }
 
     /**
-     *
+     * @return void
      */
     private function processRequest(): void
     {
@@ -292,7 +292,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
             throw new RequestParsingException('Invalid header format encountered');
         }
 
-        list($headerName, $contentLength) = $parts;
+        [$headerName, $contentLength] = $parts;
 
         $contentLength = trim($contentLength);
 

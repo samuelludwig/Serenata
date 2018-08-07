@@ -5,10 +5,12 @@ namespace Serenata\Parsing;
 use LogicException;
 
 use PhpParser\Node;
-use PhpParser\Parser;
+use PhpParser\Error;
 use PhpParser\ErrorHandler;
 
 use PhpParser\Node\Stmt\Nop;
+
+use PhpParser\Parser;
 
 /**
  * Parser that attempts to parse the last expression in a string of code.
@@ -67,7 +69,7 @@ final class LastExpressionParser implements Parser
 
         // Characters that include operators that are, for some reason, not token types...
         $expressionBoundaryCharacters = [
-            '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@'
+            '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@',
         ];
 
         $hereDocsOpened = 0;
@@ -89,7 +91,7 @@ final class LastExpressionParser implements Parser
 
                 $token = [
                     'type' => is_array($token) ? $token[0] : null,
-                    'text' => $tokenString
+                    'text' => $tokenString,
                 ];
             }
 
@@ -134,7 +136,7 @@ final class LastExpressionParser implements Parser
 
                 $token = [
                     'type' => is_array($token) ? $token[0] : null,
-                    'text' => $tokenString
+                    'text' => $tokenString,
                 ];
             }
 
@@ -234,7 +236,7 @@ final class LastExpressionParser implements Parser
      * @param string   $source
      * @param int|null $offset
      *
-     * @throws \PhpParser\Error
+     * @throws Error
      *
      * @return Node|null
      */
@@ -252,7 +254,7 @@ final class LastExpressionParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse(string $code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
             throw new LogicException(
@@ -273,12 +275,12 @@ final class LastExpressionParser implements Parser
         }
 
         if (empty($nodes)) {
-            throw new \PhpParser\Error(
+            throw new Error(
                 'Could not parse the code, even after attempting corrections. The following snippet failed: ' .
                 '<<<' . $code . '>>>, the expression was <<<' . $expression . '>>>'
             );
         } elseif (count($nodes) > 1) {
-            throw new \PhpParser\Error(
+            throw new Error(
                 'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
                 'snippet <<<' . $code . '>>>, the expression was <<<' . $expression . '>>>'
             );

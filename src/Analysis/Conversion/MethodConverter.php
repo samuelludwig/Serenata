@@ -52,7 +52,7 @@ final class MethodConverter extends FunctionConverter
                 // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
                 'startLineMember' => $method->getRange()->getStart()->getLine() + 1,
                 'endLineMember'   => $method->getRange()->getEnd()->getLine() + 1,
-            ]
+            ],
         ]);
     }
 }

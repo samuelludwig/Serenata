@@ -31,7 +31,7 @@ final class DoctrineGlobalConstantExistenceChecker implements ConstantPresenceIn
     public function isPresent(string $fullyQualifiedName): bool
     {
         return !!$this->managerRegistry->getRepository(Structures\Constant::class)->findOneBy([
-            'fqcn' => $fullyQualifiedName
+            'fqcn' => $fullyQualifiedName,
         ]);
     }
 }

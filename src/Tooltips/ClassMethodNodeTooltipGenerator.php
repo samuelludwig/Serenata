@@ -10,7 +10,6 @@ use Serenata\Analysis\FilePositionClasslikeDeterminer;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

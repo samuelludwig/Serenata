@@ -64,7 +64,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
         $startFilePos = $node->getAttribute('startFilePos');
 
         if ($startFilePos >= $this->position) {
-            if ($startFilePos == $this->position) {
+            if ($startFilePos === $this->position) {
                 // We won't analyze this node anymore (it falls outside the position and can cause infinite recursion
                 // otherwise), but php-parser matches each docblock with the next node. That docblock might still
                 // contain a type override annotation we need to parse.
@@ -415,7 +415,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
             'is_real'     => ['float'],
             'is_resource' => ['resource'],
             'is_scalar'   => ['int', 'float', 'string', 'bool'],
-            'is_string'   => ['string']
+            'is_string'   => ['string'],
         ];
 
         if (!isset($variableHandlingFunctionTypeMap[$node->name->toString()])) {
@@ -484,7 +484,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
             );
         } else {
             $docblockData = $this->docblockParser->parse((string) $docblock, [
-                DocblockParser::VAR_TYPE
+                DocblockParser::VAR_TYPE,
             ], '');
 
             foreach ($docblockData['var'] as $variableName => $data) {

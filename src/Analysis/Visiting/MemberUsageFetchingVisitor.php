@@ -133,7 +133,7 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
                 'type'       => self::TYPE_EXPRESSION_HAS_NO_TYPE,
                 'memberName' => $node->name->name,
                 'start'      => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                'end'        => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                'end'        => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null,
             ];
 
             return;
@@ -173,7 +173,7 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
                             'memberName'     => $node->name->name,
                             'expressionType' => $objectType,
                             'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                            'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                            'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null,
                         ];
                     } else {
                         $this->memberCallList[] = [
@@ -181,7 +181,7 @@ final class MemberUsageFetchingVisitor extends NodeVisitorAbstract
                             'memberName'     => $node->name->name,
                             'expressionType' => $objectType,
                             'start'          => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-                            'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+                            'end'            => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null,
                         ];
                     }
                 }

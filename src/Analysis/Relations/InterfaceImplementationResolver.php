@@ -44,7 +44,7 @@ final class InterfaceImplementationResolver extends AbstractResolver
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
-                'type'      => $class['type']
+                'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
@@ -54,8 +54,8 @@ final class InterfaceImplementationResolver extends AbstractResolver
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
                 'startLineMember' => $interfaceConstantData['startLine'],
-                'endLineMember'   => $interfaceConstantData['endLine']
-            ]
+                'endLineMember'   => $interfaceConstantData['endLine'],
+            ],
         ];
     }
 
@@ -78,7 +78,7 @@ final class InterfaceImplementationResolver extends AbstractResolver
                     'declaringClass'     => $interfaceMethodData['declaringClass'],
                     'declaringStructure' => $interfaceMethodData['declaringStructure'],
                     'startLine'          => $interfaceMethodData['startLine'],
-                    'endLine'            => $interfaceMethodData['endLine']
+                    'endLine'            => $interfaceMethodData['endLine'],
                 ];
             }
 
@@ -98,8 +98,8 @@ final class InterfaceImplementationResolver extends AbstractResolver
                 'filename' => $class['filename'],
                 'startLine'=> $class['startLine'],
                 'endLine'  => $class['endLine'],
-                'type'     => $class['type']
-            ]
+                'type'     => $class['type'],
+            ],
         ]);
     }
 }

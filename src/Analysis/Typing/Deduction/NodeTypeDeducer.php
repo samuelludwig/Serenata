@@ -272,7 +272,7 @@ final class NodeTypeDeducer extends AbstractNodeTypeDeducer
             Node\Stmt\Interface_::class          => $this->classLikeNodeTypeDeducer,
             Node\Stmt\Trait_::class              => $this->classLikeNodeTypeDeducer,
             Node\Stmt\Catch_::class              => $this->catchNodeTypeDeducer,
-            Node\Stmt\Expression::class          => $this->expressionNodeTypeDeducer
+            Node\Stmt\Expression::class          => $this->expressionNodeTypeDeducer,
         ];
 
         if (!isset($map[$class])) {

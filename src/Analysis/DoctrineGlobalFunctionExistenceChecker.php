@@ -31,7 +31,7 @@ final class DoctrineGlobalFunctionExistenceChecker implements FunctionPresenceIn
     public function isPresent(string $fullyQualifiedName): bool
     {
         return !!$this->managerRegistry->getRepository(Structures\Function_::class)->findOneBy([
-            'fqcn' => $fullyQualifiedName
+            'fqcn' => $fullyQualifiedName,
         ]);
     }
 }

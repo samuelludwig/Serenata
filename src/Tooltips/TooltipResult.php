@@ -35,7 +35,7 @@ final class TooltipResult implements JsonSerializable
      * @param string     $contents
      * @param Range|null $range
      */
-    public function __construct(string $contents, Range $range = null)
+    public function __construct(string $contents, ?Range $range = null)
     {
         $this->contents = $contents;
         $this->range = $range;
@@ -64,7 +64,7 @@ final class TooltipResult implements JsonSerializable
     {
         return [
             'contents' => $this->getContents(),
-            'range'    => $this->getRange()
+            'range'    => $this->getRange(),
         ];
     }
 }

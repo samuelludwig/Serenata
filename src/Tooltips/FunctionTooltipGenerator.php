@@ -43,7 +43,7 @@ class FunctionTooltipGenerator
             $this->generateLongDescription($functionInfo),
             $this->generateParameters($functionInfo),
             $this->generateReturn($functionInfo),
-            $this->generateThrows($functionInfo)
+            $this->generateThrows($functionInfo),
         ];
 
         return implode("\n\n", array_filter($sections));

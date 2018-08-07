@@ -28,7 +28,7 @@ class SqliteConnectionFactory
     {
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_sqlite',
-            'path'   => $databasePath
+            'path'   => $databasePath,
         ], $this->getConfiguration());
 
         // Data could become corrupted if the operating system were to crash during synchronization, but this

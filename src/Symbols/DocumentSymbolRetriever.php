@@ -2,9 +2,6 @@
 
 namespace Serenata\Symbols;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
 use Serenata\Utility\Location;
 
 use Serenata\Indexing\Structures\File;

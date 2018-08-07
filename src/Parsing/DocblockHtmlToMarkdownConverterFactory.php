@@ -39,7 +39,7 @@ class DocblockHtmlToMarkdownConverterFactory
             'italic_style'    => '_',
             'remove_nodes'    => '',
             'hard_break'      => false,
-            'list_item_style' => '-'
+            'list_item_style' => '-',
         ]);
 
         return new HTMLToMarkdown\HtmlConverter($environment);

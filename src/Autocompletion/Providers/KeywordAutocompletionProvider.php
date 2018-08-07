@@ -5,7 +5,6 @@ namespace Serenata\Autocompletion\Providers;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides keyword autocompletion suggestions at a specific location in a file.
@@ -42,7 +41,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             $keyword['name'],
             'PHP keyword',
             [
-                'returnTypes'  => ''
+                'returnTypes'  => '',
             ],
             [],
             false
@@ -133,7 +132,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             ['name' => 'var'],
             ['name' => 'while'],
             ['name' => 'xor'],
-            ['name' => 'yield']
+            ['name' => 'yield'],
         ];
     }
 }

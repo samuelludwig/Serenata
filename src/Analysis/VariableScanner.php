@@ -40,7 +40,7 @@ class VariableScanner
         foreach ($variables as $variable) {
             $outputVariables[$variable] = [
                 'name' => $variable,
-                'type' => null
+                'type' => null,
             ];
         }
 

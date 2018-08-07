@@ -20,6 +20,7 @@ interface NamespaceImportProviderInterface
      * @param string $filePath
      *
      * @return array {
+     *
      *     @var string $fqcn
      *     @var string $alias
      *     @var string $kind
@@ -30,6 +31,7 @@ interface NamespaceImportProviderInterface
 
     /**
      * @return array {
+     *
      *     @var string $name
      * }
      */

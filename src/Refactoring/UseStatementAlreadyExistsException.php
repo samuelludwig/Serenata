@@ -7,5 +7,4 @@ namespace Serenata\Refactoring;
  */
 class UseStatementAlreadyExistsException extends UseStatementInsertionCreationException
 {
-
 }

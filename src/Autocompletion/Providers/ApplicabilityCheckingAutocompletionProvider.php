@@ -8,9 +8,7 @@ use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Autocompletion\ApplicabilityChecking\AutocompletionApplicabilityCheckerInterface;
 
-use Serenata\Indexing\Structures\File;
 
-use Serenata\Utility\PositionEncoding;
 
 /**
  * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,

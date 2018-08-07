@@ -5,13 +5,9 @@ namespace Serenata\Autocompletion\Providers;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures\File;
 
 use Serenata\Utility\TextEdit;
-use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides superglobal autocompletion suggestions at a specific location in a file.
@@ -52,7 +48,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             $superGlobal['name'],
             'PHP superglobal',
             [
-                'returnTypes'  => $superGlobal['type']
+                'returnTypes'  => $superGlobal['type'],
             ],
             [],
             false
@@ -75,7 +71,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             ['name' => '$_COOKIE', 'type' => 'array'],
             ['name' => '$_SESSION','type' => 'array'],
             ['name' => '$_REQUEST','type' => 'array'],
-            ['name' => '$_ENV',    'type' => 'array']
+            ['name' => '$_ENV',    'type' => 'array'],
         ];
     }
 }

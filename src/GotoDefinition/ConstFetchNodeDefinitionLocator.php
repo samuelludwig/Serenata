@@ -12,9 +12,7 @@ use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
 /**

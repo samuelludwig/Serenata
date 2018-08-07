@@ -4,15 +4,20 @@ namespace Serenata\Parsing;
 
 use LogicException;
 
-use Serenata\Parsing\Node\Expr;
-
 use PhpParser\Node;
+use PhpParser\Error;
 use PhpParser\Lexer;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use PhpParser\NodeVisitorAbstract;
+
+use Serenata\Parsing\Node\Expr;
+
+use Serenata\Parsing\Node\Keyword\Self_;
+use Serenata\Parsing\Node\Keyword\Parent_;
+use Serenata\Parsing\Node\Keyword\Static_;
 
 /**
  * Parses partial (incomplete) PHP code.
@@ -51,7 +56,7 @@ final class PartialParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse(string $code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
         if ($errorHandler) {
             throw new LogicException(
@@ -97,7 +102,7 @@ final class PartialParser implements Parser
         $expectedOffset = mb_strlen($code) - mb_strlen('self');
 
         if (mb_strrpos($code, 'self') === $expectedOffset) {
-            $node = new \Serenata\Parsing\Node\Keyword\Self_();
+            $node = new Self_();
             $node->setAttribute('startFilePos', $expectedOffset);
 
             return [$node];
@@ -106,7 +111,7 @@ final class PartialParser implements Parser
         $expectedOffset = mb_strlen($code) - mb_strlen('static');
 
         if (mb_strrpos($code, 'static') === $expectedOffset) {
-            $node = new \Serenata\Parsing\Node\Keyword\Static_();
+            $node = new Static_();
             $node->setAttribute('startFilePos', $expectedOffset);
 
             return [$node];
@@ -115,7 +120,7 @@ final class PartialParser implements Parser
         $expectedOffset = mb_strlen($code) - mb_strlen('parent');
 
         if (mb_strrpos($code, 'parent') === $expectedOffset) {
-            $node = new \Serenata\Parsing\Node\Keyword\Parent_();
+            $node = new Parent_();
             $node->setAttribute('startFilePos', $expectedOffset);
 
             return [$node];
@@ -271,7 +276,7 @@ final class PartialParser implements Parser
     {
         try {
             return $this->getStrictParser()->parse($code);
-        } catch (\PhpParser\Error $e) {
+        } catch (Error $e) {
             return null;
         }
 

@@ -41,7 +41,7 @@ final class PropertyConverter extends AbstractConverter
             'longDescription'   => $property->getLongDescription(),
             'typeDescription'   => $property->getTypeDescription(),
 
-            'types'             => $this->convertDocblockType($property->getType())
+            'types'             => $this->convertDocblockType($property->getType()),
         ];
 
         return array_merge($data, [
@@ -64,7 +64,7 @@ final class PropertyConverter extends AbstractConverter
                 // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
                 'startLineMember' => $property->getRange()->getStart()->getLine() + 1,
                 'endLineMember'   => $property->getRange()->getEnd()->getLine() + 1,
-            ]
+            ],
         ]);
     }
 }

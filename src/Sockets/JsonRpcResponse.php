@@ -111,7 +111,7 @@ final class JsonRpcResponse implements JsonSerializable
     {
         $data = [
             'jsonrpc' => $this->getJsonrpc(),
-            'id'      => $this->getId()
+            'id'      => $this->getId(),
         ];
 
         if ($this->getError() !== null) {

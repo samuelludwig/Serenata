@@ -142,7 +142,7 @@ final class DocblockClassUsageFetchingVisitor extends NodeVisitorAbstract
                         ($docblock->getFilePos() + $typeStringOffset) : null,
 
                     'end'              => $docblock->getFilePos() ?
-                        ($docblock->getFilePos() + $typeStringOffset + mb_strlen($typeString)) : null
+                        ($docblock->getFilePos() + $typeStringOffset + mb_strlen($typeString)) : null,
                 ];
             }
         }

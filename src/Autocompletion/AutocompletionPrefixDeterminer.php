@@ -5,7 +5,6 @@ namespace Serenata\Autocompletion;
 use Serenata\Common\Position;
 
 use Serenata\Utility\PositionEncoding;
-use Serenata\Utility\TextDocumentItem;
 
 /**
  * Determines the prefix (the part of the word that is being typed) for autocompletion purposes at a specific location.

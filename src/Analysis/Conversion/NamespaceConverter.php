@@ -21,7 +21,7 @@ final class NamespaceConverter extends AbstractConverter
             'name'      => $namespace->getName(),
             'file'      => $namespace->getFile()->getPath(),
             'startLine' => $namespace->getRange()->getStart()->getLine(),
-            'endLine'   => $namespace->getRange()->getEnd()->getLine()
+            'endLine'   => $namespace->getRange()->getEnd()->getLine(),
         ];
     }
 }

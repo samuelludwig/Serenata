@@ -6,13 +6,11 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
-use Serenata\Utility\PositionEncoding;
 
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides docblock tag autocompletion suggestions at a specific location in a file.
@@ -68,7 +66,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
             'PHP docblock tag',
             [
                 'returnTypes'  => '',
-                'prefix'       => $prefixOverride
+                'prefix'       => $prefixOverride,
             ],
             [],
             false

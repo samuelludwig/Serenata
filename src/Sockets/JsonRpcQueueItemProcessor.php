@@ -3,6 +3,7 @@
 namespace Serenata\Sockets;
 
 use Throwable;
+use RuntimeException;
 
 use Ds\Vector;
 
@@ -53,13 +54,13 @@ class JsonRpcQueueItemProcessor
                 $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
             } catch (IncorrectDatabaseVersionException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
                     'line'      => $e->getLine(),
                     'file'      => $e->getFile(),
-                    'backtrace' => $this->getCompleteBacktraceFromThrowable($e)
+                    'backtrace' => $this->getCompleteBacktraceFromThrowable($e),
                 ]);
             }
         } else {

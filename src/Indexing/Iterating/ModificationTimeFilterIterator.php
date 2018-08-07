@@ -3,6 +3,7 @@
 namespace Serenata\Indexing\Iterating;
 
 use Iterator;
+use SplFileInfo;
 use FilterIterator;
 
 use Serenata\Indexing\Structures;
@@ -33,7 +34,7 @@ final class ModificationTimeFilterIterator extends FilterIterator
      */
     public function accept()
     {
-        /** @var \SplFileInfo $value */
+        /** @var SplFileInfo $value */
         $value = $this->current();
 
         $filename = $value->getPathname();

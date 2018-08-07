@@ -15,7 +15,6 @@ use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides static member property autocompletion suggestions at a specific location in a file.
@@ -114,7 +113,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
                 'declaringStructure' => $property['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($property['types']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property),
-                'prefix'             => $prefix
+                'prefix'             => $prefix,
             ],
             [],
             $property['isDeprecated'],

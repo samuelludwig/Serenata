@@ -74,7 +74,7 @@ final class SignatureHelp implements JsonSerializable
         return [
             'signatures'      => $this->getSignatures(),
             'activeSignature' => $this->getActiveSignature(),
-            'activeParameter' => $this->getActiveParameter()
+            'activeParameter' => $this->getActiveParameter(),
         ];
     }
 }

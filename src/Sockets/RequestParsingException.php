@@ -9,5 +9,4 @@ use RuntimeException;
  */
 final class RequestParsingException extends RuntimeException
 {
-
 }

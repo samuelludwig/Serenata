@@ -2,8 +2,6 @@
 
 namespace Serenata\Autocompletion\ApproximateStringMatching;
 
-use ArrayAccess;
-
 /**
  * Interface for classes that perform string approximation on a list of items and return only the best result(s).
  */

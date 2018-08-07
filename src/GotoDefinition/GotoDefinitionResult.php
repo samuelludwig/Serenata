@@ -52,7 +52,7 @@ final class GotoDefinitionResult implements JsonSerializable
     {
         return [
             'uri'  => $this->getUri(),
-            'line' => $this->getLine()
+            'line' => $this->getLine(),
         ];
     }
 }

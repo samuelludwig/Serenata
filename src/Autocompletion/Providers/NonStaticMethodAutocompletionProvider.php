@@ -18,7 +18,6 @@ use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides non-static member method autocompletion suggestions at a specific location in a file.
@@ -163,7 +162,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
                 // TODO: Deprecated, replaced with "detail". Remove in the next major version.
                 'declaringStructure' => $method['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
-                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method)
+                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method),
             ],
             [],
             $method['isDeprecated'],

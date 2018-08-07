@@ -7,7 +7,6 @@ use PhpParser\ErrorHandler;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
 use Serenata\Utility\PositionEncoding;
 
@@ -46,7 +45,7 @@ class Linter
 
         $output = [
             'errors'   => [],
-            'warnings' => []
+            'warnings' => [],
         ];
 
         foreach ($handler->getErrors() as $e) {
@@ -64,7 +63,7 @@ class Linter
                     (new Position($startLine, $startColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE),
 
                 'end' =>
-                    (new Position($endLine, $endColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE)
+                    (new Position($endLine, $endColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE),
             ];
         }
 

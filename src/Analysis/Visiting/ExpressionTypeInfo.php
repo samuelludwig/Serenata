@@ -44,7 +44,7 @@ class ExpressionTypeInfo
     private $typePossibilityMap;
 
     /**
-     *
+     * Constructor.
      */
     public function __construct()
     {

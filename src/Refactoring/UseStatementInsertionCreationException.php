@@ -9,5 +9,4 @@ use RuntimeException;
  */
 class UseStatementInsertionCreationException extends RuntimeException
 {
-
 }

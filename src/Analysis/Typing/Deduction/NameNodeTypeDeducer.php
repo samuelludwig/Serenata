@@ -6,6 +6,8 @@ use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
@@ -116,7 +118,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
-     * @param \Serenata\Analysis\Typing\Deduction\TypeDeductionContext $context
+     * @param TypeDeductionContext $context
      *
      * @return string|null
      */

@@ -56,7 +56,7 @@ final class Location implements JsonSerializable
     {
         return [
             'uri'   => $this->getUri(),
-            'range' => $this->getRange()
+            'range' => $this->getRange(),
         ];
     }
 }

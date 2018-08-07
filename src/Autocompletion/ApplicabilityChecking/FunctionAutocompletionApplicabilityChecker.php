@@ -4,7 +4,6 @@ namespace Serenata\Autocompletion\ApplicabilityChecking;
 
 use PhpParser\Node;
 
-use Serenata\Utility\NodeHelpers;
 
 use Serenata\Analysis\NodeAtOffsetLocatorResult;
 

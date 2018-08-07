@@ -29,7 +29,7 @@ final class DoctrineClasslikeExistenceChecker implements ClasslikeExistenceCheck
     public function doesClassExist(string $fqcn): bool
     {
         return !!$this->managerRegistry->getRepository(Structures\Classlike::class)->findOneBy([
-            'fqcn' => $fqcn
+            'fqcn' => $fqcn,
         ]);
     }
 }

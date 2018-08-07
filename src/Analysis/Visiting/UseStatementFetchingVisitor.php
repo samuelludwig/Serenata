@@ -45,7 +45,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 new Position(0, 0),
                 new Position(mb_substr_count($code, "\n") + 1, 0)
             ),
-            'useStatements' => []
+            'useStatements' => [],
         ];
 
         $this->lastNamespaceIndex = 0;
@@ -119,7 +119,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
                     PositionEncoding::VALUE
                 )
             ),
-            'useStatements' => []
+            'useStatements' => [],
         ];
     }
 
@@ -159,7 +159,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
         $kindMap = [
             Node\Stmt\Use_::TYPE_NORMAL   => UseStatementKind::TYPE_CLASSLIKE,
             Node\Stmt\Use_::TYPE_FUNCTION => UseStatementKind::TYPE_FUNCTION,
-            Node\Stmt\Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT
+            Node\Stmt\Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT,
         ];
 
         $this->namespaces[$this->lastNamespaceIndex]['useStatements'][$use->getAlias()->name] = [
@@ -179,7 +179,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 )
             ),
             'start' => $use->getAttribute('startFilePos') ? $use->getAttribute('startFilePos')   : null,
-            'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null
+            'end'   => $use->getAttribute('endFilePos')   ? $use->getAttribute('endFilePos') + 1 : null,
         ];
     }
 }

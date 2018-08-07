@@ -2,10 +2,6 @@
 
 namespace Serenata\Indexing;
 
-use Serenata\Indexing\Indexer;
-
-use Serenata\Sockets\JsonRpcRequest;
-
 /**
  * Normalizes paths.
  */

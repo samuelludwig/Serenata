@@ -63,7 +63,7 @@ require '../vendor/autoload.php';
 try {
     $sqliteTestConnection = Doctrine\DBAL\DriverManager::getConnection([
         'driver' => 'pdo_sqlite',
-        'path'   => ':memory:'
+        'path'   => ':memory:',
     ], new Doctrine\DBAL\Configuration());
 
     $query = "SELECT sqlite_version()";

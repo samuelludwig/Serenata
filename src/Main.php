@@ -2,6 +2,8 @@
 
 use Composer\XdebugHandler\XdebugHandler;
 
+use Serenata\UserInterface\JsonRpcApplication;
+
 require __DIR__ . '/Bootstrap.php';
 
 // xdebug will only slow down indexing. Very strangely enough, disabling xdebug doesn't seem to disable this nesting
@@ -18,6 +20,6 @@ if (XdebugHandler::getRestartSettings()) {
         'avoid severely degraded performance...' . PHP_EOL;
 }
 
-$applicationJsonRpcRequestHandler = new \Serenata\UserInterface\JsonRpcApplication();
+$applicationJsonRpcRequestHandler = new JsonRpcApplication();
 
 return $applicationJsonRpcRequestHandler->run();

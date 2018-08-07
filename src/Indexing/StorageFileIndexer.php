@@ -285,7 +285,7 @@ final class StorageFileIndexer implements FileIndexerInterface
             new Visiting\MetaStaticMethodTypeIndexingVisitor(
                 $this->storage,
                 $file
-            )
+            ),
         ];
     }
 }

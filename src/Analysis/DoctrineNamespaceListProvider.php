@@ -57,7 +57,7 @@ final class DoctrineNamespaceListProvider implements FileNamespaceListProviderIn
     {
         try {
             $namespaces = $this->managerRegistry->getRepository(Structures\FileNamespace::class)->findBy([
-                'file' => $file
+                'file' => $file,
             ]);
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);

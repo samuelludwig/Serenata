@@ -56,7 +56,7 @@ final class ParameterInformation implements JsonSerializable
     {
         return [
             'label'         => $this->getLabel(),
-            'documentation' => $this->getDocumentation()
+            'documentation' => $this->getDocumentation(),
         ];
     }
 }

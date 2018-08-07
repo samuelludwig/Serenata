@@ -2,9 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 

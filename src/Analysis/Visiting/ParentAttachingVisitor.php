@@ -18,7 +18,7 @@ final class ParentAttachingVisitor extends NodeVisitorAbstract
     private $stack;
 
     /**
-     *
+     * Constructor.
      */
     public function __construct()
     {

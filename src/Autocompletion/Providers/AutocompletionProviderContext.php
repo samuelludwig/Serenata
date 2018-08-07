@@ -2,14 +2,9 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use ArrayAccess;
-use LogicException;
-use JsonSerializable;
-
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
-use Serenata\Utility\TextEdit;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 

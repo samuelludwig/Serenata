@@ -60,7 +60,7 @@ final class InheritanceResolver extends AbstractResolver
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
-                'type'      => $class['type']
+                'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
@@ -70,8 +70,8 @@ final class InheritanceResolver extends AbstractResolver
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
                 'startLineMember' => $parentConstantData['startLine'],
-                'endLineMember'   => $parentConstantData['endLine']
-            ]
+                'endLineMember'   => $parentConstantData['endLine'],
+            ],
         ];
     }
 
@@ -94,7 +94,7 @@ final class InheritanceResolver extends AbstractResolver
                 'declaringClass'     => $parentPropertyData['declaringClass'],
                 'declaringStructure' => $parentPropertyData['declaringStructure'],
                 'startLine'          => $parentPropertyData['startLine'],
-                'endLine'            => $parentPropertyData['endLine']
+                'endLine'            => $parentPropertyData['endLine'],
             ];
 
             if ($parentPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
@@ -111,7 +111,7 @@ final class InheritanceResolver extends AbstractResolver
                 'filename'        => $class['filename'],
                 'startLine'       => $class['startLine'],
                 'endLine'         => $class['endLine'],
-                'type'            => $class['type']
+                'type'            => $class['type'],
             ];
 
             $childProperty['declaringStructure'] = [
@@ -121,7 +121,7 @@ final class InheritanceResolver extends AbstractResolver
                 'endLine'         => $class['endLine'],
                 'type'            => $class['type'],
                 'startLineMember' => $childProperty['startLine'],
-                'endLineMember'   => $childProperty['endLine']
+                'endLineMember'   => $childProperty['endLine'],
             ];
         } else {
             $childProperty = [];
@@ -157,8 +157,8 @@ final class InheritanceResolver extends AbstractResolver
                         'declaringClass'     => $parentMethodData['declaringClass'],
                         'declaringStructure' => $parentMethodData['declaringStructure'],
                         'startLine'          => $parentMethodData['startLine'],
-                        'endLine'            => $parentMethodData['endLine']
-                    ]
+                        'endLine'            => $parentMethodData['endLine'],
+                    ],
                 ]);
             } else {
                 $overrideData = [
@@ -166,7 +166,7 @@ final class InheritanceResolver extends AbstractResolver
                     'declaringStructure' => $parentMethodData['declaringStructure'],
                     'startLine'          => $parentMethodData['startLine'],
                     'endLine'            => $parentMethodData['endLine'],
-                    'wasAbstract'        => $parentMethodData['isAbstract']
+                    'wasAbstract'        => $parentMethodData['isAbstract'],
                 ];
             }
 
@@ -184,7 +184,7 @@ final class InheritanceResolver extends AbstractResolver
 
         $class['methods'][$parentMethodData['name']] = array_merge($parentMethodData, $childMethod, $inheritedData, [
             'override'        => $overrideData,
-            'implementations' => $implementationData
+            'implementations' => $implementationData,
         ]);
     }
 }

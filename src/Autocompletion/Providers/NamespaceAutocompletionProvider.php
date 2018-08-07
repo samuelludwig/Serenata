@@ -9,7 +9,6 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides namespace autocompletion suggestions at a specific location in a file.
@@ -103,7 +102,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             null,
             [
                 'returnTypes'  => 'namespace',
-                'prefix'       => $prefix
+                'prefix'       => $prefix,
             ],
             [],
             false

@@ -187,7 +187,7 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
 
             'constants'          => [],
             'properties'         => [],
-            'methods'            => []
+            'methods'            => [],
         ]);
 
         $this->buildDirectChildrenInfo($classlikeInfo, $classlike);

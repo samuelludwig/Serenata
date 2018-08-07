@@ -200,12 +200,12 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
 
             'extraData' => array_merge($this->getExtraData(), [
                 // TODO: Deprecated, kept for backwards compatibility. Remove in next major version.
-                'isDeprecated' => $this->getDeprecated()
+                'isDeprecated' => $this->getDeprecated(),
             ]),
 
             'additionalTextEdits' => $this->getAdditionalTextEdits(),
             'deprecated'          => $this->getDeprecated(),
-            'detail'              => $this->getDetail()
+            'detail'              => $this->getDetail(),
         ];
     }
 

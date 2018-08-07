@@ -178,7 +178,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     /**
      * @inheritDoc
      */
-    public function leaveNode(\PhpParser\Node $node)
+    public function leaveNode(Node $node)
     {
         $value = parent::leaveNode($node);
 
@@ -276,7 +276,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::METHOD,
             DocblockParser::PROPERTY,
             DocblockParser::PROPERTY_READ,
-            DocblockParser::PROPERTY_WRITE
+            DocblockParser::PROPERTY_WRITE,
         ], '');
 
         $classlike = null;
@@ -628,7 +628,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation = $this->docblockParser->parse($docComment, [
                 DocblockParser::VAR_TYPE,
                 DocblockParser::DEPRECATED,
-                DocblockParser::DESCRIPTION
+                DocblockParser::DESCRIPTION,
             ], $property->name);
 
             $varDocumentation = isset($documentation['var']['$' . $property->name]) ?
@@ -742,7 +742,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PARAM_TYPE,
             DocblockParser::DEPRECATED,
             DocblockParser::DESCRIPTION,
-            DocblockParser::RETURN_VALUE
+            DocblockParser::RETURN_VALUE,
         ], $node->name);
 
         $typeStringSpecification = null;
@@ -969,7 +969,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::VAR_TYPE,
             DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
+            DocblockParser::DESCRIPTION,
         ], $node->name->name);
 
         $varDocumentation = isset($documentation['var']['$' . $node->name->name]) ?

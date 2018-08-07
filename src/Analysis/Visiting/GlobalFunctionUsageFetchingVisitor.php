@@ -22,7 +22,7 @@ final class GlobalFunctionUsageFetchingVisitor extends NameResolver
     public function __construct()
     {
         parent::__construct(null, [
-            'replaceNodes' => false
+            'replaceNodes' => false,
         ]);
     }
 

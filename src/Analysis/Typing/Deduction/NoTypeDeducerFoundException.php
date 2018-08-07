@@ -9,5 +9,4 @@ use RuntimeException;
  */
 final class NoTypeDeducerFoundException extends RuntimeException
 {
-
 }

@@ -144,7 +144,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             'traits'         => [],
             'methods'        => [],
             'properties'     => [],
-            'constants'      => []
+            'constants'      => [],
         ];
     }
 
@@ -182,7 +182,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             'traits'         => [],
             'methods'        => [],
             'properties'     => [],
-            'constants'      => []
+            'constants'      => [],
         ];
     }
 
@@ -212,7 +212,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             'docComment'     => $node->getDocComment() ? $node->getDocComment()->getText() : null,
             'methods'        => [],
             'properties'     => [],
-            'constants'      => []
+            'constants'      => [],
         ];
     }
 
@@ -239,12 +239,12 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
                     'isPublic'                   => ($adaptation->newModifier === 1),
                     'isPrivate'                  => ($adaptation->newModifier === 4),
                     'isProtected'                => ($adaptation->newModifier === 2),
-                    'isInheritingAccessModifier' => ($adaptation->newModifier === null)
+                    'isInheritingAccessModifier' => ($adaptation->newModifier === null),
                 ];
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
                 $this->classlikes[$fqcn]['traitPrecedences'][] = [
                     'name'  => $adaptation->method,
-                    'trait' => NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'))
+                    'trait' => NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')),
                 ];
             }
         }
@@ -279,7 +279,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
                         $property->default->getAttribute('startFilePos'),
                         $property->default->getAttribute('endFilePos') - $property->default->getAttribute('startFilePos') + 1
                     ) :
-                    null
+                    null,
             ];
         }
     }
@@ -298,7 +298,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
         );
 
         $this->globalFunctions[$fqcn] = $data + [
-            'fqcn' => $fqcn
+            'fqcn' => $fqcn,
         ];
     }
 
@@ -321,7 +321,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             'isProtected'    => $node->isProtected(),
             'isAbstract'     => $node->isAbstract(),
             'isFinal'        => $node->isFinal(),
-            'isStatic'       => $node->isStatic()
+            'isStatic'       => $node->isStatic(),
         ];
     }
 
@@ -372,7 +372,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
                         $param->default->getAttribute('startFilePos'),
                         $param->default->getAttribute('endFilePos') - $param->default->getAttribute('startFilePos') + 1
                     ) :
-                    null
+                    null,
             ];
         }
 
@@ -407,7 +407,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
             'returnTypeHint'       => $returnTypeHint,
             'isReturnTypeNullable' => ($node->getReturnType() instanceof Node\NullableType),
             'parameters'           => $parameters,
-            'docComment'           => $node->getDocComment() ? $node->getDocComment()->getText() : null
+            'docComment'           => $node->getDocComment() ? $node->getDocComment()->getText() : null,
         ];
     }
 
@@ -437,7 +437,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
                     $this->code,
                     $const->value->getAttribute('startFilePos'),
                     $const->value->getAttribute('endFilePos') - $const->value->getAttribute('startFilePos') + 1
-                )
+                ),
             ];
         }
     }
@@ -468,7 +468,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
                     $this->code,
                     $const->value->getAttribute('startFilePos'),
                     $const->value->getAttribute('endFilePos') - $const->value->getAttribute('startFilePos') + 1
-                )
+                ),
             ];
         }
     }
@@ -510,7 +510,7 @@ final class OutlineFetchingVisitor extends NodeVisitorAbstract
                 $this->code,
                 $node->args[1]->getAttribute('startFilePos'),
                 $node->args[1]->getAttribute('endFilePos') - $node->args[1]->getAttribute('startFilePos') + 1
-            )
+            ),
         ];
     }
 

@@ -4,6 +4,8 @@ namespace Serenata\Autocompletion\Providers;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
+use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
@@ -13,13 +15,7 @@ use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
-use Serenata\Indexing\Structures\File;
-
 use Serenata\Utility\TextEdit;
-use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides local variable autocompletion suggestions at a specific location in a file.
@@ -89,7 +85,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
     {
         $typeArray = array_map(function (string $type) {
             return [
-                'fqcn' => $type
+                'fqcn' => $type,
             ];
         }, explode('|', $variable['type']));
 
@@ -102,7 +98,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             null,
             [
                 'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($typeArray),
-                'prefix'       => $context->getPrefix()
+                'prefix'       => $context->getPrefix(),
             ],
             [],
             false
@@ -133,13 +129,13 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      *
      * @throws UnexpectedValueException
      *
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
     private function parse(string $code, ?ErrorHandler $errorHandler = null): array
     {
         try {
             $nodes = $this->parser->parse($code, $errorHandler);
-        } catch (\PhpParser\Error $e) {
+        } catch (Error $e) {
             throw new UnexpectedValueException('Parsing the file failed!');
         }
 

@@ -7,5 +7,4 @@ namespace Serenata\Indexing;
  */
 final class FileNotFoundStorageException extends StorageException
 {
-
 }

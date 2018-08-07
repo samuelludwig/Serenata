@@ -15,7 +15,6 @@ use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides member constant autocompletion suggestions at a specific location in a file.
@@ -109,7 +108,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
                 // TODO: Deprecated, replaced with "detail". Remove in the next major version.
                 'declaringStructure' => $constant['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($constant['types']),
-                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($constant)
+                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($constant),
             ],
             [],
             $constant['isDeprecated'],

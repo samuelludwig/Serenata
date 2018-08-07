@@ -14,10 +14,7 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures\File;
 use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
 use Serenata\Refactoring\UseStatementInsertionCreator;
@@ -25,7 +22,6 @@ use Serenata\Refactoring\UseStatementInsertionCreationException;
 
 use Serenata\Utility\TextEdit;
 use Serenata\Utility\NodeHelpers;
-use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides classlike autocompletion suggestions at a specific location in a file.
@@ -114,7 +110,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
             $classlike['shortDescription'],
             [
                 'returnTypes'  => $classlike['type'],
-                'prefix'       => $context->getPrefix()
+                'prefix'       => $context->getPrefix(),
             ],
             $this->createAdditionalTextEditsForSuggestion($classlike, $context),
             $classlike['isDeprecated']

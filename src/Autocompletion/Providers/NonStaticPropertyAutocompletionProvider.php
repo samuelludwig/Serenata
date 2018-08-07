@@ -15,7 +15,6 @@ use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides non-static member property autocompletion suggestions at a specific location in a file.
@@ -111,7 +110,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
                 // TODO: Deprecated, replaced with "detail". Remove in the next major version.
                 'declaringStructure' => $property['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($property['types']),
-                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property)
+                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property),
             ],
             [],
             $property['isDeprecated'],

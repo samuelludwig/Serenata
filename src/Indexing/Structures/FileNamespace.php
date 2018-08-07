@@ -44,7 +44,7 @@ class FileNamespace
      */
     public function __construct(
         Range $range,
-        string $name = null,
+        ?string $name,
         File $file,
         array $imports
     ) {

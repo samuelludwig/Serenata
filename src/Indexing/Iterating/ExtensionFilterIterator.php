@@ -3,6 +3,7 @@
 namespace Serenata\Indexing\Iterating;
 
 use Iterator;
+use SplFileInfo;
 use FilterIterator;
 
 /**
@@ -31,7 +32,7 @@ final class ExtensionFilterIterator extends FilterIterator
      */
     public function accept()
     {
-        /** @var \SplFileInfo $value */
+        /** @var SplFileInfo $value */
         $value = $this->current();
 
         return in_array($value->getExtension(), $this->allowedExtensions, true);

@@ -2,8 +2,6 @@
 
 namespace Serenata\Utility;
 
-use RuntimeException;
-
 /**
  * Interface for classes representing streams.
  */

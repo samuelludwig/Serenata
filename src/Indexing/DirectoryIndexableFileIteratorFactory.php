@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing;
 
-use Serenata\Indexing\Structures;
-
 /**
  * Creates instances of {@see DirectoryIndexableFileIterator}.
  */

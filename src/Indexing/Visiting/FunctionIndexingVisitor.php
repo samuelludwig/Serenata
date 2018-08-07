@@ -161,7 +161,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             DocblockParser::PARAM_TYPE,
             DocblockParser::DEPRECATED,
             DocblockParser::DESCRIPTION,
-            DocblockParser::RETURN_VALUE
+            DocblockParser::RETURN_VALUE,
         ], $node->name);
 
         $typeStringSpecification = null;

@@ -72,7 +72,7 @@ final class SignatureInformation implements JsonSerializable
         return [
             'label'         => $this->getLabel(),
             'documentation' => $this->getDocumentation(),
-            'parameters'    => $this->getParameters()
+            'parameters'    => $this->getParameters(),
         ];
     }
 }

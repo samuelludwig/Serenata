@@ -9,7 +9,6 @@ use Serenata\Analysis\Visiting\UseStatementKind;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\Indexing\Structures;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 

@@ -65,7 +65,7 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         /** @var Structures\Function_|null $globalFunction */
         $globalFunction = $this->managerRegistry->getRepository(Structures\Function_::class)->findOneBy([
-            'fqcn' => $fqsen
+            'fqcn' => $fqsen,
         ]);
 
         if (!$globalFunction) {

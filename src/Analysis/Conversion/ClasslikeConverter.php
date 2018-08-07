@@ -29,7 +29,7 @@ final class ClasslikeConverter extends AbstractConverter
             'hasDocblock'        => $classlike->getHasDocblock(),
             'hasDocumentation'   => $classlike->getHasDocblock(),
             'shortDescription'   => $classlike->getShortDescription(),
-            'longDescription'    => $classlike->getLongDescription()
+            'longDescription'    => $classlike->getLongDescription(),
         ];
 
         if ($classlike instanceof Structures\Class_) {

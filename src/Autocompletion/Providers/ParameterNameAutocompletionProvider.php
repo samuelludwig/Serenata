@@ -9,13 +9,9 @@ use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures\File;
 
 use Serenata\Utility\TextEdit;
-use Serenata\Utility\PositionEncoding;
 
 /**
  * Provides parameter name autocompletion suggestions at a specific location in a file.
@@ -158,7 +154,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             $name,
             null,
             [
-                'prefix' => $context->getPrefix()
+                'prefix' => $context->getPrefix(),
             ],
             [],
             false

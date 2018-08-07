@@ -13,7 +13,6 @@ use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
-use Serenata\Indexing\Structures\File;
 
 /**
  * Provides function autocompletion suggestions at a specific location in a file.
@@ -133,7 +132,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $this->functionAutocompletionSuggestionLabelCreator->create($function),
             $function['shortDescription'],
             [
-                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes'])
+                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes']),
             ],
             [],
             $function['isDeprecated']

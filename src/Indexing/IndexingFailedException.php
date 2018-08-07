@@ -9,5 +9,4 @@ use RuntimeException;
  */
 final class IndexingFailedException extends RuntimeException
 {
-
 }

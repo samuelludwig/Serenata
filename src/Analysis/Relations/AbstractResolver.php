@@ -2,8 +2,6 @@
 
 namespace Serenata\Analysis\Relations;
 
-use ArrayObject;
-
 use Serenata\Analysis\DocblockAnalyzer;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
@@ -81,7 +79,7 @@ abstract class AbstractResolver
             'shortDescription',
             'longDescription',
             'typeDescription',
-            'types'
+            'types',
         ];
 
         $info = [];
@@ -110,7 +108,7 @@ abstract class AbstractResolver
             'longDescription',
             'returnDescription',
             'returnTypes',
-            'throws'
+            'throws',
         ];
 
         // Normally parameters are inherited from the parent docblock. However, this causes problems when an overridden

@@ -9,5 +9,4 @@ use DomainException;
  */
 final class InvalidArgumentsException extends DomainException
 {
-
 }

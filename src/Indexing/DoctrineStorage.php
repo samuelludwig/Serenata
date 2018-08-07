@@ -65,7 +65,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     {
         try {
             return $this->managerRegistry->getRepository(Structures\Classlike::class)->findOneBy([
-                'fqcn' => $fqcn
+                'fqcn' => $fqcn,
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
@@ -81,7 +81,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     {
         try {
             $file = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
-                'path' => $path
+                'path' => $path,
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
@@ -165,7 +165,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
         try {
             return $this->managerRegistry->getRepository(Structures\MetaStaticMethodType::class)->findBy([
                 'fqcn' => $fqcn,
-                'name' => $method
+                'name' => $method,
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);

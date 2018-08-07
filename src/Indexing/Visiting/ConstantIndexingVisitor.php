@@ -139,7 +139,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::VAR_TYPE,
             DocblockParser::DEPRECATED,
-            DocblockParser::DESCRIPTION
+            DocblockParser::DESCRIPTION,
         ], $node->name);
 
         $varDocumentation = isset($documentation['var']['$' . $node->name]) ?

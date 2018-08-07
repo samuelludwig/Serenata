@@ -76,7 +76,7 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         /** @var Structures\ConstantLike|null $globalConstant */
         $globalConstant = $this->managerRegistry->getRepository(Structures\Constant::class)->findOneBy([
-            'fqcn' => $fqsen
+            'fqcn' => $fqsen,
         ]);
 
         if (!$globalConstant) {

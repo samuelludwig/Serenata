@@ -8,7 +8,6 @@ use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

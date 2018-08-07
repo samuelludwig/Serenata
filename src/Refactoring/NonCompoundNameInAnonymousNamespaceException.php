@@ -10,5 +10,4 @@ namespace Serenata\Refactoring;
  */
 class NonCompoundNameInAnonymousNamespaceException extends UseStatementInsertionCreationException
 {
-
 }

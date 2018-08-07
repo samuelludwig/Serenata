@@ -83,7 +83,7 @@ final class ResolveTypeCommand extends AbstractCommand
         $recognizedKinds = [
             UseStatementKind::TYPE_CLASSLIKE,
             UseStatementKind::TYPE_FUNCTION,
-            UseStatementKind::TYPE_CONSTANT
+            UseStatementKind::TYPE_CONSTANT,
         ];
 
         if (!in_array($kind, $recognizedKinds)) {

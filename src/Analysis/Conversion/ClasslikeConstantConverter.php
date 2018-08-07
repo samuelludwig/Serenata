@@ -49,7 +49,7 @@ final class ClasslikeConstantConverter
                 'filename'  => $class['filename'],
                 'startLine' => $class['startLine'],
                 'endLine'   => $class['endLine'],
-                'type'      => $class['type']
+                'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
@@ -60,8 +60,8 @@ final class ClasslikeConstantConverter
                 'type'            => $class['type'],
                 // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
                 'startLineMember' => $constant->getRange()->getStart()->getLine() + 1,
-                'endLineMember'   => $constant->getRange()->getEnd()->getLine() + 1
-            ]
+                'endLineMember'   => $constant->getRange()->getEnd()->getLine() + 1,
+            ],
         ]);
     }
 }

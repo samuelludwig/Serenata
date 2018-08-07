@@ -83,7 +83,7 @@ final class NamespaceData implements JsonSerializable
         return [
             'name'      => $this->getName(),
             'startLine' => $this->getStartLine(),
-            'endLine'   => $this->getEndLine()
+            'endLine'   => $this->getEndLine(),
         ];
     }
 }

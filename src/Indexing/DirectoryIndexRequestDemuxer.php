@@ -84,7 +84,7 @@ class DirectoryIndexRequestDemuxer
         $request = new JsonRpcRequest(null, 'reindex', [
             'source'    => [$fileInfo->getPathname()],
             'exclude'   => $globsToExclude,
-            'extension' => $extensionsToIndex
+            'extension' => $extensionsToIndex,
         ]);
 
         $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
@@ -108,8 +108,8 @@ class DirectoryIndexRequestDemuxer
                 'requestId' => $originatingRequestId,
                 'index'     => $index,
                 'total'     => $total,
-                'progress'  => ($index / $total) * 100
-            ])
+                'progress'  => ($index / $total) * 100,
+            ]),
         ]);
 
         $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));

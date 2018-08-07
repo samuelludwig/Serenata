@@ -4,7 +4,6 @@ namespace Serenata\Autocompletion;
 
 use Serenata\Common\Position;
 
-use Serenata\Utility\TextDocumentItem;
 
 /**
  * Interface for classes that determine the prefix (the part of the word that is being typed) for autocompletion

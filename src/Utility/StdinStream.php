@@ -2,8 +2,6 @@
 
 namespace Serenata\Utility;
 
-use RuntimeException;
-
 /**
  * Represents the STDIN stream.
  */

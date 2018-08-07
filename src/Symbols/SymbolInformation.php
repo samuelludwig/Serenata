@@ -106,7 +106,7 @@ final class SymbolInformation implements JsonSerializable
             'kind'          => $this->getKind(),
             'deprecated'    => $this->getDeprecated(),
             'location'      => $this->getLocation(),
-            'containerName' => $this->getContainerName()
+            'containerName' => $this->getContainerName(),
         ];
     }
 }

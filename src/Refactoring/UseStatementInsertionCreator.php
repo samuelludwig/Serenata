@@ -13,8 +13,6 @@ use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
 
-use Serenata\Analysis\Visiting\UseStatementKind;
-
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
@@ -57,7 +55,7 @@ class UseStatementInsertionCreator
 
     /**
      * @param string $name
-     * @param string $kind                    {@see UseStatementKind}
+     * @param string $kind                    {@see \Serenata\Analysis\Visiting\UseStatementKind}
      * @param string $code
      * @param bool   $allowAdditionalNewlines
      * @param int    $position

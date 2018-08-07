@@ -197,8 +197,8 @@ class SignatureHelpRetriever
 
     /**
      * @param Node\Expr\FuncCall|Node\Expr\StaticCall|Node\Expr\MethodCall|Node\Expr\New_ $invocationNode
-     * @parm TextDocumentItem                                                             $textDocumentItem
-     * @parm Position                                                                     $position
+     * @param TextDocumentItem                                                            $textDocumentItem
+     * @param Position                                                                    $position
      *
      * @return int
      */

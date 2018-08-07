@@ -4,6 +4,7 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
@@ -56,10 +57,10 @@ class ExpressionLocalTypeAnalyzer
     }
 
     /**
-     * @param \Serenata\Utility\TextDocumentItem $textDocumentItem
-     * @param \Serenata\Common\Position          $position
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position          $position
      *
-     * @return \Serenata\Analysis\Visiting\ExpressionTypeInfoMap
+     * @return ExpressionTypeInfoMap
      */
     public function analyze(TextDocumentItem $textDocumentItem, Position $position): ExpressionTypeInfoMap
     {
@@ -84,7 +85,7 @@ class ExpressionLocalTypeAnalyzer
 
         try {
             $nodes = $this->parser->parse($textDocumentItem->getText(), $handler);
-        } catch (\PhpParser\Error $e) {
+        } catch (Error $e) {
             throw new UnexpectedValueException('Parsing the file failed!');
         }
 

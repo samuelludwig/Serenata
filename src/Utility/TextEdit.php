@@ -54,7 +54,7 @@ final class TextEdit implements JsonSerializable
     {
         return [
             'range'   => $this->getRange(),
-            'newText' => $this->getNewText()
+            'newText' => $this->getNewText(),
         ];
     }
 }

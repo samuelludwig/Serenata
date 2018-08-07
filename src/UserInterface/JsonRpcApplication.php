@@ -3,19 +3,19 @@
 namespace Serenata\UserInterface;
 
 use React;
+use Closure;
 use RuntimeException;
 use UnexpectedValueException;
 
+use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 
 use Serenata\Sockets\SocketServer;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
 use Serenata\Sockets\JsonRpcRequestHandlerInterface;
+use Serenata\Sockets\JsonRpcResponseSenderInterface;
 use Serenata\Sockets\JsonRpcConnectionHandlerFactory;
-
-use React\EventLoop\LoopInterface;
 
 use Symfony\Component\Console\Application;
 
@@ -58,7 +58,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
             ->register('start')
                 ->addOption('uri', 'u', InputOption::VALUE_OPTIONAL, 'The URI to run on', null)
                 ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'The port to run on', null)
-                ->setCode(\Closure::fromCallable([$this, 'runEventLoop']))
+                ->setCode(Closure::fromCallable([$this, 'runEventLoop']))
             ->getApplication();
 
         $application->setAutoExit(false);

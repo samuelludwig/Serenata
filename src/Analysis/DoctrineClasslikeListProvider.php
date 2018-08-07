@@ -59,7 +59,7 @@ final class DoctrineClasslikeListProvider implements FileClasslikeListProviderIn
     {
         try {
             $items = $this->managerRegistry->getRepository(Structures\Classlike::class)->findBy([
-                'file' => $file
+                'file' => $file,
             ]);
         } catch (DriverException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);

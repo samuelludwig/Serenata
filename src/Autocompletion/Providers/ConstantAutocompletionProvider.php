@@ -8,7 +8,6 @@ use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
-use Serenata\Indexing\Structures\File;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
@@ -87,7 +86,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $constant['name'],
             $constant['shortDescription'],
             [
-                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($constant['types'])
+                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($constant['types']),
             ],
             [],
             $constant['isDeprecated']

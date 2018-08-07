@@ -95,7 +95,7 @@ final class JsonRpcError implements JsonSerializable
     {
         $data = [
             'code'    => $this->getCode(),
-            'message' => $this->getMessage()
+            'message' => $this->getMessage(),
         ];
 
         if ($this->getData() !== null) {

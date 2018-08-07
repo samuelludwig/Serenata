@@ -10,7 +10,6 @@ use PhpParser\Node;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
 use Serenata\Utility\TextDocumentItem;
 

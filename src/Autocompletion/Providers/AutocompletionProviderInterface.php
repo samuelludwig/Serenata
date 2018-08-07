@@ -2,8 +2,6 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use Serenata\Indexing\Structures\File;
-
 /**
  * Interface for classes that provide autocompletion suggestions at a specific location in a file.
  */

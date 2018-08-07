@@ -43,7 +43,7 @@ final class MetadataAttachingParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse(string $code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
         $nodes = $this->delegate->parse($code, $errorHandler);
 
@@ -54,7 +54,7 @@ final class MetadataAttachingParser implements Parser
         $traverser = new NodeTraverser();
 
         $traverser->addVisitor(new NameResolver(null, [
-            'replaceNodes' => false
+            'replaceNodes' => false,
         ]));
 
         $traverser->addVisitor(new NamespaceAttachingVisitor());

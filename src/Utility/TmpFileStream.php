@@ -2,8 +2,6 @@
 
 namespace Serenata\Utility;
 
-use RuntimeException;
-
 /**
  * Represents a stream to a temporary file.
  */

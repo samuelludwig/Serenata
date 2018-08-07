@@ -61,7 +61,7 @@ class NodeHelpers
         $reservedNames = [
             'parent',
             'self',
-            'static'
+            'static',
         ];
 
         return in_array($name->toString(), $reservedNames, true);

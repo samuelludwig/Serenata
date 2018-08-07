@@ -2,8 +2,6 @@
 
 namespace Serenata\Utility;
 
-use RuntimeException;
-
 /**
  * Base class for resource streams.
  */

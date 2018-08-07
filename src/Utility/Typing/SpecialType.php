@@ -9,5 +9,4 @@ namespace Serenata\Utility\Typing;
  */
 final class SpecialType extends Type
 {
-
 }

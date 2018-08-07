@@ -88,7 +88,7 @@ final class ClassUsageFetchingVisitor extends NodeVisitorAbstract
             'namespace'        => $this->lastNamespace,
             'line'             => $node->getAttribute('startLine')    ? $node->getAttribute('startLine')      : null,
             'start'            => $node->getAttribute('startFilePos') ? $node->getAttribute('startFilePos')   : null,
-            'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null
+            'end'              => $node->getAttribute('endFilePos')   ? $node->getAttribute('endFilePos') + 1 : null,
         ];
     }
 

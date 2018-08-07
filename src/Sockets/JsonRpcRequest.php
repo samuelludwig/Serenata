@@ -125,7 +125,7 @@ final class JsonRpcRequest implements JsonSerializable
             'jsonrpc' => $this->getJsonrpc(),
             'id'      => $this->getId(),
             'method'  => $this->getMethod(),
-            'params'  => $this->getParams()
+            'params'  => $this->getParams(),
         ];
     }
 }

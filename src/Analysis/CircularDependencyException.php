@@ -10,5 +10,4 @@ use RuntimeException;
  */
 final class CircularDependencyException extends RuntimeException
 {
-
 }

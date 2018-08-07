@@ -27,7 +27,7 @@ class FunctionConverter extends AbstractConverter
                 'defaultValue' => $parameter->getDefaultValue(),
                 'isReference'  => $parameter->getIsReference(),
                 'isVariadic'   => $parameter->getIsVariadic(),
-                'isOptional'   => $parameter->getIsOptional()
+                'isOptional'   => $parameter->getIsOptional(),
             ];
         }
 
@@ -36,7 +36,7 @@ class FunctionConverter extends AbstractConverter
         foreach ($function->getThrows() as $throws) {
             $throwsAssoc[] = [
                 'type'        => $throws->getFqcn(),
-                'description' => $throws->getDescription()
+                'description' => $throws->getDescription(),
             ];
         }
 
@@ -58,7 +58,7 @@ class FunctionConverter extends AbstractConverter
             'returnDescription' => $function->getReturnDescription(),
 
             'returnTypeHint'    => $function->getReturnTypeHint(),
-            'returnTypes'       => $this->convertDocblockType($function->getReturnType())
+            'returnTypes'       => $this->convertDocblockType($function->getReturnType()),
         ];
 
         if ($function instanceof Structures\Function_) {

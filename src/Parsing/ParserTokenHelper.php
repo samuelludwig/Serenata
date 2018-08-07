@@ -25,7 +25,7 @@ class ParserTokenHelper
             T_OPEN_TAG, T_OPEN_TAG_WITH_ECHO, T_OR_EQUAL, T_PLUS_EQUAL, T_PRINT, T_PRIVATE, T_PUBLIC, T_PROTECTED,
             T_REQUIRE, T_REQUIRE_ONCE, T_RETURN, T_SL, T_SL_EQUAL, T_SR, T_SR_EQUAL, T_SWITCH, T_THROW, T_TRAIT, T_TRY,
             T_USE, T_VAR, T_WHILE, T_XOR_EQUAL, T_FINALLY, T_YIELD, T_ELLIPSIS, T_POW, T_POW_EQUAL, T_SPACESHIP,
-            T_YIELD_FROM
+            T_YIELD_FROM,
         ];
     }
 
@@ -37,7 +37,7 @@ class ParserTokenHelper
     public function getCastBoundaryTokens(): array
     {
         return [
-            T_INT_CAST, T_UNSET_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_ARRAY_CAST, T_DOUBLE_CAST, T_STRING_CAST
+            T_INT_CAST, T_UNSET_CAST, T_OBJECT_CAST, T_BOOL_CAST, T_ARRAY_CAST, T_DOUBLE_CAST, T_STRING_CAST,
         ];
     }
 
@@ -49,7 +49,7 @@ class ParserTokenHelper
     public function getSkippableTokens(): array
     {
         return [
-            T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING
+            T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING,
         ];
     }
 }

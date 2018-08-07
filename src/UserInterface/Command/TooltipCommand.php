@@ -81,7 +81,7 @@ final class TooltipCommand extends AbstractCommand
 
         $offset = $arguments['offset'];
 
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] == true) {
+        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
             $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
         }
 

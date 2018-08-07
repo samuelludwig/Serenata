@@ -4,6 +4,8 @@ namespace Serenata\Indexing;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Doctrine\DBAL\Exception\TableNotFoundException;
+
 /**
  * Handles storage version checks.
  */
@@ -31,9 +33,9 @@ class StorageVersionChecker
 
         try {
             $versionSetting = $this->managerRegistry->getRepository(Structures\Setting::class)->findOneBy([
-                'name' => SchemaInitializer::VERSION_SETTING_NAME
+                'name' => SchemaInitializer::VERSION_SETTING_NAME,
             ]);
-        } catch (\Doctrine\DBAL\Exception\TableNotFoundException $e) {
+        } catch (TableNotFoundException $e) {
             return false;
         }
 

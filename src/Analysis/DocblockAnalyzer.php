@@ -25,7 +25,7 @@ class DocblockAnalyzer
 
             // This tag (without curly braces) is, according to draft PSR-5, a valid way to indicate an entire docblock
             // should be inherited and to implicitly indicate that documentation was not forgotten.
-            '@inheritDoc'
+            '@inheritDoc',
         ];
 
         return in_array($shortDescription, $specialTags);

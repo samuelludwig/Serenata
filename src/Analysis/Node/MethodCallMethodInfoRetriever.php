@@ -12,7 +12,6 @@ use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

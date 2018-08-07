@@ -32,9 +32,9 @@ final class TypeDeductionContext
     private $position;
 
     /**
-     * @param \PhpParser\Node                    $node
-     * @param \Serenata\Utility\TextDocumentItem $textDocumentItem
-     * @param \Serenata\Common\Position|null     $position
+     * @param Node             $node
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position|null    $position
      */
     public function __construct(Node $node, TextDocumentItem $textDocumentItem, ?Position $position = null)
     {
@@ -52,9 +52,9 @@ final class TypeDeductionContext
     }
 
     /**
-     * @return \Serenata\Utility\TextDocumentItem
+     * @return TextDocumentItem
      */
-    public function getTextDocumentItem(): \Serenata\Utility\TextDocumentItem
+    public function getTextDocumentItem(): TextDocumentItem
     {
         return $this->textDocumentItem;
     }

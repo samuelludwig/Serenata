@@ -70,7 +70,7 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
         if ($docBlock = $this->getFunctionDocblock()) {
             // Analyze the docblock's @param tags.
             $result = $this->docblockParser->parse($docBlock, [
-                DocblockParser::PARAM_TYPE
+                DocblockParser::PARAM_TYPE,
             ], '');
 
             if (isset($result['params']['$' . $varNode->name])) {

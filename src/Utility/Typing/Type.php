@@ -54,7 +54,7 @@ class Type
             SpecialTypeString::ARRAY_,
             SpecialTypeString::VOID_,
             SpecialTypeString::CALLABLE_,
-            SpecialTypeString::ITERABLE_
+            SpecialTypeString::ITERABLE_,
         ], true);
 
         return $isReservedKeyword ? new SpecialType($type) : new ClassType($type);

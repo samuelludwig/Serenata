@@ -26,7 +26,7 @@ abstract class AbstractConverter
                 $types[] = [
                     'type'         => $type->toString(),
                     'fqcn'         => $type->toString(),
-                    'resolvedType' => $type->toString()
+                    'resolvedType' => $type->toString(),
                 ];
             }
 

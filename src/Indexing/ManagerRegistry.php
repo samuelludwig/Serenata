@@ -61,10 +61,10 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
         parent::__construct(
             'managerRegistry',
             [
-                'default' => 'defaultConnection'
+                'default' => 'defaultConnection',
             ],
             [
-                'default' => 'defaultEntityManager'
+                'default' => 'defaultEntityManager',
             ],
             'default',
             'default',

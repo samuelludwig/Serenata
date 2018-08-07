@@ -4,6 +4,8 @@ namespace Serenata\UserInterface\Command;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
+use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
@@ -23,13 +25,13 @@ trait ParserAwareTrait
      *
      * @throws UnexpectedValueException
      *
-     * @return \PhpParser\Node[]
+     * @return Node[]
      */
     private function parse(string $code, ?ErrorHandler $errorHandler = null): array
     {
         try {
             $nodes = $this->parser->parse($code, $errorHandler);
-        } catch (\PhpParser\Error $e) {
+        } catch (Error $e) {
             throw new UnexpectedValueException('Parsing the file failed!');
         }
 

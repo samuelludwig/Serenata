@@ -7,5 +7,4 @@ namespace Serenata\Refactoring;
  */
 class UseStatementUnnecessaryException extends UseStatementInsertionCreationException
 {
-
 }

@@ -10,7 +10,6 @@ use Serenata\Analysis\Node\NameNodeFqsenDeterminer;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\Structures;
 
 use PhpParser\Node;
 

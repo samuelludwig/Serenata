@@ -142,7 +142,7 @@ final class Indexer implements EventEmitterInterface
         // This request will not be queued for file reindex requests that are the result of the demuxing as those
         // don't have an originating request ID.
         $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoResponse', [
-            'response' => new JsonRpcResponse($originatingRequestId, true)
+            'response' => new JsonRpcResponse($originatingRequestId, true),
         ]);
 
         $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));

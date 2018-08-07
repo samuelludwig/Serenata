@@ -44,7 +44,7 @@ final class CachingParser implements Parser
     /**
      * @inheritDoc
      */
-    public function parse(string $code, ErrorHandler $errorHandler = null)
+    public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
         if (!$errorHandler instanceof ErrorHandler\Collecting) {
             // Throwing error handlers need to throw on every call, if we cache the result, throws won't happen anymore

@@ -3,6 +3,7 @@
 namespace Serenata\Indexing\Iterating;
 
 use Iterator;
+use SplFileInfo;
 use FilterIterator;
 
 /**
@@ -32,7 +33,7 @@ final class ExclusionFilterIterator extends FilterIterator
      */
     public function accept()
     {
-        /** @var \SplFileInfo $value */
+        /** @var SplFileInfo $value */
         $value = $this->current();
 
         $path = $value->getPathname();
