@@ -148,7 +148,6 @@ services:
     functionLikeParameterTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer
         arguments:
-            - '@nodeTypeDeducer'
             - '@typeAnalyzer'
             - '@docblockParser'
 

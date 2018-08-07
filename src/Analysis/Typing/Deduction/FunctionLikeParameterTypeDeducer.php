@@ -16,11 +16,6 @@ use Serenata\Utility\NodeHelpers;
 final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var NodeTypeDeducerInterface
-     */
-    private $nodeTypeDeducer;
-
-    /**
      * @var TypeAnalyzer
      */
     private $typeAnalyzer;
@@ -36,16 +31,11 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     private $functionDocblock;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param TypeAnalyzer             $typeAnalyzer
-     * @param DocblockParser           $docblockParser
+     * @param TypeAnalyzer   $typeAnalyzer
+     * @param DocblockParser $docblockParser
      */
-    public function __construct(
-        NodeTypeDeducerInterface $nodeTypeDeducer,
-        TypeAnalyzer $typeAnalyzer,
-        DocblockParser $docblockParser
-    ) {
-        $this->nodeTypeDeducer = $nodeTypeDeducer;
+    public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
+    {
         $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockParser = $docblockParser;
     }
