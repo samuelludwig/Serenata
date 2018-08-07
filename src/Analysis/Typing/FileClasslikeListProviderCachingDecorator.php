@@ -14,7 +14,7 @@ final class FileClasslikeListProviderCachingDecorator implements FileClasslikeLi
     /**
      * @var FileClasslikeListProviderInterface
      */
-    private $classlikeClassListProviderInterface;
+    private $fileClasslikeListProviderInterface;
 
     /**
      * @var array
