@@ -14,7 +14,6 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
-
 use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
 use Serenata\Refactoring\UseStatementInsertionCreator;
