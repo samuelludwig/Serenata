@@ -16,8 +16,6 @@ use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterfa
 
 use Serenata\Parsing;
 
-use Serenata\Parsing\DocblockParser;
-
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
@@ -29,11 +27,6 @@ use Serenata\Utility\TextDocumentItem;
  */
 class LocalTypeScanner
 {
-    /**
-     * @var DocblockParser
-     */
-    private $docblockParser;
-
     /**
      * @var StructureAwareNameResolverFactoryInterface
      */
@@ -65,7 +58,6 @@ class LocalTypeScanner
     private $expressionLocalTypeAnalyzer;
 
     /**
-     * @param DocblockParser                             $docblockParser
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFacotry
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
@@ -74,7 +66,6 @@ class LocalTypeScanner
      * @param ExpressionLocalTypeAnalyzer                $expressionLocalTypeAnalyzer
      */
     public function __construct(
-        DocblockParser $docblockParser,
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFacotry,
         TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
@@ -82,7 +73,6 @@ class LocalTypeScanner
         FunctionLikeParameterTypeDeducer $functionLikeParameterTypeDeducer,
         ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer
     ) {
-        $this->docblockParser = $docblockParser;
         $this->structureAwareNameResolverFacotry = $structureAwareNameResolverFacotry;
         $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;

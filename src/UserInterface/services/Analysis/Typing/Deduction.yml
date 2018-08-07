@@ -12,7 +12,6 @@ services:
     localTypeScanner:
         class: Serenata\Analysis\Typing\Deduction\LocalTypeScanner
         arguments:
-            - '@docblockParser'
             - '@structureAwareNameResolverFactory'
             - '@typeAnalyzer'
             - '@nodeTypeDeducer'
