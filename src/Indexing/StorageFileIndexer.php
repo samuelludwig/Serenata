@@ -63,11 +63,6 @@ final class StorageFileIndexer implements FileIndexerInterface
     private $nodeTypeDeducer;
 
     /**
-     * @var array
-     */
-    private $accessModifierMap;
-
-    /**
      * @var DocblockTypeParserInterface
      */
     private $docblockTypeParser;
