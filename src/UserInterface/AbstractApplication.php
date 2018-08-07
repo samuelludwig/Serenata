@@ -21,13 +21,6 @@ abstract class AbstractApplication
     private $container;
 
     /**
-     * The path to the database to use.
-     *
-     * @var string
-     */
-    private $databaseFile;
-
-    /**
      * @return ContainerBuilder
      */
     protected function getContainer(): ContainerBuilder
