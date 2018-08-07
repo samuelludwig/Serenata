@@ -14,8 +14,6 @@ use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Common\Position;
 
-use Serenata\Parsing\ParserTokenHelper;
-
 use Serenata\PrettyPrinting\FunctionParameterPrettyPrinter;
 
 use Serenata\Utility\NodeHelpers;
@@ -31,11 +29,6 @@ class SignatureHelpRetriever
      * @var NodeAtOffsetLocatorInterface
      */
     private $nodeAtOffsetLocator;
-
-    /**
-     * @var ParserTokenHelper
-     */
-    private $parserTokenHelper;
 
     /**
      * @var FunctionFunctionInfoRetriever
@@ -54,20 +47,17 @@ class SignatureHelpRetriever
 
     /**
      * @param NodeAtOffsetLocatorInterface   $nodeAtOffsetLocator
-     * @param ParserTokenHelper              $parserTokenHelper
      * @param FunctionFunctionInfoRetriever  $functionFunctionInfoRetriever
      * @param MethodCallMethodInfoRetriever  $methodCallMethodInfoRetriever
      * @param FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
      */
     public function __construct(
         NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
-        ParserTokenHelper $parserTokenHelper,
         FunctionFunctionInfoRetriever $functionFunctionInfoRetriever,
         MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever,
         FunctionParameterPrettyPrinter $functionParameterPrettyPrinter
     ) {
         $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
-        $this->parserTokenHelper = $parserTokenHelper;
         $this->functionFunctionInfoRetriever = $functionFunctionInfoRetriever;
         $this->methodCallMethodInfoRetriever = $methodCallMethodInfoRetriever;
         $this->functionParameterPrettyPrinter = $functionParameterPrettyPrinter;
