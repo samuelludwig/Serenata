@@ -14,11 +14,6 @@ use Serenata\Indexing\StorageInterface;
 class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
 {
     /**
-     * @var Conversion\ConstantConverter
-     */
-    private $constantConverter;
-
-    /**
      * @var Conversion\ClasslikeConstantConverter
      */
     private $classlikeConstantConverter;
@@ -27,11 +22,6 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
      * @var Conversion\PropertyConverter
      */
     private $propertyConverter;
-
-    /**
-     * @var Conversion\FunctionConverter
-     */
-    private $functionConverter;
 
     /**
      * @var Conversion\MethodConverter
@@ -74,10 +64,8 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
     private $resolutionStack = [];
 
     /**
-     * @param Conversion\ConstantConverter              $constantConverter
      * @param Conversion\ClasslikeConstantConverter     $classlikeConstantConverter
      * @param Conversion\PropertyConverter              $propertyConverter
-     * @param Conversion\FunctionConverter              $functionConverter
      * @param Conversion\MethodConverter                $methodConverter
      * @param Conversion\ClasslikeConverter             $classlikeConverter
      * @param Relations\InheritanceResolver             $inheritanceResolver
@@ -87,10 +75,8 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
      * @param Typing\TypeAnalyzer                       $typeAnalyzer
      */
     public function __construct(
-        Conversion\ConstantConverter $constantConverter,
         Conversion\ClasslikeConstantConverter $classlikeConstantConverter,
         Conversion\PropertyConverter $propertyConverter,
-        Conversion\FunctionConverter $functionConverter,
         Conversion\MethodConverter $methodConverter,
         Conversion\ClasslikeConverter $classlikeConverter,
         Relations\InheritanceResolver $inheritanceResolver,
@@ -99,10 +85,8 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
         StorageInterface $storage,
         Typing\TypeAnalyzer $typeAnalyzer
     ) {
-        $this->constantConverter = $constantConverter;
         $this->classlikeConstantConverter = $classlikeConstantConverter;
         $this->propertyConverter = $propertyConverter;
-        $this->functionConverter = $functionConverter;
         $this->methodConverter = $methodConverter;
         $this->classlikeConverter = $classlikeConverter;
 

@@ -242,10 +242,8 @@ services:
     classlikeInfoBuilder:
         class: Serenata\Analysis\ClasslikeInfoBuilder
         arguments:
-            - '@constantConverter'
             - '@classlikeConstantConverter'
             - '@propertyConverter'
-            - '@functionConverter'
             - '@methodConverter'
             - '@classlikeConverter'
             - '@inheritanceResolver'
