@@ -5,6 +5,11 @@ namespace Serenata\Tests\Integration\Autocompletion\Providers;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextEdit;
+
 class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
@@ -15,10 +20,25 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $output = $this->provide('Namespace.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
-                'returnTypes'  => 'namespace',
-                'prefix'       => 'F'
-            ], [], false)
+            new AutocompletionSuggestion(
+                'Foo',
+                SuggestionKind::IMPORT,
+                'Foo',
+                new TextEdit(
+                    new Range(
+                        new Position(7, 0),
+                        new Position(7, 1)
+                    ),
+                    'Foo'
+                ),
+                'Foo',
+                null,
+                [
+                    'returnTypes'  => 'namespace',
+                ],
+                [],
+                false
+            )
         ];
 
         static::assertEquals($suggestions, $output);
@@ -42,10 +62,25 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $output = $this->provide('Namespaces.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('Foo', SuggestionKind::IMPORT, 'Foo', null, 'Foo', null, [
-                'returnTypes'  => 'namespace',
-                'prefix'       => 'F'
-            ], [], false)
+            new AutocompletionSuggestion(
+                'Foo',
+                SuggestionKind::IMPORT,
+                'Foo',
+                new TextEdit(
+                    new Range(
+                        new Position(12, 0),
+                        new Position(12, 1)
+                    ),
+                    'Foo'
+                ),
+                'Foo',
+                null,
+                [
+                    'returnTypes'  => 'namespace',
+                ],
+                [],
+                false
+            )
         ];
 
         static::assertEquals($suggestions, $output);

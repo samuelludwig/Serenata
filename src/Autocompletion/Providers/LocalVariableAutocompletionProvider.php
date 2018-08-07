@@ -97,8 +97,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             $variable['name'],
             null,
             [
-                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($typeArray),
-                'prefix'       => $context->getPrefix(),
+                'returnTypes' => $this->autocompletionSuggestionTypeFormatter->format($typeArray),
             ],
             [],
             false

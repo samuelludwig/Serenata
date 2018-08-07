@@ -5,6 +5,11 @@ namespace Serenata\Tests\Integration\Autocompletion\Providers;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextEdit;
+
 class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
@@ -17,19 +22,36 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::PROPERTY, 'foo', null, 'foo', null, [
-                'protectionLevel'    => 'public',
-                'declaringStructure' => [
-                    'fqcn'            => '\A',
-                    'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 3,
-                    'endLine'         => 9,
-                    'type'            => 'class',
-                    'startLineMember' => 8,
-                    'endLineMember'   => 8,
+            new AutocompletionSuggestion(
+                'foo',
+                SuggestionKind::PROPERTY,
+                'foo',
+                new TextEdit(
+                    new Range(
+                        new Position(11, 4),
+                        new Position(11, 4)
+                    ),
+                    'foo'
+                ),
+                'foo',
+                null,
+                [
+                    'protectionLevel'    => 'public',
+                    'declaringStructure' => [
+                        'fqcn'            => '\A',
+                        'filename'        => $this->getPathFor($fileName),
+                        'startLine'       => 3,
+                        'endLine'         => 9,
+                        'type'            => 'class',
+                        'startLineMember' => 8,
+                        'endLineMember'   => 8,
+                    ],
+                    'returnTypes'        => 'int|string',
                 ],
-                'returnTypes'        => 'int|string'
-            ], [], false, 'A')
+                [],
+                false,
+                'A'
+            )
         ];
 
         static::assertEquals($suggestions, $output);
@@ -45,19 +67,36 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion('foo', SuggestionKind::PROPERTY, 'foo', null, 'foo', null, [
-                'protectionLevel'    => 'public',
-                'declaringStructure' => [
-                        'fqcn'            => '\A',
-                        'filename'        => $this->getPathFor($fileName),
-                        'startLine'       => 3,
-                        'endLine'         => 9,
-                        'type'            => 'class',
-                        'startLineMember' => 8,
-                        'endLineMember'   => 8,
-                    ],
-                'returnTypes'        => 'mixed'
-            ], [], true, 'A')
+            new AutocompletionSuggestion(
+                'foo',
+                SuggestionKind::PROPERTY,
+                'foo',
+                new TextEdit(
+                    new Range(
+                        new Position(11, 4),
+                        new Position(11, 4)
+                    ),
+                    'foo'
+                ),
+                'foo',
+                null,
+                [
+                    'protectionLevel'    => 'public',
+                    'declaringStructure' => [
+                            'fqcn'            => '\A',
+                            'filename'        => $this->getPathFor($fileName),
+                            'startLine'       => 3,
+                            'endLine'         => 9,
+                            'type'            => 'class',
+                            'startLineMember' => 8,
+                            'endLineMember'   => 8,
+                        ],
+                    'returnTypes'        => 'mixed',
+                ],
+                [],
+                true,
+                'A'
+            )
         ];
 
         static::assertEquals($suggestions, $output);

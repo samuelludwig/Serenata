@@ -32,7 +32,6 @@ class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProvid
                 'PHP docblock tag',
                 [
                     'returnTypes'  => '',
-                    'prefix'       => '@'
                 ],
                 [],
                 false

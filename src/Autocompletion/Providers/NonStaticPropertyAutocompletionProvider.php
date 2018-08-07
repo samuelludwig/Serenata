@@ -15,6 +15,8 @@ use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
+use Serenata\Utility\TextEdit;
+
 
 /**
  * Provides non-static member property autocompletion suggestions at a specific location in a file.
@@ -74,36 +76,40 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
-            yield from $this->createSuggestionsForClasslikeInfo($classlikeInfoElement);
+            yield from $this->createSuggestionsForClasslikeInfo($classlikeInfoElement, $context);
         }
     }
 
     /**
-     * @param array $classlikeInfo
+     * @param array                         $classlikeInfo
+     * @param AutocompletionProviderContext $context
      *
      * @return Generator
      */
-    private function createSuggestionsForClasslikeInfo(array $classlikeInfo): Generator
-    {
+    private function createSuggestionsForClasslikeInfo(
+        array $classlikeInfo,
+        AutocompletionProviderContext $context
+    ): Generator {
         foreach ($classlikeInfo['properties'] as $property) {
             if (!$property['isStatic']) {
-                yield $this->createSuggestion($property);
+                yield $this->createSuggestion($property, $context);
             }
         }
     }
 
     /**
-     * @param array $property
+     * @param array                         $property
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $property): AutocompletionSuggestion
+    private function createSuggestion(array $property, AutocompletionProviderContext $context): AutocompletionSuggestion
     {
         return new AutocompletionSuggestion(
             $property['name'],
             SuggestionKind::PROPERTY,
             $property['name'],
-            null,
+            $this->getTextEditForSuggestion($property, $context),
             $property['name'],
             $property['shortDescription'],
             [
@@ -116,6 +122,24 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
             $property['isDeprecated'],
             array_slice(explode('\\', $property['declaringStructure']['fqcn']), -1)[0]
         );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array                         $property
+     * @param AutocompletionProviderContext $context
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(array $property, AutocompletionProviderContext $context): TextEdit
+    {
+        return new TextEdit($context->getPrefixRange(), $property['name']);
     }
 
     /**

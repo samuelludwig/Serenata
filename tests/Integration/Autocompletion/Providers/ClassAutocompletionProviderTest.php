@@ -34,7 +34,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => 'F'
                 ],
                 [],
                 false
@@ -64,7 +63,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => 'F'
                 ],
                 [],
                 true
@@ -94,7 +92,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => '\F'
                 ],
                 [],
                 false
@@ -124,7 +121,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => 'F'
                 ],
                 [
                     new TextEdit(
@@ -159,7 +155,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                    'prefix'       => 'Foo\Bar'
                 ],
                 [],
                 false

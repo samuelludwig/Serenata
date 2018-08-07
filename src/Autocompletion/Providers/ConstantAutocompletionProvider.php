@@ -11,6 +11,8 @@ use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
+use Serenata\Utility\TextEdit;
+
 /**
  * Provides constant autocompletion suggestions at a specific location in a file.
  */
@@ -59,6 +61,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
      */
     public function provide(AutocompletionProviderContext $context): iterable
     {
+        /** @var array[] $bestApproximations */
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $this->constantListProvider->getAll(),
             $context->getPrefix(),
@@ -67,22 +70,23 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
         );
 
         foreach ($bestApproximations as $constant) {
-            yield $this->createSuggestion($constant);
+            yield $this->createSuggestion($constant, $context);
         }
     }
 
     /**
-     * @param array $constant
+     * @param array                         $constant
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $constant): AutocompletionSuggestion
+    private function createSuggestion(array $constant, AutocompletionProviderContext $context): AutocompletionSuggestion
     {
         return new AutocompletionSuggestion(
             $constant['name'],
             SuggestionKind::CONSTANT,
             $constant['name'],
-            null,
+            $this->getTextEditForSuggestion($constant, $context),
             $constant['name'],
             $constant['shortDescription'],
             [
@@ -91,5 +95,23 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             [],
             $constant['isDeprecated']
         );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array                         $constant
+     * @param AutocompletionProviderContext $context
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(array $constant, AutocompletionProviderContext $context): TextEdit
+    {
+        return new TextEdit($context->getPrefixRange(), $constant['name']);
     }
 }

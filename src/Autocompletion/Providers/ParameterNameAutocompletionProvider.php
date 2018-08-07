@@ -153,9 +153,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             $this->getTextEditForSuggestion($name, $context),
             $name,
             null,
-            [
-                'prefix' => $context->getPrefix(),
-            ],
+            [],
             [],
             false
         );

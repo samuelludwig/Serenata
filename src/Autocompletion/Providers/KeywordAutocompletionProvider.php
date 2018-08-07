@@ -5,6 +5,8 @@ namespace Serenata\Autocompletion\Providers;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
+use Serenata\Utility\TextEdit;
+
 
 /**
  * Provides keyword autocompletion suggestions at a specific location in a file.
@@ -22,22 +24,23 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
     public function provide(AutocompletionProviderContext $context): iterable
     {
         foreach ($this->getKeywords() as $keyword) {
-            yield $this->createSuggestion($keyword);
+            yield $this->createSuggestion($keyword, $context);
         }
     }
 
     /**
-     * @param array $keyword
+     * @param array                         $keyword
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $keyword): AutocompletionSuggestion
+    private function createSuggestion(array $keyword, AutocompletionProviderContext $context): AutocompletionSuggestion
     {
         return new AutocompletionSuggestion(
             $keyword['name'],
             SuggestionKind::KEYWORD,
             $keyword['name'],
-            null,
+            $this->getTextEditForSuggestion($keyword, $context),
             $keyword['name'],
             'PHP keyword',
             [
@@ -46,6 +49,24 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             [],
             false
         );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array                         $keyword
+     * @param AutocompletionProviderContext $context
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(array $keyword, AutocompletionProviderContext $context): TextEdit
+    {
+        return new TextEdit($context->getPrefixRange(), $keyword['name']);
     }
 
     /**

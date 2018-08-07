@@ -5,6 +5,11 @@ namespace Serenata\Tests\Integration\Autocompletion\Providers;
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextEdit;
+
 class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
@@ -15,9 +20,25 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Constants.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
-                'returnTypes'  => 'int|string'
-            ], [], false)
+            new AutocompletionSuggestion(
+                'FOO',
+                SuggestionKind::CONSTANT,
+                'FOO',
+                new TextEdit(
+                    new Range(
+                        new Position(7, 0),
+                        new Position(7, 1)
+                    ),
+                    'FOO'
+                ),
+                'FOO',
+                null,
+                [
+                    'returnTypes'  => 'int|string'
+                ],
+                [],
+                false
+            )
         ];
 
         static::assertEquals($suggestions, $output);
@@ -31,9 +52,25 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedConstant.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion('FOO', SuggestionKind::CONSTANT, 'FOO', null, 'FOO', null, [
-                'returnTypes'  => 'int'
-            ], [], true)
+            new AutocompletionSuggestion(
+                'FOO',
+                SuggestionKind::CONSTANT,
+                'FOO',
+                new TextEdit(
+                    new Range(
+                        new Position(7, 0),
+                        new Position(7, 1)
+                    ),
+                    'FOO'
+                ),
+                'FOO',
+                null,
+                [
+                    'returnTypes'  => 'int'
+                ],
+                [],
+                true
+            )
         ];
 
         static::assertEquals($suggestions, $output);

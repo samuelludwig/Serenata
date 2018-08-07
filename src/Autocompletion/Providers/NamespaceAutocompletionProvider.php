@@ -9,6 +9,8 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
+use Serenata\Utility\TextEdit;
+
 
 /**
  * Provides namespace autocompletion suggestions at a specific location in a file.
@@ -75,17 +77,17 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
         );
 
         foreach ($bestApproximations as $namespace) {
-            yield $this->createSuggestion($namespace, $context->getPrefix());
+            yield $this->createSuggestion($namespace, $context);
         }
     }
 
     /**
-     * @param array $namespace
-     * @param string $prefix
+     * @param array                         $namespace
+     * @param AutocompletionProviderContext $context
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $namespace, string $prefix): AutocompletionSuggestion
+    private function createSuggestion(array $namespace, AutocompletionProviderContext $context): AutocompletionSuggestion
     {
         $fqcnWithoutLeadingSlash = $namespace['name'];
 
@@ -97,15 +99,32 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             $fqcnWithoutLeadingSlash,
             SuggestionKind::IMPORT,
             $namespace['name'],
-            null,
+            $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,
             null,
             [
                 'returnTypes'  => 'namespace',
-                'prefix'       => $prefix,
             ],
             [],
             false
         );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array                         $namespace
+     * @param AutocompletionProviderContext $context
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(array $namespace, AutocompletionProviderContext $context): TextEdit
+    {
+        return new TextEdit($context->getPrefixRange(), $namespace['name']);
     }
 }

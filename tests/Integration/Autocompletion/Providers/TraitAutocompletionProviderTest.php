@@ -34,7 +34,6 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::TRAIT_,
-                    'prefix'       => 'F'
                 ],
                 [],
                 false

@@ -110,7 +110,6 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
             $classlike['shortDescription'],
             [
                 'returnTypes'  => $classlike['type'],
-                'prefix'       => $context->getPrefix(),
             ],
             $this->createAdditionalTextEditsForSuggestion($classlike, $context),
             $classlike['isDeprecated']

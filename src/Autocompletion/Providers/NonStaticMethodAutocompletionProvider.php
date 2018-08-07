@@ -18,6 +18,8 @@ use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
+use Serenata\Utility\TextEdit;
+
 
 /**
  * Provides non-static member method autocompletion suggestions at a specific location in a file.
@@ -109,53 +111,48 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
             yield from $this->createSuggestionsForClasslikeInfo(
                 $classlikeInfoElement,
+                $context,
                 $shouldIncludeParanthesesInInsertText
             );
         }
     }
 
     /**
-     * @param array $classlikeInfo
-     * @param bool  $shouldIncludeParanthesesInInsertText
+     * @param array                         $classlikeInfo
+     * @param AutocompletionProviderContext $context
+     * @param bool                          $shouldIncludeParanthesesInInsertText
      *
      * @return Generator
      */
     private function createSuggestionsForClasslikeInfo(
         array $classlikeInfo,
+        AutocompletionProviderContext $context,
         bool $shouldIncludeParanthesesInInsertText
     ): Generator {
         foreach ($classlikeInfo['methods'] as $method) {
             if (!$method['isStatic']) {
-                yield $this->createSuggestion($method, $shouldIncludeParanthesesInInsertText);
+                yield $this->createSuggestion($method, $context, $shouldIncludeParanthesesInInsertText);
             }
         }
     }
 
     /**
-     * @param array $method
-     * @param bool  $shouldIncludeParanthesesInInsertText
+     * @param array                         $method
+     * @param AutocompletionProviderContext $context
+     * @param bool                          $shouldIncludeParanthesesInInsertText
      *
      * @return AutocompletionSuggestion
      */
     private function createSuggestion(
         array $method,
+        AutocompletionProviderContext $context,
         bool $shouldIncludeParanthesesInInsertText
     ): AutocompletionSuggestion {
-        $insertText = $method['name'];
-
-        if ($shouldIncludeParanthesesInInsertText) {
-            if ($this->functionParametersEvaluator->hasRequiredParameters($method)) {
-                $insertText .= '($0)';
-            } else {
-                $insertText .= '()$0';
-            }
-        }
-
         return new AutocompletionSuggestion(
             $method['name'],
             SuggestionKind::METHOD,
-            $insertText,
-            null,
+            $this->getInsertTextForSuggestion($method, $shouldIncludeParanthesesInInsertText),
+            $this->getTextEditForSuggestion($method, $context, $shouldIncludeParanthesesInInsertText),
             $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
             [
@@ -168,6 +165,52 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             $method['isDeprecated'],
             array_slice(explode('\\', $method['declaringStructure']['fqcn']), -1)[0]
         );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array                         $method
+     * @param AutocompletionProviderContext $context
+     * @param bool                          $shouldIncludeParanthesesInInsertText
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(
+        array $method,
+        AutocompletionProviderContext $context,
+        bool $shouldIncludeParanthesesInInsertText
+    ): TextEdit {
+        return new TextEdit(
+            $context->getPrefixRange(),
+            $this->getInsertTextForSuggestion($method, $shouldIncludeParanthesesInInsertText)
+        );
+    }
+
+    /**
+     * @param array $method
+     * @param bool  $shouldIncludeParanthesesInInsertText
+     *
+     * @return string
+     */
+    private function getInsertTextForSuggestion(array $method, bool $shouldIncludeParanthesesInInsertText): string
+    {
+        $insertText = $method['name'];
+
+        if ($shouldIncludeParanthesesInInsertText) {
+            if ($this->functionParametersEvaluator->hasRequiredParameters($method)) {
+                $insertText .= '($0)';
+            } else {
+                $insertText .= '()$0';
+            }
+        }
+
+        return $insertText;
     }
 
     /**

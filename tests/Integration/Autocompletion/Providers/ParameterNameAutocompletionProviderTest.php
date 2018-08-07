@@ -40,9 +40,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$int',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             )
         ];
 
@@ -67,9 +65,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$someClasslike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -82,9 +78,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$some',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             )
         ];
 
@@ -109,9 +103,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$someClasslike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -124,9 +116,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$some',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -139,9 +129,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$classlike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             )
         ];
 
@@ -166,9 +154,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$someClasslike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -181,9 +167,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$some',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -196,9 +180,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$classlike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             )
         ];
 
@@ -223,9 +205,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$someClasslikeType',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -238,9 +218,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$someClasslike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -253,9 +231,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$classlikeType',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             ),
 
             new AutocompletionSuggestion(
@@ -268,9 +244,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$classlike',
                 null,
-                [
-                    'prefix' => '$p'
-                ]
+                []
             )
         ];
 

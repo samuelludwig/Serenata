@@ -34,7 +34,6 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 null,
                 [
                     'returnTypes'  => ClasslikeTypeNameValue::INTERFACE_,
-                    'prefix'       => 'F'
                 ],
                 [],
                 false

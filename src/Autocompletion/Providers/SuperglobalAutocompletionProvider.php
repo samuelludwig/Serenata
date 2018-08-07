@@ -41,10 +41,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             $superGlobal['name'],
             SuggestionKind::VARIABLE,
             $superGlobal['name'],
-            new TextEdit(
-                $context->getPrefixRange(),
-                $superGlobal['name']
-            ),
+            $this->getTextEditForSuggestion($superGlobal, $context),
             $superGlobal['name'],
             'PHP superglobal',
             [
@@ -53,6 +50,24 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             [],
             false
         );
+    }
+
+    /**
+     * Generate a {@see TextEdit} for the suggestion.
+     *
+     * Some clients automatically determine the prefix to replace on their end (e.g. Atom) and just paste the insertText
+     * we send back over this prefix. This prefix sometimes differs from what we see as prefix as the namespace
+     * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
+     * ensures that the entire prefix is replaced along with the insertion.
+     *
+     * @param array                         $superGlobal
+     * @param AutocompletionProviderContext $context
+     *
+     * @return TextEdit
+     */
+    private function getTextEditForSuggestion(array $superGlobal, AutocompletionProviderContext $context): TextEdit
+    {
+        return new TextEdit($context->getPrefixRange(), $superGlobal['name']);
     }
 
     /**

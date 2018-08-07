@@ -66,7 +66,6 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
             'PHP docblock tag',
             [
                 'returnTypes'  => '',
-                'prefix'       => $prefixOverride,
             ],
             [],
             false
