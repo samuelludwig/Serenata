@@ -216,7 +216,7 @@ class TooltipProvider
      * @param TextDocumentItem   $textDocumentItem
      * @param Position           $position
      *
-     * @throws unexpectedValueException
+     * @throws UnexpectedValueException
      *
      * @return string
      */
