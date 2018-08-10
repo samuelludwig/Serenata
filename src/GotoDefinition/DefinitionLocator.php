@@ -107,10 +107,7 @@ class DefinitionLocator
     public function locate(TextDocumentItem $textDocumentItem, Position $position): ?GotoDefinitionResult
     {
         try {
-            $node = $this->getNodeAt(
-                $textDocumentItem->getText(),
-                $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
-            );
+            $node = $this->getNodeAt($textDocumentItem, $position);
 
             return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $textDocumentItem, $position);
         } catch (UnexpectedValueException $e) {
@@ -119,22 +116,24 @@ class DefinitionLocator
     }
 
     /**
-     * @param string $code
-     * @param int    $position
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @throws UnexpectedValueException
      *
      * @return Node
      */
-    private function getNodeAt(string $code, int $position): Node
+    private function getNodeAt(TextDocumentItem $textDocumentItem, Position $position): Node
     {
-        $result = $this->nodeAtOffsetLocator->locate($code, $position);
+        $result = $this->nodeAtOffsetLocator->locate($textDocumentItem, $position);
 
         $node = $result->getNode();
         $nearestInterestingNode = $result->getNearestInterestingNode();
 
         if (!$node) {
-            throw new UnexpectedValueException('No node found at location ' . $position);
+            throw new UnexpectedValueException(
+                'No node found at location ' . $position->getLine() . ':' . $position->getCharacter()
+            );
         }
 
         if ($nearestInterestingNode instanceof Node\Expr\FuncCall ||

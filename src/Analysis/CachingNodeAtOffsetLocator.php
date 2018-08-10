@@ -2,6 +2,10 @@
 
 namespace Serenata\Analysis;
 
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Caching locator that delegates to another object and caches the result.
  */
@@ -28,12 +32,12 @@ class CachingNodeAtOffsetLocator implements NodeAtOffsetLocatorInterface, Cleara
     /**
      * @inheritDoc
      */
-    public function locate(string $code, int $position): NodeAtOffsetLocatorResult
+    public function locate(TextDocumentItem $textDocumentItem, Position $position): NodeAtOffsetLocatorResult
     {
-        $cacheKey = md5($code) . '_' . $position;
+        $cacheKey = md5($textDocumentItem->getText()) . '_' . $position->getLine() . '_' . $position->getCharacter();
 
         if (!isset($this->cache[$cacheKey])) {
-            $this->cache[$cacheKey] = $this->delegate->locate($code, $position);
+            $this->cache[$cacheKey] = $this->delegate->locate($textDocumentItem, $position);
         }
 
         return $this->cache[$cacheKey];

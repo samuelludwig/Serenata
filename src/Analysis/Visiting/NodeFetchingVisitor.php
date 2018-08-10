@@ -7,6 +7,11 @@ use PhpParser\Comment;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
+use Serenata\Common\Position;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Visitor that retrieves the node at a specific location.
  */
@@ -33,13 +38,12 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     private $comment;
 
     /**
-     * Constructor.
-     *
-     * @param int $byteOffset
+     * @param TextDocumentItem $textDocument
+     * @param Position          $position
      */
-    public function __construct(int $byteOffset)
+    public function __construct(TextDocumentItem $textDocument, Position $position)
     {
-        $this->byteOffset = $byteOffset;
+        $this->byteOffset = $position->getAsByteOffsetInString($textDocument->getText(), PositionEncoding::VALUE);
     }
 
     /**

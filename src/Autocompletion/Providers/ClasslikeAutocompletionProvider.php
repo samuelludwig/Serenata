@@ -14,6 +14,8 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
 use Serenata\Refactoring\UseStatementInsertionCreator;
@@ -199,8 +201,8 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
             return [$this->useStatementInsertionCreator->create(
                 $nameToImport,
                 UseStatementKind::TYPE_CLASSLIKE,
-                $context->getTextDocumentItem()->getText(),
-                $context->getPositionAsByteOffset(),
+                $context->getTextDocumentItem(),
+                $context->getPosition(),
                 true
             )];
         } catch (UseStatementInsertionCreationException $e) {
@@ -218,10 +220,12 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         // The position the position is at may already be the start of another node. We're interested in what's just
         // before the position (usually the cursor), not what is "at" or "just to the right" of the cursor, hence the
         // -1.
-        $nodeAtOffset = $this->nodeAtOffsetLocator->locate(
-            $context->getTextDocumentItem()->getText(),
-            $context->getPositionAsByteOffset() - 1
+        $position = new Position(
+            $context->getPosition()->getLine(),
+            max($context->getPosition()->getCharacter() - 1, 0)
         );
+
+        $nodeAtOffset = $this->nodeAtOffsetLocator->locate($context->getTextDocumentItem(), $position);
 
         if ($nodeAtOffset->getNode() === null) {
             return false;

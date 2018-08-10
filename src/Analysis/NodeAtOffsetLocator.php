@@ -4,12 +4,16 @@ namespace Serenata\Analysis;
 
 use UnexpectedValueException;
 
-use Serenata\Analysis\Visiting\NodeFetchingVisitor;
-
 use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
+
+use Serenata\Analysis\Visiting\NodeFetchingVisitor;
+
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Locates the node at the specified offset in code.
@@ -32,17 +36,17 @@ class NodeAtOffsetLocator implements NodeAtOffsetLocatorInterface
     /**
      * @inheritDoc
      */
-    public function locate(string $code, int $position): NodeAtOffsetLocatorResult
+    public function locate(TextDocumentItem $textDocumentItem, Position $position): NodeAtOffsetLocatorResult
     {
         $nodes = [];
 
         try {
-            $nodes = $this->getNodesFromCode($code);
+            $nodes = $this->getNodesFromCode($textDocumentItem->getText());
         } catch (UnexpectedValueException $e) {
             return new NodeAtOffsetLocatorResult(null, null, null);
         }
 
-        $visitor = new NodeFetchingVisitor($position);
+        $visitor = new NodeFetchingVisitor($textDocumentItem, $position);
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($visitor);

@@ -8,6 +8,8 @@ use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Autocompletion\ApplicabilityChecking\AutocompletionApplicabilityCheckerInterface;
 
+use Serenata\Common\Position;
+
 /**
  * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,
  * delegates to another provider.
@@ -57,8 +59,6 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
      */
     public function provide(AutocompletionProviderContext $context): iterable
     {
-        $offset = $context->getPositionAsByteOffset();
-
         $prefix = $this->autocompletionPrefixDeterminer->determine(
             $context->getTextDocumentItem()->getText(),
             $context->getPosition()
@@ -71,7 +71,12 @@ final class ApplicabilityCheckingAutocompletionProvider implements Autocompletio
         // The position the position is at may already be the start of another node. We're interested in what's just
         // before the position (usually the cursor), not what is "at" or "just to the right" of the cursor, hence the
         // -1.
-        $nodeResult = $this->nodeAtOffsetLocator->locate($context->getTextDocumentItem()->getText(), $offset - 1);
+        $position = new Position(
+            $context->getPosition()->getLine(),
+            max($context->getPosition()->getCharacter() - 1, 0)
+        );
+
+        $nodeResult = $this->nodeAtOffsetLocator->locate($context->getTextDocumentItem(), $position);
 
         return $this->autocompletionApplicabilityChecker->doesApplyTo($nodeResult) ?
             $this->delegate->provide($context) :

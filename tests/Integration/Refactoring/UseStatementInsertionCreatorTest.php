@@ -15,6 +15,8 @@ use Serenata\Refactoring\NonCompoundNameInAnonymousNamespaceException;
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\TextEdit;
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
 {
@@ -428,8 +430,8 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         return $container->get('useStatementInsertionCreator')->create(
             $name,
             $kind,
-            $code,
-            $markerOffset,
+            new TextDocumentItem($path, $code),
+            Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
             $allowAdditionalNewlines
         );
     }

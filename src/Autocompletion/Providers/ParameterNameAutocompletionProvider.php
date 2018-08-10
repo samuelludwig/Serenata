@@ -11,6 +11,8 @@ use Serenata\Autocompletion\AutocompletionSuggestion;
 
 
 
+use Serenata\Common\Position;
+
 use Serenata\Utility\TextEdit;
 
 /**
@@ -184,10 +186,12 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      */
     private function findParamNode(AutocompletionProviderContext $context): ?Node\Param
     {
-        $nodeResult = $this->nodeAtOffsetLocator->locate(
-            $context->getTextDocumentItem()->getText(),
-            $context->getPositionAsByteOffset() - 1
+        $position = new Position(
+            $context->getPosition()->getLine(),
+            max($context->getPosition()->getCharacter() - 1, 0)
         );
+
+        $nodeResult = $this->nodeAtOffsetLocator->locate($context->getTextDocumentItem(), $position);
 
         $node = $nodeResult->getNode();
 

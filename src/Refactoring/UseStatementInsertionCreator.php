@@ -17,6 +17,8 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Creates {@see TextEdit}s that insert use statements (imports).
@@ -54,11 +56,11 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $name
-     * @param string $kind                    {@see \Serenata\Analysis\Visiting\UseStatementKind}
-     * @param string $code
-     * @param bool   $allowAdditionalNewlines
-     * @param int    $position
+     * @param string           $name
+     * @param string           $kind                    {@see \Serenata\Analysis\Visiting\UseStatementKind}
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
+     * @param bool             $allowAdditionalNewlines
      *
      * @throws UseStatementAlreadyExistsException
      * @throws UseStatementInsertionCreationException
@@ -68,24 +70,32 @@ class UseStatementInsertionCreator
     public function create(
         string $name,
         string $kind,
-        string $code,
-        int $position,
+        TextDocumentItem $textDocumentItem,
+        Position $position,
         bool $allowAdditionalNewlines
     ): TextEdit {
         $normalizedName = $this->typeNormalizer->getNormalizedFqcn($name);
 
-        $this->enforceThatCreationIsPossibleAndNecessary($normalizedName, $kind, $code, $position);
+        $this->enforceThatCreationIsPossibleAndNecessary($normalizedName, $kind, $textDocumentItem, $position);
 
         $textToInsert = "use {$name};\n";
 
-        $line = $this->locateBestZeroIndexedLineForInsertion($normalizedName, $kind, $code, $position);
-        $shouldInsertBelowBestLine = $this->shouldInsertBelowLineOfBestMatch($normalizedName, $kind, $code, $position);
+        $line = $this->locateBestZeroIndexedLineForInsertion($normalizedName, $kind, $textDocumentItem, $position);
+
+        $shouldInsertBelowBestLine = $this->shouldInsertBelowLineOfBestMatch(
+            $normalizedName,
+            $kind,
+            $textDocumentItem,
+            $position
+        );
 
         if ($shouldInsertBelowBestLine) {
             ++$line;
         }
 
-        if ($allowAdditionalNewlines && $this->shouldAddAdditionalNewline($normalizedName, $kind, $code, $position)) {
+        if ($allowAdditionalNewlines &&
+            $this->shouldAddAdditionalNewline($normalizedName, $kind, $textDocumentItem, $position)
+        ) {
             if ($shouldInsertBelowBestLine) {
                 $textToInsert = "\n" . $textToInsert;
             } else {
@@ -100,24 +110,24 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $name
-     * @param string $kind
-     * @param string $code
-     * @param int    $position
+     * @param string           $name
+     * @param string           $kind
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      */
     private function enforceThatCreationIsPossibleAndNecessary(
         string $name,
         string $kind,
-        string $code,
-        int $position
+        TextDocumentItem $textDocumentItem,
+        Position $position
     ): void {
-        if ($this->isUseStatementAlreadyPresent($name, $kind, $code, $position)) {
+        if ($this->isUseStatementAlreadyPresent($name, $kind, $textDocumentItem, $position)) {
             throw new UseStatementAlreadyExistsException(
                 'Use statement for ' . $name . ' with kind ' . $kind . 'already exists'
             );
         }
 
-        $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
+        $namespaceNode = $this->locateActiveNamespaceAt($textDocumentItem, $position);
 
         if (mb_strpos($name, '\\', 1) === false && ($namespaceNode === null || $namespaceNode->name === null)) {
             throw new NonCompoundNameInAnonymousNamespaceException(
@@ -150,19 +160,23 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $name
-     * @param string $kind
-     * @param string $code
-     * @param int    $position
+     * @param string           $name
+     * @param string           $kind
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return int
      */
-    private function locateBestZeroIndexedLineForInsertion(string $name, string $kind, string $code, int $position): int
-    {
+    private function locateBestZeroIndexedLineForInsertion(
+        string $name,
+        string $kind,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): int {
         $bestLine = null;
         $previousMatchThatSharedNamespacePrefixLine = null;
 
-        foreach ($this->retrieveRelevantUseStatements($code, $position) as $useStatement) {
+        foreach ($this->retrieveRelevantUseStatements($textDocumentItem, $position) as $useStatement) {
             $bestLine = $useStatement->getEndLine();
 
             foreach ($useStatement->uses as $useUseNode) {
@@ -187,23 +201,27 @@ class UseStatementInsertionCreator
             return --$bestLine; // Make line zero-indexed.
         }
 
-        return $this->determineZeroIndexedFallbackLine($code, $position);
+        return $this->determineZeroIndexedFallbackLine($textDocumentItem, $position);
     }
 
     /**
-     * @param string $name
-     * @param string $kind
-     * @param string $code
-     * @param int    $position
+     * @param string           $name
+     * @param string           $kind
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return bool
      */
-    private function shouldAddAdditionalNewline(string $name, string $kind, string $code, int $position): bool
-    {
+    private function shouldAddAdditionalNewline(
+        string $name,
+        string $kind,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): bool {
         $addAdditionalNewline = true;
         $previousMatchThatSharedNamespacePrefixLine = null;
 
-        foreach ($this->retrieveRelevantUseStatements($code, $position) as $useStatement) {
+        foreach ($this->retrieveRelevantUseStatements($textDocumentItem, $position) as $useStatement) {
             $addAdditionalNewline = true;
 
             foreach ($useStatement->uses as $useUseNode) {
@@ -230,16 +248,20 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $name
-     * @param string $kind
-     * @param string $code
-     * @param int    $position
+     * @param string           $name
+     * @param string           $kind
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return bool
      */
-    private function shouldInsertBelowLineOfBestMatch(string $name, string $kind, string $code, int $position): bool
-    {
-        $useStatements = $this->retrieveRelevantUseStatements($code, $position);
+    private function shouldInsertBelowLineOfBestMatch(
+        string $name,
+        string $kind,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): bool {
+        $useStatements = $this->retrieveRelevantUseStatements($textDocumentItem, $position);
 
         foreach ($useStatements as $useStatement) {
             foreach ($useStatement->uses as $useUseNode) {
@@ -255,31 +277,31 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $code
-     * @param int    $position
+    * @param TextDocumentItem $textDocumentItem
+    * @param Position         $position
      *
      * @return (Node\Stmt\Use_|Node\Stmt\GroupUse)[]
      */
-    private function retrieveRelevantUseStatements(string $code, int $position): array
+    private function retrieveRelevantUseStatements(TextDocumentItem $textDocumentItem, Position $position): array
     {
-        $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
+        $namespaceNode = $this->locateActiveNamespaceAt($textDocumentItem, $position);
 
         if ($namespaceNode !== null) {
             return $this->collectUseStatementsFromNamespaceNode($namespaceNode);
         }
 
-        return $this->collectUseStatementsFromCode($code);
+        return $this->collectUseStatementsFromCode($textDocumentItem->getText());
     }
 
     /**
-     * @param string $code
-     * @param int    $position
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return int
      */
-    private function determineZeroIndexedFallbackLine(string $code, int $position): int
+    private function determineZeroIndexedFallbackLine(TextDocumentItem $textDocumentItem, Position $position): int
     {
-        $namespaceNode = $this->locateActiveNamespaceAt($code, $position);
+        $namespaceNode = $this->locateActiveNamespaceAt($textDocumentItem, $position);
 
         if ($namespaceNode !== null) {
             if ($namespaceNode->name !== null) {
@@ -289,7 +311,7 @@ class UseStatementInsertionCreator
             }
         }
 
-        $nodes = $this->getNodesFromCode($code);
+        $nodes = $this->getNodesFromCode($textDocumentItem->getText());
 
         if (!empty($nodes)) {
             return max($nodes[0]->getStartLine() - 1 - 1, 0);
@@ -299,16 +321,20 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $name
-     * @param string $kind
-     * @param string $code
-     * @param int    $position
+     * @param string           $name
+     * @param string           $kind
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return bool
      */
-    private function isUseStatementAlreadyPresent(string $name, string $kind, string $code, int $position): bool
-    {
-        $useStatements = $this->retrieveRelevantUseStatements($code, $position);
+    private function isUseStatementAlreadyPresent(
+        string $name,
+        string $kind,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): bool {
+        $useStatements = $this->retrieveRelevantUseStatements($textDocumentItem, $position);
 
         return !empty(array_filter($useStatements, function (Node\Stmt $useStatement) use ($name): bool {
             /** @var Node\Stmt\Use_|Node\Stmt\GroupUse $useStatement */
@@ -414,14 +440,16 @@ class UseStatementInsertionCreator
     }
 
     /**
-     * @param string $code
-     * @param int    $position
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return Node\Stmt\Namespace_|null
      */
-    private function locateActiveNamespaceAt(string $code, int $position): ?Node\Stmt\Namespace_
-    {
-        $result = $this->nodeAtOffsetLocator->locate($code, $position);
+    private function locateActiveNamespaceAt(
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ): ?Node\Stmt\Namespace_ {
+        $result = $this->nodeAtOffsetLocator->locate($textDocumentItem, $position);
 
         $node = $result->getNode();
 
@@ -440,7 +468,7 @@ class UseStatementInsertionCreator
         $nodes = [];
 
         try {
-            $nodes = $this->getNodesFromCode($code);
+            $nodes = $this->getNodesFromCode($textDocumentItem->getText());
         } catch (UnexpectedValueException $e) {
             throw new UseStatementInsertionCreationException(
                 'Could not parse code needed for use statement insertion creation',
@@ -453,7 +481,9 @@ class UseStatementInsertionCreator
             $endFilePos = $node->getAttribute('endFilePos');
             $startFilePos = $node->getAttribute('startFilePos');
 
-            if ($startFilePos > $position) {
+            $byteOffset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
+
+            if ($startFilePos > $byteOffset) {
                 break;
             } elseif ($node instanceof Node\Stmt\Namespace_) {
                 return $node;
