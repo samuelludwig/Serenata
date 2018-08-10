@@ -68,6 +68,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             }
         );
 
+        /** @var array $bestApproximations */
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $namespaceArrays,
             $context->getPrefix(),
