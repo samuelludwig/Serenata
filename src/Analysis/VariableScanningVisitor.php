@@ -25,7 +25,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    private $position;
+    private $byteOffset;
 
     /**
      * @var bool
@@ -38,7 +38,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      */
     public function __construct(TextDocumentItem $textDocument, Position $position)
     {
-        $this->position = $position->getAsByteOffsetInString($textDocument->getText(), PositionEncoding::VALUE);
+        $this->byteOffset = $position->getAsByteOffsetInString($textDocument->getText(), PositionEncoding::VALUE);
     }
 
     /**
@@ -47,13 +47,13 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
     public function enterNode(Node $node)
     {
         // NOTE: Position ranges are closed (inclusive).
-        if ($node->getAttribute('startFilePos') >= $this->position) {
+        if ($node->getAttribute('startFilePos') >= $this->byteOffset) {
             // We've gone beyond the requested position, there is nothing here that can still be relevant anymore.
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
-        if ($node->getAttribute('startFilePos') <= $this->position &&
-            $node->getAttribute('endFilePos') >= $this->position
+        if ($node->getAttribute('startFilePos') <= $this->byteOffset &&
+            $node->getAttribute('endFilePos') >= $this->byteOffset
         ) {
             if ($node instanceof Node\Stmt\ClassLike) {
                 $this->hasThisContext = true;
@@ -75,9 +75,9 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
         if ($node instanceof Node\Expr\Variable) {
             $parentAssignmentExpression = NodeHelpers::findAncestorOfAnyType($node, Node\Expr\Assign::class);
 
-            if (($node->getAttribute('endFilePos') + 1) < $this->position && (
+            if (($node->getAttribute('endFilePos') + 1) < $this->byteOffset && (
                 $parentAssignmentExpression === null ||
-                ($parentAssignmentExpression->getAttribute('endFilePos') + 1) < $this->position
+                ($parentAssignmentExpression->getAttribute('endFilePos') + 1) < $this->byteOffset
             )) {
                 $this->parseVariable($node);
             }
