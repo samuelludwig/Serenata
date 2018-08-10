@@ -33,7 +33,8 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
     private $hasThisContext;
 
     /**
-     * @param Position $position
+     * @param TextDocumentItem $textDocument
+     * @param Position          $position
      */
     public function __construct(TextDocumentItem $textDocument, Position $position)
     {
