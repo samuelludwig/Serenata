@@ -39,12 +39,12 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     private $memorizedNodeProperties;
 
     /**
-     * @param TextDocumentItem $textDocument
+     * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      */
-    public function __construct(TextDocumentItem $textDocument, Position $position)
+    public function __construct(TextDocumentItem $textDocumentItem, Position $position)
     {
-        $this->byteOffset = $position->getAsByteOffsetInString($textDocument->getText(), PositionEncoding::VALUE);
+        $this->byteOffset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
     }
 
     /**
