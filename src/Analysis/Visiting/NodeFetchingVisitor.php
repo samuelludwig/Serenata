@@ -15,7 +15,7 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    private $position;
+    private $byteOffset;
 
     /**
      * @var Node|null
@@ -35,11 +35,11 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
     /**
      * Constructor.
      *
-     * @param int $position
+     * @param int $byteOffset
      */
-    public function __construct(int $position)
+    public function __construct(int $byteOffset)
     {
-        $this->position = $position;
+        $this->byteOffset = $byteOffset;
     }
 
     /**
@@ -61,9 +61,9 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
             $endFilePos = $startFilePos;
         }
 
-        if ($endFilePos < $this->position) {
+        if ($endFilePos < $this->byteOffset) {
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
-        } elseif ($startFilePos > $this->position) {
+        } elseif ($startFilePos > $this->byteOffset) {
             return NodeTraverser::STOP_TRAVERSAL;
         }
 
@@ -92,7 +92,7 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
         // NOTE: This is now an open (exclusive) range.
         $endPosition = $comment->getFilePos() + strlen($comment->getText());
 
-        if ($this->position >= $comment->getFilePos() && $this->position < $endPosition) {
+        if ($this->byteOffset >= $comment->getFilePos() && $this->byteOffset < $endPosition) {
             $this->comment = $comment;
         }
     }
