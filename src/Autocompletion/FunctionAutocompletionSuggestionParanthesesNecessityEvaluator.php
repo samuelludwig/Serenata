@@ -2,20 +2,28 @@
 
 namespace Serenata\Autocompletion;
 
+use Serenata\Common\Position;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * Evaluates if parantheses are necessary in autocompletion suggestions for functions.
  */
 final class FunctionAutocompletionSuggestionParanthesesNecessityEvaluator
 {
     /**
-     * @param string $code
-     * @param int    $offset
+     * @param TextDocumentItem $textDocumentItem
+     * @param Position         $position
      *
      * @return bool
      */
-    public function evaluate(string $code, int $offset): bool
+    public function evaluate(TextDocumentItem $textDocumentItem, Position $position): bool
     {
-        $length = mb_strlen($code);
+        $code = $textDocumentItem->getText();
+        $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
+
+        $length = strlen($code);
 
         for ($i = $offset; $i < $length; ++$i) {
             if ($code[$i] === '(') {

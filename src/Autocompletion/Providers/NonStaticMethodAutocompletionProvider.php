@@ -102,10 +102,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         $shouldIncludeParanthesesInInsertText = $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator
-            ->evaluate(
-                $context->getTextDocumentItem()->getText(),
-                $context->getPositionAsByteOffset()
-            );
+            ->evaluate($context->getTextDocumentItem(), $context->getPosition());
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
             yield from $this->createSuggestionsForClasslikeInfo(

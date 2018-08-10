@@ -88,10 +88,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     public function provide(AutocompletionProviderContext $context): iterable
     {
         $shouldIncludeParanthesesInInsertText = $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator
-            ->evaluate(
-                $context->getTextDocumentItem()->getText(),
-                $context->getPositionAsByteOffset()
-            );
+            ->evaluate($context->getTextDocumentItem(), $context->getPosition());
 
         /** @var array[] $bestApproximations */
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
