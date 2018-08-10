@@ -40,7 +40,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
 
     /**
      * @param TextDocumentItem $textDocument
-     * @param Position          $position
+     * @param Position         $position
      */
     public function __construct(TextDocumentItem $textDocument, Position $position)
     {
