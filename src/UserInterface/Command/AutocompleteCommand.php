@@ -15,7 +15,6 @@ use Serenata\Indexing\FileIndexerInterface;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
@@ -77,46 +76,40 @@ class AutocompleteCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
-        } elseif (!isset($arguments['offset'])) {
-            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
-        $offset = $arguments['offset'];
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
-            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
-        }
-
-        $result = $this->getAutocompletionSuggestions($arguments['file'], $code, $offset);
+        $result = $this->getAutocompletionSuggestions($arguments['uri'], $code, $position);
 
         return new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param int    $offset
+     * @param string   $uri
+     * @param string   $code
+     * @param Position $position
      *
      * @return array
      */
-    public function getAutocompletionSuggestions(string $filePath, string $code, int $offset): array
+    public function getAutocompletionSuggestions(string $uri, string $code, Position $position): array
     {
-        $file = $this->storage->getFileByPath($filePath);
+        $file = $this->storage->getFileByPath($uri);
 
-        // $this->fileIndexer->index($filePath, $code);
-
-        $position = Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE);
+        // $this->fileIndexer->index($uri, $code);
 
         return $this->autocompletionProvider->provide(new AutocompletionProviderContext(
-            new TextDocumentItem($filePath, $code),
+            new TextDocumentItem($uri, $code),
             $position,
             $this->autocompletionPrefixDeterminer->determine($code, $position)
         ));
