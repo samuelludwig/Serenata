@@ -8,8 +8,6 @@ use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Autocompletion\ApplicabilityChecking\AutocompletionApplicabilityCheckerInterface;
 
-
-
 /**
  * Autocompletion provider that first checks if autocompletion suggestions apply at the requested offset and, if so,
  * delegates to another provider.

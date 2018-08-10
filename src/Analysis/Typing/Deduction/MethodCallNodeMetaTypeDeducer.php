@@ -94,8 +94,7 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
                 continue;
             }
 
-            if (
-                $relevantArgumentNode->value instanceof Node\Scalar\String_ &&
+            if ($relevantArgumentNode->value instanceof Node\Scalar\String_ &&
                 $relevantArgumentNode->value->value === $staticType->getValue()
             ) {
                 $types[] = $staticType->getReturnType();

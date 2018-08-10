@@ -15,7 +15,6 @@ use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessity
 
 use Serenata\Utility\TextEdit;
 
-
 /**
  * Provides function autocompletion suggestions at a specific location in a file.
  */

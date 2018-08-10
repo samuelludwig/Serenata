@@ -285,7 +285,7 @@ class MethodIndexingTest extends AbstractIntegrationTest
      */
     public function testMethodParameterExplicitNullability(): void
     {
-        $method = $this->indexMethod('MethodParameterExplicitNullability.phpt');;
+        $method = $this->indexMethod('MethodParameterExplicitNullability.phpt');
 
         static::assertSame('?int', $method->getParameters()[0]->getTypeHint());
         static::assertSame('int|null', $method->getParameters()[0]->getType()->toString());

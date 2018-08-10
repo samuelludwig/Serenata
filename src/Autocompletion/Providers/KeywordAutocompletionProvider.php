@@ -7,7 +7,6 @@ use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Utility\TextEdit;
 
-
 /**
  * Provides keyword autocompletion suggestions at a specific location in a file.
  *

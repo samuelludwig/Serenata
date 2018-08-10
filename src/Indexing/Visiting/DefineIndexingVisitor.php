@@ -91,8 +91,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
      */
     public function enterNode(Node $node)
     {
-        if (
-            $node instanceof Node\Expr\FuncCall &&
+        if ($node instanceof Node\Expr\FuncCall &&
             $node->name instanceof Node\Name &&
             $node->name->toString() === 'define'
         ) {

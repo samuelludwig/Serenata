@@ -20,7 +20,6 @@ use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessity
 
 use Serenata\Utility\TextEdit;
 
-
 /**
  * Provides static member method autocompletion suggestions at a specific location in a file.
  */

@@ -89,7 +89,6 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      */
     public function onEnded(): void
     {
-
     }
 
     /**
@@ -97,7 +96,6 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
      */
     public function onClosed(): void
     {
-
     }
 
     /**

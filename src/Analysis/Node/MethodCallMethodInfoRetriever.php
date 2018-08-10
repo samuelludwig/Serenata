@@ -57,8 +57,7 @@ class MethodCallMethodInfoRetriever
      */
     public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
     {
-        if (
-            !$node instanceof Node\Expr\MethodCall &&
+        if (!$node instanceof Node\Expr\MethodCall &&
             !$node instanceof Node\Expr\StaticCall &&
             !$node instanceof Node\Expr\New_
         ) {

@@ -17,7 +17,6 @@ use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Utility\TextEdit;
 
-
 /**
  * Provides member constant autocompletion suggestions at a specific location in a file.
  */

@@ -17,7 +17,6 @@ use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 use Serenata\Utility\TextEdit;
 
-
 /**
  * Provides static member property autocompletion suggestions at a specific location in a file.
  */

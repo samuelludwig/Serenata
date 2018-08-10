@@ -11,7 +11,6 @@ use Serenata\Autocompletion\SuggestionKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
-
 /**
  * Provides docblock tag autocompletion suggestions at a specific location in a file.
  */

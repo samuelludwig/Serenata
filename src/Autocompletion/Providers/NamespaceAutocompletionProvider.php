@@ -11,7 +11,6 @@ use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Utility\TextEdit;
 
-
 /**
  * Provides namespace autocompletion suggestions at a specific location in a file.
  */
