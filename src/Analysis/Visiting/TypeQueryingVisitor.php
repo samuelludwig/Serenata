@@ -23,7 +23,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    private $position;
+    private $byteOffset;
 
     /**
      * @var DocblockParser
@@ -45,13 +45,13 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
      *
      * @param DocblockParser        $docblockParser
      * @param PrettyPrinterAbstract $prettyPrinter
-     * @param int                   $position
+     * @param int                   $byteOffset
      */
-    public function __construct(DocblockParser $docblockParser, PrettyPrinterAbstract $prettyPrinter, int $position)
+    public function __construct(DocblockParser $docblockParser, PrettyPrinterAbstract $prettyPrinter, int $byteOffset)
     {
         $this->docblockParser = $docblockParser;
         $this->prettyPrinter = $prettyPrinter;
-        $this->position = $position;
+        $this->byteOffset = $byteOffset;
 
         $this->expressionTypeInfoMap = new ExpressionTypeInfoMap();
     }
@@ -63,8 +63,8 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         $startFilePos = $node->getAttribute('startFilePos');
 
-        if ($startFilePos >= $this->position) {
-            if ($startFilePos === $this->position) {
+        if ($startFilePos >= $this->byteOffset) {
+            if ($startFilePos === $this->byteOffset) {
                 // We won't analyze this node anymore (it falls outside the position and can cause infinite recursion
                 // otherwise), but php-parser matches each docblock with the next node. That docblock might still
                 // contain a type override annotation we need to parse.
@@ -113,8 +113,8 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
         // There can be conditional expressions inside the current scope (think variables assigned to a ternary
         // expression). In that case we don't want to actually look at the condition for type deduction unless
         // we're inside the scope of that conditional.
-        if ($this->position < $node->getAttribute('startFilePos') ||
-            $this->position > $node->getAttribute('endFilePos')
+        if ($this->byteOffset < $node->getAttribute('startFilePos') ||
+            $this->byteOffset > $node->getAttribute('endFilePos')
         ) {
             return;
         }
@@ -148,7 +148,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     private function parseAssignment(Node\Expr\Assign $node): void
     {
-        if ($node->getAttribute('endFilePos') > $this->position) {
+        if ($node->getAttribute('endFilePos') > $this->byteOffset) {
             return;
         } elseif (!$this->isExpressionSubjectToTypePossibilities($node->var)) {
             return;
@@ -184,8 +184,8 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     private function checkForScopeChange(Node $node): void
     {
-        if ($node->getAttribute('startFilePos') > $this->position ||
-            $node->getAttribute('endFilePos') < $this->position
+        if ($node->getAttribute('startFilePos') > $this->byteOffset ||
+            $node->getAttribute('endFilePos') < $this->byteOffset
         ) {
             return;
         }
