@@ -97,7 +97,7 @@ class ExpressionLocalTypeAnalyzer
 
         $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
 
-        $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
+        $scopeLimitingVisitor = new ScopeLimitingVisitor($textDocumentItem, $position);
         $typeQueryingVisitor = new TypeQueryingVisitor($this->docblockParser, $this->prettyPrinter, $offset);
 
         $traverser = new NodeTraverser();

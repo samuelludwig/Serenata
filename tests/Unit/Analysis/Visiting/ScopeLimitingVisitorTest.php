@@ -10,6 +10,10 @@ use PHPUnit\Framework\TestCase;
 
 use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
 
+use Serenata\Common\Position;
+
+use Serenata\Utility\TextDocumentItem;
+
 class ScopeLimitingVisitorTest extends TestCase
 {
     /**
@@ -55,7 +59,10 @@ SOURCE;
 
         $stateBefore = serialize($nodes);
 
-        $visitor = new ScopeLimitingVisitor(260);
+        $visitor = new ScopeLimitingVisitor(
+            new TextDocumentItem('path', $code),
+            new Position(15, 12)
+        );
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($visitor);

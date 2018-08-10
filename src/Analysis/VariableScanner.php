@@ -53,10 +53,7 @@ class VariableScanner
         }
 
         $queryingVisitor = new VariableScanningVisitor($textDocumentItem, $position);
-
-        $scopeLimitingVisitor = new ScopeLimitingVisitor(
-            $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
-        );
+        $scopeLimitingVisitor = new ScopeLimitingVisitor($textDocumentItem, $position);
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($scopeLimitingVisitor);

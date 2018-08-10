@@ -2,11 +2,16 @@
 
 namespace Serenata\Analysis\Visiting;
 
+use Serenata\Common\Position;
+
 use Serenata\Parsing\Node\Expr\Dummy;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Visitor that limits the traversed nodes to ones that apply to the scope active at a specific location. Note that
@@ -34,13 +39,12 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     private $memorizedNodeProperties;
 
     /**
-     * Constructor.
-     *
-     * @param int $byteOffset
+     * @param TextDocumentItem $textDocument
+     * @param Position          $position
      */
-    public function __construct(int $byteOffset)
+    public function __construct(TextDocumentItem $textDocument, Position $position)
     {
-        $this->byteOffset = $byteOffset;
+        $this->byteOffset = $position->getAsByteOffsetInString($textDocument->getText(), PositionEncoding::VALUE);
     }
 
     /**
