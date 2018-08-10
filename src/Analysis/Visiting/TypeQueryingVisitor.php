@@ -4,6 +4,8 @@ namespace Serenata\Analysis\Visiting;
 
 use DomainException;
 
+use Serenata\Common\Position;
+
 use Serenata\Parsing\DocblockParser;
 
 use Serenata\Utility\NodeHelpers;
@@ -13,6 +15,9 @@ use PhpParser\NodeAbstract;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\PrettyPrinterAbstract;
+
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Visitor that walks to a specific position, building a list of information about variables and their possible and
@@ -45,13 +50,18 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
      *
      * @param DocblockParser        $docblockParser
      * @param PrettyPrinterAbstract $prettyPrinter
-     * @param int                   $byteOffset
+     * @param TextDocumentItem      $textDocumentItem
+     * @param Position              $position
      */
-    public function __construct(DocblockParser $docblockParser, PrettyPrinterAbstract $prettyPrinter, int $byteOffset)
-    {
+    public function __construct(
+        DocblockParser $docblockParser,
+        PrettyPrinterAbstract $prettyPrinter,
+        TextDocumentItem $textDocumentItem,
+        Position $position
+    ) {
         $this->docblockParser = $docblockParser;
         $this->prettyPrinter = $prettyPrinter;
-        $this->byteOffset = $byteOffset;
+        $this->byteOffset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
 
         $this->expressionTypeInfoMap = new ExpressionTypeInfoMap();
     }
