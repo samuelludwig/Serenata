@@ -6,7 +6,11 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 
+use Serenata\Common\Position;
+
 use Serenata\Utility\NodeHelpers;
+use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
 /**
  * Visitor that queries the nodes for information about available (set) variables.
@@ -29,13 +33,11 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
     private $hasThisContext;
 
     /**
-     * Constructor.
-     *
-     * @param int $position
+     * @param Position $position
      */
-    public function __construct(int $position)
+    public function __construct(TextDocumentItem $textDocument, Position $position)
     {
-        $this->position = $position;
+        $this->position = $position->getAsByteOffsetInString($textDocument->getText(), PositionEncoding::VALUE);
     }
 
     /**

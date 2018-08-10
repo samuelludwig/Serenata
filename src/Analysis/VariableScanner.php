@@ -42,8 +42,6 @@ class VariableScanner
      */
     public function getAvailableVariables(TextDocumentItem $textDocumentItem, Position $position): array
     {
-        $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
-
         try {
             $nodes = $this->getNodes($textDocumentItem->getText());
         } catch (Error $e) {
@@ -54,8 +52,11 @@ class VariableScanner
             );
         }
 
-        $queryingVisitor = new VariableScanningVisitor($offset);
-        $scopeLimitingVisitor = new ScopeLimitingVisitor($offset);
+        $queryingVisitor = new VariableScanningVisitor($textDocumentItem, $position);
+
+        $scopeLimitingVisitor = new ScopeLimitingVisitor(
+            $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
+        );
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor($scopeLimitingVisitor);
