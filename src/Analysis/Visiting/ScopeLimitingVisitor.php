@@ -20,7 +20,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     /**
      * @var int
      */
-    private $position;
+    private $byteOffset;
 
     /**
      * Keeps track of previous values of node properties.
@@ -36,11 +36,11 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     /**
      * Constructor.
      *
-     * @param int $position
+     * @param int $byteOffset
      */
-    public function __construct(int $position)
+    public function __construct(int $byteOffset)
     {
-        $this->position = $position;
+        $this->byteOffset = $byteOffset;
     }
 
     /**
@@ -65,7 +65,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
             $endFilePos = $node->getAttribute('endFilePos');
             $startFilePos = $node->getAttribute('startFilePos');
 
-            if ($startFilePos >= $this->position || $endFilePos <= $this->position) {
+            if ($startFilePos >= $this->byteOffset || $endFilePos <= $this->byteOffset) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
 
@@ -77,7 +77,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                 $elseIfNodes = array_reverse($node->elseifs);
 
                 foreach ($elseIfNodes as $elseIfNode) {
-                    if ($elseIfNode->getAttribute('startFilePos') < $this->position) {
+                    if ($elseIfNode->getAttribute('startFilePos') < $this->byteOffset) {
                         $this->memorizeNodeProperties($node, ['stmts', 'elseifs', 'cond']);
 
                         $node->stmts = [];
@@ -87,7 +87,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                     }
                 }
 
-                if ($node->else && $node->else->getAttribute('startFilePos') < $this->position) {
+                if ($node->else && $node->else->getAttribute('startFilePos') < $this->byteOffset) {
                     $this->memorizeNodeProperties($node, ['stmts', 'elseifs', 'cond']);
 
                     $node->stmts = [];
@@ -102,7 +102,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                 $caseNodes = array_reverse($node->cases);
 
                 foreach ($caseNodes as $caseNode) {
-                    if ($caseNode->getAttribute('startFilePos') < $this->position) {
+                    if ($caseNode->getAttribute('startFilePos') < $this->byteOffset) {
                         $this->memorizeNodeProperties($node, ['cases']);
 
                         $node->cases = [$caseNode];
@@ -113,7 +113,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                 $catchNodes = array_reverse($node->catches);
 
                 foreach ($catchNodes as $catchNode) {
-                    if ($catchNode->getAttribute('startFilePos') < $this->position) {
+                    if ($catchNode->getAttribute('startFilePos') < $this->byteOffset) {
                         $this->memorizeNodeProperties($node, ['stmts', 'catches']);
 
                         $node->stmts = [];
@@ -125,7 +125,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                 // Finally statements have no own node, so use the first statement as a reference point instead. This
                 // won't be entirely correct, but it's the best we can do. See also
                 // https://github.com/nikic/PHP-Parser/issues/254
-                if ($node->finally && $node->finally->getAttribute('startFilePos') < $this->position) {
+                if ($node->finally && $node->finally->getAttribute('startFilePos') < $this->byteOffset) {
                     $this->memorizeNodeProperties($node, ['stmts', 'catches']);
 
                     $node->stmts = [];
