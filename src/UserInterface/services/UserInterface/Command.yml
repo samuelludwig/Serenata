@@ -95,7 +95,6 @@ services:
             - '@variableScanner'
             - '@sourceCodeStreamReader'
             - '@updateEnforcingIndexer'
-            - '@parser'
             - '@fileIndexer'
 
     deduceTypesCommand:

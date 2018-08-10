@@ -56,6 +56,8 @@ services:
 
     variableScanner:
         class: Serenata\Analysis\VariableScanner
+        arguments:
+            - '@parser'
 
     typeAnalyzer:
         class: Serenata\Analysis\Typing\TypeAnalyzer

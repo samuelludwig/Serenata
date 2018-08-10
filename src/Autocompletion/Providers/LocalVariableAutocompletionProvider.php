@@ -66,8 +66,8 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
         }
 
         $availableVariables = $this->variableScanner->getAvailableVariables(
-            $nodes,
-            $context->getPositionAsByteOffset()
+            $context->getTextDocumentItem(),
+            $context->getPosition()
         );
 
         foreach ($availableVariables as $variable) {
