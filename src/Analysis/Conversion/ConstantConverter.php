@@ -18,6 +18,7 @@ final class ConstantConverter extends AbstractConverter
     {
         $data = [
             'name'              => $constant->getName(),
+            'range'             => $constant->getRange(),
             // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
             'startLine'         => $constant->getRange()->getStart()->getLine() + 1,
             'endLine'           => $constant->getRange()->getEnd()->getLine() + 1,

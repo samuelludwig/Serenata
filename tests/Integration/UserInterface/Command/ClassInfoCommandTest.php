@@ -60,6 +60,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'constants'          => [
                 'class' => [
                     'name'               => 'class',
+                    'range'              => $output['constants']['class']['range'],
                     'startLine'          => 10,
                     'endLine'            => 10,
                     'defaultValue'       => '\'A\SimpleClass\'',
@@ -107,6 +108,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'methods'            => [],
         ], $output);
 
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(9, 0)
+            ),
+            $output['constants']['class']['range']
+        );
+
         static::assertEquals(new Range(new Position(9, 0), new Position(12, 1)), $output['range']);
     }
 
@@ -121,6 +130,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         static::assertSame([
             'name'               => 'testProperty',
+            'range'              => $output['properties']['testProperty']['range'],
             'startLine'          => 14,
             'endLine'            => 14,
             'filename'           => $this->getPathFor($fileName),
@@ -171,6 +181,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLineMember'   => 14,
             ],
         ], $output['properties']['testProperty']);
+
+        static::assertEquals(
+            new Range(
+                new Position(13, 14),
+                new Position(13, 36)
+            ),
+            $output['properties']['testProperty']['range']
+        );
     }
 
     /**
@@ -184,6 +202,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         static::assertSame([
             'name'               => 'testMethod',
+            'range'              => $output['methods']['testMethod']['range'],
             'startLine'          => 19,
             'endLine'            => 22,
             'filename'           => $this->getPathFor($fileName),
@@ -312,6 +331,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLineMember'   => 22,
             ],
         ], $output['methods']['testMethod']);
+
+        static::assertEquals(
+            new Range(
+                new Position(18, 4),
+                new Position(21, 5)
+            ),
+            $output['methods']['testMethod']['range']
+        );
     }
 
     /**
@@ -325,6 +352,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
         static::assertSame([
             'name'               => 'TEST_CONSTANT',
+            'range'              => $output['constants']['TEST_CONSTANT']['range'],
             'startLine'          => 14,
             'endLine'            => 14,
             'defaultValue'       => '5',
@@ -373,6 +401,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'endLineMember'   => 14,
             ],
         ], $output['constants']['TEST_CONSTANT']);
+
+        static::assertEquals(
+            new Range(
+                new Position(13, 10),
+                new Position(13, 27)
+            ),
+            $output['constants']['TEST_CONSTANT']['range']
+        );
     }
 
     /**

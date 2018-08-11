@@ -23,6 +23,7 @@ final class PropertyConverter extends AbstractConverter
     {
         $data = [
             'name'               => $property->getName(),
+            'range'              => $property->getRange(),
             // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
             'startLine'          => $property->getRange()->getStart()->getLine() + 1,
             'endLine'            => $property->getRange()->getEnd()->getLine() + 1,

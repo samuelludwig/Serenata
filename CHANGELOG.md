@@ -10,6 +10,7 @@
 * Semantic linting support has been removed as it was previously deprecated
 * All commands (requests) now accept a LSP `uri` instead of `path` or `file`
 * All commands (requests) now accept a proper LSP `position` instead of an `offset` and a `charoffset` flag
+* All structural element data now contains a `range` property with `start` and `end` subproperties that contain the line and character position of the element
 
 ## 4.3.0 (Unreleased)
 ### Improvements
