@@ -67,8 +67,6 @@ final class TooltipCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
-
         if (!isset($arguments['uri'])) {
             throw new InvalidArgumentsException('"uri" must be supplied');
         } elseif (!isset($arguments['position'])) {
