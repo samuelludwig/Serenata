@@ -83,7 +83,7 @@ final class TooltipCommand extends AbstractCommand
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->getTooltip($arguments['file'], $code, $position)
+            $this->getTooltip($arguments['uri'], $code, $position)
         );
     }
 
