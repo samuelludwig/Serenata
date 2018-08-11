@@ -1086,7 +1086,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 
         $this->expectException(FileNotFoundStorageException::class);
 
-        $command->deduceTypes('DoesNotExist.phpt', 'Code', 'CodeWithExpression', 1, false);
+        $command->deduceTypes('DoesNotExist.phpt', 'Code', 'CodeWithExpression', new Position(0, 1), false);
     }
 
     /**

@@ -43,7 +43,7 @@ final class ClassInfoCommand extends AbstractCommand
 
         if (!isset($arguments['name'])) {
             throw new InvalidArgumentsException(
-                'The fully qualified name of the structural element is required for this command.'
+                '"name" as fully qualified name of the classlike must be passed'
             );
         }
 

@@ -11,7 +11,6 @@ use Serenata\Indexing\FileIndexerInterface;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
@@ -57,47 +56,38 @@ final class AvailableVariablesCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
-        } elseif (!isset($arguments['offset'])) {
-            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
-
-        $code = null;
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-        } elseif (isset($arguments['file']) && $arguments['file']) {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+        } else {
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
-        $offset = $arguments['offset'];
-
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
-            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
-        }
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
         return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAvailableVariables(
-            $arguments['file'],
+            $arguments['uri'],
             $code,
-            $offset
+            $position
         ));
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param int    $offset
+     * @param string   $uri
+     * @param string   $code
+     * @param Position $position
      *
      * @return array
      */
-    public function getAvailableVariables(string $filePath, string $code, int $offset): array
+    public function getAvailableVariables(string $uri, string $code, Position $position): array
     {
-        // $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($uri, $code);
 
-        return $this->variableScanner->getAvailableVariables(
-            new TextDocumentItem($filePath, $code),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
-        );
+        return $this->variableScanner->getAvailableVariables(new TextDocumentItem($uri, $code), $position);
     }
 }

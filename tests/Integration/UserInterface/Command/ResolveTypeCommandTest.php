@@ -4,6 +4,8 @@ namespace Serenata\Tests\Integration\UserInterface\Command;
 
 use Serenata\Analysis\Visiting\UseStatementKind;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
@@ -21,7 +23,10 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $command = $this->container->get('resolveTypeCommand');
 
-        static::assertSame('\C', $command->resolveType('C', $path, 1, UseStatementKind::TYPE_CLASSLIKE));
+        static::assertSame(
+            '\C',
+            $command->resolveType('C', $path, new Position(0, 1), UseStatementKind::TYPE_CLASSLIKE)
+        );
     }
 
     /**
@@ -33,6 +38,6 @@ class ResolveTypeCommandTest extends AbstractIntegrationTest
 
         $this->expectException(FileNotFoundStorageException::class);
 
-        $command->resolveType('A', 'DoesNotExist.phpt', 1, UseStatementKind::TYPE_CLASSLIKE);
+        $command->resolveType('A', 'DoesNotExist.phpt', new Position(0, 1), UseStatementKind::TYPE_CLASSLIKE);
     }
 }

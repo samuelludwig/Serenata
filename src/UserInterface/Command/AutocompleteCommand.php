@@ -104,7 +104,8 @@ class AutocompleteCommand extends AbstractCommand
      */
     public function getAutocompletionSuggestions(string $uri, string $code, Position $position): array
     {
-        $file = $this->storage->getFileByPath($uri);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($uri);
 
         // $this->fileIndexer->index($uri, $code);
 

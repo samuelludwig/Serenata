@@ -2,7 +2,11 @@
 
 namespace Serenata\Tests\Integration\UserInterface\Command;
 
+use Serenata\Common\Position;
+
 use Serenata\Tests\Integration\AbstractIntegrationTest;
+
+use Serenata\Utility\PositionEncoding;
 
 class AvailableVariablesCommandTest extends AbstractIntegrationTest
 {
@@ -142,7 +146,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
             $markerOffsets[$i++] = $markerOffset;
         }
 
-        $doMarkerTest = function ($markerNumber, array $variableNames) use ($command, $fullPath, $markerOffsets) {
+        $doMarkerTest = function ($markerNumber, array $variableNames) use ($command, $fullPath, $markerOffsets, $code) {
             $list = [];
 
             foreach ($variableNames as $variableName) {
@@ -151,7 +155,11 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
 
             static::assertSame(
                 $list,
-                $command->getAvailableVariables($fullPath, file_get_contents($fullPath), $markerOffsets[$markerNumber])
+                $command->getAvailableVariables(
+                    $fullPath,
+                    file_get_contents($fullPath),
+                    Position::createFromByteOffset($markerOffsets[$markerNumber], $code, PositionEncoding::VALUE)
+                )
             );
         };
 
@@ -228,7 +236,11 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFileWithSource($container, $path, $code);
 
-        return $container->get('availableVariablesCommand')->getAvailableVariables($path, $code, $markerOffset);
+        return $container->get('availableVariablesCommand')->getAvailableVariables(
+            $path,
+            $code,
+            Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE)
+        );
     }
 
     /**

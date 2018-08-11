@@ -53,11 +53,11 @@ final class ClassListCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        $filePath = $arguments['file'] ?? null;
+        $uri = $arguments['uri'] ?? null;
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            ($filePath !== null) ? $this->getAllForFilePath($filePath) : $this->getAll()
+            ($uri !== null) ? $this->getAllForFilePath($uri) : $this->getAll()
         );
     }
 
@@ -70,13 +70,13 @@ final class ClassListCommand extends AbstractCommand
     }
 
     /**
-     * @param string $filePath
+     * @param string $uri
      *
      * @return array
      */
-    public function getAllForFilePath(string $filePath): array
+    public function getAllForFilePath(string $uri): array
     {
-        $file = $this->storage->getFileByPath($filePath);
+        $file = $this->storage->getFileByPath($uri);
 
         return $this->fileClasslikeListProvider->getAllForFile($file);
     }

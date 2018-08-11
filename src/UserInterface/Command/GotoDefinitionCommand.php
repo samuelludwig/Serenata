@@ -13,7 +13,6 @@ use Serenata\Indexing\FileIndexerInterface;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
@@ -67,46 +66,40 @@ final class GotoDefinitionCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
-        } elseif (!isset($arguments['offset'])) {
-            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
-        $offset = $arguments['offset'];
-
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
-            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
-        }
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->gotoDefinition($arguments['file'], $code, $offset)
+            $this->gotoDefinition($arguments['uri'], $code, $position)
         );
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param int    $offset
+     * @param string   $uri
+     * @param string   $code
+     * @param Position $position
      *
      * @return GotoDefinitionResult|null
      */
-    public function gotoDefinition(string $filePath, string $code, int $offset): ?GotoDefinitionResult
+    public function gotoDefinition(string $uri, string $code, Position $position): ?GotoDefinitionResult
     {
-        $file = $this->storage->getFileByPath($filePath);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($uri);
 
-        // $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($uri, $code);
 
-        return $this->definitionLocator->locate(
-            new TextDocumentItem($filePath, $code),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
-        );
+        return $this->definitionLocator->locate(new TextDocumentItem($uri, $code), $position);
     }
 }

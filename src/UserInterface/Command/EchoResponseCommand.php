@@ -20,7 +20,7 @@ final class EchoResponseCommand extends AbstractCommand
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['response'])) {
-            throw new InvalidArgumentsException('Missing response in parameters for echo response request');
+            throw new InvalidArgumentsException('Missing "response" in parameters for echo response request');
         }
 
         return $arguments['response'];

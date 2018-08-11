@@ -67,47 +67,42 @@ final class TooltipCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
-        } elseif (!isset($arguments['offset'])) {
-            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
+        $arguments = $queueItem->getRequest()->getParams() ?: [];
+
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
-        $offset = $arguments['offset'];
-
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
-            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
-        }
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->getTooltip($arguments['file'], $code, $offset)
+            $this->getTooltip($arguments['file'], $code, $position)
         );
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param int    $offset
+     * @param string   $filePath
+     * @param string   $code
+     * @param Position $position
      *
      * @return TooltipResult|null
      */
-    public function getTooltip(string $filePath, string $code, int $offset): ?TooltipResult
+    public function getTooltip(string $filePath, string $code, Position $position): ?TooltipResult
     {
-        // Not used (yet), but will validate if file exists in index.
-        $file = $this->storage->getFileByPath($filePath);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($filePath);
 
         // $this->fileIndexer->index($filePath, $code);
 
-        return $this->tooltipProvider->get(
-            new TextDocumentItem($filePath, $code),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
-        );
+        return $this->tooltipProvider->get(new TextDocumentItem($filePath, $code), $position);
     }
 }

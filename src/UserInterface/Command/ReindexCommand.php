@@ -32,23 +32,25 @@ final class ReindexCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['source']) || empty($arguments['source'])) {
-            throw new InvalidArgumentsException('At least one file or directory to index is required for this command.');
+        if (!isset($arguments['uris']) || count($arguments['uris']) === 0) {
+            throw new InvalidArgumentsException('"uris" must be supplied with at least one file or directory to index');
         }
 
-        $paths = $arguments['source'];
+        $uris = $arguments['uris'];
         $useStdin = $arguments['stdin'] ?? false;
 
         if ($useStdin) {
-            if (count($paths) > 1) {
-                throw new InvalidArgumentsException('Reading from STDIN is only possible when a single path is specified!');
-            } elseif (!is_file($paths[0])) {
-                throw new InvalidArgumentsException('Reading from STDIN is only possible for a single file!');
+            if (count($uris) > 1) {
+                throw new InvalidArgumentsException(
+                    'Reading from STDIN is only possible when a single path is specified'
+                );
+            } elseif (!is_file($uris[0])) {
+                throw new InvalidArgumentsException('Reading from STDIN is only possible for files');
             }
         }
 
         $this->indexer->index(
-            $paths,
+            $uris,
             $arguments['extension'] ?? [],
             $arguments['exclude'] ?? [],
             $useStdin,

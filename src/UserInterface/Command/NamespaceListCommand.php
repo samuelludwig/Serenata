@@ -54,21 +54,21 @@ final class NamespaceListCommand extends AbstractCommand
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->getNamespaceList($arguments['file'] ?? null)
+            $this->getNamespaceList($arguments['uri'] ?? null)
         );
     }
 
     /**
-     * @param string|null $filePath
+     * @param string|null $uri
      *
      * @return array
      */
-    public function getNamespaceList(?string $filePath = null): array
+    public function getNamespaceList(?string $uri = null): array
     {
         $criteria = [];
 
-        if ($filePath !== null) {
-            $file = $this->storage->getFileByPath($filePath);
+        if ($uri !== null) {
+            $file = $this->storage->getFileByPath($uri);
 
             return $this->fileNamespaceListProvider->getAllForFile($file);
         }

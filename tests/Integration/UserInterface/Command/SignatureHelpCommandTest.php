@@ -2,6 +2,8 @@
 
 namespace Serenata\Tests\Integration\UserInterface\Command;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
@@ -17,6 +19,6 @@ class SignatureHelpCommandTest extends AbstractIntegrationTest
 
         $this->expectException(FileNotFoundStorageException::class);
 
-        $command->signatureHelp('DoesNotExist.phpt', 'Code', 1);
+        $command->signatureHelp('DoesNotExist.phpt', 'Code', new Position(0, 1));
     }
 }

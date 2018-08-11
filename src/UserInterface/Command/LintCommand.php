@@ -62,36 +62,34 @@ final class LintCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A file name is required for this command.');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
         }
-
-        $code = null;
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->lint($arguments['file'], $code)
+            $this->lint($arguments['uri'], $code)
         );
     }
 
     /**
-     * @param string $filePath
+     * @param string $uri
      * @param string $code
      *
      * @return array
      */
-    public function lint(string $filePath, string $code): array
+    public function lint(string $uri, string $code): array
     {
-        // Not used (yet), but still throws an exception when file is in index.
-        $file = $this->storage->getFileByPath($filePath);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($uri);
 
-        // $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($uri, $code);
 
         return $this->linter->lint($code);
     }

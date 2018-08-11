@@ -4,12 +4,15 @@ namespace Serenata\UserInterface\Command;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
+use Serenata\Common\Position;
+
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileIndexerInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
 /**
@@ -62,23 +65,19 @@ final class DeduceTypesCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
-        } elseif (!isset($arguments['offset'])) {
-            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
-        $offset = $arguments['offset'];
-
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
-            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
-        }
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
         $codeWithExpression = $code;
 
@@ -87,10 +86,10 @@ final class DeduceTypesCommand extends AbstractCommand
         }
 
         $result = $this->deduceTypes(
-            $arguments['file'],
+            $arguments['uri'],
             $code,
             $codeWithExpression,
-            $offset,
+            $position,
             isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
         );
 
@@ -98,29 +97,29 @@ final class DeduceTypesCommand extends AbstractCommand
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param string $codeWithExpression
-     * @param int    $offset
-     * @param bool   $ignoreLastElement
+     * @param string   $uri
+     * @param string   $code
+     * @param string   $codeWithExpression
+     * @param Position $position
+     * @param bool     $ignoreLastElement
      *
      * @return array
      */
     public function deduceTypes(
-        string $filePath,
+        string $uri,
         string $code,
         string $codeWithExpression,
-        int $offset,
+        Position $position,
         bool $ignoreLastElement
     ): array {
-        $file = $this->storage->getFileByPath($filePath);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($uri);
 
-        // $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($uri, $code);
 
         return $this->expressionTypeDeducer->deduce(
-            $file,
-            $code,
-            $offset,
+            new TextDocumentItem($uri, $code),
+            $position,
             $codeWithExpression,
             $ignoreLastElement
         );

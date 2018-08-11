@@ -2,13 +2,13 @@
 
 namespace Serenata\UserInterface\Command;
 
+use Serenata\Indexing\StorageInterface;
+
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
 use Serenata\Symbols\SymbolInformation;
 use Serenata\Symbols\DocumentSymbolRetriever;
-
-use Serenata\Indexing\StorageInterface;
 
 /**
  * Command that retrieves a list of known symbols for a document.
@@ -42,21 +42,21 @@ final class DocumentSymbolsCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
         }
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAll($arguments['file']));
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAll($arguments['uri']));
     }
 
     /**
-     * @param string $filePath
+     * @param string $uri
      *
      * @return SymbolInformation[]|null
      */
-    public function getAll(string $filePath): ?array
+    public function getAll(string $uri): ?array
     {
-        $file = $this->storage->getFileByPath($filePath);
+        $file = $this->storage->getFileByPath($uri);
 
         return $this->documentSymbolRetriever->retrieve($file);
     }

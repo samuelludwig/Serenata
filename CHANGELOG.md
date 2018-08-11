@@ -8,6 +8,8 @@
 * [All autocompletion suggestions now return data in their `textEdit` properties](https://gitlab.com/Serenata/Serenata/issues/213)
     * The `extraData.prefix` property was removed as it was a non-standard workaround that is now properly solved
 * Semantic linting support has been removed as it was previously deprecated
+* All commands (requests) now accept a LSP `uri` instead of `path` or `file`
+* All commands (requests) now accept a proper LSP `position` instead of an `offset` and a `charoffset` flag
 
 ## 4.3.0 (Unreleased)
 ### Improvements

@@ -32,7 +32,7 @@ final class CancelRequestCommand extends AbstractCommand
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['id'])) {
-            throw new InvalidArgumentsException('ID of request to cancel must be passed');
+            throw new InvalidArgumentsException('"id" of request to cancel must be passed');
         }
 
         $this->requestQueue->cancel($arguments['id']);

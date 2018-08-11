@@ -49,17 +49,19 @@ final class LocalizeTypeCommand extends AbstractCommand
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         if (!isset($arguments['type'])) {
-            throw new InvalidArgumentsException('The type is required for this command.');
-        } elseif (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A file name is required for this command.');
-        } elseif (!isset($arguments['line'])) {
-            throw new InvalidArgumentsException('A line number is required for this command.');
+            throw new InvalidArgumentsException('"type" must be supplied');
+        } elseif (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" must be supplied');
         }
+
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
         $type = $this->localizeType(
             $arguments['type'],
-            $arguments['file'],
-            $arguments['line'],
+            $arguments['uri'],
+            $position,
             isset($arguments['kind']) ? $arguments['kind'] : UseStatementKind::TYPE_CLASSLIKE
         );
 
@@ -67,20 +69,19 @@ final class LocalizeTypeCommand extends AbstractCommand
     }
 
     /**
-     * Resolves the type.
-     *
-     * @param string $type
-     * @param string $filePath
-     * @param int    $line
-     * @param string $kind     A constant from {@see UseStatementKind}.
+     * @param string   $type
+     * @param string   $uri
+     * @param Position $position
+     * @param string   $kind     A constant from {@see UseStatementKind}.
      *
      * @return string|null
      */
-    public function localizeType(string $type, string $filePath, int $line, string $kind): ?string
+    public function localizeType(string $type, string $uri, Position $position, string $kind): ?string
     {
-        $file = $this->storage->getFileByPath($filePath);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($uri);
 
-        $filePosition = new FilePosition($file->getPath(), new Position($line, 0));
+        $filePosition = new FilePosition($uri, $position);
 
         return $this->positionalNameLocalizerFactory->create($filePosition)->localize($type, $kind);
     }

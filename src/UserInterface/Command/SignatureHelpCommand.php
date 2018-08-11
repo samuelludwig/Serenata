@@ -67,46 +67,40 @@ final class SignatureHelpCommand extends AbstractCommand
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['file'])) {
-            throw new InvalidArgumentsException('A --file must be supplied!');
-        } elseif (!isset($arguments['offset'])) {
-            throw new InvalidArgumentsException('An --offset must be supplied into the source code!');
+        if (!isset($arguments['uri'])) {
+            throw new InvalidArgumentsException('"uri" must be supplied');
+        } elseif (!isset($arguments['position'])) {
+            throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
 
         if (isset($arguments['stdin']) && $arguments['stdin']) {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['file']);
+            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
         }
 
-        $offset = $arguments['offset'];
-
-        if (isset($arguments['charoffset']) && $arguments['charoffset'] === true) {
-            $offset = $this->getByteOffsetFromCharacterOffset($offset, $code);
-        }
+        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->signatureHelp($arguments['file'], $code, $offset)
+            $this->signatureHelp($arguments['uri'], $code, $position)
         );
     }
 
     /**
-     * @param string $filePath
-     * @param string $code
-     * @param int    $offset
+     * @param string   $uri
+     * @param string   $code
+     * @param Position $position
      *
      * @return SignatureHelp
      */
-    public function signatureHelp(string $filePath, string $code, int $offset): SignatureHelp
+    public function signatureHelp(string $uri, string $code, Position $position): SignatureHelp
     {
-        $file = $this->storage->getFileByPath($filePath);
+        // Not used (yet), but still throws an exception when file is not in index.
+        $this->storage->getFileByPath($uri);
 
-        // $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($uri, $code);
 
-        return $this->signatureHelpRetriever->get(
-            new TextDocumentItem($filePath, $code),
-            Position::createFromByteOffset($offset, $code, PositionEncoding::VALUE)
-        );
+        return $this->signatureHelpRetriever->get(new TextDocumentItem($uri, $code), $position);
     }
 }
