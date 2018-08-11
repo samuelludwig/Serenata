@@ -88,19 +88,19 @@ final class TooltipCommand extends AbstractCommand
     }
 
     /**
-     * @param string   $filePath
+     * @param string   $uri
      * @param string   $code
      * @param Position $position
      *
      * @return TooltipResult|null
      */
-    public function getTooltip(string $filePath, string $code, Position $position): ?TooltipResult
+    public function getTooltip(string $uri, string $code, Position $position): ?TooltipResult
     {
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($filePath);
+        $this->storage->getFileByPath($uri);
 
-        // $this->fileIndexer->index($filePath, $code);
+        // $this->fileIndexer->index($uri, $code);
 
-        return $this->tooltipProvider->get(new TextDocumentItem($filePath, $code), $position);
+        return $this->tooltipProvider->get(new TextDocumentItem($uri, $code), $position);
     }
 }
