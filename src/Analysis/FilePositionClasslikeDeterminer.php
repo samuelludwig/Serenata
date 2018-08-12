@@ -47,14 +47,15 @@ class FilePositionClasslikeDeterminer
     {
         $file = $this->storage->getFileByPath($textDocumentItem->getUri());
 
-        $classesInFile = $this->fileClasslikeListProvider->getAllForFile($file);
+        $bestMatch = null;
 
-        foreach ($classesInFile as $fqcn => $classInfo) {
-            if ($position->getLine() >= $classInfo['startLine'] && $position->getLine() <= $classInfo['endLine']) {
-                return $fqcn;
+        /** @var string $fqcn */
+        foreach ($this->fileClasslikeListProvider->getAllForFile($file) as $fqcn => $class) {
+            if ($class['range']->contains($position)) {
+                $bestMatch = $fqcn;
             }
         }
 
-        return null;
+        return $bestMatch;
     }
 }

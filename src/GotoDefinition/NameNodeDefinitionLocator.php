@@ -60,7 +60,7 @@ class NameNodeDefinitionLocator
 
         $info = $this->getClassLikeInfo($fqsen);
 
-        return new GotoDefinitionResult($info['filename'], $info['startLine']);
+        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
     }
 
     /**

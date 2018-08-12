@@ -42,19 +42,16 @@ final class InterfaceImplementationResolver extends AbstractResolver
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],
-                'startLine' => $class['startLine'],
-                'endLine'   => $class['endLine'],
+                'range'     => $class['range'],
                 'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
-                'startLineMember' => $interfaceConstantData['startLine'],
-                'endLineMember'   => $interfaceConstantData['endLine'],
+                'memberRange'     => $interfaceConstantData['range'],
             ],
         ];
     }
@@ -77,8 +74,7 @@ final class InterfaceImplementationResolver extends AbstractResolver
                 $childMethod['implementations'][] = [
                     'declaringClass'     => $interfaceMethodData['declaringClass'],
                     'declaringStructure' => $interfaceMethodData['declaringStructure'],
-                    'startLine'          => $interfaceMethodData['startLine'],
-                    'endLine'            => $interfaceMethodData['endLine'],
+                    'range'              => $interfaceMethodData['range'],
                 ];
             }
 
@@ -96,8 +92,7 @@ final class InterfaceImplementationResolver extends AbstractResolver
             'declaringClass' => [
                 'fqcn'     => $class['fqcn'],
                 'filename' => $class['filename'],
-                'startLine'=> $class['startLine'],
-                'endLine'  => $class['endLine'],
+                'range'    => $class['range'],
                 'type'     => $class['type'],
             ],
         ]);

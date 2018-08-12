@@ -26,7 +26,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             43,
             48,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -41,7 +41,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             76,
             79,
-            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+            new GotoDefinitionResult($this->getPathFor($fileName), 6)
         );
     }
 
@@ -56,7 +56,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             45,
             47,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -71,7 +71,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             71,
             73,
-            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+            new GotoDefinitionResult($this->getPathFor($fileName), 6)
         );
     }
 
@@ -86,7 +86,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             68,
             68,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -101,7 +101,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             79,
             82,
-            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+            new GotoDefinitionResult($this->getPathFor($fileName), 6)
         );
     }
 
@@ -116,7 +116,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             96,
             96,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -131,7 +131,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             105,
             107,
-            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+            new GotoDefinitionResult($this->getPathFor($fileName), 6)
         );
     }
 
@@ -146,7 +146,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             108,
             111,
-            new GotoDefinitionResult($this->getPathFor($fileName), 7)
+            new GotoDefinitionResult($this->getPathFor($fileName), 6)
         );
     }
 
@@ -161,7 +161,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             60,
             60,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -176,7 +176,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             77,
             79,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -191,7 +191,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             93,
             93,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -206,7 +206,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             56,
             56,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -221,7 +221,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             49,
             49,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -236,7 +236,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             51,
             51,
-            new GotoDefinitionResult($this->getPathFor($fileName), 5)
+            new GotoDefinitionResult($this->getPathFor($fileName), 4)
         );
     }
 
@@ -251,7 +251,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             131,
             131,
-            new GotoDefinitionResult($this->getPathFor($fileName), 3)
+            new GotoDefinitionResult($this->getPathFor($fileName), 2)
         );
     }
 
@@ -266,7 +266,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             $fileName,
             84,
             84,
-            new GotoDefinitionResult($this->getPathFor($fileName), 3)
+            new GotoDefinitionResult($this->getPathFor($fileName), 2)
         );
     }
 

@@ -74,7 +74,10 @@ class ClassConstFetchNodeDefinitionLocator
                 continue;
             }
 
-            $definitions[] = new GotoDefinitionResult($constantInfo['filename'], $constantInfo['startLine']);
+            $definitions[] = new GotoDefinitionResult(
+                $constantInfo['filename'],
+                $constantInfo['range']->getStart()->getLine()
+            );
         }
 
         if (empty($definitions)) {

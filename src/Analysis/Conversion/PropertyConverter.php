@@ -24,9 +24,6 @@ final class PropertyConverter extends AbstractConverter
         $data = [
             'name'               => $property->getName(),
             'range'              => $property->getRange(),
-            // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
-            'startLine'          => $property->getRange()->getStart()->getLine() + 1,
-            'endLine'            => $property->getRange()->getEnd()->getLine() + 1,
             'filename'           => $property->getFile()->getPath(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
@@ -51,20 +48,16 @@ final class PropertyConverter extends AbstractConverter
             'declaringClass' => [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
-                // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
-                'startLineMember' => $property->getRange()->getStart()->getLine() + 1,
-                'endLineMember'   => $property->getRange()->getEnd()->getLine() + 1,
+                'memberRange'     => $property->getRange(),
             ],
         ]);
     }

@@ -35,8 +35,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'name'               => 'SimpleClass',
             'fqcn'               => '\A\SimpleClass',
             'range'              => $output['range'],
-            'startLine'          => 10,
-            'endLine'            => 13,
             'filename'           => $this->getPathFor($fileName),
             'type'               => 'class',
             'isDeprecated'       => false,
@@ -61,8 +59,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'class' => [
                     'name'               => 'class',
                     'range'              => $output['constants']['class']['range'],
-                    'startLine'          => 10,
-                    'endLine'            => 10,
                     'defaultValue'       => '\'A\SimpleClass\'',
                     'filename'           => $this->getPathFor($fileName),
                     'isStatic'           => true,
@@ -87,19 +83,16 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'declaringClass'     => [
                         'fqcn'      => '\A\SimpleClass',
                         'filename'  => $this->getPathFor($fileName),
-                        'startLine' => 10,
-                        'endLine'   => 13,
+                        'range'     => $output['constants']['class']['declaringClass']['range'],
                         'type'      => 'class',
                     ],
 
                     'declaringStructure' => [
                         'fqcn'            => '\A\SimpleClass',
                         'filename'        => $this->getPathFor($fileName),
-                        'startLine'       => 10,
-                        'endLine'         => 13,
+                        'range'           => $output['constants']['class']['declaringStructure']['range'],
                         'type'            => 'class',
-                        'startLineMember' => 10,
-                        'endLineMember'   => 10,
+                        'memberRange'     => $output['constants']['class']['declaringStructure']['memberRange'],
                     ],
                 ],
             ],
@@ -113,6 +106,30 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 new Position(9, 0)
             ),
             $output['constants']['class']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['constants']['class']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['constants']['class']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(9, 0)
+            ),
+            $output['constants']['class']['declaringStructure']['memberRange']
         );
 
         static::assertEquals(new Range(new Position(9, 0), new Position(12, 1)), $output['range']);
@@ -130,8 +147,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'name'               => 'testProperty',
             'range'              => $output['properties']['testProperty']['range'],
-            'startLine'          => 14,
-            'endLine'            => 14,
             'filename'           => $this->getPathFor($fileName),
             'defaultValue'       => "'test'",
             'isMagic'            => false,
@@ -163,19 +178,16 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\TestClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 5,
-                'endLine'   => 15,
+                'range'     => $output['properties']['testProperty']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 15,
+                'range'           => $output['properties']['testProperty']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 14,
-                'endLineMember'   => 14,
+                'memberRange'     => $output['properties']['testProperty']['declaringStructure']['memberRange'],
             ],
         ], $output['properties']['testProperty']);
 
@@ -185,6 +197,30 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 new Position(13, 36)
             ),
             $output['properties']['testProperty']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(14, 1)
+            ),
+            $output['properties']['testProperty']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(14, 1)
+            ),
+            $output['properties']['testProperty']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(13, 14),
+                new Position(13, 36)
+            ),
+            $output['properties']['testProperty']['declaringStructure']['memberRange']
         );
     }
 
@@ -200,8 +236,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'name'               => 'testMethod',
             'range'              => $output['methods']['testMethod']['range'],
-            'startLine'          => 19,
-            'endLine'            => 22,
             'filename'           => $this->getPathFor($fileName),
 
             'parameters'         => [
@@ -307,19 +341,16 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass'     => [
                 'fqcn'      => '\A\TestClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 5,
-                'endLine'   => 23,
+                'range'     => $output['methods']['testMethod']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 23,
+                'range'           => $output['methods']['testMethod']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 19,
-                'endLineMember'   => 22,
+                'memberRange'     => $output['methods']['testMethod']['declaringStructure']['memberRange'],
             ],
         ], $output['methods']['testMethod']);
 
@@ -329,6 +360,30 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 new Position(21, 5)
             ),
             $output['methods']['testMethod']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(22, 1)
+            ),
+            $output['methods']['testMethod']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(22, 1)
+            ),
+            $output['methods']['testMethod']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(18, 4),
+                new Position(21, 5)
+            ),
+            $output['methods']['testMethod']['declaringStructure']['memberRange']
         );
     }
 
@@ -344,8 +399,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'name'               => 'TEST_CONSTANT',
             'range'              => $output['constants']['TEST_CONSTANT']['range'],
-            'startLine'          => 14,
-            'endLine'            => 14,
             'defaultValue'       => '5',
             'filename'           => $this->getPathFor($fileName),
             'isStatic'           => true,
@@ -375,19 +428,16 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass'     => [
                 'fqcn'      => '\A\TestClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 5,
-                'endLine'   => 15,
+                'range'           => $output['constants']['TEST_CONSTANT']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 5,
-                'endLine'         => 15,
+                'range'           => $output['constants']['TEST_CONSTANT']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 14,
-                'endLineMember'   => 14,
+                'memberRange'     => $output['constants']['TEST_CONSTANT']['declaringStructure']['memberRange'],
             ],
         ], $output['constants']['TEST_CONSTANT']);
 
@@ -397,6 +447,30 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 new Position(13, 27)
             ),
             $output['constants']['TEST_CONSTANT']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(14, 1)
+            ),
+            $output['constants']['TEST_CONSTANT']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(14, 1)
+            ),
+            $output['constants']['TEST_CONSTANT']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(13, 10),
+                new Position(13, 27)
+            ),
+            $output['constants']['TEST_CONSTANT']['declaringStructure']['memberRange']
         );
     }
 
@@ -550,28 +624,61 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 21,
-                'endLine'   => 39,
+                'range'     => $output['methods']['__construct']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 21,
-                'endLine'         => 39,
+                'range'           => $output['methods']['__construct']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 25,
-                'endLineMember'   => 28,
+                'memberRange'     => $output['methods']['__construct']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 25,
-            'endLine'     => 28,
+            'range'       => $output['methods']['__construct']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['__construct']['override']);
 
-        static::assertSame(55, $output['methods']['__construct']['startLine']);
-        static::assertSame(58, $output['methods']['__construct']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(24, 4),
+                new Position(27, 5)
+            ),
+            $output['methods']['__construct']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['__construct']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['__construct']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(24, 4),
+                new Position(27, 5)
+            ),
+            $output['methods']['__construct']['override']['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(54, 4),
+                new Position(57, 5)
+            ),
+            $output['methods']['__construct']['range']
+        );
 
         static::assertSame([
             [
@@ -601,28 +708,61 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 21,
-                'endLine'   => 39,
+                'range'     => $output['methods']['parentTraitMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentTrait',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 13,
-                'endLine'         => 19,
+                'range'           => $output['methods']['parentTraitMethod']['override']['declaringStructure']['range'],
                 'type'            => 'trait',
-                'startLineMember' => 15,
-                'endLineMember'   => 18,
+                'memberRange'     => $output['methods']['parentTraitMethod']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 15,
-            'endLine'     => 18,
+            'range'       => $output['methods']['parentTraitMethod']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['parentTraitMethod']['override']);
 
-        static::assertSame(65, $output['methods']['parentTraitMethod']['startLine']);
-        static::assertSame(68, $output['methods']['parentTraitMethod']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(14, 4),
+                new Position(17, 5)
+            ),
+            $output['methods']['parentTraitMethod']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['parentTraitMethod']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(12, 0),
+                new Position(18, 1)
+            ),
+            $output['methods']['parentTraitMethod']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(14, 4),
+                new Position(17, 5)
+            ),
+            $output['methods']['parentTraitMethod']['override']['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(64, 4),
+                new Position(67, 5)
+            ),
+            $output['methods']['parentTraitMethod']['range']
+        );
 
         static::assertSame([
             [
@@ -653,55 +793,121 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 21,
-                'endLine'   => 39,
+                'range'     => $output['methods']['parentMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 21,
-                'endLine'         => 39,
+                'range'           => $output['methods']['parentMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 30,
-                'endLineMember'   => 33,
+                'memberRange'     => $output['methods']['parentMethod']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 30,
-            'endLine'     => 33,
+            'range'     => $output['methods']['parentMethod']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['parentMethod']['override']);
 
-        static::assertSame(70, $output['methods']['parentMethod']['startLine']);
-        static::assertSame(73, $output['methods']['parentMethod']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(29, 4),
+                new Position(32, 5)
+            ),
+            $output['methods']['parentMethod']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['parentMethod']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['parentMethod']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(29, 4),
+                new Position(32, 5)
+            ),
+            $output['methods']['parentMethod']['override']['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(69, 4),
+                new Position(72, 5)
+            ),
+            $output['methods']['parentMethod']['range']
+        );
 
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 21,
-                'endLine'   => 39,
+                'range'     => $output['methods']['ancestorMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 21,
-                'endLine'         => 39,
+                'range'           => $output['methods']['ancestorMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 35,
-                'endLineMember'   => 38,
+                'memberRange'     => $output['methods']['ancestorMethod']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 35,
-            'endLine'     => 38,
+            'range'       => $output['methods']['ancestorMethod']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['ancestorMethod']['override']);
 
-        static::assertSame(60, $output['methods']['ancestorMethod']['startLine']);
-        static::assertSame(63, $output['methods']['ancestorMethod']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(34, 4),
+                new Position(37, 5)
+            ),
+            $output['methods']['ancestorMethod']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['ancestorMethod']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(20, 0),
+                new Position(38, 1)
+            ),
+            $output['methods']['ancestorMethod']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(34, 4),
+                new Position(37, 5)
+            ),
+            $output['methods']['ancestorMethod']['override']['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(59, 4),
+                new Position(62, 5)
+            ),
+            $output['methods']['ancestorMethod']['range']
+        );
 
         static::assertSame([
             [
@@ -732,28 +938,61 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\TestTrait',
                 'filename'  =>  $this->getPathFor($fileName),
-                'startLine' => 41,
-                'endLine'   => 49,
+                'range'     => $output['methods']['traitMethod']['override']['declaringClass']['range'],
                 'type'      => 'trait',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestTrait',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 41,
-                'endLine'         => 49,
+                'range'           => $output['methods']['traitMethod']['override']['declaringStructure']['range'],
                 'type'            => 'trait',
-                'startLineMember' => 43,
-                'endLineMember'   => 46,
+                'memberRange'     => $output['methods']['traitMethod']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 43,
-            'endLine'     => 46,
+            'range'       => $output['methods']['traitMethod']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['traitMethod']['override']);
 
-        static::assertSame(75, $output['methods']['traitMethod']['startLine']);
-        static::assertSame(78, $output['methods']['traitMethod']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(42, 4),
+                new Position(45, 5)
+            ),
+            $output['methods']['traitMethod']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(40, 0),
+                new Position(48, 1)
+            ),
+            $output['methods']['traitMethod']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(40, 0),
+                new Position(48, 1)
+            ),
+            $output['methods']['traitMethod']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(42, 4),
+                new Position(45, 5)
+            ),
+            $output['methods']['traitMethod']['override']['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(74, 4),
+                new Position(77, 5)
+            ),
+            $output['methods']['traitMethod']['range']
+        );
 
         static::assertSame([
             [
@@ -796,30 +1035,63 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  =>  $this->getPathFor($fileName),
-                'startLine' => 10,
-                'endLine'   => 16,
+                'range'     => $output['methods']['interfaceMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 10,
-                'endLine'         => 16,
+                'range'           => $output['methods']['interfaceMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 12,
-                'endLineMember'   => 15,
+                'memberRange'     => $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 12,
-            'endLine'     => 15,
+            'range'       => $output['methods']['interfaceMethod']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['interfaceMethod']['override']);
 
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(14, 5)
+            ),
+            $output['methods']['interfaceMethod']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(15, 1)
+            ),
+            $output['methods']['interfaceMethod']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(15, 1)
+            ),
+            $output['methods']['interfaceMethod']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(14, 5)
+            ),
+            $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange']
+        );
+
         static::assertEmpty($output['methods']['interfaceMethod']['implementations']);
 
-        static::assertSame(20, $output['methods']['interfaceMethod']['startLine']);
-        static::assertSame(23, $output['methods']['interfaceMethod']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(19, 4),
+                new Position(22, 5)
+            ),
+            $output['methods']['interfaceMethod']['range']
+        );
     }
 
     /**
@@ -836,52 +1108,113 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
                     'filename'  =>  $this->getPathFor($fileName),
-                    'startLine' => 5,
-                    'endLine'   => 8,
+                    'range'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['interfaceMethod']['implementations'][0]['range'],
             ],
         ], $output['methods']['interfaceMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 38)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 38)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
 
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  =>  $this->getPathFor($fileName),
-                'startLine' => 10,
-                'endLine'   => 16,
+                'range'     => $output['methods']['interfaceMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 10,
-                'endLine'         => 16,
+                'range'           => $output['methods']['interfaceMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 12,
-                'endLineMember'   => 15,
+                'memberRange'     => $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine'   => 12,
-            'endLine'     => 15,
+            'range'       => $output['methods']['interfaceMethod']['override']['range'],
             'wasAbstract' => false,
         ], $output['methods']['interfaceMethod']['override']);
 
-        static::assertSame(20, $output['methods']['interfaceMethod']['startLine']);
-        static::assertSame(23, $output['methods']['interfaceMethod']['endLine']);
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(14, 5)
+            ),
+            $output['methods']['interfaceMethod']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(15, 1)
+            ),
+            $output['methods']['interfaceMethod']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(15, 1)
+            ),
+            $output['methods']['interfaceMethod']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(14, 5)
+            ),
+            $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(19, 4),
+                new Position(22, 5)
+            ),
+            $output['methods']['interfaceMethod']['range']
+        );
     }
 
     /**
@@ -897,70 +1230,154 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 15,
-                'endLine'   => 21,
+                'range'     => $output['properties']['parentTraitProperty']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentTrait',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 10,
-                'endLine'         => 13,
+                'range'           => $output['properties']['parentTraitProperty']['override']['declaringStructure']['range'],
                 'type'            => 'trait',
-                'startLineMember' => 12,
-                'endLineMember'   => 12,
+                'memberRange'     => $output['properties']['parentTraitProperty']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine' => 12,
-            'endLine'   => 12,
+            'range' => $output['properties']['parentTraitProperty']['override']['range'],
         ], $output['properties']['parentTraitProperty']['override']);
 
+        static::assertEquals(
+            new Range(
+                new Position(11, 14),
+                new Position(11, 34)
+            ),
+            $output['properties']['parentTraitProperty']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(14, 0),
+                new Position(20, 1)
+            ),
+            $output['properties']['parentTraitProperty']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['properties']['parentTraitProperty']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 14),
+                new Position(11, 34)
+            ),
+            $output['properties']['parentTraitProperty']['override']['declaringStructure']['memberRange']
+        );
+
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 15,
-                'endLine'   => 21,
+                'range'     => $output['properties']['parentProperty']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 15,
-                'endLine'         => 21,
+                'range'           => $output['properties']['parentProperty']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 19,
-                'endLineMember'   => 19,
+                'memberRange'     => $output['properties']['parentProperty']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine' => 19,
-            'endLine'   => 19,
+            'range' => $output['properties']['parentProperty']['override']['range'],
         ], $output['properties']['parentProperty']['override']);
 
+        static::assertEquals(
+            new Range(
+                new Position(18, 14),
+                new Position(18, 29)
+            ),
+            $output['properties']['parentProperty']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(14, 0),
+                new Position(20, 1)
+            ),
+            $output['properties']['parentProperty']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(14, 0),
+                new Position(20, 1)
+            ),
+            $output['properties']['parentProperty']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(18, 14),
+                new Position(18, 29)
+            ),
+            $output['properties']['parentProperty']['override']['declaringStructure']['memberRange']
+        );
+
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'filename'  => $this->getPathFor($fileName),
-                'startLine' => 15,
-                'endLine'   => 21,
+                'range'     => $output['properties']['ancestorProperty']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
                 'filename'        => $this->getPathFor($fileName),
-                'startLine'       => 15,
-                'endLine'         => 21,
+                'range'           => $output['properties']['ancestorProperty']['override']['declaringStructure']['range'],
                 'type'            => 'class',
-                'startLineMember' => 20,
-                'endLineMember'   => 20,
+                'memberRange'     => $output['properties']['ancestorProperty']['override']['declaringStructure']['memberRange'],
             ],
 
-            'startLine' => 20,
-            'endLine'   => 20,
+            'range' => $output['properties']['ancestorProperty']['override']['range'],
         ], $output['properties']['ancestorProperty']['override']);
+
+        static::assertEquals(
+            new Range(
+                new Position(19, 14),
+                new Position(19, 31)
+            ),
+            $output['properties']['ancestorProperty']['override']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(14, 0),
+                new Position(20, 1)
+            ),
+            $output['properties']['ancestorProperty']['override']['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(14, 0),
+                new Position(20, 1)
+            ),
+            $output['properties']['ancestorProperty']['override']['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(19, 14),
+                new Position(19, 31)
+            ),
+            $output['properties']['ancestorProperty']['override']['declaringStructure']['memberRange']
+        );
     }
 
     /**
@@ -1001,25 +1418,53 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentClass',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 10,
-                    'endLine'   => 13,
+                    'range'     => $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'class',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\ParentInterface',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['parentInterfaceMethod']['implementations'][0]['range'],
             ],
         ], $output['methods']['parentInterfaceMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 44)
+            ),
+            $output['methods']['parentInterfaceMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 44)
+            ),
+            $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
 
         static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
         static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['fqcn']);
@@ -1039,25 +1484,53 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentInterface',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 5,
-                    'endLine'   => 8,
+                    'range'     => $output['methods']['interfaceParentMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\ParentInterface',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['interfaceParentMethod']['implementations'][0]['range'],
             ],
         ], $output['methods']['interfaceParentMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 44)
+            ),
+            $output['methods']['interfaceParentMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['interfaceParentMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 44)
+            ),
+            $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
 
         static::assertNull($output['methods']['interfaceParentMethod']['override']);
 
@@ -1079,25 +1552,53 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 5,
-                    'endLine'   => 8,
+                    'range'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['interfaceMethod']['implementations'][0]['range'],
             ],
         ], $output['methods']['interfaceMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 38)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 38)
+            ),
+            $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
 
         static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
         static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
@@ -1465,48 +1966,104 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 5,
-                    'endLine'   => 8,
+                    'range'     => $output['methods']['someMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface1',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['someMethod']['implementations'][0]['range'],
             ],
 
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface2',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 10,
-                    'endLine'   => 13,
+                    'range'     => $output['methods']['someMethod']['implementations'][1]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface2',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 10,
-                    'endLine'         => 13,
+                    'range'           => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 12,
-                    'endLineMember'   => 12,
+                    'memberRange'     => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 12,
-                'endLine'   => 12,
+                'range' => $output['methods']['someMethod']['implementations'][1]['range'],
             ],
         ], $output['methods']['someMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(11, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(11, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange']
+        );
 
         static::assertNull($output['methods']['someMethod']['override']);
     }
@@ -1528,48 +2085,104 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 5,
-                    'endLine'   => 8,
+                    'range'     => $output['methods']['someMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface1',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['someMethod']['implementations'][0]['range'],
             ],
 
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface2',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 10,
-                    'endLine'   => 13,
+                    'range'     => $output['methods']['someMethod']['implementations'][1]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface2',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 10,
-                    'endLine'         => 13,
+                    'range'           => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 12,
-                    'endLineMember'   => 12,
+                    'memberRange'     => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 12,
-                'endLine'   => 12,
+                'range' => $output['methods']['someMethod']['implementations'][1]['range'],
             ],
         ], $output['methods']['someMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(11, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(11, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange']
+        );
 
         static::assertNull($output['methods']['someMethod']['override']);
     }
@@ -1591,48 +2204,104 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 5,
-                    'endLine'   => 8,
+                    'range'     => $output['methods']['someMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface1',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 5,
-                    'endLine'         => 8,
+                    'range'           => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 7,
-                    'endLineMember'   => 7,
+                    'memberRange'     => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 7,
-                'endLine'   => 7,
+                'range' => $output['methods']['someMethod']['implementations'][0]['range'],
             ],
 
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface2',
                     'filename'  => $this->getPathFor($fileName),
-                    'startLine' => 10,
-                    'endLine'   => 13,
+                    'range'     => $output['methods']['someMethod']['implementations'][1]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface2',
                     'filename'        => $this->getPathFor($fileName),
-                    'startLine'       => 10,
-                    'endLine'         => 13,
+                    'range'           => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range'],
                     'type'            => 'interface',
-                    'startLineMember' => 12,
-                    'endLineMember'   => 12,
+                    'memberRange'     => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange'],
                 ],
 
-                'startLine' => 12,
-                'endLine'   => 12,
+                'range' => $output['methods']['someMethod']['implementations'][1]['range'],
             ],
         ], $output['methods']['someMethod']['implementations']);
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(4, 0),
+                new Position(7, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(6, 4),
+                new Position(6, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(11, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringClass']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(9, 0),
+                new Position(12, 1)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range']
+        );
+
+        static::assertEquals(
+            new Range(
+                new Position(11, 4),
+                new Position(11, 33)
+            ),
+            $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange']
+        );
 
         static::assertNull($output['methods']['someMethod']['override']);
     }

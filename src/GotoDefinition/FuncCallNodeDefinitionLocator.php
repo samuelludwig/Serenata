@@ -64,7 +64,7 @@ final class FuncCallNodeDefinitionLocator
 
         $info = $this->getFunctionInfo($fqsen);
 
-        return new GotoDefinitionResult($info['filename'], $info['startLine']);
+        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
     }
 
     /**

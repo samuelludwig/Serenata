@@ -60,7 +60,7 @@ class ConstFetchNodeDefinitionLocator
 
         $info = $this->getConstantInfo($fqsen);
 
-        return new GotoDefinitionResult($info['filename'], $info['startLine']);
+        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
     }
 
     /**

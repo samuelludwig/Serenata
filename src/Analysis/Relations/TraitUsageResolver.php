@@ -84,8 +84,7 @@ final class TraitUsageResolver extends AbstractResolver
             $overriddenPropertyData = [
                 'declaringClass'     => $childProperty['declaringClass'],
                 'declaringStructure' => $traitPropertyData['declaringStructure'],
-                'startLine'          => $traitPropertyData['startLine'],
-                'endLine'            => $traitPropertyData['endLine'],
+                'range'              => $traitPropertyData['range'],
             ];
 
             if ($traitPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
@@ -100,11 +99,9 @@ final class TraitUsageResolver extends AbstractResolver
             $childProperty['declaringStructure'] = [
                 'fqcn'            => $traitPropertyData['declaringStructure']['fqcn'],
                 'filename'        => $traitPropertyData['declaringStructure']['filename'],
-                'startLine'       => $traitPropertyData['declaringStructure']['startLine'],
-                'endLine'         => $traitPropertyData['declaringStructure']['endLine'],
+                'range'           => $traitPropertyData['declaringStructure']['range'],
                 'type'            => $traitPropertyData['declaringStructure']['type'],
-                'startLineMember' => $traitPropertyData['startLine'],
-                'endLineMember'   => $traitPropertyData['endLine'],
+                'memberRange'     => $traitPropertyData['range'],
             ];
         } else {
             $childProperty = [];
@@ -116,8 +113,7 @@ final class TraitUsageResolver extends AbstractResolver
             'declaringClass' => [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
             ],
         ]);
@@ -144,8 +140,7 @@ final class TraitUsageResolver extends AbstractResolver
                     [
                         'declaringClass'     => $childMethod['declaringClass'],
                         'declaringStructure' => $traitMethodData['declaringStructure'],
-                        'startLine'          => $traitMethodData['startLine'],
-                        'endLine'            => $traitMethodData['endLine'],
+                        'range'              => $traitMethodData['range'],
                     ],
                 ]);
             } else {
@@ -170,8 +165,7 @@ final class TraitUsageResolver extends AbstractResolver
                         $overrideData = [
                             'declaringClass'     => $traitMethodData['declaringClass'],
                             'declaringStructure' => $traitMethodData['declaringStructure'],
-                            'startLine'          => $traitMethodData['startLine'],
-                            'endLine'            => $traitMethodData['endLine'],
+                            'range'              => $traitMethodData['range'],
                             'wasAbstract'        => $traitMethodData['isAbstract'],
                         ];
                     }
@@ -179,8 +173,7 @@ final class TraitUsageResolver extends AbstractResolver
                     $overrideData = [
                         'declaringClass'     => $childMethod['declaringClass'],
                         'declaringStructure' => $traitMethodData['declaringStructure'],
-                        'startLine'          => $traitMethodData['startLine'],
-                        'endLine'            => $traitMethodData['endLine'],
+                        'range'              => $traitMethodData['range'],
                         'wasAbstract'        => $traitMethodData['isAbstract'],
                     ];
                 }
@@ -199,21 +192,18 @@ final class TraitUsageResolver extends AbstractResolver
                 $childMethod['declaringStructure'] = [
                     'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
                     'filename'        => $traitMethodData['declaringStructure']['filename'],
-                    'startLine'       => $traitMethodData['declaringStructure']['startLine'],
+                    'range'           => $traitMethodData['declaringStructure']['range'],
                     'endLine'         => $traitMethodData['declaringStructure']['endLine'],
                     'type'            => $traitMethodData['declaringStructure']['type'],
-                    'startLineMember' => $traitMethodData['startLine'],
-                    'endLineMember'   => $traitMethodData['endLine'],
+                    'memberRange'     => $traitMethodData['range'],
                 ];
             } else {
                 $childMethod['declaringStructure'] = [
                     'fqcn'            => $class['fqcn'],
                     'filename'        => $class['filename'],
-                    'startLine'       => $class['startLine'],
-                    'endLine'         => $class['endLine'],
+                    'range'           => $class['range'],
                     'type'            => $class['type'],
-                    'startLineMember' => $childMethod['startLine'],
-                    'endLineMember'   => $childMethod['endLine'],
+                    'memberRange'     => $childMethod['range'],
                 ];
             }
         } else {
@@ -221,11 +211,9 @@ final class TraitUsageResolver extends AbstractResolver
                 'declaringStructure' => [
                     'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
                     'filename'        => $traitMethodData['declaringStructure']['filename'],
-                    'startLine'       => $traitMethodData['declaringStructure']['startLine'],
-                    'endLine'         => $traitMethodData['declaringStructure']['endLine'],
+                    'range'           => $traitMethodData['declaringStructure']['range'],
                     'type'            => $traitMethodData['declaringStructure']['type'],
-                    'startLineMember' => $traitMethodData['startLine'],
-                    'endLineMember'   => $traitMethodData['endLine'],
+                    'memberRange'     => $traitMethodData['range'],
                 ],
             ];
         }
@@ -237,8 +225,7 @@ final class TraitUsageResolver extends AbstractResolver
             'declaringClass' => [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
             ],
         ]);

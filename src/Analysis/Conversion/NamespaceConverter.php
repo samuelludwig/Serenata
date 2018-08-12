@@ -17,13 +17,10 @@ final class NamespaceConverter extends AbstractConverter
     public function convert(Structures\FileNamespace $namespace): array
     {
         return [
-            'id'        => $namespace->getId(),
-            'name'      => $namespace->getName(),
-            'file'      => $namespace->getFile()->getPath(),
-            'range'     => $namespace->getRange(),
-            // TODO: "+ 1" is only done for backwards compatibility, remove as soon as we can break it.
-            'startLine' => $namespace->getRange()->getStart()->getLine(),
-            'endLine'   => $namespace->getRange()->getEnd()->getLine(),
+            'id'    => $namespace->getId(),
+            'name'  => $namespace->getName(),
+            'file'  => $namespace->getFile()->getPath(),
+            'range' => $namespace->getRange(),
         ];
     }
 }

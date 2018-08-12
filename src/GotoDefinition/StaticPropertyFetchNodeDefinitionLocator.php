@@ -53,6 +53,6 @@ class StaticPropertyFetchNodeDefinitionLocator
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         $info = array_shift($infoElements);
 
-        return new GotoDefinitionResult($info['filename'], $info['startLine']);
+        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
     }
 }

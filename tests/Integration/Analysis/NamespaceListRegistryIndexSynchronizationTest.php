@@ -81,7 +81,7 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
             $secondElement = array_shift($results);
 
             static::assertSame('Test', $secondElement['name']);
-            static::assertSame(4, $secondElement['endLine']);
+            static::assertSame(4, $secondElement['range']->getEnd()->getLine());
 
             return str_replace('namespace Test;', "namespace Test;\n\n", $source);
         };
@@ -97,7 +97,7 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
             $secondElement = array_shift($results);
 
             static::assertSame('Test', $secondElement['name']);
-            static::assertSame(6, $secondElement['endLine']);
+            static::assertSame(6, $secondElement['range']->getEnd()->getLine());
         };
 
         $path = $this->getPathFor('OldNamespaceIsRemoved.phpt');

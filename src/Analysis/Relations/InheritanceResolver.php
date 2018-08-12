@@ -58,19 +58,16 @@ final class InheritanceResolver extends AbstractResolver
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],
                 'filename'  => $class['filename'],
-                'startLine' => $class['startLine'],
-                'endLine'   => $class['endLine'],
+                'range'     => $class['range'],
                 'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
-                'startLineMember' => $parentConstantData['startLine'],
-                'endLineMember'   => $parentConstantData['endLine'],
+                'memberRange'     => $parentConstantData['range'],
             ],
         ];
     }
@@ -93,8 +90,7 @@ final class InheritanceResolver extends AbstractResolver
             $overrideData = [
                 'declaringClass'     => $parentPropertyData['declaringClass'],
                 'declaringStructure' => $parentPropertyData['declaringStructure'],
-                'startLine'          => $parentPropertyData['startLine'],
-                'endLine'            => $parentPropertyData['endLine'],
+                'range'              => $parentPropertyData['range'],
             ];
 
             if ($parentPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
@@ -109,19 +105,16 @@ final class InheritanceResolver extends AbstractResolver
             $childProperty['declaringClass'] = [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
             ];
 
             $childProperty['declaringStructure'] = [
                 'fqcn'            => $class['fqcn'],
                 'filename'        => $class['filename'],
-                'startLine'       => $class['startLine'],
-                'endLine'         => $class['endLine'],
+                'range'           => $class['range'],
                 'type'            => $class['type'],
-                'startLineMember' => $childProperty['startLine'],
-                'endLineMember'   => $childProperty['endLine'],
+                'memberRange'     => $childProperty['range'],
             ];
         } else {
             $childProperty = [];
@@ -156,16 +149,14 @@ final class InheritanceResolver extends AbstractResolver
                     [
                         'declaringClass'     => $parentMethodData['declaringClass'],
                         'declaringStructure' => $parentMethodData['declaringStructure'],
-                        'startLine'          => $parentMethodData['startLine'],
-                        'endLine'            => $parentMethodData['endLine'],
+                        'range'              => $parentMethodData['range'],
                     ],
                 ]);
             } else {
                 $overrideData = [
                     'declaringClass'     => $parentMethodData['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],
-                    'startLine'          => $parentMethodData['startLine'],
-                    'endLine'            => $parentMethodData['endLine'],
+                    'range'              => $parentMethodData['range'],
                     'wasAbstract'        => $parentMethodData['isAbstract'],
                 ];
             }

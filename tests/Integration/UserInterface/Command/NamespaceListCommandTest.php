@@ -2,6 +2,9 @@
 
 namespace Serenata\Tests\Integration\UserInterface\Command;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
 use Serenata\Indexing\FileNotFoundStorageException;
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
@@ -54,15 +57,27 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
 
         static::assertSame(null, $firstItem['name']);
         static::assertSame($path . 'NamespaceA.phpt', $firstItem['file']);
-        static::assertSame(0, $firstItem['startLine']);
-        static::assertSame(2, $firstItem['endLine']);
+
+        static::assertEquals(
+            new Range(
+                new Position(0, 0),
+                new Position(2, 0)
+            ),
+            $firstItem['range']
+        );
 
         $secondItem = array_shift($output);
 
         static::assertSame('NamespaceA', $secondItem['name']);
         static::assertSame($path . 'NamespaceA.phpt', $secondItem['file']);
-        static::assertSame(2, $secondItem['startLine']);
-        static::assertSame(9, $secondItem['endLine']);
+
+        static::assertEquals(
+            new Range(
+                new Position(2, 0),
+                new Position(9, 0)
+            ),
+            $secondItem['range']
+        );
     }
 
     /**
