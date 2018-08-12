@@ -12,6 +12,8 @@ use Serenata\Utility\TextDocumentItem;
 
 /**
  * Determines in which class a position (offset) in a file is located.
+ *
+ * @final
  */
 class FilePositionClasslikeDeterminer
 {
