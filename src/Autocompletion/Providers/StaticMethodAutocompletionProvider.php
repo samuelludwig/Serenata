@@ -152,7 +152,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
             $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
             [
-                // TODO: Deprecated, replaced with "detail". Remove in the next major version.
+                // TODO: Deprecated, replace with "detail". Remove in the next major version.
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method),
             ],

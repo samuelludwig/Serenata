@@ -112,7 +112,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             $property['name'],
             $property['shortDescription'],
             [
-                // TODO: Deprecated, replaced with "detail". Remove in the next major version.
+                // TODO: Deprecated, replace with "detail". Remove in the next major version.
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($property['types']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($property),
             ],
