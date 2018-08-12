@@ -2,7 +2,7 @@
 ### Improvements
 * [Major](https://gitlab.com/Serenata/Serenata/issues/113) [internal](https://gitlab.com/Serenata/Serenata/issues/111) refactoring work to becoming more compliant with the language server protocol
     * Use `TextDocumentItem` almost everywhere instead of using a `File` entity
-    * Use (language server) positions with character offsets in almost all places rather than old byte offsets
+    * [Use (language server) positions with character offsets in almost all places rather than old byte offsets](https://gitlab.com/Serenata/Serenata/issues/217)
     * Replace several [data clumps](https://en.wikipedia.org/wiki/Data_Clump_(Code_Smell)) with proper classes
 * Properties, constants, function parameters will now return a `mixed` type instead of no type at all if the type is not known
 * [All autocompletion suggestions now return data in their `textEdit` properties](https://gitlab.com/Serenata/Serenata/issues/213)
@@ -11,6 +11,8 @@
 * All commands (requests) now accept a LSP `uri` instead of `path` or `file`
 * All commands (requests) now accept a proper LSP `position` instead of an `offset` and a `charoffset` flag
 * All structural element data now contains a `range` property with `start` and `end` subproperties that contain the line and character position of the element
+* [Tooltips will now always show the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/220)
+* [Signature help will now always show the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/219)
 
 ## 4.3.0 (Unreleased)
 ### Improvements
