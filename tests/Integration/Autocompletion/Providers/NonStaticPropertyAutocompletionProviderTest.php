@@ -37,15 +37,6 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 null,
                 [
                     'protectionLevel'    => 'public',
-                    'declaringStructure' => [
-                        'fqcn'            => '\A',
-                        'filename'        => $this->getPathFor($fileName),
-                        'startLine'       => 3,
-                        'endLine'         => 9,
-                        'type'            => 'class',
-                        'startLineMember' => 8,
-                        'endLineMember'   => 8,
-                    ],
                     'returnTypes'        => 'int|string',
                 ],
                 [],
@@ -82,15 +73,6 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 null,
                 [
                     'protectionLevel'    => 'public',
-                    'declaringStructure' => [
-                            'fqcn'            => '\A',
-                            'filename'        => $this->getPathFor($fileName),
-                            'startLine'       => 3,
-                            'endLine'         => 9,
-                            'type'            => 'class',
-                            'startLineMember' => 8,
-                            'endLineMember'   => 8,
-                        ],
                     'returnTypes'        => 'mixed',
                 ],
                 [],

@@ -153,7 +153,6 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             $method['shortDescription'],
             [
                 // TODO: Deprecated, replaced with "detail". Remove in the next major version.
-                'declaringStructure' => $method['declaringStructure'],
                 'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
                 'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method),
             ],

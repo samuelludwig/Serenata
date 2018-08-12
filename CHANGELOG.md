@@ -18,6 +18,8 @@
     * This was done to reduce redundant information as the type hint is already available separately
     * If you needed this to take over the original type definition, it is probably better to try and localize the FQCN to local imports - or even add an import for it
 * Fix off-by-one error in line returned in goto definition responses (they were 1-indexed instead of 0-indexed)
+* Autocompletion for class members suggestions no longer pass back `extraData.declaringStructure`
+    * It was a non-standard property and has since been replaced by generating the new `detail` property
 
 ## 4.3.0 (Unreleased)
 ### Improvements
