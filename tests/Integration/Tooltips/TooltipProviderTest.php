@@ -36,7 +36,7 @@ Another paragraph.
 #### • **$second** — *int*
 Test
 
-#### • **$third** — *\Exception*
+#### • **$third** — *Exception*
 Test
 
 
@@ -44,13 +44,13 @@ Test
 *string&#124;bool*
 
 # Throws
-#### • **\Exception**
+#### • **Exception**
 When something happens
 
-#### • **\LogicException**
+#### • **LogicException**
 When something else happens.
 
-#### • **\RuntimeException**
+#### • **RuntimeException**
 (No context available)
 ');
     }

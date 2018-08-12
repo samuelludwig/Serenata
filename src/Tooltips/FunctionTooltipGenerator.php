@@ -2,6 +2,8 @@
 
 namespace Serenata\Tooltips;
 
+use LogicException;
+
 use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
 
 /**
@@ -120,7 +122,7 @@ class FunctionTooltipGenerator
 
         if (count($parameter['types']) > 0) {
             $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
-                return $type['type'];
+                return $this->getClassNameFromFqcn($type['type']);
             }, $parameter['types']));
 
             $text .= ' — *' . $value . '*';
@@ -148,7 +150,7 @@ class FunctionTooltipGenerator
 
         if (!empty($functionInfo['returnTypes'])) {
             $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
-                return $type['type'];
+                return $this->getClassNameFromFqcn($type['type']);
             }, $functionInfo['returnTypes']));
 
             $returnDescription = '*' . $value . '*';
@@ -173,7 +175,9 @@ class FunctionTooltipGenerator
         $throwsLines = [];
 
         foreach ($functionInfo['throws'] as $throwsItem) {
-            $text = "#### • **{$throwsItem['type']}**\n";
+            $type = $this->getClassNameFromFqcn($throwsItem['type']);
+
+            $text = "#### • **{$type}**\n";
 
             if ($throwsItem['description']) {
                 $text .= $throwsItem['description'];
@@ -189,5 +193,23 @@ class FunctionTooltipGenerator
         }
 
         return "# Throws\n" . implode("\n", $throwsLines);
+    }
+
+    /**
+     * @param string $fqcn
+     *
+     * @return string
+     */
+    private function getClassNameFromFqcn(string $fqcn): string
+    {
+        $parts = explode('\\', $fqcn);
+
+        $part = array_pop($parts);
+
+        if (!$part) {
+            throw new LogicException('FQCN "' . $fqcn . '" does not contain at least one part');
+        }
+
+        return $part;
     }
 }
