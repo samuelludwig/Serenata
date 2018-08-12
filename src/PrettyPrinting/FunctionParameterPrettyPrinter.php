@@ -2,6 +2,8 @@
 
 namespace Serenata\PrettyPrinting;
 
+use LogicException;
+
 /**
  * Pretty prints function and method parameters.
  */
@@ -48,7 +50,7 @@ class FunctionParameterPrettyPrinter
 
         if (count($parameter['types']) > 0) {
             $label .= $this->typeListPrettyPrinter->print(array_map(function (array $type) {
-                return $type['type'];
+                return $this->getClassNameFromFqcn($type['type']);
             }, $parameter['types']));
 
             $label .= ' ';
@@ -61,5 +63,23 @@ class FunctionParameterPrettyPrinter
         }
 
         return $label;
+    }
+
+    /**
+     * @param string $fqcn
+     *
+     * @return string
+     */
+    private function getClassNameFromFqcn(string $fqcn): string
+    {
+        $parts = explode('\\', $fqcn);
+
+        $part = array_pop($parts);
+
+        if (!$part) {
+            throw new LogicException('FQCN "' . $fqcn . '" does not contain at least one part');
+        }
+
+        return $part;
     }
 }

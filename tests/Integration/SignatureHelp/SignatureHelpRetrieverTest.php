@@ -99,8 +99,8 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     public function testFunctionCallDoesNotWorkWhenInsideClosureArgumentBody(): void
     {
         $expectedSignaturesResult = [
-            new SignatureInformation('test(\Closure $a)', null, [
-                new ParameterInformation('\Closure $a', null),
+            new SignatureInformation('test(Closure $a)', null, [
+                new ParameterInformation('Closure $a', null),
             ]),
         ];
 
