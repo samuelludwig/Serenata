@@ -57,7 +57,6 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $application = (new Application('PHP Integrator Core'))
             ->register('start')
                 ->addOption('uri', 'u', InputOption::VALUE_OPTIONAL, 'The URI to run on', null)
-                ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'The port to run on', null)
                 ->setCode(Closure::fromCallable([$this, 'runEventLoop']))
             ->getApplication();
 
@@ -86,11 +85,6 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     private function runEventLoop(InputInterface $input, OutputInterface $output): int
     {
         $uri = $input->getOption('uri');
-        $port = $input->getOption('port');
-
-        if ($port) {
-            $uri = 'tcp://127.0.0.1:' . $port;
-        }
 
         if ($uri === null) {
             throw new UnexpectedValueException('A URI for handling requests must be specified');
