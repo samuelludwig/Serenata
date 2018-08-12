@@ -82,9 +82,8 @@ services:
         arguments:
             - '@typeAnalyzer'
             - '@classlikeInfoBuilder'
-            - '@fileClasslikeListProvider'
+            - '@filePositionClasslikeDeterminer'
             - '@structureAwareNameResolverFactory'
-            - '@storage'
 
     funcCallNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer

@@ -5,15 +5,13 @@ namespace Serenata\Analysis\Typing\Deduction;
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\FilePositionClasslikeDeterminer;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
-use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
 use Serenata\Common\FilePosition;
-
-use Serenata\Indexing\StorageInterface;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
@@ -35,9 +33,9 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $classlikeInfoBuilder;
 
     /**
-     * @var FileClasslikeListProviderInterface
+     * @var FilePositionClasslikeDeterminer
      */
-    private $fileClasslikeListProvider;
+    private $filePositionClasslikeDeterminer;
 
     /**
      * @var StructureAwareNameResolverFactoryInterface
@@ -45,29 +43,21 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $structureAwareNameResolverFactory;
 
     /**
-     * @var StorageInterface
-     */
-    private $storage;
-
-    /**
      * @param TypeNormalizerInterface                    $typeNormalizer
      * @param ClasslikeInfoBuilderInterface              $classlikeInfoBuilder
-     * @param FileClasslikeListProviderInterface         $fileClasslikeListProvider
+     * @param FilePositionClasslikeDeterminer            $filePositionClasslikeDeterminer
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
-     * @param StorageInterface                           $storage
      */
     public function __construct(
         TypeNormalizerInterface $typeNormalizer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
-        FileClasslikeListProviderInterface $fileClasslikeListProvider,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        StorageInterface $storage
+        FilePositionClasslikeDeterminer $filePositionClasslikeDeterminer,
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
     ) {
         $this->typeNormalizer = $typeNormalizer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-        $this->fileClasslikeListProvider = $fileClasslikeListProvider;
+        $this->filePositionClasslikeDeterminer = $filePositionClasslikeDeterminer;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
-        $this->storage = $storage;
     }
 
     /**
@@ -82,7 +72,10 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
         $nameString = NodeHelpers::fetchClassName($context->getNode());
 
         if ($nameString === 'static' || $nameString === 'self') {
-            $currentClass = $this->findCurrentClassAt($context);
+            $currentClass = $this->filePositionClasslikeDeterminer->determine(
+                $context->getTextDocumentItem(),
+                $context->getPosition()
+            );
 
             if ($currentClass === null) {
                 return [];
@@ -90,7 +83,10 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             return [$this->typeNormalizer->getNormalizedFqcn($currentClass)];
         } elseif ($nameString === 'parent') {
-            $currentClassName = $this->findCurrentClassAt($context);
+            $currentClassName = $this->filePositionClasslikeDeterminer->determine(
+                $context->getTextDocumentItem(),
+                $context->getPosition()
+            );
 
             if (!$currentClassName) {
                 return [];
@@ -115,27 +111,5 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
         $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($nameString, $filePosition);
 
         return [$fqcn];
-    }
-
-    /**
-     * @param TypeDeductionContext $context
-     *
-     * @return string|null
-     */
-    private function findCurrentClassAt(TypeDeductionContext $context): ?string
-    {
-        $position = $context->getPosition();
-        $file = $this->storage->getFileByPath($context->getTextDocumentItem()->getUri());
-
-        $bestMatch = null;
-
-        /** @var string $fqcn */
-        foreach ($this->fileClasslikeListProvider->getAllForFile($file) as $fqcn => $class) {
-            if ($class['range']->contains($position)) {
-                $bestMatch = $fqcn;
-            }
-        }
-
-        return $bestMatch;
     }
 }
