@@ -76,7 +76,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'types'             => [
                         [
                             'type'         => 'string',
-                            'fqcn'         => 'string',
                             'resolvedType' => 'string',
                         ],
                     ],
@@ -150,13 +149,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'types'             => [
                 [
                     'type'         => '\A\MyType',
-                    'fqcn'         => '\A\MyType',
                     'resolvedType' => '\A\MyType',
                 ],
 
                 [
                     'type'         => 'string',
-                    'fqcn'         => 'string',
                     'resolvedType' => 'string',
                 ],
             ],
@@ -214,13 +211,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'types'        => [
                         [
                             'type'         => '\DateTimeInterface',
-                            'fqcn'         => '\DateTimeInterface',
                             'resolvedType' => '\DateTimeInterface',
                         ],
 
                         [
                             'type'         => '\DateTime',
-                            'fqcn'         => '\DateTime',
                             'resolvedType' => '\DateTime',
                         ],
                     ],
@@ -238,7 +233,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'types'        => [
                         [
                             'type'         => 'bool',
-                            'fqcn'         => 'bool',
                             'resolvedType' => 'bool',
                         ],
                     ],
@@ -256,7 +250,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'types'        => [
                         [
                             'type'         => 'mixed[]',
-                            'fqcn'         => 'mixed[]',
                             'resolvedType' => 'mixed[]',
                         ],
                     ],
@@ -292,13 +285,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'returnTypes' => [
                 [
                     'type'         => 'mixed',
-                    'fqcn'         => 'mixed',
                     'resolvedType' => 'mixed',
                 ],
 
                 [
                     'type'         => 'bool',
-                    'fqcn'         => 'bool',
                     'resolvedType' => 'bool',
                 ],
             ],
@@ -368,13 +359,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'types'             => [
                 [
                     'type'         => '\A\MyType',
-                    'fqcn'         => '\A\MyType',
                     'resolvedType' => '\A\MyType',
                 ],
 
                 [
                     'type'         => 'string',
-                    'fqcn'         => 'string',
                     'resolvedType' => 'string',
                 ],
             ],
@@ -545,7 +534,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'types' => [
                     [
                         'type'         => '\A\Foo',
-                        'fqcn'         => '\A\Foo',
                         'resolvedType' => '\A\Foo',
                     ],
                 ],
@@ -592,13 +580,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'types' => [
                     [
                         'type'         => '\A\Foo',
-                        'fqcn'         => '\A\Foo',
                         'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
-                        'fqcn'         => 'null',
                         'resolvedType' => 'null',
                     ],
                 ],
@@ -646,13 +632,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'types' => [
                     [
                         'type'         => '\A\Foo',
-                        'fqcn'         => '\A\Foo',
                         'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
-                        'fqcn'         => 'null',
                         'resolvedType' => 'null',
                     ],
                 ],
@@ -727,13 +711,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'types' => [
                     [
                         'type'         => '\A\Foo',
-                        'fqcn'         => '\A\Foo',
                         'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
-                        'fqcn'         => 'null',
                         'resolvedType' => 'null',
                     ],
                 ],
@@ -781,13 +763,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'types' => [
                     [
                         'type'         => '\A\Foo',
-                        'fqcn'         => '\A\Foo',
                         'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
-                        'fqcn'         => 'null',
                         'resolvedType' => 'null',
                     ],
                 ],
@@ -999,13 +979,11 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                 'types' => [
                     [
                         'type'         => '\A\Foo',
-                        'fqcn'         => '\A\Foo',
                         'resolvedType' => '\A\Foo',
                     ],
 
                     [
                         'type'         => 'null',
-                        'fqcn'         => 'null',
                         'resolvedType' => 'null',
                     ],
                 ],
@@ -1671,7 +1649,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropSelf']['types']);
@@ -1679,7 +1656,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['basePropStatic']['types']);
@@ -1687,7 +1663,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['basePropThis']['types']);
@@ -1695,7 +1670,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['propSelf']['types']);
@@ -1703,7 +1677,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['propStatic']['types']);
@@ -1711,7 +1684,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['propThis']['types']);
@@ -1719,7 +1691,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodSelf']['returnTypes']);
@@ -1727,7 +1698,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodStatic']['returnTypes']);
@@ -1735,7 +1705,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodThis']['returnTypes']);
@@ -1743,7 +1712,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodSelf']['returnTypes']);
@@ -1751,7 +1719,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodStatic']['returnTypes']);
@@ -1759,7 +1726,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodThis']['returnTypes']);
@@ -1767,7 +1733,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '\A\childClass',
-                'fqcn'         => '\A\childClass',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodOwnClassName']['returnTypes']);
@@ -1775,7 +1740,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][0]['types']);
@@ -1783,7 +1747,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][1]['types']);
@@ -1791,7 +1754,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][2]['types']);
@@ -1801,7 +1763,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropSelf']['types']);
@@ -1809,7 +1770,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropStatic']['types']);
@@ -1817,7 +1777,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropThis']['types']);
@@ -1825,7 +1784,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'self',
-                'fqcn'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodSelf']['returnTypes']);
@@ -1833,7 +1791,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => 'static',
-                'fqcn'         => 'static',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodStatic']['returnTypes']);
@@ -1841,7 +1798,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '$this',
-                'fqcn'         => '$this',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodThis']['returnTypes']);
@@ -1895,7 +1851,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             [
                 'type'         => '\DateTime',
-                'fqcn'         => '\DateTime',
                 'resolvedType' => '\DateTime',
             ],
         ], $output['methods']['foo']['returnTypes']);

@@ -85,7 +85,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
     {
         $typeArray = array_map(function (string $type) {
             return [
-                'fqcn' => $type,
+                'type' => $type,
             ];
         }, explode('|', $variable['type']));
 

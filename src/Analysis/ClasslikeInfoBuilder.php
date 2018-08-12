@@ -431,10 +431,10 @@ class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
         $typeAnalyzer = $this->typeAnalyzer;
 
         $this->walkTypes($result, function (array &$type) use ($typeAnalyzer) {
-            if ($type['fqcn'] !== null && $typeAnalyzer->isClassType($type['fqcn'])) {
-                $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['fqcn']);
+            if ($type['type'] !== null && $typeAnalyzer->isClassType($type['type'])) {
+                $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['type']);
             } else {
-                $type['resolvedType'] = $type['fqcn'];
+                $type['resolvedType'] = $type['type'];
             }
         });
     }

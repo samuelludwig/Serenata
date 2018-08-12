@@ -17,7 +17,7 @@ final class AutocompletionSuggestionTypeFormatter
         $shortTypes = [];
 
         foreach ($typeArrayList as $typeArray) {
-            $shortTypes[] = $this->getClassShortNameFromFqcn($typeArray['fqcn']);
+            $shortTypes[] = $this->getClassShortNameFromFqcn($typeArray['type']);
         }
 
         return implode('|', $shortTypes);

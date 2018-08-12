@@ -13,6 +13,9 @@
 * All structural element data now contains a `range` property with `start` and `end` subproperties that contain the line and character position of the element
 * [Tooltips will now always show the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/220)
 * [Signature help will now always show the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/219)
+* Structural element types now no longer contain an `fqcn` property; instead, the `type` property contains the original scalar type or an FQCN if it is a class type
+    * This was done to reduce redundant information as the type hint is already available separately
+    * If you needed this to take over the original type definition, it is probably better to try and localize the FQCN to local imports - or even add an import for it
 
 ## 4.3.0 (Unreleased)
 ### Improvements

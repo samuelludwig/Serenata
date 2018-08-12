@@ -25,7 +25,6 @@ abstract class AbstractConverter
             if (!$type instanceof CompoundDocblockType) {
                 $types[] = [
                     'type'         => $type->toString(),
-                    'fqcn'         => $type->toString(),
                     'resolvedType' => $type->toString(),
                 ];
             }
