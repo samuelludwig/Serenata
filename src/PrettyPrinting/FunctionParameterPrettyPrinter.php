@@ -46,7 +46,7 @@ class FunctionParameterPrettyPrinter
     {
         $label = '';
 
-        if (!empty($parameter['types'])) {
+        if (count($parameter['types']) > 0) {
             $label .= $this->typeListPrettyPrinter->print(array_map(function (array $type) {
                 return $type['type'];
             }, $parameter['types']));

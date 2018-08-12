@@ -118,7 +118,7 @@ class FunctionTooltipGenerator
 
         $text = '#### • **' . $text . '**';
 
-        if (!empty($parameter['types'])) {
+        if (count($parameter['types']) > 0) {
             $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
                 return $type['type'];
             }, $parameter['types']));
