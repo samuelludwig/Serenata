@@ -19,7 +19,7 @@
 
 Serenata (previously "PHP Integrator") is a gratis, libre and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
 
-More information for users, both developers looking to implement clients for other editors as well as programmers using the server via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://Serenata.github.io/).
+More information for users, both developers looking to implement clients for other editors as well as programmers using the server via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://serenata.gitlab.io/).
 
 ## What Features Are Supported?
 * Autocompletion
