@@ -1,4 +1,4 @@
-## 4.3.0 (Unreleased)
+## 4.3.0
 ### Improvements
 * [Static members will now also be shown during non-static access](https://gitlab.com/Serenata/Serenata/issues/199)
 * Autocompletion suggestions now give back a `detail` property as specified in the language server protocol
