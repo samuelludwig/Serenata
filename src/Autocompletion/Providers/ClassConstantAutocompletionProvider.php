@@ -85,8 +85,10 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
      *
      * @return Generator
      */
-    private function createSuggestionsForClasslikeInfo(array $classlikeInfo, AutocompletionProviderContext $context): Generator
-    {
+    private function createSuggestionsForClasslikeInfo(
+        array $classlikeInfo,
+        AutocompletionProviderContext $context
+    ): Generator {
         foreach ($classlikeInfo['constants'] as $constant) {
             yield $this->createSuggestion($constant, $context);
         }
