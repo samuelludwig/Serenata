@@ -76,7 +76,9 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
         if ($typeNode instanceof Node\NullableType) {
             $typeNode = $typeNode->type;
             $isNullable = true;
-        } elseif ($context->getNode()->default instanceof Node\Expr\ConstFetch && $context->getNode()->default->name->toString() === 'null') {
+        } elseif ($context->getNode()->default instanceof Node\Expr\ConstFetch &&
+            $context->getNode()->default->name->toString() === 'null'
+        ) {
             $isNullable = true;
         }
 
