@@ -31,7 +31,9 @@ final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     public function deduce(TypeDeductionContext $context): array
     {
-        if (!$context->getNode() instanceof Node\Expr\MethodCall && !$context->getNode() instanceof Node\Expr\StaticCall) {
+        if (!$context->getNode() instanceof Node\Expr\MethodCall &&
+            !$context->getNode() instanceof Node\Expr\StaticCall
+        ) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
