@@ -13,7 +13,6 @@ use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Tooltips\TooltipResult;
 use Serenata\Tooltips\TooltipProvider;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
