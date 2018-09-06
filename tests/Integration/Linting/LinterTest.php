@@ -13,7 +13,19 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
 
-        static::assertSame(2, count($output['errors']));
+        static::assertSame([
+            [
+                'message' => 'Syntax error, unexpected \';\' on line 6',
+                'start'   => 47,
+                'end'     => 47,
+            ],
+
+            [
+                'message' => 'Syntax error, unexpected \';\' on line 8',
+                'start'   => 89,
+                'end'     => 89,
+            ],
+        ], $output['errors']);
     }
 
     /**
