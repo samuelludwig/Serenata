@@ -91,7 +91,7 @@ final class Indexer implements EventEmitterInterface
      * @param string[]                       $globsToExclude
      * @param bool                           $useStdin
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param int|null                       $originatingRequestId
+     * @param int|string|null                $originatingRequestId
      *
      * @return bool
      */
@@ -101,7 +101,7 @@ final class Indexer implements EventEmitterInterface
         array $globsToExclude,
         bool $useStdin,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
-        ?int $originatingRequestId = null
+        $originatingRequestId = null
     ): bool {
         $paths = array_map(function (string $path) {
             return $this->pathNormalizer->normalize($path);
@@ -155,14 +155,14 @@ final class Indexer implements EventEmitterInterface
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param int|null                       $requestId
+     * @param int|string|null                $requestId
      */
     private function indexDirectories(
         array $paths,
         array $extensionsToIndex,
         array $globsToExclude,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
-        ?int $requestId
+        $requestId
     ): void {
         if (empty($paths)) {
             return; // Optimization that skips expensive operations during demuxing, which stack.

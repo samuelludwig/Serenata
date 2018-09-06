@@ -42,14 +42,14 @@ class DirectoryIndexRequestDemuxer
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param int|null                       $originatingRequestId
+     * @param int|string|null                $originatingRequestId
      */
     public function index(
         array $paths,
         array $extensionsToIndex,
         array $globsToExclude,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
-        ?int $originatingRequestId
+        $originatingRequestId
     ): void {
         $iterator = $this->directoryIndexableFileIteratorFactory->create($paths, $extensionsToIndex, $globsToExclude);
 
@@ -91,13 +91,13 @@ class DirectoryIndexRequestDemuxer
     }
 
     /**
-     * @param int                            $originatingRequestId
+     * @param int|string|null                $originatingRequestId
      * @param int                            $index
      * @param int                            $total
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      */
     private function queueProgressRequest(
-        int $originatingRequestId,
+        $originatingRequestId,
         int $index,
         int $total,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender
