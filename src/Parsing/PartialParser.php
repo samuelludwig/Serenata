@@ -170,7 +170,7 @@ final class PartialParser implements Parser
 
         $nodes = $this->tryParse($code . " {$dummyName});");
 
-        if (empty($nodes)) {
+        if ($nodes === null || count($nodes) === 0) {
             return $nodes;
         }
 
@@ -205,7 +205,7 @@ final class PartialParser implements Parser
 
         $nodes = $this->tryParse($code . ": {$dummyName};");
 
-        if (empty($nodes)) {
+        if ($nodes === null || count($nodes) === 0) {
             return $nodes;
         }
 
@@ -249,7 +249,7 @@ final class PartialParser implements Parser
 
         $nodes = $this->tryParse($code . $dummyName . ';');
 
-        if (empty($nodes)) {
+        if ($nodes === null || count($nodes) === 0) {
             return null;
         }
 

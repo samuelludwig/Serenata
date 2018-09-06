@@ -29,7 +29,7 @@ class TooltipTypeListPrettyPrinter
      */
     public function print(array $types): string
     {
-        if (empty($types)) {
+        if (count($types) === 0) {
             return '(Not known)';
         }
 

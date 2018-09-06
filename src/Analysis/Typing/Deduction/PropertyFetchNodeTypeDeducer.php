@@ -72,7 +72,7 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         foreach ($infoItems as $info) {
             $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['types']);
 
-            if (!empty($fetchedTypes)) {
+            if (count($fetchedTypes) > 0) {
                 $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
             }
         }
@@ -89,7 +89,7 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             $types
         );
 
-        if (!empty($localTypes)) {
+        if (count($localTypes) > 0) {
             return $localTypes;
         }
 

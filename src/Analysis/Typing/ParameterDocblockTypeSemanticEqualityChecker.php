@@ -241,7 +241,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
                 }
             );
 
-            return empty($docblockTypesThatAreNotArrayTypes);
+            return count($docblockTypesThatAreNotArrayTypes) === 0;
         }
 
         return
@@ -278,7 +278,7 @@ class ParameterDocblockTypeSemanticEqualityChecker
                 }
             );
 
-            if (!empty($docblockTypesThatAreNotClassTypes)) {
+            if (count($docblockTypesThatAreNotClassTypes) > 0) {
                 return false;
             }
 

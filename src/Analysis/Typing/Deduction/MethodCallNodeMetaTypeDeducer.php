@@ -77,7 +77,7 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
             );
         }
 
-        if (empty($staticTypes)) {
+        if (count($staticTypes) === 0) {
             return $this->delegate->deduce($context);
         }
 

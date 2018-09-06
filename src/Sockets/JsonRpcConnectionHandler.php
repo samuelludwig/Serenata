@@ -127,7 +127,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
         } elseif (!$this->request['wasBoundaryFound']) {
             $header = $this->readRawHeader($data);
 
-            if (empty($header)) {
+            if ($header === '') {
                 $this->request['wasBoundaryFound'] = true;
             }
 
@@ -182,7 +182,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     {
         $responseContent = $this->getEncodedResponse($response);
 
-        if (empty($responseContent)) {
+        if ($responseContent === '') {
             trigger_error(
                 'Empty JSON body encountered after encoding, JSON reports "' . json_last_error_msg() . '"',
                 E_USER_WARNING

@@ -56,7 +56,7 @@ class StaticPropertyFetchNodeTooltipGenerator
     ): string {
         $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
-        if (empty($infoElements)) {
+        if (count($infoElements) === 0) {
             throw new UnexpectedValueException('No property fetch information was found for node');
         }
 

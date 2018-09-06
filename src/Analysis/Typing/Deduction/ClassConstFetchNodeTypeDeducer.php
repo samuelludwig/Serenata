@@ -65,7 +65,7 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                     $info['constants'][$context->getNode()->name->name]['types']
                 );
 
-                if (!empty($fetchedTypes)) {
+                if (count($fetchedTypes) > 0) {
                     $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
                 }
             }

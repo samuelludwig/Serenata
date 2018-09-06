@@ -113,7 +113,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
         );
 
-        if (empty($words)) {
+        if (!$words || count($words) === 0) {
             return '';
         }
 

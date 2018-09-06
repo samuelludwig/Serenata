@@ -47,7 +47,7 @@ class ImmutableSet implements IteratorAggregate
      */
     public function isEmpty(): bool
     {
-        return empty($this->toArray());
+        return count($this->toArray()) === 0;
     }
 
     /**
@@ -58,8 +58,8 @@ class ImmutableSet implements IteratorAggregate
     public function equals(ImmutableSet $other): bool
     {
         return
-            empty(array_diff($this->toArray(), $other->toArray())) &&
-            empty(array_diff($other->toArray(), $this->toArray()));
+            count(array_diff($this->toArray(), $other->toArray())) === 0 &&
+            count(array_diff($other->toArray(), $this->toArray())) === 0;
     }
 
     /**

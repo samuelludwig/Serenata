@@ -127,7 +127,7 @@ class JsonRpcQueueItemProcessor
         $counter = 1;
 
         $reducer = function (string $carry, Throwable $item) use (&$counter): string {
-            if (!empty($carry)) {
+            if ($carry !== '') {
                 $carry .= "\n \n";
             }
 

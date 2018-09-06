@@ -430,7 +430,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
         if (!isset($variableHandlingFunctionTypeMap[$node->name->toString()])) {
             return;
-        } elseif (empty($node->args) ||
+        } elseif (count($node->args) === 0 ||
             $node->args[0]->unpack ||
             !$this->isExpressionSubjectToTypePossibilities($node->args[0]->value)
         ) {

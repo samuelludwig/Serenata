@@ -201,7 +201,7 @@ class SignatureHelpRetriever
         $code = $textDocumentItem->getText();
         $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
 
-        if (empty($arguments)) {
+        if (count($arguments) === 0) {
             for ($i = $offset; $i < $invocationNode->getAttribute('endFilePos'); ++$i) {
                 if ($code[$i] === '(') {
                     throw new UnexpectedValueException(
@@ -299,7 +299,7 @@ class SignatureHelpRetriever
         ) {
             $methodInfoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
-            if (empty($methodInfoElements)) {
+            if (count($methodInfoElements) === 0) {
                 throw new UnexpectedValueException('Method to fetch signature help for was not found');
             }
 

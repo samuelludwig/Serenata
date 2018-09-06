@@ -72,7 +72,7 @@ class FunctionTooltipGenerator
      */
     private function generateLongDescription(array $functionInfo): ?string
     {
-        if (!empty($functionInfo['longDescription'])) {
+        if ($functionInfo['longDescription'] !== '' && $functionInfo['longDescription'] !== null) {
             return "# Description\n" . $functionInfo['longDescription'];
         }
 
@@ -88,7 +88,7 @@ class FunctionTooltipGenerator
     {
         $parameterLines = [];
 
-        if (empty($functionInfo['parameters'])) {
+        if (count($functionInfo['parameters']) === 0) {
             return null;
         }
 
@@ -148,7 +148,7 @@ class FunctionTooltipGenerator
     {
         $returnDescription = null;
 
-        if (!empty($functionInfo['returnTypes'])) {
+        if (count($functionInfo['returnTypes']) > 0) {
             $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
                 return $this->getClassNameFromFqcn($type['type']);
             }, $functionInfo['returnTypes']));
@@ -188,7 +188,7 @@ class FunctionTooltipGenerator
             $throwsLines[] = $text . "\n";
         }
 
-        if (empty($throwsLines)) {
+        if (count($throwsLines) === 0) {
             return null;
         }
 

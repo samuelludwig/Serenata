@@ -273,7 +273,7 @@ class UseStatementInsertionCreator
             }
         }
 
-        return !empty($useStatements);
+        return count($useStatements) > 0;
     }
 
     /**
@@ -313,7 +313,7 @@ class UseStatementInsertionCreator
 
         $nodes = $this->getNodesFromCode($textDocumentItem->getText());
 
-        if (!empty($nodes)) {
+        if (count($nodes) > 0) {
             return max($nodes[0]->getStartLine() - 1 - 1, 0);
         }
 
@@ -336,7 +336,7 @@ class UseStatementInsertionCreator
     ): bool {
         $useStatements = $this->retrieveRelevantUseStatements($textDocumentItem, $position);
 
-        return !empty(array_filter($useStatements, function (Node\Stmt $useStatement) use ($name): bool {
+        return count(array_filter($useStatements, function (Node\Stmt $useStatement) use ($name): bool {
             /** @var Node\Stmt\Use_|Node\Stmt\GroupUse $useStatement */
             foreach ($useStatement->uses as $useUseNode) {
                 if ($this->getFullNameFromUseUse($useStatement, $useUseNode) === $name) {
@@ -345,7 +345,7 @@ class UseStatementInsertionCreator
             }
 
             return false;
-        }));
+        })) > 0;
     }
 
     /**

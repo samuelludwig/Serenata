@@ -84,7 +84,7 @@ class ClassConstFetchNodeTooltipGenerator
             $tooltips[] = $this->constantTooltipGenerator->generate($constantInfo);
         }
 
-        if (empty($tooltips)) {
+        if (count($tooltips) === 0) {
             throw new UnexpectedValueException('Could not determine any tooltips for the class constant');
         }
 
@@ -117,7 +117,7 @@ class ClassConstFetchNodeTooltipGenerator
             throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
         }
 
-        if (empty($classTypes)) {
+        if (count($classTypes) === 0) {
             throw new UnexpectedValueException('No types returned for class');
         }
 

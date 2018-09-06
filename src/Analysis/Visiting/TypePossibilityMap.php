@@ -83,8 +83,8 @@ class TypePossibilityMap
         // best match types act as a whitelist for the conditional types).
         $types = array_intersect($guaranteedTypes, $typeList);
 
-        if (empty($types)) {
-            if (empty($guaranteedTypes)) {
+        if (count($types) === 0) {
+            if (count($guaranteedTypes) === 0) {
                 $types = $typeList;
             } else {
                 // We got inside the if statement, so the type MUST be of one of the guaranteed types. However, if

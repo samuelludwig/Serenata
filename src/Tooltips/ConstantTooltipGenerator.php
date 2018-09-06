@@ -57,7 +57,7 @@ class ConstantTooltipGenerator
      */
     private function generateLongDescription(array $info): ?string
     {
-        if (!empty($info['longDescription'])) {
+        if ($info['longDescription'] !== '' && $info['longDescription'] !== null) {
             return "# Description\n" . $info['longDescription'];
         }
 
@@ -73,7 +73,7 @@ class ConstantTooltipGenerator
     {
         $returnDescription = null;
 
-        if (!empty($info['types'])) {
+        if (count($info['types']) > 0) {
             $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
                 return $type['type'];
             }, $info['types']));

@@ -106,7 +106,7 @@ final class InitializeCommand extends AbstractCommand
 
         $databasePath = $this->managerRegistry->getDatabasePath();
 
-        if (empty($databasePath)) {
+        if ($databasePath === '') {
             return;
         }
 

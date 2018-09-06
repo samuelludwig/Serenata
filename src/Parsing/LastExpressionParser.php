@@ -46,7 +46,7 @@ final class LastExpressionParser implements Parser
      */
     public function getStartOfExpression(string $code): int
     {
-        if (empty($code)) {
+        if ($code === '') {
             return 0;
         }
 
@@ -274,7 +274,7 @@ final class LastExpressionParser implements Parser
             $nodes = [new Nop()];
         }
 
-        if (empty($nodes)) {
+        if ($nodes === null || count($nodes) === 0) {
             throw new Error(
                 'Could not parse the code, even after attempting corrections. The following snippet failed: ' .
                 '<<<' . $code . '>>>, the expression was <<<' . $expression . '>>>'

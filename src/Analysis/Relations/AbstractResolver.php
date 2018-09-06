@@ -128,7 +128,7 @@ abstract class AbstractResolver
         $parameterNameDiff1 = array_diff($inheritedMethodParameterNames, $inheritingMethodParameterNames);
         $parameterNameDiff2 = array_diff($inheritingMethodParameterNames, $inheritedMethodParameterNames);
 
-        if (empty($parameterNameDiff1) && empty($parameterNameDiff2)) {
+        if (count($parameterNameDiff1) === 0 && count($parameterNameDiff2) === 0) {
             $inheritedKeys[] = 'parameters';
         }
 
