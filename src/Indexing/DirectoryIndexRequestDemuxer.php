@@ -13,7 +13,7 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 /**
  * Indexes directories by generating one or more file index requests for each encountered file.
  */
-class DirectoryIndexRequestDemuxer
+final class DirectoryIndexRequestDemuxer
 {
     /**
      * @var JsonRpcQueue
