@@ -112,19 +112,16 @@ services:
         class: Serenata\Analysis\Relations\InheritanceResolver
         arguments:
             - '@docblockAnalyzer'
-            - '@typeAnalyzer'
 
     interfaceImplementationResolver:
         class: Serenata\Analysis\Relations\InterfaceImplementationResolver
         arguments:
             - '@docblockAnalyzer'
-            - '@typeAnalyzer'
 
     traitUsageResolver:
         class: Serenata\Analysis\Relations\TraitUsageResolver
         arguments:
             - '@docblockAnalyzer'
-            - '@typeAnalyzer'
 
     classlikeExistenceChecker.doctrine:
         class: Serenata\Analysis\DoctrineClasslikeExistenceChecker

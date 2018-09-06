@@ -4,8 +4,6 @@ namespace Serenata\Analysis\Relations;
 
 use Serenata\Analysis\DocblockAnalyzer;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
-
 use Serenata\Parsing\DocblockParser;
 
 /**
@@ -19,18 +17,11 @@ abstract class AbstractResolver
     private $docblockAnalyzer;
 
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @param DocblockAnalyzer $docblockAnalyzer
-     * @param TypeAnalyzer     $typeAnalyzer
      */
-    public function __construct(DocblockAnalyzer $docblockAnalyzer, TypeAnalyzer $typeAnalyzer)
+    public function __construct(DocblockAnalyzer $docblockAnalyzer)
     {
         $this->docblockAnalyzer = $docblockAnalyzer;
-        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
