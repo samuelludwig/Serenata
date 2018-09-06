@@ -12,7 +12,6 @@ use Serenata\Common\Position;
 
 use PhpParser\Node;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
 /**
