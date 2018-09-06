@@ -88,13 +88,18 @@ final class InterfaceImplementationResolver extends AbstractResolver
             }
         }
 
-        $class['methods'][$interfaceMethodData['name']] = array_merge($interfaceMethodData, $childMethod, $inheritedData, [
-            'declaringClass' => [
-                'fqcn'     => $class['fqcn'],
-                'filename' => $class['filename'],
-                'range'    => $class['range'],
-                'type'     => $class['type'],
-            ],
-        ]);
+        $class['methods'][$interfaceMethodData['name']] = array_merge(
+            $interfaceMethodData,
+            $childMethod,
+            $inheritedData,
+            [
+                'declaringClass' => [
+                    'fqcn'     => $class['fqcn'],
+                    'filename' => $class['filename'],
+                    'range'    => $class['range'],
+                    'type'     => $class['type'],
+                ],
+            ]
+        );
     }
 }
