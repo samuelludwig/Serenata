@@ -131,7 +131,7 @@ final class Indexer implements EventEmitterInterface
             return true;
         }
 
-        if (!empty($directories)) {
+        if (count($directories) > 0) {
             $this->indexFilePruner->prune();
         }
 
