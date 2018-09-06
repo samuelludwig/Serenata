@@ -185,8 +185,10 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      *
      * @return TextEdit[]
      */
-    private function createAdditionalTextEditsForSuggestion(array $classlike, AutocompletionProviderContext $context): array
-    {
+    private function createAdditionalTextEditsForSuggestion(
+        array $classlike,
+        AutocompletionProviderContext $context
+    ): array {
         if ($context->getPrefix() !== '' && $context->getPrefix()[0] === '\\') {
             return [];
         } elseif ($this->isInsideUseStatement($context)) {

@@ -228,7 +228,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $documentation['descriptions']['long'] ?: null,
             $documentation['return']['description'] ?: null,
             $returnTypeHint,
-            !empty($docComment),
+            $docComment !== '' && $docComment !== null,
             $throws,
             $returnType
         );

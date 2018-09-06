@@ -318,7 +318,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $node->isFinal(),
                 $documentation['annotation'],
                 $documentation['deprecated'],
-                !empty($docComment),
+                $docComment !== '' && $docComment !== null,
                 null
             );
         } elseif ($node instanceof Node\Stmt\Interface_) {
@@ -330,7 +330,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $documentation['deprecated'],
-                !empty($docComment)
+                $docComment !== '' && $docComment !== null
             );
         } elseif ($node instanceof Node\Stmt\Trait_) {
             $classlike = new Structures\Trait_(
@@ -341,7 +341,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $documentation['descriptions']['short'] ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $documentation['deprecated'],
-                !empty($docComment)
+                $docComment !== '' && $docComment !== null
             );
         }
 
@@ -642,7 +642,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             if ($varDocumentation) {
                 // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
                 // from the latter to the former.
-                if (!empty($varDocumentation['description'])) {
+                if ($varDocumentation['description'] !== '' && $varDocumentation['description'] !== null) {
                     $shortDescription = $varDocumentation['description'];
                 }
 
@@ -686,7 +686,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $documentation['deprecated'],
                 false,
                 $node->isStatic(),
-                !empty($docComment),
+                $docComment !== '' && $docComment !== null,
                 $shortDescription ?: null,
                 $documentation['descriptions']['long'] ?: null,
                 $varDocumentation ? $varDocumentation['description'] : null,
@@ -826,7 +826,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $node->isStatic(),
             $node->isAbstract(),
             $node->isFinal(),
-            !empty($docComment),
+            $docComment !== '' && $docComment !== null,
             $throws,
             $returnType
         );
@@ -989,7 +989,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         if ($varDocumentation) {
             // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
             // from the latter to the former.
-            if (!empty($varDocumentation['description'])) {
+            if ($varDocumentation['description'] !== null && $varDocumentation['description'] !== '') {
                 $shortDescription = $varDocumentation['description'];
             }
 
@@ -1031,7 +1031,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $range,
             $defaultValue,
             $documentation['deprecated'] ? 1 : 0,
-            !empty($docComment),
+            $docComment !== '' && $docComment !== null,
             $shortDescription ?: null,
             $documentation['descriptions']['long'] ?: null,
             $varDocumentation ? $varDocumentation['description'] : null,

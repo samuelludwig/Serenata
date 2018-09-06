@@ -87,8 +87,10 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      *
      * @return AutocompletionSuggestion
      */
-    private function createSuggestion(array $namespace, AutocompletionProviderContext $context): AutocompletionSuggestion
-    {
+    private function createSuggestion(
+        array $namespace,
+        AutocompletionProviderContext $context
+    ): AutocompletionSuggestion {
         $fqcnWithoutLeadingSlash = $namespace['name'];
 
         if ($fqcnWithoutLeadingSlash[0] === '\\') {
