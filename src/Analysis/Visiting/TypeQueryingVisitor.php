@@ -484,7 +484,9 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
         // they aren't consistent with the standard syntax "@var <type> <name>", but they are still used by some IDE's.
         // For this reason we support them, but only their most elementary form.
         $classRegexPart = "?:\\\\?[a-zA-Z_][a-zA-Z0-9_]*(?:\\\\[a-zA-Z_][a-zA-Z0-9_]*)*";
-        $reverseRegexTypeAnnotation = "/\/\*\*\s*@var\s+(\\\$[A-Za-z0-9_])\s+(({$classRegexPart}(?:\[\])?))\s*(\s.*)?\*\//";
+
+        $reverseRegexTypeAnnotation =
+            "/\/\*\*\s*@var\s+(\\\$[A-Za-z0-9_])\s+(({$classRegexPart}(?:\[\])?))\s*(\s.*)?\*\//";
 
         if (preg_match($reverseRegexTypeAnnotation, $docblock, $matches) === 1) {
             $this->expressionTypeInfoMap->setBestTypeOverrideMatch(
