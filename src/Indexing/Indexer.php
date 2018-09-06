@@ -199,10 +199,6 @@ final class Indexer implements EventEmitterInterface
             }
         }
 
-        if ($code === null) {
-            return false;
-        }
-
         try {
             $this->fileIndexer->index(new TextDocumentItem($path, $code));
         } catch (IndexingFailedException $e) {
