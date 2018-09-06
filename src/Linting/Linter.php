@@ -8,9 +8,6 @@ use PhpParser\ErrorHandler;
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
-
-use Serenata\Utility\PositionEncoding;
-
 /**
  * Lints a file syntactically as well as semantically to indicate various problems with its contents.
  */
