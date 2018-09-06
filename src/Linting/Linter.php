@@ -33,7 +33,6 @@ final class Linter
      */
     public function lint(string $code): array
     {
-        // Parse the file to fetch the information we need.
         $handler = new ErrorHandler\Collecting();
 
         $this->parser->parse($code, $handler);
