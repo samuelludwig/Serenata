@@ -47,7 +47,9 @@ final class MultiRecursivePathIterator extends AppendIterator
             } elseif ($fileInfo->isFile()) {
                 $fileInfoIterators[] = new ArrayIterator([$fileInfo]);
             } else {
-                throw new UnexpectedValueException('The specified file or directory "' . $fileInfo->getPathname() . '" does not exist!');
+                throw new UnexpectedValueException(
+                    'The specified file or directory "' . $fileInfo->getPathname() . '" does not exist!'
+                );
             }
         }
 
