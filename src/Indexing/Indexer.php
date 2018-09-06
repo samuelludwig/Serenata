@@ -54,18 +54,12 @@ final class Indexer implements EventEmitterInterface
     private $sourceCodeStreamReader;
 
     /**
-     * @var DirectoryIndexableFileIteratorFactory
-     */
-    private $directoryIndexableFileIteratorFactory;
-
-    /**
-     * @param JsonRpcQueue                          $queue
-     * @param FileIndexerInterface                  $fileIndexer
-     * @param DirectoryIndexRequestDemuxer          $directoryIndexRequestDemuxer
-     * @param IndexFilePruner                       $indexFilePruner
-     * @param PathNormalizer                        $pathNormalizer
-     * @param SourceCodeStreamReader                $sourceCodeStreamReader
-     * @param DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
+     * @param JsonRpcQueue                 $queue
+     * @param FileIndexerInterface         $fileIndexer
+     * @param DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer
+     * @param IndexFilePruner              $indexFilePruner
+     * @param PathNormalizer               $pathNormalizer
+     * @param SourceCodeStreamReader       $sourceCodeStreamReader
      */
     public function __construct(
         JsonRpcQueue $queue,
@@ -73,8 +67,7 @@ final class Indexer implements EventEmitterInterface
         DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
         IndexFilePruner $indexFilePruner,
         PathNormalizer $pathNormalizer,
-        SourceCodeStreamReader $sourceCodeStreamReader,
-        DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
+        SourceCodeStreamReader $sourceCodeStreamReader
     ) {
         $this->queue = $queue;
         $this->fileIndexer = $fileIndexer;
@@ -82,7 +75,6 @@ final class Indexer implements EventEmitterInterface
         $this->indexFilePruner = $indexFilePruner;
         $this->pathNormalizer = $pathNormalizer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->directoryIndexableFileIteratorFactory = $directoryIndexableFileIteratorFactory;
     }
 
     /**
