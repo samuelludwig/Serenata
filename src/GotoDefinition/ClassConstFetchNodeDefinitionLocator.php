@@ -81,7 +81,7 @@ class ClassConstFetchNodeDefinitionLocator
         }
 
         if (empty($definitions)) {
-            throw new UnexpectedValueException('Could not determine any tooltips for the class constant');
+            throw new UnexpectedValueException('Could not determine any definition for the class constant');
         }
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
