@@ -7,7 +7,9 @@ use Serenata\NameQualificationUtilities\FunctionPresenceIndicatorInterface;
 /**
  * Delegates classlike existence checking to another object and adds a caching wrapper.
  */
-final class ArrayCachingGlobalFunctionExistenceChecker implements FunctionPresenceIndicatorInterface, ClearableCacheInterface
+final class ArrayCachingGlobalFunctionExistenceChecker implements
+    FunctionPresenceIndicatorInterface,
+    ClearableCacheInterface
 {
     /**
      * @var FunctionPresenceIndicatorInterface
