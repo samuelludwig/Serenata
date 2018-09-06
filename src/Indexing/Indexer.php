@@ -221,6 +221,6 @@ final class Indexer implements EventEmitterInterface
     {
         $iterator = new IndexableFileIterator([$path], $extensionsToIndex, $globsToExclude);
 
-        return !empty(iterator_to_array($iterator));
+        return iterator_count($iterator) > 0;
     }
 }
