@@ -80,7 +80,7 @@ class ClassConstFetchNodeDefinitionLocator
             );
         }
 
-        if (empty($definitions)) {
+        if (count($definitions) === 0) {
             throw new UnexpectedValueException('Could not determine any definition for the class constant');
         }
 
@@ -114,7 +114,7 @@ class ClassConstFetchNodeDefinitionLocator
             throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
         }
 
-        if (empty($classTypes)) {
+        if (count($classTypes) === 0) {
             throw new UnexpectedValueException('No types returned for class');
         }
 
