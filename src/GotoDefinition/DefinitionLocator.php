@@ -102,16 +102,16 @@ class DefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @return GotoDefinitionResult|null
+     * @return GotoDefinitionResponse
      */
-    public function locate(TextDocumentItem $textDocumentItem, Position $position): ?GotoDefinitionResult
+    public function locate(TextDocumentItem $textDocumentItem, Position $position): GotoDefinitionResponse
     {
         try {
             $node = $this->getNodeAt($textDocumentItem, $position);
 
             return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $textDocumentItem, $position);
         } catch (UnexpectedValueException $e) {
-            return null;
+            return new GotoDefinitionResponse(null);
         }
     }
 
@@ -153,13 +153,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfStructuralElementRepresentedByNode(
         Node $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         if ($node instanceof Node\Expr\FuncCall) {
             return $this->locateDefinitionOfFuncCallNode($node, $textDocumentItem, $position);
         } elseif ($node instanceof Node\Expr\ConstFetch) {
@@ -198,13 +198,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfFuncCallNode(
         Node\Expr\FuncCall $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->funcCallNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
@@ -215,13 +215,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfMethodCallNode(
         Node\Expr\MethodCall $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->methodCallNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
@@ -232,13 +232,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfStaticMethodCallNode(
         Node\Expr\StaticCall $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->staticMethodCallNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
@@ -249,13 +249,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfPropertyFetchNode(
         Node\Expr\PropertyFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->propertyFetchDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
@@ -266,13 +266,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfStaticPropertyFetchNode(
         Node\Expr\StaticPropertyFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->staticPropertyFetchNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
@@ -283,13 +283,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfConstFetchNode(
         Node\Expr\ConstFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->constFetchNodeDefinitionLocator->generate($node, $textDocumentItem, $position);
     }
 
@@ -300,13 +300,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfClassConstFetchNode(
         Node\Expr\ClassConstFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->classConstFetchNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 
@@ -317,13 +317,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfUseUseNode(
         Node\Stmt\UseUse $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         $parentNode = $node->getAttribute('parent', false);
 
         if ($parentNode === false) {
@@ -347,13 +347,13 @@ class DefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     private function locateDefinitionOfNameNode(
         Node\Name $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         return $this->nameNodeDefinitionLocator->locate($node, $textDocumentItem, $position);
     }
 }

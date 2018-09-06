@@ -14,6 +14,7 @@ use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use Serenata\Common\Position;
 
 
+use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -52,13 +53,13 @@ class ClassConstFetchNodeDefinitionLocator
      * @throws UnexpectedValueException when the type of the class could not be determined.
      * @throws UnexpectedValueException when no tooltips could be determined.
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     public function locate(
         Node\Expr\ClassConstFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         if (!$node->name instanceof Node\Identifier) {
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
@@ -74,10 +75,10 @@ class ClassConstFetchNodeDefinitionLocator
                 continue;
             }
 
-            $definitions[] = new GotoDefinitionResult(
+            $definitions[] = new GotoDefinitionResponse(new Location(
                 $constantInfo['filename'],
-                $constantInfo['range']->getStart()->getLine()
-            );
+                $constantInfo['range']
+            ));
         }
 
         if (count($definitions) === 0) {

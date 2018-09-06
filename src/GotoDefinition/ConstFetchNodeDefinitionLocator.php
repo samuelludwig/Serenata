@@ -13,6 +13,7 @@ use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
 use Serenata\Common\Position;
 
 
+use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -49,18 +50,18 @@ class ConstFetchNodeDefinitionLocator
      *
      * @throws UnexpectedValueException when the constant was not found.
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     public function generate(
         Node\Expr\ConstFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         $fqsen = $this->constFetchNodeFqsenDeterminer->determine($node, $textDocumentItem, $position);
 
         $info = $this->getConstantInfo($fqsen);
 
-        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
+        return new GotoDefinitionResponse(new Location($info['filename'], $info['range']));
     }
 
     /**

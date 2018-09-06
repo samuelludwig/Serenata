@@ -20,6 +20,7 @@
 * Fix off-by-one error in line returned in goto definition responses (they were 1-indexed instead of 0-indexed)
 * Autocompletion for class members suggestions no longer pass back `extraData.declaringStructure` or `extraData.isDeprecated`
     * It was a non-standard property and has since been replaced by generating the new `detail` property
+* [`GotoDefinition` now returns a language-server-compliant response](https://gitlab.com/Serenata/Serenata/issues/224)
 
 ## 4.3.0
 ### Improvements

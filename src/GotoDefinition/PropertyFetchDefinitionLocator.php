@@ -11,6 +11,7 @@ use Serenata\Common\Position;
 
 use PhpParser\Node;
 
+use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -38,13 +39,13 @@ class PropertyFetchDefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     public function locate(
         Node\Expr\PropertyFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         $infoElements = $this->propertyFetchPropertyInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         if (empty($infoElements)) {
@@ -54,6 +55,6 @@ class PropertyFetchDefinitionLocator
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         $info = array_shift($infoElements);
 
-        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
+        return new GotoDefinitionResponse(new Location($info['filename'], $info['range']));
     }
 }

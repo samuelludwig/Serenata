@@ -5,7 +5,7 @@ namespace Serenata\UserInterface\Command;
 use Serenata\Common\Position;
 
 use Serenata\GotoDefinition\DefinitionLocator;
-use Serenata\GotoDefinition\GotoDefinitionResult;
+use Serenata\GotoDefinition\GotoDefinitionResponse;
 
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileIndexerInterface;
@@ -91,9 +91,9 @@ final class GotoDefinitionCommand extends AbstractCommand
      * @param string   $code
      * @param Position $position
      *
-     * @return GotoDefinitionResult|null
+     * @return GotoDefinitionResponse|null
      */
-    public function gotoDefinition(string $uri, string $code, Position $position): ?GotoDefinitionResult
+    public function gotoDefinition(string $uri, string $code, Position $position): ?GotoDefinitionResponse
     {
         // Not used (yet), but still throws an exception when file is not in index.
         $this->storage->getFileByPath($uri);

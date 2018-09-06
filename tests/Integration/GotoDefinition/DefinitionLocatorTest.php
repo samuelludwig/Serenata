@@ -4,12 +4,14 @@ namespace Serenata\Tests\Unit\SignatureHelp;
 
 use UnexpectedValueException;
 
+use Serenata\Common\Range;
 use Serenata\Common\Position;
 
-use Serenata\GotoDefinition\GotoDefinitionResult;
+use Serenata\GotoDefinition\GotoDefinitionResponse;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
+use Serenata\Utility\Location;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
@@ -22,11 +24,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'FunctionCall.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             43,
             48,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(7, 1))
+            ))
         );
     }
 
@@ -37,11 +42,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'MethodCall.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             76,
             79,
-            new GotoDefinitionResult($this->getPathFor($fileName), 6)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(6, 4), new Position(9, 5))
+            ))
         );
     }
 
@@ -52,11 +60,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'Constant.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             45,
             47,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 6), new Position(4, 13))
+            ))
         );
     }
 
@@ -67,11 +78,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ConstantInClassConstant.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             71,
             73,
-            new GotoDefinitionResult($this->getPathFor($fileName), 6)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(6, 17), new Position(6, 24))
+            ))
         );
     }
 
@@ -82,11 +96,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInClassConstant.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             68,
             68,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(7, 1))
+            ))
         );
     }
 
@@ -97,11 +114,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'StaticMethodCall.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             79,
             82,
-            new GotoDefinitionResult($this->getPathFor($fileName), 6)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(6, 4), new Position(9, 5))
+            ))
         );
     }
 
@@ -112,11 +132,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInStaticMethodCall.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             96,
             96,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(10, 1))
+            ))
         );
     }
 
@@ -127,11 +150,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'Property.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             105,
             107,
-            new GotoDefinitionResult($this->getPathFor($fileName), 6)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(6, 14), new Position(6, 22))
+            ))
         );
     }
 
@@ -142,11 +168,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'PropertyInStaticPropertyFetch.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             108,
             111,
-            new GotoDefinitionResult($this->getPathFor($fileName), 6)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(6, 21), new Position(6, 29))
+            ))
         );
     }
 
@@ -157,11 +186,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'testClassInStaticPropertyFetch.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             60,
             60,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(7, 1))
+            ))
         );
     }
 
@@ -172,11 +204,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInUseStatement.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             77,
             79,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 4), new Position(7, 5))
+            ))
         );
     }
 
@@ -187,11 +222,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInGroupedUseStatement.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             93,
             93,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 4), new Position(7, 5))
+            ))
         );
     }
 
@@ -202,11 +240,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInImplements.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             56,
             56,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(4, 14))
+            ))
         );
     }
 
@@ -217,11 +258,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInExtends.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             49,
             49,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(4, 10))
+            ))
         );
     }
 
@@ -232,11 +276,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInTraitUse.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             51,
             51,
-            new GotoDefinitionResult($this->getPathFor($fileName), 4)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(4, 10))
+            ))
         );
     }
 
@@ -247,11 +294,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInTraitPrecedence.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             131,
             131,
-            new GotoDefinitionResult($this->getPathFor($fileName), 2)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(2, 0), new Position(5, 1))
+            ))
         );
     }
 
@@ -262,11 +312,14 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     {
         $fileName = 'ClassInTraitAlias.phpt';
 
-        static::assertGotoDefinitionResultEquals(
+        static::assertGotoDefinitionResponseEquals(
             $fileName,
             84,
             84,
-            new GotoDefinitionResult($this->getPathFor($fileName), 2)
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(2, 0), new Position(5, 1))
+            ))
         );
     }
 
@@ -274,9 +327,9 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
      * @param string $file
      * @param int    $position
      *
-     * @return GotoDefinitionResult|null
+     * @return GotoDefinitionResponse|null
      */
-    private function locateDefinition(string $file, int $position): ?GotoDefinitionResult
+    private function locateDefinition(string $file, int $position): ?GotoDefinitionResponse
     {
         $path = $this->getPathFor($file);
 
@@ -301,25 +354,25 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param string               $fileName
-     * @param int                  $start
-     * @param int                  $end
-     * @param GotoDefinitionResult $gotoDefinitionResult
+     * @param string                 $fileName
+     * @param int                    $start
+     * @param int                    $end
+     * @param GotoDefinitionResponse $gotoDefinitionResponse
      */
-    private function assertGotoDefinitionResultEquals(
+    private function assertGotoDefinitionResponseEquals(
         string $fileName,
         int $start,
         int $end,
-        GotoDefinitionResult $gotoDefinitionResult
+        GotoDefinitionResponse $gotoDefinitionResponse
     ): void {
         $i = $start;
 
         while ($i <= $end) {
-            $result = $this->locateDefinition($fileName, $i);
-
-            static::assertNotNull($result, 'Failed locating definition at offset ' . $i);
-            static::assertSame($gotoDefinitionResult->getUri(), $result->getUri());
-            static::assertSame($gotoDefinitionResult->getLine(), $result->getLine());
+            static::assertEquals(
+                $gotoDefinitionResponse,
+                $this->locateDefinition($fileName, $i),
+                'Failed locating definition at offset ' . $i
+            );
 
             ++$i;
         }
@@ -335,10 +388,17 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
 
         static::assertTrue(
             $gotException === true ||
-            $resultBeforeRange === null ||
+            $resultBeforeRange->getResult() === null ||
             ($gotException === false && (
-                $resultBeforeRange->getUri() !== $gotoDefinitionResult->getUri() ||
-                $resultBeforeRange->getLine() !== $gotoDefinitionResult->getLine()
+                $resultBeforeRange->getResult()[0]->getUri() !== $gotoDefinitionResponse->getUri() ||
+                $resultBeforeRange->getResult()[0]->getRange()->getStart()->getLine() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getStart()->getLine() ||
+                $resultBeforeRange->getResult()[0]->getRange()->getStart()->getCharacter() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getStart()->getCharacter() ||
+                $resultBeforeRange->getResult()[0]->getRange()->getEnd()->getLine() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getEnd()->getLine() ||
+                $resultBeforeRange->getResult()[0]->getRange()->getEnd()->getCharacter() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getEnd()->getCharacter()
             )),
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
@@ -353,10 +413,19 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
 
         static::assertTrue(
             $gotException === true ||
-            $resultAfterRange === null ||
+            $resultAfterRange->getResult() === null ||
             ($gotException === false && (
-                $resultAfterRange->getUri() !== $gotoDefinitionResult->getUri() ||
-                $resultAfterRange->getLine() !== $gotoDefinitionResult->getLine()
+                $resultAfterRange->getResult()[0]->getUri() !== $gotoDefinitionResponse->getUri() ||
+                $resultAfterRange->getResult()[0]->getRange()->getStart()->getLine() !==
+                    $gotoDefinitionResponse->getLine() ||
+                $resultAfterRange->getResult()[0]->getRange()->getStart()->getLine() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getStart()->getLine() ||
+                $resultAfterRange->getResult()[0]->getRange()->getStart()->getCharacter() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getStart()->getCharacter() ||
+                $resultAfterRange->getResult()[0]->getRange()->getEnd()->getLine() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getEnd()->getLine() ||
+                $resultAfterRange->getResult()[0]->getRange()->getEnd()->getCharacter() !==
+                    $gotoDefinitionResponse->getResult()[0]->getRange()->getEnd()->getCharacter()
             )),
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );

@@ -12,6 +12,7 @@ use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
 
 use Serenata\Common\Position;
 
+use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -49,13 +50,13 @@ final class FuncCallNodeDefinitionLocator
      * @throws UnexpectedValueException when the function was not found.
      * @throws UnexpectedValueException when a dynamic function call is passed.
      *
-     * @return GotoDefinitionResult
+     * @return GotoDefinitionResponse
      */
     public function locate(
         Node\Expr\FuncCall $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): GotoDefinitionResult {
+    ): GotoDefinitionResponse {
         if (!$node->name instanceof Node\Name) {
             throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
         }
@@ -64,7 +65,7 @@ final class FuncCallNodeDefinitionLocator
 
         $info = $this->getFunctionInfo($fqsen);
 
-        return new GotoDefinitionResult($info['filename'], $info['range']->getStart()->getLine());
+        return new GotoDefinitionResponse(new Location($info['filename'], $info['range']));
     }
 
     /**
