@@ -5,6 +5,7 @@ namespace Serenata\Linting;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
+use Serenata\Common\Range;
 use Serenata\Common\Position;
 
 
@@ -43,10 +44,7 @@ class Linter
 
         $nodes = $parser->parse($code, $handler);
 
-        $output = [
-            'errors'   => [],
-            'warnings' => [],
-        ];
+        $diagnostics = [];
 
         foreach ($handler->getErrors() as $e) {
             $startLine = $e->getStartLine() >= 0 ? ($e->getStartLine() - 1) : 0;
@@ -55,22 +53,19 @@ class Linter
             $startColumn = $e->hasColumnInfo() ? ($e->getStartColumn($code) - 1) : 0;
             $endColumn   = $e->hasColumnInfo() ? ($e->getEndColumn($code) - 1) : 0;
 
-            $output['errors'][] = [
-                'message' =>
-                    $e->getMessage(),
-
-                'start' =>
-                    (new Position($startLine, $startColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE),
-
-                'end' =>
-                    (new Position($endLine, $endColumn))->getAsByteOffsetInString($code, PositionEncoding::VALUE),
-            ];
+            $diagnostics[] = new Diagnostic(
+                new Range(
+                    new Position($startLine, $startColumn),
+                    new Position($endLine, $endColumn)
+                ),
+                DiagnosticSeverity::ERROR,
+                null,
+                'Syntax',
+                $e->getMessage(),
+                null
+            );
         }
 
-        if ($nodes === null) {
-            return $output;
-        }
-
-        return $output;
+        return $diagnostics;
     }
 }

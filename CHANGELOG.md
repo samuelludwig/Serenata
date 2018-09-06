@@ -21,6 +21,7 @@
 * Autocompletion for class members suggestions no longer pass back `extraData.declaringStructure` or `extraData.isDeprecated`
     * It was a non-standard property and has since been replaced by generating the new `detail` property
 * [`GotoDefinition` now returns a language-server-compliant response](https://gitlab.com/Serenata/Serenata/issues/224)
+* [`Lint` now returns a language-server-compliant `PublishDiagnosticsParams`](https://gitlab.com/Serenata/Serenata/issues/221)
 
 ## 4.3.0
 ### Improvements

@@ -2,6 +2,12 @@
 
 namespace Serenata\Tests\Integration\UserInterface\Command;
 
+use Serenata\Common\Range;
+use Serenata\Common\Position;
+
+use Serenata\Linting\Diagnostic;
+use Serenata\Linting\DiagnosticSeverity;
+
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class LinterTest extends AbstractIntegrationTest
@@ -13,19 +19,31 @@ class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
 
-        static::assertSame([
-            [
-                'message' => 'Syntax error, unexpected \';\' on line 6',
-                'start'   => 47,
-                'end'     => 47,
-            ],
+        static::assertEquals([
+            new Diagnostic(
+                new Range(
+                    new Position(5, 15),
+                    new Position(5, 15)
+                ),
+                DiagnosticSeverity::ERROR,
+                null,
+                'Syntax',
+                'Syntax error, unexpected \';\' on line 6',
+                null
+            ),
 
-            [
-                'message' => 'Syntax error, unexpected \';\' on line 8',
-                'start'   => 89,
-                'end'     => 89,
-            ],
-        ], $output['errors']);
+            new Diagnostic(
+                new Range(
+                    new Position(7, 22),
+                    new Position(7, 22)
+                ),
+                DiagnosticSeverity::ERROR,
+                null,
+                'Syntax',
+                'Syntax error, unexpected \';\' on line 8',
+                null
+            ),
+        ], $output);
     }
 
     /**

@@ -6,6 +6,7 @@ use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileIndexerInterface;
 
 use Serenata\Linting\Linter;
+use Serenata\Linting\PublishDiagnosticsParams;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -82,15 +83,15 @@ final class LintCommand extends AbstractCommand
      * @param string $uri
      * @param string $code
      *
-     * @return array
+     * @return PublishDiagnosticsParams
      */
-    public function lint(string $uri, string $code): array
+    public function lint(string $uri, string $code): PublishDiagnosticsParams
     {
         // Not used (yet), but still throws an exception when file is not in index.
         $this->storage->getFileByPath($uri);
 
         // $this->fileIndexer->index($uri, $code);
 
-        return $this->linter->lint($code);
+        return new PublishDiagnosticsParams($uri, $this->linter->lint($code));
     }
 }
