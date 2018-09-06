@@ -11,7 +11,6 @@ use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Common\Position;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
 /**
