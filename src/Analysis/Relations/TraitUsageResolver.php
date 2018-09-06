@@ -40,9 +40,14 @@ final class TraitUsageResolver extends AbstractResolver
                     $method['name'] = $traitAlias->getAlias() ?: $method['name'];
 
                     if ($traitAlias->getAccessModifier()) {
-                        $method['isPublic']    = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_);
-                        $method['isProtected'] = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_);
-                        $method['isPrivate']   = ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_);
+                        $method['isPublic'] =
+                            ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_);
+
+                        $method['isProtected'] =
+                            ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_);
+
+                        $method['isPrivate'] =
+                            ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_);
                     }
                 }
             }
@@ -50,7 +55,9 @@ final class TraitUsageResolver extends AbstractResolver
             $skipMethod = false;
 
             foreach ($traitPrecedences as $traitPrecedence) {
-                if ($traitPrecedence->getName() === $method['name'] && $traitPrecedence->getTraitFqcn() !== $trait['fqcn']) {
+                if ($traitPrecedence->getName() === $method['name'] &&
+                    $traitPrecedence->getTraitFqcn() !== $trait['fqcn']
+                ) {
                     // The method is present in multiple used traits and precedences indicate that the one
                     // from this trait should not be imported.
                     $skipMethod = true;
@@ -107,16 +114,21 @@ final class TraitUsageResolver extends AbstractResolver
             $childProperty = [];
         }
 
-        $class['properties'][$traitPropertyData['name']] = array_merge($traitPropertyData, $childProperty, $inheritedData, [
-            'override' => $overriddenPropertyData,
+        $class['properties'][$traitPropertyData['name']] = array_merge(
+            $traitPropertyData,
+            $childProperty,
+            $inheritedData,
+            [
+                'override' => $overriddenPropertyData,
 
-            'declaringClass' => [
-                'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
-                'range'           => $class['range'],
-                'type'            => $class['type'],
-            ],
-        ]);
+                'declaringClass' => [
+                    'fqcn'            => $class['fqcn'],
+                    'filename'        => $class['filename'],
+                    'range'           => $class['range'],
+                    'type'            => $class['type'],
+                ],
+            ]
+        );
     }
 
     /**
