@@ -40,16 +40,16 @@ final class Linter
         $diagnostics = [];
 
         foreach ($handler->getErrors() as $e) {
-            $startLine = $e->getStartLine() >= 0 ? ($e->getStartLine() - 1) : 0;
-            $endLine   = $e->getEndLine() >= 0 ? ($e->getEndLine() - 1) : 0;
-
-            $startColumn = $e->hasColumnInfo() ? ($e->getStartColumn($code) - 1) : 0;
-            $endColumn   = $e->hasColumnInfo() ? ($e->getEndColumn($code) - 1) : 0;
-
             $diagnostics[] = new Diagnostic(
                 new Range(
-                    new Position($startLine, $startColumn),
-                    new Position($endLine, $endColumn)
+                    new Position(
+                        $e->getStartLine() >= 0 ? ($e->getStartLine() - 1) : 0,
+                        $e->hasColumnInfo() ? ($e->getStartColumn($code) - 1) : 0
+                    ),
+                    new Position(
+                        $e->getEndLine() >= 0 ? ($e->getEndLine() - 1) : 0,
+                        $e->hasColumnInfo() ? ($e->getEndColumn($code) - 1) : 0
+                    )
                 ),
                 DiagnosticSeverity::ERROR,
                 null,
