@@ -14,7 +14,7 @@ use Serenata\Utility\PositionEncoding;
 /**
  * Lints a file syntactically as well as semantically to indicate various problems with its contents.
  */
-class Linter
+final class Linter
 {
     /**
      * @var Parser
