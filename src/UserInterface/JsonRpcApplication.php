@@ -77,6 +77,8 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     }
 
     /**
+     * phpcs:disable -- runEventLoop is called with array syntax above and not an unused method.
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
@@ -84,6 +86,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     private function runEventLoop(InputInterface $input, OutputInterface $output): int
     {
+        // phpcs:enable
         $uri = $input->getOption('uri');
 
         if ($uri === null) {
