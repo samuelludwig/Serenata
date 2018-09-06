@@ -234,7 +234,9 @@ final class DocumentSymbolRetriever
         usort($symbolList, function (SymbolInformation $a, SymbolInformation $b) {
             if ($a->getLocation()->getRange()->getStart()->liesAfter($b->getLocation()->getRange()->getStart())) {
                 return 1;
-            } elseif ($a->getLocation()->getRange()->getStart()->liesBefore($b->getLocation()->getRange()->getStart())) {
+            } elseif ($a->getLocation()->getRange()->getStart()->liesBefore(
+                $b->getLocation()->getRange()->getStart()
+            )) {
                 return -1;
             }
 
