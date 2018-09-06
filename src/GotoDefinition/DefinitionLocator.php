@@ -5,12 +5,11 @@ namespace Serenata\GotoDefinition;
 use LogicException;
 use UnexpectedValueException;
 
+use PhpParser\Node;
+
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Common\Position;
-
-
-use PhpParser\Node;
 
 use Serenata\Utility\TextDocumentItem;
 
