@@ -164,7 +164,7 @@ final class Indexer implements EventEmitterInterface
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         $requestId
     ): void {
-        if (empty($paths)) {
+        if (count($paths) === 0) {
             return; // Optimization that skips expensive operations during demuxing, which stack.
         }
 
