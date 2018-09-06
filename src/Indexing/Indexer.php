@@ -4,6 +4,9 @@ namespace Serenata\Indexing;
 
 use UnexpectedValueException;
 
+use Evenement\EventEmitterTrait;
+use Evenement\EventEmitterInterface;
+
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
@@ -12,9 +15,6 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
-
-use Evenement\EventEmitterTrait;
-use Evenement\EventEmitterInterface;
 
 /**
  * Indexes directories and files.
