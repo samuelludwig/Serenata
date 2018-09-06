@@ -13,7 +13,6 @@ use Serenata\Analysis\Visiting\ScopeLimitingVisitor;
 
 use Serenata\Common\Position;
 
-use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
 /**
