@@ -47,7 +47,7 @@ final class StaticMethodCallNodeDefinitionLocator
     ): GotoDefinitionResponse {
         $infoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
-        if (empty($infoElements)) {
+        if (count($infoElements) === 0) {
             throw new UnexpectedValueException('No method call information was found for node');
         }
 
