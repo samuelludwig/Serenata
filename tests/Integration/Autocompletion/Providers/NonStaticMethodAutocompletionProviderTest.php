@@ -177,7 +177,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                     ),
                     'foo()$0'
                 ),
-                'foo([$i])',
+                'foo([$i = 0])',
                 null,
                 [
                     'protectionLevel'    => 'public',
