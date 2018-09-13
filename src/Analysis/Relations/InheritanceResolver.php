@@ -17,11 +17,11 @@ final class InheritanceResolver extends AbstractResolver
      */
     public function resolveInheritanceOf(ArrayObject $parent, ArrayObject $class): void
     {
-        if (!$class['shortDescription']) {
+        if ($class['shortDescription'] === '' || $class['shortDescription'] === null) {
             $class['shortDescription'] = $parent['shortDescription'];
         }
 
-        if (!$class['longDescription']) {
+        if ($class['longDescription'] === '' || $class['longDescription'] === null) {
             $class['longDescription'] = $parent['longDescription'];
         } elseif ($class['longDescription'] !== null && $parent['longDescription'] !== null) {
             $class['longDescription'] = $this->resolveInheritDoc($class['longDescription'], $parent['longDescription']);

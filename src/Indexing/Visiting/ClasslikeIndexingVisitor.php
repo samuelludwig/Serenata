@@ -647,7 +647,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 $typeStringSpecification = $varDocumentation['type'];
-            } elseif ($property->default) {
+            } elseif ($property->default !== '' && $property->default !== null) {
                 $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                     $property->default,
                     $this->textDocumentItem
