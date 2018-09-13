@@ -43,7 +43,7 @@ class ConstantTooltipGenerator
      */
     private function generateSummary(array $info): string
     {
-        if ($info['shortDescription']) {
+        if ($info['shortDescription'] !== '' && $info['shortDescription'] !== null) {
             return $info['shortDescription'];
         }
 
