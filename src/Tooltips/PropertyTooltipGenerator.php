@@ -80,7 +80,7 @@ class PropertyTooltipGenerator
 
             $returnDescription = '*' . $value . '*';
 
-            if ($info['typeDescription']) {
+            if ($info['typeDescription'] !== '' && $info['typeDescription'] !== null) {
                 $returnDescription .= ' &mdash; ' . $info['typeDescription'];
             }
         } else {

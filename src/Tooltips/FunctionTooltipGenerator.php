@@ -58,7 +58,7 @@ class FunctionTooltipGenerator
      */
     private function generateSummary(array $functionInfo): string
     {
-        if ($functionInfo['shortDescription']) {
+        if ($functionInfo['shortDescription'] !== '' && $functionInfo['shortDescription'] !== null) {
             return $functionInfo['shortDescription'];
         }
 
@@ -130,7 +130,7 @@ class FunctionTooltipGenerator
 
         $text .= "\n";
 
-        if ($parameter['description']) {
+        if ($parameter['description'] !== '' &&$parameter['description'] !== null) {
             $text .= ($parameter['description']);
         } else {
             $text .= '(No documentation available)';
@@ -155,7 +155,7 @@ class FunctionTooltipGenerator
 
             $returnDescription = '*' . $value . '*';
 
-            if ($functionInfo['returnDescription']) {
+            if ($functionInfo['returnDescription'] !== '' && $functionInfo['returnDescription'] !== null) {
                 $returnDescription .= ' &mdash; ' . $functionInfo['returnDescription'];
             }
         } else {
@@ -179,7 +179,7 @@ class FunctionTooltipGenerator
 
             $text = "#### • **{$type}**\n";
 
-            if ($throwsItem['description']) {
+            if ($throwsItem['description'] !== '' && $throwsItem['description'] !== null) {
                 $text .= $throwsItem['description'];
             } else {
                 $text .= '(No context available)';
