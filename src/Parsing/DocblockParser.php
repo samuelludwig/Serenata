@@ -680,7 +680,7 @@ class DocblockParser
                                 'defaultValue' => $defaultValue,
                             ];
 
-                            if (!$defaultValue) {
+                            if ($defaultValue === '' || $defaultValue === null) {
                                 $requiredParameters[$parameterName] = $data;
                             } else {
                                 $optionalParameters[$parameterName] = $data;

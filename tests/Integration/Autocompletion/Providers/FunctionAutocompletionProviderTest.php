@@ -159,7 +159,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     ),
                     'foo()$0'
                 ),
-                'foo([$i])',
+                'foo([$i = 0])',
                 null,
                 [
                     'returnTypes'  => 'mixed',

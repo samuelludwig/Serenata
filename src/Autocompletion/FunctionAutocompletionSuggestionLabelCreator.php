@@ -39,7 +39,7 @@ final class FunctionAutocompletionSuggestionLabelCreator
 
             $description .= '$' . $param['name'];
 
-            if ($param['defaultValue']) {
+            if ($param['defaultValue'] !== '' && $param['defaultValue'] !== null) {
                 $description .= ' = ' . $param['defaultValue'];
             }
 

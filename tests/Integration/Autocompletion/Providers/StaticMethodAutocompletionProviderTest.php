@@ -177,7 +177,7 @@ class StaticMethodAutocompletionProviderTest extends AbstractAutocompletionProvi
                     ),
                     'foo()$0'
                 ),
-                'foo([$i])',
+                'foo([$i = 0])',
                 null,
                 [
                     'protectionLevel'    => 'public',
