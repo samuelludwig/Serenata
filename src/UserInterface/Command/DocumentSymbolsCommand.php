@@ -40,13 +40,12 @@ final class DocumentSymbolsCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['uri'])) {
-            throw new InvalidArgumentsException('"uri" must be supplied');
-        }
-
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getAll($arguments['uri']));
+        return new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getAll($parameters['textDocument']['uri'])
+        );
     }
 
     /**
