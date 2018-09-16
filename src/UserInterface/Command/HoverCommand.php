@@ -19,7 +19,7 @@ use Serenata\Utility\SourceCodeStreamReader;
 /**
  * Command that fetches tooltip information for a specific location.
  */
-final class TooltipCommand extends AbstractCommand
+final class HoverCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface

@@ -93,7 +93,7 @@ final class Indexer implements EventEmitterInterface
         array $globsToExclude,
         bool $useStdin,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
-        $originatingRequestId = null
+        ?JsonRpcResponse $responseToSendOnCompletion = null
     ): bool {
         $paths = array_map(function (string $path) {
             return $this->pathNormalizer->normalize($path);
@@ -112,14 +112,14 @@ final class Indexer implements EventEmitterInterface
             $extensionsToIndex,
             $globsToExclude,
             $jsonRpcResponseSender,
-            $originatingRequestId
+            $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
         );
 
         foreach ($files as $path) {
             $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
         }
 
-        if ($originatingRequestId === null) {
+        if ($responseToSendOnCompletion === null) {
             return true;
         }
 
@@ -134,7 +134,7 @@ final class Indexer implements EventEmitterInterface
         // This request will not be queued for file reindex requests that are the result of the demuxing as those
         // don't have an originating request ID.
         $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoResponse', [
-            'response' => new JsonRpcResponse($originatingRequestId, true),
+            'response' => $responseToSendOnCompletion,
         ]);
 
         $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));

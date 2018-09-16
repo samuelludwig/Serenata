@@ -14,10 +14,9 @@ imports:
     - { resource: Tooltips.yml }
     - { resource: UserInterface.yml }
     - { resource: Utility.yml }
+    - { resource: Workspace.yml }
 
 parameters:
 
 
 services:
-    cache:
-        class: Doctrine\Common\Cache\ArrayCache

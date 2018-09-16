@@ -13,7 +13,12 @@ use Serenata\UserInterface\JsonRpcApplication;
 use Serenata\UserInterface\AbstractApplication;
 
 use Serenata\Utility\TmpFileStream;
+use Serenata\Utility\InitializeParams;
 use Serenata\Utility\SourceCodeStreamReader;
+
+use Serenata\Workspace\Configuration\WorkspaceConfiguration;
+
+use Serenata\Workspace\Workspace;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
@@ -112,15 +117,16 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         // Replace some container items for testing purposes.
         $container->get('managerRegistry')->setDatabasePath(':memory:');
+        $container->get('schemaInitializer')->initialize();
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
-        $container->get('cache')->deleteAll();
 
-        $success = $container->get('initializeCommand')->initialize(
-            $this->mockJsonRpcResponseSenderInterface(),
-            false
-        );
-
-        static::assertTrue($success);
+        $container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            'test-id',
+            [],
+            7.1,
+            [],
+            ['php']
+        )));
     }
 
     /**

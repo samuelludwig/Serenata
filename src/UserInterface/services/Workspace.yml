@@ -1,0 +1,9 @@
+parameters:
+
+
+services:
+    activeWorkspaceManager:
+        class: Serenata\Workspace\ActiveWorkspaceManager
+
+    workspaceConfigurationJsonParser:
+        class: Serenata\Workspace\Configuration\Parsing\WorkspaceConfigurationJsonParser

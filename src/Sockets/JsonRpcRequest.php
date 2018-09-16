@@ -95,7 +95,7 @@ final class JsonRpcRequest implements JsonSerializable
      */
     public static function createFromArray(array $array)
     {
-        return new static($array['id'], $array['method'], $array['params'], $array['jsonrpc']);
+        return new static($array['id'] ?? null, $array['method'], $array['params'], $array['jsonrpc']);
     }
 
     /**

@@ -20,6 +20,11 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
 use Serenata\UserInterface\Command\CommandInterface;
 
+use Serenata\Workspace\Configuration\WorkspaceConfiguration;
+
+use Serenata\Workspace\Workspace;
+use Serenata\Workspace\ActiveWorkspaceManager;
+
 class JsonRpcQueueItemProcessorTest extends TestCase
 {
     /**
@@ -37,6 +42,16 @@ class JsonRpcQueueItemProcessorTest extends TestCase
      */
     private $commandMock;
 
+    /**
+     * @var MockObject
+     */
+    private $activeWorkspaceManagerMock;
+
+    /**
+     * @var JsonRpcQueueItemProcessor
+     */
+    private $jsonRpcQueueItemProcessor;
+
     /// @inherited
     public function setUp()
     {
@@ -52,7 +67,20 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             ->setMethods(['execute'])
             ->getMock();
 
+        $this->activeWorkspaceManagerMock = $this->getMockBuilder(ActiveWorkspaceManager::class)
+            ->setMethods(['getActiveWorkspace'])
+            ->getMock();
+
+        $this->activeWorkspaceManagerMock->method('getActiveWorkspace')->willReturn(new Workspace(
+            new WorkspaceConfiguration('test-id', [], 7.1, [], [])
+        ));
+
         $this->containerMock->method('get')->with('testCommand')->willReturn($this->commandMock);
+
+        $this->jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor(
+            $this->containerMock,
+            $this->activeWorkspaceManagerMock
+        );
     }
 
     /**
@@ -60,8 +88,6 @@ class JsonRpcQueueItemProcessorTest extends TestCase
      */
     public function testRelaysItemToAppropriateCommand(): void
     {
-        $jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor($this->containerMock);
-
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest('theRequestId', 'test'),
             $this->jsonRpcResponseSenderMock
@@ -77,7 +103,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             }
         );
 
-        $jsonRpcQueueItemProcessor->process($queueItem);
+        $this->jsonRpcQueueItemProcessor->process($queueItem);
     }
 
     /**
@@ -85,8 +111,6 @@ class JsonRpcQueueItemProcessorTest extends TestCase
      */
     public function testSendsGenericRuntimeErrorWhenRuntimeExceptionOccursDuringCommandRequestHandling(): void
     {
-        $jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor($this->containerMock);
-
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest('theRequestId', 'test'),
             $this->jsonRpcResponseSenderMock
@@ -105,7 +129,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             }
         );
 
-        $jsonRpcQueueItemProcessor->process($queueItem);
+        $this->jsonRpcQueueItemProcessor->process($queueItem);
     }
 
     /**
@@ -113,8 +137,6 @@ class JsonRpcQueueItemProcessorTest extends TestCase
      */
     public function testSendsFatalServerErrorWhenFatalExceptionOccursDuringCommandRequestHandling(): void
     {
-        $jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor($this->containerMock);
-
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest('theRequestId', 'test'),
             $this->jsonRpcResponseSenderMock
@@ -133,7 +155,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             }
         );
 
-        $jsonRpcQueueItemProcessor->process($queueItem);
+        $this->jsonRpcQueueItemProcessor->process($queueItem);
     }
 
     /**
@@ -141,8 +163,6 @@ class JsonRpcQueueItemProcessorTest extends TestCase
      */
     public function testSendsErrorWithCancelledCodeIfRequestWasCancelled(): void
     {
-        $jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor($this->containerMock);
-
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest('theRequestId', 'test'),
             $this->jsonRpcResponseSenderMock,
@@ -160,6 +180,6 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             }
         );
 
-        $jsonRpcQueueItemProcessor->process($queueItem);
+        $this->jsonRpcQueueItemProcessor->process($queueItem);
     }
 }

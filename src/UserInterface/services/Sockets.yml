@@ -11,6 +11,7 @@ services:
         class: Serenata\Sockets\JsonRpcQueueItemProcessor
         arguments:
             - '@service_container'
+            - '@activeWorkspaceManager'
 
     jsonRpcRequestPriorityDeterminer:
         class: Serenata\Sockets\JsonRpcRequestPriorityDeterminer

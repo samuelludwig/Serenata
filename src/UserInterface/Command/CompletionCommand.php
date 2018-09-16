@@ -21,7 +21,7 @@ use Serenata\Utility\SourceCodeStreamReader;
 /**
  * Command that shows autocompletion suggestions at a specific location.
  */
-class AutocompleteCommand extends AbstractCommand
+class CompletionCommand extends AbstractCommand
 {
     /**
      * @var AutocompletionProviderInterface
@@ -39,11 +39,6 @@ class AutocompleteCommand extends AbstractCommand
     private $storage;
 
     /**
-     * @var FileIndexerInterface
-     */
-    private $fileIndexer;
-
-    /**
      * @var AutocompletionPrefixDeterminerInterface
      */
     private $autocompletionPrefixDeterminer;
@@ -52,20 +47,17 @@ class AutocompleteCommand extends AbstractCommand
      * @param AutocompletionProviderInterface         $autocompletionProvider
      * @param SourceCodeStreamReader                  $sourceCodeStreamReader
      * @param StorageInterface                        $storage
-     * @param FileIndexerInterface                    $fileIndexer
      * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
      */
     public function __construct(
         AutocompletionProviderInterface $autocompletionProvider,
         SourceCodeStreamReader $sourceCodeStreamReader,
         StorageInterface $storage,
-        FileIndexerInterface $fileIndexer,
         AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
     ) {
         $this->autocompletionProvider = $autocompletionProvider;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->storage = $storage;
-        $this->fileIndexer = $fileIndexer;
         $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
     }
 
@@ -106,8 +98,6 @@ class AutocompleteCommand extends AbstractCommand
     {
         // Not used (yet), but still throws an exception when file is not in index.
         $this->storage->getFileByPath($uri);
-
-        // $this->fileIndexer->index($uri, $code);
 
         return $this->autocompletionProvider->provide(new AutocompletionProviderContext(
             new TextDocumentItem($uri, $code),

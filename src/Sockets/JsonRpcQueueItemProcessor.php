@@ -10,14 +10,13 @@ use Ds\Vector;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-use Serenata\Analysis\ClearableCacheInterface;
-
-use Serenata\Indexing\ManagerRegistry;
 use Serenata\Indexing\IncorrectDatabaseVersionException;
 
 use Serenata\UserInterface\Command;
 
 use Serenata\UserInterface\Command\InvalidArgumentsException;
+
+use Serenata\Workspace\ActiveWorkspaceManager;
 
 /**
  * Processes {@see JsonRpcQueueItem}s.
@@ -30,11 +29,18 @@ class JsonRpcQueueItemProcessor
     private $container;
 
     /**
-     * @param ContainerInterface $container
+     * @var ActiveWorkspaceManager
      */
-    public function __construct(ContainerInterface $container)
+    private $activeWorkspaceManager;
+
+    /**
+     * @param ContainerInterface     $container
+     * @param ActiveWorkspaceManager $activeWorkspaceManager
+     */
+    public function __construct(ContainerInterface $container, ActiveWorkspaceManager $activeWorkspaceManager)
     {
         $this->container = $container;
+        $this->activeWorkspaceManager = $activeWorkspaceManager;
     }
 
     /**
@@ -45,7 +51,14 @@ class JsonRpcQueueItemProcessor
         $error = null;
         $response = null;
 
-        if (!$queueItem->getIsCancelled()) {
+        if (!$this->activeWorkspaceManager->getActiveWorkspace() &&
+            $queueItem->getRequest()->getMethod() !== 'initialize'
+        ) {
+            $error = new JsonRpcError(
+                JsonRpcErrorCode::SERVER_NOT_INITIALIZED,
+                'Server not initialized yet, no active workspace'
+            );
+        } elseif (!$queueItem->getIsCancelled()) {
             try {
                 $response = $this->handle($queueItem);
             } catch (RequestParsingException $e) {
@@ -94,10 +107,6 @@ class JsonRpcQueueItemProcessor
             $this->container->get('stdinStream')->set($params['stdinData']);
         }
 
-        if (isset($params['database'])) {
-            $this->setDatabaseFile($params['database']);
-        }
-
         return $this->getCommandByMethod($queueItem->getRequest()->getMethod())->execute($queueItem);
     }
 
@@ -111,6 +120,21 @@ class JsonRpcQueueItemProcessor
     private function getCommandByMethod(string $method): Command\CommandInterface
     {
         try {
+            // TODO: Make a map of request names to service names and create a class that retrieves the appropriate
+            // handler for a request method that uses it.
+            // TODO: Rename "Command" to "RequestHandler" or similar.
+            if ($method === 'workspace/didChangeWatchedFiles') {
+                return $this->container->get('didChangeWatchedFilesCommand');
+            } elseif ($method === 'textDocument/didChange') {
+                return $this->container->get('didChangeCommand');
+            } elseif ($method === 'textDocument/completion') {
+                return $this->container->get('completionCommand');
+            } elseif ($method === 'textDocument/hover') {
+                return $this->container->get('hoverCommand');
+            } elseif ($method === 'textDocument/signatureHelp') {
+                return $this->container->get('signatureHelpCommand');
+            }
+
             return $this->container->get($method . 'Command');
         } catch (NotFoundExceptionInterface $e) {
             throw new RequestParsingException('Method "' . $method . '" was not found');
@@ -166,24 +190,5 @@ class JsonRpcQueueItemProcessor
         }
 
         return $vector;
-    }
-
-    /**
-     * @param string $databaseFile
-     */
-    private function setDatabaseFile(string $databaseFile): void
-    {
-        /** @var ManagerRegistry $managerRegistry */
-        $managerRegistry = $this->container->get('managerRegistry');
-
-        if (!$managerRegistry->hasInitialDatabasePathConfigured() ||
-            $managerRegistry->getDatabasePath() !== $databaseFile
-        ) {
-            $managerRegistry->setDatabasePath($databaseFile);
-
-            /** @var ClearableCacheInterface $clearableCache */
-            $clearableCache = $this->container->get('cacheClearingEventMediator.clearableCache');
-            $clearableCache->clearCache();
-        }
     }
 }

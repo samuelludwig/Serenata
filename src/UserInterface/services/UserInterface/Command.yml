@@ -10,36 +10,35 @@ services:
     initializeCommand:
         class: Serenata\UserInterface\Command\InitializeCommand
         arguments:
-            - '@schemaInitializer'
+            - '@activeWorkspaceManager'
+            - '@workspaceConfigurationJsonParser'
             - '@managerRegistry'
+            - '@storageVersionChecker'
             - '@indexer'
-            - '@cache'
+            - '@schemaInitializer'
+            - '@indexFilePruner'
+            - '@cacheClearingEventMediator.clearableCache'
+
+    initializedCommand:
+        class: Serenata\UserInterface\Command\InitializedCommand
+
+    shutdownCommand:
+        class: Serenata\UserInterface\Command\ShutdownCommand
+        arguments:
+            - '@managerRegistry'
+            - '@activeWorkspaceManager'
+            - '@cacheClearingEventMediator.clearableCache'
 
     exitCommand:
         class: Serenata\UserInterface\Command\ExitCommand
         arguments:
-            - '@managerRegistry'
-
-    reindexCommand:
-        class: Serenata\UserInterface\Command\ReindexCommand
-        arguments:
-            - '@indexer'
+            - '@activeWorkspaceManager'
 
     echoResponseCommand:
         class: Serenata\UserInterface\Command\EchoResponseCommand
 
-    vacuumCommand:
-        class: Serenata\UserInterface\Command\VacuumCommand
-        arguments:
-            - '@indexFilePruner'
-
-    testCommand:
-        class: Serenata\UserInterface\Command\TestCommand
-        arguments:
-            - '@storageVersionChecker'
-
-    tooltipCommand:
-        class: Serenata\UserInterface\Command\TooltipCommand
+    hoverCommand:
+        class: Serenata\UserInterface\Command\HoverCommand
         arguments:
             - '@storage'
             - '@tooltipProvider'
@@ -120,13 +119,12 @@ services:
             - '@namespaceListProvider'
             - '@fileNamespaceListProvider'
 
-    autocompleteCommand:
-        class: Serenata\UserInterface\Command\AutocompleteCommand
+    completionCommand:
+        class: Serenata\UserInterface\Command\CompletionCommand
         arguments:
             - '@autocompletionProvider'
             - '@sourceCodeStreamReader'
             - '@storage'
-            - '@fileIndexer'
             - '@defaultAutocompletionPrefixDeterminer'
 
     gotoDefinitionCommand:
@@ -142,3 +140,17 @@ services:
         arguments:
             - '@storage'
             - '@documentSymbolRetriever'
+
+    didChangeWatchedFilesCommand:
+        class: Serenata\UserInterface\Command\DidChangeWatchedFilesCommand
+        arguments:
+            - '@activeWorkspaceManager'
+            - '@storage'
+            - '@indexer'
+
+    didChangeCommand:
+        class: Serenata\UserInterface\Command\DidChangeCommand
+        arguments:
+            - '@activeWorkspaceManager'
+            - '@indexer'
+            - '@stdinStream'
