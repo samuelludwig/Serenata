@@ -5,6 +5,7 @@ namespace Serenata\UserInterface\Command;
 use UnexpectedValueException;
 
 use Serenata\Indexing\Indexer;
+use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -35,17 +36,26 @@ final class DidChangeCommand extends AbstractCommand
     private $stdinStream;
 
     /**
-     * @param ActiveWorkspaceManager $activeWorkspaceManager
-     * @param Indexer                $indexer
+     * @var TextDocumentContentRegistry
+     */
+    private $textDocumentContentRegistry;
+
+    /**
+     * @param ActiveWorkspaceManager      $activeWorkspaceManager
+     * @param Indexer                     $indexer
+     * @param StreamInterface             $stdinStream
+     * @param TextDocumentContentRegistry $textDocumentContentRegistry
      */
     public function __construct(
         ActiveWorkspaceManager $activeWorkspaceManager,
         Indexer $indexer,
-        StreamInterface $stdinStream
+        StreamInterface $stdinStream,
+        TextDocumentContentRegistry $textDocumentContentRegistry
     ) {
         $this->activeWorkspaceManager = $activeWorkspaceManager;
         $this->indexer = $indexer;
         $this->stdinStream = $stdinStream;
+        $this->textDocumentContentRegistry = $textDocumentContentRegistry;
     }
 
     /**
@@ -84,9 +94,6 @@ final class DidChangeCommand extends AbstractCommand
             );
         }
 
-        // TODO: Need to maintain a mapping of URI's (or documents) to their contents somewhere as other requests
-        // need to be able to access the latest state (which can't be loaded from disk).
-
         // TODO: This should be refactored at some point to no longer require use of streams.
         fwrite($this->stdinStream->getHandle(), $contents);
         rewind($this->stdinStream->getHandle());
@@ -99,6 +106,6 @@ final class DidChangeCommand extends AbstractCommand
             $sender
         );
 
-        echo "Okay" . PHP_EOL;
+        $this->textDocumentContentRegistry->update($uri, $contents);
     }
 }

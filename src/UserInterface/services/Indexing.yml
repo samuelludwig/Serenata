@@ -99,3 +99,8 @@ services:
             - '@indexFilePruner'
             - '@pathNormalizer'
             - '@sourceCodeStreamReader'
+
+    textDocumentContentRegistry:
+        class: Serenata\Indexing\TextDocumentContentRegistry
+        arguments:
+            - '@sourceCodeStreamReader'
