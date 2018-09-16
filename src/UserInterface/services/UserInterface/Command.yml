@@ -123,8 +123,7 @@ services:
         class: Serenata\UserInterface\Command\CompletionCommand
         arguments:
             - '@autocompletionProvider'
-            - '@sourceCodeStreamReader'
-            - '@storage'
+            - '@textDocumentContentRegistry'
             - '@defaultAutocompletionPrefixDeterminer'
 
     gotoDefinitionCommand:
