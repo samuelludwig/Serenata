@@ -40,10 +40,8 @@ services:
     hoverCommand:
         class: Serenata\UserInterface\Command\HoverCommand
         arguments:
-            - '@storage'
+            - '@textDocumentContentRegistry'
             - '@tooltipProvider'
-            - '@sourceCodeStreamReader'
-            - '@fileIndexer'
 
     classListCommand:
         class: Serenata\UserInterface\Command\ClassListCommand
