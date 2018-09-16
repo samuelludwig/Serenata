@@ -63,9 +63,9 @@ final class SignatureHelpCommand extends AbstractCommand
      * @param string   $code
      * @param Position $position
      *
-     * @return SignatureHelp
+     * @return SignatureHelp|null
      */
-    public function signatureHelp(string $uri, string $code, Position $position): SignatureHelp
+    public function signatureHelp(string $uri, string $code, Position $position): ?SignatureHelp
     {
         return $this->signatureHelpRetriever->get(new TextDocumentItem($uri, $code), $position);
     }

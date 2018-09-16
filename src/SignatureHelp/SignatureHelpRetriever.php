@@ -70,19 +70,19 @@ class SignatureHelpRetriever
      * @throws UnexpectedValueException when there is no signature help to be retrieved for the location.
      * @throws UnexpectedValueException when a node type is encountered that this method doesn't know how to handle.
      *
-     * @return SignatureHelp
+     * @return SignatureHelp|null
      */
-    public function get(TextDocumentItem $textDocumentItem, Position $position): SignatureHelp
+    public function get(TextDocumentItem $textDocumentItem, Position $position): ?SignatureHelp
     {
         $nodes = [];
 
-        // try {
+        try {
             $node = $this->getNodeAt($textDocumentItem, $position);
 
             return $this->getSignatureHelpForNode($node, $textDocumentItem, $position);
-        // } catch (UnexpectedValueException $e) {
-        //     return null;
-        // }
+        } catch (UnexpectedValueException $e) {
+            return null;
+        }
     }
 
     /**
