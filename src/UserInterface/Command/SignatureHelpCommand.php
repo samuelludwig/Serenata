@@ -4,8 +4,7 @@ namespace Serenata\UserInterface\Command;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\StorageInterface;
-use Serenata\Indexing\FileIndexerInterface;
+use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\SignatureHelp\SignatureHelp;
 use Serenata\SignatureHelp\SignatureHelpRetriever;
@@ -14,7 +13,6 @@ use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
 use Serenata\Utility\TextDocumentItem;
-use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Allows fetching signature help (call tips) for a method or function call.
@@ -22,9 +20,9 @@ use Serenata\Utility\SourceCodeStreamReader;
 final class SignatureHelpCommand extends AbstractCommand
 {
     /**
-     * @var StorageInterface
+     * @var TextDocumentContentRegistry
      */
-    private $storage;
+    private $textDocumentContentRegistry;
 
     /**
      * @var SignatureHelpRetriever
@@ -32,31 +30,15 @@ final class SignatureHelpCommand extends AbstractCommand
     private $signatureHelpRetriever;
 
     /**
-     * @var SourceCodeStreamReader
-     */
-    private $sourceCodeStreamReader;
-
-    /**
-     * @var FileIndexerInterface
-     */
-    private $fileIndexer;
-
-    /**
-     * @param StorageInterface       $storage
-     * @param SignatureHelpRetriever $signatureHelpRetriever
-     * @param SourceCodeStreamReader $sourceCodeStreamReader
-     * @param FileIndexerInterface   $fileIndexer
+     * @param TextDocumentContentRegistry $textDocumentContentRegistry
+     * @param SignatureHelpRetriever      $signatureHelpRetriever
      */
     public function __construct(
-        StorageInterface $storage,
-        SignatureHelpRetriever $signatureHelpRetriever,
-        SourceCodeStreamReader $sourceCodeStreamReader,
-        FileIndexerInterface $fileIndexer
+        TextDocumentContentRegistry $textDocumentContentRegistry,
+        SignatureHelpRetriever $signatureHelpRetriever
     ) {
-        $this->storage = $storage;
+        $this->textDocumentContentRegistry = $textDocumentContentRegistry;
         $this->signatureHelpRetriever = $signatureHelpRetriever;
-        $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -64,25 +46,15 @@ final class SignatureHelpCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
-
-        if (!isset($arguments['uri'])) {
-            throw new InvalidArgumentsException('"uri" must be supplied');
-        } elseif (!isset($arguments['position'])) {
-            throw new InvalidArgumentsException('"position" into the source must be supplied');
-        }
-
-        if (isset($arguments['stdin']) && $arguments['stdin']) {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
-        } else {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
-        }
-
-        $position = new Position($arguments['position']['line'], $arguments['position']['character']);
+        $parameters = $queueItem->getRequest()->getParams() ?: [];
 
         return new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
-            $this->signatureHelp($arguments['uri'], $code, $position)
+            $this->signatureHelp(
+                $parameters['textDocument']['uri'],
+                $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
+                new Position($parameters['position']['line'], $parameters['position']['character'])
+            )
         );
     }
 
@@ -95,11 +67,6 @@ final class SignatureHelpCommand extends AbstractCommand
      */
     public function signatureHelp(string $uri, string $code, Position $position): SignatureHelp
     {
-        // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
-
-        // $this->fileIndexer->index($uri, $code);
-
         return $this->signatureHelpRetriever->get(new TextDocumentItem($uri, $code), $position);
     }
 }
