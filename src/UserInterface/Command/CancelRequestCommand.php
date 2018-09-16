@@ -29,14 +29,14 @@ final class CancelRequestCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        if (!isset($arguments['id'])) {
+        if (!isset($parameters['id'])) {
             throw new InvalidArgumentsException('"id" of request to cancel must be passed');
         }
 
-        $this->requestQueue->cancel($arguments['id']);
+        $this->requestQueue->cancel($parameters['id']);
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), true);
+        return null;
     }
 }
