@@ -149,3 +149,4 @@ services:
             - '@activeWorkspaceManager'
             - '@indexer'
             - '@stdinStream'
+            - '@textDocumentContentRegistry'
