@@ -3,7 +3,7 @@
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -20,7 +20,7 @@ class KeywordAutocompletionProviderTest extends AbstractAutocompletionProviderTe
         $output = $this->provide('Keywords.phpt');
 
         $firstSuggestion =
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'self',
                 CompletionItemKind::KEYWORD,
                 'self',

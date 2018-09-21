@@ -12,7 +12,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
@@ -137,14 +137,14 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
     private function createSuggestion(
         array $method,
         AutocompletionProviderContext $context,
         bool $shouldIncludeParanthesesInInsertText
-    ): AutocompletionSuggestion {
-        return new AutocompletionSuggestion(
+    ): CompletionItem {
+        return new CompletionItem(
             $method['name'],
             CompletionItemKind::METHOD,
             $this->getInsertTextForSuggestion($method, $shouldIncludeParanthesesInInsertText),

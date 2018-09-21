@@ -3,7 +3,7 @@
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,7 +22,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('Class.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
                 CompletionItemKind::CLASS_,
                 'Foo',
@@ -51,7 +51,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('DeprecatedClass.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
                 CompletionItemKind::CLASS_,
                 'Foo',
@@ -80,7 +80,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('PrefixWithSlash.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
                 CompletionItemKind::CLASS_,
                 '\Foo',
@@ -109,7 +109,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('NamespacedClass.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo\Bar\Baz',
                 CompletionItemKind::CLASS_,
                 'Baz',
@@ -143,7 +143,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('UseStatement.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo\Bar\Baz\Qux',
                 CompletionItemKind::CLASS_,
                 'Foo\Bar\Baz\Qux',

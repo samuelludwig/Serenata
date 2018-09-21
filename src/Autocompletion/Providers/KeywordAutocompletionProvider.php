@@ -3,7 +3,7 @@
 namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Utility\TextEdit;
 
@@ -31,11 +31,11 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
      * @param array                         $keyword
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(array $keyword, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(array $keyword, AutocompletionProviderContext $context): CompletionItem
     {
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $keyword['name'],
             CompletionItemKind::KEYWORD,
             $keyword['name'],

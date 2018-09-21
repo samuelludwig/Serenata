@@ -3,7 +3,7 @@
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,7 +22,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::PROPERTY,
                 'foo',
@@ -58,7 +58,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::PROPERTY,
                 'foo',

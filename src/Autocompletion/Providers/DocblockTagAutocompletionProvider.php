@@ -8,7 +8,7 @@ use Serenata\Common\Position;
 use Serenata\Utility\TextEdit;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 /**
@@ -49,14 +49,14 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
      * @param AutocompletionProviderContext $context
      * @param string                        $prefixOverride
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
     private function createSuggestion(
         array $tag,
         AutocompletionProviderContext $context,
         string $prefixOverride
-    ): AutocompletionSuggestion {
-        return new AutocompletionSuggestion(
+    ): CompletionItem {
+        return new CompletionItem(
             $tag['name'],
             CompletionItemKind::KEYWORD,
             $tag['insertText'],

@@ -10,7 +10,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\CircularDependencyException;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
@@ -98,11 +98,11 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
      * @param array                         $constant
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(array $constant, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(array $constant, AutocompletionProviderContext $context): CompletionItem
     {
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $constant['name'],
             CompletionItemKind::CONSTANT,
             $constant['name'],

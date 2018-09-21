@@ -11,7 +11,7 @@ use Serenata\Autocompletion\Providers\AutocompletionProviderInterface;
 use Serenata\Autocompletion\Providers\FuzzyMatchingAutocompletionProvider;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Position;
 
@@ -34,8 +34,8 @@ class FuzzyMatchingAutocompletionProviderTest extends TestCase
             ->getMock();
 
         $suggestions = [
-            new AutocompletionSuggestion('test1', CompletionItemKind::FUNCTION, 'test', null, 'test', null),
-            new AutocompletionSuggestion('test12', CompletionItemKind::FUNCTION, 'test', null, 'test', null),
+            new CompletionItem('test1', CompletionItemKind::FUNCTION, 'test', null, 'test', null),
+            new CompletionItem('test12', CompletionItemKind::FUNCTION, 'test', null, 'test', null),
         ];
 
         $delegate->expects($this->once())->method('provide')->willReturn($suggestions);

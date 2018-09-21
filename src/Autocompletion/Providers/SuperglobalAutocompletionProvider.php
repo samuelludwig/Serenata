@@ -3,7 +3,7 @@
 namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 
 
@@ -31,13 +31,13 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
      * @param array                         $superGlobal
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
     private function createSuggestion(
         array $superGlobal,
         AutocompletionProviderContext $context
-    ): AutocompletionSuggestion {
-        return new AutocompletionSuggestion(
+    ): CompletionItem {
+        return new CompletionItem(
             $superGlobal['name'],
             CompletionItemKind::VARIABLE,
             $superGlobal['name'],

@@ -12,7 +12,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 use Serenata\Utility\TextEdit;
@@ -100,11 +100,11 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
      * @param array                         $property
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(array $property, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(array $property, AutocompletionProviderContext $context): CompletionItem
     {
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $property['name'],
             CompletionItemKind::PROPERTY,
             $property['name'],

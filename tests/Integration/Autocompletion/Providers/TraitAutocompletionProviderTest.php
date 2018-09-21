@@ -3,7 +3,7 @@
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,7 +22,7 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('Trait.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
                 CompletionItemKind::CLASS_,
                 'Foo',

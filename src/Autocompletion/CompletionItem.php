@@ -13,7 +13,7 @@ use Serenata\Utility\TextEdit;
  *
  * This is a value object and immutable.
  */
-final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
+final class CompletionItem implements JsonSerializable, ArrayAccess
 {
     /**
      * @var string

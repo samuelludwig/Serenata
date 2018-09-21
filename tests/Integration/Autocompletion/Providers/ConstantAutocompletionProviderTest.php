@@ -3,7 +3,7 @@
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -20,7 +20,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Constants.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'FOO',
                 CompletionItemKind::CONSTANT,
                 'FOO',
@@ -52,7 +52,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedConstant.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'FOO',
                 CompletionItemKind::CONSTANT,
                 'FOO',

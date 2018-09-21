@@ -8,7 +8,7 @@ use Serenata\Common\Position;
 use Serenata\Utility\TextEdit;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
@@ -30,7 +30,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('ScalarParameter.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$int',
                 CompletionItemKind::VARIABLE,
                 '$int',
@@ -55,7 +55,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('UnqualifiedClassParameter.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
                 '$someClasslike',
@@ -68,7 +68,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$some',
                 CompletionItemKind::VARIABLE,
                 '$some',
@@ -93,7 +93,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('QualifiedClassParameter.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
                 '$someClasslike',
@@ -106,7 +106,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$some',
                 CompletionItemKind::VARIABLE,
                 '$some',
@@ -119,7 +119,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$classlike',
                 CompletionItemKind::VARIABLE,
                 '$classlike',
@@ -144,7 +144,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('FullyQualifiedClassParameter.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
                 '$someClasslike',
@@ -157,7 +157,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$some',
                 CompletionItemKind::VARIABLE,
                 '$some',
@@ -170,7 +170,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$classlike',
                 CompletionItemKind::VARIABLE,
                 '$classlike',
@@ -195,7 +195,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('QualifiedClassParameterMultipleWords.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$someClasslikeType',
                 CompletionItemKind::VARIABLE,
                 '$someClasslikeType',
@@ -208,7 +208,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
                 '$someClasslike',
@@ -221,7 +221,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$classlikeType',
                 CompletionItemKind::VARIABLE,
                 '$classlikeType',
@@ -234,7 +234,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
                 []
             ),
 
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$classlike',
                 CompletionItemKind::VARIABLE,
                 '$classlike',

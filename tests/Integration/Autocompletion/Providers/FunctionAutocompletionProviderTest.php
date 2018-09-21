@@ -3,7 +3,7 @@
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -20,7 +20,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Functions.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::FUNCTION,
                 'foo()$0',
@@ -52,7 +52,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('CursorFollowedByParanthesis.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::FUNCTION,
                 'foo',
@@ -84,7 +84,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('CursorFollowedByWhitespaceAndParanthesis.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::FUNCTION,
                 'foo',
@@ -116,7 +116,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedFunction.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::FUNCTION,
                 'foo()$0',
@@ -148,7 +148,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('NoRequiredParameters.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::FUNCTION,
                 'foo()$0',
@@ -180,7 +180,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('RequiredParameters.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
                 CompletionItemKind::FUNCTION,
                 'foo($0)',

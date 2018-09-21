@@ -8,7 +8,7 @@ use Serenata\Common\Position;
 use Serenata\Utility\TextEdit;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 
 class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
@@ -19,7 +19,7 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
     {
         $output = $this->provide('Superglobals.phpt');
 
-        $firstSuggestion = new AutocompletionSuggestion(
+        $firstSuggestion = new CompletionItem(
             '$argc',
             CompletionItemKind::VARIABLE,
             '$argc',

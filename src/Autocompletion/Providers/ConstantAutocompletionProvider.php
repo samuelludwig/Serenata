@@ -5,7 +5,7 @@ namespace Serenata\Autocompletion\Providers;
 use Serenata\Analysis\ConstantListProviderInterface;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 
@@ -78,11 +78,11 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
      * @param array                         $constant
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(array $constant, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(array $constant, AutocompletionProviderContext $context): CompletionItem
     {
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $constant['name'],
             CompletionItemKind::CONSTANT,
             $constant['name'],

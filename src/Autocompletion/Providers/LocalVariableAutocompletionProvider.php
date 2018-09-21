@@ -12,7 +12,7 @@ use PhpParser\ErrorHandler;
 use Serenata\Analysis\VariableScanner;
 
 use Serenata\Autocompletion\CompletionItemKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
 use Serenata\Utility\TextEdit;
@@ -89,7 +89,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             ];
         }, explode('|', $variable['type']));
 
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $variable['name'],
             CompletionItemKind::VARIABLE,
             $variable['name'],
