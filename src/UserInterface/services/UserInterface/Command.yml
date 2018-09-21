@@ -130,8 +130,8 @@ services:
             - '@sourceCodeStreamReader'
             - '@fileIndexer'
 
-    documentSymbolsCommand:
-        class: Serenata\UserInterface\Command\DocumentSymbolsCommand
+    documentSymbolCommand:
+        class: Serenata\UserInterface\Command\DocumentSymbolCommand
         arguments:
             - '@storage'
             - '@documentSymbolRetriever'

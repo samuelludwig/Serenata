@@ -13,7 +13,7 @@ use Serenata\Symbols\DocumentSymbolRetriever;
 /**
  * Command that retrieves a list of known symbols for a document.
  */
-final class DocumentSymbolsCommand extends AbstractCommand
+final class DocumentSymbolCommand extends AbstractCommand
 {
     /**
      * @var StorageInterface
