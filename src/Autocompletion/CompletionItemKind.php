@@ -20,7 +20,7 @@ final class CompletionItemKind
     /**
      * @var int
      */
-    public const FUNCTION_     = 3;
+    public const FUNCTION      = 3;
 
     /**
      * @var int
