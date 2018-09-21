@@ -197,8 +197,6 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
             'textEdit'            => $this->getTextEdit(),
             'label'               => $this->getLabel(),
             'documentation'       => $this->getDocumentation(),
-            // TODO: Deprecated, remove.
-            'extraData'           => $this->getExtraData(),
             'additionalTextEdits' => $this->getAdditionalTextEdits(),
             'deprecated'          => $this->getDeprecated(),
             'detail'              => $this->getDetail(),
