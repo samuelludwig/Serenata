@@ -83,7 +83,7 @@ final class Indexer implements EventEmitterInterface
      * @param string[]                       $globsToExclude
      * @param bool                           $useStdin
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param int|string|null                $originatingRequestId
+     * @param JsonRpcResponse|null           $responseToSendOnCompletion
      *
      * @return bool
      */
