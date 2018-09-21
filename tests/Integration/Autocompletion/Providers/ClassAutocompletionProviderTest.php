@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Range;
@@ -24,7 +24,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 1)),
@@ -53,7 +53,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(10, 0), new Position(10, 1)),
@@ -82,7 +82,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 '\Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 2)),
@@ -111,7 +111,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo\Bar\Baz',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Baz',
                 new TextEdit(
                     new Range(new Position(10, 4), new Position(10, 5)),
@@ -145,7 +145,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo\Bar\Baz\Qux',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Foo\Bar\Baz\Qux',
                 new TextEdit(
                     new Range(new Position(10, 8), new Position(10, 15)),

@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Range;
@@ -22,7 +22,7 @@ class KeywordAutocompletionProviderTest extends AbstractAutocompletionProviderTe
         $firstSuggestion =
             new AutocompletionSuggestion(
                 'self',
-                SuggestionKind::KEYWORD,
+                CompletionItemKind::KEYWORD,
                 'self',
                 new TextEdit(
                     new Range(

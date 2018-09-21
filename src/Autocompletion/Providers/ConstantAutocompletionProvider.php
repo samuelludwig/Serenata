@@ -4,7 +4,7 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Analysis\ConstantListProviderInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
@@ -84,7 +84,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     {
         return new AutocompletionSuggestion(
             $constant['name'],
-            SuggestionKind::CONSTANT,
+            CompletionItemKind::CONSTANT,
             $constant['name'],
             $this->getTextEditForSuggestion($constant, $context),
             $constant['name'],

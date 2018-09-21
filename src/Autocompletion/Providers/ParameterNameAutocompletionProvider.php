@@ -6,7 +6,7 @@ use PhpParser\Node;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 
@@ -150,7 +150,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
     {
         return new AutocompletionSuggestion(
             $name,
-            SuggestionKind::VARIABLE,
+            CompletionItemKind::VARIABLE,
             $name,
             $this->getTextEditForSuggestion($name, $context),
             $name,

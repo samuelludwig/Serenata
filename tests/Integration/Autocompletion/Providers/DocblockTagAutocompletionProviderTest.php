@@ -7,7 +7,7 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProviderTest
@@ -22,7 +22,7 @@ class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProvid
         $firstSuggestion =
             new AutocompletionSuggestion(
                 '@api',
-                SuggestionKind::KEYWORD,
+                CompletionItemKind::KEYWORD,
                 '@api$0',
                 new TextEdit(
                     new Range(new Position(3, 3), new Position(3, 4)),

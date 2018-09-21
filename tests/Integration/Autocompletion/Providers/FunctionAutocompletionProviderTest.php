@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Range;
@@ -22,7 +22,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -54,7 +54,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -86,7 +86,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -118,7 +118,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -150,7 +150,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -182,7 +182,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo($0)',
                 new TextEdit(
                     new Range(

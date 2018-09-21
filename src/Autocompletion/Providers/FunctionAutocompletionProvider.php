@@ -6,7 +6,7 @@ use Serenata\Analysis\FunctionListProviderInterface;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
@@ -117,7 +117,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $function['name'],
-            SuggestionKind::FUNCTION,
+            CompletionItemKind::FUNCTION,
             $this->getInsertTextForSuggestion($function, $shouldIncludeParanthesesInInsertText),
             $this->getTextEditForSuggestion($function, $context, $shouldIncludeParanthesesInInsertText),
             $this->functionAutocompletionSuggestionLabelCreator->create($function),

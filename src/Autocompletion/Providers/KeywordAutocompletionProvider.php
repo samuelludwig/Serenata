@@ -2,7 +2,7 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Utility\TextEdit;
@@ -37,7 +37,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
     {
         return new AutocompletionSuggestion(
             $keyword['name'],
-            SuggestionKind::KEYWORD,
+            CompletionItemKind::KEYWORD,
             $keyword['name'],
             $this->getTextEditForSuggestion($keyword, $context),
             $keyword['name'],

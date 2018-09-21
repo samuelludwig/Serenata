@@ -21,7 +21,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $filterText;
 
     /**
-     * @var int|null Item from {@see SuggestionKind}
+     * @var int|null Item from {@see CompletionItemKind}
      */
     private $kind;
 

@@ -11,7 +11,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
@@ -146,7 +146,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $method['name'],
-            SuggestionKind::METHOD,
+            CompletionItemKind::METHOD,
             $this->getInsertTextForSuggestion($method, $shouldIncludeParanthesesInInsertText),
             $this->getTextEditForSuggestion($method, $context, $shouldIncludeParanthesesInInsertText),
             $this->functionAutocompletionSuggestionLabelCreator->create($method),

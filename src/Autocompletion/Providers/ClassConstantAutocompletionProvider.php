@@ -9,7 +9,7 @@ use UnexpectedValueException;
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\CircularDependencyException;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
@@ -104,7 +104,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
     {
         return new AutocompletionSuggestion(
             $constant['name'],
-            SuggestionKind::CONSTANT,
+            CompletionItemKind::CONSTANT,
             $constant['name'],
             $this->getTextEditForSuggestion($constant, $context),
             $constant['name'],

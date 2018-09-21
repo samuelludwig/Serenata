@@ -6,7 +6,7 @@ use Serenata\Analysis\NamespaceListProviderInterface;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Utility\TextEdit;
@@ -99,7 +99,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
 
         return new AutocompletionSuggestion(
             $fqcnWithoutLeadingSlash,
-            SuggestionKind::MODULE,
+            CompletionItemKind::MODULE,
             $namespace['name'],
             $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,

@@ -7,7 +7,7 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
@@ -58,7 +58,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
     ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $tag['name'],
-            SuggestionKind::KEYWORD,
+            CompletionItemKind::KEYWORD,
             $tag['insertText'],
             $this->getTextEditForSuggestion($tag, $context, $prefixOverride),
             $tag['name'],

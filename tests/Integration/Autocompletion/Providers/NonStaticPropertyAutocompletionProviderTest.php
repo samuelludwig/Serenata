@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Range;
@@ -24,7 +24,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::PROPERTY,
+                CompletionItemKind::PROPERTY,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -60,7 +60,7 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::PROPERTY,
+                CompletionItemKind::PROPERTY,
                 'foo',
                 new TextEdit(
                     new Range(

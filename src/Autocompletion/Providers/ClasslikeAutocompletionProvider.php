@@ -11,7 +11,7 @@ use Serenata\Analysis\Visiting\UseStatementKind;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Position;
@@ -106,8 +106,8 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
         return new AutocompletionSuggestion(
             $classlike['fqcn'],
             $classlike['type'] === ClasslikeTypeNameValue::INTERFACE_ ?
-                SuggestionKind::INTERFACE_ :
-                SuggestionKind::CLASS_,
+                CompletionItemKind::INTERFACE_ :
+                CompletionItemKind::CLASS_,
             $this->getInsertTextForSuggestion($classlike, $context),
             $this->getTextEditForSuggestion($classlike, $context),
             $this->getFqcnWithoutLeadingSlash($classlike),

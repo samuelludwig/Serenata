@@ -7,7 +7,7 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProviderTest
@@ -32,7 +32,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $suggestions = [
             new AutocompletionSuggestion(
                 '$int',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$int',
                 new TextEdit(
                     new Range(new Position(4, 28), new Position(4, 30)),
@@ -57,7 +57,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $suggestions = [
             new AutocompletionSuggestion(
                 '$someClasslike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 38), new Position(4, 40)),
@@ -70,7 +70,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$some',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$some',
                 new TextEdit(
                     new Range(new Position(4, 38), new Position(4, 40)),
@@ -95,7 +95,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $suggestions = [
             new AutocompletionSuggestion(
                 '$someClasslike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
@@ -108,7 +108,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$some',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$some',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
@@ -121,7 +121,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$classlike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$classlike',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
@@ -146,7 +146,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $suggestions = [
             new AutocompletionSuggestion(
                 '$someClasslike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
@@ -159,7 +159,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$some',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$some',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
@@ -172,7 +172,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$classlike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$classlike',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
@@ -197,7 +197,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
         $suggestions = [
             new AutocompletionSuggestion(
                 '$someClasslikeType',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$someClasslikeType',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
@@ -210,7 +210,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$someClasslike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
@@ -223,7 +223,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$classlikeType',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$classlikeType',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
@@ -236,7 +236,7 @@ class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProv
 
             new AutocompletionSuggestion(
                 '$classlike',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$classlike',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),

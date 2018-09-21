@@ -11,7 +11,7 @@ use PhpParser\ErrorHandler;
 
 use Serenata\Analysis\VariableScanner;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
@@ -91,7 +91,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
 
         return new AutocompletionSuggestion(
             $variable['name'],
-            SuggestionKind::VARIABLE,
+            CompletionItemKind::VARIABLE,
             $variable['name'],
             $this->getTextEditForSuggestion($variable, $context),
             $variable['name'],

@@ -11,7 +11,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
 
@@ -106,7 +106,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
     {
         return new AutocompletionSuggestion(
             $property['name'],
-            SuggestionKind::PROPERTY,
+            CompletionItemKind::PROPERTY,
             $property['name'],
             $this->getTextEditForSuggestion($property, $context),
             $property['name'],

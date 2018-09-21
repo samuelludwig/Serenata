@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Range;
@@ -24,7 +24,7 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo',
-                SuggestionKind::INTERFACE_,
+                CompletionItemKind::INTERFACE_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 1)),

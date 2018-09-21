@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 use Serenata\Common\Range;
@@ -24,7 +24,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -60,7 +60,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -96,7 +96,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -132,7 +132,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -168,7 +168,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -204,7 +204,7 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $suggestions = [
             new AutocompletionSuggestion(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo($0)',
                 new TextEdit(
                     new Range(

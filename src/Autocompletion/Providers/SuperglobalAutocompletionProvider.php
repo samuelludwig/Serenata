@@ -2,7 +2,7 @@
 
 namespace Serenata\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 
@@ -39,7 +39,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
     ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $superGlobal['name'],
-            SuggestionKind::VARIABLE,
+            CompletionItemKind::VARIABLE,
             $superGlobal['name'],
             $this->getTextEditForSuggestion($superGlobal, $context),
             $superGlobal['name'],

@@ -7,7 +7,7 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
+use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\AutocompletionSuggestion;
 
 class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProviderTest
@@ -21,7 +21,7 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
 
         $firstSuggestion = new AutocompletionSuggestion(
             '$argc',
-            SuggestionKind::VARIABLE,
+            CompletionItemKind::VARIABLE,
             '$argc',
             new TextEdit(
                 new Range(

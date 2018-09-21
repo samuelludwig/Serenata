@@ -5,7 +5,7 @@ namespace Serenata\Autocompletion;
 /**
  * Enumeration of suggestion kinds.
  */
-final class SuggestionKind
+final class CompletionItemKind
 {
     /**
      * @var int
