@@ -174,7 +174,7 @@ final class InitializeCommand extends AbstractCommand
 
             if ($initializeIndexForProject) {
                 $this->indexer->index(
-                    [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
+                    ['file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
                     $workspaceConfiguration->getFileExtensions(),
                     [],
                     false,
