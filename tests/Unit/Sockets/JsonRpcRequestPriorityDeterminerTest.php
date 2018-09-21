@@ -37,11 +37,23 @@ class JsonRpcRequestPriorityDeterminerTest extends TestCase
     /**
      * @return void
      */
-    public function testAssignsLowPriorityToReindexRequests(): void
+    public function testAssignsLowPriorityToDidChangeWatchedFilesNotifications(): void
     {
         $determiner = new JsonRpcRequestPriorityDeterminer();
 
-        $request = new JsonRpcRequest(null, 'reindex');
+        $request = new JsonRpcRequest(null, 'workspace/didChangeWatchedFilesCommand');
+
+        static::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
+    }
+
+    /**
+     * @return void
+     */
+    public function testAssignsLowPriorityToDidChangeNotifications(): void
+    {
+        $determiner = new JsonRpcRequestPriorityDeterminer();
+
+        $request = new JsonRpcRequest(null, 'textDocument/didChange');
 
         static::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
     }

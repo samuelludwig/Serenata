@@ -5,7 +5,6 @@ namespace Serenata\Tests\Integration\UserInterface\Command;
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
-use Serenata\Indexing\FileNotFoundStorageException;
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 class NamespaceListCommandTest extends AbstractIntegrationTest
@@ -78,17 +77,5 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
             ),
             $secondItem['range']
         );
-    }
-
-    /**
-     * @return void
-     */
-    public function testThrowsExceptionWhenFileIsNotInIndex(): void
-    {
-        $command = $this->container->get('namespaceListCommand');
-
-        $this->expectException(FileNotFoundStorageException::class);
-
-        $command->getNamespaceList('DoesNotExist.phpt');
     }
 }

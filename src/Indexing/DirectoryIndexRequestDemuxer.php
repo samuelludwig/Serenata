@@ -10,6 +10,8 @@ use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
+use Serenata\Utility\FileChangeType;
+
 /**
  * Indexes directories by generating one or more file index requests for each encountered file.
  */
@@ -61,7 +63,7 @@ final class DirectoryIndexRequestDemuxer
         $i = 1;
 
         foreach ($items as $fileInfo) {
-            $this->queueIndexRequest($fileInfo, $extensionsToIndex, $globsToExclude, $jsonRpcResponseSender);
+            $this->queueIndexRequest($fileInfo, $jsonRpcResponseSender);
 
             if ($originatingRequestId !== null) {
                 $this->queueProgressRequest($originatingRequestId, $i++, $totalItems, $jsonRpcResponseSender);
@@ -71,20 +73,19 @@ final class DirectoryIndexRequestDemuxer
 
     /**
      * @param SplFileInfo                    $fileInfo
-     * @param string[]                       $extensionsToIndex
-     * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      */
     private function queueIndexRequest(
         SplFileInfo $fileInfo,
-        array $extensionsToIndex,
-        array $globsToExclude,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender
     ): void {
-        $request = new JsonRpcRequest(null, 'reindex', [
-            'uris'      => [$fileInfo->getPathname()],
-            'exclude'   => $globsToExclude,
-            'extension' => $extensionsToIndex,
+        $request = new JsonRpcRequest(null, 'workspace/didChangeWatchedFiles', [
+            'changes' => [
+                [
+                    'uri'  => $fileInfo->getPathname(),
+                    'type' => FileChangeType::CHANGED,
+                ],
+            ],
         ]);
 
         $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));

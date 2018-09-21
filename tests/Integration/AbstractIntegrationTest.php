@@ -125,7 +125,7 @@ abstract class AbstractIntegrationTest extends TestCase
             [],
             7.1,
             [],
-            ['php']
+            ['php', 'phpt']
         )));
     }
 

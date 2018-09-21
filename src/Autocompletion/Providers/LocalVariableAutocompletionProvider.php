@@ -79,9 +79,9 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      * @param array                         $variable
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(array $variable, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(array $variable, AutocompletionProviderContext $context): CompletionItem
     {
         $typeArray = array_map(function (string $type) {
             return [
