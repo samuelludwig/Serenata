@@ -14,7 +14,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
      */
     public function testNamespaceListForAllFiles(): void
     {
-        $path = __DIR__ . '/NamespaceListCommandTest/';
+        $path = 'file://' . __DIR__ . '/NamespaceListCommandTest/';
 
         $this->indexTestFile($this->container, $path);
 
@@ -42,7 +42,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
      */
     public function testNamespaceListForSpecificFile(): void
     {
-        $path = __DIR__ . '/NamespaceListCommandTest/';
+        $path = 'file://' . __DIR__ . '/NamespaceListCommandTest/';
 
         $this->indexTestFile($this->container, $path);
 
