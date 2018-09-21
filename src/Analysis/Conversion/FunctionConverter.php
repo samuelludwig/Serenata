@@ -43,7 +43,7 @@ class FunctionConverter extends AbstractConverter
         $data = [
             'name'              => $function->getName(),
             'range'             => $function->getRange(),
-            'filename'          => $function->getFile()->getPath(),
+            'uri'               => $function->getFile()->getUri(),
 
             'parameters'        => $parameters,
             'throws'            => $throwsAssoc,

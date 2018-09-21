@@ -1150,7 +1150,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
      */
     private function getFilePath(string $file): string
     {
-        return __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
+        return 'file:///' . __DIR__ . '/ExpressionTypeDeducerTest/' . $file;
     }
 
     /**

@@ -47,7 +47,7 @@ class FilePositionClasslikeDeterminer
      */
     public function determine(TextDocumentItem $textDocumentItem, Position $position): ?string
     {
-        $file = $this->storage->getFileByPath($textDocumentItem->getUri());
+        $file = $this->storage->getFileByUri($textDocumentItem->getUri());
 
         $bestMatch = null;
 

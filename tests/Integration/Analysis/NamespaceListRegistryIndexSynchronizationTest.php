@@ -112,6 +112,6 @@ class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegrationT
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/NamespaceListRegistryIndexSynchronizationTest/' . $file;
+        return 'file:///' . __DIR__ . '/NamespaceListRegistryIndexSynchronizationTest/' . $file;
     }
 }

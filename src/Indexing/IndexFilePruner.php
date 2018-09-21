@@ -35,7 +35,7 @@ class IndexFilePruner
         $this->storage->beginTransaction();
 
         foreach ($this->storage->getFiles() as $file) {
-            if (!$this->fileExistenceChecker->exists($file->getPath())) {
+            if (!$this->fileExistenceChecker->exists($file->getUri())) {
                 $this->storage->delete($file);
             }
         }

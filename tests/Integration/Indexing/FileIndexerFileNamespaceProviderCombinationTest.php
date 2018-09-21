@@ -47,6 +47,6 @@ class FileIndexerFileNamespaceProviderCombinationTest extends AbstractIntegratio
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/FileIndexerFileNamespaceProviderCombinationTest/' . $file;
+        return 'file:///' . __DIR__ . '/FileIndexerFileNamespaceProviderCombinationTest/' . $file;
     }
 }

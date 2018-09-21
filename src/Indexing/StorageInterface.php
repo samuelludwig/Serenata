@@ -39,7 +39,7 @@ interface StorageInterface
      *
      * @return Structures\File
      */
-    public function getFileByPath(string $path): Structures\File;
+    public function getFileByUri(string $path): Structures\File;
 
     /**
      * @param object $entity

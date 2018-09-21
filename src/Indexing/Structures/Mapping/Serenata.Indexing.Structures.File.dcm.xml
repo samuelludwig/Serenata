@@ -8,7 +8,7 @@
     <entity name="Serenata\Indexing\Structures\File" change-tracking-policy="DEFERRED_EXPLICIT">
         <id name="id" type="string"></id>
 
-        <field name="path"                  type="string"   nullable="false" length="512" unique="true" />
+        <field name="uri"                   type="string"   nullable="false" length="512" unique="true" />
         <field name="lastIndexedSourceHash" type="string"   nullable="true"  length="255" />
         <field name="indexedOn"             type="datetime" nullable="false" />
 

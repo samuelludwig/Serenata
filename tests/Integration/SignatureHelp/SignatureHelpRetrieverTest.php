@@ -371,7 +371,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/SignatureHelpTest/' . $file;
+        return 'file:///' . __DIR__ . '/SignatureHelpTest/' . $file;
     }
 
     /**

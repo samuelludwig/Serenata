@@ -55,7 +55,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
         $firstItem = array_shift($output);
 
         static::assertSame(null, $firstItem['name']);
-        static::assertSame($path . 'NamespaceA.phpt', $firstItem['file']);
+        static::assertSame($path . 'NamespaceA.phpt', $firstItem['uri']);
 
         static::assertEquals(
             new Range(
@@ -68,7 +68,7 @@ class NamespaceListCommandTest extends AbstractIntegrationTest
         $secondItem = array_shift($output);
 
         static::assertSame('NamespaceA', $secondItem['name']);
-        static::assertSame($path . 'NamespaceA.phpt', $secondItem['file']);
+        static::assertSame($path . 'NamespaceA.phpt', $secondItem['uri']);
 
         static::assertEquals(
             new Range(

@@ -32,7 +32,7 @@ final class StorageFileNamespaceProvider implements FileNamespaceProviderInterfa
      */
     public function provide(string $file): array
     {
-        return $this->mapNamespaces($this->storage->getFileByPath($file)->getNamespaces());
+        return $this->mapNamespaces($this->storage->getFileByUri($file)->getNamespaces());
     }
 
     /**

@@ -95,6 +95,6 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
      */
     protected function getPathFor(string $fileName): string
     {
-        return __DIR__ . '/' . $this->getFolderName() . '/' . $fileName;
+        return 'file:///' . __DIR__ . '/' . $this->getFolderName() . '/' . $fileName;
     }
 }

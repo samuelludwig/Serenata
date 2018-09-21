@@ -119,7 +119,7 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
 
         if ($event->getType() === FileChangeType::DELETED) {
             try {
-                $this->storage->delete($this->storage->getFileByPath($event->getUri()));
+                $this->storage->delete($this->storage->getFileByUri($event->getUri()));
             } catch (FileNotFoundStorageException $e) {
                 return; // Not a known file, then don't remove it either.
             }

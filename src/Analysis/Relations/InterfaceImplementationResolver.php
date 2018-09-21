@@ -41,14 +41,14 @@ final class InterfaceImplementationResolver extends AbstractResolver
         $class['constants'][$interfaceConstantData['name']] = $interfaceConstantData + [
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],
-                'filename'  => $class['filename'],
+                'uri'       => $class['uri'],
                 'range'     => $class['range'],
                 'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
                 'memberRange'     => $interfaceConstantData['range'],
@@ -95,7 +95,7 @@ final class InterfaceImplementationResolver extends AbstractResolver
             [
                 'declaringClass' => [
                     'fqcn'     => $class['fqcn'],
-                    'filename' => $class['filename'],
+                    'uri'      => $class['uri'],
                     'range'    => $class['range'],
                     'type'     => $class['type'],
                 ],

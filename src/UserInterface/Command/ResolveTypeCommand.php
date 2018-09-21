@@ -93,7 +93,7 @@ final class ResolveTypeCommand extends AbstractCommand
         }
 
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
+        $this->storage->getFileByUri($uri);
 
         $filePosition = new FilePosition($uri, $position);
 

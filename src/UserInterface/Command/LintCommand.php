@@ -88,7 +88,7 @@ final class LintCommand extends AbstractCommand
     public function lint(string $uri, string $code): PublishDiagnosticsParams
     {
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
+        $this->storage->getFileByUri($uri);
 
         // $this->fileIndexer->index($uri, $code);
 

@@ -132,10 +132,7 @@ final class DocumentSymbolRetriever
             $classlike->getName(),
             $kind,
             $classlike->getIsDeprecated(),
-            new Location(
-                'file://' . $file->getPath(),
-                $classlike->getRange()
-            ),
+            new Location($file->getUri(), $classlike->getRange()),
             null
         );
     }
@@ -156,10 +153,7 @@ final class DocumentSymbolRetriever
             $constant->getName(),
             SymbolKind::CONSTANT,
             $constant->getIsDeprecated(),
-            new Location(
-                'file://' . $file->getPath(),
-                $constant->getRange()
-            ),
+            new Location($file->getUri(), $constant->getRange()),
             $containerName
         );
     }
@@ -192,10 +186,7 @@ final class DocumentSymbolRetriever
             $function->getName(),
             $kind,
             $function->getIsDeprecated(),
-            new Location(
-                'file://' . $file->getPath(),
-                $function->getRange()
-            ),
+            new Location($file->getUri(), $function->getRange()),
             $containerName
         );
     }
@@ -216,10 +207,7 @@ final class DocumentSymbolRetriever
             $property->getName(),
             SymbolKind::PROPERTY,
             $property->getIsDeprecated(),
-            new Location(
-                'file://' . $file->getPath(),
-                $property->getRange()
-            ),
+            new Location($file->getUri(), $property->getRange()),
             $containerName
         );
     }

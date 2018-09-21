@@ -55,7 +55,7 @@ final class DocumentSymbolCommand extends AbstractCommand
      */
     public function getAll(string $uri): ?array
     {
-        $file = $this->storage->getFileByPath($uri);
+        $file = $this->storage->getFileByUri($uri);
 
         return $this->documentSymbolRetriever->retrieve($file);
     }

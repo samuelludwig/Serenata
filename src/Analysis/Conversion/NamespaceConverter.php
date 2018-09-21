@@ -19,7 +19,7 @@ final class NamespaceConverter extends AbstractConverter
         return [
             'id'    => $namespace->getId(),
             'name'  => $namespace->getName(),
-            'file'  => $namespace->getFile()->getPath(),
+            'uri'   => $namespace->getFile()->getUri(),
             'range' => $namespace->getRange(),
         ];
     }

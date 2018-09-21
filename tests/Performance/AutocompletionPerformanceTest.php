@@ -40,7 +40,7 @@ class AutocompletionPerformanceTest extends AbstractPerformanceTest
 
         $time = $this->time(function () use ($testFilePath, $code, $positionThatWillGenerateNonEmptyPrefix) {
             $suggestions = $this->container->get('autocompletionProvider')->provide(
-                $this->container->get('storage')->getFileByPath($testFilePath),
+                $this->container->get('storage')->getFileByUri($testFilePath),
                 $code,
                 $positionThatWillGenerateNonEmptyPrefix
             );

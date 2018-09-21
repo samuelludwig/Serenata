@@ -113,7 +113,7 @@ final class DeduceTypesCommand extends AbstractCommand
         bool $ignoreLastElement
     ): array {
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
+        $this->storage->getFileByUri($uri);
 
         // $this->fileIndexer->index($uri, $code);
 

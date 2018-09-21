@@ -54,7 +54,7 @@ final class ModificationTimeFilterIterator extends FilterIterator
         $map = [];
 
         foreach ($filesInIndex as $file) {
-            $map[$file->getPath()] = $file;
+            $map[$file->getUri()] = $file;
         }
 
         return $map;

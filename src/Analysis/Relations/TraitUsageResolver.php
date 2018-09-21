@@ -105,7 +105,7 @@ final class TraitUsageResolver extends AbstractResolver
 
             $childProperty['declaringStructure'] = [
                 'fqcn'            => $traitPropertyData['declaringStructure']['fqcn'],
-                'filename'        => $traitPropertyData['declaringStructure']['filename'],
+                'uri'             => $traitPropertyData['declaringStructure']['uri'],
                 'range'           => $traitPropertyData['declaringStructure']['range'],
                 'type'            => $traitPropertyData['declaringStructure']['type'],
                 'memberRange'     => $traitPropertyData['range'],
@@ -123,7 +123,7 @@ final class TraitUsageResolver extends AbstractResolver
 
                 'declaringClass' => [
                     'fqcn'            => $class['fqcn'],
-                    'filename'        => $class['filename'],
+                    'uri'             => $class['uri'],
                     'range'           => $class['range'],
                     'type'            => $class['type'],
                 ],
@@ -203,7 +203,7 @@ final class TraitUsageResolver extends AbstractResolver
             if ($childMethod['declaringStructure']['fqcn'] !== $class['fqcn']) {
                 $childMethod['declaringStructure'] = [
                     'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
-                    'filename'        => $traitMethodData['declaringStructure']['filename'],
+                    'uri'             => $traitMethodData['declaringStructure']['uri'],
                     'range'           => $traitMethodData['declaringStructure']['range'],
                     'endLine'         => $traitMethodData['declaringStructure']['endLine'],
                     'type'            => $traitMethodData['declaringStructure']['type'],
@@ -212,7 +212,7 @@ final class TraitUsageResolver extends AbstractResolver
             } else {
                 $childMethod['declaringStructure'] = [
                     'fqcn'            => $class['fqcn'],
-                    'filename'        => $class['filename'],
+                    'uri'             => $class['uri'],
                     'range'           => $class['range'],
                     'type'            => $class['type'],
                     'memberRange'     => $childMethod['range'],
@@ -222,7 +222,7 @@ final class TraitUsageResolver extends AbstractResolver
             $childMethod = [
                 'declaringStructure' => [
                     'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
-                    'filename'        => $traitMethodData['declaringStructure']['filename'],
+                    'uri'             => $traitMethodData['declaringStructure']['uri'],
                     'range'           => $traitMethodData['declaringStructure']['range'],
                     'type'            => $traitMethodData['declaringStructure']['type'],
                     'memberRange'     => $traitMethodData['range'],
@@ -236,7 +236,7 @@ final class TraitUsageResolver extends AbstractResolver
 
             'declaringClass' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
             ],

@@ -210,7 +210,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $name): string
     {
-        return __DIR__ . '/AvailableVariablesCommandTest/' . $name;
+        return 'file:///' . __DIR__ . '/AvailableVariablesCommandTest/' . $name;
     }
 
     /**

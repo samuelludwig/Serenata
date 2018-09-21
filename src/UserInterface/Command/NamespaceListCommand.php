@@ -68,7 +68,7 @@ final class NamespaceListCommand extends AbstractCommand
         $criteria = [];
 
         if ($uri !== null) {
-            $file = $this->storage->getFileByPath($uri);
+            $file = $this->storage->getFileByUri($uri);
 
             return $this->fileNamespaceListProvider->getAllForFile($file);
         }

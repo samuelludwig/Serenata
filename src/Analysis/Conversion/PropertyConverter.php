@@ -24,7 +24,7 @@ final class PropertyConverter extends AbstractConverter
         $data = [
             'name'               => $property->getName(),
             'range'              => $property->getRange(),
-            'filename'           => $property->getFile()->getPath(),
+            'uri'                => $property->getFile()->getUri(),
             'defaultValue'       => $property->getDefaultValue(),
             'isMagic'            => $property->getIsMagic(),
             'isPublic'           => $property->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,
@@ -47,14 +47,14 @@ final class PropertyConverter extends AbstractConverter
 
             'declaringClass' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
                 'memberRange'     => $property->getRange(),

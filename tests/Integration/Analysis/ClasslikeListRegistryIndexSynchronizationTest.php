@@ -88,6 +88,6 @@ class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegrationT
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/ClasslikeListRegistryIndexSynchronizationTest/' . $file;
+        return 'file:///' . __DIR__ . '/ClasslikeListRegistryIndexSynchronizationTest/' . $file;
     }
 }

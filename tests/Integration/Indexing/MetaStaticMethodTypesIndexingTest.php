@@ -191,6 +191,6 @@ class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/MetaStaticMethodTypesIndexingTest/' . $file;
+        return 'file:///' . __DIR__ . '/MetaStaticMethodTypesIndexingTest/' . $file;
     }
 }

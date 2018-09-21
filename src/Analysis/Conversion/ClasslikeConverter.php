@@ -20,7 +20,7 @@ final class ClasslikeConverter extends AbstractConverter
             'name'               => $classlike->getName(),
             'fqcn'               => $classlike->getFqcn(),
             'range'              => $classlike->getRange(),
-            'filename'           => $classlike->getFile()->getPath(),
+            'uri'                => $classlike->getFile()->getUri(),
             'type'               => $classlike->getTypeName(),
             'isDeprecated'       => $classlike->getIsDeprecated(),
             'hasDocblock'        => $classlike->getHasDocblock(),

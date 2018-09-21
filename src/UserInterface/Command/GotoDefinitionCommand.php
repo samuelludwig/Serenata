@@ -96,7 +96,7 @@ final class GotoDefinitionCommand extends AbstractCommand
     public function gotoDefinition(string $uri, string $code, Position $position): ?GotoDefinitionResponse
     {
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
+        $this->storage->getFileByUri($uri);
 
         // $this->fileIndexer->index($uri, $code);
 

@@ -27,7 +27,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CONSTANT,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(2, 6),
                         new Position(2, 18)
@@ -51,7 +51,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::FUNCTION_,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(2, 0),
                         new Position(5, 1)
@@ -75,7 +75,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CLASS_,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(2, 0),
                         new Position(5, 1)
@@ -99,7 +99,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::INTERFACE_,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(2, 0),
                         new Position(5, 1)
@@ -123,7 +123,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CLASS_,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(2, 0),
                         new Position(5, 1)
@@ -150,7 +150,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CONSTANT,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(4, 17),
                         new Position(4, 34)
@@ -178,7 +178,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::METHOD,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(4, 4),
                         new Position(7, 5)
@@ -206,7 +206,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CONSTRUCTOR,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(4, 4),
                         new Position(7, 5)
@@ -234,7 +234,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::PROPERTY,
                 false,
                 new Location(
-                    'file://' . $filePath,
+                    $filePath,
                     new Range(
                         new Position(4, 12),
                         new Position(4, 21)
@@ -279,7 +279,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 
         $documentSymbolRetriever = $this->container->get('documentSymbolRetriever');
 
-        return $documentSymbolRetriever->retrieve($this->container->get('storage')->getFileByPath($filePath));
+        return $documentSymbolRetriever->retrieve($this->container->get('storage')->getFileByUri($filePath));
     }
 
     /**
@@ -289,6 +289,6 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
      */
     private function getTestFilePath(string $fileName): string
     {
-        return __DIR__ . '/DocumentSymbolRetrieverTest/' . $fileName;
+        return 'file://' . __DIR__ . '/DocumentSymbolRetrieverTest/' . $fileName;
     }
 }

@@ -88,6 +88,6 @@ class FunctionListRegistryIndexSynchronizationTest extends AbstractIntegrationTe
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/FunctionListRegistryIndexSynchronizationTest/' . $file;
+        return 'file:///' . __DIR__ . '/FunctionListRegistryIndexSynchronizationTest/' . $file;
     }
 }

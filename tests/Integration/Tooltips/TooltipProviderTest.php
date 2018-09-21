@@ -424,7 +424,7 @@ Hello!
 *void*');
 
         static::assertNull($this->getTooltip(
-            $this->container->get('storage')->getFileByPath($this->getPathFor($fileName)),
+            $this->container->get('storage')->getFileByUri($this->getPathFor($fileName)),
             69
         ));
     }
@@ -454,7 +454,7 @@ Hello!
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
+        $file = $this->container->get('storage')->getFileByUri($path);
 
         $i = $start;
 
@@ -490,10 +490,10 @@ Hello!
      */
     private function getTooltip(Structures\File $file, int $position): ?TooltipResult
     {
-        $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($file->getPath());
+        $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($file->getUri());
 
         return $this->container->get('tooltipProvider')->get(
-            new TextDocumentItem($file->getPath(), $code),
+            new TextDocumentItem($file->getUri(), $code),
             Position::createFromByteOffset($position, $code, PositionEncoding::VALUE)
         );
     }
@@ -505,6 +505,6 @@ Hello!
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/TooltipProviderTest/' . $file;
+        return 'file:///' . __DIR__ . '/TooltipProviderTest/' . $file;
     }
 }

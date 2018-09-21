@@ -16,7 +16,7 @@ abstract class AbstractPerformanceTest extends AbstractIntegrationTest
      */
     protected function getOutputDirectory(): string
     {
-        return __DIR__ . '/Output';
+        return 'file:///' . __DIR__ . '/Output';
     }
 
     /**

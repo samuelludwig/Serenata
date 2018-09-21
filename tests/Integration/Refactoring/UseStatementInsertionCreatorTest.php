@@ -460,6 +460,6 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $fileName): string
     {
-        return __DIR__ . '/UseStatementInsertionCreatorTest/' . $fileName;
+        return 'file:///' . __DIR__ . '/UseStatementInsertionCreatorTest/' . $fileName;
     }
 }

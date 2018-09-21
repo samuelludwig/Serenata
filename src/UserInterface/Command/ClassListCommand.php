@@ -76,7 +76,7 @@ final class ClassListCommand extends AbstractCommand
      */
     public function getAllForFilePath(string $uri): array
     {
-        $file = $this->storage->getFileByPath($uri);
+        $file = $this->storage->getFileByUri($uri);
 
         return $this->fileClasslikeListProvider->getAllForFile($file);
     }

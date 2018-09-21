@@ -36,13 +36,13 @@ final class FileClasslikeListProviderCachingDecorator implements
      */
     public function getAllForFile(Structures\File $file): array
     {
-        $filePath = $file->getPath();
+        $uri = $file->getUri();
 
-        if (!isset($this->cache[$filePath])) {
-            $this->cache[$filePath] = $this->fileClasslikeListProviderInterface->getAllForFile($file);
+        if (!isset($this->cache[$uri])) {
+            $this->cache[$uri] = $this->fileClasslikeListProviderInterface->getAllForFile($file);
         }
 
-        return $this->cache[$filePath];
+        return $this->cache[$uri];
     }
 
     /**

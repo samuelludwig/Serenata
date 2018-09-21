@@ -55,6 +55,6 @@ class ClassListCommandTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/ClassListCommandTest/' . $file;
+        return 'file:///' . __DIR__ . '/ClassListCommandTest/' . $file;
     }
 }
