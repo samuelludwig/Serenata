@@ -13,7 +13,6 @@ use Serenata\UserInterface\JsonRpcApplication;
 use Serenata\UserInterface\AbstractApplication;
 
 use Serenata\Utility\TmpFileStream;
-use Serenata\Utility\InitializeParams;
 use Serenata\Utility\SourceCodeStreamReader;
 
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
