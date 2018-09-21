@@ -21,7 +21,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $filterText;
 
     /**
-     * @var string Item from {@see SuggestionKind}
+     * @var int|null Item from {@see SuggestionKind}
      */
     private $kind;
 
@@ -67,7 +67,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
 
     /**
      * @param string        $filterText
-     * @param string        $kind
+     * @param int|null      $kind
      * @param string|null   $insertText
      * @param TextEdit|null $textEdit
      * @param string        $label
@@ -79,7 +79,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      */
     public function __construct(
         string $filterText,
-        string $kind,
+        ?int $kind,
         ?string $insertText,
         ?TextEdit $textEdit,
         string $label,
@@ -114,9 +114,9 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @return string
+     * @return int|null
      */
-    public function getKind(): string
+    public function getKind(): ?int
     {
         return $this->kind;
     }

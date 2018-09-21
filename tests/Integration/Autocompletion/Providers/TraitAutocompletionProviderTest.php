@@ -24,7 +24,7 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo',
-                SuggestionKind::MIXIN,
+                SuggestionKind::CLASS_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 1)),

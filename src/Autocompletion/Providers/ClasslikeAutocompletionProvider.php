@@ -105,7 +105,9 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     ): AutocompletionSuggestion {
         return new AutocompletionSuggestion(
             $classlike['fqcn'],
-            $classlike['type'] === ClasslikeTypeNameValue::TRAIT_ ? SuggestionKind::MIXIN : SuggestionKind::CLASS_,
+            $classlike['type'] === ClasslikeTypeNameValue::INTERFACE_ ?
+                SuggestionKind::INTERFACE_ :
+                SuggestionKind::CLASS_,
             $this->getInsertTextForSuggestion($classlike, $context),
             $this->getTextEditForSuggestion($classlike, $context),
             $this->getFqcnWithoutLeadingSlash($classlike),

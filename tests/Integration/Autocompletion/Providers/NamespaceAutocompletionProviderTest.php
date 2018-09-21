@@ -22,7 +22,7 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $suggestions = [
             new AutocompletionSuggestion(
                 'Foo',
-                SuggestionKind::IMPORT,
+                SuggestionKind::MODULE,
                 'Foo',
                 new TextEdit(
                     new Range(
@@ -64,7 +64,7 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $suggestions = [
             new AutocompletionSuggestion(
                 'Foo',
-                SuggestionKind::IMPORT,
+                SuggestionKind::MODULE,
                 'Foo',
                 new TextEdit(
                     new Range(

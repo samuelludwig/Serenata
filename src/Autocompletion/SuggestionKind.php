@@ -8,47 +8,127 @@ namespace Serenata\Autocompletion;
 final class SuggestionKind
 {
     /**
-     * @var string
+     * @var int
      */
-    public const KEYWORD = 'keyword';
+    public const TEXT          = 1;
 
     /**
-     * @var string
+     * @var int
      */
-    public const CLASS_ = 'class';
+    public const METHOD        = 2;
 
     /**
-     * @var string
+     * @var int
      */
-    public const MIXIN = 'mixin';
+    public const FUNCTION_     = 3;
 
     /**
-     * @var string
+     * @var int
      */
-    public const IMPORT = 'import';
+    public const CONSTRUCTOR   = 4;
 
     /**
-     * @var string
+     * @var int
      */
-    public const FUNCTION = 'function';
+    public const FIELD         = 5;
 
     /**
-     * @var string
+     * @var int
      */
-    public const CONSTANT = 'constant';
+    public const VARIABLE      = 6;
 
     /**
-     * @var string
+     * @var int
      */
-    public const METHOD = 'method';
+    public const CLASS_        = 7;
 
     /**
-     * @var string
+     * @var int
      */
-    public const PROPERTY = 'property';
+    public const INTERFACE_    = 8;
 
     /**
-     * @var string
+     * @var int
      */
-    public const VARIABLE = 'variable';
+    public const MODULE        = 9;
+
+    /**
+     * @var int
+     */
+    public const PROPERTY      = 10;
+
+    /**
+     * @var int
+     */
+    public const UNIT          = 11;
+
+    /**
+     * @var int
+     */
+    public const VALUE         = 12;
+
+    /**
+     * @var int
+     */
+    public const ENUM          = 13;
+
+    /**
+     * @var int
+     */
+    public const KEYWORD       = 14;
+
+    /**
+     * @var int
+     */
+    public const SNIPPET       = 15;
+
+    /**
+     * @var int
+     */
+    public const COLOR         = 16;
+
+    /**
+     * @var int
+     */
+    public const FILE          = 17;
+
+    /**
+     * @var int
+     */
+    public const REFERENCE     = 18;
+
+    /**
+     * @var int
+     */
+    public const FOLDER        = 19;
+
+    /**
+     * @var int
+     */
+    public const ENUM_MEMBER    = 20;
+
+    /**
+     * @var int
+     */
+    public const CONSTANT      = 21;
+
+    /**
+     * @var int
+     */
+    public const STRUCT        = 22;
+
+    /**
+     * @var int
+     */
+    public const EVENT         = 23;
+
+    /**
+     * @var int
+     */
+    public const OPERATOR      = 24;
+
+    /**
+     * @var int
+     */
+    public const TYPE_PARAMETER = 25;
 }

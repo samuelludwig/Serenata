@@ -99,7 +99,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
 
         return new AutocompletionSuggestion(
             $fqcnWithoutLeadingSlash,
-            SuggestionKind::IMPORT,
+            SuggestionKind::MODULE,
             $namespace['name'],
             $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,

@@ -24,7 +24,7 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $suggestions = [
             new AutocompletionSuggestion(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                SuggestionKind::INTERFACE_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 1)),
