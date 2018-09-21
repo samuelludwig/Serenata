@@ -155,17 +155,18 @@ final class InitializeCommand extends AbstractCommand
         JsonRpcRequest $jsonRpcRequest,
         bool $initializeIndexForProject = true
     ): ?JsonRpcResponse {
-        $rootPath = $initializeParams->getRootPath();
+        $rootUri = $initializeParams->getRootUri();
 
-        if (!$rootPath) {
-            throw new InvalidArgumentsException('Need a rootPath in InitializeParams to function');
+        if (!$rootUri) {
+            throw new InvalidArgumentsException('Need a rootUri in InitializeParams to function');
         }
 
-        $pathToConfigurationFile = $rootPath . '/.serenata/config.json';
+        $pathToConfigurationFile = $rootUri . '/.serenata/config.json';
 
         $workspaceConfiguration = $this->workspaceConfigurationParser->parse($pathToConfigurationFile);
 
-        $this->setDatabaseFile($rootPath . '/.serenata/index.sqlite');
+        // TODO: Replace with URI.
+        $this->setDatabaseFile($initializeParams->getRootPath() . '/.serenata/index.sqlite');
 
         if (!$this->storageVersionChecker->isUpToDate()) {
             $this->ensureIndexDatabaseDoesNotExist();
@@ -234,7 +235,7 @@ final class InitializeCommand extends AbstractCommand
         // This indexing will rend the response by itself when it is fully finished. This ensures that the
         // initialization does not complete until the initial index has occurred.
         $this->indexer->index(
-            [$rootPath],
+            [$rootUri],
             $workspaceConfiguration->getFileExtensions(),
             $workspaceConfiguration->getExcludedPathExpressions(),
             false,
