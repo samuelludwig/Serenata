@@ -42,11 +42,6 @@ abstract class AbstractIntegrationTest extends TestCase
     /**
      * @var ContainerBuilder
      */
-    private static $testContainerBuiltinStructuralElements;
-
-    /**
-     * @var ContainerBuilder
-     */
     protected $container;
 
     /**
