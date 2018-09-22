@@ -166,7 +166,7 @@ final class InitializeCommand extends AbstractCommand
         $workspaceConfiguration = $this->workspaceConfigurationParser->parse($pathToConfigurationFile);
 
         // TODO: Replace with URI.
-        $this->setDatabaseFile($initializeParams->getRootPath() . '/.serenata/index.sqlite');
+        $this->managerRegistry->setDatabasePath($initializeParams->getRootPath() . '/.serenata/index.sqlite');
 
         if (!$this->storageVersionChecker->isUpToDate()) {
             $this->ensureIndexDatabaseDoesNotExist();
@@ -244,18 +244,6 @@ final class InitializeCommand extends AbstractCommand
         );
 
         return null;
-    }
-
-    /**
-     * @param string $databaseFile
-     */
-    private function setDatabaseFile(string $databaseFile): void
-    {
-        if (!$this->managerRegistry->hasInitialDatabasePathConfigured() ||
-            $this->managerRegistry->getDatabasePath() !== $databaseFile
-        ) {
-            $this->managerRegistry->setDatabasePath($databaseFile);
-        }
     }
 
     /**
