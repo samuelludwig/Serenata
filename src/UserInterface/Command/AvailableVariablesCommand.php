@@ -6,8 +6,6 @@ use Serenata\Analysis\VariableScanner;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\FileIndexerInterface;
-
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
@@ -30,23 +28,13 @@ final class AvailableVariablesCommand extends AbstractCommand
     private $sourceCodeStreamReader;
 
     /**
-     * @var FileIndexerInterface
-     */
-    private $fileIndexer;
-
-    /**
      * @param VariableScanner        $variableScanner
      * @param SourceCodeStreamReader $sourceCodeStreamReader
-     * @param FileIndexerInterface   $fileIndexer
      */
-    public function __construct(
-        VariableScanner $variableScanner,
-        SourceCodeStreamReader $sourceCodeStreamReader,
-        FileIndexerInterface $fileIndexer
-    ) {
+    public function __construct(VariableScanner $variableScanner, SourceCodeStreamReader $sourceCodeStreamReader)
+    {
         $this->variableScanner = $variableScanner;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->fileIndexer = $fileIndexer;
     }
 
     /**
@@ -86,8 +74,6 @@ final class AvailableVariablesCommand extends AbstractCommand
      */
     public function getAvailableVariables(string $uri, string $code, Position $position): array
     {
-        // $this->fileIndexer->index($uri, $code);
-
         return $this->variableScanner->getAvailableVariables(new TextDocumentItem($uri, $code), $position);
     }
 }

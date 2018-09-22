@@ -80,25 +80,19 @@ services:
     lintCommand:
         class: Serenata\UserInterface\Command\LintCommand
         arguments:
-            - '@storage'
             - '@sourceCodeStreamReader'
             - '@linter'
-            - '@fileIndexer'
 
     availableVariablesCommand:
         class: Serenata\UserInterface\Command\AvailableVariablesCommand
         arguments:
             - '@variableScanner'
             - '@sourceCodeStreamReader'
-            - '@updateEnforcingIndexer'
-            - '@fileIndexer'
 
     deduceTypesCommand:
         class: Serenata\UserInterface\Command\DeduceTypesCommand
         arguments:
-            - '@storage'
             - '@sourceCodeStreamReader'
-            - '@fileIndexer'
             - '@expressionTypeDeducer'
 
     signatureHelpCommand:
