@@ -127,29 +127,29 @@ final class ServerCapabilities implements JsonSerializable
     private $experimental;
 
     /**
-     * @param array|int|null            $textDocumentSync
-     * @param bool|null                 $hoverProvider
-     * @param CompletionOptions|null    $completionProvider
-     * @param SignatureHelpOptions|null $signatureHelpProvider
-     * @param bool|null                 $definitionProvider
-     * @param bool|object|null          $typeDefinitionProvider
-     * @param bool|object|null          $implementationProvider
-     * @param bool|null                 $referencesProvider
-     * @param bool|null                 $documentHighlightProvider
-     * @param bool|null                 $documentSymbolProvider
-     * @param bool|null                 $workspaceSymbolProvider
-     * @param bool|object|null          $codeActionProvider
-     * @param bool|object|null          $codeLensProvider
-     * @param bool|null                 $documentFormattingProvider
-     * @param bool|null                 $documentRangeFormattingProvider
-     * @param object|null               $documentOnTypeFormattingProvider
-     * @param bool|object|null          $renameProvider
-     * @param object|null               $documentLinkProvider
-     * @param bool|object|null          $colorProvider
-     * @param bool|object|null          $foldingRangeProvider
-     * @param object|null               $executeCommandProvider
-     * @param object|null               $workspace
-     * @param mixed|null                $experimental
+     * @param TextDocumentSyncOptions|int|null $textDocumentSync
+     * @param bool|null                        $hoverProvider
+     * @param CompletionOptions|null           $completionProvider
+     * @param SignatureHelpOptions|null        $signatureHelpProvider
+     * @param bool|null                        $definitionProvider
+     * @param bool|object|null                 $typeDefinitionProvider
+     * @param bool|object|null                 $implementationProvider
+     * @param bool|null                        $referencesProvider
+     * @param bool|null                        $documentHighlightProvider
+     * @param bool|null                        $documentSymbolProvider
+     * @param bool|null                        $workspaceSymbolProvider
+     * @param bool|object|null                 $codeActionProvider
+     * @param bool|object|null                 $codeLensProvider
+     * @param bool|null                        $documentFormattingProvider
+     * @param bool|null                        $documentRangeFormattingProvider
+     * @param object|null                      $documentOnTypeFormattingProvider
+     * @param bool|object|null                 $renameProvider
+     * @param object|null                      $documentLinkProvider
+     * @param bool|object|null                 $colorProvider
+     * @param bool|object|null                 $foldingRangeProvider
+     * @param object|null                      $executeCommandProvider
+     * @param object|null                      $workspace
+     * @param mixed|null                       $experimental
      */
     public function __construct(
         $textDocumentSync,
@@ -202,7 +202,7 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return TextDocumentSyncOptions|int
+     * @return TextDocumentSyncOptions|int|null
      */
     public function getTextDocumentSync()
     {
