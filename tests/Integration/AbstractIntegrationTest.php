@@ -12,9 +12,6 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 use Serenata\UserInterface\JsonRpcApplication;
 use Serenata\UserInterface\AbstractApplication;
 
-use Serenata\Utility\TmpFileStream;
-use Serenata\Utility\SourceCodeStreamReader;
-
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 
 use Serenata\Workspace\Workspace;
