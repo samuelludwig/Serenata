@@ -145,5 +145,4 @@ services:
         arguments:
             - '@activeWorkspaceManager'
             - '@indexer'
-            - '@stdinStream'
             - '@textDocumentContentRegistry'

@@ -11,8 +11,6 @@ use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
-use Serenata\Utility\StreamInterface;
-
 use Serenata\Workspace\ActiveWorkspaceManager;
 
 /**
@@ -31,11 +29,6 @@ final class DidChangeCommand extends AbstractCommand
     private $indexer;
 
     /**
-     * @var StreamInterface
-     */
-    private $stdinStream;
-
-    /**
      * @var TextDocumentContentRegistry
      */
     private $textDocumentContentRegistry;
@@ -43,18 +36,15 @@ final class DidChangeCommand extends AbstractCommand
     /**
      * @param ActiveWorkspaceManager      $activeWorkspaceManager
      * @param Indexer                     $indexer
-     * @param StreamInterface             $stdinStream
      * @param TextDocumentContentRegistry $textDocumentContentRegistry
      */
     public function __construct(
         ActiveWorkspaceManager $activeWorkspaceManager,
         Indexer $indexer,
-        StreamInterface $stdinStream,
         TextDocumentContentRegistry $textDocumentContentRegistry
     ) {
         $this->activeWorkspaceManager = $activeWorkspaceManager;
         $this->indexer = $indexer;
-        $this->stdinStream = $stdinStream;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
     }
 
@@ -94,9 +84,7 @@ final class DidChangeCommand extends AbstractCommand
             );
         }
 
-        // TODO: This should be refactored at some point to no longer require use of streams.
-        fwrite($this->stdinStream->getHandle(), $contents);
-        rewind($this->stdinStream->getHandle());
+        $this->textDocumentContentRegistry->update($uri, $contents);
 
         $this->indexer->index(
             [$uri],
@@ -105,7 +93,5 @@ final class DidChangeCommand extends AbstractCommand
             true,
             $sender
         );
-
-        $this->textDocumentContentRegistry->update($uri, $contents);
     }
 }

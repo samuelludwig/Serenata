@@ -7,6 +7,8 @@ use UnexpectedValueException;
 use Evenement\EventEmitterTrait;
 use Evenement\EventEmitterInterface;
 
+use Serenata\Indexing\TextDocumentContentRegistry;
+
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
@@ -54,12 +56,18 @@ final class Indexer implements EventEmitterInterface
     private $sourceCodeStreamReader;
 
     /**
+     * @var TextDocumentContentRegistry
+     */
+    private $textDocumentContentRegistry;
+
+    /**
      * @param JsonRpcQueue                 $queue
      * @param FileIndexerInterface         $fileIndexer
      * @param DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer
      * @param IndexFilePruner              $indexFilePruner
      * @param PathNormalizer               $pathNormalizer
      * @param SourceCodeStreamReader       $sourceCodeStreamReader
+     * @param TextDocumentContentRegistry  $textDocumentContentRegistry
      */
     public function __construct(
         JsonRpcQueue $queue,
@@ -67,7 +75,8 @@ final class Indexer implements EventEmitterInterface
         DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
         IndexFilePruner $indexFilePruner,
         PathNormalizer $pathNormalizer,
-        SourceCodeStreamReader $sourceCodeStreamReader
+        SourceCodeStreamReader $sourceCodeStreamReader,
+        TextDocumentContentRegistry $textDocumentContentRegistry
     ) {
         $this->queue = $queue;
         $this->fileIndexer = $fileIndexer;
@@ -75,13 +84,14 @@ final class Indexer implements EventEmitterInterface
         $this->indexFilePruner = $indexFilePruner;
         $this->pathNormalizer = $pathNormalizer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
+        $this->textDocumentContentRegistry = $textDocumentContentRegistry;
     }
 
     /**
      * @param string[]                       $paths
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
-     * @param bool                           $useStdin
+     * @param bool                           $useLatestState
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param JsonRpcResponse|null           $responseToSendOnCompletion
      *
@@ -91,7 +101,7 @@ final class Indexer implements EventEmitterInterface
         array $paths,
         array $extensionsToIndex,
         array $globsToExclude,
-        bool $useStdin,
+        bool $useLatestState,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         ?JsonRpcResponse $responseToSendOnCompletion = null
     ): bool {
@@ -116,7 +126,7 @@ final class Indexer implements EventEmitterInterface
         );
 
         foreach ($files as $path) {
-            $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useStdin);
+            $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useLatestState);
         }
 
         if ($responseToSendOnCompletion === null) {
@@ -170,29 +180,33 @@ final class Indexer implements EventEmitterInterface
     }
 
     /**
-     * @param string   $path
+     * @param string   $uri
      * @param string[] $extensionsToIndex
      * @param string[] $globsToExclude
-     * @param bool     $useStdin
+     * @param bool     $useLatestState
      *
      * @return bool
      */
-    private function indexFile(string $path, array $extensionsToIndex, array $globsToExclude, bool $useStdin): bool
-    {
-        if (!$this->isFileAllowed($path, $extensionsToIndex, $globsToExclude)) {
+    private function indexFile(
+        string $uri,
+        array $extensionsToIndex,
+        array $globsToExclude,
+        bool $useLatestState
+    ): bool {
+        if (!$this->isFileAllowed($uri, $extensionsToIndex, $globsToExclude)) {
             return false;
-        } elseif ($useStdin) {
-            $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
+        } elseif ($useLatestState) {
+            $code = $this->textDocumentContentRegistry->get($uri);
         } else {
             try {
-                $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($path);
+                $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($uri);
             } catch (UnexpectedValueException $e) {
                 return false; // Skip files that we can't read.
             }
         }
 
         try {
-            $this->fileIndexer->index(new TextDocumentItem($path, $code));
+            $this->fileIndexer->index(new TextDocumentItem($uri, $code));
         } catch (IndexingFailedException $e) {
             return false;
         }

@@ -153,28 +153,34 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
-        $this->indexPathViaIndexer($container->get('indexer'), $testPath, false, $mayFail);
+        $this->indexUriViaIndexer($container->get('indexer'), $testPath, null, $mayFail);
     }
 
     /**
-     * @param Indexer $indexer
-     * @param string  $testPath
-     * @param bool    $useStdin
-     * @param bool    $mayFail
+     * @param Indexer     $indexer
+     * @param string      $uri
+     * @param string|null $source
+     * @param bool        $mayFail
      *
      * @return void
      */
-    protected function indexPathViaIndexer(
+    protected function indexUriViaIndexer(
         Indexer $indexer,
-        string $testPath,
-        bool $useStdin,
+        string $uri,
+        ?string $source = null,
         bool $mayFail = false
     ): void {
+        if ($source !== null) {
+            $this->container->get('textDocumentContentRegistry')->update($uri, $source);
+        } else {
+            $this->container->get('textDocumentContentRegistry')->clear($uri);
+        }
+
         $success = $indexer->index(
-            [$testPath],
+            [$uri],
             ['php', 'phpt'],
             [],
-            $useStdin,
+            true,
             $this->mockJsonRpcResponseSenderInterface()
         );
 
@@ -234,12 +240,10 @@ abstract class AbstractIntegrationTest extends TestCase
             $container->get('indexFilePruner'),
             $container->get('pathNormalizer'),
             $sourceCodeStreamReader,
-            $container->get('directoryIndexableFileIteratorFactory')
+            $container->get('textDocumentContentRegistry')
         );
 
-        $stream->set($source);
-
-        $this->indexPathViaIndexer($indexer, $path, true);
+        $this->indexUriViaIndexer($indexer, $path, $source);
 
         $stream->close();
     }
@@ -274,10 +278,10 @@ abstract class AbstractIntegrationTest extends TestCase
                 $container->get('indexFilePruner'),
                 $container->get('pathNormalizer'),
                 $sourceCodeStreamReader,
-                $container->get('directoryIndexableFileIteratorFactory')
+                $container->get('textDocumentContentRegistry')
             );
 
-            $this->indexPathViaIndexer($indexer, $path, false);
+            $this->indexUriViaIndexer($indexer, $path);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -290,9 +294,7 @@ abstract class AbstractIntegrationTest extends TestCase
                 $container->get('managerRegistry')->getManager()->clear();
             }
 
-            $stream->set($source);
-
-            $this->indexPathViaIndexer($indexer, $path, true);
+            $this->indexUriViaIndexer($indexer, $path, $source);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();

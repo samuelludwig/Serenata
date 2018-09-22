@@ -56,4 +56,12 @@ final class TextDocumentContentRegistry
     {
         $this->textDocumentContentsMap[$uri] = $contents;
     }
+
+    /**
+     * @param string $uri
+     */
+    public function clear(string $uri): void
+    {
+        unset($this->textDocumentContentsMap[$uri]);
+    }
 }
