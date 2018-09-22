@@ -131,6 +131,8 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('completionCommand');
             } elseif ($method === 'textDocument/hover') {
                 return $this->container->get('hoverCommand');
+            } elseif ($method === 'textDocument/definition') {
+                return $this->container->get('definitionCommand');
             } elseif ($method === 'textDocument/signatureHelp') {
                 return $this->container->get('signatureHelpCommand');
             } elseif ($method === 'textDocument/documentSymbol') {

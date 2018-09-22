@@ -121,11 +121,11 @@ services:
             - '@textDocumentContentRegistry'
             - '@defaultAutocompletionPrefixDeterminer'
 
-    gotoDefinitionCommand:
-        class: Serenata\UserInterface\Command\GotoDefinitionCommand
+    definitionCommand:
+        class: Serenata\UserInterface\Command\DefinitionCommand
         arguments:
             - '@definitionLocator'
-            - '@sourceCodeStreamReader'
+            - '@textDocumentContentRegistry'
 
     documentSymbolCommand:
         class: Serenata\UserInterface\Command\DocumentSymbolCommand
