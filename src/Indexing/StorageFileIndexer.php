@@ -115,8 +115,6 @@ final class StorageFileIndexer implements FileIndexerInterface
 
         $this->storage->persist($file);
 
-        echo $textDocumentItem->getText() . PHP_EOL;
-
         try {
             $nodes = $this->getNodes($textDocumentItem->getText());
 
