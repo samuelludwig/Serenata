@@ -225,27 +225,9 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function indexTestFileWithSource(ContainerBuilder $container, string $path, string $source): void
     {
-        $stream = new TmpFileStream();
-
-        $sourceCodeStreamReader = new SourceCodeStreamReader(
-            $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
-            $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
-            $stream
-        );
-
-        $indexer = new Indexer(
-            $container->get('requestQueue'),
-            $container->get('fileIndexer'),
-            $container->get('directoryIndexRequestDemuxer'),
-            $container->get('indexFilePruner'),
-            $container->get('pathNormalizer'),
-            $sourceCodeStreamReader,
-            $container->get('textDocumentContentRegistry')
-        );
+        $indexer = $container->get('indexer');
 
         $this->indexUriViaIndexer($indexer, $path, $source);
-
-        $stream->close();
     }
 
     /**
@@ -263,23 +245,9 @@ abstract class AbstractIntegrationTest extends TestCase
         for ($i = 0; $i <= 1; ++$i) {
             $container = $this->createTestContainer();
 
-            $stream = new TmpFileStream();
+            $sourceCodeStreamReader = $this->container->get('sourceCodeStreamReader');
 
-            $sourceCodeStreamReader = new SourceCodeStreamReader(
-                $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
-                $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
-                $stream
-            );
-
-            $indexer = new Indexer(
-                $container->get('requestQueue'),
-                $container->get('fileIndexer'),
-                $container->get('directoryIndexRequestDemuxer'),
-                $container->get('indexFilePruner'),
-                $container->get('pathNormalizer'),
-                $sourceCodeStreamReader,
-                $container->get('textDocumentContentRegistry')
-            );
+            $indexer = $this->container->get('indexer');
 
             $this->indexUriViaIndexer($indexer, $path);
 
@@ -301,8 +269,6 @@ abstract class AbstractIntegrationTest extends TestCase
             }
 
             $afterReindex($container, $path, $source);
-
-            $stream->close();
         }
     }
 
