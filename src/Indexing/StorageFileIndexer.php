@@ -131,7 +131,6 @@ final class StorageFileIndexer implements FileIndexerInterface
 
             throw new IndexingFailedException($e->getMessage(), 0, $e);
         } catch (Exception $e) {
-            throw $e;
             $this->storage->rollbackTransaction();
 
             throw new LogicException(
