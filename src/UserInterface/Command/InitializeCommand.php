@@ -156,17 +156,17 @@ final class InitializeCommand extends AbstractCommand
         bool $initializeIndexForProject = true
     ): ?JsonRpcResponse {
         $rootUri = $initializeParams->getRootUri();
+        $rootPath = $initializeParams->getRootPath();
 
-        if (!$rootUri) {
-            throw new InvalidArgumentsException('Need a rootUri in InitializeParams to function');
+        if (!$rootUri || !$rootPath) {
+            throw new InvalidArgumentsException('Need a rootUri and a rootPath in InitializeParams to function');
         }
 
         $pathToConfigurationFile = $rootUri . '/.serenata/config.json';
 
         $workspaceConfiguration = $this->workspaceConfigurationParser->parse($pathToConfigurationFile);
 
-        // TODO: Replace with URI.
-        $this->managerRegistry->setDatabasePath($initializeParams->getRootPath() . '/.serenata/index.sqlite');
+        $this->managerRegistry->setDatabasePath($rootPath . '/.serenata/index.sqlite');
 
         if (!$this->storageVersionChecker->isUpToDate()) {
             $this->ensureIndexDatabaseDoesNotExist();
