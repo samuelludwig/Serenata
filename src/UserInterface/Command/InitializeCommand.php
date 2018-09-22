@@ -2,6 +2,8 @@
 
 namespace Serenata\UserInterface\Command;
 
+use UnexpectedValueException;
+
 use Serenata\Analysis\ClearableCacheInterface;
 
 use Serenata\Indexing\Indexer;
@@ -155,6 +157,12 @@ final class InitializeCommand extends AbstractCommand
         JsonRpcRequest $jsonRpcRequest,
         bool $initializeIndexForProject = true
     ): ?JsonRpcResponse {
+        if ($this->activeWorkspaceManager->getActiveWorkspace()) {
+            throw new UnexpectedValueException(
+                'Initialize was already called, send a shutdown request first if you want to initialize another project'
+            );
+        }
+
         $rootUri = $initializeParams->getRootUri();
         $rootPath = $initializeParams->getRootPath();
 
