@@ -4,8 +4,6 @@ namespace Serenata\UserInterface\Command;
 
 use UnexpectedValueException;
 
-use Serenata\Analysis\ClearableCacheInterface;
-
 use Serenata\Indexing\Indexer;
 use Serenata\Indexing\IndexFilePruner;
 use Serenata\Indexing\ManagerRegistry;
@@ -71,11 +69,6 @@ final class InitializeCommand extends AbstractCommand
     private $indexFilePruner;
 
     /**
-     * @var ClearableCacheInterface
-     */
-    private $cache;
-
-    /**
      * @param ActiveWorkspaceManager                $activeWorkspaceManager
      * @param WorkspaceConfigurationParserInterface $workspaceConfigurationParser
      * @param ManagerRegistry                       $managerRegistry
@@ -83,7 +76,6 @@ final class InitializeCommand extends AbstractCommand
      * @param Indexer                               $indexer
      * @param SchemaInitializer                     $schemaInitializer
      * @param IndexFilePruner                       $indexFilePruner
-     * @param ClearableCacheInterface               $cache
      */
     public function __construct(
         ActiveWorkspaceManager $activeWorkspaceManager,
@@ -92,8 +84,7 @@ final class InitializeCommand extends AbstractCommand
         StorageVersionChecker $storageVersionChecker,
         Indexer $indexer,
         SchemaInitializer $schemaInitializer,
-        IndexFilePruner $indexFilePruner,
-        ClearableCacheInterface $cache
+        IndexFilePruner $indexFilePruner
     ) {
         $this->activeWorkspaceManager = $activeWorkspaceManager;
         $this->workspaceConfigurationParser = $workspaceConfigurationParser;
@@ -102,7 +93,6 @@ final class InitializeCommand extends AbstractCommand
         $this->indexer = $indexer;
         $this->schemaInitializer = $schemaInitializer;
         $this->indexFilePruner = $indexFilePruner;
-        $this->cache = $cache;
     }
 
     /**

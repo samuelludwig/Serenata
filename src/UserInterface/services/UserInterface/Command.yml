@@ -17,7 +17,6 @@ services:
             - '@indexer'
             - '@schemaInitializer'
             - '@indexFilePruner'
-            - '@cacheClearingEventMediator.clearableCache'
 
     initializedCommand:
         class: Serenata\UserInterface\Command\InitializedCommand
