@@ -7,11 +7,11 @@ use Serenata\Common\Position;
 use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\GotoDefinition\DefinitionLocator;
-use Serenata\GotoDefinition\GotoDefinitionResponse;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -63,10 +63,10 @@ final class DefinitionCommand extends AbstractCommand
      * @param string   $code
      * @param Position $position
      *
-     * @return GotoDefinitionResponse|null
+     * @return Location|Location[]|null
      */
-    public function gotoDefinition(string $uri, string $code, Position $position): ?GotoDefinitionResponse
+    public function gotoDefinition(string $uri, string $code, Position $position)
     {
-        return $this->definitionLocator->locate(new TextDocumentItem($uri, $code), $position);
+        return $this->definitionLocator->locate(new TextDocumentItem($uri, $code), $position)->getResult();
     }
 }
