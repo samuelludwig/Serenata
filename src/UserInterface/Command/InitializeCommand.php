@@ -187,8 +187,6 @@ final class InitializeCommand extends AbstractCommand
             $this->indexFilePruner->prune();
         }
 
-        $this->cache->clearCache();
-
         $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
 
         $response = new JsonRpcResponse(
