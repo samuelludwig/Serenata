@@ -31,6 +31,11 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     private $insertText;
 
     /**
+     * @var int|null
+     */
+    private $insertTextFormat = 2;
+
+    /**
      * @var TextEdit|null
      */
     private $textEdit;
@@ -130,6 +135,14 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     }
 
     /**
+     * @return int|null
+     */
+    public function getInsertTextFormat(): ?int
+    {
+        return $this->insertTextFormat;
+    }
+
+    /**
      * @return TextEdit|null
      */
     public function getTextEdit(): ?TextEdit
@@ -194,6 +207,7 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
             'filterText'          => $this->getFilterText(),
             'kind'                => $this->getKind(),
             'insertText'          => $this->getInsertText(),
+            'insertTextFormat'    => $this->getInsertTextFormat(),
             'textEdit'            => $this->getTextEdit(),
             'label'               => $this->getLabel(),
             'documentation'       => $this->getDocumentation(),
