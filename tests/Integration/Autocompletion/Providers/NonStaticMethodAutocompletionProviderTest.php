@@ -35,13 +35,10 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'int|string',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'int|string — public — A'
             ),
         ];
 
@@ -71,13 +68,10 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'mixed',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 
@@ -107,13 +101,10 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'mixed',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 
@@ -143,13 +134,10 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'void',
-                ],
+                [],
                 [],
                 true,
-                'A'
+                'void — public — A'
             ),
         ];
 
@@ -179,13 +167,10 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo([$i])',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'mixed',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 
@@ -215,13 +200,10 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo($test)',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'mixed',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 

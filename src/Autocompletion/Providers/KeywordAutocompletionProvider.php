@@ -42,9 +42,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             $this->getTextEditForSuggestion($keyword, $context),
             $keyword['name'],
             'PHP keyword',
-            [
-                'returnTypes'  => '',
-            ],
+            [],
             [],
             false
         );

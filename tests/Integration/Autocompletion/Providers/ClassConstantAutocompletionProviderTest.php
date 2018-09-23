@@ -35,13 +35,10 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 'FOO',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'int|string',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'int|string — public — A'
             ),
         ];
 
@@ -72,13 +69,10 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 'FOO',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'int',
-                ],
+                [],
                 [],
                 true,
-                'A'
+                'int — public — A'
             ),
         ];
 

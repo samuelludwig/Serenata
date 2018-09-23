@@ -104,11 +104,10 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,
             null,
-            [
-                'returnTypes'  => 'namespace',
-            ],
             [],
-            false
+            [],
+            false,
+            'namespace'
         );
     }
 

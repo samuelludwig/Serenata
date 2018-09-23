@@ -11,7 +11,7 @@ use Serenata\Analysis\CircularDependencyException;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
-use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
@@ -33,23 +33,23 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
     private $classlikeInfoBuilder;
 
     /**
-     * @var AutocompletionSuggestionTypeFormatter
+     * @var CompletionItemDetailFormatter
      */
-    private $autocompletionSuggestionTypeFormatter;
+    private $completionItemDetailFormatter;
 
     /**
      * @param ExpressionTypeDeducer                 $expressionTypeDeducer
      * @param ClasslikeInfoBuilderInterface         $classlikeInfoBuilder
-     * @param AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+     * @param CompletionItemDetailFormatter $completionItemDetailFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+        CompletionItemDetailFormatter $completionItemDetailFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
-        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
+        $this->completionItemDetailFormatter = $completionItemDetailFormatter;
     }
 
     /**
@@ -109,14 +109,14 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
             $this->getTextEditForSuggestion($constant, $context),
             $constant['name'],
             $constant['shortDescription'],
-            [
-                // TODO: Deprecated, replace with "detail". Remove in the next major version.
-                'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($constant['types']),
-                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($constant),
-            ],
+            [],
             [],
             $constant['isDeprecated'],
-            array_slice(explode('\\', $constant['declaringStructure']['fqcn']), -1)[0]
+            $this->completionItemDetailFormatter->format(
+                $constant['declaringStructure']['fqcn'],
+                $this->extractProtectionLevelStringFromMemberData($constant),
+                $constant['types']
+            )
         );
     }
 

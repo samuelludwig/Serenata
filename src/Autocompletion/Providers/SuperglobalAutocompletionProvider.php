@@ -44,11 +44,10 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             $this->getTextEditForSuggestion($superGlobal, $context),
             $superGlobal['name'],
             'PHP superglobal',
-            [
-                'returnTypes'  => $superGlobal['type'],
-            ],
             [],
-            false
+            [],
+            false,
+            $superGlobal['type']
         );
     }
 

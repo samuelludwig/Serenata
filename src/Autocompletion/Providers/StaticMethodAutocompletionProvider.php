@@ -14,7 +14,7 @@ use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
-use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\CompletionItemDetailFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
@@ -46,9 +46,9 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     private $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
     /**
-     * @var AutocompletionSuggestionTypeFormatter
+     * @var CompletionItemDetailFormatter
      */
-    private $autocompletionSuggestionTypeFormatter;
+    private $completionItemDetailFormatter;
 
     /**
      * @var FunctionParametersEvaluator
@@ -61,7 +61,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
      * @param FunctionParametersEvaluator                                   $functionParametersEvaluator
      * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
-     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
+     * @param CompletionItemDetailFormatter                                 $completionItemDetailFormatter
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
@@ -69,14 +69,14 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
         FunctionParametersEvaluator $functionParametersEvaluator,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+        CompletionItemDetailFormatter $completionItemDetailFormatter
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->functionParametersEvaluator = $functionParametersEvaluator;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
-        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
+        $this->completionItemDetailFormatter = $completionItemDetailFormatter;
     }
 
     /**
@@ -151,14 +151,14 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
             $this->getTextEditForSuggestion($method, $context, $shouldIncludeParanthesesInInsertText),
             $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
-            [
-                // TODO: Deprecated, replace with "detail". Remove in the next major version.
-                'returnTypes'        => $this->autocompletionSuggestionTypeFormatter->format($method['returnTypes']),
-                'protectionLevel'    => $this->extractProtectionLevelStringFromMemberData($method),
-            ],
+            [],
             [],
             $method['isDeprecated'],
-            array_slice(explode('\\', $method['declaringStructure']['fqcn']), -1)[0]
+            $this->completionItemDetailFormatter->format(
+                $method['declaringStructure']['fqcn'],
+                $this->extractProtectionLevelStringFromMemberData($method),
+                $method['returnTypes']
+            )
         );
     }
 

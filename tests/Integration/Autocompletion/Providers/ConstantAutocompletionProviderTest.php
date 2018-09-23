@@ -33,11 +33,10 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'FOO',
                 null,
-                [
-                    'returnTypes'  => 'int|string',
-                ],
                 [],
-                false
+                [],
+                false,
+                'int|string'
             ),
         ];
 
@@ -65,11 +64,10 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'FOO',
                 null,
-                [
-                    'returnTypes'  => 'int',
-                ],
                 [],
-                true
+                [],
+                true,
+                'int'
             ),
         ];
 

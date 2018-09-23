@@ -132,7 +132,7 @@ services:
             - '@bestStringApproximationDeterminer'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingFunctionAutocompletionProvider:
@@ -148,7 +148,7 @@ services:
         arguments:
             - '@constantListProvider'
             - '@bestStringApproximationDeterminer'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
             - '%autocompletion.largeProviderResultLimit%'
 
     applicabilityCheckingConstantAutocompletionProvider:
@@ -167,7 +167,7 @@ services:
             - '@functionParametersEvaluator'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
 
     applicabilityCheckingNonStaticMethodAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -185,7 +185,7 @@ services:
             - '@functionParametersEvaluator'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
 
     applicabilityCheckingStaticMethodAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -200,7 +200,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
 
     applicabilityCheckingNonStaticPropertyAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -215,7 +215,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
 
     applicabilityCheckingStaticPropertyAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -230,7 +230,7 @@ services:
         arguments:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
 
     applicabilityCheckingClassConstantAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -245,7 +245,7 @@ services:
         arguments:
             - '@variableScanner'
             - '@parser'
-            - '@autocompletionSuggestionTypeFormatter'
+            - '@completionItemDetailFormatter'
 
     applicabilityCheckingLocalVariableAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider

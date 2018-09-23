@@ -31,8 +31,8 @@ services:
     autocompletionApproximateStringMatcher:
         alias: levenshteinApproximateStringMatcher
 
-    autocompletionSuggestionTypeFormatter:
-        class: Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter
+    completionItemDetailFormatter:
+        class: Serenata\Autocompletion\CompletionItemDetailFormatter
 
     functionAutocompletionSuggestionLabelCreator:
         class: Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator

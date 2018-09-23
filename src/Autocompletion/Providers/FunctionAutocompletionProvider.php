@@ -9,7 +9,7 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
-use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\CompletionItemDetailFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
@@ -41,9 +41,9 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     private $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
     /**
-     * @var AutocompletionSuggestionTypeFormatter
+     * @var CompletionItemDetailFormatter
      */
-    private $autocompletionSuggestionTypeFormatter;
+    private $completionItemDetailFormatter;
 
     /**
      * @var int
@@ -61,7 +61,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      * @param BestStringApproximationDeterminerInterface                    $bestStringApproximationDeterminer
      * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
-     * @param AutocompletionSuggestionTypeFormatter                         $autocompletionSuggestionTypeFormatter
+     * @param CompletionItemDetailFormatter                                 $completionItemDetailFormatter
      * @param int                                                           $resultLimit
      */
     public function __construct(
@@ -70,7 +70,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
+        CompletionItemDetailFormatter $completionItemDetailFormatter,
         int $resultLimit
     ) {
         $this->functionListProvider = $functionListProvider;
@@ -78,7 +78,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
-        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
+        $this->completionItemDetailFormatter = $completionItemDetailFormatter;
         $this->resultLimit = $resultLimit;
     }
 
@@ -122,11 +122,10 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $this->getTextEditForSuggestion($function, $context, $shouldIncludeParanthesesInInsertText),
             $this->functionAutocompletionSuggestionLabelCreator->create($function),
             $function['shortDescription'],
-            [
-                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($function['returnTypes']),
-            ],
             [],
-            $function['isDeprecated']
+            [],
+            $function['isDeprecated'],
+            $this->completionItemDetailFormatter->format(null, null, $function['returnTypes'])
         );
     }
 

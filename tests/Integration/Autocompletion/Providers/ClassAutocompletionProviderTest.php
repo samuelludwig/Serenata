@@ -32,11 +32,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                false
+                [],
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -61,11 +60,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                true
+                [],
+                true,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -90,11 +88,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                false
+                [],
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -119,16 +116,15 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo\Bar\Baz',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
+                [],
                 [
                     new TextEdit(
                         new Range(new Position(10, 0), new Position(10, 0)),
                         "use Foo\Bar\Baz;\n\n"
                     ),
                 ],
-                false
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -153,11 +149,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo\Bar\Baz\Qux',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                false
+                [],
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 

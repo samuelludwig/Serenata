@@ -35,13 +35,10 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 ),
                 'foo',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'int|string',
-                ],
+                [],
                 [],
                 false,
-                'A'
+                'int|string — public — A'
             ),
         ];
 
@@ -71,13 +68,10 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 ),
                 'foo',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'mixed',
-                ],
+                [],
                 [],
                 true,
-                'A'
+                'mixed — public — A'
             ),
         ];
 

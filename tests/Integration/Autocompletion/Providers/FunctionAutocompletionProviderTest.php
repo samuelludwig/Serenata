@@ -33,11 +33,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'int|string',
-                ],
                 [],
-                false
+                [],
+                false,
+                'int|string'
             ),
         ];
 
@@ -65,11 +64,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                [],
+                false,
+                'mixed'
             ),
         ];
 
@@ -97,11 +95,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                [],
+                false,
+                'mixed'
             ),
         ];
 
@@ -129,11 +126,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'void',
-                ],
                 [],
-                true
+                [],
+                true,
+                'void'
             ),
         ];
 
@@ -161,11 +157,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo([$i])',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                [],
+                false,
+                'mixed'
             ),
         ];
 
@@ -193,11 +188,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo($test)',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                [],
+                false,
+                'mixed'
             ),
         ];
 

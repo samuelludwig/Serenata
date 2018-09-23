@@ -63,9 +63,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
             $this->getTextEditForSuggestion($tag, $context, $prefixOverride),
             $tag['name'],
             'PHP docblock tag',
-            [
-                'returnTypes'  => '',
-            ],
+            [],
             [],
             false
         );

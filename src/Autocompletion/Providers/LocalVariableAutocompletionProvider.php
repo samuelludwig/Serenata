@@ -13,7 +13,7 @@ use Serenata\Analysis\VariableScanner;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
-use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 use Serenata\Utility\TextEdit;
 
@@ -33,23 +33,23 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
     private $parser;
 
     /**
-     * @var AutocompletionSuggestionTypeFormatter
+     * @var CompletionItemDetailFormatter
      */
-    private $autocompletionSuggestionTypeFormatter;
+    private $completionItemDetailFormatter;
 
     /**
      * @param VariableScanner                         $variableScanner
      * @param Parser                                  $parser
-     * @param AutocompletionSuggestionTypeFormatter   $autocompletionSuggestionTypeFormatter
+     * @param CompletionItemDetailFormatter   $completionItemDetailFormatter
      */
     public function __construct(
         VariableScanner $variableScanner,
         Parser $parser,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter
+        CompletionItemDetailFormatter $completionItemDetailFormatter
     ) {
         $this->variableScanner = $variableScanner;
         $this->parser = $parser;
-        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
+        $this->completionItemDetailFormatter = $completionItemDetailFormatter;
     }
 
     /**
@@ -96,11 +96,10 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             $this->getTextEditForSuggestion($variable, $context),
             $variable['name'],
             null,
-            [
-                'returnTypes' => $this->autocompletionSuggestionTypeFormatter->format($typeArray),
-            ],
             [],
-            false
+            [],
+            false,
+            $this->completionItemDetailFormatter->format(null, null, $typeArray)
         );
     }
 

@@ -33,11 +33,10 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => 'namespace',
-                ],
                 [],
-                false
+                [],
+                false,
+                'namespace'
             ),
         ];
 
@@ -75,11 +74,10 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => 'namespace',
-                ],
                 [],
-                false
+                [],
+                false,
+                'namespace'
             ),
         ];
 
