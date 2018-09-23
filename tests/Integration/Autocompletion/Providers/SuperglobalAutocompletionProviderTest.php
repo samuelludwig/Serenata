@@ -33,7 +33,6 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
             '$argc',
             'PHP superglobal',
             [],
-            [],
             false,
             'int'
         );

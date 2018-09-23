@@ -112,7 +112,6 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
             $property['name'],
             $property['shortDescription'],
             [],
-            [],
             $property['isDeprecated'],
             $this->completionItemDetailFormatter->format(
                 $property['declaringStructure']['fqcn'],

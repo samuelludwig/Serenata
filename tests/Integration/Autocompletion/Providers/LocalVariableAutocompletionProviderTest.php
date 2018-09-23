@@ -30,9 +30,6 @@ class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$foo',
                 null,
-                [
-                    'returnTypes'  => '',
-                ],
                 [],
                 false
             ),

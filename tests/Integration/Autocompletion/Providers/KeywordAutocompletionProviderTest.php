@@ -33,9 +33,6 @@ class KeywordAutocompletionProviderTest extends AbstractAutocompletionProviderTe
                 ),
                 'self',
                 'PHP keyword',
-                [
-                    'returnTypes'  => '',
-                ],
                 [],
                 false
             );

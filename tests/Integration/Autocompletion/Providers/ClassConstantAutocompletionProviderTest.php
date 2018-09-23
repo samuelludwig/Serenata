@@ -36,7 +36,6 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                 'FOO',
                 null,
                 [],
-                [],
                 false,
                 'int|string — public — A'
             ),
@@ -69,7 +68,6 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 'FOO',
                 null,
-                [],
                 [],
                 true,
                 'int — public — A'

@@ -34,7 +34,6 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 'Foo',
                 null,
                 [],
-                [],
                 false,
                 'namespace'
             ),
@@ -74,7 +73,6 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ),
                 'Foo',
                 null,
-                [],
                 [],
                 false,
                 'namespace'

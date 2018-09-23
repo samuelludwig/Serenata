@@ -36,7 +36,6 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 'foo',
                 null,
                 [],
-                [],
                 false,
                 'int|string — public — A'
             ),
@@ -68,7 +67,6 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 ),
                 'foo',
                 null,
-                [],
                 [],
                 true,
                 'mixed — public — A'

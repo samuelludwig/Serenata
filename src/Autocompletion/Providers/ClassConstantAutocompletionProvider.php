@@ -110,7 +110,6 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
             $constant['name'],
             $constant['shortDescription'],
             [],
-            [],
             $constant['isDeprecated'],
             $this->completionItemDetailFormatter->format(
                 $constant['declaringStructure']['fqcn'],

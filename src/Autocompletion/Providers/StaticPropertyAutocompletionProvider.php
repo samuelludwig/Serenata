@@ -112,7 +112,6 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             $property['name'],
             $property['shortDescription'],
             [],
-            [],
             $property['isDeprecated'],
             $this->completionItemDetailFormatter->format(
                 $property['declaringStructure']['fqcn'],

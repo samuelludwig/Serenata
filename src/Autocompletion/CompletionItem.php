@@ -72,7 +72,6 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
      * @param TextEdit|null $textEdit
      * @param string        $label
      * @param string|null   $documentation
-     * @param array         $extraData
      * @param TextEdit[]    $additionalTextEdits
      * @param bool          $deprecated
      * @param string|null   $detail
@@ -84,7 +83,6 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
         ?TextEdit $textEdit,
         string $label,
         ?string $documentation,
-        array $extraData = [],
         array $additionalTextEdits = [],
         bool $deprecated = false,
         ?string $detail = null

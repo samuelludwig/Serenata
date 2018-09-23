@@ -105,7 +105,6 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             $fqcnWithoutLeadingSlash,
             null,
             [],
-            [],
             false,
             'namespace'
         );

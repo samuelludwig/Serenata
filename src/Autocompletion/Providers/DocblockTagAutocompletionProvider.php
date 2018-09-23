@@ -64,7 +64,6 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
             $tag['name'],
             'PHP docblock tag',
             [],
-            [],
             false
         );
     }

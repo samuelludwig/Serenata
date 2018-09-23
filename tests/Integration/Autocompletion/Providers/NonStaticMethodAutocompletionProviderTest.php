@@ -36,7 +36,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 'foo()',
                 null,
                 [],
-                [],
                 false,
                 'int|string — public — A'
             ),
@@ -68,7 +67,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [],
                 [],
                 false,
                 'mixed — public — A'
@@ -102,7 +100,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 'foo()',
                 null,
                 [],
-                [],
                 false,
                 'mixed — public — A'
             ),
@@ -134,7 +131,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [],
                 [],
                 true,
                 'void — public — A'
@@ -168,7 +164,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 'foo([$i])',
                 null,
                 [],
-                [],
                 false,
                 'mixed — public — A'
             ),
@@ -200,7 +195,6 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo($test)',
                 null,
-                [],
                 [],
                 false,
                 'mixed — public — A'

@@ -152,7 +152,6 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             $this->functionAutocompletionSuggestionLabelCreator->create($method),
             $method['shortDescription'],
             [],
-            [],
             $method['isDeprecated'],
             $this->completionItemDetailFormatter->format(
                 $method['declaringStructure']['fqcn'],

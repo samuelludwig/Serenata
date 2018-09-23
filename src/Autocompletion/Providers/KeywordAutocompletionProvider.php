@@ -43,7 +43,6 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             $keyword['name'],
             'PHP keyword',
             [],
-            [],
             false
         );
     }

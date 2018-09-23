@@ -34,7 +34,6 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'FOO',
                 null,
                 [],
-                [],
                 false,
                 'int|string'
             ),
@@ -64,7 +63,6 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'FOO',
                 null,
-                [],
                 [],
                 true,
                 'int'

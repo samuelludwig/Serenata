@@ -156,7 +156,6 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             $name,
             null,
             [],
-            [],
             false
         );
     }

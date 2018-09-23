@@ -45,7 +45,6 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             $superGlobal['name'],
             'PHP superglobal',
             [],
-            [],
             false,
             $superGlobal['type']
         );

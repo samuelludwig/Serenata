@@ -34,7 +34,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo()',
                 null,
                 [],
-                [],
                 false,
                 'int|string'
             ),
@@ -64,7 +63,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [],
                 [],
                 false,
                 'mixed'
@@ -96,7 +94,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo()',
                 null,
                 [],
-                [],
                 false,
                 'mixed'
             ),
@@ -126,7 +123,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [],
                 [],
                 true,
                 'void'
@@ -158,7 +154,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 'foo([$i])',
                 null,
                 [],
-                [],
                 false,
                 'mixed'
             ),
@@ -188,7 +183,6 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo($test)',
                 null,
-                [],
                 [],
                 false,
                 'mixed'

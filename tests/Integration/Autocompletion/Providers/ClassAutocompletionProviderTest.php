@@ -33,7 +33,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo',
                 null,
                 [],
-                [],
                 false,
                 ClasslikeTypeNameValue::CLASS_
             ),
@@ -60,7 +59,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [],
                 [],
                 true,
                 ClasslikeTypeNameValue::CLASS_
@@ -89,7 +87,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo',
                 null,
                 [],
-                [],
                 false,
                 ClasslikeTypeNameValue::CLASS_
             ),
@@ -116,7 +113,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo\Bar\Baz',
                 null,
-                [],
                 [
                     new TextEdit(
                         new Range(new Position(10, 0), new Position(10, 0)),
@@ -149,7 +145,6 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo\Bar\Baz\Qux',
                 null,
-                [],
                 [],
                 false,
                 ClasslikeTypeNameValue::CLASS_

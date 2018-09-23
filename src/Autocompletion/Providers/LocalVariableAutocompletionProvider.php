@@ -97,7 +97,6 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             $variable['name'],
             null,
             [],
-            [],
             false,
             $this->completionItemDetailFormatter->format(null, null, $typeArray)
         );
