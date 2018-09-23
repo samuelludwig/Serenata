@@ -51,11 +51,6 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     private $documentation;
 
     /**
-     * @var array
-     */
-    private $extraData;
-
-    /**
      * @var TextEdit[]
      */
     private $additionalTextEdits;
@@ -100,7 +95,6 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
         $this->textEdit = $textEdit;
         $this->label = $label;
         $this->documentation = $documentation;
-        $this->extraData = $extraData;
         $this->additionalTextEdits = $additionalTextEdits;
         $this->deprecated = $deprecated;
         $this->detail = $detail;
@@ -164,14 +158,6 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     public function getDocumentation(): ?string
     {
         return $this->documentation;
-    }
-
-    /**
-     * @return array
-     */
-    public function getExtraData(): array
-    {
-        return $this->extraData;
     }
 
     /**
