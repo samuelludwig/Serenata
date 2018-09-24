@@ -2,7 +2,7 @@
 
 namespace Serenata\UserInterface\Command;
 
-use Serenata\Indexing\Indexer;
+use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Sockets\JsonRpcResponse;
@@ -15,7 +15,7 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 final class DidChangeCommand extends AbstractCommand
 {
     /**
-     * @var Indexer
+     * @var IndexerInterface
      */
     private $indexer;
 
@@ -25,10 +25,10 @@ final class DidChangeCommand extends AbstractCommand
     private $textDocumentContentRegistry;
 
     /**
-     * @param Indexer                     $indexer
+     * @param IndexerInterface            $indexer
      * @param TextDocumentContentRegistry $textDocumentContentRegistry
      */
-    public function __construct(Indexer $indexer, TextDocumentContentRegistry $textDocumentContentRegistry)
+    public function __construct(IndexerInterface $indexer, TextDocumentContentRegistry $textDocumentContentRegistry)
     {
         $this->indexer = $indexer;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;

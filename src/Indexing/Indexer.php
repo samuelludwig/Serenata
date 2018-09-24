@@ -23,7 +23,7 @@ use Serenata\Workspace\ActiveWorkspaceManager;
 /**
  * Indexes directories and files.
  */
-final class Indexer implements EventEmitterInterface
+final class Indexer implements IndexerInterface, EventEmitterInterface
 {
     use EventEmitterTrait;
 
@@ -90,12 +90,7 @@ final class Indexer implements EventEmitterInterface
     }
 
     /**
-     * @param string                         $uri
-     * @param bool                           $useLatestState
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param JsonRpcResponse|null           $responseToSendOnCompletion
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function index(
         string $uri,

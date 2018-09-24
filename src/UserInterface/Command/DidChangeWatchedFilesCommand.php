@@ -2,7 +2,7 @@
 
 namespace Serenata\UserInterface\Command;
 
-use Serenata\Indexing\Indexer;
+use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileNotFoundStorageException;
 
@@ -25,15 +25,15 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
     private $storage;
 
     /**
-     * @var Indexer
+     * @var IndexerInterface
      */
     private $indexer;
 
     /**
      * @param StorageInterface $storage
-     * @param Indexer          $indexer
+     * @param IndexerInterface $indexer
      */
-    public function __construct(StorageInterface $storage, Indexer $indexer)
+    public function __construct(StorageInterface $storage, IndexerInterface $indexer)
     {
         $this->storage = $storage;
         $this->indexer = $indexer;
