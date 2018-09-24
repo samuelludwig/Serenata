@@ -14,6 +14,8 @@ use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Command that shows information about the scopes at a specific position in a file.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class AvailableVariablesCommand extends AbstractCommand
 {

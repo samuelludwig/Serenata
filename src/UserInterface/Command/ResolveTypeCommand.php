@@ -16,6 +16,8 @@ use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that resolves local types in a file.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class ResolveTypeCommand extends AbstractCommand
 {

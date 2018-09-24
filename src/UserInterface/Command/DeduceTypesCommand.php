@@ -14,6 +14,8 @@ use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class DeduceTypesCommand extends AbstractCommand
 {

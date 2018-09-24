@@ -12,6 +12,8 @@ use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Command that lints a file for various problems.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class LintCommand extends AbstractCommand
 {
