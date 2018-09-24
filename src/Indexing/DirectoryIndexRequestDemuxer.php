@@ -40,20 +40,20 @@ final class DirectoryIndexRequestDemuxer
     }
 
     /**
-     * @param string[]                       $paths
+     * @param string                         $uri
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param int|string|null                $originatingRequestId
      */
     public function index(
-        array $paths,
+        string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         $originatingRequestId
     ): void {
-        $iterator = $this->directoryIndexableFileIteratorFactory->create($paths, $extensionsToIndex, $globsToExclude);
+        $iterator = $this->directoryIndexableFileIteratorFactory->create($uri, $extensionsToIndex, $globsToExclude);
 
         // Convert to array early so we don't walk through the iterators (and perform disk access) twice.
         $items = iterator_to_array($iterator);

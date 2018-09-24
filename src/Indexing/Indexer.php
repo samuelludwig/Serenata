@@ -18,6 +18,8 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
 
+use Serenata\Workspace\ActiveWorkspaceManager;
+
 /**
  * Indexes directories and files.
  */
@@ -61,6 +63,11 @@ final class Indexer implements EventEmitterInterface
     private $textDocumentContentRegistry;
 
     /**
+     * @var ActiveWorkspaceManager
+     */
+    private $activeWorkspaceManager;
+
+    /**
      * @param JsonRpcQueue                 $queue
      * @param FileIndexerInterface         $fileIndexer
      * @param DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer
@@ -68,6 +75,7 @@ final class Indexer implements EventEmitterInterface
      * @param PathNormalizer               $pathNormalizer
      * @param SourceCodeStreamReader       $sourceCodeStreamReader
      * @param TextDocumentContentRegistry  $textDocumentContentRegistry
+     * @param ActiveWorkspaceManager       $activeWorkspaceManager
      */
     public function __construct(
         JsonRpcQueue $queue,
@@ -76,7 +84,8 @@ final class Indexer implements EventEmitterInterface
         IndexFilePruner $indexFilePruner,
         PathNormalizer $pathNormalizer,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        TextDocumentContentRegistry $textDocumentContentRegistry
+        TextDocumentContentRegistry $textDocumentContentRegistry,
+        ActiveWorkspaceManager $activeWorkspaceManager
     ) {
         $this->queue = $queue;
         $this->fileIndexer = $fileIndexer;
@@ -85,12 +94,11 @@ final class Indexer implements EventEmitterInterface
         $this->pathNormalizer = $pathNormalizer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
+        $this->activeWorkspaceManager = $activeWorkspaceManager;
     }
 
     /**
-     * @param string[]                       $paths
-     * @param string[]                       $extensionsToIndex
-     * @param string[]                       $globsToExclude
+     * @param string                         $uri
      * @param bool                           $useLatestState
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param JsonRpcResponse|null           $responseToSendOnCompletion
@@ -98,43 +106,43 @@ final class Indexer implements EventEmitterInterface
      * @return bool
      */
     public function index(
-        array $paths,
-        array $extensionsToIndex,
-        array $globsToExclude,
+        string $uri,
         bool $useLatestState,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         ?JsonRpcResponse $responseToSendOnCompletion = null
     ): bool {
-        $paths = array_map(function (string $path) {
-            return $this->pathNormalizer->normalize($path);
-        }, $paths);
+        $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
 
-        $directories = array_filter($paths, function (string $path) {
-            return is_dir($path);
-        });
+        if (!$workspace) {
+            throw new UnexpectedValueException(
+                'Cannot handle file change event when there is no active workspace, did you send an initialize ' .
+                'request first?'
+            );
+        }
 
-        $files = array_filter($paths, function (string $path) {
-            return !is_dir($path);
-        });
+        $uri = $this->pathNormalizer->normalize($uri);
 
-        $this->indexDirectories(
-            $directories,
-            $extensionsToIndex,
-            $globsToExclude,
-            $jsonRpcResponseSender,
-            $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
-        );
+        if (is_dir($uri)) {
+            $this->indexDirectory(
+                $uri,
+                $workspace->getConfiguration()->getFileExtensions(),
+                $workspace->getConfiguration()->getExcludedPathExpressions(),
+                $jsonRpcResponseSender,
+                $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
+            );
 
-        foreach ($files as $path) {
-            $this->indexFile($path, $extensionsToIndex, $globsToExclude, $useLatestState);
+            $this->indexFilePruner->prune();
+        } elseif (is_file($uri)) {
+            $this->indexFile(
+                $uri,
+                $workspace->getConfiguration()->getFileExtensions(),
+                $workspace->getConfiguration()->getExcludedPathExpressions(),
+                $useLatestState
+            );
         }
 
         if ($responseToSendOnCompletion === null) {
             return true;
-        }
-
-        if (count($directories) > 0) {
-            $this->indexFilePruner->prune();
         }
 
         // As a directory index request is demuxed into multiple file index requests, the response for the original
@@ -153,25 +161,21 @@ final class Indexer implements EventEmitterInterface
     }
 
     /**
-     * @param string[]                       $paths
+     * @param string                         $uri
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
      * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
      * @param int|string|null                $requestId
      */
-    private function indexDirectories(
-        array $paths,
+    private function indexDirectory(
+        string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
         $requestId
     ): void {
-        if (count($paths) === 0) {
-            return; // Optimization that skips expensive operations during demuxing, which stack.
-        }
-
         $this->directoryIndexRequestDemuxer->index(
-            $paths,
+            $uri,
             $extensionsToIndex,
             $globsToExclude,
             $jsonRpcResponseSender,
@@ -225,7 +229,7 @@ final class Indexer implements EventEmitterInterface
      */
     private function isFileAllowed(string $path, array $extensionsToIndex, array $globsToExclude): bool
     {
-        $iterator = new IndexableFileIterator([$path], $extensionsToIndex, $globsToExclude);
+        $iterator = new IndexableFileIterator($path, $extensionsToIndex, $globsToExclude);
 
         return iterator_count($iterator) > 0;
     }

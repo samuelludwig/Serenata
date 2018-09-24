@@ -2,8 +2,6 @@
 
 namespace Serenata\UserInterface\Command;
 
-use UnexpectedValueException;
-
 use Serenata\Indexing\Indexer;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileNotFoundStorageException;
@@ -16,18 +14,11 @@ use Serenata\Utility\FileEvent;
 use Serenata\Utility\FileChangeType;
 use Serenata\Utility\DidChangeWatchedFilesParams;
 
-use Serenata\Workspace\ActiveWorkspaceManager;
-
 /**
  * Handles the "workspace/didChangeWatchedFiles" notification.
  */
 final class DidChangeWatchedFilesCommand extends AbstractCommand
 {
-    /**
-     * @var ActiveWorkspaceManager
-     */
-    private $activeWorkspaceManager;
-
     /**
      * @var StorageInterface
      */
@@ -39,16 +30,11 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
     private $indexer;
 
     /**
-     * @param ActiveWorkspaceManager $activeWorkspaceManager
-     * @param StorageInterface       $storage
-     * @param Indexer                $indexer
+     * @param StorageInterface $storage
+     * @param Indexer          $indexer
      */
-    public function __construct(
-        ActiveWorkspaceManager $activeWorkspaceManager,
-        StorageInterface $storage,
-        Indexer $indexer
-    ) {
-        $this->activeWorkspaceManager = $activeWorkspaceManager;
+    public function __construct(StorageInterface $storage, Indexer $indexer)
+    {
         $this->storage = $storage;
         $this->indexer = $indexer;
     }
@@ -108,15 +94,6 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
      */
     public function handleFileEvent(FileEvent $event, JsonRpcResponseSenderInterface $sender): void
     {
-        $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
-
-        if (!$workspace) {
-            throw new UnexpectedValueException(
-                'Cannot handle file change event when there is no active workspace, did you send an initialize ' .
-                'request first?'
-            );
-        }
-
         if ($event->getType() === FileChangeType::DELETED) {
             try {
                 $this->storage->delete($this->storage->getFileByUri($event->getUri()));
@@ -127,12 +104,6 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
             return;
         }
 
-        $this->indexer->index(
-            [$event->getUri()],
-            $workspace->getConfiguration()->getFileExtensions(),
-            $workspace->getConfiguration()->getExcludedPathExpressions(),
-            false,
-            $sender
-        );
+        $this->indexer->index($event->getUri(), false, $sender);
     }
 }

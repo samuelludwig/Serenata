@@ -130,13 +130,11 @@ services:
     didChangeWatchedFilesCommand:
         class: Serenata\UserInterface\Command\DidChangeWatchedFilesCommand
         arguments:
-            - '@activeWorkspaceManager'
             - '@storage'
             - '@indexer'
 
     didChangeCommand:
         class: Serenata\UserInterface\Command\DidChangeCommand
         arguments:
-            - '@activeWorkspaceManager'
             - '@indexer'
             - '@textDocumentContentRegistry'

@@ -166,6 +166,8 @@ final class InitializeCommand extends AbstractCommand
 
         $this->managerRegistry->setDatabasePath($rootPath . '/.serenata/index.sqlite');
 
+        $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
+
         if (!$this->storageVersionChecker->isUpToDate()) {
             $this->ensureIndexDatabaseDoesNotExist();
 
@@ -173,9 +175,7 @@ final class InitializeCommand extends AbstractCommand
 
             if ($initializeIndexForProject) {
                 $this->indexer->index(
-                    ['file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
-                    $workspaceConfiguration->getFileExtensions(),
-                    [],
+                    'file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/',
                     false,
                     $jsonRpcResponseSender,
                     null
@@ -184,8 +184,6 @@ final class InitializeCommand extends AbstractCommand
         } else {
             $this->indexFilePruner->prune();
         }
-
-        $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
 
         $response = new JsonRpcResponse(
             $jsonRpcRequest->getId(),
@@ -230,14 +228,7 @@ final class InitializeCommand extends AbstractCommand
 
         // This indexing will rend the response by itself when it is fully finished. This ensures that the
         // initialization does not complete until the initial index has occurred.
-        $this->indexer->index(
-            [$rootUri],
-            $workspaceConfiguration->getFileExtensions(),
-            $workspaceConfiguration->getExcludedPathExpressions(),
-            false,
-            $jsonRpcResponseSender,
-            $response
-        );
+        $this->indexer->index($rootUri, false, $jsonRpcResponseSender, $response);
 
         return null;
     }

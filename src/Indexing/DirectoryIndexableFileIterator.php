@@ -11,17 +11,13 @@ final class DirectoryIndexableFileIterator extends IteratorIterator
 {
     /**
      * @param Structures\File[] $filesInIndex
-     * @param string[]          $paths
+     * @param string            $uri
      * @param string[]          $extensionsToIndex
      * @param string[]          $globsToExclude
      */
-    public function __construct(
-        array $filesInIndex,
-        array $paths,
-        array $extensionsToIndex,
-        array $globsToExclude = []
-    ) {
-        $iterator = new IndexableFileIterator($paths, $extensionsToIndex, $globsToExclude);
+    public function __construct(array $filesInIndex, string $uri, array $extensionsToIndex, array $globsToExclude = [])
+    {
+        $iterator = new IndexableFileIterator($uri, $extensionsToIndex, $globsToExclude);
         $iterator = new Iterating\ModificationTimeFilterIterator($iterator, $filesInIndex);
 
         parent::__construct($iterator);

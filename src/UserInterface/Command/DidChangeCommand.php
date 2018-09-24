@@ -2,8 +2,6 @@
 
 namespace Serenata\UserInterface\Command;
 
-use UnexpectedValueException;
-
 use Serenata\Indexing\Indexer;
 use Serenata\Indexing\TextDocumentContentRegistry;
 
@@ -11,18 +9,11 @@ use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
-use Serenata\Workspace\ActiveWorkspaceManager;
-
 /**
  * Handles the "textDocument/didChange" notification.
  */
 final class DidChangeCommand extends AbstractCommand
 {
-    /**
-     * @var ActiveWorkspaceManager
-     */
-    private $activeWorkspaceManager;
-
     /**
      * @var Indexer
      */
@@ -34,16 +25,11 @@ final class DidChangeCommand extends AbstractCommand
     private $textDocumentContentRegistry;
 
     /**
-     * @param ActiveWorkspaceManager      $activeWorkspaceManager
      * @param Indexer                     $indexer
      * @param TextDocumentContentRegistry $textDocumentContentRegistry
      */
-    public function __construct(
-        ActiveWorkspaceManager $activeWorkspaceManager,
-        Indexer $indexer,
-        TextDocumentContentRegistry $textDocumentContentRegistry
-    ) {
-        $this->activeWorkspaceManager = $activeWorkspaceManager;
+    public function __construct(Indexer $indexer, TextDocumentContentRegistry $textDocumentContentRegistry)
+    {
         $this->indexer = $indexer;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
     }
@@ -75,23 +61,8 @@ final class DidChangeCommand extends AbstractCommand
      */
     public function handle(string $uri, string $contents, JsonRpcResponseSenderInterface $sender): void
     {
-        $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
-
-        if (!$workspace) {
-            throw new UnexpectedValueException(
-                'Cannot handle file change event when there is no active workspace, did you send an initialize ' .
-                'request first?'
-            );
-        }
-
         $this->textDocumentContentRegistry->update($uri, $contents);
 
-        $this->indexer->index(
-            [$uri],
-            $workspace->getConfiguration()->getFileExtensions(),
-            $workspace->getConfiguration()->getExcludedPathExpressions(),
-            true,
-            $sender
-        );
+        $this->indexer->index($uri, true, $sender);
     }
 }

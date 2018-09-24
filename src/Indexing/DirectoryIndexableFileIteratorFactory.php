@@ -22,20 +22,20 @@ class DirectoryIndexableFileIteratorFactory
     }
 
     /**
-     * @param string[] $paths
+     * @param string   $uri
      * @param string[] $extensionsToIndex
      * @param string[] $globsToExclude
      *
      * @return DirectoryIndexableFileIterator
      */
     public function create(
-        array $paths,
+        string $uri,
         array $extensionsToIndex,
         array $globsToExclude = []
     ): DirectoryIndexableFileIterator {
         return new DirectoryIndexableFileIterator(
             $this->storage->getFiles(),
-            $paths,
+            $uri,
             $extensionsToIndex,
             $globsToExclude
         );

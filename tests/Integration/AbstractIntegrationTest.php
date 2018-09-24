@@ -173,13 +173,7 @@ abstract class AbstractIntegrationTest extends TestCase
             $this->container->get('textDocumentContentRegistry')->clear($uri);
         }
 
-        $success = $indexer->index(
-            [$uri],
-            ['php', 'phpt'],
-            [],
-            true,
-            $this->mockJsonRpcResponseSenderInterface()
-        );
+        $success = $indexer->index($uri, true, $this->mockJsonRpcResponseSenderInterface());
 
         if (!$mayFail) {
             static::assertTrue($success);
