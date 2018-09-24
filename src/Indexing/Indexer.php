@@ -43,11 +43,6 @@ final class Indexer implements EventEmitterInterface
     private $directoryIndexRequestDemuxer;
 
     /**
-     * @var IndexFilePruner
-     */
-    private $indexFilePruner;
-
-    /**
      * @var PathNormalizer
      */
     private $pathNormalizer;
@@ -71,7 +66,6 @@ final class Indexer implements EventEmitterInterface
      * @param JsonRpcQueue                 $queue
      * @param FileIndexerInterface         $fileIndexer
      * @param DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer
-     * @param IndexFilePruner              $indexFilePruner
      * @param PathNormalizer               $pathNormalizer
      * @param SourceCodeStreamReader       $sourceCodeStreamReader
      * @param TextDocumentContentRegistry  $textDocumentContentRegistry
@@ -81,7 +75,6 @@ final class Indexer implements EventEmitterInterface
         JsonRpcQueue $queue,
         FileIndexerInterface $fileIndexer,
         DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
-        IndexFilePruner $indexFilePruner,
         PathNormalizer $pathNormalizer,
         SourceCodeStreamReader $sourceCodeStreamReader,
         TextDocumentContentRegistry $textDocumentContentRegistry,
@@ -90,7 +83,6 @@ final class Indexer implements EventEmitterInterface
         $this->queue = $queue;
         $this->fileIndexer = $fileIndexer;
         $this->directoryIndexRequestDemuxer = $directoryIndexRequestDemuxer;
-        $this->indexFilePruner = $indexFilePruner;
         $this->pathNormalizer = $pathNormalizer;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
@@ -130,8 +122,6 @@ final class Indexer implements EventEmitterInterface
                 $jsonRpcResponseSender,
                 $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
             );
-
-            $this->indexFilePruner->prune();
         } elseif (is_file($uri)) {
             $this->indexFile(
                 $uri,

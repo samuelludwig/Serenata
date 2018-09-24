@@ -102,7 +102,6 @@ services:
             - '@requestQueue'
             - '@fileIndexer'
             - '@directoryIndexRequestDemuxer'
-            - '@indexFilePruner'
             - '@pathNormalizer'
             - '@sourceCodeStreamReader'
             - '@textDocumentContentRegistry'
