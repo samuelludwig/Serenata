@@ -138,3 +138,8 @@ services:
         arguments:
             - '@debouncingIndexer'
             - '@textDocumentContentRegistry'
+
+    indexCommand:
+        class: Serenata\UserInterface\Command\IndexCommand
+        arguments:
+            - '@indexer'

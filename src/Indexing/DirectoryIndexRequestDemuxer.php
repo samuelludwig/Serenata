@@ -79,12 +79,9 @@ final class DirectoryIndexRequestDemuxer
         SplFileInfo $fileInfo,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender
     ): void {
-        $request = new JsonRpcRequest(null, 'workspace/didChangeWatchedFiles', [
-            'changes' => [
-                [
-                    'uri'  => $fileInfo->getPathname(),
-                    'type' => FileChangeType::CHANGED,
-                ],
+        $request = new JsonRpcRequest(null, 'index', [
+            'textDocument' => [
+                'uri'  => $fileInfo->getPathname(),
             ],
         ]);
 
