@@ -77,5 +77,7 @@ final class DebouncingIndexer implements IndexerInterface
         };
 
         $this->uriTimerMap[$uri] = $this->eventLoop->addTimer(self::INDEXING_DELAY_SECONDS, $callback);
+
+        return true;
     }
 }
