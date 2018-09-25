@@ -139,6 +139,12 @@ services:
             - '@debouncingIndexer'
             - '@textDocumentContentRegistry'
 
+    didSaveCommand:
+        class: Serenata\UserInterface\Command\DidSaveCommand
+        arguments:
+            - '@debouncingIndexer'
+            - '@textDocumentContentRegistry'
+
     indexCommand:
         class: Serenata\UserInterface\Command\IndexCommand
         arguments:

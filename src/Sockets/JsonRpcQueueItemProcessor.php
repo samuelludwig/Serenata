@@ -127,6 +127,8 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('didChangeWatchedFilesCommand');
             } elseif ($method === 'textDocument/didChange') {
                 return $this->container->get('didChangeCommand');
+            } elseif ($method === 'textDocument/didSave') {
+                return $this->container->get('didSaveCommand');
             } elseif ($method === 'textDocument/completion') {
                 return $this->container->get('completionCommand');
             } elseif ($method === 'textDocument/hover') {
