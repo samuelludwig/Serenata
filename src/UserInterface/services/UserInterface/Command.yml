@@ -131,10 +131,10 @@ services:
         class: Serenata\UserInterface\Command\DidChangeWatchedFilesCommand
         arguments:
             - '@storage'
-            - '@indexer'
+            - '@debouncingIndexer'
 
     didChangeCommand:
         class: Serenata\UserInterface\Command\DidChangeCommand
         arguments:
-            - '@indexer'
+            - '@debouncingIndexer'
             - '@textDocumentContentRegistry'

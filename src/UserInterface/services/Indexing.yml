@@ -107,6 +107,12 @@ services:
             - '@textDocumentContentRegistry'
             - '@activeWorkspaceManager'
 
+    debouncingIndexer:
+        class: Serenata\Indexing\DebouncingIndexer
+        arguments:
+            - '@eventLoop'
+            - '@indexer'
+
     textDocumentContentRegistry:
         class: Serenata\Indexing\TextDocumentContentRegistry
         arguments:

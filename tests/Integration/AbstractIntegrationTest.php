@@ -192,9 +192,18 @@ abstract class AbstractIntegrationTest extends TestCase
         $refMethod = $refClass->getMethod('processNextQueueItem');
         $refMethod->setAccessible(true);
 
+        if ($this->container->get('requestQueue')->isEmpty()) {
+            return;
+        }
+
         while (!$this->container->get('requestQueue')->isEmpty()) {
             $refMethod->invoke(self::$application);
         }
+
+        // Executing timers may generate more queue items, so keep going until everything is finished.
+        $this->container->get('eventLoop')->run();
+
+        $this->processOpenQueueItems();
     }
 
     /**
