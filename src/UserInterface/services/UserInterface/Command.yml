@@ -101,13 +101,6 @@ services:
             - '@textDocumentContentRegistry'
             - '@signatureHelpRetriever'
 
-    namespaceListCommand:
-        class: Serenata\UserInterface\Command\NamespaceListCommand
-        arguments:
-            - '@storage'
-            - '@namespaceListProvider'
-            - '@fileNamespaceListProvider'
-
     completionCommand:
         class: Serenata\UserInterface\Command\CompletionCommand
         arguments:
