@@ -68,4 +68,4 @@ You may also be interested in [other libraries that are part of the Serenata sui
 ## Contributing
 As this project is inherently large in scope, there is a lot of potential and a lot of areas to work in, so contributions are most welcome! Take a look at [our contribution guide](https://gitlab.com/Serenata/Serenata/blob/master/CONTRIBUTING.md).
 
-![GPLv3 Logo](https://gitlab.com/Serenata/Serenata/raw/793c93b0f69a5f4ba183f1dfff79f0c68d9bd010/resources/images/gpl_v3.png)
+![AGPLv3 Logo](https://www.gnu.org/graphics/agplv3-with-text-162x68.png)

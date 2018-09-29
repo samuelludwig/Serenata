@@ -3,7 +3,7 @@
     "description": "Free and open source server providing code assistance for PHP",
     "keywords": ["static", "analysis", "indexing", "indexer", "ide", "autocompletion", "refactoring", "tooltips", "signature-help"],
     "homepage": "https://serenata.github.io",
-    "license": "GPL-3.0-or-later",
+    "license": "AGPL-3.0-or-later",
     "require": {
         "php": "^7.1",
         "ext-mbstring": "*",
