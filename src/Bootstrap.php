@@ -16,7 +16,7 @@ if (!function_exists('mb_substr')) {
 }
 
 // If cli.pager is set to less/more or the like, it causes non-serial STDOUT/STDERR output. This confuses clients.
-ini_set('cli.pager', null);
+ini_set('cli.pager', '');
 
 // Show us pretty much everything so we can properly debug what is going wrong.
 error_reporting(E_ALL & ~E_DEPRECATED);
