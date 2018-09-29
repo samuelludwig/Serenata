@@ -11,6 +11,8 @@ use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows information about a class, interface or trait.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class ClassInfoCommand extends AbstractCommand
 {

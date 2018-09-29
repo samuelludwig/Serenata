@@ -57,14 +57,14 @@ final class InheritanceResolver extends AbstractResolver
         $class['constants'][$parentConstantData['name']] = $parentConstantData + [
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],
-                'filename'  => $class['filename'],
+                'uri'       => $class['uri'],
                 'range'     => $class['range'],
                 'type'      => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
                 'memberRange'     => $parentConstantData['range'],
@@ -104,14 +104,14 @@ final class InheritanceResolver extends AbstractResolver
 
             $childProperty['declaringClass'] = [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
             ];
 
             $childProperty['declaringStructure'] = [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
                 'memberRange'     => $childProperty['range'],

@@ -20,7 +20,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
+        $file = $this->container->get('storage')->getFileByUri($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -35,7 +35,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         );
 
         static::assertSame(null, $namespaces[0]->getName());
-        static::assertSame($path, $namespaces[0]->getFile()->getPath());
+        static::assertSame($path, $namespaces[0]->getFile()->getUri());
         static::assertEmpty($namespaces[0]->getImports());
     }
 
@@ -48,7 +48,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
+        $file = $this->container->get('storage')->getFileByUri($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -63,7 +63,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         );
 
         static::assertSame('N', $namespaces[1]->getName());
-        static::assertSame($path, $namespaces[1]->getFile()->getPath());
+        static::assertSame($path, $namespaces[1]->getFile()->getUri());
         static::assertEmpty($namespaces[1]->getImports());
     }
 
@@ -76,7 +76,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $this->indexTestFile($this->container, $path);
 
-        $file = $this->container->get('storage')->getFileByPath($path);
+        $file = $this->container->get('storage')->getFileByUri($path);
 
         $namespaces = $file->getNamespaces();
 
@@ -91,7 +91,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         );
 
         static::assertSame(null, $namespaces[1]->getName());
-        static::assertSame($path, $namespaces[1]->getFile()->getPath());
+        static::assertSame($path, $namespaces[1]->getFile()->getUri());
         static::assertCount(1, $namespaces[1]->getImports());
     }
 
@@ -101,7 +101,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
     public function testChangesArePickedUpOnReindex(): void
     {
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->getFileByPath($path);
+            $file = $container->get('storage')->getFileByUri($path);
 
             static::assertCount(3, $file->getNamespaces());
             static::assertSame('N', $file->getNamespaces()[1]->getName());
@@ -110,7 +110,7 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
         };
 
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
-            $file = $container->get('storage')->getFileByPath($path);
+            $file = $container->get('storage')->getFileByUri($path);
 
             static::assertCount(3, $file->getNamespaces());
             static::assertSame(null, $file->getNamespaces()[1]->getName());
@@ -128,6 +128,6 @@ class NamespaceIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/NamespaceIndexingTest/' . $file;
+        return 'file:///' . __DIR__ . '/NamespaceIndexingTest/' . $file;
     }
 }

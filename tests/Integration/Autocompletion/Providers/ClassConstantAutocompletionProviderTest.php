@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,9 +22,9 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'FOO',
-                SuggestionKind::CONSTANT,
+                CompletionItemKind::CONSTANT,
                 'FOO',
                 new TextEdit(
                     new Range(
@@ -35,13 +35,9 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 'FOO',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'int|string',
-                ],
                 [],
                 false,
-                'A'
+                'int|string — public — A'
             ),
         ];
 
@@ -59,9 +55,9 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'FOO',
-                SuggestionKind::CONSTANT,
+                CompletionItemKind::CONSTANT,
                 'FOO',
                 new TextEdit(
                     new Range(
@@ -72,13 +68,9 @@ class ClassConstantAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 'FOO',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'int',
-                ],
                 [],
                 true,
-                'A'
+                'int — public — A'
             ),
         ];
 

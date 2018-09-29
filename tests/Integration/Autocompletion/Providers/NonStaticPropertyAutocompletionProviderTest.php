@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,9 +22,9 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::PROPERTY,
+                CompletionItemKind::PROPERTY,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -35,13 +35,9 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 ),
                 'foo',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'int|string',
-                ],
                 [],
                 false,
-                'A'
+                'int|string — public — A'
             ),
         ];
 
@@ -58,9 +54,9 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::PROPERTY,
+                CompletionItemKind::PROPERTY,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -71,13 +67,9 @@ class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocompletion
                 ),
                 'foo',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'mixed',
-                ],
                 [],
                 true,
-                'A'
+                'mixed — public — A'
             ),
         ];
 

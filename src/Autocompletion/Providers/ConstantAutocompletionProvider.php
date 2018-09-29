@@ -4,9 +4,9 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Analysis\ConstantListProviderInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
-use Serenata\Autocompletion\AutocompletionSuggestionTypeFormatter;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
@@ -29,9 +29,9 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     private $bestStringApproximationDeterminer;
 
     /**
-     * @var AutocompletionSuggestionTypeFormatter
+     * @var CompletionItemDetailFormatter
      */
-    private $autocompletionSuggestionTypeFormatter;
+    private $completionItemDetailFormatter;
 
     /**
      * @var int
@@ -41,18 +41,18 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     /**
      * @param ConstantListProviderInterface              $constantListProvider
      * @param BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer
-     * @param AutocompletionSuggestionTypeFormatter      $autocompletionSuggestionTypeFormatter
+     * @param CompletionItemDetailFormatter      $completionItemDetailFormatter
      * @param int                                        $resultLimit
      */
     public function __construct(
         ConstantListProviderInterface $constantListProvider,
         BestStringApproximationDeterminerInterface $bestStringApproximationDeterminer,
-        AutocompletionSuggestionTypeFormatter $autocompletionSuggestionTypeFormatter,
+        CompletionItemDetailFormatter $completionItemDetailFormatter,
         int $resultLimit
     ) {
         $this->constantListProvider = $constantListProvider;
         $this->bestStringApproximationDeterminer = $bestStringApproximationDeterminer;
-        $this->autocompletionSuggestionTypeFormatter = $autocompletionSuggestionTypeFormatter;
+        $this->completionItemDetailFormatter = $completionItemDetailFormatter;
         $this->resultLimit = $resultLimit;
     }
 
@@ -78,22 +78,20 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
      * @param array                         $constant
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(array $constant, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(array $constant, AutocompletionProviderContext $context): CompletionItem
     {
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $constant['name'],
-            SuggestionKind::CONSTANT,
+            CompletionItemKind::CONSTANT,
             $constant['name'],
             $this->getTextEditForSuggestion($constant, $context),
             $constant['name'],
             $constant['shortDescription'],
-            [
-                'returnTypes'  => $this->autocompletionSuggestionTypeFormatter->format($constant['types']),
-            ],
             [],
-            $constant['isDeprecated']
+            $constant['isDeprecated'],
+            $this->completionItemDetailFormatter->format(null, null, $constant['types'])
         );
     }
 

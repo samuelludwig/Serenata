@@ -107,7 +107,7 @@ final class StorageFileIndexer implements FileIndexerInterface
         $this->storage->beginTransaction();
 
         try {
-            $file = $this->storage->getFileByPath($textDocumentItem->getUri());
+            $file = $this->storage->getFileByUri($textDocumentItem->getUri());
             $file->setIndexedOn(new DateTime());
         } catch (FileNotFoundStorageException $e) {
             $file = new Structures\File($textDocumentItem->getUri(), new DateTime(), []);
@@ -131,7 +131,6 @@ final class StorageFileIndexer implements FileIndexerInterface
 
             throw new IndexingFailedException($e->getMessage(), 0, $e);
         } catch (Exception $e) {
-            throw $e;
             $this->storage->rollbackTransaction();
 
             throw new LogicException(

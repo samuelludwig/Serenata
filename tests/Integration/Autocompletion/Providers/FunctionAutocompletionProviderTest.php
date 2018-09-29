@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -20,9 +20,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('Functions.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -33,11 +33,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'int|string',
-                ],
                 [],
-                false
+                false,
+                'int|string'
             ),
         ];
 
@@ -52,9 +50,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('CursorFollowedByParanthesis.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -65,11 +63,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                false,
+                'mixed'
             ),
         ];
 
@@ -84,9 +80,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('CursorFollowedByWhitespaceAndParanthesis.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -97,11 +93,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                false,
+                'mixed'
             ),
         ];
 
@@ -116,9 +110,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('DeprecatedFunction.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -129,11 +123,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo()',
                 null,
-                [
-                    'returnTypes'  => 'void',
-                ],
                 [],
-                true
+                true,
+                'void'
             ),
         ];
 
@@ -148,9 +140,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('NoRequiredParameters.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -161,11 +153,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo([$i = 0])',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                false,
+                'mixed'
             ),
         ];
 
@@ -180,9 +170,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
         $output = $this->provide('RequiredParameters.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::FUNCTION,
+                CompletionItemKind::FUNCTION,
                 'foo($0)',
                 new TextEdit(
                     new Range(
@@ -193,11 +183,9 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 ),
                 'foo($test)',
                 null,
-                [
-                    'returnTypes'  => 'mixed',
-                ],
                 [],
-                false
+                false,
+                'mixed'
             ),
         ];
 

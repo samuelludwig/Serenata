@@ -11,8 +11,8 @@ use Serenata\Analysis\Visiting\UseStatementKind;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Position;
 
@@ -97,24 +97,24 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      * @param array                         $classlike
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
     private function createSuggestion(
         array $classlike,
         AutocompletionProviderContext $context
-    ): AutocompletionSuggestion {
-        return new AutocompletionSuggestion(
+    ): CompletionItem {
+        return new CompletionItem(
             $classlike['fqcn'],
-            $classlike['type'] === ClasslikeTypeNameValue::TRAIT_ ? SuggestionKind::MIXIN : SuggestionKind::CLASS_,
+            $classlike['type'] === ClasslikeTypeNameValue::INTERFACE_ ?
+                CompletionItemKind::INTERFACE_ :
+                CompletionItemKind::CLASS_,
             $this->getInsertTextForSuggestion($classlike, $context),
             $this->getTextEditForSuggestion($classlike, $context),
             $this->getFqcnWithoutLeadingSlash($classlike),
             $classlike['shortDescription'],
-            [
-                'returnTypes'  => $classlike['type'],
-            ],
             $this->createAdditionalTextEditsForSuggestion($classlike, $context),
-            $classlike['isDeprecated']
+            $classlike['isDeprecated'],
+            $classlike['type']
         );
     }
 

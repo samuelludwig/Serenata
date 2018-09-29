@@ -7,8 +7,8 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
@@ -20,9 +20,9 @@ class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProvid
         $output = $this->provide('DocblockTags.phpt');
 
         $firstSuggestion =
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '@api',
-                SuggestionKind::KEYWORD,
+                CompletionItemKind::KEYWORD,
                 '@api$0',
                 new TextEdit(
                     new Range(new Position(3, 3), new Position(3, 4)),
@@ -30,9 +30,6 @@ class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProvid
                 ),
                 '@api',
                 'PHP docblock tag',
-                [
-                    'returnTypes'  => '',
-                ],
                 [],
                 false
             );

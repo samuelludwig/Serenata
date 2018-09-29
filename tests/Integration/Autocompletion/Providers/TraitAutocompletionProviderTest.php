@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,9 +22,9 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('Trait.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
-                SuggestionKind::MIXIN,
+                CompletionItemKind::CLASS_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 1)),
@@ -32,11 +32,9 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::TRAIT_,
-                ],
                 [],
-                false
+                false,
+                ClasslikeTypeNameValue::TRAIT_
             ),
         ];
 

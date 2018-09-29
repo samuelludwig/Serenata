@@ -35,7 +35,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'name'               => 'SimpleClass',
             'fqcn'               => '\A\SimpleClass',
             'range'              => $output['range'],
-            'filename'           => $this->getPathFor($fileName),
+            'uri'                => $this->getPathFor($fileName),
             'type'               => 'class',
             'isDeprecated'       => false,
             'hasDocblock'        => true,
@@ -60,7 +60,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
                     'name'               => 'class',
                     'range'              => $output['constants']['class']['range'],
                     'defaultValue'       => '\'A\SimpleClass\'',
-                    'filename'           => $this->getPathFor($fileName),
+                    'uri'                => $this->getPathFor($fileName),
                     'isStatic'           => true,
                     'isDeprecated'       => false,
                     'hasDocblock'        => false,
@@ -82,14 +82,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
                     'declaringClass'     => [
                         'fqcn'      => '\A\SimpleClass',
-                        'filename'  => $this->getPathFor($fileName),
+                        'uri'       => $this->getPathFor($fileName),
                         'range'     => $output['constants']['class']['declaringClass']['range'],
                         'type'      => 'class',
                     ],
 
                     'declaringStructure' => [
                         'fqcn'            => '\A\SimpleClass',
-                        'filename'        => $this->getPathFor($fileName),
+                        'uri'             => $this->getPathFor($fileName),
                         'range'           => $output['constants']['class']['declaringStructure']['range'],
                         'type'            => 'class',
                         'memberRange'     => $output['constants']['class']['declaringStructure']['memberRange'],
@@ -147,7 +147,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'name'               => 'testProperty',
             'range'              => $output['properties']['testProperty']['range'],
-            'filename'           => $this->getPathFor($fileName),
+            'uri'                => $this->getPathFor($fileName),
             'defaultValue'       => "'test'",
             'isMagic'            => false,
             'isPublic'           => false,
@@ -177,14 +177,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
             'declaringClass' => [
                 'fqcn'      => '\A\TestClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['properties']['testProperty']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['properties']['testProperty']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['properties']['testProperty']['declaringStructure']['memberRange'],
@@ -236,7 +236,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'name'               => 'testMethod',
             'range'              => $output['methods']['testMethod']['range'],
-            'filename'           => $this->getPathFor($fileName),
+            'uri'                => $this->getPathFor($fileName),
 
             'parameters'         => [
                 [
@@ -340,14 +340,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
             'declaringClass'     => [
                 'fqcn'      => '\A\TestClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['methods']['testMethod']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['testMethod']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['methods']['testMethod']['declaringStructure']['memberRange'],
@@ -400,7 +400,7 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             'name'               => 'TEST_CONSTANT',
             'range'              => $output['constants']['TEST_CONSTANT']['range'],
             'defaultValue'       => '5',
-            'filename'           => $this->getPathFor($fileName),
+            'uri'                => $this->getPathFor($fileName),
             'isStatic'           => true,
             'isDeprecated'       => false,
             'hasDocblock'        => true,
@@ -427,14 +427,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
 
             'declaringClass'     => [
                 'fqcn'      => '\A\TestClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'           => $output['constants']['TEST_CONSTANT']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['constants']['TEST_CONSTANT']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['constants']['TEST_CONSTANT']['declaringStructure']['memberRange'],
@@ -623,14 +623,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['methods']['__construct']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['__construct']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['methods']['__construct']['override']['declaringStructure']['memberRange'],
@@ -707,14 +707,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['methods']['parentTraitMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentTrait',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['parentTraitMethod']['override']['declaringStructure']['range'],
                 'type'            => 'trait',
                 'memberRange'     => $output['methods']['parentTraitMethod']['override']['declaringStructure']['memberRange'],
@@ -792,14 +792,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['methods']['parentMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['parentMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['methods']['parentMethod']['override']['declaringStructure']['memberRange'],
@@ -852,14 +852,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['methods']['ancestorMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['ancestorMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['methods']['ancestorMethod']['override']['declaringStructure']['memberRange'],
@@ -937,14 +937,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\TestTrait',
-                'filename'  =>  $this->getPathFor($fileName),
+                'uri'       =>  $this->getPathFor($fileName),
                 'range'     => $output['methods']['traitMethod']['override']['declaringClass']['range'],
                 'type'      => 'trait',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\TestTrait',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['traitMethod']['override']['declaringStructure']['range'],
                 'type'            => 'trait',
                 'memberRange'     => $output['methods']['traitMethod']['override']['declaringStructure']['memberRange'],
@@ -1034,14 +1034,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  =>  $this->getPathFor($fileName),
+                'uri'       =>  $this->getPathFor($fileName),
                 'range'     => $output['methods']['interfaceMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['interfaceMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange'],
@@ -1107,14 +1107,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
-                    'filename'  =>  $this->getPathFor($fileName),
+                    'uri'       =>  $this->getPathFor($fileName),
                     'range'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -1159,14 +1159,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  =>  $this->getPathFor($fileName),
+                'uri'       =>  $this->getPathFor($fileName),
                 'range'     => $output['methods']['interfaceMethod']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['methods']['interfaceMethod']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange'],
@@ -1229,14 +1229,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['properties']['parentTraitProperty']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentTrait',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['properties']['parentTraitProperty']['override']['declaringStructure']['range'],
                 'type'            => 'trait',
                 'memberRange'     => $output['properties']['parentTraitProperty']['override']['declaringStructure']['memberRange'],
@@ -1280,14 +1280,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['properties']['parentProperty']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['properties']['parentProperty']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['properties']['parentProperty']['override']['declaringStructure']['memberRange'],
@@ -1331,14 +1331,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
         static::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
-                'filename'  => $this->getPathFor($fileName),
+                'uri'       => $this->getPathFor($fileName),
                 'range'     => $output['properties']['ancestorProperty']['override']['declaringClass']['range'],
                 'type'      => 'class',
             ],
 
             'declaringStructure' => [
                 'fqcn'            => '\A\ParentClass',
-                'filename'        => $this->getPathFor($fileName),
+                'uri'             => $this->getPathFor($fileName),
                 'range'           => $output['properties']['ancestorProperty']['override']['declaringStructure']['range'],
                 'type'            => 'class',
                 'memberRange'     => $output['properties']['ancestorProperty']['override']['declaringStructure']['memberRange'],
@@ -1417,14 +1417,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentClass',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'class',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\ParentInterface',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -1483,14 +1483,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentInterface',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['interfaceParentMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\ParentInterface',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -1551,14 +1551,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -1965,14 +1965,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['someMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface1',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -1984,14 +1984,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface2',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['someMethod']['implementations'][1]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface2',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange'],
@@ -2084,14 +2084,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['someMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface1',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -2103,14 +2103,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface2',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['someMethod']['implementations'][1]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface2',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange'],
@@ -2203,14 +2203,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['someMethod']['implementations'][0]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface1',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange'],
@@ -2222,14 +2222,14 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface2',
-                    'filename'  => $this->getPathFor($fileName),
+                    'uri'       => $this->getPathFor($fileName),
                     'range'     => $output['methods']['someMethod']['implementations'][1]['declaringClass']['range'],
                     'type'      => 'interface',
                 ],
 
                 'declaringStructure' => [
                     'fqcn'            => '\A\TestInterface2',
-                    'filename'        => $this->getPathFor($fileName),
+                    'uri'             => $this->getPathFor($fileName),
                     'range'           => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range'],
                     'type'            => 'interface',
                     'memberRange'     => $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange'],
@@ -2599,6 +2599,6 @@ class ClassInfoCommandTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/ClassInfoCommandTest/' . $file;
+        return 'file:///' . __DIR__ . '/ClassInfoCommandTest/' . $file;
     }
 }

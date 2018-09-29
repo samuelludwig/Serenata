@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,9 +22,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('Class.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 1)),
@@ -32,11 +32,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                false
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -51,9 +49,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('DeprecatedClass.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Foo',
                 new TextEdit(
                     new Range(new Position(10, 0), new Position(10, 1)),
@@ -61,11 +59,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                true
+                true,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -80,9 +76,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('PrefixWithSlash.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 '\Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 2)),
@@ -90,11 +86,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                false
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -109,9 +103,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('NamespacedClass.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo\Bar\Baz',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Baz',
                 new TextEdit(
                     new Range(new Position(10, 4), new Position(10, 5)),
@@ -120,15 +114,13 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 'Foo\Bar\Baz',
                 null,
                 [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
-                [
                     new TextEdit(
                         new Range(new Position(10, 0), new Position(10, 0)),
                         "use Foo\Bar\Baz;\n\n"
                     ),
                 ],
-                false
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 
@@ -143,9 +135,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
         $output = $this->provide('UseStatement.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '\Foo\Bar\Baz\Qux',
-                SuggestionKind::CLASS_,
+                CompletionItemKind::CLASS_,
                 'Foo\Bar\Baz\Qux',
                 new TextEdit(
                     new Range(new Position(10, 8), new Position(10, 15)),
@@ -153,11 +145,9 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 ),
                 'Foo\Bar\Baz\Qux',
                 null,
-                [
-                    'returnTypes'  => ClasslikeTypeNameValue::CLASS_,
-                ],
                 [],
-                false
+                false,
+                ClasslikeTypeNameValue::CLASS_
             ),
         ];
 

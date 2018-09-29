@@ -6,9 +6,6 @@ use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Common\Position;
 
-use Serenata\Indexing\StorageInterface;
-use Serenata\Indexing\FileIndexerInterface;
-
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
@@ -17,23 +14,15 @@ use Serenata\Utility\SourceCodeStreamReader;
 
 /**
  * Allows deducing the types of an expression (e.g. a call chain, a simple string, ...).
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class DeduceTypesCommand extends AbstractCommand
 {
     /**
-     * @var StorageInterface
-     */
-    private $storage;
-
-    /**
      * @var SourceCodeStreamReader
      */
     private $sourceCodeStreamReader;
-
-    /**
-     * @var FileIndexerInterface
-     */
-    private $fileIndexer;
 
     /**
      * @var ExpressionTypeDeducer
@@ -41,20 +30,14 @@ final class DeduceTypesCommand extends AbstractCommand
     private $expressionTypeDeducer;
 
     /**
-     * @param StorageInterface       $storage
      * @param SourceCodeStreamReader $sourceCodeStreamReader
-     * @param FileIndexerInterface   $fileIndexer
      * @param ExpressionTypeDeducer  $expressionTypeDeducer
      */
     public function __construct(
-        StorageInterface $storage,
         SourceCodeStreamReader $sourceCodeStreamReader,
-        FileIndexerInterface $fileIndexer,
         ExpressionTypeDeducer $expressionTypeDeducer
     ) {
-        $this->storage = $storage;
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
-        $this->fileIndexer = $fileIndexer;
         $this->expressionTypeDeducer = $expressionTypeDeducer;
     }
 
@@ -112,11 +95,6 @@ final class DeduceTypesCommand extends AbstractCommand
         Position $position,
         bool $ignoreLastElement
     ): array {
-        // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
-
-        // $this->fileIndexer->index($uri, $code);
-
         return $this->expressionTypeDeducer->deduce(
             new TextDocumentItem($uri, $code),
             $position,

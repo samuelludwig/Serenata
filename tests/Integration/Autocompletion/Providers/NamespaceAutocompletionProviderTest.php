@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -20,9 +20,9 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $output = $this->provide('Namespace.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'Foo',
-                SuggestionKind::IMPORT,
+                CompletionItemKind::MODULE,
                 'Foo',
                 new TextEdit(
                     new Range(
@@ -33,11 +33,9 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => 'namespace',
-                ],
                 [],
-                false
+                false,
+                'namespace'
             ),
         ];
 
@@ -62,9 +60,9 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
         $output = $this->provide('Namespaces.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'Foo',
-                SuggestionKind::IMPORT,
+                CompletionItemKind::MODULE,
                 'Foo',
                 new TextEdit(
                     new Range(
@@ -75,11 +73,9 @@ class NamespaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 ),
                 'Foo',
                 null,
-                [
-                    'returnTypes'  => 'namespace',
-                ],
                 [],
-                false
+                false,
+                'namespace'
             ),
         ];
 

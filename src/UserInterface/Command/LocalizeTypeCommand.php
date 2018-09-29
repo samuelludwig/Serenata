@@ -79,7 +79,7 @@ final class LocalizeTypeCommand extends AbstractCommand
     public function localizeType(string $type, string $uri, Position $position, string $kind): ?string
     {
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
+        $this->storage->getFileByUri($uri);
 
         $filePosition = new FilePosition($uri, $position);
 

@@ -61,7 +61,7 @@ class ConstFetchNodeDefinitionLocator
 
         $info = $this->getConstantInfo($fqsen);
 
-        return new GotoDefinitionResponse(new Location($info['filename'], $info['range']));
+        return new GotoDefinitionResponse(new Location($info['uri'], $info['range']));
     }
 
     /**

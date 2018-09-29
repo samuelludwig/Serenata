@@ -16,18 +16,18 @@ use RecursiveDirectoryIterator;
 final class MultiRecursivePathIterator extends AppendIterator
 {
     /**
-     * @param string[] $paths
+     * @param string[] $uris
      *
      * @throws UnexpectedValueException
      */
-    public function __construct(array $paths)
+    public function __construct(array $uris)
     {
         parent::__construct();
 
         $fileInfoIterators = [];
 
-        foreach ($paths as $path) {
-            $fileInfo = new SplFileInfo($path);
+        foreach ($uris as $uri) {
+            $fileInfo = new SplFileInfo($uri);
 
             if ($fileInfo->isDir()) {
                 $directoryIterator = new RecursiveDirectoryIterator(

@@ -10,7 +10,7 @@ interface AutocompletionProviderInterface
     /**
      * @param AutocompletionProviderContext $context
      *
-     * @return iterable iterable<AutocompletionSuggestion>
+     * @return iterable iterable<CompletionItem>
      */
     public function provide(AutocompletionProviderContext $context): iterable;
 }

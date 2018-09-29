@@ -20,7 +20,7 @@ final class ConstantConverter extends AbstractConverter
             'name'              => $constant->getName(),
             'range'             => $constant->getRange(),
             'defaultValue'      => $constant->getDefaultValue(),
-            'filename'          => $constant->getFile()->getPath(),
+            'uri'               => $constant->getFile()->getUri(),
 
             'isStatic'          => true,
             'isDeprecated'      => $constant->getIsDeprecated(),

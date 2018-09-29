@@ -40,7 +40,7 @@ final class UnmodifiedFileSkippingIndexer implements FileIndexerInterface
         $file = null;
 
         try {
-            $file = $this->storage->getFileByPath($textDocumentItem->getUri());
+            $file = $this->storage->getFileByUri($textDocumentItem->getUri());
         } catch (FileNotFoundStorageException $e) {
             $file = null;
         }
@@ -51,7 +51,7 @@ final class UnmodifiedFileSkippingIndexer implements FileIndexerInterface
             $this->delegate->index($textDocumentItem);
 
             try {
-                $file = $this->storage->getFileByPath($textDocumentItem->getUri());
+                $file = $this->storage->getFileByUri($textDocumentItem->getUri());
             } catch (FileNotFoundStorageException $e) {
                 throw new LogicException(
                     "File {$textDocumentItem->getUri()} is not in index, even though it was just indexed",

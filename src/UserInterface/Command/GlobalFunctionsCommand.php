@@ -9,6 +9,8 @@ use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of global functions.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class GlobalFunctionsCommand extends AbstractCommand
 {

@@ -2,16 +2,31 @@
 
 namespace Serenata\UserInterface\Command;
 
-use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\ClearableCache;
+use UnexpectedValueException;
 
 use Serenata\Indexing\Indexer;
+use Serenata\Indexing\IndexFilePruner;
 use Serenata\Indexing\ManagerRegistry;
 use Serenata\Indexing\SchemaInitializer;
+use Serenata\Indexing\StorageVersionChecker;
 
+use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
+
+use Serenata\Utility\SaveOptions;
+use Serenata\Utility\InitializeParams;
+use Serenata\Utility\InitializeResult;
+use Serenata\Utility\CompletionOptions;
+use Serenata\Utility\ServerCapabilities;
+use Serenata\Utility\SignatureHelpOptions;
+use Serenata\Utility\TextDocumentSyncOptions;
+
+use Serenata\Workspace\Workspace;
+use Serenata\Workspace\ActiveWorkspaceManager;
+
+use Serenata\Workspace\Configuration\Parsing\WorkspaceConfigurationParserInterface;
 
 /**
  * Command that initializes a project.
@@ -19,9 +34,14 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 final class InitializeCommand extends AbstractCommand
 {
     /**
-     * @var SchemaInitializer
+     * @var ActiveWorkspaceManager
      */
-    private $schemaInitializer;
+    private $activeWorkspaceManager;
+
+    /**
+     * @var WorkspaceConfigurationParserInterface
+     */
+    private $workspaceConfigurationParser;
 
     /**
      * @var ManagerRegistry
@@ -29,31 +49,50 @@ final class InitializeCommand extends AbstractCommand
     private $managerRegistry;
 
     /**
+     * @var StorageVersionChecker
+     */
+    private $storageVersionChecker;
+
+    /**
      * @var Indexer
      */
     private $indexer;
 
     /**
-     * @var Cache
+     * @var SchemaInitializer
      */
-    private $cache;
+    private $schemaInitializer;
 
     /**
-     * @param SchemaInitializer $schemaInitializer
-     * @param ManagerRegistry   $managerRegistry
-     * @param Indexer           $indexer
-     * @param Cache             $cache
+     * @var IndexFilePruner
+     */
+    private $indexFilePruner;
+
+    /**
+     * @param ActiveWorkspaceManager                $activeWorkspaceManager
+     * @param WorkspaceConfigurationParserInterface $workspaceConfigurationParser
+     * @param ManagerRegistry                       $managerRegistry
+     * @param StorageVersionChecker                 $storageVersionChecker
+     * @param Indexer                               $indexer
+     * @param SchemaInitializer                     $schemaInitializer
+     * @param IndexFilePruner                       $indexFilePruner
      */
     public function __construct(
-        SchemaInitializer $schemaInitializer,
+        ActiveWorkspaceManager $activeWorkspaceManager,
+        WorkspaceConfigurationParserInterface $workspaceConfigurationParser,
         ManagerRegistry $managerRegistry,
+        StorageVersionChecker $storageVersionChecker,
         Indexer $indexer,
-        Cache $cache
+        SchemaInitializer $schemaInitializer,
+        IndexFilePruner $indexFilePruner
     ) {
-        $this->schemaInitializer = $schemaInitializer;
+        $this->activeWorkspaceManager = $activeWorkspaceManager;
+        $this->workspaceConfigurationParser = $workspaceConfigurationParser;
         $this->managerRegistry = $managerRegistry;
+        $this->storageVersionChecker = $storageVersionChecker;
         $this->indexer = $indexer;
-        $this->cache = $cache;
+        $this->schemaInitializer = $schemaInitializer;
+        $this->indexFilePruner = $indexFilePruner;
     }
 
     /**
@@ -61,40 +100,137 @@ final class InitializeCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return new JsonRpcResponse(
-            $queueItem->getRequest()->getId(),
-            $this->initialize($queueItem->getJsonRpcResponseSender())
+        $params = $queueItem->getRequest()->getParams();
+
+        if (!$params) {
+            throw new InvalidArgumentsException('Missing parameters for initialize request');
+        }
+
+        return $this->initialize(
+            $this->createInitializeParamsFromRawArray($params),
+            $queueItem->getJsonRpcResponseSender(),
+            $queueItem->getRequest()
         );
     }
 
     /**
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
-     * @param bool                           $includeBuiltinItems
+     * @param array $params
      *
-     * @return bool
+     * @return InitializeParams
+     */
+    private function createInitializeParamsFromRawArray(array $params): InitializeParams
+    {
+        return new InitializeParams(
+            $params['processId'],
+            $params['rootPath'] ?? null,
+            $params['rootUri'],
+            $params['initializationOptions'] ?? null,
+            $params['capabilities'],
+            $params['trace'] ?? 'off',
+            $params['workspaceFolders'] ?? null
+        );
+    }
+
+    /**
+     * @param InitializeParams               $initializeParams
+     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcRequest                 $jsonRpcRequest
+     * @param bool                           $initializeIndexForProject
+     *
+     * @throws InvalidArgumentsException
+     *
+     * @return JsonRpcResponse|null
      */
     public function initialize(
+        InitializeParams $initializeParams,
         JsonRpcResponseSenderInterface $jsonRpcResponseSender,
-        bool $includeBuiltinItems = true
-    ): bool {
-        $this->ensureIndexDatabaseDoesNotExist();
-
-        $this->schemaInitializer->initialize();
-
-        if ($includeBuiltinItems) {
-            $this->indexer->index(
-                [__DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/'],
-                ['php'],
-                [],
-                false,
-                $jsonRpcResponseSender,
-                null
+        JsonRpcRequest $jsonRpcRequest,
+        bool $initializeIndexForProject = true
+    ): ?JsonRpcResponse {
+        if ($this->activeWorkspaceManager->getActiveWorkspace()) {
+            throw new UnexpectedValueException(
+                'Initialize was already called, send a shutdown request first if you want to initialize another project'
             );
         }
 
-        $this->clearCache();
+        $rootUri = $initializeParams->getRootUri();
+        $rootPath = $initializeParams->getRootPath();
 
-        return true;
+        if (!$rootUri || !$rootPath) {
+            throw new InvalidArgumentsException('Need a rootUri and a rootPath in InitializeParams to function');
+        }
+
+        $pathToConfigurationFile = $rootUri . '/.serenata/config.json';
+
+        $workspaceConfiguration = $this->workspaceConfigurationParser->parse($pathToConfigurationFile);
+
+        $this->managerRegistry->setDatabasePath($rootPath . '/.serenata/index.sqlite');
+
+        $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
+
+        if (!$this->storageVersionChecker->isUpToDate()) {
+            $this->ensureIndexDatabaseDoesNotExist();
+
+            $this->schemaInitializer->initialize();
+
+            if ($initializeIndexForProject) {
+                $this->indexer->index(
+                    'file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/',
+                    false,
+                    $jsonRpcResponseSender,
+                    null
+                );
+            }
+        } else {
+            $this->indexFilePruner->prune();
+        }
+
+        $response = new JsonRpcResponse(
+            $jsonRpcRequest->getId(),
+            new InitializeResult(
+                new ServerCapabilities(
+                    new TextDocumentSyncOptions(
+                        false,
+                        1,
+                        false,
+                        false,
+                        new SaveOptions(true)
+                    ),
+                    true,
+                    new CompletionOptions(false, null),
+                    new SignatureHelpOptions(['(', ',']),
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    true,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    null,
+                    false,
+                    null,
+                    false,
+                    false,
+                    null,
+                    null,
+                    null
+                )
+            )
+        );
+
+        if (!$initializeIndexForProject) {
+            return $response;
+        }
+
+        // This indexing will rend the response by itself when it is fully finished. This ensures that the
+        // initialization does not complete until the initial index has occurred.
+        $this->indexer->index($rootUri, false, $jsonRpcResponseSender, $response);
+
+        return null;
     }
 
     /**
@@ -120,16 +256,6 @@ final class InitializeCommand extends AbstractCommand
 
         if (file_exists($databasePath . '-wal')) {
             unlink($databasePath . '-wal');
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function clearCache(): void
-    {
-        if ($this->cache instanceof ClearableCache) {
-            $this->cache->deleteAll();
         }
     }
 }

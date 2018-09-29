@@ -16,6 +16,8 @@ use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that resolves local types in a file.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class ResolveTypeCommand extends AbstractCommand
 {
@@ -93,7 +95,7 @@ final class ResolveTypeCommand extends AbstractCommand
         }
 
         // Not used (yet), but still throws an exception when file is not in index.
-        $this->storage->getFileByPath($uri);
+        $this->storage->getFileByUri($uri);
 
         $filePosition = new FilePosition($uri, $position);
 

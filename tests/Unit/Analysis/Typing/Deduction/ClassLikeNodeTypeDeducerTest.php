@@ -78,7 +78,7 @@ class ClassLikeNodeTypeDeducerTest extends TestCase
             'startFilePos' => 9,
         ]);
 
-        $file = new Structures\File('/test/path', new DateTime(), []);
+        $file = new Structures\File('file:////test/path', new DateTime(), []);
 
         static::assertSame(
             ['\(anonymous_d41d8cd98f00b204e9800998ecf8427e_9)'],

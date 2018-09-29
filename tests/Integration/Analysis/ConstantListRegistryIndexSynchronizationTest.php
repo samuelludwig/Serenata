@@ -88,6 +88,6 @@ class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegrationTe
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/ConstantListRegistryIndexSynchronizationTest/' . $file;
+        return 'file:///' . __DIR__ . '/ConstantListRegistryIndexSynchronizationTest/' . $file;
     }
 }

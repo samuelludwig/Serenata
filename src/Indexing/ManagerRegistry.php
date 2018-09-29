@@ -178,12 +178,4 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
 
         $this->emit(WorkspaceEventName::CHANGED, [$databasePath]);
     }
-
-    /**
-     * @return bool
-     */
-    public function hasInitialDatabasePathConfigured(): bool
-    {
-        return !!$this->databasePath;
-    }
 }

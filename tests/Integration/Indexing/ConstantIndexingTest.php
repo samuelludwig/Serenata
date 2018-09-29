@@ -22,7 +22,7 @@ class ConstantIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('CONSTANT', $constant->getName());
         static::assertSame('\CONSTANT', $constant->getFqcn());
-        static::assertSame($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getPath());
+        static::assertSame($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 6),
@@ -190,6 +190,6 @@ class ConstantIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/ConstantIndexingTest/' . $file;
+        return 'file:///' . __DIR__ . '/ConstantIndexingTest/' . $file;
     }
 }

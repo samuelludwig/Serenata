@@ -37,14 +37,14 @@ final class MethodConverter extends FunctionConverter
 
             'declaringClass' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
             ],
 
             'declaringStructure' => [
                 'fqcn'            => $class['fqcn'],
-                'filename'        => $class['filename'],
+                'uri'             => $class['uri'],
                 'range'           => $class['range'],
                 'type'            => $class['type'],
                 'memberRange'     => $method->getRange(),

@@ -75,10 +75,7 @@ class ClassConstFetchNodeDefinitionLocator
                 continue;
             }
 
-            $definitions[] = new GotoDefinitionResponse(new Location(
-                $constantInfo['filename'],
-                $constantInfo['range']
-            ));
+            $definitions[] = new GotoDefinitionResponse(new Location($constantInfo['uri'], $constantInfo['range']));
         }
 
         if (count($definitions) === 0) {

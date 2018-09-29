@@ -2,28 +2,27 @@
 
 namespace Serenata\UserInterface\Command;
 
-use Serenata\Indexing\ManagerRegistry;
-
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+
+use Serenata\Workspace\ActiveWorkspaceManager;
 
 /**
- * Command that requests the server to shutdown completely and exit.
+ * Command that handles the "exit" request.
  */
 final class ExitCommand extends AbstractCommand
 {
     /**
-     * @var ManagerRegistry
+     * @var ActiveWorkspaceManager
      */
-    private $managerRegistry;
+    private $activeWorkspaceManager;
 
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @param ActiveWorkspaceManager $activeWorkspaceManager
      */
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(ActiveWorkspaceManager $activeWorkspaceManager)
     {
-        $this->managerRegistry = $managerRegistry;
+        $this->activeWorkspaceManager = $activeWorkspaceManager;
     }
 
     /**
@@ -31,19 +30,18 @@ final class ExitCommand extends AbstractCommand
      */
     public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
     {
-        return new JsonRpcResponse(
-            $queueItem->getRequest()->getId(),
-            $this->exit($queueItem->getJsonRpcResponseSender())
-        );
+        $this->exit();
+
+        return null;
     }
 
     /**
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @return void
      */
-    public function exit(JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
+    public function exit(): void
     {
-        $this->managerRegistry->ensureConnectionClosed();
-
-        exit(0);
+        // Assume that an active workspace means that shutdown hasn't been invoked yet, in which case we need to send
+        // an error code.
+        exit($this->activeWorkspaceManager->getActiveWorkspace() !== null ? 1 : 0);
     }
 }

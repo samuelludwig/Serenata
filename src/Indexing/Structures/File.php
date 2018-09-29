@@ -20,7 +20,7 @@ class File
     /**
      * @var string
      */
-    private $path;
+    private $uri;
 
     /**
      * @var string|null
@@ -58,14 +58,14 @@ class File
     private $metaStaticMethodTypes;
 
     /**
-     * @param string          $path
+     * @param string          $uri
      * @param DateTime        $indexedOn
      * @param FileNamespace[] $namespaces
      */
-    public function __construct(string $path, DateTime $indexedOn, array $namespaces)
+    public function __construct(string $uri, DateTime $indexedOn, array $namespaces)
     {
         $this->id = uniqid('', true);
-        $this->path = $path;
+        $this->uri = $uri;
         $this->lastIndexedSourceHash = null;
         $this->indexedOn = $indexedOn;
         $this->namespaces = new ArrayCollection($namespaces);
@@ -106,9 +106,9 @@ class File
     /**
      * @return string
      */
-    public function getPath(): string
+    public function getUri(): string
     {
-        return $this->path;
+        return $this->uri;
     }
 
     /**

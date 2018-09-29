@@ -22,7 +22,7 @@ class DefineIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('DEFINE', $define->getName());
         static::assertSame('\DEFINE', $define->getFqcn());
-        static::assertSame($this->getPathFor('SimpleDefine.phpt'), $define->getFile()->getPath());
+        static::assertSame($this->getPathFor('SimpleDefine.phpt'), $define->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),
@@ -100,6 +100,6 @@ class DefineIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/DefineIndexingTest/' . $file;
+        return 'file:///' . __DIR__ . '/DefineIndexingTest/' . $file;
     }
 }

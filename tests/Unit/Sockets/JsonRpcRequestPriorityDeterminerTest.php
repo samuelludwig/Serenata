@@ -37,11 +37,11 @@ class JsonRpcRequestPriorityDeterminerTest extends TestCase
     /**
      * @return void
      */
-    public function testAssignsLowPriorityToReindexRequests(): void
+    public function testAssignsLowPriorityToIndexRequests(): void
     {
         $determiner = new JsonRpcRequestPriorityDeterminer();
 
-        $request = new JsonRpcRequest(null, 'reindex');
+        $request = new JsonRpcRequest(null, 'index');
 
         static::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
     }

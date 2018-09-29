@@ -6,8 +6,8 @@ use Serenata\Analysis\NamespaceListProviderInterface;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Utility\TextEdit;
 
@@ -85,30 +85,28 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      * @param array                         $namespace
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
     private function createSuggestion(
         array $namespace,
         AutocompletionProviderContext $context
-    ): AutocompletionSuggestion {
+    ): CompletionItem {
         $fqcnWithoutLeadingSlash = $namespace['name'];
 
         if ($fqcnWithoutLeadingSlash[0] === '\\') {
             $fqcnWithoutLeadingSlash = mb_substr($fqcnWithoutLeadingSlash, 1);
         }
 
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $fqcnWithoutLeadingSlash,
-            SuggestionKind::IMPORT,
+            CompletionItemKind::MODULE,
             $namespace['name'],
             $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,
             null,
-            [
-                'returnTypes'  => 'namespace',
-            ],
             [],
-            false
+            false,
+            'namespace'
         );
     }
 

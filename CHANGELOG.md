@@ -25,6 +25,33 @@
 * [Fix docblocks with a description of `0` being ignored (thanks to @UziTech)](https://gitlab.com/Serenata/Serenata/merge_requests/77)
 * [Fix default values of `0` being ignored (thanks to @UziTech)](https://gitlab.com/Serenata/Serenata/merge_requests/77)
 
+### Raw LSP-stuff that should be prettified later
+- "exit" made LSP-compliant
+- "shutdown" implemented
+- "initialize" made LSP-compliant
+- "initialized" notification is received instead of throwing error
+- "autocomplete" is now called "textDocument/completion" as per LSP
+- "tooltip" is now called "textDocument/hover" as per LSP
+- "signatureHelp" is now called "textDocument/signatureHelp" as per LSP
+- "documentSymbols" is now called "textDocument/documentSymbol" as per LSP
+- "gotoDefinition" is now called "textDocument/definition" as per LSP
+- "cancel" is now called "$/cancelRequest" as per LSP
+- "textDocument/didChange" is implemented
+- "textDocument/didSave" is implemented
+- In output data of extension commands (non-LSP commands), "filename" was renamed to "uri" and is now an actual URI instead of just a path
+- "workspace/didChangeWatchedFiles" is implemented
+    - Also supports handling notifications of removed files, which should fix classes remaining in index after file removal
+        - TODO: Test this properly
+- Drop "extraData" from autocompletion suggestions
+- Autocompletion suggestions "detail" now also include protection level and type information (#218?)
+- Autocompletion suggestion kinds are now numeric and follow the values prescribed by the LSP
+- "reindex" was removed as indexing is now handled via "textDocument/didChange" and "workspace/didChangeWatchedFiles"
+- The "namespaceList" request has been removed as it was obsoleted by autocomplete being implemented in the server and there are no clients that use it anymore
+- I *think* that the split of the "index" request and the separate didChange and didChangeWatchedFiles notifications
+  have also solved the issue of user interactions causing reindexes not being prioritized over low-priority indexing
+  of the project on the background (such as during project setup)
+    - TODO: Test this properly
+
 ## 4.3.0
 ### Improvements
 * [Static members will now also be shown during non-static access](https://gitlab.com/Serenata/Serenata/issues/199)

@@ -2,8 +2,8 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\Providers;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -22,9 +22,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -35,13 +35,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'int|string',
-                ],
                 [],
                 false,
-                'A'
+                'int|string — public — A'
             ),
         ];
 
@@ -58,9 +54,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -71,13 +67,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'mixed',
-                ],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 
@@ -94,9 +86,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo',
                 new TextEdit(
                     new Range(
@@ -107,13 +99,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'mixed',
-                ],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 
@@ -130,9 +118,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -143,13 +131,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo()',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes' => 'void',
-                ],
                 [],
                 true,
-                'A'
+                'void — public — A'
             ),
         ];
 
@@ -166,9 +150,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo()$0',
                 new TextEdit(
                     new Range(
@@ -179,13 +163,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo([$i = 0])',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'mixed',
-                ],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 
@@ -202,9 +182,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
         $output = $this->provide($fileName);
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 'foo',
-                SuggestionKind::METHOD,
+                CompletionItemKind::METHOD,
                 'foo($0)',
                 new TextEdit(
                     new Range(
@@ -215,13 +195,9 @@ class NonStaticMethodAutocompletionProviderTest extends AbstractAutocompletionPr
                 ),
                 'foo($test)',
                 null,
-                [
-                    'protectionLevel'    => 'public',
-                    'returnTypes'        => 'mixed',
-                ],
                 [],
                 false,
-                'A'
+                'mixed — public — A'
             ),
         ];
 

@@ -19,7 +19,7 @@ class FileClasslikeListProviderTest extends AbstractIntegrationTest
 
         $provider = $this->container->get('fileClasslikeListProvider');
 
-        $file = $this->container->get('storage')->getFileByPath($path);
+        $file = $this->container->get('storage')->getFileByUri($path);
 
         $output = $provider->getAllForFile($file);
 

@@ -22,7 +22,7 @@ class TraitIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('Test', $structure->getName());
         static::assertSame('\Test', $structure->getFqcn());
-        static::assertSame($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getPath());
+        static::assertSame($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),
@@ -257,6 +257,6 @@ class TraitIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/TraitIndexingTest/' . $file;
+        return 'file:///' . __DIR__ . '/TraitIndexingTest/' . $file;
     }
 }

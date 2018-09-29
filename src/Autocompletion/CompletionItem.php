@@ -13,7 +13,7 @@ use Serenata\Utility\TextEdit;
  *
  * This is a value object and immutable.
  */
-final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
+final class CompletionItem implements JsonSerializable, ArrayAccess
 {
     /**
      * @var string
@@ -21,7 +21,7 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     private $filterText;
 
     /**
-     * @var string Item from {@see SuggestionKind}
+     * @var int|null Item from {@see CompletionItemKind}
      */
     private $kind;
 
@@ -29,6 +29,11 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      * @var string|null
      */
     private $insertText;
+
+    /**
+     * @var int|null
+     */
+    private $insertTextFormat = 2;
 
     /**
      * @var TextEdit|null
@@ -44,11 +49,6 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
      * @var string|null
      */
     private $documentation;
-
-    /**
-     * @var array
-     */
-    private $extraData;
 
     /**
      * @var TextEdit[]
@@ -67,24 +67,22 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
 
     /**
      * @param string        $filterText
-     * @param string        $kind
+     * @param int|null      $kind
      * @param string|null   $insertText
      * @param TextEdit|null $textEdit
      * @param string        $label
      * @param string|null   $documentation
-     * @param array         $extraData
      * @param TextEdit[]    $additionalTextEdits
      * @param bool          $deprecated
      * @param string|null   $detail
      */
     public function __construct(
         string $filterText,
-        string $kind,
+        ?int $kind,
         ?string $insertText,
         ?TextEdit $textEdit,
         string $label,
         ?string $documentation,
-        array $extraData = [],
         array $additionalTextEdits = [],
         bool $deprecated = false,
         ?string $detail = null
@@ -95,7 +93,6 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
         $this->textEdit = $textEdit;
         $this->label = $label;
         $this->documentation = $documentation;
-        $this->extraData = $extraData;
         $this->additionalTextEdits = $additionalTextEdits;
         $this->deprecated = $deprecated;
         $this->detail = $detail;
@@ -114,9 +111,9 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     }
 
     /**
-     * @return string
+     * @return int|null
      */
-    public function getKind(): string
+    public function getKind(): ?int
     {
         return $this->kind;
     }
@@ -127,6 +124,14 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     public function getInsertText(): ?string
     {
         return $this->insertText;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getInsertTextFormat(): ?int
+    {
+        return $this->insertTextFormat;
     }
 
     /**
@@ -151,14 +156,6 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
     public function getDocumentation(): ?string
     {
         return $this->documentation;
-    }
-
-    /**
-     * @return array
-     */
-    public function getExtraData(): array
-    {
-        return $this->extraData;
     }
 
     /**
@@ -194,11 +191,10 @@ final class AutocompletionSuggestion implements JsonSerializable, ArrayAccess
             'filterText'          => $this->getFilterText(),
             'kind'                => $this->getKind(),
             'insertText'          => $this->getInsertText(),
+            'insertTextFormat'    => $this->getInsertTextFormat(),
             'textEdit'            => $this->getTextEdit(),
             'label'               => $this->getLabel(),
             'documentation'       => $this->getDocumentation(),
-            // TODO: Deprecated, remove.
-            'extraData'           => $this->getExtraData(),
             'additionalTextEdits' => $this->getAdditionalTextEdits(),
             'deprecated'          => $this->getDeprecated(),
             'detail'              => $this->getDetail(),

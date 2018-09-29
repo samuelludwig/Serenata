@@ -7,8 +7,8 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
@@ -19,9 +19,9 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
     {
         $output = $this->provide('Superglobals.phpt');
 
-        $firstSuggestion = new AutocompletionSuggestion(
+        $firstSuggestion = new CompletionItem(
             '$argc',
-            SuggestionKind::VARIABLE,
+            CompletionItemKind::VARIABLE,
             '$argc',
             new TextEdit(
                 new Range(
@@ -32,11 +32,9 @@ class SuperglobalAutocompletionProviderTest extends AbstractAutocompletionProvid
             ),
             '$argc',
             'PHP superglobal',
-            [
-                'returnTypes'  => 'int',
-            ],
             [],
-            false
+            false,
+            'int'
         );
 
         static::assertEquals($firstSuggestion, $output[0]);

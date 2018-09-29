@@ -38,7 +38,7 @@ final class UpdateEnforcingIndexer implements FileIndexerInterface
         $file = null;
 
         try {
-            $file = $this->storage->getFileByPath($textDocumentItem->getUri());
+            $file = $this->storage->getFileByUri($textDocumentItem->getUri());
         } catch (FileNotFoundStorageException $e) {
             throw new IndexingFailedException('Skipping creation of new file during indexing', 0, $e);
         }

@@ -84,6 +84,6 @@ class FileIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/FileIndexingTest/' . $file;
+        return 'file:///' . __DIR__ . '/FileIndexingTest/' . $file;
     }
 }

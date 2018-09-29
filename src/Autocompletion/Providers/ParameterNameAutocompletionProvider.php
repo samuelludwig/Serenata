@@ -6,8 +6,8 @@ use PhpParser\Node;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 
 
@@ -51,7 +51,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      * @param Node\Param                    $node
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion[]
+     * @return CompletionItem[]
      */
     private function createSuggestionsForParamNode(Node\Param $node, AutocompletionProviderContext $context): array
     {
@@ -78,7 +78,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      * @param string                        $name
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion[]
+     * @return CompletionItem[]
      */
     private function generateSuggestionsForName(string $name, AutocompletionProviderContext $context): array
     {
@@ -144,18 +144,17 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      * @param string                        $name
      * @param AutocompletionProviderContext $context
      *
-     * @return AutocompletionSuggestion
+     * @return CompletionItem
      */
-    private function createSuggestion(string $name, AutocompletionProviderContext $context): AutocompletionSuggestion
+    private function createSuggestion(string $name, AutocompletionProviderContext $context): CompletionItem
     {
-        return new AutocompletionSuggestion(
+        return new CompletionItem(
             $name,
-            SuggestionKind::VARIABLE,
+            CompletionItemKind::VARIABLE,
             $name,
             $this->getTextEditForSuggestion($name, $context),
             $name,
             null,
-            [],
             [],
             false
         );

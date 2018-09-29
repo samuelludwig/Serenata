@@ -9,6 +9,8 @@ use Serenata\Sockets\JsonRpcQueueItem;
 
 /**
  * Command that shows a list of global constants.
+ *
+ * @deprecated Will be removed as soon as all functionality this facilitates is implemented as LSP-compliant requests.
  */
 final class GlobalConstantsCommand extends AbstractCommand
 {

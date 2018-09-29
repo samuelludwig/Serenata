@@ -7,8 +7,8 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-use Serenata\Autocompletion\SuggestionKind;
-use Serenata\Autocompletion\AutocompletionSuggestion;
+use Serenata\Autocompletion\CompletionItemKind;
+use Serenata\Autocompletion\CompletionItem;
 
 class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
@@ -20,9 +20,9 @@ class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProv
         $output = $this->provide('LocalVariable.phpt');
 
         $suggestions = [
-            new AutocompletionSuggestion(
+            new CompletionItem(
                 '$foo',
-                SuggestionKind::VARIABLE,
+                CompletionItemKind::VARIABLE,
                 '$foo',
                 new TextEdit(
                     new Range(new Position(4, 0), new Position(4, 0)),
@@ -30,9 +30,6 @@ class LocalVariableAutocompletionProviderTest extends AbstractAutocompletionProv
                 ),
                 '$foo',
                 null,
-                [
-                    'returnTypes'  => '',
-                ],
                 [],
                 false
             ),

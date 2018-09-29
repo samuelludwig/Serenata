@@ -22,12 +22,12 @@ class FilePruningTest extends AbstractIntegrationTest
         $fileExistenceChecker = $this->getMockBuilder(FileExistenceCheckerInterface::class)->getMock();
 
         $storage->expects($this->once())->method('getFiles')->willReturn([
-            new Structures\File('testPath.php', new DateTime(), []),
+            new Structures\File('file:///testPath.php', new DateTime(), []),
         ]);
 
         $pruner = new IndexFilePruner($storage, $fileExistenceChecker);
 
-        $fileExistenceChecker->expects($this->once())->method('exists')->with('testPath.php')->willReturn(true);
+        $fileExistenceChecker->expects($this->once())->method('exists')->with('file:///testPath.php')->willReturn(true);
         $storage->expects($this->never())->method('delete');
 
         $pruner->prune();
@@ -42,12 +42,12 @@ class FilePruningTest extends AbstractIntegrationTest
         $fileExistenceChecker = $this->getMockBuilder(FileExistenceCheckerInterface::class)->getMock();
 
         $storage->expects($this->once())->method('getFiles')->willReturn([
-            new Structures\File('testPath.php', new DateTime(), []),
+            new Structures\File('file:///testPath.php', new DateTime(), []),
         ]);
 
         $pruner = new IndexFilePruner($storage, $fileExistenceChecker);
 
-        $fileExistenceChecker->expects($this->once())->method('exists')->with('testPath.php')->willReturn(false);
+        $fileExistenceChecker->expects($this->once())->method('exists')->with('file:///testPath.php')->willReturn(false);
         $storage->expects($this->once())->method('delete');
 
         $pruner->prune();

@@ -53,6 +53,11 @@ class JsonRpcErrorCode
     public const GENERIC_RUNTIME_ERROR      = -32001;
 
     /**
+     * @var int
+     */
+    public const SERVER_NOT_INITIALIZED     = -32002;
+
+    /**
      * Indicates that the database version is of an incorrect (i.e. too old or too new) version and can't be used by
      * this version.
      *
@@ -61,7 +66,7 @@ class JsonRpcErrorCode
      *
      * @var int
      */
-    public const DATABASE_VERSION_MISMATCH  = -32002;
+    public const DATABASE_VERSION_MISMATCH  = -32003;
 
     /**
      * @var int

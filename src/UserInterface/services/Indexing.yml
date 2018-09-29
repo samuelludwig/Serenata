@@ -75,10 +75,16 @@ services:
             - '@docblockTypeParser'
             - '@typeResolvingDocblockTypeTransformer'
 
+    textDocumentContentRegistryUpdatingIndexer:
+        class: Serenata\Indexing\TextDocumentContentRegistryUpdatingIndexer
+        arguments:
+            - '@storageFileIndexer'
+            - '@textDocumentContentRegistry'
+
     unmodifiedFileSkippingIndexer:
         class: Serenata\Indexing\UnmodifiedFileSkippingIndexer
         arguments:
-            - '@storageFileIndexer'
+            - '@textDocumentContentRegistryUpdatingIndexer'
             - '@storage'
 
     updateEnforcingIndexer:
@@ -96,6 +102,18 @@ services:
             - '@requestQueue'
             - '@fileIndexer'
             - '@directoryIndexRequestDemuxer'
-            - '@indexFilePruner'
             - '@pathNormalizer'
+            - '@sourceCodeStreamReader'
+            - '@textDocumentContentRegistry'
+            - '@activeWorkspaceManager'
+
+    debouncingIndexer:
+        class: Serenata\Indexing\DebouncingIndexer
+        arguments:
+            - '@eventLoop'
+            - '@indexer'
+
+    textDocumentContentRegistry:
+        class: Serenata\Indexing\TextDocumentContentRegistry
+        arguments:
             - '@sourceCodeStreamReader'

@@ -350,7 +350,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/DefinitionLocatorTest/' . $file;
+        return 'file:///' . __DIR__ . '/DefinitionLocatorTest/' . $file;
     }
 
     /**

@@ -10,13 +10,13 @@ use IteratorIterator;
 final class IndexableFileIterator extends IteratorIterator
 {
     /**
-     * @param string[] $paths
+     * @param string   $uri
      * @param string[] $extensionsToIndex
      * @param string[] $globsToExclude
      */
-    public function __construct(array $paths, array $extensionsToIndex, array $globsToExclude = [])
+    public function __construct(string $uri, array $extensionsToIndex, array $globsToExclude = [])
     {
-        $iterator = new Iterating\MultiRecursivePathIterator($paths);
+        $iterator = new Iterating\MultiRecursivePathIterator([$uri]);
         $iterator = new Iterating\ExtensionFilterIterator($iterator, $extensionsToIndex);
         $iterator = new Iterating\ExclusionFilterIterator($iterator, $globsToExclude);
 

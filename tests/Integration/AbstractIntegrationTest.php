@@ -12,8 +12,9 @@ use Serenata\Sockets\JsonRpcResponseSenderInterface;
 use Serenata\UserInterface\JsonRpcApplication;
 use Serenata\UserInterface\AbstractApplication;
 
-use Serenata\Utility\TmpFileStream;
-use Serenata\Utility\SourceCodeStreamReader;
+use Serenata\Workspace\Configuration\WorkspaceConfiguration;
+
+use Serenata\Workspace\Workspace;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use PHPUnit\Framework\TestCase;
@@ -34,11 +35,6 @@ abstract class AbstractIntegrationTest extends TestCase
      * @var ContainerBuilder
      */
     private static $testContainer;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private static $testContainerBuiltinStructuralElements;
 
     /**
      * @var ContainerBuilder
@@ -112,15 +108,16 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         // Replace some container items for testing purposes.
         $container->get('managerRegistry')->setDatabasePath(':memory:');
+        $container->get('schemaInitializer')->initialize();
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
-        $container->get('cache')->deleteAll();
 
-        $success = $container->get('initializeCommand')->initialize(
-            $this->mockJsonRpcResponseSenderInterface(),
-            false
-        );
-
-        static::assertTrue($success);
+        $container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            'test-id',
+            [],
+            7.1,
+            [],
+            ['php', 'phpt']
+        )));
     }
 
     /**
@@ -153,30 +150,30 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
-        $this->indexPathViaIndexer($container->get('indexer'), $testPath, false, $mayFail);
+        $this->indexUriViaIndexer($container->get('indexer'), $testPath, null, $mayFail);
     }
 
     /**
-     * @param Indexer $indexer
-     * @param string  $testPath
-     * @param bool    $useStdin
-     * @param bool    $mayFail
+     * @param Indexer     $indexer
+     * @param string      $uri
+     * @param string|null $source
+     * @param bool        $mayFail
      *
      * @return void
      */
-    protected function indexPathViaIndexer(
+    protected function indexUriViaIndexer(
         Indexer $indexer,
-        string $testPath,
-        bool $useStdin,
+        string $uri,
+        ?string $source = null,
         bool $mayFail = false
     ): void {
-        $success = $indexer->index(
-            [$testPath],
-            ['php', 'phpt'],
-            [],
-            $useStdin,
-            $this->mockJsonRpcResponseSenderInterface()
-        );
+        if ($source !== null) {
+            $this->container->get('textDocumentContentRegistry')->update($uri, $source);
+        } else {
+            $this->container->get('textDocumentContentRegistry')->clear($uri);
+        }
+
+        $success = $indexer->index($uri, true, $this->mockJsonRpcResponseSenderInterface());
 
         if (!$mayFail) {
             static::assertTrue($success);
@@ -195,9 +192,18 @@ abstract class AbstractIntegrationTest extends TestCase
         $refMethod = $refClass->getMethod('processNextQueueItem');
         $refMethod->setAccessible(true);
 
+        if ($this->container->get('requestQueue')->isEmpty()) {
+            return;
+        }
+
         while (!$this->container->get('requestQueue')->isEmpty()) {
             $refMethod->invoke(self::$application);
         }
+
+        // Executing timers may generate more queue items, so keep going until everything is finished.
+        $this->container->get('eventLoop')->run();
+
+        $this->processOpenQueueItems();
     }
 
     /**
@@ -219,29 +225,9 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function indexTestFileWithSource(ContainerBuilder $container, string $path, string $source): void
     {
-        $stream = new TmpFileStream();
+        $indexer = $container->get('indexer');
 
-        $sourceCodeStreamReader = new SourceCodeStreamReader(
-            $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
-            $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
-            $stream
-        );
-
-        $indexer = new Indexer(
-            $container->get('requestQueue'),
-            $container->get('fileIndexer'),
-            $container->get('directoryIndexRequestDemuxer'),
-            $container->get('indexFilePruner'),
-            $container->get('pathNormalizer'),
-            $sourceCodeStreamReader,
-            $container->get('directoryIndexableFileIteratorFactory')
-        );
-
-        $stream->set($source);
-
-        $this->indexPathViaIndexer($indexer, $path, true);
-
-        $stream->close();
+        $this->indexUriViaIndexer($indexer, $path, $source);
     }
 
     /**
@@ -259,25 +245,11 @@ abstract class AbstractIntegrationTest extends TestCase
         for ($i = 0; $i <= 1; ++$i) {
             $container = $this->createTestContainer();
 
-            $stream = new TmpFileStream();
+            $sourceCodeStreamReader = $this->container->get('sourceCodeStreamReader');
 
-            $sourceCodeStreamReader = new SourceCodeStreamReader(
-                $this->container->get('fileSourceCodeFileReader.fileReaderFactory'),
-                $this->container->get('fileSourceCodeFileReader.streamReaderFactory'),
-                $stream
-            );
+            $indexer = $this->container->get('indexer');
 
-            $indexer = new Indexer(
-                $container->get('requestQueue'),
-                $container->get('fileIndexer'),
-                $container->get('directoryIndexRequestDemuxer'),
-                $container->get('indexFilePruner'),
-                $container->get('pathNormalizer'),
-                $sourceCodeStreamReader,
-                $container->get('directoryIndexableFileIteratorFactory')
-            );
-
-            $this->indexPathViaIndexer($indexer, $path, false);
+            $this->indexUriViaIndexer($indexer, $path);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -290,17 +262,13 @@ abstract class AbstractIntegrationTest extends TestCase
                 $container->get('managerRegistry')->getManager()->clear();
             }
 
-            $stream->set($source);
-
-            $this->indexPathViaIndexer($indexer, $path, true);
+            $this->indexUriViaIndexer($indexer, $path, $source);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
             }
 
             $afterReindex($container, $path, $source);
-
-            $stream->close();
         }
     }
 

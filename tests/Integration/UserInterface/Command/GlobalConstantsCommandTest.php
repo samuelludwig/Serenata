@@ -75,6 +75,6 @@ class GlobalConstantsCommandTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return __DIR__ . '/GlobalConstantsCommandTest/' . $file;
+        return 'file:///' . __DIR__ . '/GlobalConstantsCommandTest/' . $file;
     }
 }

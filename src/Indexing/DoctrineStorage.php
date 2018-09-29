@@ -77,18 +77,18 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     /**
      * @inheritDoc
      */
-    public function getFileByPath(string $path): Structures\File
+    public function getFileByUri(string $uri): Structures\File
     {
         try {
             $file = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
-                'path' => $path,
+                'uri' => $uri,
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
 
         if ($file === null) {
-            throw new FileNotFoundStorageException("Could not find file \"{$path}\" in index");
+            throw new FileNotFoundStorageException("Could not find file \"{$uri}\" in index");
         }
 
         return $file;
