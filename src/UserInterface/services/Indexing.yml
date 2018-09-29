@@ -44,7 +44,6 @@ services:
         class: Serenata\Indexing\DirectoryIndexableFileIteratorFactory
         arguments:
             - '@storage'
-            - '@pathNormalizer'
 
     directoryIndexRequestDemuxer:
         class: Serenata\Indexing\DirectoryIndexRequestDemuxer

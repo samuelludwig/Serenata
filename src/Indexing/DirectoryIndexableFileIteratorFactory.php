@@ -14,9 +14,8 @@ class DirectoryIndexableFileIteratorFactory
 
     /**
      * @param StorageInterface $storage
-     * @param PathNormalizer   $pathNormalizer
      */
-    public function __construct(StorageInterface $storage, PathNormalizer $pathNormalizer)
+    public function __construct(StorageInterface $storage)
     {
         $this->storage = $storage;
     }
