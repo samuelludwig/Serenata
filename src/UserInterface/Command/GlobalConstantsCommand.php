@@ -6,6 +6,7 @@ use Serenata\Analysis\ConstantListProviderInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Command that shows a list of global constants.
@@ -30,7 +31,7 @@ final class GlobalConstantsCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getGlobalConstants());
     }

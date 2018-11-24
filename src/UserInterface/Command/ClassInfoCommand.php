@@ -8,6 +8,7 @@ use Serenata\Analysis\Typing\TypeAnalyzer;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Command that shows information about a class, interface or trait.
@@ -39,7 +40,7 @@ final class ClassInfoCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 

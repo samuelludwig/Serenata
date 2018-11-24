@@ -13,7 +13,7 @@ use Serenata\Sockets\SocketServer;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcRequestHandlerInterface;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 use Serenata\Sockets\JsonRpcConnectionHandlerFactory;
 
 use Symfony\Component\Console\Application;
@@ -62,9 +62,9 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @inheritDoc
      */
-    public function handle(JsonRpcRequest $request, JsonRpcResponseSenderInterface $jsonRpcResponseSender): void
+    public function handle(JsonRpcRequest $request, JsonRpcMessageSenderInterface $jsonRpcMessageSender): void
     {
-        $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
+        $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
 
         $this->ensurePeriodicQueueProcessingTimerIsInstalled();
     }

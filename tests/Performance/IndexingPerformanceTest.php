@@ -19,7 +19,7 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
 
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
         $this->container->get('initializeCommand')->initialize(
-            $this->mockJsonRpcResponseSenderInterface(),
+            $this->mockJsonRpcMessageSenderInterface(),
             false
         );
 
@@ -45,7 +45,7 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
 
         $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
         $this->container->get('initializeCommand')->initialize(
-            $this->mockJsonRpcResponseSenderInterface(),
+            $this->mockJsonRpcMessageSenderInterface(),
             false
         );
 

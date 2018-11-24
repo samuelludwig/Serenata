@@ -8,7 +8,7 @@ use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
  * Indexes directories by generating one or more file index requests for each encountered file.
@@ -41,14 +41,14 @@ final class DirectoryIndexRequestDemuxer
      * @param string                         $uri
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      * @param int|string|null                $originatingRequestId
      */
     public function index(
         string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         $originatingRequestId
     ): void {
         $iterator = $this->directoryIndexableFileIteratorFactory->create($uri, $extensionsToIndex, $globsToExclude);
@@ -61,21 +61,21 @@ final class DirectoryIndexRequestDemuxer
         $i = 1;
 
         foreach ($items as $fileInfo) {
-            $this->queueIndexRequest($fileInfo, $jsonRpcResponseSender);
+            $this->queueIndexRequest($fileInfo, $jsonRpcMessageSender);
 
             if ($originatingRequestId !== null) {
-                $this->queueProgressRequest($originatingRequestId, $i++, $totalItems, $jsonRpcResponseSender);
+                $this->queueProgressRequest($originatingRequestId, $i++, $totalItems, $jsonRpcMessageSender);
             }
         }
     }
 
     /**
      * @param SplFileInfo                    $fileInfo
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      */
     private function queueIndexRequest(
         SplFileInfo $fileInfo,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
         $request = new JsonRpcRequest(null, 'index', [
             'textDocument' => [
@@ -83,23 +83,23 @@ final class DirectoryIndexRequestDemuxer
             ],
         ]);
 
-        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
+        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
     }
 
     /**
      * @param int|string|null                $originatingRequestId
      * @param int                            $index
      * @param int                            $total
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      */
     private function queueProgressRequest(
         $originatingRequestId,
         int $index,
         int $total,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
-        $request = new JsonRpcRequest(null, 'echoResponse', [
-            'response' => new JsonRpcResponse(null, [
+        $request = new JsonRpcRequest(null, 'echoMessage', [
+            'message' => new JsonRpcResponse(null, [
                 'type'      => 'reindexProgressInformation',
                 'requestId' => $originatingRequestId,
                 'index'     => $index,
@@ -108,6 +108,6 @@ final class DirectoryIndexRequestDemuxer
             ]),
         ]);
 
-        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcResponseSender));
+        $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
     }
 }

@@ -15,9 +15,9 @@ class JsonRpcQueueItem
     private $request;
 
     /**
-     * @var JsonRpcResponseSenderInterface
+     * @var JsonRpcMessageSenderInterface
      */
-    private $jsonRpcResponseSender;
+    private $jsonRpcMessageSender;
 
     /**
      * @var bool
@@ -26,16 +26,16 @@ class JsonRpcQueueItem
 
     /**
      * @param JsonRpcRequest                 $request
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      * @param bool                           $isCancelled
      */
     public function __construct(
         JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         bool $isCancelled = false
     ) {
         $this->request = $request;
-        $this->jsonRpcResponseSender = $jsonRpcResponseSender;
+        $this->jsonRpcResponseSender = $jsonRpcMessageSender;
         $this->isCancelled = $isCancelled;
     }
 
@@ -48,9 +48,9 @@ class JsonRpcQueueItem
     }
 
     /**
-     * @return JsonRpcResponseSenderInterface
+     * @return JsonRpcMessageSenderInterface
      */
-    public function getJsonRpcResponseSender(): JsonRpcResponseSenderInterface
+    public function getJsonRpcMessageSender(): JsonRpcMessageSenderInterface
     {
         return $this->jsonRpcResponseSender;
     }

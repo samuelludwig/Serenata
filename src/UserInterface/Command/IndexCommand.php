@@ -4,9 +4,9 @@ namespace Serenata\UserInterface\Command;
 
 use Serenata\Indexing\IndexerInterface;
 
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
  * Indexes a URI directly.
@@ -37,7 +37,7 @@ final class IndexCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $parameters = $queueItem->getRequest()->getParams();
 
@@ -45,16 +45,16 @@ final class IndexCommand extends AbstractCommand
             throw new InvalidArgumentsException('Missing parameters for index request');
         }
 
-        $this->handle($parameters['textDocument']['uri'], $queueItem->getJsonRpcResponseSender());
+        $this->handle($parameters['textDocument']['uri'], $queueItem->getJsonRpcMessageSender());
 
         return null; // This is a notification that doesn't expect a response.
     }
 
     /**
      * @param string                         $uri
-     * @param JsonRpcResponseSenderInterface $sender
+     * @param JsonRpcMessageSenderInterface $sender
      */
-    public function handle(string $uri, JsonRpcResponseSenderInterface $sender): void
+    public function handle(string $uri, JsonRpcMessageSenderInterface $sender): void
     {
         $this->indexer->index($uri, true, $sender);
     }

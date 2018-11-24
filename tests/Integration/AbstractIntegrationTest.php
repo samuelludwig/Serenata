@@ -7,7 +7,7 @@ use ReflectionClass;
 
 use Serenata\Indexing\Indexer;
 
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\UserInterface\JsonRpcApplication;
 use Serenata\UserInterface\AbstractApplication;
@@ -173,7 +173,7 @@ abstract class AbstractIntegrationTest extends TestCase
             $this->container->get('textDocumentContentRegistry')->clear($uri);
         }
 
-        $success = $indexer->index($uri, true, $this->mockJsonRpcResponseSenderInterface());
+        $success = $indexer->index($uri, true, $this->mockJsonRpcMessageSenderInterface());
 
         if (!$mayFail) {
             static::assertTrue($success);
@@ -273,11 +273,11 @@ abstract class AbstractIntegrationTest extends TestCase
     }
 
     /**
-     * @return JsonRpcResponseSenderInterface
+     * @return JsonRpcMessageSenderInterface
      */
-    protected function mockJsonRpcResponseSenderInterface(): JsonRpcResponseSenderInterface
+    protected function mockJsonRpcMessageSenderInterface(): JsonRpcMessageSenderInterface
     {
-        return $this->getMockBuilder(JsonRpcResponseSenderInterface::class)
+        return $this->getMockBuilder(JsonRpcMessageSenderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

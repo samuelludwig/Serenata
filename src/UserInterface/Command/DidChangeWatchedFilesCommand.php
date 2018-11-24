@@ -6,9 +6,9 @@ use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileNotFoundStorageException;
 
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\FileEvent;
 use Serenata\Utility\FileChangeType;
@@ -42,7 +42,7 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $parameters = $queueItem->getRequest()->getParams();
 
@@ -50,7 +50,7 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
             throw new InvalidArgumentsException('Missing parameters for didChangeWatchedFiles request');
         }
 
-        $this->handle($this->createParamsFromRawArray($parameters), $queueItem->getJsonRpcResponseSender());
+        $this->handle($this->createParamsFromRawArray($parameters), $queueItem->getJsonRpcMessageSender());
 
         return null; // This is a notification that doesn't expect a response.
     }
@@ -79,9 +79,9 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
 
     /**
      * @param DidChangeWatchedFilesParams    $parameters
-     * @param JsonRpcResponseSenderInterface $sender
+     * @param JsonRpcMessageSenderInterface $sender
      */
-    public function handle(DidChangeWatchedFilesParams $parameters, JsonRpcResponseSenderInterface $sender): void
+    public function handle(DidChangeWatchedFilesParams $parameters, JsonRpcMessageSenderInterface $sender): void
     {
         foreach ($parameters->getChanges() as $change) {
             $this->handleFileEvent($change, $sender);
@@ -90,9 +90,9 @@ final class DidChangeWatchedFilesCommand extends AbstractCommand
 
     /**
      * @param FileEvent                      $event
-     * @param JsonRpcResponseSenderInterface $sender
+     * @param JsonRpcMessageSenderInterface $sender
      */
-    public function handleFileEvent(FileEvent $event, JsonRpcResponseSenderInterface $sender): void
+    public function handleFileEvent(FileEvent $event, JsonRpcMessageSenderInterface $sender): void
     {
         if ($event->getType() === FileChangeType::DELETED) {
             try {

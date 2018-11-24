@@ -5,9 +5,9 @@ namespace Serenata\UserInterface\Command;
 use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\TextDocumentContentRegistry;
 
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
  * Handles the "textDocument/didSave" notification.
@@ -45,7 +45,7 @@ final class DidSaveCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $parameters = $queueItem->getRequest()->getParams();
 
@@ -53,7 +53,7 @@ final class DidSaveCommand extends AbstractCommand
             throw new InvalidArgumentsException('Missing parameters for didChangeWatchedFiles request');
         }
 
-        $this->handle($parameters['textDocument']['uri'], $parameters['text'], $queueItem->getJsonRpcResponseSender());
+        $this->handle($parameters['textDocument']['uri'], $parameters['text'], $queueItem->getJsonRpcMessageSender());
 
         return null; // This is a notification that doesn't expect a response.
     }
@@ -61,9 +61,9 @@ final class DidSaveCommand extends AbstractCommand
     /**
      * @param string                         $uri
      * @param string                         $contents
-     * @param JsonRpcResponseSenderInterface $sender
+     * @param JsonRpcMessageSenderInterface $sender
      */
-    public function handle(string $uri, string $contents, JsonRpcResponseSenderInterface $sender): void
+    public function handle(string $uri, string $contents, JsonRpcMessageSenderInterface $sender): void
     {
         $this->textDocumentContentRegistry->update($uri, $contents);
 

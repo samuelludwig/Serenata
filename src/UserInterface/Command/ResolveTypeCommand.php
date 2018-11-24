@@ -13,6 +13,7 @@ use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterfa
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Command that resolves local types in a file.
@@ -46,7 +47,7 @@ final class ResolveTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 

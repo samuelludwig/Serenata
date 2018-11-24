@@ -49,7 +49,7 @@ class JsonRpcQueueItemProcessor
     public function process(JsonRpcQueueItem $queueItem): void
     {
         $error = null;
-        $response = null;
+        $message = null;
 
         if (!$this->activeWorkspaceManager->getActiveWorkspace() &&
             $queueItem->getRequest()->getMethod() !== 'initialize'
@@ -60,7 +60,7 @@ class JsonRpcQueueItemProcessor
             );
         } elseif (!$queueItem->getIsCancelled()) {
             try {
-                $response = $this->handle($queueItem);
+                $message = $this->handle($queueItem);
             } catch (RequestParsingException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
             } catch (Command\InvalidArgumentsException $e) {
@@ -81,11 +81,11 @@ class JsonRpcQueueItemProcessor
         }
 
         if ($error !== null) {
-            $response = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
+            $message = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
         }
 
-        if ($response !== null) {
-            $queueItem->getJsonRpcResponseSender()->send($response);
+        if ($message !== null) {
+            $queueItem->getJsonRpcMessageSender()->send($message);
         }
     }
 
@@ -96,9 +96,9 @@ class JsonRpcQueueItemProcessor
      * @throws InvalidArgumentsException
      * @throws Throwable
      *
-     * @return JsonRpcResponse|null
+     * @return JsonRpcMessageInterface|null
      */
-    private function handle(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    private function handle(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $params = $queueItem->getRequest()->getParams();
 

@@ -10,7 +10,7 @@ use React\Socket\Connection;
  * Handles socket connections that send JSON-RPC requests via a simple HTTP-like protocol and dispatches the requests
  * to a handler.
  */
-final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
+final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
 {
     /**
      * @var string
@@ -178,28 +178,28 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
     /**
      * @inheritDoc
      */
-    public function send(JsonRpcResponse $response): void
+    public function send(JsonRpcMessageInterface $message): void
     {
-        $responseContent = $this->getEncodedResponse($response);
+        $messageContent = $this->getEncodedResponse($message);
 
-        if ($responseContent === '') {
+        if ($messageContent === '') {
             trigger_error(
                 'Empty JSON body encountered after encoding, JSON reports "' . json_last_error_msg() . '"',
                 E_USER_WARNING
             );
         }
 
-        $this->writeRawResponse($responseContent);
+        $this->writeRawResponse($messageContent);
     }
 
     /**
-     * @param JsonRpcResponse $response
+     * @param JsonRpcMessageInterface $message
      *
      * @return string
      */
-    private function getEncodedResponse(JsonRpcResponse $response): string
+    private function getEncodedResponse(JsonRpcMessageInterface $message): string
     {
-        $data = json_encode($response);
+        $data = json_encode($message);
 
         // See also #147 and #248.
         if (json_last_error() === JSON_ERROR_UTF8) {
@@ -208,7 +208,7 @@ final class JsonRpcConnectionHandler implements JsonRpcResponseSenderInterface
                 E_USER_WARNING
             );
 
-            $serializedData = $response->jsonSerialize();
+            $serializedData = $message->jsonSerialize();
             $serializedData = $this->getCorrectedUtf8Data($serializedData);
 
             $data = json_encode($serializedData);

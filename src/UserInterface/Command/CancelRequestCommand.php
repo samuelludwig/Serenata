@@ -3,8 +3,8 @@
 namespace Serenata\UserInterface\Command;
 
 use Serenata\Sockets\JsonRpcQueue;
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Command that cancels an open request.
@@ -27,7 +27,7 @@ final class CancelRequestCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 

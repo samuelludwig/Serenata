@@ -9,12 +9,12 @@ interface JsonRpcRequestHandlerInterface
 {
     /**
      * @param JsonRpcRequest                 $request
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      *
      * @return void
      */
     public function handle(
         JsonRpcRequest $request,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void;
 }

@@ -28,10 +28,10 @@ final class JsonRpcRequestPriorityDeterminer implements JsonRpcRequestPriorityDe
             return JsonRpcQueueItemPriority::CRITICAL;
         } elseif ($name === 'index') {
             return JsonRpcQueueItemPriority::LOW;
-        } elseif ($name === 'echoResponse') {
+        } elseif ($name === 'echoMessage') {
             // Responses should never be sent sooner or much later than their matching reindex request as they notify
             // of progress. Lower priority would mean all reindex requests are processed before notifications are sent
-            // and higher would mean the other way around. This is not that great a solution as echoResponse could
+            // and higher would mean the other way around. This is not that great a solution as echoMessage could
             // theoretically also be used by other commands.
             // FIXME: Requests should have a settable priority so the one scheduling these notifications can assign the
             // same priority as the original request - or it just needs to be rewritten to schedule these with a higher

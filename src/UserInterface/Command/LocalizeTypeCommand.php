@@ -13,6 +13,7 @@ use Serenata\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Command that makes a FQCN relative to local use statements in a file.
@@ -44,7 +45,7 @@ final class LocalizeTypeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 

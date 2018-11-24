@@ -66,7 +66,7 @@ final class JsonRpcQueue
 
             return new JsonRpcQueueItem(
                 $requestQueueItem->getRequest(),
-                $requestQueueItem->getJsonRpcResponseSender(),
+                $requestQueueItem->getJsonRpcMessageSender(),
                 true
             );
         }

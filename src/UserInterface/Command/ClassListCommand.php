@@ -10,6 +10,7 @@ use Serenata\Indexing\StorageInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Command that shows a list of available classes, interfaces and traits.
@@ -51,7 +52,7 @@ final class ClassListCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 

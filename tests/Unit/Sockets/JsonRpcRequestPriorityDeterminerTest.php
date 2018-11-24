@@ -53,7 +53,7 @@ class JsonRpcRequestPriorityDeterminerTest extends TestCase
     {
         $determiner = new JsonRpcRequestPriorityDeterminer();
 
-        $request = new JsonRpcRequest(null, 'echoResponse');
+        $request = new JsonRpcRequest(null, 'echoMessage');
 
         static::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
     }

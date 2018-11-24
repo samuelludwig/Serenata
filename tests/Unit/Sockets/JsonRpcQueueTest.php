@@ -5,7 +5,7 @@ namespace Serenata\Tests\Unit\Sockets;
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 use Serenata\Sockets\JsonRpcRequestPriorityDeterminerInterface;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,7 +35,7 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $queue->push($queueItem);
@@ -52,12 +52,12 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItem1 = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $queueItem2 = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $queue->push($queueItem2, 1);
@@ -76,12 +76,12 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItemHighPriority = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $queueItemLowPriority = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $queue->push($queueItemLowPriority, 1);
@@ -100,7 +100,7 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $this->requestPriorityDeterminer->expects($this->once())->method('determine')->with($queueItem->getRequest());
@@ -119,7 +119,7 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $this->requestPriorityDeterminer->expects($this->never())->method('determine');
@@ -138,7 +138,7 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest(null, 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         static::assertTrue($queue->isEmpty());
@@ -157,7 +157,7 @@ class JsonRpcQueueTest extends TestCase
 
         $queueItem = new JsonRpcQueueItem(
             new JsonRpcRequest('theRequestId', 'test'),
-            $this->getMockBuilder(JsonRpcResponseSenderInterface::class)->getMock()
+            $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
         $queue->push($queueItem);

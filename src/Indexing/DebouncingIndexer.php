@@ -6,7 +6,7 @@ use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
  * Indexes directories and files by scheduling them to be indexed after a delay.
@@ -58,7 +58,7 @@ final class DebouncingIndexer implements IndexerInterface
     public function index(
         string $uri,
         bool $useLatestState,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         ?JsonRpcResponse $responseToSendOnCompletion = null
     ): bool {
         if (isset($this->uriTimerMap[$uri])) {
@@ -68,10 +68,10 @@ final class DebouncingIndexer implements IndexerInterface
         $callback = function (/*TimerInterface $timer*/) use (
             $uri,
             $useLatestState,
-            $jsonRpcResponseSender,
+            $jsonRpcMessageSender,
             $responseToSendOnCompletion
         ) {
-            $this->delegate->index($uri, $useLatestState, $jsonRpcResponseSender, $responseToSendOnCompletion);
+            $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender, $responseToSendOnCompletion);
 
             unset($this->uriTimerMap[$uri]);
         };

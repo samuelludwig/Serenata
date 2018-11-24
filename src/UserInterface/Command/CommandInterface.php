@@ -4,9 +4,8 @@ namespace Serenata\UserInterface\Command;
 
 use Throwable;
 
-use Serenata\Sockets\JsonRpcRequest;
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Interface for commands.
@@ -16,14 +15,14 @@ interface CommandInterface
     /**
      * Executes the command.
      *
-     * @param JsonRpcRequest $request
+     * @param JsonRpcQueueItem $queueItem
      *
      * @throws Throwable                 when procesing the request fails.
      * @throws InvalidArgumentsException when the request is invalid or otherwise invalid arguments were passed.
      *
-     * @return JsonRpcResponse|null Either a response or null to not send any response (in that case the command MUST
-     *                              manually send a response to the request if appropriate, or queue a new request that
-     *                              will do so).
+     * @return JsonRpcMessageInterface|null A message (e.g. a response) or null to not send any. In the latter case
+     *                                      the command should usually manually send a response to the request itself or
+     *                                      schedule one to be sent at a later time (e.g. via the echoMessage request).
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse;
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface;
 }

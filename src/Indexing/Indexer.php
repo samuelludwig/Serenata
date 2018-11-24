@@ -13,7 +13,7 @@ use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
@@ -95,7 +95,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
     public function index(
         string $uri,
         bool $useLatestState,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         ?JsonRpcResponse $responseToSendOnCompletion = null
     ): bool {
         $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
@@ -114,7 +114,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
                 $uri,
                 $workspace->getConfiguration()->getFileExtensions(),
                 $workspace->getConfiguration()->getExcludedPathExpressions(),
-                $jsonRpcResponseSender,
+                $jsonRpcMessageSender,
                 $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
             );
         } elseif (is_file($uri)) {
@@ -136,11 +136,11 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
         //
         // This request will not be queued for file reindex requests that are the result of the demuxing as those
         // don't have an originating request ID.
-        $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoResponse', [
-            'response' => $responseToSendOnCompletion,
+        $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoMessage', [
+            'message' => $responseToSendOnCompletion,
         ]);
 
-        $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcResponseSender));
+        $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcMessageSender));
 
         return true;
     }
@@ -149,21 +149,21 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
      * @param string                         $uri
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      * @param int|string|null                $requestId
      */
     private function indexDirectory(
         string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         $requestId
     ): void {
         $this->directoryIndexRequestDemuxer->index(
             $uri,
             $extensionsToIndex,
             $globsToExclude,
-            $jsonRpcResponseSender,
+            $jsonRpcMessageSender,
             $requestId
         );
     }

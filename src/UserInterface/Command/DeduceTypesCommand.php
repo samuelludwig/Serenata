@@ -8,6 +8,7 @@ use Serenata\Common\Position;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
@@ -44,7 +45,7 @@ final class DeduceTypesCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 

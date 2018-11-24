@@ -13,7 +13,8 @@ use Serenata\Indexing\StorageVersionChecker;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcResponseSenderInterface;
+use Serenata\Sockets\JsonRpcMessageInterface;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\SaveOptions;
 use Serenata\Utility\InitializeParams;
@@ -98,7 +99,7 @@ final class InitializeCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $params = $queueItem->getRequest()->getParams();
 
@@ -108,7 +109,7 @@ final class InitializeCommand extends AbstractCommand
 
         return $this->initialize(
             $this->createInitializeParamsFromRawArray($params),
-            $queueItem->getJsonRpcResponseSender(),
+            $queueItem->getJsonRpcMessageSender(),
             $queueItem->getRequest()
         );
     }
@@ -133,7 +134,7 @@ final class InitializeCommand extends AbstractCommand
 
     /**
      * @param InitializeParams               $initializeParams
-     * @param JsonRpcResponseSenderInterface $jsonRpcResponseSender
+     * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      * @param JsonRpcRequest                 $jsonRpcRequest
      * @param bool                           $initializeIndexForProject
      *
@@ -143,7 +144,7 @@ final class InitializeCommand extends AbstractCommand
      */
     public function initialize(
         InitializeParams $initializeParams,
-        JsonRpcResponseSenderInterface $jsonRpcResponseSender,
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         JsonRpcRequest $jsonRpcRequest,
         bool $initializeIndexForProject = true
     ): ?JsonRpcResponse {
@@ -177,7 +178,7 @@ final class InitializeCommand extends AbstractCommand
                 $this->indexer->index(
                     'file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/',
                     false,
-                    $jsonRpcResponseSender,
+                    $jsonRpcMessageSender,
                     null
                 );
             }
@@ -228,7 +229,7 @@ final class InitializeCommand extends AbstractCommand
 
         // This indexing will rend the response by itself when it is fully finished. This ensures that the
         // initialization does not complete until the initial index has occurred.
-        $this->indexer->index($rootUri, false, $jsonRpcResponseSender, $response);
+        $this->indexer->index($rootUri, false, $jsonRpcMessageSender, $response);
 
         return null;
     }

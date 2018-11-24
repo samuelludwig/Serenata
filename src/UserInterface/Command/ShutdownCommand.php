@@ -8,6 +8,7 @@ use Serenata\Indexing\ManagerRegistry;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Workspace\ActiveWorkspaceManager;
 
@@ -49,7 +50,7 @@ final class ShutdownCommand extends AbstractCommand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcResponse
+    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
     {
         $this->shutdown();
 
