@@ -10,8 +10,6 @@ use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcResponseSenderInterface;
 
-use Serenata\Utility\FileChangeType;
-
 /**
  * Indexes directories by generating one or more file index requests for each encountered file.
  */
