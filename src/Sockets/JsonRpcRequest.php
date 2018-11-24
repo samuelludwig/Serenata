@@ -94,7 +94,12 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
      */
     public static function createFromArray(array $array)
     {
-        return new static($array['id'] ?? null, $array['method'], $array['params'], $array['jsonrpc']);
+        return new static(
+            array_key_exists('id', $array) ? $array['id'] : null,
+            $array['method'],
+            $array['params'],
+            $array['jsonrpc']
+        );
     }
 
     /**
