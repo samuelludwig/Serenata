@@ -6,7 +6,6 @@ use SplFileInfo;
 
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
@@ -99,12 +98,11 @@ final class DirectoryIndexRequestDemuxer
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
         $request = new JsonRpcRequest(null, 'echoMessage', [
-            'message' => new JsonRpcResponse(null, [
-                'type'      => 'reindexProgressInformation',
-                'requestId' => $originatingRequestId,
-                'index'     => $index,
-                'total'     => $total,
-                'progress'  => ($index / $total) * 100,
+            'message' => new JsonRpcRequest(null, 'serenata/didProgressIndexing', [
+                'originatingRequestId'  => $originatingRequestId,
+                'sequenceOfIndexedItem' => $index,
+                'totalItemsToIndex'     => $total,
+                'progressPercentage'    => ($index / $total) * 100,
             ]),
         ]);
 
