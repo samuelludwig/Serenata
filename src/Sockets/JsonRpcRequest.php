@@ -2,7 +2,6 @@
 
 namespace Serenata\Sockets;
 
-use JsonSerializable;
 use UnexpectedValueException;
 
 /**
@@ -10,7 +9,7 @@ use UnexpectedValueException;
  *
  * Value object.
  */
-final class JsonRpcRequest implements JsonSerializable
+final class JsonRpcRequest implements JsonRpcMessageInterface
 {
     /**
      * @var string

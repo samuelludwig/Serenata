@@ -2,14 +2,12 @@
 
 namespace Serenata\Sockets;
 
-use JsonSerializable;
-
 /**
  * A response in JSON-RPC 2.0 format.
  *
  * Value object.
  */
-final class JsonRpcResponse implements JsonSerializable
+final class JsonRpcResponse implements JsonRpcMessageInterface
 {
     /**
      * @var string
