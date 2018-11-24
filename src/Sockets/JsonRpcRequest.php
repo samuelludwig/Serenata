@@ -125,11 +125,18 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
      */
     public function jsonSerialize()
     {
-        return [
+        $data = [
             'jsonrpc' => $this->getJsonrpc(),
-            'id'      => $this->getId(),
             'method'  => $this->getMethod(),
             'params'  => $this->getParams(),
         ];
+
+        // NOTE: Some client implementations (e.g. atom-languageclient) treat a request with an explicit null value for
+        // the ID as an actual request instead of a notification, so omit it completely.
+        if ($this->getId() !== null) {
+            $data['id'] = $this->getId();
+        }
+
+        return $data;
     }
 }
