@@ -19,7 +19,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Command that shows autocompletion suggestions at a specific location.
  */
-class CompletionCommand extends AbstractCommand
+final class CompletionCommand extends AbstractCommand
 {
     /**
      * @var AutocompletionProviderInterface
