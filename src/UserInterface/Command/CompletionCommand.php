@@ -58,12 +58,6 @@ class CompletionCommand extends AbstractCommand
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        echo json_encode($this->getSuggestions(
-            $parameters['textDocument']['uri'],
-            $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
-            new Position($parameters['position']['line'], $parameters['position']['character'])
-        ));
-
         return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getSuggestions(
             $parameters['textDocument']['uri'],
             $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
