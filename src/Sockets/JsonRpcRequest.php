@@ -2,6 +2,7 @@
 
 namespace Serenata\Sockets;
 
+use TypeError;
 use UnexpectedValueException;
 
 /**
@@ -94,12 +95,23 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
      */
     public static function createFromArray(array $array)
     {
-        return new static(
-            array_key_exists('id', $array) ? $array['id'] : null,
-            $array['method'],
-            $array['params'],
-            $array['jsonrpc']
-        );
+        try {
+            $object = new static(
+                array_key_exists('id', $array) ? $array['id'] : null,
+                $array['method'],
+                $array['params'],
+                $array['jsonrpc']
+            );
+        } catch (TypeError $e) {
+            throw new UnexpectedValueException(
+                'Specified data does not contain data expected for a JSON-RPC request, the data sent was: "' .
+                json_encode($array) .'"',
+                0,
+                $e
+            );
+        }
+
+        return $object;
     }
 
     /**
