@@ -43,7 +43,6 @@
 - In output data of extension commands (non-LSP commands), "filename" was renamed to "uri" and is now an actual URI instead of just a path
 - "workspace/didChangeWatchedFiles" is implemented
     - Also supports handling notifications of removed files, which should fix classes remaining in index after file removal
-        - TODO: Test this properly
 - Drop "extraData" from autocompletion suggestions
 - Autocompletion suggestions "detail" now also include protection level and type information (#218?)
 - Autocompletion suggestion kinds are now numeric and follow the values prescribed by the LSP
