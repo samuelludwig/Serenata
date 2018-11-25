@@ -91,18 +91,6 @@ final class JsonRpcResponse implements JsonRpcMessageInterface
     }
 
     /**
-     * @param string $json
-     *
-     * @return static
-     */
-    public static function createFromJson(string $json)
-    {
-        $data = json_decode($this->request['content'], true);
-
-        return static::createFromArray($data);
-    }
-
-    /**
      * @inheritDoc
      */
     public function jsonSerialize()
