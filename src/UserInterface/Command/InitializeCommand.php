@@ -227,7 +227,7 @@ final class InitializeCommand extends AbstractCommand
             return $response;
         }
 
-        // This indexing will rend the response by itself when it is fully finished. This ensures that the
+        // This indexing will send the response by itself when it is fully finished. This ensures that the
         // initialization does not complete until the initial index has occurred.
         $this->indexer->index($rootUri, false, $jsonRpcMessageSender, $response);
 
