@@ -139,6 +139,10 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('signatureHelpCommand');
             } elseif ($method === 'textDocument/documentSymbol') {
                 return $this->container->get('documentSymbolCommand');
+            } elseif ($method === 'serenata/deprecated/getClassInfo') {
+                return $this->container->get('classInfoCommand');
+            } elseif ($method === 'serenata/deprecated/getClassListForFile') {
+                return $this->container->get('classListCommand');
             } elseif ($method === '$/cancelRequest') {
                 return $this->container->get('cancelRequestCommand');
             }

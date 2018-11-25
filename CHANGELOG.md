@@ -38,6 +38,8 @@
 - "cancel" is now called "$/cancelRequest" as per LSP
 - "textDocument/didChange" is implemented
 - "textDocument/didSave" is implemented
+- "classInfo" is now "serenata/deprecated/getClassInfo"
+- "classList" is now "serenata/deprecated/getClassListForFile"
 - "reindexProgressInformation" was renamed to "serenata/didProgressIndexing" and is now follows the notification instead of the response format
     - TODO: Should document that this custom notification exists on the wiki
 - In output data of extension commands (non-LSP commands), "filename" was renamed to "uri" and is now an actual URI instead of just a path
