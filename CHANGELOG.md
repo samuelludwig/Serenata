@@ -1,5 +1,6 @@
 ## 5.0.0 (Unreleased)
 ### Improvements
+* PHP 7.3 support
 * [Major](https://gitlab.com/Serenata/Serenata/issues/113) [internal](https://gitlab.com/Serenata/Serenata/issues/111) refactoring work to becoming more compliant with the language server protocol
     * Use `TextDocumentItem` almost everywhere instead of using a `File` entity
     * [Use (language server) positions with character offsets in almost all places rather than old byte offsets](https://gitlab.com/Serenata/Serenata/issues/217)
