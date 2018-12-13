@@ -492,6 +492,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        static::assertNotNull($result);
         static::assertSame(1, count($result));
 
         $result = array_shift($result);
