@@ -143,6 +143,16 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('classInfoCommand');
             } elseif ($method === 'serenata/deprecated/getClassListForFile') {
                 return $this->container->get('classListCommand');
+            } elseif ($method === 'serenata/deprecated/deduceTypes') {
+                return $this->container->get('deduceTypesCommand');
+            } elseif ($method === 'serenata/deprecated/getGlobalConstants') {
+                return $this->container->get('globalConstantsCommand');
+            } elseif ($method === 'serenata/deprecated/getGlobalFunctions') {
+                return $this->container->get('globalFunctionsCommand');
+            } elseif ($method === 'serenata/deprecated/resolveType') {
+                return $this->container->get('resolveTypeCommand');
+            } elseif ($method === 'serenata/deprecated/localizeType') {
+                return $this->container->get('localizeTypeCommand');
             } elseif ($method === '$/cancelRequest') {
                 return $this->container->get('cancelRequestCommand');
             }
