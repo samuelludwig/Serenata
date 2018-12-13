@@ -1,14 +1,15 @@
 <?php
 
-namespace Serenata\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\Analysis;
 
 use Serenata\Common\Position;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\PositionEncoding;
+use Serenata\Utility\TextDocumentItem;
 
-class AvailableVariablesCommandTest extends AbstractIntegrationTest
+class VariableScannerTest extends AbstractIntegrationTest
 {
     /**
      * @return void
@@ -131,7 +132,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
         $this->indexTestFile($container, $fullPath);
         $code = $container->get('sourceCodeStreamReader')->getSourceCodeFromFile($fullPath);
 
-        $command = $container->get('availableVariablesCommand');
+        $scanner = $container->get('variableScanner');
 
         $i = 1;
         $markerOffsets = [];
@@ -146,7 +147,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
             $markerOffsets[$i++] = $markerOffset;
         }
 
-        $doMarkerTest = function ($markerNumber, array $variableNames) use ($command, $fullPath, $markerOffsets, $code) {
+        $doMarkerTest = function ($markerNumber, array $variableNames) use ($scanner, $fullPath, $markerOffsets, $code) {
             $list = [];
 
             foreach ($variableNames as $variableName) {
@@ -155,9 +156,8 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
 
             static::assertSame(
                 $list,
-                $command->getAvailableVariables(
-                    $fullPath,
-                    file_get_contents($fullPath),
+                $scanner->getAvailableVariables(
+                    new TextDocumentItem($fullPath, file_get_contents($fullPath)),
                     Position::createFromByteOffset($markerOffsets[$markerNumber], $code, PositionEncoding::VALUE)
                 )
             );
@@ -210,7 +210,7 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $name): string
     {
-        return 'file:///' . __DIR__ . '/AvailableVariablesCommandTest/' . $name;
+        return 'file:///' . __DIR__ . '/VariableScannerTest/' . $name;
     }
 
     /**
@@ -236,9 +236,8 @@ class AvailableVariablesCommandTest extends AbstractIntegrationTest
 
         $this->indexTestFileWithSource($container, $path, $code);
 
-        return $container->get('availableVariablesCommand')->getAvailableVariables(
-            $path,
-            $code,
+        return $container->get('variableScanner')->getAvailableVariables(
+            new TextDocumentItem($file, $code),
             Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE)
         );
     }
