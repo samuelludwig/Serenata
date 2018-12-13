@@ -29,6 +29,10 @@ build:php-7.2:
     image: php:7.2-cli-alpine
     <<: *build-job-shared
 
+build:php-7.3:
+    image: php:7.3-cli-alpine
+    <<: *build-job-shared
+
 # ----- Test stage
 .test-run-phpunit: &test-run-phpunit
     script:
@@ -50,9 +54,15 @@ test:php-7.2:
     dependencies:
         - build:php-7.2
 
+test:php-7.3:
+    image: php:7.3-cli-alpine
+    <<: *test-job-shared
+    dependencies:
+        - build:php-7.3
+
 # ----- Code quality analysis stage
 code-quality:code-coverage:
-    image: php:7.2-cli-alpine
+    image: php:7.3-cli-alpine
     stage: code-quality
     script:
         - phpdbg -d memory_limit=2048M -qrr vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
@@ -61,4 +71,4 @@ code-quality:code-coverage:
         paths:
             - coverage/
     dependencies:
-        - build:php-7.2
+        - build:php-7.3
