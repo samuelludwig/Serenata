@@ -39,6 +39,7 @@
 - "cancel" is now called "$/cancelRequest" as per LSP
 - "textDocument/didChange" is implemented
 - "textDocument/didSave" is implemented
+- "availableVariables" was removed
 - "classInfo" is now "serenata/deprecated/getClassInfo"
 - "classList" is now "serenata/deprecated/getClassListForFile"
 - "deduceTypes" is now "serenata/deprecated/deduceTypes"

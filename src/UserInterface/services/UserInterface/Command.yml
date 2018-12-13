@@ -83,12 +83,6 @@ services:
             - '@sourceCodeStreamReader'
             - '@linter'
 
-    availableVariablesCommand:
-        class: Serenata\UserInterface\Command\AvailableVariablesCommand
-        arguments:
-            - '@variableScanner'
-            - '@sourceCodeStreamReader'
-
     deduceTypesCommand:
         class: Serenata\UserInterface\Command\DeduceTypesCommand
         arguments:
