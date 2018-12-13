@@ -5,7 +5,7 @@ namespace Serenata\Parsing;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
-use League\HTMLToMarkdown\HtmlConverter;
+use League\HTMLToMarkdown\HtmlConverterInterface;
 
 use Serenata\Analysis\DocblockAnalyzer;
 
@@ -116,19 +116,19 @@ class DocblockParser
     private $docblockTypeParser;
 
     /**
-     * @var HtmlConverter
+     * @var HtmlConverterInterface
      */
     private $htmlToMarkdownConverter;
 
     /**
      * @param DocblockAnalyzer            $docblockAnalyzer
      * @param DocblockTypeParserInterface $docblockTypeParser
-     * @param HtmlConverter               $htmlToMarkdownConverter
+     * @param HtmlConverterInterface      $htmlToMarkdownConverter
      */
     public function __construct(
         DocblockAnalyzer $docblockAnalyzer,
         DocblockTypeParserInterface $docblockTypeParser,
-        HtmlConverter $htmlToMarkdownConverter
+        HtmlConverterInterface $htmlToMarkdownConverter
     ) {
         $this->docblockAnalyzer = $docblockAnalyzer;
         $this->docblockTypeParser = $docblockTypeParser;

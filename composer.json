@@ -13,7 +13,7 @@
         "doctrine/orm": "^2.6",
         "evenement/evenement": "^3.0",
         "jetbrains/phpstorm-stubs": "dev-master",
-        "league/html-to-markdown": "^4.7",
+        "league/html-to-markdown": "^4.8",
         "nikic/php-parser": "^4.1",
         "php-ds/php-ds": "^1.2",
         "react/socket": "^1.0",
