@@ -106,11 +106,17 @@ services:
             - '@textDocumentContentRegistry'
             - '@activeWorkspaceManager'
 
+    diagnosticsSchedulingIndexer:
+        class: Serenata\Indexing\DiagnosticsSchedulingIndexer
+        arguments:
+            - '@indexer'
+            - '@requestQueue'
+
     debouncingIndexer:
         class: Serenata\Indexing\DebouncingIndexer
         arguments:
             - '@eventLoop'
-            - '@indexer'
+            - '@diagnosticsSchedulingIndexer'
 
     textDocumentContentRegistry:
         class: Serenata\Indexing\TextDocumentContentRegistry

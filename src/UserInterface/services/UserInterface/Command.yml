@@ -77,11 +77,11 @@ services:
             - '@storage'
             - '@positionalNameLocalizerFactory'
 
-    lintCommand:
-        class: Serenata\UserInterface\Command\LintCommand
+    diagnosticsCommand:
+        class: Serenata\UserInterface\Command\DiagnosticsCommand
         arguments:
-            - '@sourceCodeStreamReader'
             - '@linter'
+            - '@textDocumentContentRegistry'
 
     deduceTypesCommand:
         class: Serenata\UserInterface\Command\DeduceTypesCommand

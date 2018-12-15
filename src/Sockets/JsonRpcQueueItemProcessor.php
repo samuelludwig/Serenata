@@ -150,6 +150,8 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('echoMessageCommand');
             } elseif ($method === 'serenata/internal/index') {
                 return $this->container->get('indexCommand');
+            } elseif ($method === 'serenata/internal/diagnostics') {
+                return $this->container->get('diagnosticsCommand');
             } elseif ($method === 'serenata/deprecated/getClassInfo') {
                 return $this->container->get('classInfoCommand');
             } elseif ($method === 'serenata/deprecated/getClassListForFile') {

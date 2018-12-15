@@ -150,7 +150,7 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function indexPath(ContainerBuilder $container, string $testPath, bool $mayFail = false): void
     {
-        $this->indexUriViaIndexer($container->get('indexer'), $testPath, null, $mayFail);
+        $this->indexUriViaIndexer($container->get('diagnosticsSchedulingIndexer'), $testPath, null, $mayFail);
     }
 
     /**
@@ -225,7 +225,7 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function indexTestFileWithSource(ContainerBuilder $container, string $path, string $source): void
     {
-        $indexer = $container->get('indexer');
+        $indexer = $container->get('diagnosticsSchedulingIndexer');
 
         $this->indexUriViaIndexer($indexer, $path, $source);
     }
@@ -247,7 +247,7 @@ abstract class AbstractIntegrationTest extends TestCase
 
             $sourceCodeStreamReader = $this->container->get('sourceCodeStreamReader');
 
-            $indexer = $this->container->get('indexer');
+            $indexer = $this->container->get('diagnosticsSchedulingIndexer');
 
             $this->indexUriViaIndexer($indexer, $path);
 
