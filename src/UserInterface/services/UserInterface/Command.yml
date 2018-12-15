@@ -14,7 +14,7 @@ services:
             - '@workspaceConfigurationJsonParser'
             - '@managerRegistry'
             - '@storageVersionChecker'
-            - '@indexer'
+            - '@backendIndexer'
             - '@schemaInitializer'
             - '@indexFilePruner'
 
@@ -135,4 +135,4 @@ services:
     indexCommand:
         class: Serenata\UserInterface\Command\IndexCommand
         arguments:
-            - '@indexer'
+            - '@backendIndexer'

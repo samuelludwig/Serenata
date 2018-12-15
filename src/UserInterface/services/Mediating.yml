@@ -16,7 +16,7 @@ services:
         class: Serenata\Mediating\CacheClearingEventMediator
         arguments:
             - '@cacheClearingEventMediator.clearableCache'
-            - '@indexer'
+            - '@backendIndexer'
             - !php/const Serenata\Indexing\IndexingEventName::INDEXING_SUCCEEDED_EVENT
 
     cacheClearingEventMediator2:

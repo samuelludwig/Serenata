@@ -95,7 +95,7 @@ services:
     fileIndexer:
         alias: unmodifiedFileSkippingIndexer
 
-    indexer:
+    backendIndexer:
         class: Serenata\Indexing\Indexer
         arguments:
             - '@requestQueue'
@@ -109,7 +109,7 @@ services:
     diagnosticsSchedulingIndexer:
         class: Serenata\Indexing\DiagnosticsSchedulingIndexer
         arguments:
-            - '@indexer'
+            - '@backendIndexer'
             - '@requestQueue'
 
     debouncingIndexer:
