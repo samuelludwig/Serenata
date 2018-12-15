@@ -157,6 +157,7 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('cancelRequestCommand');
             }
 
+            // TODO: This should be disabled, we don't want anyone accessing internal commands or requests.
             return $this->container->get($method . 'Command');
         } catch (NotFoundExceptionInterface $e) {
             throw new RequestParsingException('Method "' . $method . '" was not found');
