@@ -5,7 +5,7 @@ namespace Serenata\Tests\Integration;
 use Closure;
 use ReflectionClass;
 
-use Serenata\Indexing\Indexer;
+use Serenata\Indexing\IndexerInterface;
 
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
@@ -154,15 +154,15 @@ abstract class AbstractIntegrationTest extends TestCase
     }
 
     /**
-     * @param Indexer     $indexer
-     * @param string      $uri
-     * @param string|null $source
-     * @param bool        $mayFail
+     * @param IndexerInterface $indexer
+     * @param string           $uri
+     * @param string|null      $source
+     * @param bool             $mayFail
      *
      * @return void
      */
     protected function indexUriViaIndexer(
-        Indexer $indexer,
+        IndexerInterface $indexer,
         string $uri,
         ?string $source = null,
         bool $mayFail = false
