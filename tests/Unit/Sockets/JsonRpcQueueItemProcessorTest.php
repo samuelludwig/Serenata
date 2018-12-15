@@ -38,6 +38,11 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     private $jsonRpcMessageSenderMock;
 
     /**
+     * @var string
+     */
+    private $testMethod;
+
+    /**
      * @var MockObject
      */
     private $commandMock;
@@ -75,7 +80,8 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             new WorkspaceConfiguration('test-id', [], 7.1, [], [])
         ));
 
-        $this->containerMock->method('get')->with('testCommand')->willReturn($this->commandMock);
+        $this->testMethod = '$/cancelRequest';
+        $this->containerMock->method('get')->with('cancelRequestCommand')->willReturn($this->commandMock);
 
         $this->jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor(
             $this->containerMock,
@@ -89,7 +95,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     public function testRelaysItemToAppropriateCommand(): void
     {
         $queueItem = new JsonRpcQueueItem(
-            new JsonRpcRequest('theRequestId', 'test'),
+            new JsonRpcRequest('theRequestId', $this->testMethod),
             $this->jsonRpcResponseSenderMock
         );
 
@@ -112,7 +118,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     public function testSendsGenericRuntimeErrorWhenRuntimeExceptionOccursDuringCommandRequestHandling(): void
     {
         $queueItem = new JsonRpcQueueItem(
-            new JsonRpcRequest('theRequestId', 'test'),
+            new JsonRpcRequest('theRequestId', $this->testMethod),
             $this->jsonRpcResponseSenderMock
         );
 
@@ -138,7 +144,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     public function testSendsFatalServerErrorWhenFatalExceptionOccursDuringCommandRequestHandling(): void
     {
         $queueItem = new JsonRpcQueueItem(
-            new JsonRpcRequest('theRequestId', 'test'),
+            new JsonRpcRequest('theRequestId', $this->testMethod),
             $this->jsonRpcResponseSenderMock
         );
 
@@ -164,7 +170,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     public function testSendsErrorWithCancelledCodeIfRequestWasCancelled(): void
     {
         $queueItem = new JsonRpcQueueItem(
-            new JsonRpcRequest('theRequestId', 'test'),
+            new JsonRpcRequest('theRequestId', $this->testMethod),
             $this->jsonRpcResponseSenderMock,
             true
         );
