@@ -124,7 +124,13 @@ class JsonRpcQueueItemProcessor
             // TODO: Make a map of request names to service names and create a class that retrieves the appropriate
             // handler for a request method that uses it.
             // TODO: Rename "Command" to "RequestHandler" or similar.
-            if ($method === 'workspace/didChangeWatchedFiles') {
+            if ($method === 'initialize') {
+                return $this->container->get('initializeCommand');
+            } elseif ($method === 'initialized') {
+                return $this->container->get('initializedCommand');
+            } elseif ($method === 'exit') {
+                return $this->container->get('exitCommand');
+            } elseif ($method === 'workspace/didChangeWatchedFiles') {
                 return $this->container->get('didChangeWatchedFilesCommand');
             } elseif ($method === 'textDocument/didChange') {
                 return $this->container->get('didChangeCommand');
@@ -140,6 +146,10 @@ class JsonRpcQueueItemProcessor
                 return $this->container->get('signatureHelpCommand');
             } elseif ($method === 'textDocument/documentSymbol') {
                 return $this->container->get('documentSymbolCommand');
+            } elseif ($method === 'serenata/internal/echoMessage') {
+                return $this->container->get('echoMessageCommand');
+            } elseif ($method === 'serenata/internal/index') {
+                return $this->container->get('indexCommand');
             } elseif ($method === 'serenata/deprecated/getClassInfo') {
                 return $this->container->get('classInfoCommand');
             } elseif ($method === 'serenata/deprecated/getClassListForFile') {

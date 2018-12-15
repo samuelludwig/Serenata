@@ -136,7 +136,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
         //
         // This request will not be queued for file reindex requests that are the result of the demuxing as those
         // don't have an originating request ID.
-        $delayedIndexFinishRequest = new JsonRpcRequest(null, 'echoMessage', [
+        $delayedIndexFinishRequest = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
             'message' => $responseToSendOnCompletion,
         ]);
 

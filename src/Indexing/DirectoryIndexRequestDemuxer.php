@@ -76,7 +76,7 @@ final class DirectoryIndexRequestDemuxer
         SplFileInfo $fileInfo,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
-        $request = new JsonRpcRequest(null, 'index', [
+        $request = new JsonRpcRequest(null, 'serenata/internal/index', [
             'textDocument' => [
                 'uri'  => $fileInfo->getPathname(),
             ],
@@ -97,7 +97,7 @@ final class DirectoryIndexRequestDemuxer
         int $total,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
-        $request = new JsonRpcRequest(null, 'echoMessage', [
+        $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
             'message' => new JsonRpcRequest(null, 'serenata/didProgressIndexing', [
                 'originatingRequestId'  => $originatingRequestId,
                 'sequenceOfIndexedItem' => $index,
