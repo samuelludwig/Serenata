@@ -55,8 +55,8 @@ final class DidChangeCommand extends AbstractCommand
     }
 
     /**
-     * @param string                         $uri
-     * @param string                         $contents
+     * @param string                        $uri
+     * @param string                        $contents
      * @param JsonRpcMessageSenderInterface $sender
      */
     public function handle(string $uri, string $contents, JsonRpcMessageSenderInterface $sender): void
