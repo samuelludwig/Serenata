@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 abstract class AbstractApplication
 {
     /**
-     * @var ContainerBuilder
+     * @var ContainerBuilder|null
      */
     private $container;
 
