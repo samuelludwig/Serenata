@@ -70,9 +70,9 @@ abstract class AbstractApplication
         $container
             ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)
             ->setArguments([])
-            ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $configurableDelegatingNodeTypeDeducer) use ($container) {
+            ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $deducer) use ($container) {
                 // Avoid circular references due to two-way object usage.
-                $configurableDelegatingNodeTypeDeducer->setNodeTypeDeducer($container->get('nodeTypeDeducer.instance'));
+                $deducer->setNodeTypeDeducer($container->get('nodeTypeDeducer.instance'));
             });
     }
 
