@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Integration\UserInterface\Command;
+namespace Serenata\Tests\Integration\Linting;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
