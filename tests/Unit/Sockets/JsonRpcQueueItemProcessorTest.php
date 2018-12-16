@@ -35,7 +35,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     /**
      * @var MockObject
      */
-    private $jsonRpcMessageSenderMock;
+    private $jsonRpcResponseSenderMock;
 
     /**
      * @var string
