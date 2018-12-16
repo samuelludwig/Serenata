@@ -1,5 +1,5 @@
 imports:
-    - { resource: UserInterface/Command.yml }
+    - { resource: UserInterface/JsonRpcQueueItemHandler.yml }
 
 parameters:
 

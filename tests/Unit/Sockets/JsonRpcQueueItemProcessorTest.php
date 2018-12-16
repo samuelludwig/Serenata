@@ -16,7 +16,7 @@ use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcQueueItemProcessor;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
-use Serenata\UserInterface\Command\CommandInterface;
+use Serenata\UserInterface\JsonRpcQueueItemHandler\JsonRpcQueueItemHandlerInterface;
 
 use Serenata\UserInterface\JsonRpcQueueItemHandlerFactoryInterface;
 
@@ -78,7 +78,7 @@ class JsonRpcQueueItemProcessorTest extends TestCase
             ->setMethods(['send'])
             ->getMock();
 
-        $this->commandMock = $this->getMockBuilder(CommandInterface::class)
+        $this->commandMock = $this->getMockBuilder(JsonRpcQueueItemHandlerInterface::class)
             ->setMethods(['execute'])
             ->getMock();
 

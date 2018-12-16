@@ -10,7 +10,7 @@ interface JsonRpcQueueItemHandlerFactoryInterface
     /**
      * @param string $method
      *
-     * @return Command\CommandInterface
+     * @return JsonRpcQueueItemHandler\JsonRpcQueueItemHandlerInterface
      */
-    public function create(string $method): Command\CommandInterface;
+    public function create(string $method): JsonRpcQueueItemHandler\JsonRpcQueueItemHandlerInterface;
 }

@@ -9,9 +9,9 @@ use Ds\Vector;
 
 use Serenata\Indexing\IncorrectDatabaseVersionException;
 
-use Serenata\UserInterface\Command;
+use Serenata\UserInterface\JsonRpcQueueItemHandler;
 
-use Serenata\UserInterface\Command\InvalidArgumentsException;
+use Serenata\UserInterface\JsonRpcQueueItemHandler\InvalidArgumentsException;
 
 use Serenata\UserInterface\JsonRpcQueueItemHandlerFactoryInterface;
 
@@ -74,7 +74,7 @@ class JsonRpcQueueItemProcessor
                 $message = $this->handle($queueItem);
             } catch (RequestParsingException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-            } catch (Command\InvalidArgumentsException $e) {
+            } catch (JsonRpcQueueItemHandler\InvalidArgumentsException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
             } catch (IncorrectDatabaseVersionException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());

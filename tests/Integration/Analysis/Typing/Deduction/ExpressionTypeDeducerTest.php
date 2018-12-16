@@ -1082,7 +1082,7 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
      */
     public function testThrowsExceptionWhenFileIsNotInIndex(): void
     {
-        $command = $this->container->get('deduceTypesCommand');
+        $command = $this->container->get('deduceTypesJsonRpcQueueItemHandler');
 
         $this->expectException(FileNotFoundStorageException::class);
 

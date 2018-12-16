@@ -29,31 +29,31 @@ final class JsonRpcQueueItemHandlerFactory implements JsonRpcQueueItemHandlerFac
     /**
      * @inheritDoc
      */
-    public function create(string $method): Command\CommandInterface
+    public function create(string $method): JsonRpcQueueItemHandler\JsonRpcQueueItemHandlerInterface
     {
         $methodServiceNameMap = [
-            'initialize'                              => 'initializeCommand',
-            'initialized'                             => 'initializedCommand',
-            'exit'                                    => 'exitCommand',
-            'workspace/didChangeWatchedFiles'         => 'didChangeWatchedFilesCommand',
-            'textDocument/didChange'                  => 'didChangeCommand',
-            'textDocument/didSave'                    => 'didSaveCommand',
-            'textDocument/completion'                 => 'completionCommand',
-            'textDocument/hover'                      => 'hoverCommand',
-            'textDocument/definition'                 => 'definitionCommand',
-            'textDocument/signatureHelp'              => 'signatureHelpCommand',
-            'textDocument/documentSymbol'             => 'documentSymbolCommand',
-            'serenata/internal/echoMessage'           => 'echoMessageCommand',
-            'serenata/internal/index'                 => 'indexCommand',
-            'serenata/internal/diagnostics'           => 'diagnosticsCommand',
-            'serenata/deprecated/getClassInfo'        => 'classInfoCommand',
-            'serenata/deprecated/getClassListForFile' => 'classListCommand',
-            'serenata/deprecated/deduceTypes'         => 'deduceTypesCommand',
-            'serenata/deprecated/getGlobalConstants'  => 'globalConstantsCommand',
-            'serenata/deprecated/getGlobalFunctions'  => 'globalFunctionsCommand',
-            'serenata/deprecated/resolveType'         => 'resolveTypeCommand',
-            'serenata/deprecated/localizeType'        => 'localizeTypeCommand',
-            '$/cancelRequest'                         => 'cancelRequestCommand',
+            'initialize'                              => 'initializeJsonRpcQueueItemHandler',
+            'initialized'                             => 'initializedJsonRpcQueueItemHandler',
+            'exit'                                    => 'exitJsonRpcQueueItemHandler',
+            'workspace/didChangeWatchedFiles'         => 'didChangeWatchedFilesJsonRpcQueueItemHandler',
+            'textDocument/didChange'                  => 'didChangeJsonRpcQueueItemHandler',
+            'textDocument/didSave'                    => 'didSaveJsonRpcQueueItemHandler',
+            'textDocument/completion'                 => 'completionJsonRpcQueueItemHandler',
+            'textDocument/hover'                      => 'hoverJsonRpcQueueItemHandler',
+            'textDocument/definition'                 => 'definitionJsonRpcQueueItemHandler',
+            'textDocument/signatureHelp'              => 'signatureHelpJsonRpcQueueItemHandler',
+            'textDocument/documentSymbol'             => 'documentSymbolJsonRpcQueueItemHandler',
+            'serenata/internal/echoMessage'           => 'echoMessageJsonRpcQueueItemHandler',
+            'serenata/internal/index'                 => 'indexJsonRpcQueueItemHandler',
+            'serenata/internal/diagnostics'           => 'diagnosticsJsonRpcQueueItemHandler',
+            'serenata/deprecated/getClassInfo'        => 'classInfoJsonRpcQueueItemHandler',
+            'serenata/deprecated/getClassListForFile' => 'classListJsonRpcQueueItemHandler',
+            'serenata/deprecated/deduceTypes'         => 'deduceTypesJsonRpcQueueItemHandler',
+            'serenata/deprecated/getGlobalConstants'  => 'globalConstantsJsonRpcQueueItemHandler',
+            'serenata/deprecated/getGlobalFunctions'  => 'globalFunctionsJsonRpcQueueItemHandler',
+            'serenata/deprecated/resolveType'         => 'resolveTypeJsonRpcQueueItemHandler',
+            'serenata/deprecated/localizeType'        => 'localizeTypeJsonRpcQueueItemHandler',
+            '$/cancelRequest'                         => 'cancelRequestJsonRpcQueueItemHandler',
         ];
 
         if (!isset($methodServiceNameMap[$method])) {

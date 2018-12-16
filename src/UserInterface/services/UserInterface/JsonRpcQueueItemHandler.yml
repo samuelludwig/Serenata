@@ -1,0 +1,138 @@
+parameters:
+
+
+services:
+    cancelRequestJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\CancelRequestJsonRpcQueueItemHandler
+        arguments:
+            - '@requestQueue'
+
+    initializeJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\InitializeJsonRpcQueueItemHandler
+        arguments:
+            - '@activeWorkspaceManager'
+            - '@workspaceConfigurationJsonParser'
+            - '@managerRegistry'
+            - '@storageVersionChecker'
+            - '@backendIndexer'
+            - '@schemaInitializer'
+            - '@indexFilePruner'
+
+    initializedJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\InitializedJsonRpcQueueItemHandler
+
+    shutdownJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ShutdownJsonRpcQueueItemHandler
+        arguments:
+            - '@managerRegistry'
+            - '@activeWorkspaceManager'
+            - '@cacheClearingEventMediator.clearableCache'
+
+    exitJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ExitJsonRpcQueueItemHandler
+        arguments:
+            - '@activeWorkspaceManager'
+
+    echoMessageJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\EchoMessageJsonRpcQueueItemHandler
+
+    hoverJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\HoverJsonRpcQueueItemHandler
+        arguments:
+            - '@textDocumentContentRegistry'
+            - '@tooltipProvider'
+
+    classListJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ClassListJsonRpcQueueItemHandler
+        arguments:
+            - '@storage'
+            - '@classlikeListProvider'
+            - '@fileClasslikeListProvider.instance'
+
+    classInfoJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ClassInfoJsonRpcQueueItemHandler
+        arguments:
+            - '@typeAnalyzer'
+            - '@classlikeInfoBuilder'
+
+    globalFunctionsJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\GlobalFunctionsJsonRpcQueueItemHandler
+        arguments:
+            - '@functionListProvider'
+
+    globalConstantsJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\GlobalConstantsJsonRpcQueueItemHandler
+        arguments:
+            - '@constantListProvider'
+
+    resolveTypeJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ResolveTypeJsonRpcQueueItemHandler
+        arguments:
+            - '@storage'
+            - '@structureAwareNameResolverFactory'
+
+    localizeTypeJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\LocalizeTypeJsonRpcQueueItemHandler
+        arguments:
+            - '@storage'
+            - '@positionalNameLocalizerFactory'
+
+    diagnosticsJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DiagnosticsJsonRpcQueueItemHandler
+        arguments:
+            - '@linter'
+            - '@textDocumentContentRegistry'
+
+    deduceTypesJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DeduceTypesJsonRpcQueueItemHandler
+        arguments:
+            - '@sourceCodeStreamReader'
+            - '@expressionTypeDeducer'
+
+    signatureHelpJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\SignatureHelpJsonRpcQueueItemHandler
+        arguments:
+            - '@textDocumentContentRegistry'
+            - '@signatureHelpRetriever'
+
+    completionJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\CompletionJsonRpcQueueItemHandler
+        arguments:
+            - '@autocompletionProvider'
+            - '@textDocumentContentRegistry'
+            - '@defaultAutocompletionPrefixDeterminer'
+
+    definitionJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DefinitionJsonRpcQueueItemHandler
+        arguments:
+            - '@definitionLocator'
+            - '@textDocumentContentRegistry'
+
+    documentSymbolJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DocumentSymbolJsonRpcQueueItemHandler
+        arguments:
+            - '@storage'
+            - '@documentSymbolRetriever'
+
+    didChangeWatchedFilesJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeWatchedFilesJsonRpcQueueItemHandler
+        arguments:
+            - '@storage'
+            - '@debouncingIndexer'
+
+    didChangeJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeJsonRpcQueueItemHandler
+        arguments:
+            - '@debouncingIndexer'
+            - '@textDocumentContentRegistry'
+
+    didSaveJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidSaveJsonRpcQueueItemHandler
+        arguments:
+            - '@debouncingIndexer'
+            - '@textDocumentContentRegistry'
+
+    indexJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\IndexJsonRpcQueueItemHandler
+        arguments:
+            - '@backendIndexer'
