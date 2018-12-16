@@ -9,8 +9,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
 
-use Psr\Container\ContainerInterface;
-
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcErrorCode;
@@ -20,6 +18,10 @@ use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\UserInterface\Command\CommandInterface;
 
+use Serenata\UserInterface\JsonRpcQueueItemHandlerFactoryInterface;
+
+use Serenata\Utility\StreamInterface;
+
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 
 use Serenata\Workspace\Workspace;
@@ -28,12 +30,17 @@ use Serenata\Workspace\ActiveWorkspaceManager;
 class JsonRpcQueueItemProcessorTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var MockObject&JsonRpcQueueItemHandlerFactoryInterface
      */
-    private $containerMock;
+    private $jsonRpcQueueItemHandlerFactoryMock;
 
     /**
-     * @var MockObject
+     * @var MockObject&StreamInterface
+     */
+    private $streamMock;
+
+    /**
+     * @var MockObject&JsonRpcMessageSenderInterface
      */
     private $jsonRpcResponseSenderMock;
 
@@ -60,8 +67,11 @@ class JsonRpcQueueItemProcessorTest extends TestCase
     /// @inherited
     public function setUp()
     {
-        $this->containerMock = $this->getMockBuilder(ContainerInterface::class)
-            ->setMethods(['get', 'has'])
+        $this->jsonRpcQueueItemHandlerFactoryMock = $this
+            ->getMockBuilder(JsonRpcQueueItemHandlerFactoryInterface::class)
+            ->getMock();
+
+        $this->streamMock = $this->getMockBuilder(StreamInterface::class)
             ->getMock();
 
         $this->jsonRpcResponseSenderMock = $this->getMockBuilder(JsonRpcMessageSenderInterface::class)
@@ -81,10 +91,13 @@ class JsonRpcQueueItemProcessorTest extends TestCase
         ));
 
         $this->testMethod = '$/cancelRequest';
-        $this->containerMock->method('get')->with('cancelRequestCommand')->willReturn($this->commandMock);
+        $this->jsonRpcQueueItemHandlerFactoryMock->method('create')->with('$/cancelRequest')->willReturn(
+            $this->commandMock
+        );
 
         $this->jsonRpcQueueItemProcessor = new JsonRpcQueueItemProcessor(
-            $this->containerMock,
+            $this->jsonRpcQueueItemHandlerFactoryMock,
+            $this->streamMock,
             $this->activeWorkspaceManagerMock
         );
     }

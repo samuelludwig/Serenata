@@ -3,19 +3,19 @@
 namespace Serenata\Sockets;
 
 use Throwable;
-use LogicException;
 use RuntimeException;
 
 use Ds\Vector;
-
-use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 
 use Serenata\Indexing\IncorrectDatabaseVersionException;
 
 use Serenata\UserInterface\Command;
 
 use Serenata\UserInterface\Command\InvalidArgumentsException;
+
+use Serenata\UserInterface\JsonRpcQueueItemHandlerFactoryInterface;
+
+use Serenata\Utility\StreamInterface;
 
 use Serenata\Workspace\ActiveWorkspaceManager;
 
@@ -25,9 +25,14 @@ use Serenata\Workspace\ActiveWorkspaceManager;
 class JsonRpcQueueItemProcessor
 {
     /**
-     * @var ContainerInterface
+     * @var JsonRpcQueueItemHandlerFactoryInterface
      */
-    private $container;
+    private $jsonRpcQueueItemHandlerFactory;
+
+    /**
+     * @var StreamInterface
+     */
+    private $stdinStream;
 
     /**
      * @var ActiveWorkspaceManager
@@ -35,12 +40,17 @@ class JsonRpcQueueItemProcessor
     private $activeWorkspaceManager;
 
     /**
-     * @param ContainerInterface     $container
-     * @param ActiveWorkspaceManager $activeWorkspaceManager
+     * @param JsonRpcQueueItemHandlerFactoryInterface $jsonRpcQueueItemHandlerFactory
+     * @param StreamInterface                         $stdinStream
+     * @param ActiveWorkspaceManager                  $activeWorkspaceManager
      */
-    public function __construct(ContainerInterface $container, ActiveWorkspaceManager $activeWorkspaceManager)
-    {
-        $this->container = $container;
+    public function __construct(
+        JsonRpcQueueItemHandlerFactoryInterface $jsonRpcQueueItemHandlerFactory,
+        StreamInterface $stdinStream,
+        ActiveWorkspaceManager $activeWorkspaceManager
+    ) {
+        $this->jsonRpcQueueItemHandlerFactory = $jsonRpcQueueItemHandlerFactory;
+        $this->stdinStream = $stdinStream;
         $this->activeWorkspaceManager = $activeWorkspaceManager;
     }
 
@@ -105,75 +115,12 @@ class JsonRpcQueueItemProcessor
 
         // TODO: This should probably be handled by the commands proper at some point.
         if (isset($params['stdinData'])) {
-            $this->container->get('stdinStream')->set($params['stdinData']);
+            $this->stdinStream->set($params['stdinData']);
         }
 
-        return $this->getCommandByMethod($queueItem->getRequest()->getMethod())->execute($queueItem);
-    }
-
-    /**
-     * @param string $method
-     *
-     * @throws RequestParsingException
-     *
-     * @return Command\CommandInterface
-     */
-    private function getCommandByMethod(string $method): Command\CommandInterface
-    {
-        try {
-            // TODO: Make a map of request names to service names and create a class that retrieves the appropriate
-            // handler for a request method that uses it.
-            // TODO: Rename "Command" to "RequestHandler" or similar.
-            if ($method === 'initialize') {
-                return $this->container->get('initializeCommand');
-            } elseif ($method === 'initialized') {
-                return $this->container->get('initializedCommand');
-            } elseif ($method === 'exit') {
-                return $this->container->get('exitCommand');
-            } elseif ($method === 'workspace/didChangeWatchedFiles') {
-                return $this->container->get('didChangeWatchedFilesCommand');
-            } elseif ($method === 'textDocument/didChange') {
-                return $this->container->get('didChangeCommand');
-            } elseif ($method === 'textDocument/didSave') {
-                return $this->container->get('didSaveCommand');
-            } elseif ($method === 'textDocument/completion') {
-                return $this->container->get('completionCommand');
-            } elseif ($method === 'textDocument/hover') {
-                return $this->container->get('hoverCommand');
-            } elseif ($method === 'textDocument/definition') {
-                return $this->container->get('definitionCommand');
-            } elseif ($method === 'textDocument/signatureHelp') {
-                return $this->container->get('signatureHelpCommand');
-            } elseif ($method === 'textDocument/documentSymbol') {
-                return $this->container->get('documentSymbolCommand');
-            } elseif ($method === 'serenata/internal/echoMessage') {
-                return $this->container->get('echoMessageCommand');
-            } elseif ($method === 'serenata/internal/index') {
-                return $this->container->get('indexCommand');
-            } elseif ($method === 'serenata/internal/diagnostics') {
-                return $this->container->get('diagnosticsCommand');
-            } elseif ($method === 'serenata/deprecated/getClassInfo') {
-                return $this->container->get('classInfoCommand');
-            } elseif ($method === 'serenata/deprecated/getClassListForFile') {
-                return $this->container->get('classListCommand');
-            } elseif ($method === 'serenata/deprecated/deduceTypes') {
-                return $this->container->get('deduceTypesCommand');
-            } elseif ($method === 'serenata/deprecated/getGlobalConstants') {
-                return $this->container->get('globalConstantsCommand');
-            } elseif ($method === 'serenata/deprecated/getGlobalFunctions') {
-                return $this->container->get('globalFunctionsCommand');
-            } elseif ($method === 'serenata/deprecated/resolveType') {
-                return $this->container->get('resolveTypeCommand');
-            } elseif ($method === 'serenata/deprecated/localizeType') {
-                return $this->container->get('localizeTypeCommand');
-            } elseif ($method === '$/cancelRequest') {
-                return $this->container->get('cancelRequestCommand');
-            }
-        } catch (NotFoundExceptionInterface $e) {
-            throw new LogicException('Missing service for handling request "' . $method . '"');
-        }
-
-        throw new RequestParsingException('Method "' . $method . '" was not found');
+        return $this->jsonRpcQueueItemHandlerFactory->create($queueItem->getRequest()->getMethod())->execute(
+            $queueItem
+        );
     }
 
     /**

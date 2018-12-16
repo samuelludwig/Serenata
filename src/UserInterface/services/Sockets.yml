@@ -10,7 +10,8 @@ services:
     jsonRpcQueueItemProcessor:
         class: Serenata\Sockets\JsonRpcQueueItemProcessor
         arguments:
-            - '@service_container'
+            - '@jsonRpcQueueItemHandlerFactory'
+            - '@stdinStream'
             - '@activeWorkspaceManager'
 
     jsonRpcRequestPriorityDeterminer:
