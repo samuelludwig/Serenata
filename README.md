@@ -29,7 +29,7 @@ More information for users, both developers looking to implement clients for oth
 * Symbols
 * Linting
 
-There are also other requests clients can send to extract information about a code base. However, we are in the process of slowly migrating to become a [language server](https://microsoft.github.io/language-server-protocol/) for PHP, so these may be replaced by compliant requests in the future.
+Serenata is, since version 5.0 and on the current `master` branch, a language server that follows the [language server protocol](https://microsoft.github.io/language-server-protocol/specification). See also the [support table](https://gitlab.com/Serenata/Serenata/wikis/Language-Server-Protocol-Support-Table) for more information.
 
 ## Where Is It Used?
 The [php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata/) package integrates Serenata into the Atom editor via Atom-IDE.
