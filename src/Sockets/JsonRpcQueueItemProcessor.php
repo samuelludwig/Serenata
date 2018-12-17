@@ -3,7 +3,9 @@
 namespace Serenata\Sockets;
 
 use Throwable;
+use DomainException;
 use RuntimeException;
+use UnexpectedValueException;
 
 use Ds\Vector;
 
@@ -118,9 +120,17 @@ class JsonRpcQueueItemProcessor
             $this->stdinStream->set($params['stdinData']);
         }
 
-        return $this->jsonRpcQueueItemHandlerFactory->create($queueItem->getRequest()->getMethod())->execute(
-            $queueItem
-        );
+        try {
+            $handler = $this->jsonRpcQueueItemHandlerFactory->create($queueItem->getRequest()->getMethod());
+        } catch (DomainException $e) {
+            throw new UnexpectedValueException(
+                'Unknown request method "' . $queueItem->getRequest()->getMethod() . '"',
+                0,
+                $e
+            );
+        }
+
+        return $handler->execute($queueItem);
     }
 
     /**
