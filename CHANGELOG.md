@@ -1,66 +1,69 @@
 ## 5.0.0 (Unreleased)
-### Improvements
-* PHP 7.3 support
-* [Major](https://gitlab.com/Serenata/Serenata/issues/113) [internal](https://gitlab.com/Serenata/Serenata/issues/111) refactoring work to becoming more compliant with the language server protocol
-    * Use `TextDocumentItem` almost everywhere instead of using a `File` entity
-    * [Use (language server) positions with character offsets in almost all places rather than old byte offsets](https://gitlab.com/Serenata/Serenata/issues/217)
-    * Replace several [data clumps](https://en.wikipedia.org/wiki/Data_Clump_(Code_Smell)) with proper classes
-* Properties, constants, function parameters will now return a `mixed` type instead of no type at all if the type is not known
+* To be determined
+
+## 5.0.0-RC
+### Major Changes
+* Support parsing PHP 7.3 code
+* [Serenata is now officially a language server](https://gitlab.com/Serenata/Serenata/issues/91) following the [language server protocol](https://microsoft.github.io/language-server-protocol/specification)
+    * [Major](https://gitlab.com/Serenata/Serenata/issues/113) [internal](https://gitlab.com/Serenata/Serenata/issues/111) [changes](https://gitlab.com/Serenata/Serenata/issues/217) were done to accommodate this.
+    * Almost all requests have had changes, see [the wiki](https://gitlab.com/Serenata/Serenata/wikis/Language%20Server%20Protocol%20Support%20Table) and below for more information
+
+### Other Improvements
+* Semantic linting support has been removed as it was previously deprecated
 * [All autocompletion suggestions now return data in their `textEdit` properties](https://gitlab.com/Serenata/Serenata/issues/213)
     * The `extraData.prefix` property was removed as it was a non-standard workaround that is now properly solved
-* Semantic linting support has been removed as it was previously deprecated
-* All commands (requests) now accept a LSP `uri` instead of `path` or `file`
-* All commands (requests) now accept a proper LSP `position` instead of an `offset` and a `charoffset` flag
-* All structural element data now contains a `range` property with `start` and `end` subproperties that contain the line and character position of the element
-    * The `startLine` and `endLine` properties have been removed in favor of these new properties.
-* [Tooltips will now always show the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/220)
-* [Signature help will now always show the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/219)
-* Structural element types now no longer contain an `fqcn` property; instead, the `type` property contains the original scalar type or an FQCN if it is a class type
-    * This was done to reduce redundant information as the type hint is already available separately
-    * If you needed this to take over the original type definition, it is probably better to try and localize the FQCN to local imports - or even add an import for it
-* Fix off-by-one error in line returned in goto definition responses (they were 1-indexed instead of 0-indexed)
-* Autocompletion for class members suggestions no longer pass back `extraData.declaringStructure` or `extraData.isDeprecated`
-    * It was a non-standard property and has since been replaced by generating the new `detail` property
-* [`GotoDefinition` now returns a language-server-compliant response](https://gitlab.com/Serenata/Serenata/issues/224)
-* [`Lint` now returns a language-server-compliant `PublishDiagnosticsParams`](https://gitlab.com/Serenata/Serenata/issues/221)
-* [Fix docblocks with a description of `0` being ignored (thanks to @UziTech)](https://gitlab.com/Serenata/Serenata/merge_requests/77)
-* [Fix default values of `0` being ignored (thanks to @UziTech)](https://gitlab.com/Serenata/Serenata/merge_requests/77)
+* Properties, constants, function parameters now get a `mixed` type instead of no type at all if the type is not known
+* [Tooltips now always displays the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/220)
+* [Signature help now always displays the class name instead of varying between unqualified, partially qualified and fully qualified names based on what the original definition provided](https://gitlab.com/Serenata/Serenata/issues/219)
+* Due to notifications of (external or not) file changes sent by the client now being processed, changes made via command line tools or other applications - such as Composer updates - should now be picked up automatically
 
-### Raw LSP-stuff that should be prettified later
-- "exit" made LSP-compliant
-- "shutdown" implemented
-- "initialize" made LSP-compliant
-- "initialized" notification is received instead of throwing error
-- "autocomplete" is now called "textDocument/completion" as per LSP
-- "tooltip" is now called "textDocument/hover" as per LSP
-- "signatureHelp" is now called "textDocument/signatureHelp" as per LSP
-- "documentSymbols" is now called "textDocument/documentSymbol" as per LSP
-- "gotoDefinition" is now called "textDocument/definition" as per LSP
-- "cancel" is now called "$/cancelRequest" as per LSP
-- "textDocument/didChange" is implemented
-- "textDocument/didSave" is implemented
-- "availableVariables" was removed
-- "classInfo" is now "serenata/deprecated/getClassInfo"
-- "classList" is now "serenata/deprecated/getClassListForFile"
-- "deduceTypes" is now "serenata/deprecated/deduceTypes"
-- "globalConstants" is now "serenata/deprecated/getGlobalConstants"
-- "globalFunctions" is now "serenata/deprecated/getGlobalFunctions"
-- "resolveType" is now "serenata/deprecated/resolveType"
-- "localizeType" is now "serenata/deprecated/localizeType"
-- "reindexProgressInformation" was renamed to "serenata/didProgressIndexing" and is now follows the notification instead of the response format
-    - TODO: Should document that this custom notification exists on the wiki
-- In output data of extension commands (non-LSP commands), "filename" was renamed to "uri" and is now an actual URI instead of just a path
-- "workspace/didChangeWatchedFiles" is implemented
-    - Also supports handling notifications of removed files, which should fix classes remaining in index after file removal
-- Drop "extraData" from autocompletion suggestions
-- Autocompletion suggestions "detail" now also include protection level and type information (#218?)
-- Autocompletion suggestion kinds are now numeric and follow the values prescribed by the LSP
-- "reindex" was removed as indexing is now handled via "textDocument/didChange" and "workspace/didChangeWatchedFiles"
-- The "namespaceList" request has been removed as it was obsoleted by autocomplete being implemented in the server and there are no clients that use it anymore
-- I *think* that the split of the "index" request and the separate didChange and didChangeWatchedFiles notifications
-  have also solved the issue of user interactions causing reindexes not being prioritized over low-priority indexing
-  of the project on the background (such as during project setup)
-    - TODO: Test this properly
+### Bugs Fixed
+* [Fix default values of `0` being ignored (thanks to @UziTech)](https://gitlab.com/Serenata/Serenata/merge_requests/77)
+* [Fix docblocks with a description of `0` being ignored (thanks to @UziTech)](https://gitlab.com/Serenata/Serenata/merge_requests/77)
+* Fix off-by-one error in line returned in goto definition responses (they were 1-indexed instead of 0-indexed)
+* Due to file removals now being processed, classes in removed files should no longer remain in the index after the file was removed
+
+### Changes For Clients
+* Support the following LSP messages:
+    * `shutdown`
+    * `initialized`
+    * `workspace/didChangeWatchedFiles`
+        * Also supports handling notifications of removed files now, which should fix classes remaining in index after file removal
+* Rewrite the following requests to LSP messages:
+    * `exit`
+    * `initialize`
+    * `$/cancelRequest` - was `cancel` previously
+    * [`textDocument/publishDiagnostics`](https://gitlab.com/Serenata/Serenata/issues/222) - [was `lint` previously](https://gitlab.com/Serenata/Serenata/issues/222)
+    * `textDocument/didChange` and `textDocument/didSave` - was `reindex` previously
+    * `textDocument/completion` - was `autocomplete` previously
+    * `textDocument/hover` - was `tooltip` previously
+    * `textDocument/signatureHelp` - was `signatureHelp` previously
+    * `textDocument/documentSymbol` - was `documentSymbols` previously
+    * [`textDocument/definition` - was `gotoDefinition` previously](https://gitlab.com/Serenata/Serenata/issues/224)
+    * `serenata/didProgressIndexing` - was `reindexProgressInformation` previously
+    * `serenata/deprecated/getClassInfo` - was `classInfo` previously and is now deprecated
+    * `serenata/deprecated/getClassListForFile` - was `classList` previously and is now deprecated
+    * `serenata/deprecated/deduceTypes` - was `deduceTypes` previously and is now deprecated
+    * `serenata/deprecated/getGlobalConstants` - was `globalConstants` previously and is now deprecated
+    * `serenata/deprecated/getGlobalFunctions` - was `globalFunctions` previously and is now deprecated
+    * `serenata/deprecated/resolveType` - was `resolveType` previously and is now deprecated
+    * `serenata/deprecated/localizeType` - was `localizeType` previously and is now deprecated
+* Remove the following requests:
+    * `availableVariables`
+    * `namespaceList`
+* Other, smaller changes to request formats:
+    * Drop `extraData` from autocompletion suggestions
+    * [`detail` of autocompletion suggestions now also includes protection level and type information](https://gitlab.com/Serenata/Serenata/issues/218)
+    * Autocompletion suggestion kinds are now numeric and follow the values prescribed by the LSP
+    * All requests now accept a LSP `uri` instead of a `path`, `file` or `filename`
+    * All requests now accept a proper LSP `position` instead of an `offset` and a `charoffset` flag
+    * All structural element data now contains a `range` property with `start` and `end` subproperties that contain the line and character position of the element
+        * The `startLine` and `endLine` properties have been removed in favor of these new properties.
+    * Structural element types now no longer contain an `fqcn` property; instead, the `type` property contains the original scalar type or an FQCN if it is a class type
+        * This was done to reduce redundant information as the type hint is already available separately
+        * If you needed this to take over the original type definition, it is probably better to try and localize the FQCN to local imports - or even add an import for it
+    * Autocompletion for class members suggestions no longer pass back `extraData.declaringStructure` or `extraData.isDeprecated`
+        * It was a non-standard property and has since been replaced by generating the new `detail` property
 
 ## 4.3.0
 ### Improvements
