@@ -1,3 +1,6 @@
+## 4.3.1
+* [Fix crash when using latest dependencies related to `Interface does not exist`](https://gitlab.com/Serenata/Serenata/issues/248) (thanks to @WinterSilence)
+
 ## 4.3.0
 ### Improvements
 * [Static members will now also be shown during non-static access](https://gitlab.com/Serenata/Serenata/issues/199)
