@@ -821,12 +821,12 @@ SOURCE;
         $source = <<<'SOURCE'
 <?php
 
-<<<EOF
+<<<BLOCK
 EOF: {$foo[2]->bar()} some_text
 
 This is / some text.
 
-EOF
+BLOCK
 SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
