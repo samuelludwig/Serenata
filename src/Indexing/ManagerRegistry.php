@@ -3,7 +3,6 @@
 namespace Serenata\Indexing;
 
 use LogicException;
-use DateTimeInterface;
 
 use Doctrine\ORM;
 
@@ -69,8 +68,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
             ],
             'default',
             'default',
-            // We don't need this, but we do need to pass a valid interface for reflection to not fail.
-            DateTimeInterface::class
+            ORM\Proxy\Proxy::class
         );
 
         $this->sqliteConnectionFactory = $sqliteConnectionFactory;
