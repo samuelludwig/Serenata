@@ -1,8 +1,8 @@
-## 4.3.1
-* [Fix crash when using latest dependencies related to `Interface does not exist`](https://gitlab.com/Serenata/Serenata/issues/248) (thanks to @WinterSilence)
-
 ## 5.0.0 (Unreleased)
 * To be determined
+
+## 4.3.1
+* [Fix crash when using latest dependencies related to `Interface does not exist`](https://gitlab.com/Serenata/Serenata/issues/248) (thanks to @WinterSilence)
 
 ## 5.0.0-RC
 ### Major Changes
