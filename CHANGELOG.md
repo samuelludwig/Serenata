@@ -3,6 +3,7 @@
 
 ## 5.0.0-RC2
 * Port fixes performed in version 4.3.1
+* Fix `shutdown` request not being handled correctly
 
 ## 4.3.1
 * [Fix crash when using latest dependencies related to `Interface does not exist`](https://gitlab.com/Serenata/Serenata/issues/248) (thanks to @WinterSilence)
