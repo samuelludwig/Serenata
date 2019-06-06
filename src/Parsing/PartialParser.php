@@ -74,6 +74,7 @@ final class PartialParser implements Parser
         $nodes = $nodes ?: $this->tryParseWithFunctionMissingArgumentCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithTernaryOperatorTerminationCorrection($correctedExpression);
         $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
+        $nodes = $nodes ?: $this->tryParseWithDoubleArrowFix($correctedExpression);
 
         return $nodes;
     }
@@ -263,6 +264,59 @@ final class PartialParser implements Parser
             }
         }
 
+
+        return $nodes;
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Node[]|null
+     */
+    private function tryParseWithDoubleArrowFix(string $code): ?array
+    {
+        $removeDummy = false;
+        $dummyName = '____DUMMY____';
+
+        // Pretend multiple arrows are actually valid by inserting something in between them, then treat as ordinary
+        // method call.
+        $fixedCode = $code;
+
+        while (mb_strpos($fixedCode, '->->') !== false) {
+            $fixedCode = str_replace('->->', '->' . $dummyName . '->', $fixedCode);
+        }
+
+        $nodes = $this->tryParseWithDummyInsertion($fixedCode);
+
+        if ($nodes === null || count($nodes) === 0) {
+            return null;
+        }
+
+        $node = $nodes[count($nodes) - 1];
+
+        $removeDummies = function (Node $node) use ($dummyName, &$removeDummies) {
+            if ($node instanceof Node\Expr\PropertyFetch) {
+                if ($node->var instanceof Node\Expr\ClassConstFetch ||
+                    $node->var instanceof Node\Expr\PropertyFetch
+                ) {
+                    if ($node->var->name instanceof Node\Identifier &&
+                        $node->var->name->name === $dummyName
+                    ) {
+                        $node->var->name->name = '';
+
+                        if ($node->var instanceof Node\Expr\PropertyFetch) {
+                            $removeDummies($node->var->var);
+                        }
+                    }
+                }
+
+                $removeDummies($node->var);
+            }
+        };
+
+        if ($node instanceof Node\Stmt\Expression) {
+            $removeDummies($node->expr);
+        }
 
         return $nodes;
     }

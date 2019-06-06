@@ -887,4 +887,51 @@ SOURCE;
         static::assertInstanceOf(Node\Scalar\LNumber::class, $result->expr->args[0]->value);
         static::assertSame(1, $result->expr->args[0]->value->value);
     }
+
+    /**
+     * @return void
+     */
+    public function testParsesDoubleObjectArrow(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+$test->->
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        static::assertSame(1, count($result));
+
+        $result = array_shift($result);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr->var);
+        static::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->var);
+        static::assertSame('test', $result->expr->var->var->name);
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        static::assertSame('', $result->expr->var->name->name);
+        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        static::assertSame('', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testParsesMultipleObjectArrows(): void
+    {
+        $source = <<<'SOURCE'
+<?php
+
+$test->->->->
+SOURCE;
+
+        $result = $this->createPartialParser()->parse($source);
+
+        static::assertSame(1, count($result));
+
+        // Mostly just to test that this works as an extension of testParsesDoubleObjectArrows, no need to specify
+        // all data here.
+    }
 }
