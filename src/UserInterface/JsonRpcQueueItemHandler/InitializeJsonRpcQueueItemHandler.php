@@ -229,7 +229,9 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 
         // This indexing will send the response by itself when it is fully finished. This ensures that the
         // initialization does not complete until the initial index has occurred.
-        $this->indexer->index($rootUri, false, $jsonRpcMessageSender, $response);
+        foreach ($workspaceConfiguration->getUris() as $uri) {
+            $this->indexer->index($uri, false, $jsonRpcMessageSender, $response);
+        }
 
         return null;
     }
