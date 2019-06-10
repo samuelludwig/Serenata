@@ -12,7 +12,7 @@
         "doctrine/cache": "^1.8",
         "doctrine/orm": "^2.6",
         "evenement/evenement": "^3.0",
-        "jetbrains/phpstorm-stubs": "dev-master",
+        "jetbrains/phpstorm-stubs": "dev-master@dev",
         "league/html-to-markdown": "^4.8",
         "nikic/php-parser": "^4.2",
         "php-ds/php-ds": "^1.2",
@@ -48,7 +48,5 @@
     "config": {
         "sort-packages": true,
         "preferred-install": "dist"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
