@@ -2,6 +2,8 @@
 
 namespace Serenata\Symbols;
 
+use DomainException;
+
 use Serenata\Utility\Location;
 
 use Serenata\Indexing\Structures\File;
@@ -118,14 +120,14 @@ final class DocumentSymbolRetriever
      */
     private function createSymbolForClasslike(Classlike $classlike, File $file): SymbolInformation
     {
-        $kind = null;
-
         if ($classlike instanceof Class_) {
             $kind = SymbolKind::CLASS_;
         } elseif ($classlike instanceof Interface_) {
             $kind = SymbolKind::INTERFACE_;
         } elseif ($classlike instanceof Trait_) {
             $kind = SymbolKind::CLASS_; // Due to lack of a better kind.
+        } else {
+            throw new DomainException('Unknown classlike class "' . get_class($classlike) . '" encountered');
         }
 
         return new SymbolInformation(
