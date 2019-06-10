@@ -109,6 +109,8 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
 
         $uri = $this->pathNormalizer->normalize($uri);
 
+        $result = true;
+
         if (is_dir($uri)) {
             $this->indexDirectory(
                 $uri,
@@ -118,7 +120,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
                 $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
             );
         } elseif (is_file($uri)) {
-            $this->indexFile(
+            $result = $this->indexFile(
                 $uri,
                 $workspace->getConfiguration()->getFileExtensions(),
                 $workspace->getConfiguration()->getExcludedPathExpressions(),
@@ -127,7 +129,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
         }
 
         if ($responseToSendOnCompletion === null) {
-            return true;
+            return $result;
         }
 
         // As a directory index request is demuxed into multiple file index requests, the response for the original
@@ -142,7 +144,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
 
         $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcMessageSender));
 
-        return true;
+        return $result;
     }
 
     /**
