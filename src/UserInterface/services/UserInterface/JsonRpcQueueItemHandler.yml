@@ -120,6 +120,12 @@ services:
             - '@storage'
             - '@debouncingIndexer'
 
+    didOpenJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidOpenJsonRpcQueueItemHandler
+
+    didCloseJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidCloseJsonRpcQueueItemHandler
+
     didChangeJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeJsonRpcQueueItemHandler
         arguments:
