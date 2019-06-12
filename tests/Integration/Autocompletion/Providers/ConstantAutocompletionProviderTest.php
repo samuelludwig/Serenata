@@ -21,7 +21,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'FOO',
+                '\FOO',
                 CompletionItemKind::CONSTANT,
                 'FOO',
                 new TextEdit(
@@ -51,7 +51,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'FOO',
+                '\FOO',
                 CompletionItemKind::CONSTANT,
                 'FOO',
                 new TextEdit(

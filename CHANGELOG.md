@@ -6,6 +6,7 @@
 * [Fix crash when analyzing erroneous code containing multiple object arrows, such as `$test->->`](https://gitlab.com/Serenata/Serenata/issues/245)
 * [Stub `textDocument/didOpen`](https://gitlab.com/Serenata/Serenata/issues/253)
 * [Stub `textDocument/didClose`](https://gitlab.com/Serenata/Serenata/issues/259)
+* Constant and function autocompletion suggestions will now show the FQCN, if any, to make use of libraries with namespaced constants and functions more convenient
 
 ## 5.0.0-RC2
 * Port fixes performed in version 4.3.1

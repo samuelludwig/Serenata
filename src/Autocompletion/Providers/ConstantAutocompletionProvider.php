@@ -83,16 +83,32 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     private function createSuggestion(array $constant, AutocompletionProviderContext $context): CompletionItem
     {
         return new CompletionItem(
-            $constant['name'],
+            $constant['fqcn'],
             CompletionItemKind::CONSTANT,
             $constant['name'],
             $this->getTextEditForSuggestion($constant, $context),
-            $constant['name'],
+            $this->getFqcnWithoutLeadingSlash($constant),
             $constant['shortDescription'],
             [],
             $constant['isDeprecated'],
             $this->completionItemDetailFormatter->format(null, null, $constant['types'])
         );
+    }
+
+    /**
+     * @param array $classlike
+     *
+     * @return string
+     */
+    private function getFqcnWithoutLeadingSlash(array $classlike): string
+    {
+        $fqcn = $classlike['fqcn'];
+
+        if ($fqcn[0] === '\\') {
+            return mb_substr($fqcn, 1);
+        }
+
+        return $fqcn;
     }
 
     /**

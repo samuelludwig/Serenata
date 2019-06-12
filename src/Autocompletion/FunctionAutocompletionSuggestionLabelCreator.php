@@ -54,6 +54,24 @@ final class FunctionAutocompletionSuggestionLabelCreator
 
         $body .= ')';
 
+        if (isset($function['fqcn'])) {
+            return $this->getFqcnWithoutLeadingSlash($function['fqcn']) . $body;
+        }
+
         return $function['name'] . $body;
+    }
+
+    /**
+     * @param array $classlike
+     *
+     * @return string
+     */
+    private function getFqcnWithoutLeadingSlash(string $fqcn): string
+    {
+        if ($fqcn[0] === '\\') {
+            return mb_substr($fqcn, 1);
+        }
+
+        return $fqcn;
     }
 }

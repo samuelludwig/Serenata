@@ -116,7 +116,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
         bool $shouldIncludeParanthesesInInsertText
     ): CompletionItem {
         return new CompletionItem(
-            $function['name'],
+            $function['fqcn'],
             CompletionItemKind::FUNCTION,
             $this->getInsertTextForSuggestion($function, $shouldIncludeParanthesesInInsertText),
             $this->getTextEditForSuggestion($function, $context, $shouldIncludeParanthesesInInsertText),

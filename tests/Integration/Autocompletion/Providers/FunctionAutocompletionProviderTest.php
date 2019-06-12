@@ -21,7 +21,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'foo',
+                '\foo',
                 CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
@@ -51,7 +51,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'foo',
+                '\foo',
                 CompletionItemKind::FUNCTION,
                 'foo',
                 new TextEdit(
@@ -81,7 +81,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'foo',
+                '\foo',
                 CompletionItemKind::FUNCTION,
                 'foo',
                 new TextEdit(
@@ -111,7 +111,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'foo',
+                '\foo',
                 CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
@@ -141,7 +141,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'foo',
+                '\foo',
                 CompletionItemKind::FUNCTION,
                 'foo()$0',
                 new TextEdit(
@@ -171,7 +171,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
 
         $suggestions = [
             new CompletionItem(
-                'foo',
+                '\foo',
                 CompletionItemKind::FUNCTION,
                 'foo($0)',
                 new TextEdit(
