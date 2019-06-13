@@ -2,6 +2,7 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use Serenata\Autocompletion\CompletionList;
 use Serenata\Autocompletion\AutocompletionPrefixDeterminerInterface;
 
 use Serenata\Autocompletion\Providers\AutocompletionProviderContext;
@@ -59,10 +60,13 @@ final class CompletionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getSuggestions(
-            $parameters['textDocument']['uri'],
-            $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
-            new Position($parameters['position']['line'], $parameters['position']['character'])
+        return new JsonRpcResponse($queueItem->getRequest()->getId(), new CompletionList(
+            true,
+            $this->getSuggestions(
+                $parameters['textDocument']['uri'],
+                $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
+                new Position($parameters['position']['line'], $parameters['position']['character'])
+            )
         ));
     }
 

@@ -6,6 +6,8 @@
 * [Fix crash when analyzing erroneous code containing multiple object arrows, such as `$test->->`](https://gitlab.com/Serenata/Serenata/issues/245)
 * [Stub `textDocument/didOpen`](https://gitlab.com/Serenata/Serenata/issues/253)
 * [Stub `textDocument/didClose`](https://gitlab.com/Serenata/Serenata/issues/259)
+* Return `CompletionList` as response to `textDocument/completion`
+    * Sets `isIncomplete` to `true` instead of `false` (the default), preventing clients from caching completion results at some positions and trying to apply their on filtering on top of that, whilst the actual results are different, which resulted in completion seemingly not responding.
 * Constant and function autocompletion suggestions will now show the FQCN, if any, to make use of libraries with namespaced constants and functions more convenient
 
 ## 5.0.0-RC2
