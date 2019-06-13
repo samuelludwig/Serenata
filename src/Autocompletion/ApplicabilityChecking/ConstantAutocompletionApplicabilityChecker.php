@@ -43,7 +43,11 @@ final class ConstantAutocompletionApplicabilityChecker implements Autocompletion
     private function doesApplyToNode(Node $node): bool
     {
         if ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\UseUse) {
-            return false;
+            if ($node instanceof Node\Stmt\UseUse) {
+                $node = $node->getAttribute('parent');
+            }
+
+            return $node->type === Node\Stmt\Use_::TYPE_CONSTANT;
         } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
             return false;
         } elseif ($node instanceof Node\Expr\StaticCall) {
