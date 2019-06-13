@@ -81,6 +81,8 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
             'ClassConstFetchNoDelimiter.phpt',
             'Namespace.phpt',
             'UseStatement.phpt',
+            'UseStatementFunction.phpt',
+            'UseStatementConstant.phpt',
             'Docblock.phpt',
             'DocblockTag.phpt',
             'Comment.phpt',

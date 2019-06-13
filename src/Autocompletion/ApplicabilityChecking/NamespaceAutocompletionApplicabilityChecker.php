@@ -42,7 +42,13 @@ final class NamespaceAutocompletionApplicabilityChecker implements Autocompletio
      */
     private function doesApplyToNode(Node $node): bool
     {
-        if ($node instanceof Node\Stmt\Expression) {
+        if ($node instanceof Node\Stmt\Use_ || $node instanceof Node\Stmt\UseUse) {
+            if ($node instanceof Node\Stmt\UseUse) {
+                $node = $node->getAttribute('parent');
+            }
+
+            return $node->type === Node\Stmt\Use_::TYPE_NORMAL;
+        } elseif ($node instanceof Node\Stmt\Expression) {
             return $this->doesApplyToNode($node->expr);
         } elseif ($node instanceof Node\Name || $node instanceof Node\Identifier) {
             return $this->doesApplyToNode($node->getAttribute('parent'));
@@ -52,9 +58,6 @@ final class NamespaceAutocompletionApplicabilityChecker implements Autocompletio
             return $parent !== false ? $this->doesApplyToNode($parent) : false;
         }
 
-        return
-            $node instanceof Node\Stmt\Use_ ||
-            $node instanceof Node\Stmt\UseUse ||
-            $node instanceof Node\Stmt\Namespace_;
+        return $node instanceof Node\Stmt\Namespace_;
     }
 }
