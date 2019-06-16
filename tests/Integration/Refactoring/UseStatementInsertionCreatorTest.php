@@ -323,6 +323,101 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testInsertsFunctionUseStatementForFunctions(): void
+    {
+        $name = '\Foo\Bar\func';
+        $insertionPoint = new Position(2, 0);
+        $file = 'NoNamespaceAndNoUseStatements.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use function {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_FUNCTION, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testInsertsConstantUseStatementForConstants(): void
+    {
+        $name = '\Foo\Bar\CONSTANT';
+        $insertionPoint = new Position(2, 0);
+        $file = 'NoNamespaceAndNoUseStatements.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use const {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CONSTANT, false)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testInsertsClasslikeImportsBeforeFunctionImportsAndInSeparateGroup(): void
+    {
+        $name = '\Foo\a';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ClasslikeUseStatementAlreadyExists.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse function {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_FUNCTION, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testInsertsClasslikeImportsBeforeConstantImportsAndInSeparateGroup(): void
+    {
+        $name = '\Foo\A';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ClasslikeUseStatementAlreadyExists.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse const {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CONSTANT, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testInsertsFunctionImportsBeforeConstantImportsandInSeparateGroup(): void
+    {
+        $name = '\Foo\Bar\a';
+        $insertionPoint = new Position(3, 0);
+        $file = 'FunctionUseStatementAlreadyExists.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse const {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CONSTANT, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testInsertsFunctionImportsBeforeConstantImportsandInExistingGroupIfGroupsAlreadyExist(): void
+    {
+
+        // FIXME: Function placed at bottom instead of top when "use func" and "use const" already exist.
+
+
+
+        $name = '\Foo\Bar\qux';
+        $insertionPoint = new Position(3, 0);
+        $file = 'ExistingMixedUseStatements.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "use function {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_FUNCTION, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testThrowsExceptionWhenClasslikeUseStatementAlreadyExists(): void
     {
         $name = '\Foo\Bar';

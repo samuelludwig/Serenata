@@ -193,6 +193,151 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
     }
 
     /**
+     * @return void
+     */
+    public function testIncludesClassUseStatementImportInSuggestionForFullyQualifiedFunctionNamesWithoutLeadingSlash(): void
+    {
+        $output = $this->provide('NamespacedFunctionFullyQualifiedNoLeadingSlash.phpt');
+
+        $suggestions = [
+            new CompletionItem(
+                '\Foo\Bar\baz',
+                CompletionItemKind::FUNCTION,
+                'baz()$0',
+                new TextEdit(
+                    new Range(new Position(10, 4), new Position(10, 5)),
+                    'baz()$0'
+                ),
+                'Foo\Bar\baz()',
+                null,
+                [
+                    new TextEdit(
+                        new Range(new Position(10, 0), new Position(10, 0)),
+                        "use function Foo\Bar\baz;\n\n"
+                    ),
+                ],
+                false,
+                'mixed'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIncludesClassUseStatementImportInSuggestionForPartiallyQualifiedFunctionNames(): void
+    {
+        $output = $this->provide('NamespacedFunctionPartiallyQualified.phpt');
+
+        $suggestions = [
+            new CompletionItem(
+                '\Foo\Bar\baz',
+                CompletionItemKind::FUNCTION,
+                'Bar\baz()$0',
+                new TextEdit(
+                    new Range(new Position(10, 4), new Position(10, 8)),
+                    'Bar\baz()$0'
+                ),
+                'Foo\Bar\baz()',
+                null,
+                [
+                    new TextEdit(
+                        new Range(new Position(10, 0), new Position(10, 0)),
+                        "use Foo\Bar;\n\n"
+                    ),
+                ],
+                false,
+                'mixed'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsUseStatementImportInSuggestionForFullyQualifiedFunctionNamesWithLeadingSlash(): void
+    {
+        $output = $this->provide('NamespacedFunctionFullyQualifiedLeadingSlash.phpt');
+
+        $suggestions = [
+            new CompletionItem(
+                '\Foo\Bar\baz',
+                CompletionItemKind::FUNCTION,
+                '\Foo\Bar\baz()$0',
+                new TextEdit(
+                    new Range(new Position(10, 4), new Position(10, 6)),
+                    '\Foo\Bar\baz()$0'
+                ),
+                'Foo\Bar\baz()',
+                null,
+                [],
+                false,
+                'mixed'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsUseStatementImportWhenAutocompletingUseStatement(): void
+    {
+        $output = $this->provide('UseStatement.phpt');
+
+        $suggestions = [
+            new CompletionItem(
+                '\Foo\Bar\Baz\qux',
+                CompletionItemKind::FUNCTION,
+                'Foo\Bar\Baz\qux',
+                new TextEdit(
+                    new Range(new Position(10, 17), new Position(10, 24)),
+                    'Foo\Bar\Baz\qux'
+                ),
+                'Foo\Bar\Baz\qux()',
+                null,
+                [],
+                false,
+                'mixed'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSkipsUseStatementImportForGlobalFunctions(): void
+    {
+        $output = $this->provide('GlobalFunction.phpt');
+
+        $suggestions = [
+            new CompletionItem(
+                '\baz',
+                CompletionItemKind::FUNCTION,
+                'baz()$0',
+                new TextEdit(
+                    new Range(new Position(10, 4), new Position(10, 4)),
+                    'baz()$0'
+                ),
+                'baz()',
+                null,
+                [],
+                false,
+                'mixed'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
      * @inheritDoc
      */
     protected function getFolderName(): string

@@ -128,8 +128,10 @@ services:
         class: Serenata\Autocompletion\Providers\FunctionAutocompletionProvider
         arguments:
             - '@functionListProvider'
+            - '@useStatementInsertionCreator'
             - '@functionParametersEvaluator'
             - '@bestStringApproximationDeterminer'
+            - '@nodeAtOffsetLocator'
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
             - '@completionItemDetailFormatter'
@@ -147,7 +149,9 @@ services:
         class: Serenata\Autocompletion\Providers\ConstantAutocompletionProvider
         arguments:
             - '@constantListProvider'
+            - '@useStatementInsertionCreator'
             - '@bestStringApproximationDeterminer'
+            - '@nodeAtOffsetLocator'
             - '@completionItemDetailFormatter'
             - '%autocompletion.largeProviderResultLimit%'
 

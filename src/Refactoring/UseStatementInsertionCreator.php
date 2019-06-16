@@ -6,12 +6,16 @@ use LogicException;
 use UnexpectedValueException;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Use_;
+
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
 use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Analysis\Typing\TypeNormalizerInterface;
+
+use Serenata\Analysis\Visiting\UseStatementKind;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
@@ -78,7 +82,15 @@ class UseStatementInsertionCreator
 
         $this->enforceThatCreationIsPossibleAndNecessary($normalizedName, $kind, $textDocumentItem, $position);
 
-        $textToInsert = "use {$name};\n";
+        $prefix = '';
+
+        if ($kind === UseStatementKind::TYPE_FUNCTION) {
+            $prefix = 'function ';
+        } elseif ($kind === UseStatementKind::TYPE_CONSTANT) {
+            $prefix = 'const ';
+        }
+
+        $textToInsert = "use {$prefix}{$name};\n";
 
         $line = $this->locateBestZeroIndexedLineForInsertion($normalizedName, $kind, $textDocumentItem, $position);
 
@@ -177,7 +189,21 @@ class UseStatementInsertionCreator
         $previousMatchThatSharedNamespacePrefixLine = null;
 
         foreach ($this->retrieveRelevantUseStatements($textDocumentItem, $position) as $useStatement) {
-            $bestLine = $useStatement->getEndLine();
+            $groupOrderMap = [
+                UseStatementKind::TYPE_CLASSLIKE => 0,
+                UseStatementKind::TYPE_FUNCTION  => 1,
+                UseStatementKind::TYPE_CONSTANT  => 2,
+            ];
+
+            // Don't analyze nodes of other types, but still ensure that we sort use statements into "groups" where
+            // all use statements of a single kind are grouped together.
+            if ($groupOrderMap[$kind] >= $groupOrderMap[$this->getUseStatementNodeKind($useStatement)]) {
+                $bestLine = $useStatement->getEndLine();
+            }
+
+            if (!$this->doesUseStatementNodeHaveKind($useStatement, $kind)) {
+                continue;
+            }
 
             foreach ($useStatement->uses as $useUseNode) {
                 $useUseNodeName = $this->getFullNameFromUseUse($useStatement, $useUseNode);
@@ -222,6 +248,10 @@ class UseStatementInsertionCreator
         $previousMatchThatSharedNamespacePrefixLine = null;
 
         foreach ($this->retrieveRelevantUseStatements($textDocumentItem, $position) as $useStatement) {
+            if (!$this->doesUseStatementNodeHaveKind($useStatement, $kind)) {
+                continue;
+            }
+
             $addAdditionalNewline = true;
 
             foreach ($useStatement->uses as $useUseNode) {
@@ -248,6 +278,34 @@ class UseStatementInsertionCreator
     }
 
     /**
+     * @param Node\Stmt\Use_|Node\Stmt\GroupUse $use
+     * @param string                            $kind
+     *
+     * @return bool
+     */
+    private function doesUseStatementNodeHaveKind(Node $use, string $kind): bool
+    {
+        return $this->getUseStatementNodeKind($use) === $kind;
+    }
+
+    /**
+     * @param Node\Stmt\Use_|Node\Stmt\GroupUse $use
+     *
+     * @return string
+     */
+    private function getUseStatementNodeKind(Node $use): string
+    {
+        $map = [
+            Use_::TYPE_UNKNOWN  => UseStatementKind::TYPE_CLASSLIKE,
+            Use_::TYPE_NORMAL   => UseStatementKind::TYPE_CLASSLIKE,
+            Use_::TYPE_FUNCTION => UseStatementKind::TYPE_FUNCTION,
+            Use_::TYPE_CONSTANT => UseStatementKind::TYPE_CONSTANT,
+        ];
+
+        return $map[$use->type];
+    }
+
+    /**
      * @param string           $name
      * @param string           $kind
      * @param TextDocumentItem $textDocumentItem
@@ -264,6 +322,10 @@ class UseStatementInsertionCreator
         $useStatements = $this->retrieveRelevantUseStatements($textDocumentItem, $position);
 
         foreach ($useStatements as $useStatement) {
+            if (!$this->doesUseStatementNodeHaveKind($useStatement, $kind)) {
+                continue;
+            }
+
             foreach ($useStatement->uses as $useUseNode) {
                 $useUseNodeName = $this->getFullNameFromUseUse($useStatement, $useUseNode);
 

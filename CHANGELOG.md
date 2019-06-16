@@ -2,6 +2,8 @@
 * To be determined
 
 ## 5.0.0-RC3 (Unreleased)
+* [Return use statement imports for (qualified) functions when necessary](https://gitlab.com/Serenata/Serenata/issues/164)
+* [Return use statement imports for (qualified) constants when necessary](https://gitlab.com/Serenata/Serenata/issues/163)
 * [Fix `uris` in project files being ignored and not analyzed](https://gitlab.com/Serenata/Serenata/issues/243)
 * [Fix crash when analyzing erroneous code containing multiple object arrows, such as `$test->->`](https://gitlab.com/Serenata/Serenata/issues/245)
 * [Stub `textDocument/didOpen`](https://gitlab.com/Serenata/Serenata/issues/253)
