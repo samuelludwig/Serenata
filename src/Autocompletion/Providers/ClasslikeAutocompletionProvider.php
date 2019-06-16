@@ -176,7 +176,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
 
         // Don't try to add use statements for class names that the user wants to make absolute by adding a leading
         // slash.
-        return implode('\\', array_slice($parts, -$partsToSlice - 1));
+        return str_replace('\\', '\\\\', implode('\\', array_slice($parts, -$partsToSlice - 1)));
     }
 
     /**

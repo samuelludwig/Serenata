@@ -125,6 +125,9 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      */
     private function getTextEditForSuggestion(array $namespace, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $namespace['name']);
+        return new TextEdit(
+            $context->getPrefixRange(),
+            str_replace('\\', '\\\\', $namespace['name'])
+        );
     }
 }

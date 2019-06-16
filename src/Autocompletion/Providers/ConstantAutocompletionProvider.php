@@ -188,7 +188,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $insertText = implode('\\', array_slice($parts, -$partsToSlice - 1));
         }
 
-        return $insertText;
+        return str_replace('\\', '\\\\', $insertText);
     }
 
     /**

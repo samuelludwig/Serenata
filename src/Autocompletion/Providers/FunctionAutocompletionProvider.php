@@ -238,7 +238,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             }
         }
 
-        return $insertText;
+        return str_replace('\\', '\\\\', $insertText);
     }
 
     /**

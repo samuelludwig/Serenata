@@ -115,10 +115,10 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
             new CompletionItem(
                 '\Foo\Bar\BAZ',
                 CompletionItemKind::CONSTANT,
-                'Bar\BAZ',
+                'Bar\\\\BAZ',
                 new TextEdit(
                     new Range(new Position(7, 4), new Position(7, 8)),
-                    'Bar\BAZ'
+                    'Bar\\\\BAZ'
                 ),
                 'Foo\Bar\BAZ',
                 null,
@@ -147,10 +147,10 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
             new CompletionItem(
                 '\Foo\Bar\BAZ',
                 CompletionItemKind::CONSTANT,
-                '\Foo\Bar\BAZ',
+                '\\\\Foo\\\\Bar\\\\BAZ',
                 new TextEdit(
                     new Range(new Position(7, 4), new Position(7, 6)),
-                    '\Foo\Bar\BAZ'
+                    '\\\\Foo\\\\Bar\\\\BAZ'
                 ),
                 'Foo\Bar\BAZ',
                 null,
@@ -174,10 +174,10 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
             new CompletionItem(
                 '\Foo\Bar\Baz\QUX',
                 CompletionItemKind::CONSTANT,
-                'Foo\Bar\Baz\QUX',
+                'Foo\\\\Bar\\\\Baz\\\\QUX',
                 new TextEdit(
                     new Range(new Position(7, 14), new Position(7, 21)),
-                    'Foo\Bar\Baz\QUX'
+                    'Foo\\\\Bar\\\\Baz\\\\QUX'
                 ),
                 'Foo\Bar\Baz\QUX',
                 null,

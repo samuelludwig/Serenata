@@ -235,10 +235,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
             new CompletionItem(
                 '\Foo\Bar\baz',
                 CompletionItemKind::FUNCTION,
-                'Bar\baz()$0',
+                'Bar\\\\baz()$0',
                 new TextEdit(
                     new Range(new Position(10, 4), new Position(10, 8)),
-                    'Bar\baz()$0'
+                    'Bar\\\\baz()$0'
                 ),
                 'Foo\Bar\baz()',
                 null,
@@ -267,10 +267,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
             new CompletionItem(
                 '\Foo\Bar\baz',
                 CompletionItemKind::FUNCTION,
-                '\Foo\Bar\baz()$0',
+                '\\\\Foo\\\\Bar\\\\baz()$0',
                 new TextEdit(
                     new Range(new Position(10, 4), new Position(10, 6)),
-                    '\Foo\Bar\baz()$0'
+                    '\\\\Foo\\\\Bar\\\\baz()$0'
                 ),
                 'Foo\Bar\baz()',
                 null,
@@ -294,10 +294,10 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
             new CompletionItem(
                 '\Foo\Bar\Baz\qux',
                 CompletionItemKind::FUNCTION,
-                'Foo\Bar\Baz\qux',
+                'Foo\\\\Bar\\\\Baz\\\\qux',
                 new TextEdit(
                     new Range(new Position(10, 17), new Position(10, 24)),
-                    'Foo\Bar\Baz\qux'
+                    'Foo\\\\Bar\\\\Baz\\\\qux'
                 ),
                 'Foo\Bar\Baz\qux()',
                 null,
