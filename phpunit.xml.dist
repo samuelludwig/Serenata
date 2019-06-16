@@ -4,13 +4,13 @@
          verbose="true"
 >
     <testsuites>
-        <testsuite name="PHP Integrator Unit Test Suite">
+        <testsuite name="Serenata Unit Test Suite">
             <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
-        <testsuite name="PHP Integrator Integration Test Suite">
+        <testsuite name="Serenata Integration Test Suite">
             <directory suffix="Test.php">./tests/Integration</directory>
         </testsuite>
-        <testsuite name="PHP Integrator Performance Test Suite">
+        <testsuite name="Serenata Performance Test Suite">
             <directory suffix="Test.php">./tests/Performance</directory>
         </testsuite>
     </testsuites>
