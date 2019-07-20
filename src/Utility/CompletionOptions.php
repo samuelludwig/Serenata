@@ -5,7 +5,7 @@ namespace Serenata\Utility;
 use JsonSerializable;
 
 /**
- * Represents initialization parameters.
+ * Represents completion options.
  *
  * @see https://microsoft.github.io/language-server-protocol/specification#initialize
  */
