@@ -17,6 +17,7 @@ services:
             - '@backendIndexer'
             - '@schemaInitializer'
             - '@indexFilePruner'
+            - '@requestQueue'
 
     initializedJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\InitializedJsonRpcQueueItemHandler

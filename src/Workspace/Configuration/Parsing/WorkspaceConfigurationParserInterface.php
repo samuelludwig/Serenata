@@ -10,11 +10,11 @@ use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 interface WorkspaceConfigurationParserInterface
 {
     /**
-     * @param string $uri
+     * @param array $configuration
      *
      * @throws WorkspaceConfigurationParsingException
      *
      * @return WorkspaceConfiguration
      */
-    public function parse(string $uri): WorkspaceConfiguration;
+    public function parse(array $configuration): WorkspaceConfiguration;
 }

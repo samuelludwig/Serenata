@@ -10,15 +10,18 @@ use Serenata\Indexing\ManagerRegistry;
 use Serenata\Indexing\SchemaInitializer;
 use Serenata\Indexing\StorageVersionChecker;
 
+use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcMessageInterface;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
+use Serenata\Utility\MessageType;
 use Serenata\Utility\SaveOptions;
 use Serenata\Utility\InitializeParams;
 use Serenata\Utility\InitializeResult;
+use Serenata\Utility\LogMessageParams;
 use Serenata\Utility\CompletionOptions;
 use Serenata\Utility\ServerCapabilities;
 use Serenata\Utility\SignatureHelpOptions;
@@ -70,6 +73,11 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     private $indexFilePruner;
 
     /**
+     * @var JsonRpcQueue
+     */
+    private $queue;
+
+    /**
      * @param ActiveWorkspaceManager                $activeWorkspaceManager
      * @param WorkspaceConfigurationParserInterface $workspaceConfigurationParser
      * @param ManagerRegistry                       $managerRegistry
@@ -77,6 +85,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      * @param Indexer                               $indexer
      * @param SchemaInitializer                     $schemaInitializer
      * @param IndexFilePruner                       $indexFilePruner
+     * @param JsonRpcQueue                          $queue
      */
     public function __construct(
         ActiveWorkspaceManager $activeWorkspaceManager,
@@ -85,7 +94,8 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         StorageVersionChecker $storageVersionChecker,
         Indexer $indexer,
         SchemaInitializer $schemaInitializer,
-        IndexFilePruner $indexFilePruner
+        IndexFilePruner $indexFilePruner,
+        JsonRpcQueue $queue
     ) {
         $this->activeWorkspaceManager = $activeWorkspaceManager;
         $this->workspaceConfigurationParser = $workspaceConfigurationParser;
@@ -94,6 +104,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         $this->indexer = $indexer;
         $this->schemaInitializer = $schemaInitializer;
         $this->indexFilePruner = $indexFilePruner;
+        $this->queue = $queue;
     }
 
     /**
@@ -161,11 +172,40 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
             throw new InvalidArgumentsException('Need a rootUri and a rootPath in InitializeParams to function');
         }
 
-        $pathToConfigurationFile = $rootUri . '/.serenata/config.json';
+        $initializationOptions = $initializeParams->getInitializationOptions();
 
-        $workspaceConfiguration = $this->workspaceConfigurationParser->parse($pathToConfigurationFile);
+        if ($initializationOptions !== null && ($initializationOptions['configuration'] ?? null) !== null) {
+            $workspaceConfiguration = $this->workspaceConfigurationParser->parse(
+                $initializationOptions['configuration']
+            );
 
-        $this->managerRegistry->setDatabasePath($rootPath . '/.serenata/index.sqlite');
+            $this->managerRegistry->setDatabasePath($rootPath . '/.serenata/index.sqlite');
+        } else {
+            $workspaceConfiguration = $this->workspaceConfigurationParser->parse(
+                $this->getDefaultProjectConfiguration($rootUri)
+            );
+
+            $this->managerRegistry->setDatabasePath(
+                sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($rootPath . $rootUri)
+            );
+
+            $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
+                'message' => new JsonRpcRequest(
+                    null,
+                    'window/logMessage',
+                    (new LogMessageParams(
+                        MessageType::INFO,
+                        'No explicit project configuration found, automatically generating one and using the ' .
+                        'system\'s temp folder to store the index database. You should consider setting up a ' .
+                        'Serenata configuration file, see also ' .
+                        'https://gitlab.com/Serenata/Serenata/wikis/Setting%20Up%20Your%20Project for more ' .
+                        'information.'
+                    ))->jsonSerialize()
+                ),
+            ]);
+
+            $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
+        }
 
         $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
 
@@ -234,6 +274,29 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         }
 
         return null;
+    }
+
+    /**
+     * @param string $rootUri
+     *
+     * @return array
+     */
+    private function getDefaultProjectConfiguration(string $rootUri): array
+    {
+        $configuration = <<<JSON
+{
+    "uris": [
+        "{$rootUri}"
+    ],
+    "phpVersion": 7.3,
+    "excludedPathExpressions": [],
+    "fileExtensions": [
+        "php"
+    ]
+}
+JSON;
+
+        return json_decode($configuration, true);
     }
 
     /**

@@ -12,24 +12,8 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
     /**
      * @inheritDoc
      */
-    public function parse(string $uri): WorkspaceConfiguration
+    public function parse(array $configuration): WorkspaceConfiguration
     {
-        $contents = @file_get_contents($uri);
-
-        if ($contents === false) {
-            throw new WorkspaceConfigurationNotFoundException(
-                'Workspace configuration could not be read from URI "' . $uri . '"'
-            );
-        }
-
-        $configuration = json_decode($contents, true);
-
-        if ($configuration === false) {
-            throw new WorkspaceConfigurationInvalidFormatException(
-                'Workspace configuration in "' . $uri . ' is not valid JSON'
-            );
-        }
-
         $this->validate($configuration);
 
         return new WorkspaceConfiguration(

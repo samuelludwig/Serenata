@@ -2,6 +2,8 @@
 * To be determined
 
 ## 5.0.0-RC3 (Unreleased)
+* [Accept project configurations via `initializationOptions` instead of trying to read it from disk ourselves](https://gitlab.com/Serenata/Serenata/issues/258)
+    * This means the server now supports initializing for projects that haven't explicitly been set up as well. A fallback configuration with an index database stored in the system's temp folder will be used in that case.
 * [Return use statement imports for (qualified) functions when necessary](https://gitlab.com/Serenata/Serenata/issues/164)
 * [Return use statement imports for (qualified) constants when necessary](https://gitlab.com/Serenata/Serenata/issues/163)
 * [Fix `uris` in project files being ignored and not analyzed](https://gitlab.com/Serenata/Serenata/issues/243)
