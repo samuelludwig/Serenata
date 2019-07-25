@@ -12,7 +12,7 @@ use Serenata\Symbols\SymbolInformation;
 use Serenata\Symbols\DocumentSymbolRetriever;
 
 /**
- * JsonRpcQueueItemHandlerthat retrieves a list of known symbols for a document.
+ * Handler that retrieves a list of known symbols for a document.
  */
 final class DocumentSymbolJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandler
 {
