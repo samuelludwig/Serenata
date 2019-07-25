@@ -9,6 +9,7 @@ imports:
     - { resource: PrettyPrinting.yml }
     - { resource: Refactoring.yml }
     - { resource: SignatureHelp.yml }
+    - { resource: Highlights.yml }
     - { resource: Sockets.yml }
     - { resource: Symbols.yml }
     - { resource: Tooltips.yml }

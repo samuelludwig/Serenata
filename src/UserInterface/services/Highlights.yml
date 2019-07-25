@@ -1,0 +1,10 @@
+parameters:
+
+
+services:
+    documentHighlightsRetriever:
+        class: Serenata\Highlights\DocumentHighlightsRetriever
+        arguments:
+            - '@parser'
+            - '@nodeAtOffsetLocator'
+            - '@nameNodeFqsenDeterminer'

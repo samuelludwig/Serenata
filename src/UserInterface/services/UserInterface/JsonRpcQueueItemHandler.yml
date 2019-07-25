@@ -109,6 +109,12 @@ services:
             - '@definitionLocator'
             - '@textDocumentContentRegistry'
 
+    documentHighlightJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DocumentHighlightJsonRpcQueueItemHandler
+        arguments:
+            - '@documentHighlightsRetriever'
+            - '@textDocumentContentRegistry'
+
     documentSymbolJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DocumentSymbolJsonRpcQueueItemHandler
         arguments:

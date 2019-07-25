@@ -244,7 +244,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                     false,
                     false,
                     false,
-                    false,
+                    true,
                     true,
                     false,
                     false,
