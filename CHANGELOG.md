@@ -2,6 +2,8 @@
 * To be determined
 
 ## 5.0.0-RC3 (Unreleased)
+* [Implement basic support for `textDocument/documentHighlight`](https://gitlab.com/Serenata/Serenata/issues/236)
+    * This is very basic for now and mainly intended to help clients to identify ranges for things such as qualified class names, i.e. the Atom client uses this to know what to underline when hovering over a qualified class name (otherwise it will do a best effort based on path separators, which stops on slashes).
 * [Accept project configurations via `initializationOptions` instead of trying to read it from disk ourselves](https://gitlab.com/Serenata/Serenata/issues/258)
     * This means the server now supports initializing for projects that haven't explicitly been set up as well. A fallback configuration with an index database stored in the system's temp folder will be used in that case.
 * [Return use statement imports for (qualified) functions when necessary](https://gitlab.com/Serenata/Serenata/issues/164)

@@ -10,6 +10,7 @@ use Serenata\Analysis\Node\NameNodeFqsenDeterminer;
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
+use Serenata\Utility\NodeHelpers;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
@@ -72,9 +73,6 @@ final class DocumentHighlightsVisitor extends NodeVisitorAbstract
         if ($nodeFqcn === $referenceFqcn) {
             $this->pushHighlight($node);
         }
-
-        // TODO: Use node retriever to get node at position, then we know what to look for.
-        // TODO: Use parser to get AST. Traverse AST, find what we're looking for, return results.
     }
 
     /**
@@ -92,6 +90,16 @@ final class DocumentHighlightsVisitor extends NodeVisitorAbstract
             $nodeToResolve = new Node\Name($node->name);
         } else {
             return null;
+        }
+
+        if (NodeHelpers::findAncestorOfAnyType($node, Node\Stmt\Use_::class) !== null) {
+            $name = $node->toString();
+
+            if ($name[0] !== '\\') {
+                return '\\' . $name;
+            }
+
+            return $name;
         }
 
         return $this->nameNodeFqsenDeterminer->determine(

@@ -206,11 +206,159 @@ class DocumentHighlightsRetrieverTest extends AbstractIntegrationTest
         ]);
     }
 
-    // TODO: Test class names in class constants (unqualified)
-    // TODO: Test class names in class constants (qualified)
-    // TODO: Test class names in class constants (fully qualified)
-    // TODO: Test manually that this now also works after extends, implements, trait uses. If it doesn't, fix and write
-    // tests for that.
+    /**
+     * @return void
+     */
+    public function testConstantInUnqualifiedClassConstant(): void
+    {
+        $filePath = $this->getTestFilePath('UnqualifiedClassConstant.phpt');
+
+        $this->assertDocumentHighlightsEqual($filePath, 7, 12, 14, [
+            new DocumentHighlight(
+                new Range(
+                    new Position(4, 17),
+                    new Position(4, 20)
+                ),
+                null
+            ),
+            new DocumentHighlight(
+                new Range(
+                    new Position(7, 12),
+                    new Position(7, 15)
+                ),
+                null
+            ),
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testClassInUnqualifiedClassConstant(): void
+    {
+        $filePath = $this->getTestFilePath('UnqualifiedClassConstant.phpt');
+
+        $this->assertDocumentHighlightsEqual($filePath, 7, 7, 9, [
+            new DocumentHighlight(
+                new Range(
+                    new Position(2, 6),
+                    new Position(2, 9)
+                ),
+                null
+            ),
+            new DocumentHighlight(
+                new Range(
+                    new Position(7, 7),
+                    new Position(7, 10)
+                ),
+                null
+            ),
+        ]);
+    }
+
+    // TODO: Should pass once class constants are properly supported.
+    // /**
+    //  * @return void
+    //  */
+    // public function testConstantInQualifiedClassConstant(): void
+    // {
+    //     $filePath = $this->getTestFilePath('QualifiedClassConstant.phpt');
+    //
+    //     $this->assertDocumentHighlightsEqual($filePath, 7, 17, 19, [
+    //         new DocumentHighlight(
+    //             new Range(
+    //                 new Position(4, 21),
+    //                 new Position(4, 24)
+    //             ),
+    //             null
+    //         ),
+    //         new DocumentHighlight(
+    //             new Range(
+    //                 new Position(7, 17),
+    //                 new Position(7, 20)
+    //             ),
+    //             null
+    //         ),
+    //         new DocumentHighlight(
+    //             new Range(
+    //                 new Position(11, 17),
+    //                 new Position(11, 24)
+    //             ),
+    //             null
+    //         ),
+    //         new DocumentHighlight(
+    //             new Range(
+    //                 new Position(15, 17),
+    //                 new Position(15, 25)
+    //             ),
+    //             null
+    //         ),
+    //     ]);
+    // }
+
+    /**
+     * @return void
+     */
+    public function testClassInQualifiedClassConstant(): void
+    {
+        $filePath = $this->getTestFilePath('QualifiedClassConstant.phpt');
+
+        $this->assertDocumentHighlightsEqual($filePath, 7, 12, 14, [
+            new DocumentHighlight(
+                new Range(
+                    new Position(3, 10),
+                    new Position(3, 13)
+                ),
+                null
+            ),
+            new DocumentHighlight(
+                new Range(
+                    new Position(7, 12),
+                    new Position(7, 15)
+                ),
+                null
+            ),
+            new DocumentHighlight(
+                new Range(
+                    new Position(13, 13),
+                    new Position(13, 20)
+                ),
+                null
+            ),
+            new DocumentHighlight(
+                new Range(
+                    new Position(17, 13),
+                    new Position(17, 21)
+                ),
+                null
+            ),
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnqualifiedClassMatchesImport(): void
+    {
+        $filePath = $this->getTestFilePath('UnqualifiedClassWithImport.phpt');
+
+        $this->assertDocumentHighlightsEqual($filePath, 6, 11, 13, [
+            new DocumentHighlight(
+                new Range(
+                    new Position(4, 4),
+                    new Position(4, 11)
+                ),
+                null
+            ),
+            new DocumentHighlight(
+                new Range(
+                    new Position(6, 11),
+                    new Position(6, 14)
+                ),
+                null
+            ),
+        ]);
+    }
 
     /**
      * @param string                   $uri
