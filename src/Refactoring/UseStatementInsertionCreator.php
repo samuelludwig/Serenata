@@ -199,6 +199,8 @@ class UseStatementInsertionCreator
             // all use statements of a single kind are grouped together.
             if ($groupOrderMap[$kind] >= $groupOrderMap[$this->getUseStatementNodeKind($useStatement)]) {
                 $bestLine = $useStatement->getEndLine();
+            } elseif ($bestLine === null) {
+                $bestLine = $useStatement->getStartLine() - 2;
             }
 
             if (!$this->doesUseStatementNodeHaveKind($useStatement, $kind)) {
@@ -321,6 +323,10 @@ class UseStatementInsertionCreator
     ): bool {
         $useStatements = $this->retrieveRelevantUseStatements($textDocumentItem, $position);
 
+        if (count($useStatements) === 0) {
+            return false;
+        }
+
         foreach ($useStatements as $useStatement) {
             if (!$this->doesUseStatementNodeHaveKind($useStatement, $kind)) {
                 continue;
@@ -335,7 +341,7 @@ class UseStatementInsertionCreator
             }
         }
 
-        return count($useStatements) > 0;
+        return true;
     }
 
     /**

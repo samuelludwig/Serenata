@@ -383,6 +383,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testInsertsClasslikeImportAfterFunctionImportsAndInSeparateGroup(): void
+    {
+        $name = '\B\Foo';
+        $insertionPoint = new Position(3, 0);
+        $file = 'MultipleFunctionUseStatementsInNamespace.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testInsertsFunctionImportsBeforeConstantImportsandInSeparateGroup(): void
     {
         $name = '\Foo\Bar\a';
@@ -416,7 +431,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     public function testInsertsClasslikeImportIfImportForFunctionAlreadyExists(): void
     {
         $name = '\Foo\Bar\FOO';
-        $insertionPoint = new Position(2, 0);
+        $insertionPoint = new Position(1, 0);
         $file = 'ExistingMixedUseStatements.phpt';
 
         static::assertEquals(
