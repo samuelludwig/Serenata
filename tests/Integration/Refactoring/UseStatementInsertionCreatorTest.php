@@ -400,11 +400,6 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
      */
     public function testInsertsFunctionImportsBeforeConstantImportsandInExistingGroupIfGroupsAlreadyExist(): void
     {
-
-        // FIXME: Function placed at bottom instead of top when "use func" and "use const" already exist.
-
-
-
         $name = '\Foo\Bar\qux';
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingMixedUseStatements.phpt';
