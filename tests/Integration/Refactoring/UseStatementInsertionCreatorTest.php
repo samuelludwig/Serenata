@@ -353,7 +353,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testInsertsClasslikeImportsBeforeFunctionImportsAndInSeparateGroup(): void
+    public function testInsertsFunctionImportAfterClasslikeImportsAndInSeparateGroup(): void
     {
         $name = '\Foo\a';
         $insertionPoint = new Position(3, 0);
@@ -368,7 +368,7 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testInsertsClasslikeImportsBeforeConstantImportsAndInSeparateGroup(): void
+    public function testInsertsConstantImportAfterClasslikeImportsAndInSeparateGroup(): void
     {
         $name = '\Foo\A';
         $insertionPoint = new Position(3, 0);
