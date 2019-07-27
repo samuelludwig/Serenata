@@ -13,11 +13,11 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
     public function testIndexStubs(): void
     {
         $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
-        $dummyDatabasePath = $this->getOutputDirectory() . '/test-stubs.sqlite';
+        $dummyDatabaseUri = 'file://' . $this->getOutputDirectory() . '/test-stubs.sqlite';
 
-        @unlink($dummyDatabasePath);
+        @unlink($dummyDatabaseUri);
 
-        $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
+        $this->container->get('managerRegistry')->setDatabaseUri($dummyDatabaseUri);
         $this->container->get('initializeJsonRpcQueueItemHandler')->initialize(
             $this->mockJsonRpcMessageSenderInterface(),
             false
@@ -27,7 +27,7 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
             $this->indexPath($this->container, $pathToIndex);
         });
 
-        unlink($dummyDatabasePath);
+        unlink($dummyDatabaseUri);
 
         $this->finish($time);
     }
@@ -39,11 +39,11 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
     {
         // This file is about 3000 lines at the time of writing.
         $pathToIndex = __DIR__ . '/../../vendor/doctrine/orm/lib/Doctrine/ORM/UnitOfWork.php';
-        $dummyDatabasePath = $this->getOutputDirectory() . '/test-large-file.sqlite';
+        $dummyDatabaseUri = 'file://' . $this->getOutputDirectory() . '/test-large-file.sqlite';
 
-        @unlink($dummyDatabasePath);
+        @unlink($dummyDatabaseUri);
 
-        $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
+        $this->container->get('managerRegistry')->setDatabaseUri($dummyDatabaseUri);
         $this->container->get('initializeJsonRpcQueueItemHandler')->initialize(
             $this->mockJsonRpcMessageSenderInterface(),
             false
@@ -53,7 +53,7 @@ class IndexingPerformanceTest extends AbstractPerformanceTest
             $this->indexPath($this->container, $pathToIndex);
         });
 
-        unlink($dummyDatabasePath);
+        unlink($dummyDatabaseUri);
 
         $this->finish($time);
     }

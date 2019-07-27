@@ -20,15 +20,15 @@ class SqliteConnectionFactory
     }
 
     /**
-     * @param string $databasePath
+     * @param string $databaseUri
      *
      * @return Connection
      */
-    public function create(string $databasePath)
+    public function create(string $databaseUri): Connection
     {
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_sqlite',
-            'path'   => $databasePath,
+            'path'   => str_replace('file://', '', $databaseUri),
         ], $this->getConfiguration());
 
         // Data could become corrupted if the operating system were to crash during synchronization, but this

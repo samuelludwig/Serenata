@@ -107,13 +107,14 @@ abstract class AbstractIntegrationTest extends TestCase
     protected function prepareContainer(ContainerBuilder $container): void
     {
         // Replace some container items for testing purposes.
-        $container->get('managerRegistry')->setDatabasePath(':memory:');
+        $container->get('managerRegistry')->setDatabaseUri(':memory:');
         $container->get('schemaInitializer')->initialize();
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
         $container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             'test-id',
             [],
+            ':memory:',
             7.1,
             [],
             ['php', 'phpt']

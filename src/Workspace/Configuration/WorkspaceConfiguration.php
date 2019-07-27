@@ -18,6 +18,11 @@ final class WorkspaceConfiguration
     private $uris;
 
     /**
+     * @var string
+     */
+    private $indexDatabaseUri;
+
+    /**
      * @var float
      */
     private $phpVersion;
@@ -35,6 +40,7 @@ final class WorkspaceConfiguration
     /**
      * @param string   $id
      * @param string[] $uris
+     * @param string   $indexDatabaseUri
      * @param float    $phpVersion
      * @param string[] $excludedPathExpressions
      * @param string[] $fileExtensions
@@ -42,12 +48,14 @@ final class WorkspaceConfiguration
     public function __construct(
         string $id,
         array $uris,
+        string $indexDatabaseUri,
         float $phpVersion,
         array $excludedPathExpressions,
         array $fileExtensions
     ) {
         $this->id = $id;
         $this->uris = $uris;
+        $this->indexDatabaseUri = $indexDatabaseUri;
         $this->phpVersion = $phpVersion;
         $this->excludedPathExpressions = $excludedPathExpressions;
         $this->fileExtensions = $fileExtensions;
@@ -67,6 +75,14 @@ final class WorkspaceConfiguration
     public function getUris(): array
     {
         return $this->uris;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIndexDatabaseUri(): string
+    {
+        return $this->indexDatabaseUri;
     }
 
     /**

@@ -13,11 +13,11 @@ class AutocompletionPerformanceTest extends AbstractPerformanceTest
     public function testProvideAllFromStubs(): void
     {
         $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
-        $dummyDatabasePath = $this->getOutputDirectory() . '/test-stubs.sqlite';
+        $dummyDatabaseUri = 'file://' . $this->getOutputDirectory() . '/test-stubs.sqlite';
 
-        @unlink($dummyDatabasePath);
+        @unlink($dummyDatabaseUri);
 
-        $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
+        $this->container->get('managerRegistry')->setDatabaseUri($dummyDatabaseUri);
         $this->container->get('initializeJsonRpcQueueItemHandler')->initialize(
             $this->mockJsonRpcMessageSenderInterface(),
             false
@@ -46,7 +46,7 @@ class AutocompletionPerformanceTest extends AbstractPerformanceTest
             );
         });
 
-        unlink($dummyDatabasePath);
+        unlink($dummyDatabaseUri);
 
         $this->finish($time);
     }

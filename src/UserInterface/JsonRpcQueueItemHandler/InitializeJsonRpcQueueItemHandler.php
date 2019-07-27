@@ -179,14 +179,14 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                 $initializationOptions['configuration']
             );
 
-            $this->managerRegistry->setDatabasePath($rootPath . '/.serenata/index.sqlite');
+            $this->managerRegistry->setDatabaseUri($workspaceConfiguration->getIndexDatabaseUri());
         } else {
             $workspaceConfiguration = $this->workspaceConfigurationParser->parse(
                 $this->getDefaultProjectConfiguration($rootUri)
             );
 
-            $this->managerRegistry->setDatabasePath(
-                sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($rootPath . $rootUri)
+            $this->managerRegistry->setDatabaseUri(
+                'file://' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($rootPath . $rootUri)
             );
 
             $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [

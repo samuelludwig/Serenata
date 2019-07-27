@@ -19,6 +19,7 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
         return new WorkspaceConfiguration(
             $this->generateId($configuration['uris']),
             $configuration['uris'],
+            $configuration['indexDatabaseUri'],
             $configuration['phpVersion'],
             $configuration['excludedPathExpressions'] ?? [],
             $configuration['fileExtensions'] ?? ['php']
@@ -43,6 +44,7 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
     private function validate(array $configuration): void
     {
         $this->expectKey($configuration, 'uris');
+        $this->expectKey($configuration, 'indexDatabaseUri');
         $this->expectKey($configuration, 'phpVersion');
     }
 

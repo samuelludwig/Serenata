@@ -50,7 +50,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
     /**
      * @var string
      */
-    private $databasePath;
+    private $databaseUri;
 
     /**
      * @param SqliteConnectionFactory $sqliteConnectionFactory
@@ -95,7 +95,7 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
     private function getConnectionInstance(): Connection
     {
         if ($this->connection === null) {
-            $this->connection = $this->sqliteConnectionFactory->create($this->getDatabasePath());
+            $this->connection = $this->sqliteConnectionFactory->create($this->getDatabaseUri());
         }
 
         return $this->connection;
@@ -160,22 +160,22 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
     /**
      * @return string
      */
-    public function getDatabasePath(): string
+    public function getDatabaseUri(): string
     {
-        return $this->databasePath;
+        return $this->databaseUri;
     }
 
     /**
-     * @param string $databasePath
+     * @param string $databaseUri
      *
      * @return void
      */
-    public function setDatabasePath(string $databasePath): void
+    public function setDatabaseUri(string $databaseUri): void
     {
-        $this->databasePath = $databasePath;
+        $this->databaseUri = $databaseUri;
 
         $this->resetService('defaultConnection');
 
-        $this->emit(WorkspaceEventName::CHANGED, [$databasePath]);
+        $this->emit(WorkspaceEventName::CHANGED, [$databaseUri]);
     }
 }

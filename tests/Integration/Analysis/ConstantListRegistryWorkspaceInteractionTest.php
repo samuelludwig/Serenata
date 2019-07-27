@@ -28,13 +28,14 @@ class ConstantListRegistryWorkspaceInteractionTest extends AbstractIntegrationTe
 
         static::assertCount(1, $registry->getAll());
 
-        $this->container->get('managerRegistry')->setDatabasePath(':memory:');
+        $this->container->get('managerRegistry')->setDatabaseUri(':memory:');
         $this->container->get('schemaInitializer')->initialize();
         $this->container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
         $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             'test-id',
             [],
+            ':memory:',
             7.1,
             [],
             ['php']

@@ -13,11 +13,11 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
     public function testFetchAllColdFromStubs(): void
     {
         $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
-        $dummyDatabasePath = $this->getOutputDirectory() . '/test-global-functions-stubs.sqlite';
+        $dummyDatabaseUri = 'file://' . $this->getOutputDirectory() . '/test-global-functions-stubs.sqlite';
 
-        @unlink($dummyDatabasePath);
+        @unlink($dummyDatabaseUri);
 
-        $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
+        $this->container->get('managerRegistry')->setDatabaseUri($dummyDatabaseUri);
         $this->container->get('initializeJsonRpcQueueItemHandler')->initialize(
             $this->mockJsonRpcMessageSenderInterface(),
             false
@@ -29,7 +29,7 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
             $this->container->get('functionListProvider')->getAll();
         });
 
-        unlink($dummyDatabasePath);
+        unlink($dummyDatabaseUri);
 
         $this->finish($time);
     }
@@ -40,11 +40,11 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
     public function testFetchAllHotFromStubs(): void
     {
         $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
-        $dummyDatabasePath = $this->getOutputDirectory() . '/test-global-functions-stubs.sqlite';
+        $dummyDatabaseUri = $this->getOutputDirectory() . '/test-global-functions-stubs.sqlite';
 
-        @unlink($dummyDatabasePath);
+        @unlink($dummyDatabaseUri);
 
-        $this->container->get('managerRegistry')->setDatabasePath($dummyDatabasePath);
+        $this->container->get('managerRegistry')->setDatabaseUri($dummyDatabaseUri);
         $this->container->get('initializeJsonRpcQueueItemHandler')->initialize(
             $this->mockJsonRpcMessageSenderInterface(),
             false
@@ -57,7 +57,7 @@ class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
             $this->container->get('functionListProvider')->getAll();
         });
 
-        unlink($dummyDatabasePath);
+        unlink($dummyDatabaseUri);
 
         $this->finish($time);
     }
