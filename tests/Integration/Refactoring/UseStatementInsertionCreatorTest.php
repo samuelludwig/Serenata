@@ -413,6 +413,21 @@ class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testInsertsClasslikeImportIfImportForFunctionAlreadyExists(): void
+    {
+        $name = '\Foo\Bar\FOO';
+        $insertionPoint = new Position(2, 0);
+        $file = 'ExistingMixedUseStatements.phpt';
+
+        static::assertEquals(
+            new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
+            $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testThrowsExceptionWhenClasslikeUseStatementAlreadyExists(): void
     {
         $name = '\Foo\Bar';
