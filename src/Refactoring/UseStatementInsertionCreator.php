@@ -135,7 +135,7 @@ class UseStatementInsertionCreator
     ): void {
         if ($this->isUseStatementAlreadyPresent($name, $kind, $textDocumentItem, $position)) {
             throw new UseStatementAlreadyExistsException(
-                'Use statement for ' . $name . ' with kind ' . $kind . 'already exists'
+                'Use statement for ' . $name . ' with kind ' . $kind . ' already exists'
             );
         }
 
