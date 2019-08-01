@@ -306,22 +306,22 @@ JSON;
     {
         $this->managerRegistry->ensureConnectionClosed();
 
-        $databasePath = $this->managerRegistry->getDatabasePath();
+        $databaseUri = $this->managerRegistry->getDatabaseUri();
 
-        if ($databasePath === '') {
+        if ($databaseUri === '') {
             return;
         }
 
-        if (file_exists($databasePath)) {
-            unlink($databasePath);
+        if (file_exists($databaseUri)) {
+            unlink($databaseUri);
         }
 
-        if (file_exists($databasePath . '-shm')) {
-            unlink($databasePath . '-shm');
+        if (file_exists($databaseUri . '-shm')) {
+            unlink($databaseUri . '-shm');
         }
 
-        if (file_exists($databasePath . '-wal')) {
-            unlink($databasePath . '-wal');
+        if (file_exists($databaseUri . '-wal')) {
+            unlink($databaseUri . '-wal');
         }
     }
 }
