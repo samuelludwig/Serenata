@@ -1,7 +1,7 @@
 stages:
     - build
     - test
-    - code-quality
+    - finalization
 
 # ----- Build stage
 .build-setup-composer: &build-setup-composer
@@ -60,10 +60,33 @@ test:php-7.3:
     dependencies:
         - build:php-7.3
 
-# ----- Code quality analysis stage
-code-quality:code-coverage:
+# ----- Finalization stage, which contains finishing steps such as metrics and packaging.
+.finalization-package-job-shared: &finalization-package-job-shared
+    stage: finalization
+    script:
+        # Do a clean install so we can avoid including dev dependencies.
+        - curl -sS https://getcomposer.org/installer | php
+        - php composer.phar install --prefer-dist --optimize-autoloader --no-interaction --no-progress --no-dev
+        - php -d phar.readonly=0 bin/create-phar
+    artifacts:
+        paths:
+            - bin/distribution.phar
+
+finalization:package-php-7.1:
+    image: php:7.1-cli-alpine
+    <<: *finalization-package-job-shared
+
+finalization:package-php-7.2:
+    image: php:7.2-cli-alpine
+    <<: *finalization-package-job-shared
+
+finalization:package-php-7.3:
     image: php:7.3-cli-alpine
-    stage: code-quality
+    <<: *finalization-package-job-shared
+
+finalization:code-coverage:
+    image: php:7.3-cli-alpine
+    stage: finalization
     script:
         - phpdbg -d memory_limit=2048M -qrr vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
     artifacts:

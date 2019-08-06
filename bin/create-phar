@@ -1,0 +1,47 @@
+#!/usr/bin/env php
+<?php
+
+const OUTPUT_PATH = __DIR__ . '/distribution.phar';
+
+define('SOURCE_ROOT', realpath(__DIR__ . '/..'));
+
+@unlink(OUTPUT_PATH);
+
+$phar = new Phar(OUTPUT_PATH, 0, 'serenata');
+$phar->startBuffering();
+
+$iterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator(SOURCE_ROOT, FilesystemIterator::SKIP_DOTS)
+);
+
+$iterator = new CallbackFilterIterator($iterator, function (SplFileInfo $info) {
+    $relativePath = substr($info->getPathname(), strlen(SOURCE_ROOT));
+
+    return strpos($relativePath, '.git') === false && strpos($relativePath, '.serenata') === false;
+
+    return $info->getFilename() !== '.git' && $info->getFilename() !== '.serenata';
+});
+
+// buildFromIterator seems to hang for some unknown reason, so do things manually.
+foreach ($iterator as $test) {
+    echo 'Adding ' . $test->getPathname() . PHP_EOL;
+    $phar->addFile($test);
+}
+
+// TODO: Could be this works anyway, but it just takes a long time. Try it out.
+// $phar->buildFromIterator($iterator, SOURCE_ROOT);
+
+$phar->setStub("#!/usr/bin/env php\n" . $phar->createDefaultStub(SOURCE_ROOT . '/src/Main.php'));
+$phar->stopBuffering();
+
+// TODO: May want to sign the archive using a private SSL key added to CI at some point. It is now signed using SH1
+// as just a verification hash.
+// $phar->setSignatureAlgorithm(Phar::OPENSSL, 'TODO: Private key contents');
+
+$phar->compressFiles(Phar::BZ2);
+
+chmod(OUTPUT_PATH, ((int) substr((string) fileperms(OUTPUT_PATH), -4)) | 0x0111);
+
+echo "PHAR created successfully at " . OUTPUT_PATH;
+
+exit(0);
