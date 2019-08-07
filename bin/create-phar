@@ -38,7 +38,7 @@ $phar->stopBuffering();
 // as just a verification hash.
 // $phar->setSignatureAlgorithm(Phar::OPENSSL, 'TODO: Private key contents');
 
-$phar->compressFiles(Phar::BZ2);
+$phar->compressFiles(Phar::GZ);
 
 chmod(OUTPUT_PATH, ((int) substr((string) fileperms(OUTPUT_PATH), -4)) | 0x0111);
 
