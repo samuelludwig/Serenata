@@ -1,7 +1,7 @@
 ## 5.0.0 (Unreleased)
 * To be determined
 
-## 5.0.0-RC3 (Unreleased)
+## 5.0.0-RC3
 * [Implement basic support for `textDocument/documentHighlight`](https://gitlab.com/Serenata/Serenata/issues/236)
     * This is very basic for now and mainly intended to help clients to identify ranges for things such as qualified class names, i.e. the Atom client uses this to know what to underline when hovering over a qualified class name (otherwise it will do a best effort based on path separators, which stops on slashes).
 * [Accept project configurations via `initializationOptions` instead of trying to read it from disk ourselves](https://gitlab.com/Serenata/Serenata/issues/258)
@@ -13,6 +13,7 @@
 * [Fix crash when analyzing erroneous code containing multiple object arrows, such as `$test->->`](https://gitlab.com/Serenata/Serenata/issues/245)
 * [Stub `textDocument/didOpen`](https://gitlab.com/Serenata/Serenata/issues/253)
 * [Stub `textDocument/didClose`](https://gitlab.com/Serenata/Serenata/issues/259)
+* [Add initial support for building and distributing as PHAR](https://gitlab.com/Serenata/Serenata/issues/264)
 * Fix `textEdit` and `insertText` generated for completion suggestions not having backslashes properly escaped, as per spec (for edits bearing an `insertTextFormat` of `Snippet`, the backslash is itself an escape character)
 * Fix classlike autocompletion suggestions being given after `use function` and `use const`
 * Return `CompletionList` as response to `textDocument/completion`
