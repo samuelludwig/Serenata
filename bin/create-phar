@@ -18,8 +18,6 @@ $iterator = new CallbackFilterIterator($iterator, function (SplFileInfo $info) {
     $relativePath = substr($info->getPathname(), strlen(SOURCE_ROOT));
 
     return strpos($relativePath, '.git') === false && strpos($relativePath, '.serenata') === false;
-
-    return $info->getFilename() !== '.git' && $info->getFilename() !== '.serenata';
 });
 
 // buildFromIterator seems to hang for some unknown reason, so do things manually.
