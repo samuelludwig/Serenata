@@ -60,9 +60,7 @@ mb_detect_order(array_merge([
     'ISO-8859-1',
 ], mb_list_encodings()));
 
-chdir(__DIR__);
-
-require '../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 // Check the SQLite version.
 try {
