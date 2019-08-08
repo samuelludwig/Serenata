@@ -161,22 +161,24 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     private function getInsertTextForSuggestion(array $classlike, AutocompletionProviderContext $context): string
     {
         if ($context->getPrefix() !== '' && $context->getPrefix()[0] === '\\') {
-            return $classlike['fqcn'];
+            $insertText = $classlike['fqcn'];
         } elseif ($this->isInsideUseStatement($context)) {
-            return mb_substr($classlike['fqcn'], 1);
-        }
+            $insertText = mb_substr($classlike['fqcn'], 1);
+        } else {
+            // We try to add an import that has only as many parts of the namespace as needed, for example, if the user
+            // types 'Foo\Class' and confirms the suggestion 'My\Foo\Class', we add an import for 'My\Foo' and leave the
+            // user's code at 'Foo\Class' as a relative import. We only add the full 'My\Foo\Class' if the user were to
+            // type just 'Class' and then select 'My\Foo\Class' (i.e. we remove as many segments from the suggestion
+            // as the user already has in his code).
+            $partsToSlice = (count(explode('\\', $context->getPrefix())) - 1);
+            $parts = explode('\\', $this->getFqcnWithoutLeadingSlash($classlike));
 
-        // We try to add an import that has only as many parts of the namespace as needed, for example, if the user
-        // types 'Foo\Class' and confirms the suggestion 'My\Foo\Class', we add an import for 'My\Foo' and leave the
-        // user's code at 'Foo\Class' as a relative import. We only add the full 'My\Foo\Class' if the user were to
-        // type just 'Class' and then select 'My\Foo\Class' (i.e. we remove as many segments from the suggestion
-        // as the user already has in his code).
-        $partsToSlice = (count(explode('\\', $context->getPrefix())) - 1);
-        $parts = explode('\\', $this->getFqcnWithoutLeadingSlash($classlike));
+            $insertText = implode('\\', array_slice($parts, -$partsToSlice - 1));
+        }
 
         // Don't try to add use statements for class names that the user wants to make absolute by adding a leading
         // slash.
-        return str_replace('\\', '\\\\', implode('\\', array_slice($parts, -$partsToSlice - 1)));
+        return str_replace('\\', '\\\\', $insertText);
     }
 
     /**

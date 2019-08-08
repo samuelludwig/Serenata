@@ -79,10 +79,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
             new CompletionItem(
                 '\Foo',
                 CompletionItemKind::CLASS_,
-                '\Foo',
+                '\\\\Foo',
                 new TextEdit(
                     new Range(new Position(7, 0), new Position(7, 2)),
-                    '\Foo'
+                    '\\\\Foo'
                 ),
                 'Foo',
                 null,
@@ -138,10 +138,10 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
             new CompletionItem(
                 '\Foo\Bar\Baz\Qux',
                 CompletionItemKind::CLASS_,
-                'Foo\Bar\Baz\Qux',
+                'Foo\\\\Bar\\\\Baz\\\\Qux',
                 new TextEdit(
                     new Range(new Position(10, 8), new Position(10, 15)),
-                    'Foo\Bar\Baz\Qux'
+                    'Foo\\\\Bar\\\\Baz\\\\Qux'
                 ),
                 'Foo\Bar\Baz\Qux',
                 null,
