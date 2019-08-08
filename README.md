@@ -28,26 +28,36 @@ Serenata is, since version 5.0 and on the current `master` branch, a language se
 The [php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata/) package integrates Serenata into the Atom editor via Atom-IDE.
 
 ## Installation
-### Runtime
-If you want to use the server directly, i.e. just to be able to fire it up and communicate with it over a socket, such as when you want to integrate it into an editor:
+If you want to use the server as language server inside an editor or IDE, you can either install the PHAR, which is the recommended and easiest way to install the server, or install the server via Composer.
 
+### PHAR (recommended)
+Go to the [releases](https://gitlab.com/Serenata/Serenata/-/tags) page and download the appropriate PHAR for your PHP version.
+
+### Composer
 ```sh
 composer create-project "serenata/serenata" serenata --prefer-dist --no-dev
 ```
 
-You can then run it with:
+## Running
+If you downloaded the PHAR:
 
 ```sh
-php -d memory_limit=1024M bin/console --uri=tcp://127.0.0.1:11111
+php -d memory_limit=1024M distribution-7.x.phar --uri=tcp://127.0.0.1:11111
 ```
 
-Using `0.0.0.0` as host allows the server to be reachable when located on a different machine, such as across the network or inside a Docker container.
+Or if you installed via Composer:
+
+```sh
+php -d memory_limit=1024M <Serenata folder>/bin/console --uri=tcp://127.0.0.1:11111
+```
+
+Using `0.0.0.0` as host allows the server to be reachable when located on a different machine, such as across the network or inside a (e.g. Docker) container.
 
 You can select any port you desire, as long as it is not in use on your system.
 
-The memory limit can also be freely set. The memory needed very much depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the server on itself, it sits at around 150 MB on a 64-bit Linux system with PHP 7.1.
+The memory limit can also be freely set. Serenata keeps a lot of things in memory as cache and the memory needed thus depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the server on itself, it sits at around 250 MB on a 64-bit Linux system with PHP 7.3.
 
-### Development
+## Development
 If you want to make the server part of your (existing) project and use the classes contained inside it for your own purposes:
 
 ```sh
