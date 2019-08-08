@@ -100,7 +100,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
         return new CompletionItem(
             $fqcnWithoutLeadingSlash,
             CompletionItemKind::MODULE,
-            $namespace['name'],
+            str_replace('\\', '\\\\', $namespace['name']),
             $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,
             null,

@@ -1,5 +1,6 @@
 ## 5.0.0 (Unreleased)
-* To be determined
+* Fix namespace autocompletion suggestions not having their backslashes properly escaped
+* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2) and [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3).
 
 ## 5.0.0-RC3
 * [Implement basic support for `textDocument/documentHighlight`](https://gitlab.com/Serenata/Serenata/issues/236)
