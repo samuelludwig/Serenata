@@ -22,13 +22,6 @@ Serenata (previously "PHP Integrator") is a gratis, libre and open source server
 More information for users, both developers looking to implement clients for other editors as well as programmers using the server via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://serenata.gitlab.io/).
 
 ## What Features Are Supported?
-* Autocompletion
-* Goto Definition (Code Navigation)
-* Signature Help (Call Tips)
-* Tooltips
-* Symbols
-* Linting
-
 Serenata is, since version 5.0 and on the current `master` branch, a language server that follows the [language server protocol](https://microsoft.github.io/language-server-protocol/specification). See also the [support table](https://gitlab.com/Serenata/Serenata/wikis/Language-Server-Protocol-Support-Table) for more information.
 
 ## Where Is It Used?
