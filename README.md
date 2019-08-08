@@ -31,7 +31,9 @@ The [php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata/) package in
 If you want to use the server as language server inside an editor or IDE, you can either install the PHAR, which is the recommended and easiest way to install the server, or install the server via Composer.
 
 ### PHAR (recommended)
-Go to the [releases](https://gitlab.com/Serenata/Serenata/-/tags) page and download the appropriate PHAR for your PHP version.
+Download the latest stable PHAR for your PHP version [from the releases page](https://gitlab.com/Serenata/Serenata/-/tags).
+
+You can also find the latest _unstable_ builds as PHAR by downloading the artifacts [of the latest pipelines](https://gitlab.com/Serenata/Serenata/pipelines).
 
 ### Composer
 ```sh
