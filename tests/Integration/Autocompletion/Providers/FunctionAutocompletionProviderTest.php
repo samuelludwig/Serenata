@@ -35,7 +35,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'int|string'
+                'int|string — foo'
             ),
         ];
 
@@ -65,7 +65,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — foo'
             ),
         ];
 
@@ -95,7 +95,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — foo'
             ),
         ];
 
@@ -125,7 +125,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 true,
-                'void'
+                'void — foo'
             ),
         ];
 
@@ -155,7 +155,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — foo'
             ),
         ];
 
@@ -185,7 +185,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — foo'
             ),
         ];
 
@@ -208,7 +208,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(10, 4), new Position(10, 5)),
                     'baz()$0'
                 ),
-                'Foo\Bar\baz()',
+                'baz()',
                 null,
                 [
                     new TextEdit(
@@ -217,7 +217,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     ),
                 ],
                 false,
-                'mixed'
+                'mixed — Foo\Bar\baz'
             ),
         ];
 
@@ -240,7 +240,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(10, 4), new Position(10, 8)),
                     'Bar\\\\baz()$0'
                 ),
-                'Foo\Bar\baz()',
+                'baz()',
                 null,
                 [
                     new TextEdit(
@@ -249,7 +249,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     ),
                 ],
                 false,
-                'mixed'
+                'mixed — Foo\Bar\baz'
             ),
         ];
 
@@ -272,11 +272,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(10, 4), new Position(10, 6)),
                     '\\\\Foo\\\\Bar\\\\baz()$0'
                 ),
-                'Foo\Bar\baz()',
+                'baz()',
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — Foo\Bar\baz'
             ),
         ];
 
@@ -299,11 +299,11 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(10, 17), new Position(10, 24)),
                     'Foo\\\\Bar\\\\Baz\\\\qux'
                 ),
-                'Foo\Bar\Baz\qux()',
+                'qux()',
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — Foo\Bar\Baz\qux'
             ),
         ];
 
@@ -330,7 +330,7 @@ class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'mixed'
+                'mixed — baz'
             ),
         ];
 

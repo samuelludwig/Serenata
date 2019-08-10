@@ -151,7 +151,8 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $function['shortDescription'],
             $this->createAdditionalTextEditsForSuggestion($function, $context),
             $function['isDeprecated'],
-            $this->completionItemDetailFormatter->format(null, null, $function['returnTypes'])
+            $this->completionItemDetailFormatter->format(null, null, $function['returnTypes']) . ' — ' .
+                $this->getFqcnWithoutLeadingSlash($function)
         );
     }
 

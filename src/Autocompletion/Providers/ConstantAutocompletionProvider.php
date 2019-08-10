@@ -113,11 +113,12 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             CompletionItemKind::CONSTANT,
             $this->getInsertTextForSuggestion($constant, $context),
             $this->getTextEditForSuggestion($constant, $context),
-            $this->getFqcnWithoutLeadingSlash($constant),
+            $constant['name'],
             $constant['shortDescription'],
             $this->createAdditionalTextEditsForSuggestion($constant, $context),
             $constant['isDeprecated'],
-            $this->completionItemDetailFormatter->format(null, null, $constant['types'])
+            $this->completionItemDetailFormatter->format(null, null, $constant['types']) . ' — ' .
+                $this->getFqcnWithoutLeadingSlash($constant)
         );
     }
 

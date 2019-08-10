@@ -34,7 +34,7 @@ class InterfaceAutocompletionProviderTest extends AbstractAutocompletionProvider
                 null,
                 [],
                 false,
-                ClasslikeTypeNameValue::INTERFACE_
+                ClasslikeTypeNameValue::INTERFACE_ . ' — Foo'
             ),
         ];
 

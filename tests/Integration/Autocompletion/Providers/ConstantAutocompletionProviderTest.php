@@ -35,7 +35,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'int|string'
+                'int|string — FOO'
             ),
         ];
 
@@ -65,7 +65,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 true,
-                'int'
+                'int — FOO'
             ),
         ];
 
@@ -88,7 +88,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(7, 4), new Position(7, 5)),
                     'BAZ'
                 ),
-                'Foo\Bar\BAZ',
+                'BAZ',
                 null,
                 [
                     new TextEdit(
@@ -97,7 +97,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     ),
                 ],
                 false,
-                'int'
+                'int — Foo\Bar\BAZ'
             ),
         ];
 
@@ -120,7 +120,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(7, 4), new Position(7, 8)),
                     'Bar\\\\BAZ'
                 ),
-                'Foo\Bar\BAZ',
+                'BAZ',
                 null,
                 [
                     new TextEdit(
@@ -129,7 +129,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     ),
                 ],
                 false,
-                'int'
+                'int — Foo\Bar\BAZ'
             ),
         ];
 
@@ -152,11 +152,11 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(7, 4), new Position(7, 6)),
                     '\\\\Foo\\\\Bar\\\\BAZ'
                 ),
-                'Foo\Bar\BAZ',
+                'BAZ',
                 null,
                 [],
                 false,
-                'int'
+                'int — Foo\Bar\BAZ'
             ),
         ];
 
@@ -179,11 +179,11 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                     new Range(new Position(7, 14), new Position(7, 21)),
                     'Foo\\\\Bar\\\\Baz\\\\QUX'
                 ),
-                'Foo\Bar\Baz\QUX',
+                'QUX',
                 null,
                 [],
                 false,
-                'int'
+                'int — Foo\Bar\Baz\QUX'
             ),
         ];
 
@@ -210,7 +210,7 @@ class ConstantAutocompletionProviderTest extends AbstractAutocompletionProviderT
                 null,
                 [],
                 false,
-                'int'
+                'int — BAZ'
             ),
         ];
 

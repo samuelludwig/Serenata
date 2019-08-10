@@ -34,7 +34,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [],
                 false,
-                ClasslikeTypeNameValue::CLASS_
+                ClasslikeTypeNameValue::CLASS_ . ' — Foo'
             ),
         ];
 
@@ -61,7 +61,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [],
                 true,
-                ClasslikeTypeNameValue::CLASS_
+                ClasslikeTypeNameValue::CLASS_ . ' — Foo'
             ),
         ];
 
@@ -88,7 +88,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [],
                 false,
-                ClasslikeTypeNameValue::CLASS_
+                ClasslikeTypeNameValue::CLASS_ . ' — Foo'
             ),
         ];
 
@@ -111,7 +111,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                     new Range(new Position(10, 4), new Position(10, 5)),
                     'Baz'
                 ),
-                'Foo\Bar\Baz',
+                'Baz',
                 null,
                 [
                     new TextEdit(
@@ -120,7 +120,7 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                     ),
                 ],
                 false,
-                ClasslikeTypeNameValue::CLASS_
+                ClasslikeTypeNameValue::CLASS_ . ' — Foo\Bar\Baz'
             ),
         ];
 
@@ -143,11 +143,11 @@ class ClassAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                     new Range(new Position(10, 8), new Position(10, 15)),
                     'Foo\\\\Bar\\\\Baz\\\\Qux'
                 ),
-                'Foo\Bar\Baz\Qux',
+                'Qux',
                 null,
                 [],
                 false,
-                ClasslikeTypeNameValue::CLASS_
+                ClasslikeTypeNameValue::CLASS_ . ' — Foo\Bar\Baz\Qux'
             ),
         ];
 

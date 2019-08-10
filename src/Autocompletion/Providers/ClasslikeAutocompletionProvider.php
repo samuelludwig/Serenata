@@ -110,11 +110,11 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
                 CompletionItemKind::CLASS_,
             $this->getInsertTextForSuggestion($classlike, $context),
             $this->getTextEditForSuggestion($classlike, $context),
-            $this->getFqcnWithoutLeadingSlash($classlike),
+            $classlike['name'],
             $classlike['shortDescription'],
             $this->createAdditionalTextEditsForSuggestion($classlike, $context),
             $classlike['isDeprecated'],
-            $classlike['type']
+            $classlike['type'] . ' — ' . $this->getFqcnWithoutLeadingSlash($classlike)
         );
     }
 

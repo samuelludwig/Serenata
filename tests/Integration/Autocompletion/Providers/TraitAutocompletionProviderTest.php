@@ -34,7 +34,7 @@ class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
                 null,
                 [],
                 false,
-                ClasslikeTypeNameValue::TRAIT_
+                ClasslikeTypeNameValue::TRAIT_ . ' — Foo'
             ),
         ];
 
