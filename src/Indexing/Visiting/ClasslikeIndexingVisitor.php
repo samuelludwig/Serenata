@@ -647,6 +647,22 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 $typeStringSpecification = $varDocumentation['type'];
+            } elseif ($node->type !== null) {
+                $typeNode = $node->type;
+
+                if ($typeNode instanceof Node\NullableType) {
+                    $typeNode = $typeNode->type;
+                }
+
+                if ($typeNode instanceof Node\Name) {
+                    $typeStringSpecification = NodeHelpers::fetchClassName($typeNode);
+                } elseif ($typeNode instanceof Node\Identifier) {
+                    $typeStringSpecification = $typeNode->name;
+                }
+
+                if ($node->type instanceof Node\NullableType) {
+                    $typeStringSpecification .= '|null';
+                }
             } elseif ($property->default !== '' && $property->default !== null) {
                 $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                     $property->default,

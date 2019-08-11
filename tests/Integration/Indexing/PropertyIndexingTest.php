@@ -186,6 +186,26 @@ class PropertyIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testPropertyTypeIsFetchedFromDefinitionAndGetsPrecedenceOverDefaultValueType(): void
+    {
+        $property = $this->indexProperty('TypedProperty.phpt');
+
+        static::assertSame('string|null', $property->getType()->toString());
+    }
+
+    /**
+     * @return void
+     */
+    public function testPropertyTypeInDocblockGetsPrecedenceOverTypeInDefinition(): void
+    {
+        $property = $this->indexProperty('TypedPropertyWithDocblockOverride.phpt');
+
+        static::assertSame('\DateTime', $property->getType()->toString());
+    }
+
+    /**
+     * @return void
+     */
     public function testPropertyTypeInDocblockIsResolved(): void
     {
         $property = $this->indexProperty('PropertyTypeInDocblockIsResolved.phpt');
