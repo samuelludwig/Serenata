@@ -3,7 +3,7 @@ parameters:
 
 services:
     lexer:
-        class: PhpParser\Lexer
+        class: PhpParser\Lexer\Emulative
         arguments:
             - usedAttributes:
                 - comments

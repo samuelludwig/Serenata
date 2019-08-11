@@ -121,6 +121,33 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testFunctionCallDoesNotWorkWhenInsideArrowFunctionClosureArgumentBody(): void
+    {
+        $expectedSignaturesResult = [
+            new SignatureInformation('test(Closure $a)', null, [
+                new ParameterInformation('Closure $a', null),
+            ]),
+        ];
+
+        $fileName = 'FunctionCallArrowFunctionClosureArgumentBody.phpt';
+
+        static::assertSignatureHelpSignaturesEquals($fileName, 80, 88, $expectedSignaturesResult);
+
+        for ($i = 89; $i <= 90; ++$i) {
+            $hadException = false;
+
+            static::assertNull(
+                $this->getSignatureHelp($fileName, $i),
+                'Signature help should not trigger inside the body of arrow function arguments'
+            );
+        }
+
+        static::assertSignatureHelpSignaturesEquals($fileName, 91, 91, $expectedSignaturesResult);
+    }
+
+    /**
+     * @return void
+     */
     public function testNestedFunctionCall(): void
     {
         $expectedSignaturesResult = [
@@ -391,7 +418,7 @@ class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->getSignatureHelp($fileName, $i);
 
-            static::assertNotNull($result);
+            static::assertNotNull($result, 'Expected signature help at offset ' . $i);
             static::assertSame(0, $result->getActiveSignature());
             static::assertEquals($signatures, $result->getSignatures());
 

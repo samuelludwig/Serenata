@@ -251,6 +251,7 @@ final class NodeTypeDeducer extends AbstractNodeTypeDeducer
             Node\Expr\ConstFetch::class          => $this->constFetchNodeTypeDeducer,
             Node\Expr\ArrayDimFetch::class       => $this->arrayDimFetchNodeTypeDeducer,
             Node\Expr\Closure::class             => $this->closureNodeTypeDeducer,
+            Node\Expr\ArrowFunction::class       => $this->closureNodeTypeDeducer,
             Node\Expr\New_::class                => $this->newNodeTypeDeducer,
             Node\Expr\Clone_::class              => $this->cloneNodeTypeDeducer,
             Node\Expr\Array_::class              => $this->arrayNodeTypeDeducer,

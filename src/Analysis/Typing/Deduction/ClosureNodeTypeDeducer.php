@@ -14,7 +14,8 @@ final class ClosureNodeTypeDeducer extends AbstractNodeTypeDeducer
      */
     public function deduce(TypeDeductionContext $context): array
     {
-        if (!$context->getNode() instanceof Node\Expr\Closure) {
+        if (!$context->getNode() instanceof Node\Expr\Closure &&
+            !$context->getNode() instanceof Node\Expr\ArrowFunction) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 

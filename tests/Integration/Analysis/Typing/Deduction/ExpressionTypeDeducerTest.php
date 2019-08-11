@@ -149,6 +149,24 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCorrectlyMovesBeyondClosureScopeForArrowFunctions(): void
+    {
+        $output = $this->deduceTypesFromExpression('ClosureVariableArrowFunction.phpt', '$e');
+
+        static::assertSame(['\A\E'], $output);
+
+        $output = $this->deduceTypesFromExpression('ClosureVariableArrowFunction.phpt', '$d');
+
+        static::assertSame(['\A\D'], $output);
+
+        $output = $this->deduceTypesFromExpression('ClosureVariableArrowFunction.phpt', '$a');
+
+        static::assertSame(['\A\A'], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesCatchBlockTypeHints(): void
     {
         $output = $this->deduceTypesFromExpression('CatchBlockTypeHint.phpt', '$e');
@@ -778,6 +796,19 @@ class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $result = $this->deduceTypesFromExpression(
             'Closure.phpt',
+            '$var'
+        );
+
+        static::assertSame(['\Closure'], $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesArrowFunctionClosures(): void
+    {
+        $result = $this->deduceTypesFromExpression(
+            'ArrowFunctionClosure.phpt',
             '$var'
         );
 

@@ -137,7 +137,12 @@ class SignatureHelpRetriever
         }
 
         $argumentNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Arg::class);
-        $closureNode = NodeHelpers::findNodeOfAnyTypeInNodePath($node, Node\Expr\Closure::class);
+
+        $closureNode = NodeHelpers::findNodeOfAnyTypeInNodePath(
+            $node,
+            Node\Expr\Closure::class,
+            Node\Expr\ArrowFunction::class
+        );
 
         if ($argumentNode) {
             if ($argumentNode->getAttribute('parent') !== $invocationNode) {

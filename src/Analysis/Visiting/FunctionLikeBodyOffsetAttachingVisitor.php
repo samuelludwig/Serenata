@@ -54,7 +54,9 @@ final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
         $byteOffset = $node->getAttribute('startFilePos');
 
         for ($i = $node->getAttribute('startTokenPos'); $i < $node->getAttribute('endTokenPos'); ++$i) {
-            if ($this->tokens[$i] === '{') {
+            if ($node instanceof Node\Expr\ArrowFunction && $this->tokens[$i][0] === T_DOUBLE_ARROW) {
+                return $byteOffset + 1;
+            } elseif ($this->tokens[$i] === '{') {
                 return $byteOffset;
             }
 
@@ -73,6 +75,10 @@ final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
     private function locateBodyEndByteOffset(Node\FunctionLike $node): ?int
     {
         $byteOffset = $node->getAttribute('endFilePos');
+
+        if ($node instanceof Node\Expr\ArrowFunction) {
+            return $byteOffset;
+        }
 
         for ($i = $node->getAttribute('endTokenPos'); $i > 0; --$i) {
             if ($this->tokens[$i] === '}') {

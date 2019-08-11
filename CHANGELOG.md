@@ -1,5 +1,8 @@
 ## 5.0.0 (Unreleased)
+* Support PHP 7.4 arrow functions
 * Support PHP 7.4 typed properties
+* An emulative lexer is now used, allowing you to parse more recent code (with the new HEREDOC, arrow functions, ...) when running on older PHP versions as well
+    * Using a PHP version that is newer or as recent as the one used by your code is still recommended, though.
 * [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)
 * Fix namespace autocompletion suggestions not having their backslashes properly escaped
 * Fix classlike autocompletion suggestions not having their backslashes properly escaped when starting with a leading slash

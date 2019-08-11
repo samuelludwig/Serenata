@@ -206,15 +206,18 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\FunctionLike) {
             $variablesOutsideCurrentScope = ['$this'];
 
-            // If a variable is in a use() statement of a closure, we can't reset the state as we still need to
-            // examine the parent scope of the closure where the variable is defined.
-            if ($node instanceof Node\Expr\Closure) {
-                foreach ($node->uses as $closureUse) {
-                    $variablesOutsideCurrentScope[] = '$' . $closureUse->var->name;
+            if (!$node instanceof Node\Expr\ArrowFunction) {
+                // If a variable is in a use() statement of a closure, we can't reset the state as we still need to
+                // examine the parent scope of the closure where the variable is defined. Arrow functions simply
+                // capture all variables of their parent scope.
+                if ($node instanceof Node\Expr\Closure) {
+                    foreach ($node->uses as $closureUse) {
+                        $variablesOutsideCurrentScope[] = '$' . $closureUse->var->name;
+                    }
                 }
-            }
 
-            $this->expressionTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
+                $this->expressionTypeInfoMap->removeAllExcept($variablesOutsideCurrentScope);
+            }
 
             foreach ($node->getParams() as $param) {
                 $this->expressionTypeInfoMap->setBestMatch('$' . $param->var->name, $node);

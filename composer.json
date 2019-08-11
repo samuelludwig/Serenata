@@ -14,7 +14,7 @@
         "evenement/evenement": "^3.0",
         "jetbrains/phpstorm-stubs": "dev-master@dev",
         "league/html-to-markdown": "^4.8",
-        "nikic/php-parser": "^4.2",
+        "nikic/php-parser": "^4.2.2",
         "php-ds/php-ds": "^1.2",
         "react/socket": "^1.2",
         "serenata/common": "^0.3.3",
