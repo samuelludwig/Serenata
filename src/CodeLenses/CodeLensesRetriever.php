@@ -78,7 +78,7 @@ final class CodeLensesRetriever
 
         return array_merge(
             $this->generateMethodOverrideAndImplementationLenses($classlikeInfo),
-            $this->generatePropertyOverrideLenses($classlikeInfo),
+            $this->generatePropertyOverrideLenses($classlikeInfo)
         );
     }
 
