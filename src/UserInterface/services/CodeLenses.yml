@@ -1,0 +1,10 @@
+parameters:
+
+
+services:
+    codeLensesRetriever:
+        class: Serenata\CodeLenses\CodeLensesRetriever
+        arguments:
+            - '@storage'
+            - '@fileClasslikeListProvider'
+            - '@classlikeInfoBuilder'

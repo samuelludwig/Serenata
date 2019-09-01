@@ -109,6 +109,12 @@ services:
             - '@definitionLocator'
             - '@textDocumentContentRegistry'
 
+    codeLensJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\CodeLensJsonRpcQueueItemHandler
+        arguments:
+            - '@codeLensesRetriever'
+            - '@textDocumentContentRegistry'
+
     documentHighlightJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DocumentHighlightJsonRpcQueueItemHandler
         arguments:
