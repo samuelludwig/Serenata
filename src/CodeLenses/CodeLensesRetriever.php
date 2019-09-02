@@ -6,9 +6,6 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
-use Serenata\Common\Range;
-use Serenata\Common\Position;
-
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\Utility\Command;
