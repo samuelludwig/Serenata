@@ -45,6 +45,7 @@ final class JsonRpcQueueItemHandlerFactory implements JsonRpcQueueItemHandlerFac
             'textDocument/hover'                      => 'hoverJsonRpcQueueItemHandler',
             'textDocument/definition'                 => 'definitionJsonRpcQueueItemHandler',
             'textDocument/signatureHelp'              => 'signatureHelpJsonRpcQueueItemHandler',
+            'textDocument/codeLens'                   => 'codeLensJsonRpcQueueItemHandler',
             'textDocument/documentHighlight'          => 'documentHighlightJsonRpcQueueItemHandler',
             'textDocument/documentSymbol'             => 'documentSymbolJsonRpcQueueItemHandler',
             'serenata/internal/echoMessage'           => 'echoMessageJsonRpcQueueItemHandler',
