@@ -13,7 +13,7 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
     private $delegate;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $registry;
 
@@ -69,6 +69,8 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
     private function getRegistry(): array
     {
         $this->initializeRegistryIfNecessary();
+
+        assert($this->registry !== null);
 
         return $this->registry;
     }
