@@ -5,6 +5,8 @@ namespace Serenata\Tests\Integration\CodeLenses;
 use Serenata\CodeLenses\CodeLens;
 use Serenata\CodeLenses\CodeLensesRetriever;
 
+use Serenata\Commands\OpenTextDocumentCommand;
+
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
@@ -12,7 +14,6 @@ use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-use Serenata\Utility\Command;
 use Serenata\Utility\TextDocumentItem;
 
 class CodeLensesRetrieverTest extends AbstractIntegrationTest
@@ -30,10 +31,7 @@ class CodeLensesRetrieverTest extends AbstractIntegrationTest
                     new Position(14, 4),
                     new Position(17, 5)
                 ),
-                new Command('Override', 'serenata/openTextDocument', [
-                    'uri'      => $filePath,
-                    'position' => new Position(6, 4),
-                ]),
+                new OpenTextDocumentCommand('Override', $filePath, new Position(6, 4)),
                 null
             ),
         ]);
@@ -52,10 +50,7 @@ class CodeLensesRetrieverTest extends AbstractIntegrationTest
                     new Position(11, 4),
                     new Position(14, 5)
                 ),
-                new Command('Implementation', 'serenata/openTextDocument', [
-                    'uri'      => $filePath,
-                    'position' => new Position(6, 4),
-                ]),
+                new OpenTextDocumentCommand('Implementation', $filePath, new Position(6, 4)),
                 null
             ),
         ]);
@@ -74,10 +69,7 @@ class CodeLensesRetrieverTest extends AbstractIntegrationTest
                     new Position(11, 11),
                     new Position(11, 19)
                 ),
-                new Command('Override', 'serenata/openTextDocument', [
-                    'uri'      => $filePath,
-                    'position' => new Position(6, 11),
-                ]),
+                new OpenTextDocumentCommand('Override', $filePath, new Position(6, 11)),
                 null
             ),
         ]);

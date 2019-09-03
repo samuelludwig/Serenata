@@ -6,9 +6,10 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
 
+use Serenata\Commands\OpenTextDocumentCommand;
+
 use Serenata\Indexing\StorageInterface;
 
-use Serenata\Utility\Command;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -107,10 +108,11 @@ final class CodeLensesRetriever
 
             $lenses[] = new CodeLens(
                 $method['range'],
-                new Command($method['override'] ? 'Override' : 'Implementation', 'serenata/openTextDocument', [
-                    'uri'      => $referencedMethodInfo['declaringStructure']['uri'],
-                    'position' => $referencedMethodInfo['declaringStructure']['memberRange']->getStart(),
-                ]),
+                new OpenTextDocumentCommand(
+                    $method['override'] ? 'Override' : 'Implementation',
+                    $referencedMethodInfo['declaringStructure']['uri'],
+                    $referencedMethodInfo['declaringStructure']['memberRange']->getStart()
+                ),
                 null
             );
         }
@@ -136,10 +138,11 @@ final class CodeLensesRetriever
 
             $lenses[] = new CodeLens(
                 $property['range'],
-                new Command('Override', 'serenata/openTextDocument', [
-                    'uri'      => $property['override']['declaringStructure']['uri'],
-                    'position' => $property['override']['declaringStructure']['memberRange']->getStart(),
-                ]),
+                new OpenTextDocumentCommand(
+                    'Override',
+                    $property['override']['declaringStructure']['uri'],
+                    $property['override']['declaringStructure']['memberRange']->getStart()
+                ),
                 null
             );
         }
