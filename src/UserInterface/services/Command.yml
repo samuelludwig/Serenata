@@ -1,0 +1,14 @@
+parameters:
+
+
+services:
+    commandFactory:
+        class: Serenata\Commands\CommandFactory
+
+    commandExecutorFactory:
+        class: Serenata\Commands\CommandExecutorFactory
+        arguments:
+            - '@openTextDocumentCommandExecutor'
+
+    openTextDocumentCommandExecutor:
+        class: Serenata\Commands\OpenTextDocumentCommandExecutor

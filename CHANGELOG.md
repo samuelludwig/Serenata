@@ -1,6 +1,9 @@
 ## 5.0.0 (Unreleased)
 * Support PHP 7.4 arrow functions
 * Support PHP 7.4 typed properties
+* [Support `textDocument/codeLens`](https://gitlab.com/Serenata/Serenata/issues/93)
+    * This will display method implementations and overrides and property overrides, with commands that, when invoked, will request to open the relevant accompanying element in the client (e.g. the implemented method in the interface).
+* Support `workspace/executeCommand` to execute commands returned by code actions
 * An emulative lexer is now used, allowing you to parse more recent code (with the new HEREDOC, arrow functions, ...) when running on older PHP versions as well
     * Using a PHP version that is newer or as recent as the one used by your code is still recommended, though.
 * [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)

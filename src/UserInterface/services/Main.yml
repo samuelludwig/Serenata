@@ -2,6 +2,7 @@ imports:
     - { resource: Analysis.yml }
     - { resource: Autocompletion.yml }
     - { resource: GotoDefinition.yml }
+    - { resource: Command.yml }
     - { resource: Indexing.yml }
     - { resource: Linting.yml }
     - { resource: Mediating.yml }

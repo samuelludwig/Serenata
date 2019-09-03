@@ -127,6 +127,13 @@ services:
             - '@storage'
             - '@documentSymbolRetriever'
 
+    executeCommandJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ExecuteCommandJsonRpcQueueItemHandler
+        arguments:
+            - '@commandExecutorFactory'
+            - '@commandFactory'
+            - '@requestQueue'
+
     didChangeWatchedFilesJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeWatchedFilesJsonRpcQueueItemHandler
         arguments:

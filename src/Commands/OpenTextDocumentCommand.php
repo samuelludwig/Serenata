@@ -24,7 +24,7 @@ final class OpenTextDocumentCommand implements CommandInterface
      */
     public function __construct(string $title, string $uri, Position $position)
     {
-        $this->command = new Command($title, 'serenata/openTextDocument', [
+        $this->command = new Command($title, static::getCommandName(), [
             'uri'      => $uri,
             'position' => $position,
         ]);
@@ -60,5 +60,13 @@ final class OpenTextDocumentCommand implements CommandInterface
     public function jsonSerialize()
     {
         return $this->command->jsonSerialize();
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCommandName(): string
+    {
+        return 'serenata/command/openTextDocument';
     }
 }
