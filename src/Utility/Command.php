@@ -5,7 +5,7 @@ namespace Serenata\Utility;
 use JsonSerializable;
 
 /**
- * Represents a location inside a resource.
+ * Represents a command that the client can request be executed by the server.
  *
  * @see https://microsoft.github.io/language-server-protocol/specification#command
  */
