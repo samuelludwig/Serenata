@@ -68,7 +68,7 @@ final class JsonRpcQueueItemHandlerFactory implements JsonRpcQueueItemHandlerFac
         try {
             return $this->container->get($methodServiceNameMap[$method]);
         } catch (NotFoundExceptionInterface $e) {
-            throw new LogicException('Missing service for handling request "' . $method . '"');
+            throw new LogicException('Missing service for handling request "' . $method . '"', 0, $e);
         }
     }
 }
