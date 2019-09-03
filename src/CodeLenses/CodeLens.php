@@ -6,7 +6,7 @@ use JsonSerializable;
 
 use Serenata\Common\Range;
 
-use Serenata\Utility\Command;
+use Serenata\Utility\CommandInterface;
 
 /**
  * Represents a document highlight.
@@ -23,7 +23,7 @@ final class CodeLens implements JsonSerializable
     private $range;
 
     /**
-     * @var Command|null
+     * @var CommandInterface|null
      */
     private $command;
 
@@ -33,11 +33,11 @@ final class CodeLens implements JsonSerializable
     private $data;
 
     /**
-     * @param Range        $range
-     * @param Command|null $command
-     * @param mixed        $data
+     * @param Range                 $range
+     * @param CommandInterface|null $command
+     * @param mixed                 $data
      */
-    public function __construct(Range $range, ?Command $command, $data)
+    public function __construct(Range $range, ?CommandInterface $command, $data)
     {
         $this->range = $range;
         $this->command = $command;
@@ -53,9 +53,9 @@ final class CodeLens implements JsonSerializable
     }
 
     /**
-     * @return Command|null
+     * @return CommandInterface|null
      */
-    public function getCommand(): ?Command
+    public function getCommand(): ?CommandInterface
     {
         return $this->command;
     }

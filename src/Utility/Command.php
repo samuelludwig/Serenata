@@ -2,14 +2,12 @@
 
 namespace Serenata\Utility;
 
-use JsonSerializable;
-
 /**
  * Represents a command that the client can request be executed by the server.
  *
  * @see https://microsoft.github.io/language-server-protocol/specification#command
  */
-final class Command implements JsonSerializable
+final class Command implements CommandInterface
 {
     /**
      * @var string
@@ -39,7 +37,7 @@ final class Command implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getTitle(): string
     {
@@ -47,7 +45,7 @@ final class Command implements JsonSerializable
     }
 
     /**
-     * @return string
+     * @inheritDoc
      */
     public function getCommand(): string
     {
@@ -55,7 +53,7 @@ final class Command implements JsonSerializable
     }
 
     /**
-     * @return mixed[]|null
+     * @inheritDoc
      */
     public function getArguments(): ?array
     {
