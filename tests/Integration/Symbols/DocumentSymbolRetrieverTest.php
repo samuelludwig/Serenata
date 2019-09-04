@@ -236,7 +236,7 @@ class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 new Location(
                     $filePath,
                     new Range(
-                        new Position(4, 12),
+                        new Position(4, 4),
                         new Position(4, 21)
                     )
                 ),

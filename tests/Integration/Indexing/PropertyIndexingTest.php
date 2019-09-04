@@ -26,7 +26,7 @@ class PropertyIndexingTest extends AbstractIntegrationTest
         static::assertSame($this->getPathFor('SimpleProperty.phpt'), $property->getFile()->getUri());
         static::assertEquals(
             new Range(
-                new Position(4, 11),
+                new Position(4, 4),
                 new Position(4, 24)
             ),
             $property->getRange()

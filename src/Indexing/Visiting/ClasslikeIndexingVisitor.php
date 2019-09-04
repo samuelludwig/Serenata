@@ -597,10 +597,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function parseClassPropertyNode(Node\Stmt\Property $node): void
     {
-        foreach ($node->props as $property) {
+        foreach ($node->props as $i => $property) {
+            // Let the first property include the access modifier and other parts, so we are consistent with methods.
+            $startOffset = $i === 0 ? $node->getAttribute('startFilePos') : $property->getAttribute('startFilePos') - 1;
+
             $range = new Range(
                 Position::createFromByteOffset(
-                    $property->getAttribute('startFilePos'),
+                    $startOffset,
                     $this->textDocumentItem->getText(),
                     PositionEncoding::VALUE
                 ),

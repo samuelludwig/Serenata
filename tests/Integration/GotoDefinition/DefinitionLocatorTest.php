@@ -156,7 +156,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             107,
             new GotoDefinitionResponse(new Location(
                 $this->getPathFor($fileName),
-                new Range(new Position(6, 14), new Position(6, 22))
+                new Range(new Position(6, 4), new Position(6, 22))
             ))
         );
     }
@@ -174,7 +174,7 @@ class DefinitionLocatorTest extends AbstractIntegrationTest
             111,
             new GotoDefinitionResponse(new Location(
                 $this->getPathFor($fileName),
-                new Range(new Position(6, 21), new Position(6, 29))
+                new Range(new Position(6, 4), new Position(6, 29))
             ))
         );
     }

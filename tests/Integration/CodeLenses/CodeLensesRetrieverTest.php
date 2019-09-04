@@ -66,10 +66,10 @@ class CodeLensesRetrieverTest extends AbstractIntegrationTest
         $this->assertCodeLensesEqual($filePath, [
             new CodeLens(
                 new Range(
-                    new Position(11, 11),
+                    new Position(11, 4),
                     new Position(11, 19)
                 ),
-                new OpenTextDocumentCommand('Override', $filePath, new Position(6, 11)),
+                new OpenTextDocumentCommand('Override', $filePath, new Position(6, 4)),
                 null
             ),
         ]);

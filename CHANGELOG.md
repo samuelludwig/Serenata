@@ -9,6 +9,9 @@
 * [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)
 * Fix namespace autocompletion suggestions not having their backslashes properly escaped
 * Fix classlike autocompletion suggestions not having their backslashes properly escaped when starting with a leading slash
+* A classlike property's range will now include the access modifier and other keywords
+    * This is done to remain consistent with method ranges, which also include it.
+    * When multiple properties appear on one line, only the first property will include it, the second will not (or there would be overlapping ranges).
 * See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2) and [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3).
 
 ## 5.0.0-RC3

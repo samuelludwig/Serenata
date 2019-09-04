@@ -193,7 +193,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(13, 14),
+                new Position(13, 4),
                 new Position(13, 36)
             ),
             $output['properties']['testProperty']['range']
@@ -217,7 +217,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(13, 14),
+                new Position(13, 4),
                 new Position(13, 36)
             ),
             $output['properties']['testProperty']['declaringStructure']['memberRange']
@@ -1247,7 +1247,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(11, 14),
+                new Position(11, 4),
                 new Position(11, 34)
             ),
             $output['properties']['parentTraitProperty']['override']['range']
@@ -1271,7 +1271,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(11, 14),
+                new Position(11, 4),
                 new Position(11, 34)
             ),
             $output['properties']['parentTraitProperty']['override']['declaringStructure']['memberRange']
@@ -1298,7 +1298,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(18, 14),
+                new Position(18, 4),
                 new Position(18, 29)
             ),
             $output['properties']['parentProperty']['override']['range']
@@ -1322,7 +1322,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(18, 14),
+                new Position(18, 4),
                 new Position(18, 29)
             ),
             $output['properties']['parentProperty']['override']['declaringStructure']['memberRange']
@@ -1349,7 +1349,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(19, 14),
+                new Position(19, 4),
                 new Position(19, 31)
             ),
             $output['properties']['ancestorProperty']['override']['range']
@@ -1373,7 +1373,7 @@ class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         static::assertEquals(
             new Range(
-                new Position(19, 14),
+                new Position(19, 4),
                 new Position(19, 31)
             ),
             $output['properties']['ancestorProperty']['override']['declaringStructure']['memberRange']
