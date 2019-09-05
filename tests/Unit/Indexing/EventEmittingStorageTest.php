@@ -9,7 +9,7 @@ use Serenata\Indexing\EventEmittingStorage;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class EventEmittingStorageTest extends AbstractIntegrationTest
+final class EventEmittingStorageTest extends AbstractIntegrationTest
 {
     /**
      * @return void

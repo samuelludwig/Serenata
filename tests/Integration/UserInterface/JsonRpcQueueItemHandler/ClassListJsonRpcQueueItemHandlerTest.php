@@ -6,7 +6,7 @@ use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class ClassListJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
+final class ClassListJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 {
     /**
      * @return void

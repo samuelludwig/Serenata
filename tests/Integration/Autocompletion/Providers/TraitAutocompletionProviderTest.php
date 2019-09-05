@@ -12,7 +12,7 @@ use Serenata\Indexing\Structures\ClasslikeTypeNameValue;
 
 use Serenata\Utility\TextEdit;
 
-class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+final class TraitAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @return void

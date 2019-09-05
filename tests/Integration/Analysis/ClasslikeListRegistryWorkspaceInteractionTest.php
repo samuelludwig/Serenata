@@ -11,7 +11,7 @@ use Serenata\Workspace\Workspace;
 /**
  * Contains tests that test whether the registry properly interacts with workspace changes.
  */
-class ClasslikeListRegistryWorkspaceInteractionTest extends AbstractIntegrationTest
+final class ClasslikeListRegistryWorkspaceInteractionTest extends AbstractIntegrationTest
 {
     /**
      * @return void

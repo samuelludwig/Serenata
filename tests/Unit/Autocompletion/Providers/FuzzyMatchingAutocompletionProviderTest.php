@@ -18,7 +18,7 @@ use Serenata\Common\Position;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class FuzzyMatchingAutocompletionProviderTest extends TestCase
+final class FuzzyMatchingAutocompletionProviderTest extends TestCase
 {
     /**
      * @return void

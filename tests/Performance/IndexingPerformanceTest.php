@@ -5,7 +5,7 @@ namespace Serenata\Tests\Performance;
 /**
  * @group Performance
  */
-class IndexingPerformanceTest extends AbstractPerformanceTest
+final class IndexingPerformanceTest extends AbstractPerformanceTest
 {
     /**
      * @return void

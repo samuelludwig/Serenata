@@ -16,7 +16,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\TextDocumentItem;
 
-class CodeLensesRetrieverTest extends AbstractIntegrationTest
+final class CodeLensesRetrieverTest extends AbstractIntegrationTest
 {
     /**
      * @return void

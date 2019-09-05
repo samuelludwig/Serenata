@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\ApplicabilityChecking;
 
-class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionApplicabilityCheckerTest
+final class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionApplicabilityCheckerTest
 {
     /**
      * @inheritDoc

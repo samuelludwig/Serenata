@@ -2,7 +2,7 @@
 
 namespace Serenata\Tests\Integration\Autocompletion\ApplicabilityChecking;
 
-class NonStaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionApplicabilityCheckerTest
+final class NonStaticPropertyAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionApplicabilityCheckerTest
 {
     /**
      * @inheritDoc

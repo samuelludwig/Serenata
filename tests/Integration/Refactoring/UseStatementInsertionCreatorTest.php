@@ -18,7 +18,7 @@ use Serenata\Utility\TextEdit;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
+final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
 {
     /**
      * @return void

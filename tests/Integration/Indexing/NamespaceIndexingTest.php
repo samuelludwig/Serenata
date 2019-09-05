@@ -9,7 +9,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class NamespaceIndexingTest extends AbstractIntegrationTest
+final class NamespaceIndexingTest extends AbstractIntegrationTest
 {
     /**
      * @return void

@@ -15,7 +15,7 @@ use Serenata\Utility\Location;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class DefinitionLocatorTest extends AbstractIntegrationTest
+final class DefinitionLocatorTest extends AbstractIntegrationTest
 {
     /**
      * @return void

@@ -14,7 +14,7 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextDocumentItem;
 
-class ScopeLimitingVisitorTest extends TestCase
+final class ScopeLimitingVisitorTest extends TestCase
 {
     /**
      * @return void

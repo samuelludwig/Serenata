@@ -4,7 +4,7 @@ namespace Serenata\Tests\Integration\Analysis;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class ClasslikeListProviderTest extends AbstractIntegrationTest
+final class ClasslikeListProviderTest extends AbstractIntegrationTest
 {
     /**
      * @return void

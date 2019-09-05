@@ -11,7 +11,7 @@ use Serenata\Indexing\FileExistenceCheckerInterface;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class FilePruningTest extends AbstractIntegrationTest
+final class FilePruningTest extends AbstractIntegrationTest
 {
     /**
      * @return void

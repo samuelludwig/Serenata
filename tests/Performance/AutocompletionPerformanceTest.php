@@ -5,7 +5,7 @@ namespace Serenata\Tests\Performance;
 /**
  * @group Performance
  */
-class AutocompletionPerformanceTest extends AbstractPerformanceTest
+final class AutocompletionPerformanceTest extends AbstractPerformanceTest
 {
     /**
      * @return void

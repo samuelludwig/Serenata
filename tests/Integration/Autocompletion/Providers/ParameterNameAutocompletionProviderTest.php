@@ -10,7 +10,7 @@ use Serenata\Utility\TextEdit;
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 
-class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+final class ParameterNameAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @return void

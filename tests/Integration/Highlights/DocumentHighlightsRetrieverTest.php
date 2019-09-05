@@ -11,7 +11,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\TextDocumentItem;
 
-class DocumentHighlightsRetrieverTest extends AbstractIntegrationTest
+final class DocumentHighlightsRetrieverTest extends AbstractIntegrationTest
 {
     /**
      * @return void

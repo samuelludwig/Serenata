@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Contains tests that test whether the registry remains up to date (synchronized) when the state of the index changes.
  */
-class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegrationTest
+final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegrationTest
 {
     /**
      * @return void

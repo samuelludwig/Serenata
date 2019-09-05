@@ -11,7 +11,7 @@ use PhpParser\Lexer;
 use PhpParser\ParserFactory;
 use PHPUnit\Framework\TestCase;
 
-class PartialParserTest extends TestCase
+final class PartialParserTest extends TestCase
 {
     /**
      * @return ParserFactory

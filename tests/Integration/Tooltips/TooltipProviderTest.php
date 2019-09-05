@@ -13,7 +13,7 @@ use Serenata\Tooltips\TooltipResult;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class TooltipProviderTest extends AbstractIntegrationTest
+final class TooltipProviderTest extends AbstractIntegrationTest
 {
     /**
      * @return void

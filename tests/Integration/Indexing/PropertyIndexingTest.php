@@ -13,7 +13,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class PropertyIndexingTest extends AbstractIntegrationTest
+final class PropertyIndexingTest extends AbstractIntegrationTest
 {
     /**
      * @return void

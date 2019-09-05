@@ -13,7 +13,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class SignatureHelpRetrieverTest extends AbstractIntegrationTest
+final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 {
     /**
      * @return void

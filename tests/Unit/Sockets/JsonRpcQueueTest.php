@@ -11,7 +11,7 @@ use Serenata\Sockets\JsonRpcRequestPriorityDeterminerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class JsonRpcQueueTest extends TestCase
+final class JsonRpcQueueTest extends TestCase
 {
     /**
      * @var MockObject

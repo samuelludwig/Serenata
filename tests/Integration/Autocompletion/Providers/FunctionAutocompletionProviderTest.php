@@ -10,7 +10,7 @@ use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
 
-class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+final class FunctionAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @return void

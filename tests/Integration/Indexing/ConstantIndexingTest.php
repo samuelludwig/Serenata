@@ -11,7 +11,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ConstantIndexingTest extends AbstractIntegrationTest
+final class ConstantIndexingTest extends AbstractIntegrationTest
 {
     /**
      * @return void

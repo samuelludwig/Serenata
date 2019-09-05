@@ -7,7 +7,7 @@ use Serenata\Common\Position;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
+final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 {
     /**
      * @return void

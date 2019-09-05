@@ -6,7 +6,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\TextDocumentItem;
 
-class FileIndexingTest extends AbstractIntegrationTest
+final class FileIndexingTest extends AbstractIntegrationTest
 {
     /**
      * @return void

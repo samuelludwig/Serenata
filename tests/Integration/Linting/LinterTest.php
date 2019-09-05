@@ -10,7 +10,7 @@ use Serenata\Linting\DiagnosticSeverity;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class LinterTest extends AbstractIntegrationTest
+final class LinterTest extends AbstractIntegrationTest
 {
     /**
      * @return void

@@ -11,7 +11,7 @@ use Serenata\Autocompletion\AutocompletionPrefixBoundaryTokenRetrieverInterface;
 
 use Serenata\Common\Position;
 
-class AutocompletionPrefixDeterminerTest extends TestCase
+final class AutocompletionPrefixDeterminerTest extends TestCase
 {
     /**
      * @var PHPUnit_Framework_MockObject_MockObject

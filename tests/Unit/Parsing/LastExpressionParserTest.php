@@ -12,7 +12,7 @@ use Serenata\Parsing\PartialParser;
 use Serenata\Parsing\ParserTokenHelper;
 use Serenata\Parsing\LastExpressionParser;
 
-class LastExpressionParserTest extends TestCase
+final class LastExpressionParserTest extends TestCase
 {
     /**
      * @return ParserFactory

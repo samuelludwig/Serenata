@@ -11,7 +11,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class ExpressionTypeDeducerTest extends AbstractIntegrationTest
+final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 {
     /**
      * @return void

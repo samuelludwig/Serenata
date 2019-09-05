@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatcherInterface;
 use Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer;
 
-class ApproximateStringMatchingBestStringApproximationDeterminerTest extends TestCase
+final class ApproximateStringMatchingBestStringApproximationDeterminerTest extends TestCase
 {
     /**
      * @return void

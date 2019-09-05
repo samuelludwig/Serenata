@@ -13,7 +13,7 @@ use Serenata\Parsing\DocblockParser;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class DocblockParserTest extends AbstractIntegrationTest
+final class DocblockParserTest extends AbstractIntegrationTest
 {
     /**
      * @return void

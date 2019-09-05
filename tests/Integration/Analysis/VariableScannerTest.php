@@ -9,7 +9,7 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
 
-class VariableScannerTest extends AbstractIntegrationTest
+final class VariableScannerTest extends AbstractIntegrationTest
 {
     /**
      * @return void

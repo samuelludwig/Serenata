@@ -10,7 +10,7 @@ use PhpParser\Node;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
+final class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
 {
     /**
      * @return void

@@ -7,7 +7,7 @@ use Serenata\Common\Position;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class FileNamespaceListProviderTest extends AbstractIntegrationTest
+final class FileNamespaceListProviderTest extends AbstractIntegrationTest
 {
     /**
      * @return void

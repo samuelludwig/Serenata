@@ -4,7 +4,7 @@ namespace Serenata\Tests\Integration\UserInterface\JsonRpcQueueItemHandler;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class GlobalConstantsJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
+final class GlobalConstantsJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 {
     /**
      * @return void

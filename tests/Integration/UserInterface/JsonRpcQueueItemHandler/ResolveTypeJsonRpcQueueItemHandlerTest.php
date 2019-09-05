@@ -10,7 +10,7 @@ use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class ResolveTypeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
+final class ResolveTypeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 {
     /**
      * @return void

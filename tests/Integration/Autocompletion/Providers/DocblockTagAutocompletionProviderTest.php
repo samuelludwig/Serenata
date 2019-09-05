@@ -10,7 +10,7 @@ use Serenata\Utility\TextEdit;
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 
-class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProviderTest
+final class DocblockTagAutocompletionProviderTest extends AbstractAutocompletionProviderTest
 {
     /**
      * @return void

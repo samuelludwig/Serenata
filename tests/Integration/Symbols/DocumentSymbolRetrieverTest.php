@@ -12,7 +12,7 @@ use Serenata\Utility\Location;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
+final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 {
     /**
      * @return void

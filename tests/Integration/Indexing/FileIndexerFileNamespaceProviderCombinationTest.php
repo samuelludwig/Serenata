@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * The file namespace provider performs caching, so these integration tests ensure that the cache is properly cleared
  * when the source changes.
  */
-class FileIndexerFileNamespaceProviderCombinationTest extends AbstractIntegrationTest
+final class FileIndexerFileNamespaceProviderCombinationTest extends AbstractIntegrationTest
 {
     /**
      * @return void

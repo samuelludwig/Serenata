@@ -8,7 +8,7 @@ use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItemPriority;
 use Serenata\Sockets\JsonRpcRequestPriorityDeterminer;
 
-class JsonRpcRequestPriorityDeterminerTest extends TestCase
+final class JsonRpcRequestPriorityDeterminerTest extends TestCase
 {
     /**
      * @return void

@@ -10,7 +10,7 @@ use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
 use Serenata\PrettyPrinting\FunctionParameterPrettyPrinter;
 use Serenata\PrettyPrinting\ParameterDefaultValuePrettyPrinter;
 
-class FunctionParameterPrettyPrinterTest extends TestCase
+final class FunctionParameterPrettyPrinterTest extends TestCase
 {
     /**
      * @return FunctionParameterPrettyPrinter

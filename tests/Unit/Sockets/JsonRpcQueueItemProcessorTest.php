@@ -27,7 +27,7 @@ use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 use Serenata\Workspace\Workspace;
 use Serenata\Workspace\ActiveWorkspaceManager;
 
-class JsonRpcQueueItemProcessorTest extends TestCase
+final class JsonRpcQueueItemProcessorTest extends TestCase
 {
     /**
      * @var MockObject&JsonRpcQueueItemHandlerFactoryInterface

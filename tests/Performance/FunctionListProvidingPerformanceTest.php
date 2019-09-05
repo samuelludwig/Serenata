@@ -5,7 +5,7 @@ namespace Serenata\Tests\Performance;
 /**
  * @group Performance
  */
-class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
+final class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
 {
     /**
      * @return void

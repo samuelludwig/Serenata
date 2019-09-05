@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 use Serenata\Autocompletion\ApproximateStringMatching\LevenshteinApproximateStringMatcher;
 
-class LevenshteinApproximateStringMatcherTest extends TestCase
+final class LevenshteinApproximateStringMatcherTest extends TestCase
 {
     /**
      * @return void

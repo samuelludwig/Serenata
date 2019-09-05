@@ -16,7 +16,7 @@ use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 use PHPUnit\Framework\TestCase;
 
-class ParameterDocblockTypeSemanticEqualityCheckerTest extends TestCase
+final class ParameterDocblockTypeSemanticEqualityCheckerTest extends TestCase
 {
     /**
      * @var MockObject

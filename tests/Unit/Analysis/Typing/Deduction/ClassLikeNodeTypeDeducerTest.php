@@ -14,7 +14,7 @@ use PhpParser\Node;
 use Serenata\Utility\TextDocumentItem;
 use PHPUnit\Framework\TestCase;
 
-class ClassLikeNodeTypeDeducerTest extends TestCase
+final class ClassLikeNodeTypeDeducerTest extends TestCase
 {
     /**
      * @var ClassLikeNodeTypeDeducer
