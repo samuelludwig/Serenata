@@ -2,3 +2,4 @@ includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-php-parser/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
