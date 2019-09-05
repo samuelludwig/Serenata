@@ -9,7 +9,7 @@ if (!function_exists('mb_substr')) {
         'Multibyte String support in your PHP installation is required. See also ' .
         'https://secure.php.net/manual/en/book.mbstring.php'
     );
-} elseif (ini_get('mbstring.func_overload')) {
+} elseif (ini_get('mbstring.func_overload') === '1') {
     die(
         'You have mbstring.func_overload enabled, which is not compatible. Please disable this option in your php.ini.'
     );

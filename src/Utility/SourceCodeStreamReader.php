@@ -65,7 +65,7 @@ final class SourceCodeStreamReader
      */
     public function getSourceCodeFromFile(?string $file): string
     {
-        if (!$file) {
+        if ($file === null) {
             throw new UnexpectedValueException("The file {$file} does not exist!");
         }
 

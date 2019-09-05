@@ -50,7 +50,7 @@ final class CompletionList implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'isIncomplete' => $this->isIncomplete(),

@@ -67,7 +67,7 @@ final class SignatureInformation implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'label'         => $this->getLabel(),

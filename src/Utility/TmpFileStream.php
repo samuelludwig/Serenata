@@ -12,6 +12,10 @@ final class TmpFileStream extends AbstractResourceStream
      */
     protected function createHandle()
     {
-        return tmpfile();
+        $file = tmpfile();
+
+        assert($file !== false);
+
+        return $file;
     }
 }

@@ -100,7 +100,7 @@ final class TextDocumentSyncOptions implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'openClose'         => $this->getOpenClose(),

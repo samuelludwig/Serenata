@@ -185,7 +185,7 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'filterText'          => $this->getFilterText(),

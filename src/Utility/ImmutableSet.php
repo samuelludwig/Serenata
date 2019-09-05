@@ -3,6 +3,7 @@
 namespace Serenata\Utility;
 
 use Closure;
+use Traversable;
 use ArrayIterator;
 use IteratorAggregate;
 
@@ -77,7 +78,7 @@ class ImmutableSet implements IteratorAggregate
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->elements);
     }

@@ -50,7 +50,7 @@ final class PublishDiagnosticsParams implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'uri'         => $this->getUri(),

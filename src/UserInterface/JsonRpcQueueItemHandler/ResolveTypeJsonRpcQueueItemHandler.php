@@ -91,7 +91,7 @@ final class ResolveTypeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
             UseStatementKind::TYPE_CONSTANT,
         ];
 
-        if (!in_array($kind, $recognizedKinds)) {
+        if (!in_array($kind, $recognizedKinds, true)) {
             throw new InvalidArgumentsException('Unknown "kind" specified');
         }
 

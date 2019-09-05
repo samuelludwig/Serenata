@@ -60,7 +60,7 @@ final class TooltipResult implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'contents' => $this->getContents(),

@@ -63,7 +63,7 @@ final class Command implements CommandInterface
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'title'     => $this->getTitle(),

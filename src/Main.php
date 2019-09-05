@@ -15,7 +15,7 @@ $xdebug->check();
 
 unset($xdebug);
 
-if (XdebugHandler::getRestartSettings()) {
+if (XdebugHandler::getRestartSettings() !== null) {
     echo 'Warning: You have the Xdebug extension loaded and enabled. The server has restarted itself without it to ' .
         'avoid severely degraded performance...' . PHP_EOL;
 }

@@ -50,7 +50,7 @@ final class CompletionOptions implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'resolveProvider'   => $this->getResolveProvider(),

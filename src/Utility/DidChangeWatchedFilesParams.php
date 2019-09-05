@@ -35,7 +35,7 @@ final class DidChangeWatchedFilesParams implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'changes' => $this->getChanges(),

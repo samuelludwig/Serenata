@@ -35,7 +35,7 @@ final class InitializeResult implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'capabilities' => $this->getCapabilities(),

@@ -41,7 +41,7 @@ final class IndexJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandler
     {
         $parameters = $queueItem->getRequest()->getParams();
 
-        if (!$parameters) {
+        if ($parameters === null || $parameters === []) {
             throw new InvalidArgumentsException('Missing parameters for index request');
         }
 

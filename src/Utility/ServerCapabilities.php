@@ -388,7 +388,7 @@ final class ServerCapabilities implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'textDocumentSync'                 => $this->getTextDocumentSync(),

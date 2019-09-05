@@ -118,7 +118,7 @@ final class Diagnostic implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'range'              => $this->getRange(),

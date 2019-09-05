@@ -35,7 +35,7 @@ final class GotoDefinitionResponse implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'result' => $this->getResult(),

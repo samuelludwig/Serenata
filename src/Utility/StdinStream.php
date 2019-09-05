@@ -12,6 +12,10 @@ final class StdinStream extends AbstractResourceStream
      */
     protected function createHandle()
     {
-        return fopen('php://memory', 'w+');
+        $stream = fopen('php://memory', 'w+');
+
+        assert($stream !== false);
+
+        return $stream;
     }
 }

@@ -35,7 +35,7 @@ final class SignatureHelpOptions implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'triggerCharacters' => $this->getTriggerCharacters(),

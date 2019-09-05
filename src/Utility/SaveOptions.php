@@ -35,7 +35,7 @@ final class SaveOptions implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'includeText' => $this->getIncludeText(),

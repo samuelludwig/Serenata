@@ -50,7 +50,7 @@ final class LogMessageParams implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'type'    => $this->getType(),

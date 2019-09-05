@@ -57,7 +57,7 @@ final class OpenTextDocumentCommand implements CommandInterface
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->command->jsonSerialize();
     }

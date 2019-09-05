@@ -80,7 +80,7 @@ final class TextDocumentItem implements JsonSerializable
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'uri'        => $this->getUri(),

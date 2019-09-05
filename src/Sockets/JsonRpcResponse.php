@@ -93,7 +93,7 @@ final class JsonRpcResponse implements JsonRpcMessageInterface
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $data = [
             'jsonrpc' => $this->getJsonrpc(),

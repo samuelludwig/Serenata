@@ -52,7 +52,7 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
      * @param array  $data
      * @param string $key
      */
-    private function expectKey(array $data, string $key)
+    private function expectKey(array $data, string $key): void
     {
         if (!array_key_exists($key, $data)) {
             throw new WorkspaceConfigurationParsingException('Missing key "' . $key . '" in workspace configuration');

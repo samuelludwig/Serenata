@@ -114,7 +114,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     {
         $params = $queueItem->getRequest()->getParams();
 
-        if (!$params) {
+        if ($params === null || $params === []) {
             throw new InvalidArgumentsException('Missing parameters for initialize request');
         }
 
@@ -159,7 +159,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         JsonRpcRequest $jsonRpcRequest,
         bool $initializeIndexForProject = true
     ): ?JsonRpcResponse {
-        if ($this->activeWorkspaceManager->getActiveWorkspace()) {
+        if ($this->activeWorkspaceManager->getActiveWorkspace() !== null) {
             throw new UnexpectedValueException(
                 'Initialize was already called, send a shutdown request first if you want to initialize another project'
             );
@@ -168,7 +168,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         $rootUri = $initializeParams->getRootUri();
         $rootPath = $initializeParams->getRootPath();
 
-        if (!$rootUri || !$rootPath) {
+        if ($rootUri === null || $rootPath === null) {
             throw new InvalidArgumentsException('Need a rootUri and a rootPath in InitializeParams to function');
         }
 
