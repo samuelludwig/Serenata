@@ -26,7 +26,7 @@ abstract class AbstractApplication
      */
     protected function getContainer(): ContainerBuilder
     {
-        if (!$this->container) {
+        if ($this->container === null) {
             $this->container = $this->createContainer();
         }
 

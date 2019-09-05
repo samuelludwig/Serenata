@@ -99,7 +99,7 @@ final class SignatureHelpRetriever
 
         $node = $result->getNode();
 
-        if (!$node) {
+        if ($node === null) {
             throw new UnexpectedValueException(
                 'No node found at location ' . $position->getLine() . ':' . $position->getCharacter()
             );
@@ -132,7 +132,7 @@ final class SignatureHelpRetriever
 
         $offset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
 
-        if (!$invocationNode) {
+        if ($invocationNode === null) {
             throw new UnexpectedValueException('No node supporting signature help found at location');
         }
 
@@ -144,7 +144,7 @@ final class SignatureHelpRetriever
             Node\Expr\ArrowFunction::class
         );
 
-        if ($argumentNode) {
+        if ($argumentNode !== null) {
             if ($argumentNode->getAttribute('parent') !== $invocationNode) {
                 // Usually the invocationNode will be the parent, but in case we're on the name of a nested function
                 // call, we may have received the wrong node instead. We also can't fetch the argument beforehand, as
@@ -171,7 +171,7 @@ final class SignatureHelpRetriever
                 if ($offset <= $nodeNameEndFilePosition) {
                     $invocationNode = $argumentNode->getAttribute('parent');
                 }
-            } elseif ($closureNode) {
+            } elseif ($closureNode !== null) {
                 // When a closure is used as an argument to a call, we may still show signature help for the call, but
                 // not inside the closure's body, as a new scope begins there.
                 if ($offset > $closureNode->getAttribute('bodyStartFilePos') &&
@@ -253,12 +253,12 @@ final class SignatureHelpRetriever
                 $argumentNodeBefore = $argument;
             }
 
-            if (!$argumentNodeAfter && $offset <= $argument->getAttribute('startFilePos')) {
+            if ($argumentNodeAfter === null && $offset <= $argument->getAttribute('startFilePos')) {
                 $argumentNodeAfter = $argument;
             }
         }
 
-        if (!$argumentNodeBefore) {
+        if ($argumentNodeBefore === null) {
             return 0;
         }
 
@@ -310,6 +310,8 @@ final class SignatureHelpRetriever
 
             // FIXME: There could be multiple matches, return multiple signatures in that case.
             $methodInfo = array_shift($methodInfoElements);
+
+            assert($methodInfo !== null);
 
             return $this->generateResponseFromFunctionInfo($methodInfo, $argumentIndex);
         } elseif ($node instanceof Node\Expr\FuncCall) {

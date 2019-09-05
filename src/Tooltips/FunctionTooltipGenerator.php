@@ -108,13 +108,13 @@ final class FunctionTooltipGenerator
     {
         $text = '';
 
-        if ($parameter['isOptional']) {
+        if ($parameter['isOptional'] === true) {
             $text .= '[';
         }
 
         $text .= $this->parameterNamePrettyPrinter->print($parameter);
 
-        if ($parameter['isOptional']) {
+        if ($parameter['isOptional'] === true) {
             $text .= ']';
         }
 
@@ -206,7 +206,7 @@ final class FunctionTooltipGenerator
 
         $part = array_pop($parts);
 
-        if (!$part) {
+        if ($part === null) {
             throw new LogicException('FQCN "' . $fqcn . '" does not contain at least one part');
         }
 

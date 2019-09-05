@@ -64,7 +64,7 @@ final class JsonRpcQueueItemProcessor
         $error = null;
         $message = null;
 
-        if (!$this->activeWorkspaceManager->getActiveWorkspace() &&
+        if ($this->activeWorkspaceManager->getActiveWorkspace() === null &&
             $queueItem->getRequest()->getMethod() !== 'initialize'
         ) {
             $error = new JsonRpcError(

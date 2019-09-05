@@ -147,7 +147,7 @@ final class DocblockParser
      */
     public function parse($docblock, array $filters, string $itemName): array
     {
-        if (empty($filters)) {
+        if ($filters === []) {
             return [];
         };
 
@@ -157,7 +157,7 @@ final class DocblockParser
 
         $docblock = is_string($docblock) ? $docblock : null;
 
-        if ($docblock) {
+        if ($docblock !== null && $docblock !== '') {
             $docblock = $this->stripDocblockDelimiters($docblock);
 
             try {
@@ -280,7 +280,7 @@ final class DocblockParser
      */
     private function stripDocblockLineDelimiters(string $docblock): string
     {
-        return preg_replace('/^[\t ]*\**[\t ]{0,1}/m', '', $docblock);
+        return preg_replace('/^[\t ]*\**[\t ]{0,1}/m', '', $docblock) ?: '';
     }
 
     /**
@@ -385,15 +385,17 @@ final class DocblockParser
      * @param string $value
      * @param int    $partCount
      *
-     * @return string[]
+     * @return mixed[]
      */
     private function filterParameterTag(string $value, int $partCount): array
     {
         $segments = [];
         $parts = preg_split('/[\t ]+/', $value);
 
+        assert($parts !== false);
+
         while ($partCount--) {
-            if (!empty($parts)) {
+            if ($parts !== []) {
                 $segments[] = array_shift($parts);
             } else {
                 $segments[] = null;
@@ -401,7 +403,7 @@ final class DocblockParser
         }
 
         // Append the remaining text to the last element.
-        if (!empty($parts)) {
+        if ($parts !== []) {
             $segments[count($segments) - 1] .= ' ' . implode(' ', $parts);
         }
 
@@ -760,10 +762,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterProperty(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         return $this->filterPropertyTag(static::PROPERTY, 'properties', $docblock, $itemName, $tags);
     }
 
@@ -774,10 +779,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         return $this->filterPropertyTag(static::PROPERTY_READ, 'propertiesReadOnly', $docblock, $itemName, $tags);
     }
 
@@ -788,10 +796,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         return $this->filterPropertyTag(static::PROPERTY_WRITE, 'propertiesWriteOnly', $docblock, $itemName, $tags);
     }
 
@@ -800,10 +811,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterCategory(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $description = null;
 
         if (isset($tags[static::CATEGORY])) {
@@ -820,10 +834,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterSubpackage(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $name = null;
 
         if (isset($tags[static::SUBPACKAGE])) {
@@ -840,16 +857,19 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterLink(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $links = [];
 
         if (isset($tags[static::LINK])) {
             [$uri, $description] = $this->filterParameterTag($tags[static::LINK][0], 2);
 
-            if ($uri) {
+            if ($uri !== null && $uri !== '') {
                 $links[] = [
                     'uri'         => $this->sanitizeText($uri),
                     'description' => $description,
@@ -869,10 +889,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterAnnotation(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         return [
             'annotation' => isset($tags[static::ANNOTATION]),
         ];
@@ -885,14 +908,17 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable -- since PHPCS thinks these methods are unused.
+     *
      * @return array
      */
     private function filterDescription(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $summary = '';
         $description = '';
 
-        $lines = explode("\n", $docblock);
+        $lines = explode("\n", $docblock ?: '');
 
         $isReadingSummary = true;
 
@@ -905,7 +931,7 @@ final class DocblockParser
                 break; // Found the start of a tag, the summary and description are finished.
             }
 
-            if ($isReadingSummary && empty($line) && !empty($summary)) {
+            if ($isReadingSummary && $line === '' && $summary !== '') {
                 $isReadingSummary = false;
             } elseif ($isReadingSummary) {
                 $summary .= "\n" . trim($line);

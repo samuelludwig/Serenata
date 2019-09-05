@@ -76,7 +76,7 @@ final class FunctionParameterPrettyPrinter
 
         $part = array_pop($parts);
 
-        if (!$part) {
+        if ($part === null) {
             throw new LogicException('FQCN "' . $fqcn . '" does not contain at least one part');
         }
 

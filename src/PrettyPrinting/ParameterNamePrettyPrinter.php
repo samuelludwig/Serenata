@@ -16,11 +16,11 @@ final class ParameterNamePrettyPrinter
     {
         $label = '';
 
-        if ($parameter['isVariadic']) {
+        if ($parameter['isVariadic'] === true) {
             $label .= '...';
         }
 
-        if ($parameter['isReference']) {
+        if ($parameter['isReference'] === true) {
             $label .= '&';
         }
 

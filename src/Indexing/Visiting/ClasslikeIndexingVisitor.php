@@ -29,6 +29,7 @@ use Serenata\DocblockTypeParser\SpecializedArrayDocblockType;
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
+use Serenata\Indexing\Structures\Classlike;
 use Serenata\Indexing\Structures\AccessModifierNameValue;
 
 use Serenata\Parsing\DocblockParser;
@@ -107,17 +108,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * We could also flush the changes constantly, but this hurts performance and not fetching information we already
      * have benefits performance in large files with many interdependencies.
      *
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Classlike>
      */
     private $classlikesFound;
 
     /**
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Classlike>
      */
     private $relationsStorage;
 
     /**
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Classlike>
      */
     private $traitUseStorage;
 
@@ -343,6 +344,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $documentation['deprecated'],
                 $docComment !== '' && $docComment !== null
             );
+        } else {
+            throw new DomainException('Uknown classlike node type "' . get_class($node) . '" encountered');
         }
 
         $this->storage->persist($classlike);

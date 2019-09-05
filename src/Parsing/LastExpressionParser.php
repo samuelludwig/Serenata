@@ -80,6 +80,8 @@ final class LastExpressionParser implements Parser
         $isWalkingHeredocStart = false;
         $isWalkingHeredocEnd = false;
 
+        $i = 0;
+
         // Heredocs don't always have a termination token, catch those early as heredocs can contain interpolated
         // expressions, which must then be ignored.
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
@@ -140,7 +142,7 @@ final class LastExpressionParser implements Parser
                 ];
             }
 
-            if (in_array($token['type'], $skippableTokens)) {
+            if (in_array($token['type'], $skippableTokens, true)) {
                 // Do nothing, we just keep parsing. (These can occur inside call stacks.)
             } elseif ($code[$i] === '"') {
                 if (!$isInDoubleQuotedString) {
@@ -158,7 +160,7 @@ final class LastExpressionParser implements Parser
                         return ++$i;
                     }
                 } elseif ($code[$i] === ')') {
-                    if (in_array($token['type'], $castBoundaryTokens)) {
+                    if (in_array($token['type'], $castBoundaryTokens, true)) {
                         return ++$i;
                     }
 
@@ -198,7 +200,7 @@ final class LastExpressionParser implements Parser
                     $squiggleBracketsOpened === $squiggleBracketsClosed
                 ) {
                     // NOTE: We may have entered a closure.
-                    if (in_array($token['type'], $expressionBoundaryTokens)) {
+                    if (in_array($token['type'], $expressionBoundaryTokens, true)) {
                         $nextToken = $currentTokenIndex > 0 ? $tokens[$currentTokenIndex - 1] : null;
                         $nextTokenType = is_array($nextToken) ? $nextToken[0] : null;
 
@@ -219,7 +221,7 @@ final class LastExpressionParser implements Parser
             }
 
             if ($startedStaticClassName &&
-                !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC])
+                !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC], true)
             ) {
                 return ++$i;
             }
@@ -248,6 +250,10 @@ final class LastExpressionParser implements Parser
 
         $nodes = $this->parse($source);
 
+        if ($nodes === null) {
+            return null;
+        }
+
         return array_shift($nodes);
     }
 
@@ -256,7 +262,7 @@ final class LastExpressionParser implements Parser
      */
     public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
-        if ($errorHandler) {
+        if ($errorHandler !== null) {
             throw new LogicException(
                 'Error handling is not supported as error recovery will be attempted automatically'
             );

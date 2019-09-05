@@ -74,7 +74,7 @@ final class ClassLikeTooltipGenerator
         $type = null;
 
         if ($info['type'] === 'class') {
-            if ($info['isAbstract']) {
+            if ($info['isAbstract'] === true) {
                 $type = 'Abstract class';
             } else {
                 $type = 'Class';
