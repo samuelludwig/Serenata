@@ -104,9 +104,9 @@ final class InitializeParams
     }
 
     /**
-     * @return object
+     * @return array
      */
-    public function getCapabilities()
+    public function getCapabilities(): array
     {
         return $this->capabilities;
     }
@@ -120,7 +120,7 @@ final class InitializeParams
     }
 
     /**
-     * @return object[]|null
+     * @return array[]|null
      */
     public function getWorkspaceFolders(): ?array
     {

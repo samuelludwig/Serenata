@@ -8,7 +8,7 @@ namespace Serenata\Utility;
 abstract class AbstractResourceStream implements StreamInterface
 {
     /**
-     * @var resource
+     * @var resource|null
      */
     private $handle;
 

@@ -71,7 +71,7 @@ class ImmutableSet implements IteratorAggregate
      */
     public function filter(Closure $closure): ImmutableSet
     {
-        return new static(...array_filter($this->toArray(), $closure, true));
+        return new static(...array_filter($this->toArray(), $closure));
     }
 
     /**

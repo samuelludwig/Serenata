@@ -2,6 +2,7 @@
 
 namespace Serenata\UserInterface;
 
+use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use Serenata\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use Symfony\Component\Config\FileLocator;
@@ -67,13 +68,19 @@ abstract class AbstractApplication
 
         $container->set('application', $this);
 
+        /** @var string $configurator To make setConfigurator below happy, as it does not mention callable. */
+        $configurator = function (ConfigurableDelegatingNodeTypeDeducer $deducer) use ($container) {
+            /** @var NodeTypeDeducerInterface $nodeTypeDeducer */
+            $nodeTypeDeducer = $container->get('nodeTypeDeducer.instance');
+
+            // Avoid circular references due to two-way object usage.
+            $deducer->setNodeTypeDeducer($nodeTypeDeducer);
+        };
+
         $container
             ->register('nodeTypeDeducer.configurableDelegator', ConfigurableDelegatingNodeTypeDeducer::class)
             ->setArguments([])
-            ->setConfigurator(function (ConfigurableDelegatingNodeTypeDeducer $deducer) use ($container) {
-                // Avoid circular references due to two-way object usage.
-                $deducer->setNodeTypeDeducer($container->get('nodeTypeDeducer.instance'));
-            });
+            ->setConfigurator($configurator);
     }
 
     /**

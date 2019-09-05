@@ -77,6 +77,7 @@ final class NodeHelpers
      */
     public static function findAncestorOfAnyType(Node $node, string ...$types): ?Node
     {
+        /** @var Node|false $parent */
         $parent = $node->getAttribute('parent', false);
 
         if ($parent === false) {
@@ -90,6 +91,7 @@ final class NodeHelpers
                 }
             }
 
+            /** @var Node|false $parent */
             $parent = $parent->getAttribute('parent');
         }
 

@@ -6,7 +6,9 @@ use Exception;
 
 /**
  * Indicates something went wrong during workspace configuration parsing.
+ *
+ * @final
  */
-final class WorkspaceConfigurationParsingException extends Exception
+class WorkspaceConfigurationParsingException extends Exception
 {
 }

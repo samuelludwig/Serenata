@@ -35,7 +35,7 @@ final class JsonRpcQueueItem
         bool $isCancelled = false
     ) {
         $this->request = $request;
-        $this->jsonRpcResponseSender = $jsonRpcMessageSender;
+        $this->jsonRpcMessageSender = $jsonRpcMessageSender;
         $this->isCancelled = $isCancelled;
     }
 
@@ -52,7 +52,7 @@ final class JsonRpcQueueItem
      */
     public function getJsonRpcMessageSender(): JsonRpcMessageSenderInterface
     {
-        return $this->jsonRpcResponseSender;
+        return $this->jsonRpcMessageSender;
     }
 
     /**

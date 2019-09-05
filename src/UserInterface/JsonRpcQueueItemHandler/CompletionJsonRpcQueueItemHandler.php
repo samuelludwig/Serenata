@@ -79,10 +79,12 @@ final class CompletionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      */
     public function getSuggestions(string $uri, string $code, Position $position): array
     {
-        return $this->autocompletionProvider->provide(new AutocompletionProviderContext(
+        $result = $this->autocompletionProvider->provide(new AutocompletionProviderContext(
             new TextDocumentItem($uri, $code),
             $position,
             $this->autocompletionPrefixDeterminer->determine($code, $position)
         ));
+
+        return is_array($result) ? $result : iterator_to_array($result);
     }
 }

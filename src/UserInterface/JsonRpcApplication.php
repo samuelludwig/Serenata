@@ -7,11 +7,14 @@ use Closure;
 use RuntimeException;
 use UnexpectedValueException;
 
+use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 
+use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\SocketServer;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcQueueItemProcessor;
 use Serenata\Sockets\JsonRpcRequestHandlerInterface;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 use Serenata\Sockets\JsonRpcConnectionHandlerFactory;
@@ -64,7 +67,9 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     public function handle(JsonRpcRequest $request, JsonRpcMessageSenderInterface $jsonRpcMessageSender): void
     {
-        $this->getContainer()->get('requestQueue')->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
+        /** @var JsonRpcQueue $queue */
+        $queue = $this->getContainer()->get('requestQueue');
+        $queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
 
         $this->ensurePeriodicQueueProcessingTimerIsInstalled();
     }
@@ -84,8 +89,11 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
 
         if ($uri === null) {
             throw new UnexpectedValueException('A URI for handling requests must be specified');
+        } elseif (!is_string($uri)) {
+            throw new UnexpectedValueException('The URI for handling requests must be a string');
         }
 
+        /** @var LoopInterface $loop */
         $loop = $this->getContainer()->get('eventLoop');
 
         try {
@@ -121,12 +129,18 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     private function installPeriodicQueueProcessingTimer(): void
     {
-        $this->periodicQueueProcessingTimer = $this->getContainer()->get('eventLoop')->addPeriodicTimer(
+        /** @var LoopInterface $loop */
+        $loop = $this->getContainer()->get('eventLoop');
+
+        $this->periodicQueueProcessingTimer = $loop->addPeriodicTimer(
             self::REQUEST_HANDLE_FREQUENCY_SECONDS,
             function () {
                 $this->processNextQueueItem();
 
-                if ($this->getContainer()->get('requestQueue')->isEmpty()) {
+                /** @var JsonRpcQueue $queue */
+                $queue = $this->getContainer()->get('requestQueue');
+
+                if ($queue->isEmpty()) {
                     $this->uninstallPeriodicQueueProcessingTimer();
                 }
             }
@@ -139,7 +153,9 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     private function uninstallPeriodicQueueProcessingTimer(): void
     {
         if ($this->periodicQueueProcessingTimer) {
-            $this->getContainer()->get('eventLoop')->cancelTimer($this->periodicQueueProcessingTimer);
+            /** @var LoopInterface $loop */
+            $loop = $this->getContainer()->get('eventLoop');
+            $loop->cancelTimer($this->periodicQueueProcessingTimer);
 
             $this->periodicQueueProcessingTimer = null;
         }
@@ -150,9 +166,12 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     private function processNextQueueItem(): void
     {
-        $this->getContainer()->get('jsonRpcQueueItemProcessor')->process(
-            $this->getContainer()->get('requestQueue')->pop()
-        );
+        /** @var JsonRpcQueue $queue */
+        $queue = $this->getContainer()->get('requestQueue');
+
+        /** @var JsonRpcQueueItemProcessor $processor */
+        $processor = $this->getContainer()->get('jsonRpcQueueItemProcessor');
+        $processor->process($queue->pop());
     }
 
     /**
@@ -169,7 +188,9 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
 
         $requestHandlingSocketServer = new SocketServer($uri, $loop, $connectionHandlerFactory);
 
-        $this->getContainer()->get('eventLoop')->addPeriodicTimer(
+        /** @var LoopInterface $loop */
+        $loop = $this->getContainer()->get('eventLoop');
+        $loop->addPeriodicTimer(
             self::CYCLE_COLLECTION_FREQUENCY_SECONDS,
             function () {
                 // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
