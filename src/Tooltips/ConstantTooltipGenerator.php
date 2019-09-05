@@ -5,7 +5,7 @@ namespace Serenata\Tooltips;
 /**
  * Generates tooltips for constants.
  */
-class ConstantTooltipGenerator
+final class ConstantTooltipGenerator
 {
     /**
      * @var TooltipTypeListPrettyPrinter

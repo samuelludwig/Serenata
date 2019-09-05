@@ -9,7 +9,7 @@ use PhpParser\Node;
 /**
  * Contains static helper functions for working with nodes.
  */
-class NodeHelpers
+final class NodeHelpers
 {
     /**
      * @param Node\Stmt\Class_ $node

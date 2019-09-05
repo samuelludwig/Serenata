@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Represents a class.
+ *
+ * @final
  */
 class Class_ extends Classlike
 {

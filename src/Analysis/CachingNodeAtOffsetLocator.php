@@ -9,7 +9,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Caching locator that delegates to another object and caches the result.
  */
-class CachingNodeAtOffsetLocator implements NodeAtOffsetLocatorInterface, ClearableCacheInterface
+final class CachingNodeAtOffsetLocator implements NodeAtOffsetLocatorInterface, ClearableCacheInterface
 {
     /**
      * @var NodeAtOffsetLocatorInterface

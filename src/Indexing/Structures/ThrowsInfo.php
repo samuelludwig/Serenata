@@ -5,7 +5,7 @@ namespace Serenata\Indexing\Structures;
 /**
  * Represents information about an exception that can be thrown by a function-like structural element.
  */
-class ThrowsInfo
+final class ThrowsInfo
 {
     /**
      * @var string

@@ -7,6 +7,6 @@ use Exception;
 /**
  * Indicates something went wrong during workspace configuration parsing.
  */
-class WorkspaceConfigurationParsingException extends Exception
+final class WorkspaceConfigurationParsingException extends Exception
 {
 }

@@ -5,7 +5,7 @@ namespace Serenata\Indexing;
 /**
  * Enumeration of indexing event names.
  */
-class IndexingEventName
+final class IndexingEventName
 {
     /**
      * @var string

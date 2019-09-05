@@ -10,8 +10,10 @@ use Serenata\Indexing\StorageInterface;
 
 /**
  * Builds a complete structure of data for a classlike, including children and members.
+ *
+ * @final
  */
-class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
+/*final */class ClasslikeInfoBuilder implements ClasslikeInfoBuilderInterface
 {
     /**
      * @var Conversion\ClasslikeConstantConverter

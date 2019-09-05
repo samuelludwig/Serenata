@@ -27,7 +27,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Creates {@see TextEdit}s that insert use statements (imports).
  */
-class UseStatementInsertionCreator
+final class UseStatementInsertionCreator
 {
     /**
      * @var Parser

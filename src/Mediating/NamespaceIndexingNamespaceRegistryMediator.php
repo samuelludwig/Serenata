@@ -14,7 +14,7 @@ use Serenata\Indexing\IndexingEventName;
 /**
  * Mediator that updates the namespace registry when namespace indexing events happen.
  */
-class NamespaceIndexingNamespaceRegistryMediator
+final class NamespaceIndexingNamespaceRegistryMediator
 {
     /**
      * @var NamespaceListRegistry

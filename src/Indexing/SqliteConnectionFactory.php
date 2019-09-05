@@ -9,7 +9,7 @@ use Doctrine\DBAL\DriverManager;
 /**
  * Creates connections to an SQLite database.
  */
-class SqliteConnectionFactory
+final class SqliteConnectionFactory
 {
     /**
      * @return Configuration

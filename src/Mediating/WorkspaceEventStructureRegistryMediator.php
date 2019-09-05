@@ -11,7 +11,7 @@ use Serenata\Indexing\WorkspaceEventName;
 /**
  * Mediator that updates the structure registry when workspace events happen.
  */
-class WorkspaceEventStructureRegistryMediator
+final class WorkspaceEventStructureRegistryMediator
 {
     /**
      * @var ClasslikeListRegistry

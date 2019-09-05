@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 /**
  * Represents trait method precedence in a trait.
+ *
+ * @final
  */
 class TraitTraitPrecedence extends ClasslikeTraitPrecedence
 {

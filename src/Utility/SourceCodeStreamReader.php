@@ -11,7 +11,7 @@ use Serenata\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory;
 /**
  * Deals with reading (not analyzing or parsing) source code.
  */
-class SourceCodeStreamReader
+final class SourceCodeStreamReader
 {
     /**
      * @var FileSourceCodeFileReaderFactory

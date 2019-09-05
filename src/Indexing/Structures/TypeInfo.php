@@ -5,7 +5,7 @@ namespace Serenata\Indexing\Structures;
 /**
  * Represents information about a type that a structural element can have.
  */
-class TypeInfo
+final class TypeInfo
 {
     /**
      * @var string

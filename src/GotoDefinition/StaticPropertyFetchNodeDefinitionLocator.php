@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Locates the definition of the function called in {@see Node\Expr\StaticPropertyFetch} nodes.
  */
-class StaticPropertyFetchNodeDefinitionLocator
+final class StaticPropertyFetchNodeDefinitionLocator
 {
     /**
      * @var PropertyFetchPropertyInfoRetriever

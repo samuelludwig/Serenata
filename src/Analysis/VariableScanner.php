@@ -18,7 +18,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Scans for available variables.
  */
-class VariableScanner
+final class VariableScanner
 {
     /**
      * @var Parser

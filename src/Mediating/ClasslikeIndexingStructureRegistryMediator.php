@@ -14,7 +14,7 @@ use Serenata\Indexing\IndexingEventName;
 /**
  * Mediator that updates the classlike registry when classlike indexing events happen.
  */
-class ClasslikeIndexingStructureRegistryMediator
+final class ClasslikeIndexingStructureRegistryMediator
 {
     /**
      * @var ClasslikeListRegistry

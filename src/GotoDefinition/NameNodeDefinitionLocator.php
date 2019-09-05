@@ -19,7 +19,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Locates the definition of classlikes represented by {@see Node\Name} nodes.
  */
-class NameNodeDefinitionLocator
+final class NameNodeDefinitionLocator
 {
     /**
      * @var NameNodeFqsenDeterminer

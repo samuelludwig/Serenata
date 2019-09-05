@@ -5,7 +5,7 @@ namespace Serenata\Parsing;
 /**
  * Aids in dealing with PHP parser tokens.
  */
-class ParserTokenHelper
+final class ParserTokenHelper
 {
     /**
      * @see https://secure.php.net/manual/en/tokens.php

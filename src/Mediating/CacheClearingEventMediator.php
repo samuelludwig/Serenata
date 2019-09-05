@@ -12,7 +12,7 @@ use Serenata\Analysis\ClearableCacheInterface;
  * This class effectively mediates between objects emitting events that should trigger a cache clear and objects that
  * handle clearing the cache.
  */
-class CacheClearingEventMediator
+final class CacheClearingEventMediator
 {
     /**
      * @var ClearableCacheInterface

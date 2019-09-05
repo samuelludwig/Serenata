@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips for {@see Node\Expr\StaticCall} nodes.
  */
-class StaticMethodCallNodeTooltipGenerator
+final class StaticMethodCallNodeTooltipGenerator
 {
     /**
      * @var MethodCallMethodInfoRetriever

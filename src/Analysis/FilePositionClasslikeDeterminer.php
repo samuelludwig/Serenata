@@ -15,7 +15,7 @@ use Serenata\Utility\TextDocumentItem;
  *
  * @final
  */
-class FilePositionClasslikeDeterminer
+final class FilePositionClasslikeDeterminer
 {
     /**
      * @var FileClasslikeListProviderInterface

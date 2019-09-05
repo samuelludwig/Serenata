@@ -9,7 +9,7 @@ use Doctrine\DBAL\Exception\TableNotFoundException;
 /**
  * Handles storage version checks.
  */
-class StorageVersionChecker
+final class StorageVersionChecker
 {
     /**
      * @var ManagerRegistry

@@ -5,7 +5,7 @@ namespace Serenata\Indexing;
 /**
  * Normalizes paths.
  */
-class PathNormalizer
+final class PathNormalizer
 {
     /**
      * @param string $path

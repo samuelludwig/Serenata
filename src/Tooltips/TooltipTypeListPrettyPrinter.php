@@ -7,7 +7,7 @@ use Serenata\PrettyPrinting\TypeListPrettyPrinter;
 /**
  * Pretty prints type lists for use in tooltips.
  */
-class TooltipTypeListPrettyPrinter
+final class TooltipTypeListPrettyPrinter
 {
     /**
      * @var TypeListPrettyPrinter

@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 /**
  * Represents a generic setting.
+ *
+ * @final
  */
 class Setting
 {

@@ -5,7 +5,7 @@ namespace Serenata\Autocompletion;
 /**
  * Evaluates function parameters and allows additional queries on them.
  */
-class FunctionParametersEvaluator
+final class FunctionParametersEvaluator
 {
     /**
      * @param array $function

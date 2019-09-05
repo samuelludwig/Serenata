@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Represents a namespace in a file.
+ *
+ * @final
  */
 class FileNamespace
 {

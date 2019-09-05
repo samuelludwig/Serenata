@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 /**
  * Represents metadata related to static method types.
+ *
+ * @final
  */
 class MetaStaticMethodType
 {

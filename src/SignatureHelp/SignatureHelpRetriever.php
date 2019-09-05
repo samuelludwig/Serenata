@@ -23,7 +23,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Retrieves invocation information for function and method calls.
  */
-class SignatureHelpRetriever
+final class SignatureHelpRetriever
 {
     /**
      * @var NodeAtOffsetLocatorInterface

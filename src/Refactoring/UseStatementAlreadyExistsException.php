@@ -5,6 +5,6 @@ namespace Serenata\Refactoring;
 /**
  * Indicates an appropriate use statement already exists.
  */
-class UseStatementAlreadyExistsException extends UseStatementInsertionCreationException
+final class UseStatementAlreadyExistsException extends UseStatementInsertionCreationException
 {
 }

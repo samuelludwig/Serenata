@@ -5,7 +5,7 @@ namespace Serenata\Autocompletion\ApproximateStringMatching;
 /**
  * Perform approximate string matching using the {@see levenshtein} algorithm and function.
  */
-class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInterface
+final class LevenshteinApproximateStringMatcher implements ApproximateStringMatcherInterface
 {
     /**
      * @var int

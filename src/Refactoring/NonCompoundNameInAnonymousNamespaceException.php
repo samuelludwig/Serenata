@@ -8,6 +8,6 @@ namespace Serenata\Refactoring;
  *
  * PHP generates a warning about these.
  */
-class NonCompoundNameInAnonymousNamespaceException extends UseStatementInsertionCreationException
+final class NonCompoundNameInAnonymousNamespaceException extends UseStatementInsertionCreationException
 {
 }

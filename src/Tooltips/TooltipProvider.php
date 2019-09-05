@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips.
  */
-class TooltipProvider
+final class TooltipProvider
 {
     /**
      * @var NodeAtOffsetLocatorInterface

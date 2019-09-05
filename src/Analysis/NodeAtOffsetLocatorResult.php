@@ -8,7 +8,7 @@ use PhpParser\Comment;
 /**
  * Result originating from a {@see NodeAtOffsetLocatorInterface}.
  */
-class NodeAtOffsetLocatorResult
+final class NodeAtOffsetLocatorResult
 {
     /**
      * @var Node|null

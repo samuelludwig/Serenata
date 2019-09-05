@@ -6,6 +6,8 @@ use Serenata\DocblockTypeParser\DocblockType;
 
 /**
  * Represents a method parameter.
+ *
+ * @final
  */
 class MethodParameter extends FunctionLikeParameter
 {

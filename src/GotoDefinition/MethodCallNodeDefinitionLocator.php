@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Locates the definition of the function called in {@see Node\Expr\MethodCall} nodes.
  */
-class MethodCallNodeDefinitionLocator
+final class MethodCallNodeDefinitionLocator
 {
     /**
      * @var MethodCallMethodInfoRetriever

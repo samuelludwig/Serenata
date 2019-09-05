@@ -14,7 +14,7 @@ use Serenata\Indexing\IndexingEventName;
 /**
  * Mediator that updates the constant registry when constant indexing events happen.
  */
-class ConstantIndexingConstantRegistryMediator
+final class ConstantIndexingConstantRegistryMediator
 {
     /**
      * @var ConstantListRegistry

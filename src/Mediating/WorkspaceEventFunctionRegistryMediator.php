@@ -11,7 +11,7 @@ use Serenata\Indexing\WorkspaceEventName;
 /**
  * Mediator that updates the function registry when workspace events happen.
  */
-class WorkspaceEventFunctionRegistryMediator
+final class WorkspaceEventFunctionRegistryMediator
 {
     /**
      * @var FunctionListRegistry

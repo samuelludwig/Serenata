@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips for {@see Node\Stmt\Function_} nodes.
  */
-class FunctionNodeTooltipGenerator
+final class FunctionNodeTooltipGenerator
 {
     /**
      * @var FunctionTooltipGenerator

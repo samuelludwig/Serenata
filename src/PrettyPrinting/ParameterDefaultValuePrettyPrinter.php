@@ -5,7 +5,7 @@ namespace Serenata\PrettyPrinting;
 /**
  * Pretty prints default values for parameters.
  */
-class ParameterDefaultValuePrettyPrinter
+final class ParameterDefaultValuePrettyPrinter
 {
     /**
      * @param string $value

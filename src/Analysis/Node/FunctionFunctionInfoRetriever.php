@@ -17,7 +17,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Fetches method information from a {@see Node\Expr\FuncCall} or a {@see Node\Stmt\Function_} node.
  */
-class FunctionFunctionInfoRetriever
+final class FunctionFunctionInfoRetriever
 {
     /**
      * @var FunctionCallNodeFqsenDeterminer

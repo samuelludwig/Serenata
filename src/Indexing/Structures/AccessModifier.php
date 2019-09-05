@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 /**
  * Represents an access modifier.
+ *
+ * @final
  */
 class AccessModifier
 {

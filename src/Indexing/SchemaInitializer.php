@@ -11,7 +11,7 @@ use Serenata\Indexing\Structures\AccessModifierNameValue;
 /**
  * Initializes the database schema.
  */
-class SchemaInitializer
+final class SchemaInitializer
 {
     /**
      * @var int

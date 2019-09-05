@@ -14,7 +14,7 @@ use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
 /**
  * Parser for PHP docblocks.
  */
-class DocblockParser
+final class DocblockParser
 {
     /**
      * PSR-5 and/or phpDocumentor docblock tags.

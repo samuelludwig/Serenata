@@ -5,7 +5,7 @@ namespace Serenata\Tooltips;
 /**
  * Generates tooltips for properties.
  */
-class PropertyTooltipGenerator
+final class PropertyTooltipGenerator
 {
     /**
      * @var TooltipTypeListPrettyPrinter

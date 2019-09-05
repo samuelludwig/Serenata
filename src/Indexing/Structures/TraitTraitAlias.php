@@ -4,6 +4,8 @@ namespace Serenata\Indexing\Structures;
 
 /**
  * Represents an aliased trait method in a trait.
+ *
+ * @final
  */
 class TraitTraitAlias extends ClasslikeTraitAlias
 {

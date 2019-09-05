@@ -4,8 +4,10 @@ namespace Serenata\Workspace;
 
 /**
  * Manages the currently active workspace.
+ *
+ * @final
  */
-class ActiveWorkspaceManager
+/*final */class ActiveWorkspaceManager
 {
     /**
      * @var Workspace|null

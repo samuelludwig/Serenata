@@ -24,7 +24,7 @@ use Serenata\Workspace\ActiveWorkspaceManager;
 /**
  * Processes {@see JsonRpcQueueItem}s.
  */
-class JsonRpcQueueItemProcessor
+final class JsonRpcQueueItemProcessor
 {
     /**
      * @var JsonRpcQueueItemHandlerFactoryInterface

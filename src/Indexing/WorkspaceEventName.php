@@ -5,7 +5,7 @@ namespace Serenata\Indexing;
 /**
  * Enumeration of workspace event names.
  */
-class WorkspaceEventName
+final class WorkspaceEventName
 {
     /**
      * @var string

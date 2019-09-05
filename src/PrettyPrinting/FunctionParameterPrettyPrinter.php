@@ -7,7 +7,7 @@ use LogicException;
 /**
  * Pretty prints function and method parameters.
  */
-class FunctionParameterPrettyPrinter
+final class FunctionParameterPrettyPrinter
 {
     /**
      * @var ParameterDefaultValuePrettyPrinter

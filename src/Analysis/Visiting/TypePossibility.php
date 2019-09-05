@@ -7,7 +7,7 @@ use DomainException;
 /**
  * Describes a type's possibility.
  */
-class TypePossibility
+final class TypePossibility
 {
     /**
      * Indicates a type is guaranteed.

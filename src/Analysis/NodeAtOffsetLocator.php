@@ -18,7 +18,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Locates the node at the specified offset in code.
  */
-class NodeAtOffsetLocator implements NodeAtOffsetLocatorInterface
+final class NodeAtOffsetLocator implements NodeAtOffsetLocatorInterface
 {
     /**
      * @var Parser

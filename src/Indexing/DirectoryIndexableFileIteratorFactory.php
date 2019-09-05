@@ -5,7 +5,7 @@ namespace Serenata\Indexing;
 /**
  * Creates instances of {@see DirectoryIndexableFileIterator}.
  */
-class DirectoryIndexableFileIteratorFactory
+final class DirectoryIndexableFileIteratorFactory
 {
     /**
      * @var StorageInterface

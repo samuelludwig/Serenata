@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Locates the definition of structural elements.
  */
-class DefinitionLocator
+final class DefinitionLocator
 {
     /**
      * @var NodeAtOffsetLocatorInterface

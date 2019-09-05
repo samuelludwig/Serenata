@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Represents a file.
+ *
+ * @final
  */
 class File
 {

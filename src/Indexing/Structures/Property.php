@@ -8,6 +8,8 @@ use Serenata\DocblockTypeParser\DocblockType;
 
 /**
  * Represents a property.
+ *
+ * @final
  */
 class Property
 {

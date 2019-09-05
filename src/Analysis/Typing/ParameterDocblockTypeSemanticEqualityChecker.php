@@ -25,7 +25,7 @@ use Serenata\DocblockTypeParser\DocblockTypeEquivalenceComparatorInterface;
 /**
  * Checks if a specified (normal parameter) type is semantically equal to a docblock type specification.
  */
-class ParameterDocblockTypeSemanticEqualityChecker
+final class ParameterDocblockTypeSemanticEqualityChecker
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface

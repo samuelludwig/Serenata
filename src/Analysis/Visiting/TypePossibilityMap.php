@@ -5,7 +5,7 @@ namespace Serenata\Analysis\Visiting;
 /**
  * Holds possibilities for a list of types.
  */
-class TypePossibilityMap
+final class TypePossibilityMap
 {
     /**
      * A map of conditional types that the item may have.

@@ -7,7 +7,7 @@ use LogicException;
 /**
  * Generates tooltips for classlikes.
  */
-class ClassLikeTooltipGenerator
+final class ClassLikeTooltipGenerator
 {
     /**
      * @param array $info

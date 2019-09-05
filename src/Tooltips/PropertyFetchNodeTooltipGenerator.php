@@ -16,7 +16,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips for {@see Node\Expr\PropertyFetch} nodes.
  */
-class PropertyFetchNodeTooltipGenerator
+final class PropertyFetchNodeTooltipGenerator
 {
     /**
      * @var PropertyFetchPropertyInfoRetriever

@@ -18,7 +18,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips for {@see Node\Expr\FuncCall} nodes.
  */
-class FuncCallNodeTooltipGenerator
+final class FuncCallNodeTooltipGenerator
 {
     /**
      * @var FunctionTooltipGenerator

@@ -14,7 +14,7 @@ use Serenata\Indexing\IndexingEventName;
 /**
  * Mediator that updates the function registry when function indexing events happen.
  */
-class FunctionIndexingFunctionRegistryMediator
+final class FunctionIndexingFunctionRegistryMediator
 {
     /**
      * @var FunctionListRegistry

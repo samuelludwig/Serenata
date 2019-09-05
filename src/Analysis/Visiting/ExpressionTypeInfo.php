@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * Holds information about an expression's type.
  */
-class ExpressionTypeInfo
+final class ExpressionTypeInfo
 {
     /**
      * The node that best describes the item.

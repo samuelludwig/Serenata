@@ -5,7 +5,7 @@ namespace Serenata\Indexing;
 /**
  * Prunes removed files from the index.
  */
-class IndexFilePruner
+final class IndexFilePruner
 {
     /**
      * @var StorageInterface

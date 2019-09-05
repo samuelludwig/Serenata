@@ -5,7 +5,7 @@ namespace Serenata\Indexing\Structures;
 /**
  * Enumeration of access modifier name values.
  */
-class AccessModifierNameValue
+final class AccessModifierNameValue
 {
     /**
      * @var string

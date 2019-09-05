@@ -19,7 +19,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Determines the FQSEN of a name used in a name node.
  */
-class NameNodeFqsenDeterminer
+final class NameNodeFqsenDeterminer
 {
     /**
      * @var StructureAwareNameResolverFactoryInterface

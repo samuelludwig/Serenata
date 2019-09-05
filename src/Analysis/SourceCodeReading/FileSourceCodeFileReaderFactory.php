@@ -5,7 +5,7 @@ namespace Serenata\Analysis\SourceCodeReading;
 /**
  * Factory that creates instances of {@see FileSourceCodeFileReader}.
  */
-class FileSourceCodeFileReaderFactory
+final class FileSourceCodeFileReaderFactory
 {
     /**
      * @var TextEncodingConverterInterface

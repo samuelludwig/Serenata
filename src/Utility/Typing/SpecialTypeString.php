@@ -5,7 +5,7 @@ namespace Serenata\Utility\Typing;
 /**
  * Enumeration of string values for special types (that properties, constants, parameters, ...) can have.
  */
-class SpecialTypeString
+final class SpecialTypeString
 {
     /**
      * @var string

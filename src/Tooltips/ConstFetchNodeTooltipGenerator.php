@@ -18,7 +18,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips for {@see Node\Expr\ConstFetch} nodes.
  */
-class ConstFetchNodeTooltipGenerator
+final class ConstFetchNodeTooltipGenerator
 {
     /**
      * @var ConstantTooltipGenerator

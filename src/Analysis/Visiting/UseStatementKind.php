@@ -5,7 +5,7 @@ namespace Serenata\Analysis\Visiting;
 /**
  * Kinds of use statements.
  */
-class UseStatementKind
+final class UseStatementKind
 {
     /**
      * @var string

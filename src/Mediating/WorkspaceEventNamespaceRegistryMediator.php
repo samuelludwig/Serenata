@@ -11,7 +11,7 @@ use Serenata\Indexing\WorkspaceEventName;
 /**
  * Mediator that updates the namespace registry when workspace events happen.
  */
-class WorkspaceEventNamespaceRegistryMediator
+final class WorkspaceEventNamespaceRegistryMediator
 {
     /**
      * @var NamespaceListRegistry

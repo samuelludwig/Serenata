@@ -19,7 +19,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Locates the definition of the constant called in {@see Node\Expr\ConstFetch} nodes.
  */
-class ConstFetchNodeDefinitionLocator
+final class ConstFetchNodeDefinitionLocator
 {
     /**
      * @var ConstFetchNodeFqsenDeterminer

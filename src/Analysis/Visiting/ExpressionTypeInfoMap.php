@@ -7,7 +7,7 @@ use PhpParser\Node;
 /**
  * Keeps track of {@see ExpressionTypeInfo} objects for a set of expressions represented by strings.
  */
-class ExpressionTypeInfoMap
+final class ExpressionTypeInfoMap
 {
     /**
      * @var array

@@ -9,7 +9,7 @@ use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
 /**
  * Generates tooltips for functions.
  */
-class FunctionTooltipGenerator
+final class FunctionTooltipGenerator
 {
     /**
      * @var ParameterNamePrettyPrinter

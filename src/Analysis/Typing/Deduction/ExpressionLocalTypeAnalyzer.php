@@ -27,7 +27,7 @@ use Serenata\Utility\TextDocumentItem;
  * This class can be used to scan for types that apply to an expression based on local rules, such as conditionals and
  * type overrides.
  */
-class ExpressionLocalTypeAnalyzer
+final class ExpressionLocalTypeAnalyzer
 {
     /**
      * @var Parser

@@ -8,6 +8,8 @@ use IteratorAggregate;
 
 /**
  * Represents an immutable set of values.
+ *
+ * @final
  */
 class ImmutableSet implements IteratorAggregate
 {

@@ -5,7 +5,7 @@ namespace Serenata\Sockets;
 /**
  * An enumeration of JSON-RPC 2.0 error codes.
  */
-class JsonRpcErrorCode
+final class JsonRpcErrorCode
 {
     /**
      * @var int

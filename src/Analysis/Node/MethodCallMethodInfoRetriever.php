@@ -21,7 +21,7 @@ use Serenata\Utility\TextDocumentItem;
  * Fetches method information from a {@see Node\Expr\MethodCall}, {@see Node\Expr\StaticCall} or a {@see Node\Expr\New_}
  * node.
  */
-class MethodCallMethodInfoRetriever
+final class MethodCallMethodInfoRetriever
 {
     /**
      * @var NodeTypeDeducerInterface

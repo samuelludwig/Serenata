@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Represents an interface.
+ *
+ * @final
  */
 class Interface_ extends Classlike
 {

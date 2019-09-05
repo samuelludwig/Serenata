@@ -10,6 +10,8 @@ use Serenata\DocblockTypeParser\DocblockType;
 
 /**
  * Represents a (class) method.
+ *
+ * @final
  */
 class Method extends FunctionLike
 {

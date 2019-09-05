@@ -7,7 +7,7 @@ use League\HTMLToMarkdown;
 /**
  * Generates a {@see HTMLToMarkdown\HtmlConverter} for converting HTML in docblocks to Markdown.
  */
-class DocblockHtmlToMarkdownConverterFactory
+final class DocblockHtmlToMarkdownConverterFactory
 {
     /**
      * @return HTMLToMarkdown\HtmlConverter

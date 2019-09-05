@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Represents a trait.
+ *
+ * @final
  */
 class Trait_ extends Classlike
 {

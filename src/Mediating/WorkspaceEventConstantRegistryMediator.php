@@ -11,7 +11,7 @@ use Serenata\Indexing\WorkspaceEventName;
 /**
  * Mediator that updates the constant registry when workspace events happen.
  */
-class WorkspaceEventConstantRegistryMediator
+final class WorkspaceEventConstantRegistryMediator
 {
     /**
      * @var ConstantListRegistry

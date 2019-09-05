@@ -6,8 +6,10 @@ use Serenata\Indexing\Structures;
 
 /**
  * Converts raw function data from the index to more useful data.
+ *
+ * @final
  */
-class FunctionConverter extends AbstractConverter
+/*final */class FunctionConverter extends AbstractConverter
 {
     /**
      * @param Structures\FunctionLike $function

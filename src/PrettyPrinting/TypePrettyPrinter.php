@@ -5,7 +5,7 @@ namespace Serenata\PrettyPrinting;
 /**
  * Pretty prints types.
  */
-class TypePrettyPrinter
+final class TypePrettyPrinter
 {
     /**
      * @param string $type

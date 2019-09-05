@@ -18,7 +18,7 @@ use Serenata\Utility\TextDocumentItem;
 /**
  * Provides tooltips for {@see Node\Name} nodes.
  */
-class NameNodeTooltipGenerator
+final class NameNodeTooltipGenerator
 {
     /**
      * @var ClassLikeTooltipGenerator

@@ -8,6 +8,8 @@ use Serenata\DocblockTypeParser\DocblockType;
 
 /**
  * Represents a (global) constant.
+ *
+ * @final
  */
 class Constant extends ConstantLike
 {

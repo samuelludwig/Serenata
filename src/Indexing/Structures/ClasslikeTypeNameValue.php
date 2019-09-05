@@ -5,7 +5,7 @@ namespace Serenata\Indexing\Structures;
 /**
  * Enumeration of classlike type name values.
  */
-class ClasslikeTypeNameValue
+final class ClasslikeTypeNameValue
 {
     /**
      * @var string

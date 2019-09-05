@@ -5,7 +5,7 @@ namespace Serenata\PrettyPrinting;
 /**
  * Pretty prints type lists.
  */
-class TypeListPrettyPrinter
+final class TypeListPrettyPrinter
 {
     /**
      * @var TypePrettyPrinter

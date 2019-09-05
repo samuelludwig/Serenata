@@ -7,7 +7,7 @@ namespace Serenata\Sockets;
  *
  * Value object.
  */
-class JsonRpcQueueItem
+final class JsonRpcQueueItem
 {
     /**
      * @var JsonRpcRequest

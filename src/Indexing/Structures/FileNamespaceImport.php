@@ -6,6 +6,8 @@ use Serenata\Common\Range;
 
 /**
  * Represents an import in a namespace inside a file.
+ *
+ * @final
  */
 class FileNamespaceImport
 {

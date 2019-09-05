@@ -5,7 +5,7 @@ namespace Serenata\Analysis;
 /**
  * Analyzing docblocks.
  */
-class DocblockAnalyzer
+final class DocblockAnalyzer
 {
     /**
      * Returns a boolean indicating whether the specified short description contains an indicator that the full parent

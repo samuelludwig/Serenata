@@ -6,8 +6,10 @@ namespace Serenata\Utility\Typing;
  * Represents a (parameter, property, constant) type.
  *
  * This is a value object and immutable.
+ *
+ * @final
  */
-class Type
+/*final */class Type
 {
     /**
      * @var string
