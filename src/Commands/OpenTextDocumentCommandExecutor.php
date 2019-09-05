@@ -29,6 +29,6 @@ final class OpenTextDocumentCommandExecutor implements CommandExecutorInterface
         // This command is handled by just asking the client to open the document. This whole command could in theory
         // be handled by the client, without going past the server, but doing this anyway allows clients to maintain
         // the same flow for all commands and us to do additional processing here, if it is ever needed.
-        return new JsonRpcRequest(null, 'serenata/openTextDocument', $command->getArguments());
+        return new JsonRpcRequest(null, ClientCommandName::OPEN_TEXT_DOCUMENT, $command->getArguments());
     }
 }
