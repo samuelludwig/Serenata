@@ -300,5 +300,10 @@ services:
             - '@bestStringApproximationDeterminer'
             - '%autocompletion.finalSuggestionsResultLimit%'
 
+    sortTextConfiguringAutocompletionProvider:
+        class: Serenata\Autocompletion\Providers\SortTextConfiguringAutocompletionProvider
+        arguments:
+            - '@fuzzyMatchingAutocompletionProvider'
+
     autocompletionProvider:
-        alias: fuzzyMatchingAutocompletionProvider
+        alias: sortTextConfiguringAutocompletionProvider

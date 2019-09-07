@@ -31,6 +31,11 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     private $insertText;
 
     /**
+     * @var string|null
+     */
+    private $sortText;
+
+    /**
      * @var int|null
      */
     private $insertTextFormat = 2;
@@ -75,6 +80,7 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
      * @param TextEdit[]    $additionalTextEdits
      * @param bool          $deprecated
      * @param string|null   $detail
+     * @param string|null   $sortText
      */
     public function __construct(
         string $filterText,
@@ -85,7 +91,8 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
         ?string $documentation,
         array $additionalTextEdits = [],
         bool $deprecated = false,
-        ?string $detail = null
+        ?string $detail = null,
+        ?string $sortText = null
     ) {
         $this->filterText = $filterText;
         $this->kind = $kind;
@@ -96,6 +103,7 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
         $this->additionalTextEdits = $additionalTextEdits;
         $this->deprecated = $deprecated;
         $this->detail = $detail;
+        $this->sortText = $sortText;
 
         if ($insertText === null && $textEdit === null) {
             throw new LogicException('Either an insertText or a textEdit must be provided');
@@ -132,6 +140,14 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
     public function getInsertTextFormat(): ?int
     {
         return $this->insertTextFormat;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSortText(): ?string
+    {
+        return $this->sortText;
     }
 
     /**
@@ -192,6 +208,7 @@ final class CompletionItem implements JsonSerializable, ArrayAccess
             'kind'                => $this->getKind(),
             'insertText'          => $this->getInsertText(),
             'insertTextFormat'    => $this->getInsertTextFormat(),
+            'sortText'            => $this->getSortText(),
             'textEdit'            => $this->getTextEdit(),
             'label'               => $this->getLabel(),
             'documentation'       => $this->getDocumentation(),
