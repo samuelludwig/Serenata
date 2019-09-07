@@ -47,6 +47,14 @@ test:run-phpcs:
     dependencies:
         - build:php-7.3
 
+# TODO: Enable when all the existing errors have been fixed
+# test:run-phpstan:
+#     image: php:7.3-cli-alpine
+#     script:
+#         - php vendor/bin/phpstan analyse --level=max --no-interaction --no-progress src
+#     dependencies:
+#         - build:php-7.3
+
 .test-run-phpunit: &test-run-phpunit
     script:
         - php -d memory_limit=512M vendor/bin/phpunit
