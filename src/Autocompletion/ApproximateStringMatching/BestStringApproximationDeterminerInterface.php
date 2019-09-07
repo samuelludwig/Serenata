@@ -18,5 +18,5 @@ interface BestStringApproximationDeterminerInterface
      * @return (array|ArrayAccess)[] The same list of items received as input, but filtered and sorted due to the
      *                               approximation.
      */
-    public function determine(iterable $items, string $referenceText, string $itemValueKey, ?int $limit): array;
+    public function determine(iterable $items, string $referenceText, string $itemValueKey, ?int $limit);
 }

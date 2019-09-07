@@ -24,7 +24,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     /**
      * @inheritDoc
      */
-    public function determine(iterable $items, string $referenceText, string $itemValueKey, ?int $limit): array
+    public function determine(iterable $items, string $referenceText, string $itemValueKey, ?int $limit)
     {
         // For an input set of ~5000 items, the approximate string matcher may decide that there aren't many of them
         // that can be filtered out, which leaves us with a set of the same amount that we need to sort by score, only
