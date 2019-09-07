@@ -10,9 +10,12 @@ namespace Serenata\Indexing\Structures;
 class Setting
 {
     /**
+     * phpcs:disable
+     *
      * @var string
      */
     private $id;
+    // phpcs:enable
 
     /**
      * @var string

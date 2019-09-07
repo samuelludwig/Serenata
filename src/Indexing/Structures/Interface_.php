@@ -9,10 +9,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Represents an interface.
  *
+ * phpcs:disable
+ *
  * @final
  */
 class Interface_ extends Classlike
 {
+    // phpcs:enable
     /**
      * @var string[]
      */

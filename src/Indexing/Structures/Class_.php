@@ -11,10 +11,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Represents a class.
  *
+ * phpcs:disable
+ *
  * @final
  */
 class Class_ extends Classlike
 {
+    // phpcs:enable
     /**
      * @var bool
      */

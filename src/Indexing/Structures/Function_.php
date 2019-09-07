@@ -11,10 +11,13 @@ use Serenata\DocblockTypeParser\DocblockType;
 /**
  * Represents a (global) function.
  *
+ * phpcs:disable
+ *
  * @final
  */
 class Function_ extends FunctionLike
 {
+    // phpcs:enable
     /**
      * @var string
      */

@@ -11,10 +11,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Represents a trait.
  *
+ * phpcs:disable
+ *
  * @final
  */
 class Trait_ extends Classlike
 {
+    // phpcs:enable
     /**
      * @var string[]
      */

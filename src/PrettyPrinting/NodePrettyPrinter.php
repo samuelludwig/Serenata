@@ -9,6 +9,7 @@ use PhpParser\PrettyPrinter;
  */
 final class NodePrettyPrinter extends PrettyPrinter\Standard
 {
+    // phpcs:disable
     public function parsing_Node_Keyword_Static()
     {
         return 'static';
@@ -23,4 +24,5 @@ final class NodePrettyPrinter extends PrettyPrinter\Standard
     {
         return 'parent';
     }
+    // phpcs:enable
 }

@@ -417,10 +417,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable
+     *
      * @return array
      */
     private function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $return = null;
 
         if (isset($tags[static::RETURN_VALUE])) {
@@ -454,17 +457,20 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable
+     *
      * @return array
      */
     private function filterParams(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $params = [];
 
         if (isset($tags[static::PARAM_TYPE])) {
             foreach ($tags[static::PARAM_TYPE] as $tag) {
                 [$type, $variableName, $description] = $this->filterParameterTag($tag, 3);
 
-                if (empty($type) || empty($variableName)) {
+                if (!$type || !$variableName) {
                     continue;
                 }
 
@@ -505,17 +511,20 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable
+     *
      * @return array
      */
     private function filterVar(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $vars = [];
 
         if (isset($tags[static::VAR_TYPE])) {
             foreach ($tags[static::VAR_TYPE] as $tag) {
                 [$varType, $varName, $varDescription] = $this->filterParameterTag($tag, 3);
 
-                if (empty($varType)) {
+                if (!$varType) {
                     continue;
                 }
 
@@ -562,10 +571,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable
+     *
      * @return array
      */
     private function filterDeprecated(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         return [
             'deprecated' => isset($tags[static::DEPRECATED]),
         ];
@@ -578,10 +590,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable
+     *
      * @return array
      */
     private function filterThrows(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $throws = [];
 
         if (isset($tags[static::THROWS])) {
@@ -609,10 +624,13 @@ final class DocblockParser
      * @param string      $itemName
      * @param array       $tags
      *
+     * phpcs:disable
+     *
      * @return array
      */
     private function filterMethod(?string $docblock, string $itemName, array $tags): array
     {
+        // phpcs:enable
         $methods = [];
 
         if (isset($tags[static::METHOD])) {
@@ -630,7 +648,7 @@ final class DocblockParser
                         $methodSignature = $match[3];
                         $description = $match[4];
                     } elseif ($partCount === 4) {
-                        if (empty($match[2])) {
+                        if (!$match[2]) {
                             $type = 'void';
                             $methodSignature = $match[3];
                             $description = null;
