@@ -6,7 +6,8 @@ namespace Serenata\Autocompletion\ApproximateStringMatching;
  * Performs string approximation on a list of items and return only the best result(s) by using a
  * {@see ApproximateStringMatcherInterface}.
  */
-final class ApproximateStringMatchingBestStringApproximationDeterminer implements BestStringApproximationDeterminerInterface
+final class ApproximateStringMatchingBestStringApproximationDeterminer implements
+    BestStringApproximationDeterminerInterface
 {
     /**
      * @var ApproximateStringMatcherInterface
