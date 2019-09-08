@@ -67,8 +67,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
             [],
             ':memory:',
             7.1,
-            ['Test*'],
-            [],
+            ['TestFile.phpt'],
             ['php', 'phpt']
         )));
 
@@ -77,6 +76,29 @@ final class FileIndexingTest extends AbstractIntegrationTest
         $files = $this->container->get('storage')->getFiles();
 
         static::assertCount(0, $files, 'Files matched by exclusion patterns should not be indexed');
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexingIgnoresFilesInFoldersMatchingExclusionPatterns(): void
+    {
+        $path = $this->getPathFor('Folder');
+
+        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            'test-id',
+            [],
+            ':memory:',
+            7.1,
+            ['Folder'],
+            ['php', 'phpt']
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(0, $files, 'Folders matched by exclusion patterns should not be indexed');
     }
 
     /**
@@ -91,7 +113,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
             [],
             ':memory:',
             7.1,
-            [],
             [],
             ['blah']
         )));
@@ -115,7 +136,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
             [],
             ':memory:',
             7.1,
-            [],
             [],
             []
         )));

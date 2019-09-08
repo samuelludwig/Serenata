@@ -71,17 +71,15 @@ final class IndexableFileIterator implements IteratorAggregate
         $finder
             // For single URIs, move up to parent folder so we can follow the same flow and pattern matching.
             ->in($isFile ? dirname($uri) : $uri)
-            ->ignoreUnreadableDirs()
+            ->ignoreUnreadableDirs(true)
+            ->ignoreDotFiles(true)
             ->ignoreVCS(true)
             ->followLinks()
-            ->name($globsToAdhereTo)
-            ->notName($this->globsToExclude);
+            ->name($globsToAdhereTo);
 
-        if ($isFile) {
-            $finder->name(basename($uri));
-        }
+        $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
 
-        foreach ($finder as $item) {
+        foreach ($iterator as $item) {
             if ($item->isDir()) {
                 yield from $this->iterate($item->getPathname());
             } elseif ($item->isFile()) {
@@ -97,6 +95,10 @@ final class IndexableFileIterator implements IteratorAggregate
                 // array_unshift($pathParts, $protocol);
                 //
                 // yield new SplFileInfo(implode(DIRECTORY_SEPARATOR, $pathParts));
+
+                if ($isFile && $item->getFilename() !== basename($uri)) {
+                    continue;
+                }
 
                 yield $item;
             }
