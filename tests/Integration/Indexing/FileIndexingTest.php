@@ -6,6 +6,10 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\TextDocumentItem;
 
+use Serenata\Workspace\Configuration\WorkspaceConfiguration;
+
+use Serenata\Workspace\Workspace;
+
 final class FileIndexingTest extends AbstractIntegrationTest
 {
     /**
@@ -33,6 +37,94 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         static::assertCount(1, $files);
         static::assertTrue($files[0]->getIndexedOn() > $timestamp);
+    }
+
+    // TODO: See https://gitlab.com/Serenata/Serenata/issues/278 .
+    // /**
+    //  * @return void
+    //  */
+    // public function testUriWithSpacesIsProperlyIndexed(): void
+    // {
+    //     $path = $this->getPathFor('Folder');
+    //
+    //     $this->indexTestFile($this->container, $path);
+    //
+    //     $files = $this->container->get('storage')->getFiles();
+    //
+    //     static::assertCount(1, $files);
+    //     static::assertSame($this->getPathFor('Folder') . '/' . urlencode('Test Spaces.phpt'), $files[0]->getUri());
+    // }
+
+    /**
+     * @return void
+     */
+    public function testIndexingIgnoresFilesMatchingExclusionPatterns(): void
+    {
+        $path = $this->getPathFor('TestFile.phpt');
+
+        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            'test-id',
+            [],
+            ':memory:',
+            7.1,
+            ['Test*'],
+            [],
+            ['php', 'phpt']
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(0, $files, 'Files matched by exclusion patterns should not be indexed');
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexingIgnoresFilesNotMatchingExtensions(): void
+    {
+        $path = $this->getPathFor('TestFile.phpt');
+
+        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            'test-id',
+            [],
+            ':memory:',
+            7.1,
+            [],
+            [],
+            ['blah']
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexingIgnoresAllFilesWhenNoExtensionsAreConfigured(): void
+    {
+        $path = $this->getPathFor('TestFile.phpt');
+
+        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            'test-id',
+            [],
+            ':memory:',
+            7.1,
+            [],
+            [],
+            []
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
     }
 
     /**
@@ -84,6 +176,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return 'file:///' . __DIR__ . '/FileIndexingTest/' . $file;
+        return 'file://' . __DIR__ . '/FileIndexingTest/' . $file;
     }
 }

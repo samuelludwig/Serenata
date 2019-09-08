@@ -18,7 +18,7 @@ final class DirectoryIndexableFileIterator extends IteratorIterator
     public function __construct(array $filesInIndex, string $uri, array $extensionsToIndex, array $globsToExclude = [])
     {
         $iterator = new IndexableFileIterator($uri, $extensionsToIndex, $globsToExclude);
-        $iterator = new Iterating\ModificationTimeFilterIterator($iterator, $filesInIndex);
+        $iterator = new Iterating\ModificationTimeFilterIterator(new IteratorIterator($iterator), $filesInIndex);
 
         parent::__construct($iterator);
     }

@@ -9,6 +9,8 @@
 * [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)
 * [Set `sortText` on completion suggestions to ensure clients maintain proper ordering of result list](https://gitlab.com/Serenata/Serenata/issues/276)
 * [Clear entity manager on shutdown to reclaim memory when switching projects](https://gitlab.com/Serenata/Serenata/issues/237)
+* It is now possible to use globs, strings and regular expressions in project `excludedPathExpressions`
+* [Paths that are ignored will now no longer have their files traversed anyway](https://gitlab.com/Serenata/Serenata/issues/180)
 * Fix namespace autocompletion suggestions not having their backslashes properly escaped
 * Fix classlike autocompletion suggestions not having their backslashes properly escaped when starting with a leading slash
 * A classlike property's range will now include the access modifier and other keywords

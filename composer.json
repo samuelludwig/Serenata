@@ -23,6 +23,7 @@
         "symfony/config": "^4.2",
         "symfony/console": "^4.2",
         "symfony/dependency-injection": "^4.2",
+        "symfony/finder": "^4.3",
         "symfony/yaml": "^4.2"
     },
     "require-dev": {
