@@ -100,7 +100,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
     ): bool {
         $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
 
-        if (!$workspace) {
+        if ($workspace === null) {
             throw new UnexpectedValueException(
                 'Cannot handle file change event when there is no active workspace, did you send an initialize ' .
                 'request first?'
@@ -117,7 +117,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
                 $workspace->getConfiguration()->getFileExtensions(),
                 $workspace->getConfiguration()->getExcludedPathExpressions(),
                 $jsonRpcMessageSender,
-                $responseToSendOnCompletion ? $responseToSendOnCompletion->getId() : null
+                $responseToSendOnCompletion !== null ? $responseToSendOnCompletion->getId() : null
             );
         } elseif (is_file($uri)) {
             $result = $this->indexFile(
