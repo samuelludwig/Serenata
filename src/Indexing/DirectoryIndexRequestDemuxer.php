@@ -37,11 +37,11 @@ final class DirectoryIndexRequestDemuxer
     }
 
     /**
-     * @param string                         $uri
-     * @param string[]                       $extensionsToIndex
-     * @param string[]                       $globsToExclude
+     * @param string                        $uri
+     * @param string[]                      $extensionsToIndex
+     * @param string[]                      $globsToExclude
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
-     * @param int|string|null                $originatingRequestId
+     * @param int|string|null               $originatingRequestId
      */
     public function index(
         string $uri,
