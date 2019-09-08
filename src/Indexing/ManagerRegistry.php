@@ -146,6 +146,9 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
      */
     public function ensureConnectionClosed(): void
     {
+        // Ensure all entity objects are freed and their memory can be reclaimed.
+        $this->getService('defaultEntityManager')->clear();
+
         $this->resetService('defaultConnection');
     }
 
