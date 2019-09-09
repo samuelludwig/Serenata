@@ -12,6 +12,7 @@
 * It is now possible to use globs, strings and regular expressions in project `excludedPathExpressions`
 * [Paths that are ignored will now no longer have their files traversed anyway](https://gitlab.com/Serenata/Serenata/issues/180)
 * Fix namespace autocompletion suggestions not having their backslashes properly escaped
+* Fix running server without a workspace configuration no longer working properly due to missing `indexDatabaseUri` key
 * Fix classlike autocompletion suggestions not having their backslashes properly escaped when starting with a leading slash
 * A classlike property's range will now include the access modifier and other keywords
     * This is done to remain consistent with method ranges, which also include it.

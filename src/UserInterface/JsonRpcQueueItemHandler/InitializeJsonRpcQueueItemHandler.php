@@ -288,6 +288,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     "uris": [
         "{$rootUri}"
     ],
+    "indexDatabaseUri": ":memory:",
     "phpVersion": 7.3,
     "excludedPathExpressions": [],
     "fileExtensions": [
