@@ -53,7 +53,9 @@ final class SortTextConfiguringAutocompletionProvider implements AutocompletionP
                 $item->getAdditionalTextEdits(),
                 $item->getDeprecated(),
                 $item->getDetail(),
-                $i
+                // Since these are strings, string sorting will occur, which means "2" will come after "19". We want
+                // integer sorting in these strings, so just pad to compensate.
+                str_pad((string) $i, 10, '0', STR_PAD_LEFT)
             );
         }
     }
