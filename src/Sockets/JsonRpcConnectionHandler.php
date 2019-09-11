@@ -4,7 +4,7 @@ namespace Serenata\Sockets;
 
 use UnexpectedValueException;
 
-use React\Socket\Connection;
+use React\Socket\ConnectionInterface;
 
 /**
  * Handles socket connections that send JSON-RPC requests via a simple HTTP-like protocol and dispatches the requests
@@ -23,7 +23,7 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
     private $request;
 
     /**
-     * @var Connection
+     * @var ConnectionInterface
      */
     private $connection;
 
@@ -33,10 +33,10 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
     private $jsonRpcRequestHandler;
 
     /**
-     * @param Connection                     $connection
+     * @param ConnectionInterface            $connection
      * @param JsonRpcRequestHandlerInterface $jsonRpcRequestHandler
      */
-    public function __construct(Connection $connection, JsonRpcRequestHandlerInterface $jsonRpcRequestHandler)
+    public function __construct(ConnectionInterface $connection, JsonRpcRequestHandlerInterface $jsonRpcRequestHandler)
     {
         $this->connection = $connection;
         $this->jsonRpcRequestHandler = $jsonRpcRequestHandler;
