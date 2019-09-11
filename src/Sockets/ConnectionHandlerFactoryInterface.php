@@ -2,17 +2,17 @@
 
 namespace Serenata\Sockets;
 
-use React\Socket\Connection;
+use React\Socket\ConnectionInterface;
 
 /**
- * Factory that creates instances of a class that can handle a {@see Connection}.
+ * Factory that creates instances of a class that can handle a {@see ConnectionInterface}.
  */
 interface ConnectionHandlerFactoryInterface
 {
     /**
-     * @param Connection $connection
+     * @param ConnectionInterface $connection
      *
      * @return object
      */
-    public function create(Connection $connection);
+    public function create(ConnectionInterface $connection);
 }

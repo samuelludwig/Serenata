@@ -283,6 +283,12 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      */
     private function getDefaultProjectConfiguration(string $rootUri): array
     {
+
+
+        // TODO: This needs tests, it already broke once.
+
+
+
         $configuration = <<<JSON
 {
     "uris": [
