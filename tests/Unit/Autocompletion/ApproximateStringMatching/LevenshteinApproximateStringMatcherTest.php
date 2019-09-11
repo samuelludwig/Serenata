@@ -67,7 +67,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
     /**
      * @return void
      */
-    public function testScoresParametersThatContainSubstringMatchesAtEndOfApproximationMoreFavorably(): void
+    public function testScoresParametersThatContainFullSubstringMatchesMoreFavorably(): void
     {
         $test1 = '\UnexpectedValueException';
         $test2 = '\DoctrineTest\InstantiatorTest\Exception\UnexpectedValueExceptionTest';
