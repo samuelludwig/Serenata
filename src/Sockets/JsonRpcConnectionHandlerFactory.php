@@ -2,7 +2,7 @@
 
 namespace Serenata\Sockets;
 
-use React\Socket\Connection;
+use React\Socket\ConnectionInterface;
 
 /**
  * Factory that creates instances of {@see JsonRpcConnectionHandler}.
@@ -25,7 +25,7 @@ final class JsonRpcConnectionHandlerFactory implements ConnectionHandlerFactoryI
     /**
      * @inheritDoc
      */
-    public function create(Connection $connection)
+    public function create(ConnectionInterface $connection)
     {
         return new JsonRpcConnectionHandler($connection, $this->jsonRpcRequestHandler);
     }
