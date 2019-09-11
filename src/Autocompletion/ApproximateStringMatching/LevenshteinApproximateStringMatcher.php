@@ -136,6 +136,7 @@ final class LevenshteinApproximateStringMatcher implements ApproximateStringMatc
             $bonus += self::MAX_LENGTH_IN_BYTES;
         }
 
+        // Favor matches at the exact end of the approximation or before a namespace separator more favorably.
         if (($i + $referenceTextLength) >= $approximationLength ||
             $approximation[$i + $referenceTextLength] === '\\'
         ) {
