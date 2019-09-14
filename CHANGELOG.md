@@ -1,4 +1,7 @@
 ## 5.0.0 (Unreleased)
+* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2), [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3) and [5.0.0-RC4](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC4).
+
+## 5.0.0-RC4
 * Support PHP 7.4 arrow functions
 * Support PHP 7.4 typed properties
 * [Support `textDocument/codeLens`](https://gitlab.com/Serenata/Serenata/issues/93)
@@ -7,7 +10,7 @@
 * [`initialize` will now generate an immediate response instead of waiting for indexing of stubs and the project to complete](https://gitlab.com/Serenata/Serenata/issues/275)
     * This fixes clients (Atom) thinking that they couldn't send any other requests yet because the server was still busy initializing. You should now get (usually limited) autocompletion and other functionality during the initial project indexing.
     * Internally, this indexing will still happen and the `didProgressIndexing` messages will still be sent, so you can still listen to these to display a progress bar.
-* `didProgressIndexing` events will now also be sent when indexing happens for folders, such as after a `vendor` folder update via Composer (instead of just during initialization)
+* `didProgressIndexing` events will now also be sent when indexing happens for folders, such as after a `vendor` folder update via Composer (instead of just during initialization).
 * The `didProgressIndexing` notification has been slightly altered:
     * An `originatingRequestId` is no longer sent.
     * A `folderUri` is now sent with the folder that is being indexed.
