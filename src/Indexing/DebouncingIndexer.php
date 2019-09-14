@@ -55,23 +55,14 @@ final class DebouncingIndexer implements IndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(
-        string $uri,
-        bool $useLatestState,
-        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
-        ?JsonRpcResponse $responseToSendOnCompletion = null
-    ): bool {
+    public function index(string $uri, bool $useLatestState, JsonRpcMessageSenderInterface $jsonRpcMessageSender): bool
+    {
         if (isset($this->uriTimerMap[$uri])) {
             $this->eventLoop->cancelTimer($this->uriTimerMap[$uri]);
         }
 
-        $callback = function (/*TimerInterface $timer*/) use (
-            $uri,
-            $useLatestState,
-            $jsonRpcMessageSender,
-            $responseToSendOnCompletion
-        ) {
-            $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender, $responseToSendOnCompletion);
+        $callback = function (/*TimerInterface $timer*/) use ($uri, $useLatestState, $jsonRpcMessageSender) {
+            $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender);
 
             unset($this->uriTimerMap[$uri]);
         };

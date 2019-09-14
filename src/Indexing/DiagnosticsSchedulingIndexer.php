@@ -36,13 +36,9 @@ final class DiagnosticsSchedulingIndexer implements IndexerInterface
     /**
      * @inheritDoc
      */
-    public function index(
-        string $uri,
-        bool $useLatestState,
-        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
-        ?JsonRpcResponse $responseToSendOnCompletion = null
-    ): bool {
-        $response = $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender, $responseToSendOnCompletion);
+    public function index(string $uri, bool $useLatestState, JsonRpcMessageSenderInterface $jsonRpcMessageSender): bool
+    {
+        $response = $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender);
 
         if (!$response || !is_file($uri)) {
             return $response;

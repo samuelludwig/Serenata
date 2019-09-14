@@ -92,12 +92,8 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
     /**
      * @inheritDoc
      */
-    public function index(
-        string $uri,
-        bool $useLatestState,
-        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
-        ?JsonRpcResponse $responseToSendOnCompletion = null
-    ): bool {
+    public function index(string $uri, bool $useLatestState, JsonRpcMessageSenderInterface $jsonRpcMessageSender): bool
+    {
         $workspace = $this->activeWorkspaceManager->getActiveWorkspace();
 
         if ($workspace === null) {

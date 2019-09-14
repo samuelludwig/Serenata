@@ -2,7 +2,6 @@
 
 namespace Serenata\Indexing;
 
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
@@ -14,14 +13,12 @@ interface IndexerInterface
      * @param string                         $uri
      * @param bool                           $useLatestState
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
-     * @param JsonRpcResponse|null           $responseToSendOnCompletion
      *
      * @return bool
      */
     public function index(
         string $uri,
         bool $useLatestState,
-        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
-        ?JsonRpcResponse $responseToSendOnCompletion = null
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): bool;
 }
