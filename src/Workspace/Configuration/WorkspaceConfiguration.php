@@ -8,11 +8,6 @@ namespace Serenata\Workspace\Configuration;
 final class WorkspaceConfiguration
 {
     /**
-     * @var string
-     */
-    private $id;
-
-    /**
      * @var string[]
      */
     private $uris;
@@ -38,7 +33,6 @@ final class WorkspaceConfiguration
     private $fileExtensions;
 
     /**
-     * @param string   $id
      * @param string[] $uris
      * @param string   $indexDatabaseUri
      * @param float    $phpVersion
@@ -46,27 +40,17 @@ final class WorkspaceConfiguration
      * @param string[] $fileExtensions
      */
     public function __construct(
-        string $id,
         array $uris,
         string $indexDatabaseUri,
         float $phpVersion,
         array $excludedPathExpressions,
         array $fileExtensions
     ) {
-        $this->id = $id;
         $this->uris = $uris;
         $this->indexDatabaseUri = $indexDatabaseUri;
         $this->phpVersion = $phpVersion;
         $this->excludedPathExpressions = $excludedPathExpressions;
         $this->fileExtensions = $fileExtensions;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return $this->id;
     }
 
     /**

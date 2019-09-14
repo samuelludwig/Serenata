@@ -63,7 +63,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
         $path = $this->getPathFor('TestFile.phpt');
 
         $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
-            'test-id',
             [],
             ':memory:',
             7.1,
@@ -86,7 +85,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
         $path = $this->getPathFor('Folder');
 
         $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
-            'test-id',
             [],
             ':memory:',
             7.1,
@@ -109,7 +107,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
         $path = $this->getPathFor('TestFile.phpt');
 
         $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
-            'test-id',
             [],
             ':memory:',
             7.1,
@@ -132,7 +129,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
         $path = $this->getPathFor('TestFile.phpt');
 
         $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
-            'test-id',
             [],
             ':memory:',
             7.1,

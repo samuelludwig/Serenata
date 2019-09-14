@@ -33,7 +33,6 @@ final class FunctionListRegistryWorkspaceInteractionTest extends AbstractIntegra
         $this->container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
         $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
-            'test-id',
             [],
             ':memory:',
             7.1,

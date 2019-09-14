@@ -87,7 +87,7 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
             ->getMock();
 
         $this->activeWorkspaceManagerMock->method('getActiveWorkspace')->willReturn(new Workspace(
-            new WorkspaceConfiguration('test-id', [], ':memory:', 7.1, [], [])
+            new WorkspaceConfiguration([], ':memory:', 7.1, [], [])
         ));
 
         $this->testMethod = '$/cancelRequest';

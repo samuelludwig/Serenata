@@ -17,25 +17,12 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
         $this->validate($configuration);
 
         return new WorkspaceConfiguration(
-            $this->generateId($configuration['uris']),
             $configuration['uris'],
             $configuration['indexDatabaseUri'],
             $configuration['phpVersion'],
             $configuration['excludedPathExpressions'] ?? [],
             $configuration['fileExtensions'] ?? ['php']
         );
-    }
-
-    /**
-     * @param string[] $uris
-     *
-     * @return string
-     */
-    private function generateId(array $uris): string
-    {
-        return md5(array_reduce($uris, function (string $carry, string $uri): string {
-            return $carry . $uri;
-        }, ''));
     }
 
     /**

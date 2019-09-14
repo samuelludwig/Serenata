@@ -112,7 +112,6 @@ abstract class AbstractIntegrationTest extends TestCase
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
         $container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
-            'test-id',
             [],
             ':memory:',
             7.1,
