@@ -98,7 +98,6 @@ services:
     backendIndexer:
         class: Serenata\Indexing\Indexer
         arguments:
-            - '@requestQueue'
             - '@fileIndexer'
             - '@directoryIndexRequestDemuxer'
             - '@pathNormalizer'

@@ -4,7 +4,6 @@ namespace Serenata\Indexing;
 
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 

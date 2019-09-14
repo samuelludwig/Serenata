@@ -9,10 +9,6 @@ use Evenement\EventEmitterInterface;
 
 use Serenata\Indexing\TextDocumentContentRegistry;
 
-use Serenata\Sockets\JsonRpcQueue;
-use Serenata\Sockets\JsonRpcRequest;
-use Serenata\Sockets\JsonRpcResponse;
-use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\TextDocumentItem;
@@ -26,11 +22,6 @@ use Serenata\Workspace\ActiveWorkspaceManager;
 final class Indexer implements IndexerInterface, EventEmitterInterface
 {
     use EventEmitterTrait;
-
-    /**
-     * @var JsonRpcQueue
-     */
-    private $queue;
 
     /**
      * @var FileIndexerInterface
@@ -63,7 +54,6 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
     private $activeWorkspaceManager;
 
     /**
-     * @param JsonRpcQueue                 $queue
      * @param FileIndexerInterface         $fileIndexer
      * @param DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer
      * @param PathNormalizer               $pathNormalizer
@@ -72,7 +62,6 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
      * @param ActiveWorkspaceManager       $activeWorkspaceManager
      */
     public function __construct(
-        JsonRpcQueue $queue,
         FileIndexerInterface $fileIndexer,
         DirectoryIndexRequestDemuxer $directoryIndexRequestDemuxer,
         PathNormalizer $pathNormalizer,
@@ -80,7 +69,6 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
         TextDocumentContentRegistry $textDocumentContentRegistry,
         ActiveWorkspaceManager $activeWorkspaceManager
     ) {
-        $this->queue = $queue;
         $this->fileIndexer = $fileIndexer;
         $this->directoryIndexRequestDemuxer = $directoryIndexRequestDemuxer;
         $this->pathNormalizer = $pathNormalizer;
