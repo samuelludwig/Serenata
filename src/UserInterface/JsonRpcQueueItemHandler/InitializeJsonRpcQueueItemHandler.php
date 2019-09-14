@@ -203,23 +203,21 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
 
         if (!$this->storageVersionChecker->isUpToDate()) {
-            $this->ensureIndexDatabaseDoesNotExist();
-
-            $this->schemaInitializer->initialize();
-
-            if ($initializeIndexForProject) {
-                $this->indexer->index(
-                    'file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/',
-                    false,
-                    $jsonRpcMessageSender,
-                    null
-                );
-            }
-        } else {
-            $this->indexFilePruner->prune();
+            $this->resetIndexDatabase();
         }
 
-        $response = new JsonRpcResponse(
+        $this->indexFilePruner->prune();
+
+        if ($initializeIndexForProject) {
+            $urisToIndex = $workspaceConfiguration->getUris();
+            $urisToIndex[] = 'file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/';
+
+            foreach ($urisToIndex as $uri) {
+                $this->indexer->index($uri, false, $jsonRpcMessageSender);
+            }
+        }
+
+        return new JsonRpcResponse(
             $jsonRpcRequest->getId(),
             new InitializeResult(
                 new ServerCapabilities(
@@ -255,18 +253,6 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                 )
             )
         );
-
-        if (!$initializeIndexForProject) {
-            return $response;
-        }
-
-        // This indexing will send the response by itself when it is fully finished. This ensures that the
-        // initialization does not complete until the initial index has occurred.
-        foreach ($workspaceConfiguration->getUris() as $uri) {
-            $this->indexer->index($uri, false, $jsonRpcMessageSender, $response);
-        }
-
-        return null;
     }
 
     /**
@@ -293,6 +279,16 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 JSON;
 
         return json_decode($configuration, true);
+    }
+
+    /**
+     * @return void
+     */
+    private function resetIndexDatabase(): void
+    {
+        $this->ensureIndexDatabaseDoesNotExist();
+
+        $this->schemaInitializer->initialize();
     }
 
     /**

@@ -4,6 +4,15 @@
 * [Support `textDocument/codeLens`](https://gitlab.com/Serenata/Serenata/issues/93)
     * This will display method implementations and overrides and property overrides, with commands that, when invoked, will request to open the relevant accompanying element in the client (e.g. the implemented method in the interface).
 * Support `workspace/executeCommand` to execute commands returned by code actions
+* [`initialize` will now generate an immediate response instead of waiting for indexing of stubs and the project to complete](https://gitlab.com/Serenata/Serenata/issues/275)
+    * This fixes clients (Atom) thinking that they couldn't send any other requests yet because the server was still busy initializing. You should now get (usually limited) autocompletion and other functionality during the initial project indexing.
+    * Internally, this indexing will still happen and the `didProgressIndexing` messages will still be sent, so you can still listen to these to display a progress bar.
+* `didProgressIndexing` events will now also be sent when indexing happens for folders, such as after a `vendor` folder update via Composer (instead of just during initialization)
+* The `didProgressIndexing` notification has been slightly altered:
+    * An `originatingRequestId` is no longer sent.
+    * A `folderUri` is now sent with the folder that is being indexed.
+    * A `fileUri` is now sent with the file that is being indexed.
+    * An `info` value is now sent with a convenient message to display to the user if desired.
 * An emulative lexer is now used, allowing you to parse more recent code (with the new HEREDOC, arrow functions, ...) when running on older PHP versions as well
     * Using a PHP version that is newer or as recent as the one used by your code is still recommended, though.
 * [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)

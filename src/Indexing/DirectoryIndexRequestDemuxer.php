@@ -41,14 +41,12 @@ final class DirectoryIndexRequestDemuxer
      * @param string[]                      $extensionsToIndex
      * @param string[]                      $globsToExclude
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
-     * @param int|string|null               $originatingRequestId
      */
     public function index(
         string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
-        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
-        $originatingRequestId
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
         $iterator = $this->directoryIndexableFileIteratorFactory->create($uri, $extensionsToIndex, $globsToExclude);
 
@@ -62,9 +60,13 @@ final class DirectoryIndexRequestDemuxer
         foreach ($items as $fileInfo) {
             $this->queueIndexRequest($fileInfo, $jsonRpcMessageSender);
 
-            if ($originatingRequestId !== null) {
-                $this->queueProgressRequest($originatingRequestId, $i++, $totalItems, $jsonRpcMessageSender);
-            }
+            $this->queueProgressRequest(
+                $uri,
+                $fileInfo->getPathname(),
+                $i++,
+                $totalItems,
+                $jsonRpcMessageSender
+            );
         }
     }
 
@@ -86,23 +88,30 @@ final class DirectoryIndexRequestDemuxer
     }
 
     /**
-     * @param int|string|null                $originatingRequestId
-     * @param int                            $index
-     * @param int                            $total
+     * @param string                        $folderUri
+     * @param string                        $fileUri
+     * @param int                           $index
+     * @param int                           $total
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      */
     private function queueProgressRequest(
-        $originatingRequestId,
+        string $folderUri,
+        string $fileUri,
         int $index,
         int $total,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
+        $progressPercentage = ($index / $total) * 100;
+
         $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
             'message' => new JsonRpcRequest(null, 'serenata/didProgressIndexing', [
-                'originatingRequestId'  => $originatingRequestId,
                 'sequenceOfIndexedItem' => $index,
                 'totalItemsToIndex'     => $total,
-                'progressPercentage'    => ($index / $total) * 100,
+                'progressPercentage'    => $progressPercentage,
+                'folderUri'             => $folderUri,
+                'fileUri'               => $fileUri,
+
+                'info' => "Indexing " . $folderUri . ' (' . number_format($progressPercentage, 2) . ' %)',
             ]),
         ]);
 

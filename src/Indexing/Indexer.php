@@ -116,8 +116,7 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
                 $uri,
                 $workspace->getConfiguration()->getFileExtensions(),
                 $workspace->getConfiguration()->getExcludedPathExpressions(),
-                $jsonRpcMessageSender,
-                $responseToSendOnCompletion !== null ? $responseToSendOnCompletion->getId() : null
+                $jsonRpcMessageSender
             );
         } elseif (is_file($uri)) {
             $result = $this->indexFile(
@@ -128,22 +127,6 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
             );
         }
 
-        if ($responseToSendOnCompletion === null) {
-            return $result;
-        }
-
-        // As a directory index request is demuxed into multiple file index requests, the response for the original
-        // request may not be sent until all individual file index requests have been handled. This command will
-        // send that "finish" response when executed.
-        //
-        // This request will not be queued for file reindex requests that are the result of the demuxing as those
-        // don't have an originating request ID.
-        $delayedIndexFinishRequest = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
-            'message' => $responseToSendOnCompletion,
-        ]);
-
-        $this->queue->push(new JsonRpcQueueItem($delayedIndexFinishRequest, $jsonRpcMessageSender));
-
         return $result;
     }
 
@@ -152,21 +135,18 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
      * @param string[]                       $extensionsToIndex
      * @param string[]                       $globsToExclude
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
-     * @param int|string|null                $requestId
      */
     private function indexDirectory(
         string $uri,
         array $extensionsToIndex,
         array $globsToExclude,
-        JsonRpcMessageSenderInterface $jsonRpcMessageSender,
-        $requestId
+        JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
         $this->directoryIndexRequestDemuxer->index(
             $uri,
             $extensionsToIndex,
             $globsToExclude,
-            $jsonRpcMessageSender,
-            $requestId
+            $jsonRpcMessageSender
         );
     }
 
