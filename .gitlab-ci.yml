@@ -3,8 +3,11 @@ stages:
     - test
     - finalization
 
-include:
-    template: Dependency-Scanning.gitlab-ci.yml
+# GitLab claims this supports PHP Composer, but no Composer or PHP plugin is activate in the logs. See also
+# https://gitlab.com/help/user/application_security/dependency_scanning/index.md#supported-languages-and-package-managers
+# and https://gitlab.com/Serenata/Serenata/-/jobs/295371057 .
+# include:
+#     template: Dependency-Scanning.gitlab-ci.yml
 
 # ----- Build stage
 .build-setup-composer: &build-setup-composer
