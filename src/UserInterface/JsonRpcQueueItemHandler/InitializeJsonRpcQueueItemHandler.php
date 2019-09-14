@@ -174,20 +174,10 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 
         $initializationOptions = $initializeParams->getInitializationOptions();
 
-        if ($initializationOptions !== null && ($initializationOptions['configuration'] ?? null) !== null) {
-            $workspaceConfiguration = $this->workspaceConfigurationParser->parse(
-                $initializationOptions['configuration']
-            );
+        $configuration = $initializationOptions['configuration'] ?? null;
 
-            $this->managerRegistry->setDatabaseUri($workspaceConfiguration->getIndexDatabaseUri());
-        } else {
-            $workspaceConfiguration = $this->workspaceConfigurationParser->parse(
-                $this->getDefaultProjectConfiguration($rootUri)
-            );
-
-            $this->managerRegistry->setDatabaseUri(
-                'file://' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($rootPath . $rootUri)
-            );
+        if ($initializationOptions === null) {
+            $configuration = $this->getDefaultProjectConfiguration($rootUri);
 
             $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
                 'message' => new JsonRpcRequest(
@@ -207,6 +197,9 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
             $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
         }
 
+        $workspaceConfiguration = $this->workspaceConfigurationParser->parse($configuration);
+
+        $this->managerRegistry->setDatabaseUri($workspaceConfiguration->getIndexDatabaseUri());
         $this->activeWorkspaceManager->setActiveWorkspace(new Workspace($workspaceConfiguration));
 
         if (!$this->storageVersionChecker->isUpToDate()) {
@@ -283,18 +276,14 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      */
     private function getDefaultProjectConfiguration(string $rootUri): array
     {
-
-
-        // TODO: This needs tests, it already broke once.
-
-
+        $indexDatabaseUri = 'file://' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($rootUri);
 
         $configuration = <<<JSON
 {
     "uris": [
         "{$rootUri}"
     ],
-    "indexDatabaseUri": ":memory:",
+    "indexDatabaseUri": "{$indexDatabaseUri}",
     "phpVersion": 7.3,
     "excludedPathExpressions": [],
     "fileExtensions": [
