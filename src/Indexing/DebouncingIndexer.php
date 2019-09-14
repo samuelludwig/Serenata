@@ -5,7 +5,6 @@ namespace Serenata\Indexing;
 use React\EventLoop\LoopInterface;
 use React\EventLoop\TimerInterface;
 
-use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
