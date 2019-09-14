@@ -176,7 +176,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 
         $configuration = $initializationOptions['configuration'] ?? null;
 
-        if ($initializationOptions === null) {
+        if ($configuration === null) {
             $configuration = $this->getDefaultProjectConfiguration($rootUri);
 
             $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
