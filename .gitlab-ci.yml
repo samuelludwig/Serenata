@@ -3,6 +3,9 @@ stages:
     - test
     - finalization
 
+include:
+    template: Dependency-Scanning.gitlab-ci.yml
+
 # ----- Build stage
 .build-setup-composer: &build-setup-composer
     script:
