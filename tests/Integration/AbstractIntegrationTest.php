@@ -7,6 +7,7 @@ use ReflectionClass;
 
 use Serenata\Indexing\IndexerInterface;
 
+use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\UserInterface\JsonRpcApplication;
@@ -192,11 +193,11 @@ abstract class AbstractIntegrationTest extends TestCase
         $refMethod = $refClass->getMethod('processNextQueueItem');
         $refMethod->setAccessible(true);
 
-        if ($this->container->get('requestQueue')->isEmpty()) {
+        if ($this->getRequestQueue()->isEmpty()) {
             return;
         }
 
-        while (!$this->container->get('requestQueue')->isEmpty()) {
+        while (!$this->getRequestQueue()->isEmpty()) {
             $refMethod->invoke(self::$application);
         }
 
@@ -204,6 +205,18 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->container->get('eventLoop')->run();
 
         $this->processOpenQueueItems();
+    }
+
+    /**
+     * @return JsonRpcQueue
+     */
+    protected function getRequestQueue(): JsonRpcQueue
+    {
+        $queue = $this->container->get('requestQueue');
+
+        assert($queue instanceof JsonRpcQueue);
+
+        return $queue;
     }
 
     /**
