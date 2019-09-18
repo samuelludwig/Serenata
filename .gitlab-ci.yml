@@ -42,6 +42,7 @@ build:php-7.3:
 # ----- Test stage
 test:run-phpcs:
     image: php:7.3-cli-alpine
+    stage: test
     script:
         - php vendor/bin/phpcs src -n --report-junit=./phpcs-test-report.xml
     artifacts:
