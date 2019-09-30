@@ -40,8 +40,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
-
-        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -54,8 +52,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
-
-        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -70,8 +66,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
-
-        throw new LogicException('Should never be reached');
     }
 
     /**
@@ -170,8 +164,6 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
-
-        throw new LogicException('Should never be reached');
     }
 
     /**
