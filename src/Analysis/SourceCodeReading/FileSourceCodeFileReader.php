@@ -38,7 +38,7 @@ final class FileSourceCodeFileReader implements FileSourceCodeReaderInterface
 
         $code = @file_get_contents($this->filePath);
 
-        if ($code === false || $code === null) {
+        if ($code === false) {
             throw new FileSourceCodeReaderException("File {$this->filePath} could not be read, it may be protected");
         }
 

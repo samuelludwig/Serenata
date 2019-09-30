@@ -58,7 +58,7 @@ final class PartialParser implements Parser
      */
     public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
-        if ($errorHandler) {
+        if ($errorHandler !== null) {
             throw new LogicException(
                 'Error handling is not supported as error recovery will be attempted automatically'
             );
