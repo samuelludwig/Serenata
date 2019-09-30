@@ -1,10 +1,26 @@
-## 5.0.0 (Unreleased)
+## 5.0.0
 * Fix PHP error when initialization options were passed, but without a configuration
-* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2), [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3) and [5.0.0-RC4](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC4).
+* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2), [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3) and [5.0.0-RC4](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC4)
 
 ## 5.0.0-RC4
+### Improvements
 * Support PHP 7.4 arrow functions
 * Support PHP 7.4 typed properties
+* It is now possible to use globs, strings and regular expressions in project `excludedPathExpressions`
+* [Clear entity manager on shutdown to reclaim memory when switching projects](https://gitlab.com/Serenata/Serenata/issues/237)
+* [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)
+* An emulative lexer is now used, allowing you to parse more recent code (with the new HEREDOC, arrow functions, ...) when running on older PHP versions as well
+    * Using a PHP version that is newer or as recent as the one used by your code is still recommended, though.
+* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2) and [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3)
+
+### Bugs Fixed
+* [Set `sortText` on completion suggestions to ensure clients maintain proper ordering of result list](https://gitlab.com/Serenata/Serenata/issues/276)
+* [Paths that are ignored will now no longer have their files traversed anyway](https://gitlab.com/Serenata/Serenata/issues/180)
+* Fix namespace autocompletion suggestions not having their backslashes properly escaped
+* Fix classlike autocompletion suggestions not having their backslashes properly escaped when starting with a leading slash
+* Fix running server without a workspace configuration no longer working properly due to missing `indexDatabaseUri` key
+
+### Changes For Clients
 * [Support `textDocument/codeLens`](https://gitlab.com/Serenata/Serenata/issues/93)
     * This will display method implementations and overrides and property overrides, with commands that, when invoked, will request to open the relevant accompanying element in the client (e.g. the implemented method in the interface).
 * Support `workspace/executeCommand` to execute commands returned by code actions
@@ -17,43 +33,39 @@
     * A `folderUri` is now sent with the folder that is being indexed.
     * A `fileUri` is now sent with the file that is being indexed.
     * An `info` value is now sent with a convenient message to display to the user if desired.
-* An emulative lexer is now used, allowing you to parse more recent code (with the new HEREDOC, arrow functions, ...) when running on older PHP versions as well
-    * Using a PHP version that is newer or as recent as the one used by your code is still recommended, though.
-* [Classlike, function and constant completions now show their FQSEN in the `detail` property instead of the `label`](https://gitlab.com/Serenata/Serenata/issues/269)
-* [Set `sortText` on completion suggestions to ensure clients maintain proper ordering of result list](https://gitlab.com/Serenata/Serenata/issues/276)
-* [Clear entity manager on shutdown to reclaim memory when switching projects](https://gitlab.com/Serenata/Serenata/issues/237)
-* It is now possible to use globs, strings and regular expressions in project `excludedPathExpressions`
-* [Paths that are ignored will now no longer have their files traversed anyway](https://gitlab.com/Serenata/Serenata/issues/180)
-* Fix namespace autocompletion suggestions not having their backslashes properly escaped
-* Fix running server without a workspace configuration no longer working properly due to missing `indexDatabaseUri` key
-* Fix classlike autocompletion suggestions not having their backslashes properly escaped when starting with a leading slash
 * A classlike property's range will now include the access modifier and other keywords
     * This is done to remain consistent with method ranges, which also include it.
     * When multiple properties appear on one line, only the first property will include it, the second will not (or there would be overlapping ranges).
-* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2) and [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3).
 
 ## 5.0.0-RC3
+### Improvements
+* [Return use statement imports for (qualified) constants when necessary](https://gitlab.com/Serenata/Serenata/issues/163)
+* [Return use statement imports for (qualified) functions when necessary](https://gitlab.com/Serenata/Serenata/issues/164)
+* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC) and [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2)
+
+### Bugs Fixed
+* [Fix `uris` in project files being ignored and not analyzed](https://gitlab.com/Serenata/Serenata/issues/243)
+* [Fix crash when analyzing erroneous code containing multiple object arrows, such as `$test->->`](https://gitlab.com/Serenata/Serenata/issues/245)
+* Fix classlike autocompletion suggestions being given after `use function` and `use const`
+* Constant and function autocompletion suggestions will now show the FQCN, if any, to make use of libraries with namespaced constants and functions more convenient
+
+### Changes For Clients
+* [Stub `textDocument/didOpen`](https://gitlab.com/Serenata/Serenata/issues/253)
+* [Stub `textDocument/didClose`](https://gitlab.com/Serenata/Serenata/issues/259)
+* [Add initial support for building and distributing as PHAR](https://gitlab.com/Serenata/Serenata/issues/264)
+* [Allow configuring index database location on a per-project basis](https://gitlab.com/Serenata/Serenata/issues/266)
+* Return `CompletionList` as response to `textDocument/completion`
+    * Sets `isIncomplete` to `true` instead of `false` (the default), preventing clients from caching completion results at some positions and trying to apply their on filtering on top of that, whilst the actual results are different, which resulted in completion seemingly not responding.
 * [Implement basic support for `textDocument/documentHighlight`](https://gitlab.com/Serenata/Serenata/issues/236)
     * This is very basic for now and mainly intended to help clients to identify ranges for things such as qualified class names, i.e. the Atom client uses this to know what to underline when hovering over a qualified class name (otherwise it will do a best effort based on path separators, which stops on slashes).
 * [Accept project configurations via `initializationOptions` instead of trying to read it from disk ourselves](https://gitlab.com/Serenata/Serenata/issues/258)
     * This means the server now supports initializing for projects that haven't explicitly been set up as well. A fallback configuration with an index database stored in the system's temp folder will be used in that case.
-* [Allow configuring index database location on a per-project basis](https://gitlab.com/Serenata/Serenata/issues/266)
-* [Return use statement imports for (qualified) functions when necessary](https://gitlab.com/Serenata/Serenata/issues/164)
-* [Return use statement imports for (qualified) constants when necessary](https://gitlab.com/Serenata/Serenata/issues/163)
-* [Fix `uris` in project files being ignored and not analyzed](https://gitlab.com/Serenata/Serenata/issues/243)
-* [Fix crash when analyzing erroneous code containing multiple object arrows, such as `$test->->`](https://gitlab.com/Serenata/Serenata/issues/245)
-* [Stub `textDocument/didOpen`](https://gitlab.com/Serenata/Serenata/issues/253)
-* [Stub `textDocument/didClose`](https://gitlab.com/Serenata/Serenata/issues/259)
-* [Add initial support for building and distributing as PHAR](https://gitlab.com/Serenata/Serenata/issues/264)
 * Fix `textEdit` and `insertText` generated for completion suggestions not having backslashes properly escaped, as per spec (for edits bearing an `insertTextFormat` of `Snippet`, the backslash is itself an escape character)
-* Fix classlike autocompletion suggestions being given after `use function` and `use const`
-* Return `CompletionList` as response to `textDocument/completion`
-    * Sets `isIncomplete` to `true` instead of `false` (the default), preventing clients from caching completion results at some positions and trying to apply their on filtering on top of that, whilst the actual results are different, which resulted in completion seemingly not responding.
-* Constant and function autocompletion suggestions will now show the FQCN, if any, to make use of libraries with namespaced constants and functions more convenient
 
 ## 5.0.0-RC2
 * Port fixes performed in version 4.3.1
 * Fix `shutdown` request not being handled correctly
+* See also the release notes for version [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC)
 
 ## 4.3.1
 * [Fix crash when using latest dependencies related to `Interface does not exist`](https://gitlab.com/Serenata/Serenata/issues/248) (thanks to @WinterSilence)
