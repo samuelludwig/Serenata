@@ -210,7 +210,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 
         if ($initializeIndexForProject) {
             $urisToIndex = $workspaceConfiguration->getUris();
-            $urisToIndex[] = 'file://' . __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/';
+            $urisToIndex[] = $this->getStubsUri();
 
             foreach ($urisToIndex as $uri) {
                 $this->indexer->index($uri, false, $jsonRpcMessageSender);
@@ -253,6 +253,25 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                 )
             )
         );
+    }
+
+    /**
+     * @return string
+     */
+    private function getStubsUri(): string
+    {
+        $path = __DIR__ . '/../../../vendor/jetbrains/phpstorm-stubs/';
+
+        if (mb_strpos(__DIR__, '://') === false) {
+            // When not in the PHAR, __DIR__ will yield "/path/to/Serenata/src/..." (Linux and macOS) or
+            // "C:\path\to\Serenata\src\..." (Windows). The input must be a URI, or indexed items will also not be a
+            // URI.
+            return 'file://' . $path;
+        }
+
+        // When in the PHAR, __DIR__ will yield "phar:///path/to/distribution.phar/absolute/path/to/Serenata/src/...".
+        // so there's nothing we need to do here.
+        return $path;
     }
 
     /**
