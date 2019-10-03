@@ -1,3 +1,6 @@
+## 5.0.1 (Unreleased)
+* [Fix built-in stubs not being indexed when using the PHAR distribution](https://gitlab.com/Serenata/Serenata/issues/288)
+
 ## 5.0.0
 * Fix PHP error when initialization options were passed, but without a configuration
 * See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2), [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3) and [5.0.0-RC4](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC4)
