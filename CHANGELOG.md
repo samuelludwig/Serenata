@@ -1,5 +1,6 @@
 ## 5.0.1 (Unreleased)
 * [Fix built-in stubs not being indexed when using the PHAR distribution](https://gitlab.com/Serenata/Serenata/issues/288)
+* Improve performance by preventing file scanning from happening multiple times recursively instead of just once
 
 ## 5.0.0
 * Fix PHP error when initialization options were passed, but without a configuration

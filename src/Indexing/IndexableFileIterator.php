@@ -80,9 +80,7 @@ final class IndexableFileIterator implements IteratorAggregate
         $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
 
         foreach ($iterator as $item) {
-            if ($item->isDir()) {
-                yield from $this->iterate($item->getPathname());
-            } elseif ($item->isFile()) {
+            if ($item->isFile()) {
                 // NOTE: See https://gitlab.com/Serenata/Serenata/issues/278 . This fixes encoding with URI, but then
                 // PHP's stream wrappers for file:// don't pick up these (valid) paths anymore and all file functions
                 // start failing.
