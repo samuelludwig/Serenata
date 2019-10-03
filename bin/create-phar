@@ -21,9 +21,9 @@ $iterator = new CallbackFilterIterator($iterator, function (SplFileInfo $info) {
 });
 
 // buildFromIterator seems to hang for some unknown reason, so do things manually.
-foreach ($iterator as $test) {
-    echo 'Adding ' . $test->getPathname() . PHP_EOL;
-    $phar->addFile($test);
+foreach ($iterator as $fileInfo) {
+    echo 'Adding ' . $fileInfo->getPathname() . PHP_EOL;
+    $phar->addFile($fileInfo);
 }
 
 // TODO: Could be this works anyway, but it just takes a long time. Try it out.
