@@ -3,7 +3,7 @@
 
 const OUTPUT_PATH = __DIR__ . '/distribution.phar';
 
-define('SOURCE_ROOT', realpath(__DIR__ . '/..'));
+define('SOURCE_ROOT', (string) realpath(__DIR__ . '/..'));
 
 @unlink(OUTPUT_PATH);
 
