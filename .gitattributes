@@ -1,4 +1,6 @@
 * text=auto
+*.phpt text eol=lf
+*.php text eol=lf
 
 /tests             export-ignore
 /.codecov.yml      export-ignore
@@ -10,5 +12,3 @@
 /CHANGELOG.md      export-ignore
 /ISSUE_TEMPLATE.md export-ignore
 /README.md         export-ignore
-
-*.phpt text eol=lf
