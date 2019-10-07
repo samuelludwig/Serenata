@@ -10,3 +10,5 @@
 /CHANGELOG.md      export-ignore
 /ISSUE_TEMPLATE.md export-ignore
 /README.md         export-ignore
+
+*.phpt text eol=lf
