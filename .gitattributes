@@ -1,4 +1,6 @@
 * text=auto
+*.phpt text eol=lf
+*.php text eol=lf
 
 /tests             export-ignore
 /.codecov.yml      export-ignore
