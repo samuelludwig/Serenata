@@ -1,5 +1,6 @@
-## 5.0.1 (Unreleased)
+## 5.1.0 (Unreleased)
 * [Fix built-in stubs not being indexed when using the PHAR distribution](https://gitlab.com/Serenata/Serenata/issues/288)
+* [Add definition location support for classes in comments](https://gitlab.com/Serenata/Serenata/issues/141) (thanks to @cdaguerre)
 * [Fix tests failing on Windows machines with the `core.autocrlf` option set to true](https://gitlab.com/Serenata/Serenata/merge_requests/79) (thanks to @bpedroza)
 * Improve performance by preventing file scanning from happening multiple times recursively instead of just once
 
