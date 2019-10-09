@@ -67,7 +67,7 @@ final class DocblockDefinitionLocator
 
         $word = $this->getWordAtOffset($line, $position->getCharacter());
 
-        if (!$word) {
+        if ($word === null || $word === '') {
             throw new UnexpectedValueException(sprintf('No word at %s in line "%s"', $position->getCharacter(), $line));
         }
 
@@ -86,6 +86,10 @@ final class DocblockDefinitionLocator
     private function getLineInText(string $text, int $line): string
     {
         $lines = preg_split('/((\r?\n)|(\r\n?))/', $text);
+
+        if ($lines === false) {
+            return $text;
+        }
 
         return $lines[$line];
     }
@@ -113,9 +117,14 @@ final class DocblockDefinitionLocator
     {
         $strings = preg_split('/[\|\s]/', $line, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_OFFSET_CAPTURE);
 
+        if ($strings === false) {
+            return null;
+        }
+
         foreach ($strings as $string) {
+            /** @var int $start */
             $start = $string[1];
-            $end = $string[1] + strlen($string[0]);
+            $end = $start + strlen($string[0]);
 
             if ($offset >= $start && $offset <= $end) {
                 return $string[0];
