@@ -64,6 +64,11 @@ final class DefinitionLocator
     private $staticPropertyFetchNodeDefinitionLocator;
 
     /**
+     * @var DocblockDefinitionLocator
+     */
+    private $docblockDefinitionLocator;
+
+    /**
      * @param NodeAtOffsetLocatorInterface             $nodeAtOffsetLocator
      * @param FuncCallNodeDefinitionLocator            $funcCallNodeDefinitionLocator
      * @param MethodCallNodeDefinitionLocator          $methodCallNodeDefinitionLocator
@@ -73,6 +78,7 @@ final class DefinitionLocator
      * @param StaticMethodCallNodeDefinitionLocator    $staticMethodCallNodeDefinitionLocator
      * @param PropertyFetchDefinitionLocator           $propertyFetchDefinitionLocator
      * @param StaticPropertyFetchNodeDefinitionLocator $staticPropertyFetchNodeDefinitionLocator
+     * @param DocblockDefinitionLocator                $docblockDefinitionLocator
      */
     public function __construct(
         NodeAtOffsetLocatorInterface $nodeAtOffsetLocator,
@@ -83,7 +89,8 @@ final class DefinitionLocator
         NameNodeDefinitionLocator $nameNodeDefinitionLocator,
         StaticMethodCallNodeDefinitionLocator $staticMethodCallNodeDefinitionLocator,
         PropertyFetchDefinitionLocator $propertyFetchDefinitionLocator,
-        StaticPropertyFetchNodeDefinitionLocator $staticPropertyFetchNodeDefinitionLocator
+        StaticPropertyFetchNodeDefinitionLocator $staticPropertyFetchNodeDefinitionLocator,
+        DocblockDefinitionLocator $docblockDefinitionLocator
     ) {
         $this->nodeAtOffsetLocator = $nodeAtOffsetLocator;
         $this->funcCallNodeDefinitionLocator = $funcCallNodeDefinitionLocator;
@@ -94,6 +101,7 @@ final class DefinitionLocator
         $this->staticMethodCallNodeDefinitionLocator = $staticMethodCallNodeDefinitionLocator;
         $this->propertyFetchDefinitionLocator = $propertyFetchDefinitionLocator;
         $this->staticPropertyFetchNodeDefinitionLocator = $staticPropertyFetchNodeDefinitionLocator;
+        $this->docblockDefinitionLocator = $docblockDefinitionLocator;
     }
 
     /**
@@ -107,7 +115,11 @@ final class DefinitionLocator
         try {
             $node = $this->getNodeAt($textDocumentItem, $position);
 
-            return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $textDocumentItem, $position);
+            try {
+                return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $textDocumentItem, $position);
+            } catch (UnexpectedValueException $e) {
+                return $this->docblockDefinitionLocator->locate($textDocumentItem, $position);
+            }
         } catch (UnexpectedValueException $e) {
             return new GotoDefinitionResponse(null);
         }

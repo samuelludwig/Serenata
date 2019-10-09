@@ -14,6 +14,7 @@ services:
             - '@staticMethodCallNodeDefinitionLocator'
             - '@propertyFetchDefinitionLocator'
             - '@staticPropertyFetchNodeDefinitionLocator'
+            - '@docblockDefinitionLocator'
 
     funcCallNodeDefinitionLocator:
         class: Serenata\GotoDefinition\FuncCallNodeDefinitionLocator
@@ -58,3 +59,9 @@ services:
         class: Serenata\GotoDefinition\StaticPropertyFetchNodeDefinitionLocator
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
+
+    docblockDefinitionLocator:
+        class: Serenata\GotoDefinition\DocblockDefinitionLocator
+        arguments:
+            - '@structureAwareNameResolverFactory.docblockPositionalNameResolverBackend'
+            - '@classlikeInfoBuilder'
