@@ -324,6 +324,24 @@ final class DefinitionLocatorTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testClassInDocblock(): void
+    {
+        $fileName = 'ClassInDocblock.phpt';
+
+        static::assertGotoDefinitionResponseEquals(
+            $fileName,
+            56,
+            57,
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(2, 0), new Position(2, 11))
+            ))
+        );
+    }
+
+    /**
      * @param string $file
      * @param int    $position
      *
