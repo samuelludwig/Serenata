@@ -13,6 +13,9 @@ use Serenata\Common\Position;
 use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
+/**
+ * Locates classes inside docblocks.
+ */
 final class DocblockDefinitionLocator
 {
     /**
