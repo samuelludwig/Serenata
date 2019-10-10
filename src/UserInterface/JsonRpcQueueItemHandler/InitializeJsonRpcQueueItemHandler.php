@@ -248,7 +248,12 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                     false,
                     false,
                     null,
-                    null,
+                    [
+                        'workspaceFolders' => [
+                            'supported'           => false,
+                            'changeNotifications' => false,
+                        ],
+                    ],
                     null
                 )
             )
