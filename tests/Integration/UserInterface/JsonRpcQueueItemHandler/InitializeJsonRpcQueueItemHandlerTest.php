@@ -148,7 +148,12 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             false,
             false,
             null,
-            null,
+            [
+                'workspaceFolders' => [
+                    'supported'           => false,
+                    'changeNotifications' => false,
+                ],
+            ],
             null
         ))), $response);
     }
