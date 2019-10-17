@@ -122,6 +122,7 @@ finalization:package-php-7.3:
 finalization:code-coverage:
     image: php:7.3-cli-alpine
     stage: finalization
+    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
     script:
         - phpdbg -d memory_limit=2048M -qrr vendor/bin/phpunit --coverage-text --colors=never --coverage-html=coverage
     artifacts:
