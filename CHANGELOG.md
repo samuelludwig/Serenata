@@ -1,4 +1,6 @@
 ## 5.1.0 (Unreleased)
+* [Fix some issues with tests failing on Windows](https://gitlab.com/Serenata/Serenata/merge_requests/81) (thanks to @bpedroza)
+* [Fix startup failing when using PHAR and having Xdebug enabled](https://gitlab.com/Serenata/Serenata/issues/300)
 * [Fix built-in stubs not being indexed when using the PHAR distribution](https://gitlab.com/Serenata/Serenata/issues/288)
 * [Add definition location support for classes in comments](https://gitlab.com/Serenata/Serenata/issues/141) (thanks to @cdaguerre)
 * [Explicitly set `workspace` in ServerCapabilities to make Visual Studio Code happy](https://gitlab.com/Serenata/Serenata/issues/290)
