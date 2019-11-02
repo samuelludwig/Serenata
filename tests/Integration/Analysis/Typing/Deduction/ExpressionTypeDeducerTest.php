@@ -1047,7 +1047,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
         $filePath = $this->getFilePath($fileName);
 
         static::assertSame([
-            '\\(anonymous_' . md5($filePath) . '_19)',
+            '\\(anonymous_' . md5($this->normalizePath($filePath)) . '_19)',
         ], $result);
     }
 
@@ -1138,7 +1138,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
         $code = file_get_contents($path);
 
         return $this->container->get('expressionTypeDeducer')->deduce(
-            new TextDocumentItem($path, $code),
+            new TextDocumentItem($this->normalizePath($path), $code),
             Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
             $expression,
             $ignoreLastElement

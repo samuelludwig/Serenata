@@ -23,7 +23,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
         $constant = $this->indexConstant('SimpleConstant.phpt');
 
         static::assertSame('CONSTANT', $constant->getName());
-        static::assertSame($this->getPathFor('SimpleConstant.phpt'), $constant->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleConstant.phpt')), $constant->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(4, 10),
@@ -60,7 +60,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
         static::assertSame($classes[0], $constant->getClasslike());
 
         static::assertSame('class', $constant->getName());
-        static::assertSame($this->getPathFor('ClassKeywordConstant.phpt'), $constant->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('ClassKeywordConstant.phpt')), $constant->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),

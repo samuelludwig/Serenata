@@ -349,7 +349,7 @@ final class DefinitionLocatorTest extends AbstractIntegrationTest
      */
     private function locateDefinition(string $file, int $position): ?GotoDefinitionResponse
     {
-        $path = $this->getPathFor($file);
+        $path = $this->getPathFor($file, false);
 
         $this->indexTestFile($this->container, $path);
 
@@ -363,12 +363,15 @@ final class DefinitionLocatorTest extends AbstractIntegrationTest
 
     /**
      * @param string $file
+     * @param bool   $normalize - Normalize the path? Pass false if not using for expectation.
      *
      * @return string
      */
-    private function getPathFor(string $file): string
+    private function getPathFor(string $file, $normalize = true): string
     {
-        return 'file:///' . __DIR__ . '/DefinitionLocatorTest/' . $file;
+        $path = 'file://' . __DIR__ . '/DefinitionLocatorTest/' . $file;
+
+        return $normalize ? $this->normalizePath($path) : $path;
     }
 
     /**

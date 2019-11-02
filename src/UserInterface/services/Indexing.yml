@@ -28,6 +28,7 @@ services:
         class: Serenata\Indexing\DoctrineStorage
         arguments:
             - '@managerRegistry'
+            - '@pathNormalizer'
 
     storage.eventEmittingStorage:
         class: Serenata\Indexing\EventEmittingStorage
@@ -50,6 +51,7 @@ services:
         arguments:
             - '@requestQueue'
             - '@directoryIndexableFileIteratorFactory'
+            - '@pathNormalizer'
 
     phpFileExistenceChecker:
         class: Serenata\Indexing\PhpFileExistenceChecker

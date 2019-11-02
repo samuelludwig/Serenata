@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Integration\Tooltips;
+namespace Serenata\Tests\Integration\Indexing;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
@@ -192,6 +192,6 @@ final class FileIndexingTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return 'file://' . __DIR__ . '/FileIndexingTest/' . $file;
+        return $this->normalizePath('file://' . __DIR__ . '/FileIndexingTest/' . $file);
     }
 }

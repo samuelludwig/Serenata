@@ -25,15 +25,22 @@ final class DirectoryIndexRequestDemuxer
     private $directoryIndexableFileIteratorFactory;
 
     /**
+     * @var PathNormalizer
+     */
+    private $pathNormalizer;
+
+    /**
      * @param JsonRpcQueue                          $queue
      * @param DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
      */
     public function __construct(
         JsonRpcQueue $queue,
-        DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory
+        DirectoryIndexableFileIteratorFactory $directoryIndexableFileIteratorFactory,
+        PathNormalizer $pathNormalizer
     ) {
         $this->queue = $queue;
         $this->directoryIndexableFileIteratorFactory = $directoryIndexableFileIteratorFactory;
+        $this->pathNormalizer = $pathNormalizer;
     }
 
     /**
@@ -62,7 +69,7 @@ final class DirectoryIndexRequestDemuxer
 
             $this->queueProgressRequest(
                 $uri,
-                $fileInfo->getPathname(),
+                $this->pathNormalizer->normalize($fileInfo->getPathname()),
                 $i++,
                 $totalItems,
                 $jsonRpcMessageSender
@@ -78,9 +85,10 @@ final class DirectoryIndexRequestDemuxer
         SplFileInfo $fileInfo,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
+
         $request = new JsonRpcRequest(null, 'serenata/internal/index', [
             'textDocument' => [
-                'uri'  => $fileInfo->getPathname(),
+                'uri'  => $this->pathNormalizer->normalize($fileInfo->getPathname()),
             ],
         ]);
 

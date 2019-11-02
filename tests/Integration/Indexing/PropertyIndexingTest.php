@@ -23,7 +23,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
         $property = $this->indexProperty('SimpleProperty.phpt');
 
         static::assertSame('foo', $property->getName());
-        static::assertSame($this->getPathFor('SimpleProperty.phpt'), $property->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleProperty.phpt')), $property->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(4, 4),

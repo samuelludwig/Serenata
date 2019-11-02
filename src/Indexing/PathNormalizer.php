@@ -14,7 +14,19 @@ final class PathNormalizer
      */
     public function normalize(string $path): string
     {
-        return $this->resolveHomeDirectoryTilde($path);
+        return $this->normalizeSlashes($this->resolveHomeDirectoryTilde($path));
+    }
+
+    /**
+     * Return a version of the path variable with normalized slashes.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function normalizeSlashes(string $path): string
+    {
+        return str_replace('\\', '/', $path);
     }
 
     /**

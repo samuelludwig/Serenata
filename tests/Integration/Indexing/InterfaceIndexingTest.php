@@ -22,7 +22,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('Test', $structure->getName());
         static::assertSame('\Test', $structure->getFqcn());
-        static::assertSame($this->getPathFor('SimpleInterface.phpt'), $structure->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleInterface.phpt')), $structure->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),

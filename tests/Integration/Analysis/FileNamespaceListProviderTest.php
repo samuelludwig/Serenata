@@ -15,6 +15,7 @@ final class FileNamespaceListProviderTest extends AbstractIntegrationTest
     public function testNamespaceListForSpecificFile(): void
     {
         $path = 'file://' . __DIR__ . '/FileNamespaceListProviderTest/';
+        $normalized = $this->normalizePath($path . 'NamespaceA.phpt');
 
         $this->indexTestFile($this->container, $path);
 
@@ -27,7 +28,7 @@ final class FileNamespaceListProviderTest extends AbstractIntegrationTest
         $firstItem = array_shift($output);
 
         static::assertSame(null, $firstItem['name']);
-        static::assertSame($path . 'NamespaceA.phpt', $firstItem['uri']);
+        static::assertSame($normalized, $firstItem['uri']);
 
         static::assertEquals(
             new Range(
@@ -40,7 +41,7 @@ final class FileNamespaceListProviderTest extends AbstractIntegrationTest
         $secondItem = array_shift($output);
 
         static::assertSame('NamespaceA', $secondItem['name']);
-        static::assertSame($path . 'NamespaceA.phpt', $secondItem['uri']);
+        static::assertSame($normalized, $secondItem['uri']);
 
         static::assertEquals(
             new Range(

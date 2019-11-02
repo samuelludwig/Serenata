@@ -22,7 +22,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('Test', $structure->getName());
         static::assertSame('\Test', $structure->getFqcn());
-        static::assertSame($this->getPathFor('SimpleTrait.phpt'), $structure->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleTrait.phpt')), $structure->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),

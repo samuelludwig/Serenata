@@ -23,7 +23,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
         $method = $this->indexMethod('SimpleMethod.phpt');
 
         static::assertSame('foo', $method->getName());
-        static::assertSame($this->getPathFor('SimpleMethod.phpt'), $method->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleMethod.phpt')), $method->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(4, 4),

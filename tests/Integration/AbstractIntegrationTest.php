@@ -6,6 +6,7 @@ use Closure;
 use ReflectionClass;
 
 use Serenata\Indexing\IndexerInterface;
+use Serenata\Indexing\PathNormalizer;
 
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
@@ -168,10 +169,12 @@ abstract class AbstractIntegrationTest extends TestCase
         ?string $source = null,
         bool $mayFail = false
     ): void {
+        // @TODO Fix all callers - string $uri should already be a valid uri before being passed here.
+        $normalized = $this->normalizePath($uri);
         if ($source !== null) {
-            $this->container->get('textDocumentContentRegistry')->update($uri, $source);
+            $this->container->get('textDocumentContentRegistry')->update($normalized, $source);
         } else {
-            $this->container->get('textDocumentContentRegistry')->clear($uri);
+            $this->container->get('textDocumentContentRegistry')->clear($normalized);
         }
 
         $success = $indexer->index($uri, true, $this->mockJsonRpcMessageSenderInterface());
@@ -269,7 +272,7 @@ abstract class AbstractIntegrationTest extends TestCase
             }
 
             $source = $sourceCodeStreamReader->getSourceCodeFromFile($path);
-            $source = $afterIndex($container, $path, $source);
+            $source = $afterIndex($container, $this->normalizePath($path), $source);
 
             if ($i === 1) {
                 $container->get('managerRegistry')->getManager()->clear();
@@ -281,7 +284,7 @@ abstract class AbstractIntegrationTest extends TestCase
                 $container->get('managerRegistry')->getManager()->clear();
             }
 
-            $afterReindex($container, $path, $source);
+            $afterReindex($container, $this->normalizePath($path), $source);
         }
     }
 
@@ -293,5 +296,17 @@ abstract class AbstractIntegrationTest extends TestCase
         return $this->getMockBuilder(JsonRpcMessageSenderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+    }
+
+    /**
+     * Normalize a path for test expectations
+     *
+     * @param  string $path
+     *
+     * @return string
+     */
+    protected function normalizePath(string $path): string
+    {
+        return (new PathNormalizer())->normalize($path);
     }
 }

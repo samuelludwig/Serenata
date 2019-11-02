@@ -139,7 +139,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
      */
     public function testRetrievesClassConstants(): void
     {
-        $filePath = $this->getTestFilePath('ClassConstant.phpt');
+        $filePath = $this->getTestFilePath('ClassConstant.phpt', false);
 
         $symbols = $this->getSymbolsForFile($filePath);
 
@@ -150,7 +150,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CONSTANT,
                 false,
                 new Location(
-                    $filePath,
+                    $this->normalizePath($filePath),
                     new Range(
                         new Position(4, 17),
                         new Position(4, 34)
@@ -167,7 +167,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
      */
     public function testRetrievesClassMethods(): void
     {
-        $filePath = $this->getTestFilePath('Method.phpt');
+        $filePath = $this->getTestFilePath('Method.phpt', false);
 
         $symbols = $this->getSymbolsForFile($filePath);
 
@@ -178,7 +178,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::METHOD,
                 false,
                 new Location(
-                    $filePath,
+                    $this->normalizePath($filePath),
                     new Range(
                         new Position(4, 4),
                         new Position(7, 5)
@@ -195,7 +195,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
      */
     public function testRetrievesClassConstructors(): void
     {
-        $filePath = $this->getTestFilePath('ConstructorMethod.phpt');
+        $filePath = $this->getTestFilePath('ConstructorMethod.phpt', false);
 
         $symbols = $this->getSymbolsForFile($filePath);
 
@@ -206,7 +206,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::CONSTRUCTOR,
                 false,
                 new Location(
-                    $filePath,
+                    $this->normalizePath($filePath),
                     new Range(
                         new Position(4, 4),
                         new Position(7, 5)
@@ -223,7 +223,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
      */
     public function testRetrievesClassProperties(): void
     {
-        $filePath = $this->getTestFilePath('Property.phpt');
+        $filePath = $this->getTestFilePath('Property.phpt', false);
 
         $symbols = $this->getSymbolsForFile($filePath);
 
@@ -234,7 +234,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
                 SymbolKind::PROPERTY,
                 false,
                 new Location(
-                    $filePath,
+                    $this->normalizePath($filePath),
                     new Range(
                         new Position(4, 4),
                         new Position(4, 21)
@@ -251,7 +251,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
      */
     public function testSortsSymbolsByLocation(): void
     {
-        $filePath = $this->getTestFilePath('MultipleClassMembers.phpt');
+        $filePath = $this->getTestFilePath('MultipleClassMembers.phpt', false);
 
         /** @var SymbolInformation[] $symbols */
         $symbols = $this->getSymbolsForFile($filePath);
@@ -284,11 +284,14 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 
     /**
      * @param string $fileName
+     * @param bool   $normalize - normalize the file path? Pass false if not using for expectations.
      *
      * @return string
      */
-    private function getTestFilePath(string $fileName): string
+    private function getTestFilePath(string $fileName, bool $normalize = true): string
     {
-        return 'file://' . __DIR__ . '/DocumentSymbolRetrieverTest/' . $fileName;
+        $path = 'file://' . __DIR__ . '/DocumentSymbolRetrieverTest/' . $fileName;
+
+        return $normalize ? $this->normalizePath($path) : $path;
     }
 }

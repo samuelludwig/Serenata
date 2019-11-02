@@ -22,7 +22,7 @@ final class FunctionIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('foo', $function->getName());
         static::assertSame('\foo', $function->getFqcn());
-        static::assertSame($this->getPathFor('SimpleFunction.phpt'), $function->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleFunction.phpt')), $function->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),
