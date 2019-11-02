@@ -10,7 +10,6 @@ require __DIR__ . '/Bootstrap.php';
 // level in all cases. This appears to be confirmed in
 // https://github.com/nikic/PHP-Parser/blob/master/doc/component/Performance.markdown
 $xdebug = new XdebugHandler('Serenata');
-$xdebug->setMainScript(__DIR__ . '/Main.php');
 $xdebug->check();
 
 unset($xdebug);
