@@ -74,6 +74,8 @@ final class JsonRpcQueueItemProcessor
         } elseif (!$queueItem->getIsCancelled()) {
             try {
                 $message = $this->handle($queueItem);
+            } catch (UnknownJsonRpcRequestMethodException $e) {
+                $error = new JsonRpcError(JsonRpcErrorCode::METHOD_NOT_FOUND, $e->getMessage());
             } catch (RequestParsingException $e) {
                 $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
             } catch (JsonRpcQueueItemHandler\InvalidArgumentsException $e) {
@@ -107,6 +109,7 @@ final class JsonRpcQueueItemProcessor
      *
      * @throws RequestParsingException
      * @throws InvalidArgumentsException
+     * @throws UnknownJsonRpcRequestMethodException
      * @throws Throwable
      *
      * @return JsonRpcMessageInterface|null
@@ -123,7 +126,7 @@ final class JsonRpcQueueItemProcessor
         try {
             $handler = $this->jsonRpcQueueItemHandlerFactory->create($queueItem->getRequest()->getMethod());
         } catch (DomainException $e) {
-            throw new UnexpectedValueException(
+            throw new UnknownJsonRpcRequestMethodException(
                 'Unknown request method "' . $queueItem->getRequest()->getMethod() . '"',
                 0,
                 $e

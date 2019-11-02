@@ -7,6 +7,7 @@
 * [Explicitly set `workspace` in ServerCapabilities to make Visual Studio Code happy](https://gitlab.com/Serenata/Serenata/issues/290)
 * [Fix tests failing on Windows machines with the `core.autocrlf` option set to true](https://gitlab.com/Serenata/Serenata/merge_requests/79) (thanks to @bpedroza)
 * Improve performance by preventing file scanning from happening multiple times recursively instead of just once
+* Return `MethodNotFound` JSON-RPC response code (`-32601`) instead of generic runtime error (`-32001`) when request method is unknown
 
 ## 5.0.0
 * Fix PHP error when initialization options were passed, but without a configuration
