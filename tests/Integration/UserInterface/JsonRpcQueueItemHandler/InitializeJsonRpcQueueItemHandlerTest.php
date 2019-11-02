@@ -42,7 +42,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
     /**
      * @return void
      */
-    public function testFailsWhenNoRootUriIsPresent(): void
+    public function testFailsWhenNoRootUriIsPresentAndConfigurationIsNotExplicitlyPassed(): void
     {
         $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/';
 
@@ -55,34 +55,6 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
                 123,
                 $path,
                 null,
-                null,
-                [],
-                null,
-                []
-            ),
-            $this->mockJsonRpcMessageSenderInterface(),
-            new JsonRpcRequest('TESTID', 'Not used'),
-            false
-        );
-    }
-
-    /**
-     * @return void
-     */
-    public function testFailsWhenNoRootPathIsPresent(): void
-    {
-        $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/';
-        $uri = 'file://' . $path;
-
-        $handler = $this->getHandler();
-
-        $this->expectException(InvalidArgumentsException::class);
-
-        $response = $handler->initialize(
-            new InitializeParams(
-                123,
-                null,
-                $uri,
                 null,
                 [],
                 null,
@@ -99,15 +71,14 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testRespondsWithServerCapabilities(): void
     {
-        $path =$this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
-        $uri = 'file://' . $path;
+        $uri = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
 
         $handler = $this->getHandler();
 
         $response = $handler->initialize(
             new InitializeParams(
                 123,
-                $path,
+                null,
                 $uri,
                 null,
                 [],
@@ -162,15 +133,14 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testFallsBackToTemporaryConfigurationIfNoneIsPassed(): void
     {
-        $path = $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
-        $uri = 'file://' . $path;
+        $uri = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
 
         $handler = $this->getHandler();
 
         $handler->initialize(
             new InitializeParams(
                 123,
-                $path,
+                null,
                 $uri,
                 null,
                 [],
@@ -202,16 +172,15 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testUsesPassedConfigurationFromIntializationParams(): void
     {
-        $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/Folder1';
-        $uri = 'file://' . $path;
+        $uri = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/Folder1');
 
         $handler = $this->getHandler();
 
         $handler->initialize(
             new InitializeParams(
                 123,
-                $path,
-                $uri,
+                null,
+                null,
                 [
                     'configuration' => [
                         'uris'                    => [$uri],
@@ -250,16 +219,15 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testIndexesUrisInConfigurationIfRequested(): void
     {
-        $path = $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest');
-        $uri = 'file://' . $path;
+        $uri = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest');
 
         $handler = $this->getHandler();
 
         $handler->initialize(
             new InitializeParams(
                 123,
-                $path,
-                $uri,
+                null,
+                null,
                 [
                     'configuration' => [
                         'uris'                    => [$uri . '/Folder1', $uri . '/Folder2'],

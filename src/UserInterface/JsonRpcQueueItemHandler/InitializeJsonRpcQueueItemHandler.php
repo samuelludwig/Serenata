@@ -173,19 +173,18 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
             );
         }
 
-        $rootUri = $initializeParams->getRootUri();
-        $rootPath = $initializeParams->getRootPath();
-
-        if ($rootUri === null || $rootPath === null) {
-            throw new InvalidArgumentsException('Need a rootUri and a rootPath in InitializeParams to function');
-        }
-
         $initializationOptions = $initializeParams->getInitializationOptions();
 
         $configuration = $initializationOptions['configuration'] ?? null;
 
         if ($configuration === null) {
-            $configuration = $this->getDefaultProjectConfiguration($rootUri);
+            if ($initializeParams->getRootUri() === null) {
+                throw new InvalidArgumentsException(
+                    'Need a valid "rootUri" in InitializeParams if no explicit "configuration" is passed'
+                );
+            }
+
+            $configuration = $this->getDefaultProjectConfiguration($initializeParams->getRootUri());
 
             $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
                 'message' => new JsonRpcRequest(
