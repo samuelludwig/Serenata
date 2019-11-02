@@ -31,7 +31,7 @@ final class CodeLensesRetrieverTest extends AbstractIntegrationTest
                     new Position(14, 4),
                     new Position(17, 5)
                 ),
-                new OpenTextDocumentCommand('Override', $filePath, new Position(6, 4)),
+                new OpenTextDocumentCommand('Override', $this->normalizePath($filePath), new Position(6, 4)),
                 null
             ),
         ]);
@@ -50,7 +50,7 @@ final class CodeLensesRetrieverTest extends AbstractIntegrationTest
                     new Position(11, 4),
                     new Position(14, 5)
                 ),
-                new OpenTextDocumentCommand('Implementation', $filePath, new Position(6, 4)),
+                new OpenTextDocumentCommand('Implementation', $this->normalizePath($filePath), new Position(6, 4)),
                 null
             ),
         ]);
@@ -69,7 +69,7 @@ final class CodeLensesRetrieverTest extends AbstractIntegrationTest
                     new Position(11, 4),
                     new Position(11, 19)
                 ),
-                new OpenTextDocumentCommand('Override', $filePath, new Position(6, 4)),
+                new OpenTextDocumentCommand('Override', $this->normalizePath($filePath), new Position(6, 4)),
                 null
             ),
         ]);

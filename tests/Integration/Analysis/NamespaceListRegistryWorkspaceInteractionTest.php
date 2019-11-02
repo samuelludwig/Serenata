@@ -4,7 +4,6 @@ namespace Serenata\Tests\Integration\Analysis;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
-use Serenata\Utility\InitializeParams;
 
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 

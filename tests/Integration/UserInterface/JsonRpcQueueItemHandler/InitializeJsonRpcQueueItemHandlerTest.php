@@ -4,7 +4,6 @@ namespace Serenata\Tests\Integration\UserInterface\JsonRpcQueueItemHandler;
 
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
-use Serenata\Sockets\JsonRpcQueueItem;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
@@ -100,7 +99,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testRespondsWithServerCapabilities(): void
     {
-        $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/';
+        $path =$this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
         $uri = 'file://' . $path;
 
         $handler = $this->getHandler();
@@ -163,7 +162,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testFallsBackToTemporaryConfigurationIfNoneIsPassed(): void
     {
-        $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/';
+        $path = $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
         $uri = 'file://' . $path;
 
         $handler = $this->getHandler();
@@ -190,7 +189,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
         static::assertEquals(new Workspace(
             new WorkspaceConfiguration(
                 [$uri],
-                'file://' . sys_get_temp_dir() . '/' . md5($uri),
+                $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri)),
                 7.3,
                 [],
                 ['php']
@@ -251,7 +250,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     public function testIndexesUrisInConfigurationIfRequested(): void
     {
-        $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest';
+        $path = $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest');
         $uri = 'file://' . $path;
 
         $handler = $this->getHandler();

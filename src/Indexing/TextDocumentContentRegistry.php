@@ -29,8 +29,9 @@ final class TextDocumentContentRegistry
     /**
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      */
-    public function __construct(SourceCodeStreamReader $sourceCodeStreamReader)
-    {
+    public function __construct(
+        SourceCodeStreamReader $sourceCodeStreamReader
+    ) {
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
     }
 

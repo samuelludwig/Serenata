@@ -22,7 +22,7 @@ final class ClassIndexingTest extends AbstractIntegrationTest
 
         static::assertSame('Test', $structure->getName());
         static::assertSame('\Test', $structure->getFqcn());
-        static::assertSame($this->getPathFor('SimpleClass.phpt'), $structure->getFile()->getUri());
+        static::assertSame($this->normalizePath($this->getPathFor('SimpleClass.phpt')), $structure->getFile()->getUri());
         static::assertEquals(
             new Range(
                 new Position(2, 0),
@@ -137,7 +137,7 @@ final class ClassIndexingTest extends AbstractIntegrationTest
 
         $structure = $this->indexClass($fileName);
 
-        $filePath = $this->getPathFor($fileName);
+        $filePath = $this->normalizePath($this->getPathFor($fileName));
 
         static::assertSame('(anonymous_' . md5($filePath) . '_19)', $structure->getName());
         static::assertSame('\\(anonymous_' . md5($filePath) . '_19)', $structure->getFqcn());

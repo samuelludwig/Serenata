@@ -35,7 +35,7 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
         );
 
         static::assertSame(null, $namespaces[0]->getName());
-        static::assertSame($path, $namespaces[0]->getFile()->getUri());
+        static::assertSame($this->normalizePath($path), $namespaces[0]->getFile()->getUri());
         static::assertEmpty($namespaces[0]->getImports());
     }
 
@@ -63,7 +63,7 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
         );
 
         static::assertSame('N', $namespaces[1]->getName());
-        static::assertSame($path, $namespaces[1]->getFile()->getUri());
+        static::assertSame($this->normalizePath($path), $namespaces[1]->getFile()->getUri());
         static::assertEmpty($namespaces[1]->getImports());
     }
 
@@ -91,7 +91,7 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
         );
 
         static::assertSame(null, $namespaces[1]->getName());
-        static::assertSame($path, $namespaces[1]->getFile()->getUri());
+        static::assertSame($this->normalizePath($path), $namespaces[1]->getFile()->getUri());
         static::assertCount(1, $namespaces[1]->getImports());
     }
 

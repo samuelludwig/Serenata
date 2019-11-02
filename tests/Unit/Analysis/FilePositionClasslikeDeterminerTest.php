@@ -2,8 +2,6 @@
 
 namespace Serenata\Tests\Unit\Analysis;
 
-use PhpParser\Node;
-
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;

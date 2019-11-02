@@ -23,11 +23,19 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     private $managerRegistry;
 
     /**
+     * @var PathNormalizer
+     */
+    private $pathNormalizer;
+
+    /**
      * @param ManagerRegistry $managerRegistry
      */
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        PathNormalizer $pathNormalizer
+    ) {
         $this->managerRegistry = $managerRegistry;
+        $this->pathNormalizer = $pathNormalizer;
     }
 
     /**
@@ -75,7 +83,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     {
         try {
             $file = $this->managerRegistry->getRepository(Structures\File::class)->findOneBy([
-                'uri' => $uri,
+                'uri' => $this->pathNormalizer->normalize($uri),
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);

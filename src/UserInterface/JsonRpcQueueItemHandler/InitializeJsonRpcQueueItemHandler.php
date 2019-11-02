@@ -7,6 +7,7 @@ use UnexpectedValueException;
 use Serenata\Indexing\Indexer;
 use Serenata\Indexing\IndexFilePruner;
 use Serenata\Indexing\ManagerRegistry;
+use Serenata\Indexing\PathNormalizer;
 use Serenata\Indexing\SchemaInitializer;
 use Serenata\Indexing\StorageVersionChecker;
 
@@ -78,6 +79,11 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     private $queue;
 
     /**
+     * @var PathNormalizer
+     */
+    private $pathNormalizer;
+
+    /**
      * @param ActiveWorkspaceManager                $activeWorkspaceManager
      * @param WorkspaceConfigurationParserInterface $workspaceConfigurationParser
      * @param ManagerRegistry                       $managerRegistry
@@ -95,7 +101,8 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         Indexer $indexer,
         SchemaInitializer $schemaInitializer,
         IndexFilePruner $indexFilePruner,
-        JsonRpcQueue $queue
+        JsonRpcQueue $queue,
+        PathNormalizer $pathNormalizer
     ) {
         $this->activeWorkspaceManager = $activeWorkspaceManager;
         $this->workspaceConfigurationParser = $workspaceConfigurationParser;
@@ -105,6 +112,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         $this->schemaInitializer = $schemaInitializer;
         $this->indexFilePruner = $indexFilePruner;
         $this->queue = $queue;
+        $this->pathNormalizer = $pathNormalizer;
     }
 
     /**
@@ -286,14 +294,14 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      */
     private function getDefaultProjectConfiguration(string $rootUri): array
     {
-        $indexDatabaseUri = 'file://' . sys_get_temp_dir() . DIRECTORY_SEPARATOR . md5($rootUri);
+        $indexDatabaseUri = 'file://' . sys_get_temp_dir() . '/' . md5($rootUri);
 
         $configuration = <<<JSON
 {
     "uris": [
         "{$rootUri}"
     ],
-    "indexDatabaseUri": "{$indexDatabaseUri}",
+    "indexDatabaseUri": "{$this->pathNormalizer->normalize($indexDatabaseUri)}",
     "phpVersion": 7.3,
     "excludedPathExpressions": [],
     "fileExtensions": [

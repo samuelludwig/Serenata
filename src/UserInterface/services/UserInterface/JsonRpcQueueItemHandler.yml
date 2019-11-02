@@ -18,6 +18,7 @@ services:
             - '@schemaInitializer'
             - '@indexFilePruner'
             - '@requestQueue'
+            - '@pathNormalizer'
 
     initializedJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\InitializedJsonRpcQueueItemHandler

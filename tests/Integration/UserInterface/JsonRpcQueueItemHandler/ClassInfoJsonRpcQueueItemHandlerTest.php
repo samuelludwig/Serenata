@@ -2599,6 +2599,6 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
      */
     private function getPathFor(string $file): string
     {
-        return 'file:///' . __DIR__ . '/ClassInfoJsonRpcQueueItemHandlerTest/' . $file;
+        return $this->normalizePath('file:///' . __DIR__ . '/ClassInfoJsonRpcQueueItemHandlerTest/' . $file);
     }
 }
