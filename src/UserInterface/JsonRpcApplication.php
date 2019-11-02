@@ -40,6 +40,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      * @var int
      */
     private const CYCLE_COLLECTION_FREQUENCY_SECONDS = 5;
+
     /**
      * @var TimerInterface|null
      */
