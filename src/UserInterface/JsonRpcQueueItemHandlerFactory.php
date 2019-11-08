@@ -36,6 +36,7 @@ final class JsonRpcQueueItemHandlerFactory implements JsonRpcQueueItemHandlerFac
             'initialized'                             => 'initializedJsonRpcQueueItemHandler',
             'exit'                                    => 'exitJsonRpcQueueItemHandler',
             'shutdown'                                => 'shutdownJsonRpcQueueItemHandler',
+            'workspace/didChangeConfiguration'        => 'didChangeConfigurationJsonRpcQueueItemHandler',
             'workspace/didChangeWatchedFiles'         => 'didChangeWatchedFilesJsonRpcQueueItemHandler',
             'workspace/executeCommand'                => 'executeCommandJsonRpcQueueItemHandler',
             'textDocument/didOpen'                    => 'didOpenJsonRpcQueueItemHandler',

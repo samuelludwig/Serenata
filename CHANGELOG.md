@@ -5,6 +5,7 @@
 * [Add definition location support for classes in comments](https://gitlab.com/Serenata/Serenata/issues/141) (thanks to @cdaguerre)
 * [Lift `rootPath` requirement in parameters sent with `initialize` request](https://gitlab.com/Serenata/Serenata/issues/299)
 * [Explicitly set `workspace` in ServerCapabilities to make Visual Studio Code happy](https://gitlab.com/Serenata/Serenata/issues/290)
+* [Stub `workspace/didChangeConfiguration` to avoid errors when clients such as Visual Studio Code send it](https://gitlab.com/Serenata/Serenata/issues/298)
 * [Fix tests failing on Windows machines with the `core.autocrlf` option set to true](https://gitlab.com/Serenata/Serenata/merge_requests/79) (thanks to @bpedroza)
 * Improve performance by preventing file scanning from happening multiple times recursively instead of just once
 * Return `MethodNotFound` JSON-RPC response code (`-32601`) instead of generic runtime error (`-32001`) when request method is unknown

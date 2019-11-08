@@ -135,6 +135,9 @@ services:
             - '@commandFactory'
             - '@requestQueue'
 
+    didChangeConfigurationJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeConfigurationJsonRpcQueueItemHandler
+
     didChangeWatchedFilesJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeWatchedFilesJsonRpcQueueItemHandler
         arguments:
