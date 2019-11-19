@@ -4,6 +4,7 @@
 * [Fix built-in stubs not being indexed when using the PHAR distribution](https://gitlab.com/Serenata/Serenata/issues/288)
 * [Add definition location support for classes in comments](https://gitlab.com/Serenata/Serenata/issues/141) (thanks to @cdaguerre)
 * [Lift `rootPath` requirement in parameters sent with `initialize` request](https://gitlab.com/Serenata/Serenata/issues/299)
+* [Fix ServerCapabilities incorrectly returning boolean for `codeLensProvider`](https://gitlab.com/Serenata/Serenata/issues/304)
 * [Explicitly set `workspace` in ServerCapabilities to make Visual Studio Code happy](https://gitlab.com/Serenata/Serenata/issues/290)
 * [Stub `workspace/didChangeConfiguration` to avoid errors when clients such as Visual Studio Code send it](https://gitlab.com/Serenata/Serenata/issues/298)
 * [Fix tests failing on Windows machines with the `core.autocrlf` option set to true](https://gitlab.com/Serenata/Serenata/merge_requests/79) (thanks to @bpedroza)

@@ -72,7 +72,7 @@ final class ServerCapabilities implements JsonSerializable
     private $codeActionProvider;
 
     /**
-     * @var bool|object|null
+     * @var array|null
      */
     private $codeLensProvider;
 
@@ -139,7 +139,7 @@ final class ServerCapabilities implements JsonSerializable
      * @param bool|null                        $documentSymbolProvider
      * @param bool|null                        $workspaceSymbolProvider
      * @param bool|object|null                 $codeActionProvider
-     * @param bool|object|null                 $codeLensProvider
+     * @param array|null                       $codeLensProvider
      * @param bool|null                        $documentFormattingProvider
      * @param bool|null                        $documentRangeFormattingProvider
      * @param object|null                      $documentOnTypeFormattingProvider
@@ -164,7 +164,7 @@ final class ServerCapabilities implements JsonSerializable
         ?bool $documentSymbolProvider,
         ?bool $workspaceSymbolProvider,
         $codeActionProvider,
-        $codeLensProvider,
+        ?array $codeLensProvider,
         ?bool $documentFormattingProvider,
         ?bool $documentRangeFormattingProvider,
         $documentOnTypeFormattingProvider,
@@ -298,9 +298,9 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return bool|object|null
+     * @return array|null
      */
-    public function getCodeLensProvider()
+    public function getCodeLensProvider(): ?array
     {
         return $this->codeLensProvider;
     }

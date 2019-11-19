@@ -246,7 +246,9 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                     true,
                     false,
                     false,
-                    true,
+                    [
+                        'resolveProvider' => true,
+                    ],
                     false,
                     false,
                     null,
