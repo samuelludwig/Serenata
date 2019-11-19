@@ -117,7 +117,7 @@ final class ServerCapabilities implements JsonSerializable
     private $executeCommandProvider;
 
     /**
-     * @var object|null
+     * @var array|null
      */
     private $workspace;
 
@@ -148,7 +148,7 @@ final class ServerCapabilities implements JsonSerializable
      * @param bool|object|null                 $colorProvider
      * @param bool|object|null                 $foldingRangeProvider
      * @param object|null                      $executeCommandProvider
-     * @param object|null                      $workspace
+     * @param array|null                       $workspace
      * @param mixed|null                       $experimental
      */
     public function __construct(
@@ -173,7 +173,7 @@ final class ServerCapabilities implements JsonSerializable
         $colorProvider,
         $foldingRangeProvider,
         $executeCommandProvider,
-        $workspace,
+        ?array $workspace,
         $experimental
     ) {
         $this->textDocumentSync = $textDocumentSync;
@@ -370,9 +370,9 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return object|null
+     * @return array|null
      */
-    public function getWorkspace()
+    public function getWorkspace(): ?array
     {
         return $this->workspace;
     }
