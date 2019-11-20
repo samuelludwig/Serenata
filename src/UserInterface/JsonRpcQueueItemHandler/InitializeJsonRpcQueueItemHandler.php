@@ -178,13 +178,24 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         $configuration = $initializationOptions['configuration'] ?? null;
 
         if ($configuration === null) {
-            if ($initializeParams->getRootUri() === null) {
-                throw new InvalidArgumentsException(
-                    'Need a valid "rootUri" in InitializeParams if no explicit "configuration" is passed'
-                );
+            $uris = [];
+
+            if ($initializeParams->getWorkspaceFolders() !== null && $initializeParams->getWorkspaceFolders() !== []) {
+                $uris = array_map(function (array $folder) {
+                    return $folder['uri'];
+                }, $initializeParams->getWorkspaceFolders());
+            } else {
+                if ($initializeParams->getRootUri() === null) {
+                    throw new InvalidArgumentsException(
+                        'Need a valid "rootUri" in InitializeParams if no explicit "configuration" is passed and no ' .
+                        'workspace folders have been explicitly configured'
+                    );
+                }
+
+                $uris[] = $initializeParams->getRootUri();
             }
 
-            $configuration = $this->getDefaultProjectConfiguration($initializeParams->getRootUri());
+            $configuration = $this->getDefaultProjectConfiguration($uris);
 
             $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
                 'message' => new JsonRpcRequest(
@@ -289,29 +300,21 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     }
 
     /**
-     * @param string $rootUri
+     * @param string[] $uris
      *
      * @return array
      */
-    private function getDefaultProjectConfiguration(string $rootUri): array
+    private function getDefaultProjectConfiguration(array $uris): array
     {
-        $indexDatabaseUri = 'file://' . sys_get_temp_dir() . '/' . md5($rootUri);
-
-        $configuration = <<<JSON
-{
-    "uris": [
-        "{$rootUri}"
-    ],
-    "indexDatabaseUri": "{$this->pathNormalizer->normalize($indexDatabaseUri)}",
-    "phpVersion": 7.3,
-    "excludedPathExpressions": [],
-    "fileExtensions": [
-        "php"
-    ]
-}
-JSON;
-
-        return json_decode($configuration, true);
+        return [
+            'uris'             => $uris,
+            'indexDatabaseUri' => $this->pathNormalizer->normalize(
+                'file://' . sys_get_temp_dir() . '/' . md5(implode('-', $uris))
+            ),
+            'phpVersion'              => 7.3,
+            'excludedPathExpressions' => [],
+            'fileExtensions'          => ['php'],
+        ];
     }
 
     /**

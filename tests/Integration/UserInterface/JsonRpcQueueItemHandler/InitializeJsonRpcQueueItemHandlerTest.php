@@ -42,7 +42,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
     /**
      * @return void
      */
-    public function testFailsWhenNoRootUriIsPresentAndConfigurationIsNotExplicitlyPassed(): void
+    public function testFailsWhenMissingRootUriAndWorkspaceFoldersAndConfigurationIsNotExplicitlyPassed(): void
     {
         $path = __DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/';
 
@@ -58,7 +58,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
                 null,
                 [],
                 null,
-                []
+                null
             ),
             $this->mockJsonRpcMessageSenderInterface(),
             new JsonRpcRequest('TESTID', 'Not used'),
@@ -133,7 +133,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
     /**
      * @return void
      */
-    public function testFallsBackToTemporaryConfigurationIfNoneIsPassed(): void
+    public function testIgnoresWorkspaceFolderDuringFallbackIfEmptyArrayToFixWonkyClientsSuchAsAtom(): void
     {
         $uri = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
 
@@ -162,6 +162,94 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             new WorkspaceConfiguration(
                 [$uri],
                 $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri)),
+                7.3,
+                [],
+                ['php']
+            )
+        ), $workspace);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFallsBackToTemporaryConfigurationBasedOnRootUriIfNoneIsPassed(): void
+    {
+        $uri = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest/');
+
+        $handler = $this->getHandler();
+
+        $handler->initialize(
+            new InitializeParams(
+                123,
+                null,
+                $uri,
+                null,
+                [],
+                null,
+                null
+            ),
+            $this->mockJsonRpcMessageSenderInterface(),
+            new JsonRpcRequest('TESTID', 'Not used'),
+            false
+        );
+
+        $workspace = $this->getActiveWorkspaceManager()->getActiveWorkspace();
+
+        static::assertNotNull($workspace);
+
+        static::assertEquals(new Workspace(
+            new WorkspaceConfiguration(
+                [$uri],
+                $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri)),
+                7.3,
+                [],
+                ['php']
+            )
+        ), $workspace);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFallsBackToTemporaryConfigurationIfNoneIsPassedAndUsesWorkspaceFoldersIfPresent(): void
+    {
+        $uri1 = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest1/');
+        $uri2 = 'file://' . $this->normalizePath(__DIR__ . '/InitializeJsonRpcQueueItemHandlerTest2/');
+
+        $handler = $this->getHandler();
+
+        $handler->initialize(
+            new InitializeParams(
+                123,
+                null,
+                $uri1,
+                null,
+                [],
+                null,
+                [
+                    [
+                        'uri'  => $uri1,
+                        'name' => 'Test 1',
+                    ],
+                    [
+                        'uri'  => $uri2,
+                        'name' => 'Test 2',
+                    ],
+                ]
+            ),
+            $this->mockJsonRpcMessageSenderInterface(),
+            new JsonRpcRequest('TESTID', 'Not used'),
+            false
+        );
+
+        $workspace = $this->getActiveWorkspaceManager()->getActiveWorkspace();
+
+        static::assertNotNull($workspace);
+
+        static::assertEquals(new Workspace(
+            new WorkspaceConfiguration(
+                [$uri1, $uri2],
+                $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri1 . '-' . $uri2)),
                 7.3,
                 [],
                 ['php']
