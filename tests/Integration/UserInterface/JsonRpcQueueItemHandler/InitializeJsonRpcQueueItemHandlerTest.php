@@ -109,7 +109,9 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             true,
             false,
             false,
-            true,
+            [
+                'resolveProvider' => true,
+            ],
             false,
             false,
             null,
