@@ -8,6 +8,8 @@ use UnexpectedValueException;
 /**
  * A request in JSON-RPC 2.0 format.
  *
+ * This class doubles as notification by setting the "ID" to null.
+ *
  * Value object.
  */
 final class JsonRpcRequest implements JsonRpcMessageInterface
