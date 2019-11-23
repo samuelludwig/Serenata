@@ -5,7 +5,6 @@ namespace Serenata\Sockets;
 use Throwable;
 use DomainException;
 use RuntimeException;
-use UnexpectedValueException;
 
 use Ds\Vector;
 
