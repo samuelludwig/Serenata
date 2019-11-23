@@ -19,16 +19,16 @@ final class NamespaceListProviderTest extends AbstractIntegrationTest
 
         static::assertCount(4, $output);
 
-        array_shift($output);
-        $secondItem = array_shift($output);
+        $namespaceAItem = array_filter($output, function (array $item) {
+            return $item['name'] === 'NamespaceA';
+        });
 
-        static::assertArrayHasKey('name', $secondItem);
-        static::assertSame('NamespaceA', $secondItem['name']);
+        static::assertNotEmpty($namespaceAItem);
 
-        array_shift($output);
-        $fourthItem = array_shift($output);
+        $namespaceBItem = array_filter($output, function (array $item) {
+            return $item['name'] === 'NamespaceB';
+        });
 
-        static::assertArrayHasKey('name', $fourthItem);
-        static::assertSame('NamespaceB', $fourthItem['name']);
+        static::assertNotEmpty($namespaceBItem);
     }
 }
