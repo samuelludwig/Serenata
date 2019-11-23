@@ -1,4 +1,7 @@
-## 5.1.0 (Unreleased)
+## 5.2.0 (Unreleased)
+* To do
+
+## 5.1.0
 * [Fix some issues with tests failing on Windows](https://gitlab.com/Serenata/Serenata/merge_requests/81) (thanks to @bpedroza)
 * [Fix startup failing when using PHAR and having Xdebug enabled](https://gitlab.com/Serenata/Serenata/issues/300)
 * [Fix built-in stubs not being indexed when using the PHAR distribution](https://gitlab.com/Serenata/Serenata/issues/288)
