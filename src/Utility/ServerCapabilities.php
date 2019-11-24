@@ -47,7 +47,7 @@ final class ServerCapabilities implements JsonSerializable
     private $implementationProvider;
 
     /**
-     * @var bool|null
+     * @var array|bool|null
      */
     private $referencesProvider;
 
@@ -134,7 +134,7 @@ final class ServerCapabilities implements JsonSerializable
      * @param bool|null                        $definitionProvider
      * @param bool|object|null                 $typeDefinitionProvider
      * @param bool|object|null                 $implementationProvider
-     * @param bool|null                        $referencesProvider
+     * @param array|bool|null                  $referencesProvider
      * @param bool|null                        $documentHighlightProvider
      * @param bool|null                        $documentSymbolProvider
      * @param bool|null                        $workspaceSymbolProvider
@@ -159,7 +159,7 @@ final class ServerCapabilities implements JsonSerializable
         ?bool $definitionProvider,
         $typeDefinitionProvider,
         $implementationProvider,
-        ?bool $referencesProvider,
+        $referencesProvider,
         ?bool $documentHighlightProvider,
         ?bool $documentSymbolProvider,
         ?bool $workspaceSymbolProvider,
@@ -258,9 +258,9 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return bool|null
+     * @return array|bool|null
      */
-    public function getReferencesProvider(): ?bool
+    public function getReferencesProvider()
     {
         return $this->referencesProvider;
     }

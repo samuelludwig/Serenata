@@ -104,7 +104,9 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             true,
             false,
             false,
-            false,
+            [
+                'workDoneProgress' => true,
+            ],
             true,
             true,
             false,
