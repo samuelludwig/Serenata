@@ -1,4 +1,5 @@
 /.serenata
+/.vscode
 /composer.lock
 /vendor
 /phpunit.xml
