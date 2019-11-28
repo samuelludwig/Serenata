@@ -41,12 +41,12 @@ build:php-7.3:
     <<: *build-job-shared
 
 build:php-7.4:
-    image: php:7.4-cli-alpine
+    image: php:7.4.0-cli-alpine
     <<: *build-job-shared
 
 # ----- Test stage
 test:run-phpcs:
-    image: php:7.4-cli-alpine
+    image: php:7.4.0-cli-alpine
     stage: test
     script:
         - php vendor/bin/phpcs src -n --report-junit=./phpcs-test-report.xml
@@ -61,7 +61,7 @@ test:run-phpcs:
 
 # TODO: Enable when all the existing errors have been fixed
 # test:run-phpstan:
-#     image: php:7.4-cli-alpine
+#     image: php:7.4.0-cli-alpine
 #     stage: test
 #     script:
 #         - php vendor/bin/phpstan analyse --level=max --no-interaction --no-progress --error-format codeClimate src > phpstan-report.json
@@ -100,7 +100,7 @@ test:php-7.3:
         - build:php-7.3
 
 test:php-7.4:
-    image: php:7.4-cli-alpine
+    image: php:7.4.0-cli-alpine
     <<: *test-job-shared
     dependencies:
         - build:php-7.4
@@ -130,11 +130,11 @@ finalization:package-php-7.3:
     <<: *finalization-package-job-shared
 
 finalization:package-php-7.4:
-    image: php:7.4-cli-alpine
+    image: php:7.4.0-cli-alpine
     <<: *finalization-package-job-shared
 
 finalization:code-coverage:
-    image: php:7.4-cli-alpine
+    image: php:7.4.0-cli-alpine
     stage: finalization
     coverage: '/^\s*Lines:\s*\d+.\d+\%/'
     script:
