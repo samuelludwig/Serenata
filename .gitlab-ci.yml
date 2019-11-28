@@ -40,9 +40,13 @@ build:php-7.3:
     image: php:7.3-cli-alpine
     <<: *build-job-shared
 
+build:php-7.4:
+    image: php:7.4-cli-alpine
+    <<: *build-job-shared
+
 # ----- Test stage
 test:run-phpcs:
-    image: php:7.3-cli-alpine
+    image: php:7.4-cli-alpine
     stage: test
     script:
         - php vendor/bin/phpcs src -n --report-junit=./phpcs-test-report.xml
@@ -53,11 +57,11 @@ test:run-phpcs:
         reports:
             junit: phpcs-test-report.xml
     dependencies:
-        - build:php-7.3
+        - build:php-7.4
 
 # TODO: Enable when all the existing errors have been fixed
 # test:run-phpstan:
-#     image: php:7.3-cli-alpine
+#     image: php:7.4-cli-alpine
 #     stage: test
 #     script:
 #         - php vendor/bin/phpstan analyse --level=max --no-interaction --no-progress --error-format codeClimate src > phpstan-report.json
@@ -67,7 +71,7 @@ test:run-phpcs:
 #         paths:
 #             - phpstan-report.json
 #     dependencies:
-#         - build:php-7.3
+#         - build:php-7.4
 
 .test-run-phpunit: &test-run-phpunit
     script:
@@ -95,6 +99,12 @@ test:php-7.3:
     dependencies:
         - build:php-7.3
 
+test:php-7.4:
+    image: php:7.4-cli-alpine
+    <<: *test-job-shared
+    dependencies:
+        - build:php-7.4
+
 # ----- Finalization stage, which contains finishing steps such as metrics and packaging.
 .finalization-package-job-shared: &finalization-package-job-shared
     stage: finalization
@@ -119,8 +129,12 @@ finalization:package-php-7.3:
     image: php:7.3-cli-alpine
     <<: *finalization-package-job-shared
 
+finalization:package-php-7.4:
+    image: php:7.4-cli-alpine
+    <<: *finalization-package-job-shared
+
 finalization:code-coverage:
-    image: php:7.3-cli-alpine
+    image: php:7.4-cli-alpine
     stage: finalization
     coverage: '/^\s*Lines:\s*\d+.\d+\%/'
     script:
@@ -130,4 +144,4 @@ finalization:code-coverage:
         paths:
             - coverage/
     dependencies:
-        - build:php-7.3
+        - build:php-7.4
