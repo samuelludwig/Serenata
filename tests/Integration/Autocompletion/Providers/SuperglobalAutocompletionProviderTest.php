@@ -30,7 +30,7 @@ final class SuperglobalAutocompletionProviderTest extends AbstractAutocompletion
                 ),
                 '\$argc'
             ),
-            '$argc',
+            'argc',
             'PHP superglobal',
             [],
             false,

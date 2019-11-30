@@ -1,6 +1,8 @@
 ## 5.2.0 (Unreleased)
 * Test PHP 7.4 in CI
 * Fix large amounts of notices being generated whilst running on PHP 7.4
+* Variable completion suggestions will no longer include the dollar sign in the display text
+    * This is consistent with static property completions. During display, the dollar sign only added visual noise
 * Return trigger characters in completion options to automatically trigger autocompletion after `->`, `::` and `$`
 * Fix some clients such as VSCode not properly completing variables and static properties due to dollar sign not being escaped in result
 

@@ -42,7 +42,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
             CompletionItemKind::VARIABLE,
             $superGlobal['name'],
             $this->getTextEditForSuggestion($superGlobal, $context),
-            $superGlobal['name'],
+            mb_substr($superGlobal['name'], 1),
             'PHP superglobal',
             [],
             false,

@@ -28,7 +28,7 @@ final class LocalVariableAutocompletionProviderTest extends AbstractAutocompleti
                     new Range(new Position(4, 0), new Position(4, 0)),
                     '\$foo'
                 ),
-                '$foo',
+                'foo',
                 null,
                 [],
                 false

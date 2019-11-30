@@ -94,7 +94,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
             CompletionItemKind::VARIABLE,
             $variable['name'],
             $this->getTextEditForSuggestion($variable, $context),
-            $variable['name'],
+            mb_substr($variable['name'], 1),
             null,
             [],
             false,
