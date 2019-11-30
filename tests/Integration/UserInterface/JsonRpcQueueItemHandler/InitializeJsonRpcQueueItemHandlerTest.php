@@ -99,7 +99,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
                 new SaveOptions(true)
             ),
             true,
-            new CompletionOptions(false, null),
+            new CompletionOptions(false, ['>', '$', ':']),
             new SignatureHelpOptions(['(', ',']),
             true,
             false,
