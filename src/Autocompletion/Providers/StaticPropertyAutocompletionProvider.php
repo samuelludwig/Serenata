@@ -136,7 +136,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
      */
     private function getTextEditForSuggestion(array $property, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), '$' . $property['name']);
+        return new TextEdit($context->getPrefixRange(), '\$' . $property['name']);
     }
 
     /**

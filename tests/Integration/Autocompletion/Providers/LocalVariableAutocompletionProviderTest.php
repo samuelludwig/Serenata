@@ -26,7 +26,7 @@ final class LocalVariableAutocompletionProviderTest extends AbstractAutocompleti
                 '$foo',
                 new TextEdit(
                     new Range(new Position(4, 0), new Position(4, 0)),
-                    '$foo'
+                    '\$foo'
                 ),
                 '$foo',
                 null,

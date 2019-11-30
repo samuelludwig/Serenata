@@ -65,7 +65,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
      */
     private function getTextEditForSuggestion(array $superGlobal, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $superGlobal['name']);
+        return new TextEdit($context->getPrefixRange(), str_replace('$', '\$', $superGlobal['name']));
     }
 
     /**

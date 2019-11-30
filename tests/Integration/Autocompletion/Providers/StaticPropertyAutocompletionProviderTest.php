@@ -31,7 +31,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
                         new Position(10, 3),
                         new Position(10, 3)
                     ),
-                    '$foo'
+                    '\$foo'
                 ),
                 'foo',
                 null,
@@ -63,7 +63,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
                         new Position(10, 3),
                         new Position(10, 3)
                     ),
-                    '$foo'
+                    '\$foo'
                 ),
                 'foo',
                 null,

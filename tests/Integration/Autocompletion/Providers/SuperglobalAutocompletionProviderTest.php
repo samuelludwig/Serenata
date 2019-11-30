@@ -28,7 +28,7 @@ final class SuperglobalAutocompletionProviderTest extends AbstractAutocompletion
                     new Position(2, 0),
                     new Position(2, 1)
                 ),
-                '$argc'
+                '\$argc'
             ),
             '$argc',
             'PHP superglobal',

@@ -117,7 +117,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      */
     private function getTextEditForSuggestion(array $variable, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $variable['name']);
+        return new TextEdit($context->getPrefixRange(), str_replace('$', '\$', $variable['name']));
     }
 
     /**

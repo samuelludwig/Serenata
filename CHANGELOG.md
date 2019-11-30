@@ -2,6 +2,7 @@
 * Test PHP 7.4 in CI
 * Fix large amounts of notices being generated whilst running on PHP 7.4
 * Return trigger characters in completion options to automatically trigger autocompletion after `->`, `::` and `$`
+* Fix some clients such as VSCode not properly completing variables and static properties due to dollar sign not being escaped in result
 
 ## 5.1.0
 * [Fix some issues with tests failing on Windows](https://gitlab.com/Serenata/Serenata/merge_requests/81) (thanks to @bpedroza)
