@@ -247,7 +247,9 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                         new SaveOptions(true)
                     ),
                     true,
-                    new CompletionOptions(false, null),
+                    // '>' should be '->' and ':' should be '::', but some clients such as VSCode do not support
+                    // multi-character triggers.
+                    new CompletionOptions(false, ['>', '$', ':']),
                     new SignatureHelpOptions(['(', ',']),
                     true,
                     false,
