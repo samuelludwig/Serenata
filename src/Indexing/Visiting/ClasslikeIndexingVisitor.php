@@ -769,7 +769,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $typeStringSpecification = null;
 
-        if ($documentation && $documentation['return']['type']) {
+        if ($documentation && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
             $typeStringSpecification = $documentation['return']['type'];
         } elseif ($node->getReturnType()) {
             $nodeType = $node->getReturnType();
@@ -840,7 +840,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['deprecated'],
             $documentation['descriptions']['short'] ?: null,
             $documentation['descriptions']['long'] ?: null,
-            $documentation['return']['description'] ?: null,
+            $documentation['return']['description'] ?? null,
             $returnTypeHint,
             $this->classlikeStack->peek(),
             $accessModifier ? $accessModifierMap[$accessModifier] : null,

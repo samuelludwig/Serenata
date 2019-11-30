@@ -175,13 +175,13 @@ final class DocblockParser
                 // Build a list of 'segments', which are just a collection of ranges indicating where each detected tag
                 // starts and stops.
                 foreach ($matches as $match) {
-                    $segments[] = [$previousMatch[0][0], $previousMatch[0][1], $match[0][1]];
+                    $segments[] = [$previousMatch[0][0] ?? null, $previousMatch[0][1] ?? 0, $match[0][1]];
 
                     $previousMatch = $match;
                 }
 
                 // NOTE: preg_match_all returns byte offsets, not character offsets.
-                $segments[] = [$previousMatch[0][0], $previousMatch[0][1], strlen($docblock)];
+                $segments[] = [$previousMatch[0][0] ?? null, $previousMatch[0][1] ?? 0, strlen($docblock)];
 
                 foreach ($segments as $segment) {
                     [$tag, $start, $end] = $segment;

@@ -1,5 +1,6 @@
 ## 5.2.0 (Unreleased)
-* To do
+* Test PHP 7.4 in CI
+* Fix large amounts of notices being generated whilst running on PHP 7.4
 
 ## 5.1.0
 * [Fix some issues with tests failing on Windows](https://gitlab.com/Serenata/Serenata/merge_requests/81) (thanks to @bpedroza)
