@@ -4,6 +4,11 @@
 * Variable completion suggestions will no longer include the dollar sign in the display text
     * This is consistent with static property completions. During display, the dollar sign only added visual noise
 * Return trigger characters in completion options to automatically trigger autocompletion after `->`, `::` and `$`
+* _Running_ Serenata _on_ PHP 7.1 and PHP 7.2 is now deprecated
+    * Both PHP 7.1 and PHP 7.2 [no longer receive active support](https://www.php.net/supported-versions.php).
+    * Support will be removed no earlier than the next major release.
+    * Analyzed code can still be anything from PHP 5.2 all the way up to 7.4.
+    * It will probably be some time until the next major release, but it's better to mention this early.
 * Fix some clients such as VSCode not properly completing variables and static properties due to dollar sign not being escaped in result
 
 ## 5.1.0
