@@ -61,6 +61,8 @@ final class JsonRpcQueueItemHandlerFactory implements JsonRpcQueueItemHandlerFac
             'serenata/deprecated/resolveType'         => 'resolveTypeJsonRpcQueueItemHandler',
             'serenata/deprecated/localizeType'        => 'localizeTypeJsonRpcQueueItemHandler',
             '$/cancelRequest'                         => 'cancelRequestJsonRpcQueueItemHandler',
+            '$/setTraceNotification'                  => 'setTraceNotificationJsonRpcQueueItemHandler',
+            '$/logTraceNotification'                  => 'logTraceNotificationJsonRpcQueueItemHandler',
         ];
 
         if (!isset($methodServiceNameMap[$method])) {

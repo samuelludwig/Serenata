@@ -166,3 +166,13 @@ services:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\IndexJsonRpcQueueItemHandler
         arguments:
             - '@backendIndexer'
+
+    setTraceNotificationJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\SetTraceJsonRpcQueueItemHandler
+        arguments:
+            - '@requestQueue'
+
+    logTraceNotificationJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\LogTraceJsonRpcQueueItemHandler
+        arguments:
+            - '@requestQueue'

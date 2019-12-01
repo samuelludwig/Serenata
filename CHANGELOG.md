@@ -1,6 +1,7 @@
 ## 5.2.0 (Unreleased)
 * Test PHP 7.4 in CI
 * Fix large amounts of notices being generated whilst running on PHP 7.4
+* [Stub handlers for `$/setTraceNotification` and `$/logTraceNotification`](https://gitlab.com/Serenata/Serenata/issues/308)
 * Variable completion suggestions will no longer include the dollar sign in the display text
     * This is consistent with static property completions. During display, the dollar sign only added visual noise
 * Return trigger characters in completion options to automatically trigger autocompletion after `->`, `::` and `$`
@@ -27,7 +28,7 @@
 
 ## 5.0.0
 * Fix PHP error when initialization options were passed, but without a configuration
-* See also the release notes for versions [5.0.0-RC](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2), [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3) and [5.0.0-RC4](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC4)
+* See also the release notes for versions [5.0.0-RC](https://gitlab.m/Serenata/Serenata/-/tags/5.0.0-RC), [5.0.0-RC2](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC2), [5.0.0-RC3](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC3) and [5.0.0-RC4](https://gitlab.com/Serenata/Serenata/-/tags/5.0.0-RC4)
 
 ## 5.0.0-RC4
 ### Improvements
