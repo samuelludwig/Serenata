@@ -36,9 +36,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$int',
                 new TextEdit(
                     new Range(new Position(4, 28), new Position(4, 30)),
-                    '$int'
+                    '\$int'
                 ),
-                '$int',
+                'int',
                 null,
                 []
             ),
@@ -61,9 +61,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 38), new Position(4, 40)),
-                    '$someClasslike'
+                    '\$someClasslike'
                 ),
-                '$someClasslike',
+                'someClasslike',
                 null,
                 []
             ),
@@ -74,9 +74,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$some',
                 new TextEdit(
                     new Range(new Position(4, 38), new Position(4, 40)),
-                    '$some'
+                    '\$some'
                 ),
-                '$some',
+                'some',
                 null,
                 []
             ),
@@ -99,9 +99,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
-                    '$someClasslike'
+                    '\$someClasslike'
                 ),
-                '$someClasslike',
+                'someClasslike',
                 null,
                 []
             ),
@@ -112,9 +112,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$some',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
-                    '$some'
+                    '\$some'
                 ),
-                '$some',
+                'some',
                 null,
                 []
             ),
@@ -125,9 +125,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$classlike',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
-                    '$classlike'
+                    '\$classlike'
                 ),
-                '$classlike',
+                'classlike',
                 null,
                 []
             ),
@@ -150,9 +150,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
-                    '$someClasslike'
+                    '\$someClasslike'
                 ),
-                '$someClasslike',
+                'someClasslike',
                 null,
                 []
             ),
@@ -163,9 +163,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$some',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
-                    '$some'
+                    '\$some'
                 ),
-                '$some',
+                'some',
                 null,
                 []
             ),
@@ -176,9 +176,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$classlike',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
-                    '$classlike'
+                    '\$classlike'
                 ),
-                '$classlike',
+                'classlike',
                 null,
                 []
             ),
@@ -201,9 +201,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$someClasslikeType',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
-                    '$someClasslikeType'
+                    '\$someClasslikeType'
                 ),
-                '$someClasslikeType',
+                'someClasslikeType',
                 null,
                 []
             ),
@@ -214,9 +214,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
-                    '$someClasslike'
+                    '\$someClasslike'
                 ),
-                '$someClasslike',
+                'someClasslike',
                 null,
                 []
             ),
@@ -227,9 +227,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$classlikeType',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
-                    '$classlikeType'
+                    '\$classlikeType'
                 ),
-                '$classlikeType',
+                'classlikeType',
                 null,
                 []
             ),
@@ -240,9 +240,9 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
                 '$classlike',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
-                    '$classlike'
+                    '\$classlike'
                 ),
-                '$classlike',
+                'classlike',
                 null,
                 []
             ),

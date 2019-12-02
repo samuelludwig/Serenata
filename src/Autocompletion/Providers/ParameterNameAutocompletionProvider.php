@@ -153,7 +153,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             CompletionItemKind::VARIABLE,
             $name,
             $this->getTextEditForSuggestion($name, $context),
-            $name,
+            mb_substr($name, 1),
             null,
             [],
             false
@@ -175,7 +175,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      */
     private function getTextEditForSuggestion(string $name, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $name);
+        return new TextEdit($context->getPrefixRange(), str_replace('$', '\$', $name));
     }
 
     /**
