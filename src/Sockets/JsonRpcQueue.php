@@ -56,7 +56,7 @@ final class JsonRpcQueue
      */
     public function pop(): JsonRpcQueueItem
     {
-        /** @var JsonRpcQueueItem $request */
+        /** @var JsonRpcQueueItem $requestQueueItem */
         $requestQueueItem = $this->queue->pop();
 
         if ($requestQueueItem->getRequest()->getId() !== null &&
