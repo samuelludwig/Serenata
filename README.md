@@ -59,6 +59,8 @@ You can select any port you desire, as long as it is not in use on your system.
 
 The memory limit can also be freely set. Serenata keeps a lot of things in memory as cache and the memory needed thus depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the server on itself, it sits at around 250 MB on a 64-bit Linux system with PHP 7.3.
 
+The server can additionally be optimized by installing certain extensions. [See the wiki](https://gitlab.com/Serenata/Serenata/wikis/Advanced%20Configuration) for more information.
+
 ## Development
 If you want to make the server part of your (existing) project and use the classes contained inside it for your own purposes:
 
