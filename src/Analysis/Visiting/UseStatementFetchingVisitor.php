@@ -134,7 +134,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\Stmt\GroupUse) {
             $prefix = ((string) $node->prefix) . '\\';
-        };
+        }
 
         foreach ($node->uses as $use) {
             $this->registerImport($node, $use, $prefix);

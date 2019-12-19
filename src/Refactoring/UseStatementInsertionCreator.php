@@ -432,7 +432,7 @@ final class UseStatementInsertionCreator
 
         if ($useStatement instanceof Node\Stmt\GroupUse) {
             $prefix = ((string) $useStatement->prefix) . '\\';
-        };
+        }
 
         return $this->typeNormalizer->getNormalizedFqcn($prefix . $useUseNode->name);
     }

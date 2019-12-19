@@ -149,7 +149,7 @@ final class DocblockParser
     {
         if ($filters === []) {
             return [];
-        };
+        }
 
         $tags = [];
         $result = [];

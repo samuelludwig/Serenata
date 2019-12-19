@@ -88,7 +88,7 @@ final class PartialParser implements Parser
     {
         if (mb_substr(trim($code), 0, 5) !== '<?php') {
             return '<?php ' . $code;
-        };
+        }
 
         return $code;
     }
