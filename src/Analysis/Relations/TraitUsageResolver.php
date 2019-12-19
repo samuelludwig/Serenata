@@ -61,6 +61,7 @@ final class TraitUsageResolver extends AbstractResolver
                     // The method is present in multiple used traits and precedences indicate that the one
                     // from this trait should not be imported.
                     $skipMethod = true;
+
                     break;
                 }
             }

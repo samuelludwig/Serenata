@@ -140,7 +140,6 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $returnTypeHint .= $nodeType->name;
         }
 
-
         $range = new Range(
             Position::createFromByteOffset(
                 $node->getAttribute('startFilePos'),

@@ -102,6 +102,7 @@ class File
     public function setLastIndexedSourceHash(?string $lastIndexedSourceHash)
     {
         $this->lastIndexedSourceHash = $lastIndexedSourceHash;
+
         return $this;
     }
 
@@ -129,6 +130,7 @@ class File
     public function setIndexedOn(DateTime $indexedOn)
     {
         $this->indexedOn = $indexedOn;
+
         return $this;
     }
 

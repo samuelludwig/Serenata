@@ -224,6 +224,7 @@ final class SignatureHelpRetriever
         for ($i = $arguments[0]->getAttribute('startFilePos') - 1; $i >= 0; --$i) {
             if ($code[$i] === '(') {
                 $startOfArgumentList = $i;
+
                 break;
             }
         }
@@ -233,6 +234,7 @@ final class SignatureHelpRetriever
         for ($i = $arguments[count($arguments) - 1]->getAttribute('endFilePos') + 1; $i < mb_strlen($code); ++$i) {
             if ($code[$i] === ')') {
                 $endOfArgumentList = $i+1;
+
                 break;
             }
         }
@@ -267,6 +269,7 @@ final class SignatureHelpRetriever
         for ($i = $argumentNodeBefore->getAttribute('endFilePos') + 1; $i < $offset; ++$i) {
             if ($code[$i] === ',') {
                 $isBeforeComma = false;
+
                 break;
             }
         }

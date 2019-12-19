@@ -67,6 +67,7 @@ final class ExpressionTypeInfo
     public function setBestMatch(?Node $bestMatch)
     {
         $this->bestMatch = $bestMatch;
+
         return $this;
     }
 
@@ -86,6 +87,7 @@ final class ExpressionTypeInfo
     public function setBestTypeOverrideMatch(?string $bestTypeOverrideMatch)
     {
         $this->bestTypeOverrideMatch = $bestTypeOverrideMatch;
+
         return $this;
     }
 
@@ -105,6 +107,7 @@ final class ExpressionTypeInfo
     public function setBestTypeOverrideMatchLine(?int $bestTypeOverrideMatchLine)
     {
         $this->bestTypeOverrideMatchLine = $bestTypeOverrideMatchLine;
+
         return $this;
     }
 
@@ -124,6 +127,7 @@ final class ExpressionTypeInfo
     public function setTypePossibilityMap(TypePossibilityMap $typePossibilityMap)
     {
         $this->typePossibilityMap = $typePossibilityMap;
+
         return $this;
     }
 

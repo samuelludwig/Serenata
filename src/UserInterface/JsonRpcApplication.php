@@ -101,6 +101,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
             $this->setupRequestHandlingSocketServer($loop, $uri);
         } catch (RuntimeException $e) {
             $output->writeln("<error>Could not bind to socket on URI {$uri}</>");
+
             return 2;
         }
 

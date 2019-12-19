@@ -39,6 +39,7 @@ final class AutocompletionPrefixDeterminer implements AutocompletionPrefixDeterm
         while ($i > 0) {
             if (in_array($source[$i], $tokens, true)) {
                 ++$i; // Don't include the boundary character itself.
+
                 break;
             }
 

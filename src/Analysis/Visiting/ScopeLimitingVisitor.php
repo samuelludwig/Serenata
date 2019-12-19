@@ -88,6 +88,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                         $node->stmts = [];
                         $node->elseifs = [$elseIfNode];
                         $node->cond = new Dummy();
+
                         break;
                     }
                 }
@@ -111,6 +112,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                         $this->memorizeNodeProperties($node, ['cases']);
 
                         $node->cases = [$caseNode];
+
                         break;
                     }
                 }
@@ -123,6 +125,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
 
                         $node->stmts = [];
                         $node->catches = [$catchNode];
+
                         break;
                     }
                 }

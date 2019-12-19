@@ -38,6 +38,7 @@ final class TypePossibilityMap
     public function set(string $type, int $possibility)
     {
         $this->map[$type] = $possibility;
+
         return $this;
     }
 
@@ -49,6 +50,7 @@ final class TypePossibilityMap
     public function remove(string $type)
     {
         unset($this->map[$type]);
+
         return $this;
     }
 

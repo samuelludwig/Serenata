@@ -186,6 +186,7 @@ final class PartialParser implements Parser
                 foreach ($node->expr->args as $i => $arg) {
                     if ($arg->value instanceof Node\Expr\ConstFetch && $arg->value->name->toString() === $dummyName) {
                         array_splice($node->expr->args, $i, $i+1);
+
                         break;
                     }
                 }
@@ -263,7 +264,6 @@ final class PartialParser implements Parser
                 }
             }
         }
-
 
         return $nodes;
     }
