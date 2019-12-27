@@ -50,12 +50,12 @@ final class TextDocumentContentRegistry
     }
 
     /**
-     * @param string $uri
-     * @param string $contents
+     * @param string      $uri
+     * @param string|null $contents
      */
-    public function update(string $uri, string $contents): void
+    public function update(string $uri, ?string $contents): void
     {
-        $this->textDocumentContentsMap[$uri] = $contents;
+        $this->textDocumentContentsMap[$uri] = $contents ?? '';
     }
 
     /**

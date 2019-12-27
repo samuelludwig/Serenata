@@ -59,11 +59,11 @@ final class DidSaveJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandl
     }
 
     /**
-     * @param string                         $uri
-     * @param string                         $contents
+     * @param string                        $uri
+     * @param string|null                   $contents
      * @param JsonRpcMessageSenderInterface $sender
      */
-    public function handle(string $uri, string $contents, JsonRpcMessageSenderInterface $sender): void
+    public function handle(string $uri, ?string $contents, JsonRpcMessageSenderInterface $sender): void
     {
         $this->textDocumentContentRegistry->update($uri, $contents);
 
