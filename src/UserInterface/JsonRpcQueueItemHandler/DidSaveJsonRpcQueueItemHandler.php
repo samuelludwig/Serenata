@@ -65,7 +65,12 @@ final class DidSaveJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandl
      */
     public function handle(string $uri, ?string $contents, JsonRpcMessageSenderInterface $sender): void
     {
-        $this->textDocumentContentRegistry->update($uri, $contents);
+        if ($contents !== null) {
+            $this->textDocumentContentRegistry->update($uri, $contents);
+        } else {
+            // Force refetching from the file, since it now has the latest state.
+            $this->textDocumentContentRegistry->clear($uri);
+        }
 
         $this->indexer->index($uri, true, $sender);
     }
