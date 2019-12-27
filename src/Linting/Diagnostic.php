@@ -126,7 +126,7 @@ final class Diagnostic implements JsonSerializable
             'code'               => $this->getCode(),
             'source'             => $this->getSource(),
             'message'            => $this->getMessage(),
-            'relatedInformation' => $this->getRelatedInformation(),
+            'relatedInformation' => $this->getRelatedInformation() ?? [],
         ];
     }
 }
