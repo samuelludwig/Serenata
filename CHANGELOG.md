@@ -11,6 +11,8 @@
     * Analyzed code can still be anything from PHP 5.2 all the way up to 7.4.
     * It will probably be some time until the next major release, but it's better to mention this early.
 * Fix some clients such as VSCode not properly completing variables and static properties due to dollar sign not being escaped in result
+* [Return empty array for `relatedInformation` for `Diagnostic` items instead of `null` to fix errors with Sublime-LSP client](https://gitlab.com/Serenata/Serenata/merge_requests/83) (thanks to @mdeboer)
+* [Fix `textDocument/didSave` notifications with `text` set to null causing errors, whilst this was valid according to the specification](https://gitlab.com/Serenata/Serenata/merge_requests/82) (thanks to @mdeboer)
 
 ## 5.1.0
 * [Fix some issues with tests failing on Windows](https://gitlab.com/Serenata/Serenata/merge_requests/81) (thanks to @bpedroza)
