@@ -1,4 +1,7 @@
-## 5.2.0 (Unreleased)
+## 5.3.0 (Unreleased)
+* To be determined
+
+## 5.2.0
 * Test PHP 7.4 in CI
 * Fix large amounts of notices being generated whilst running on PHP 7.4
 * [Stub handlers for `$/setTraceNotification` and `$/logTraceNotification`](https://gitlab.com/Serenata/Serenata/issues/308)
