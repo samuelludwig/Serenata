@@ -206,7 +206,6 @@ final class TraitUsageResolver extends AbstractResolver
                     'fqcn'            => $traitMethodData['declaringStructure']['fqcn'],
                     'uri'             => $traitMethodData['declaringStructure']['uri'],
                     'range'           => $traitMethodData['declaringStructure']['range'],
-                    'endLine'         => $traitMethodData['declaringStructure']['endLine'],
                     'type'            => $traitMethodData['declaringStructure']['type'],
                     'memberRange'     => $traitMethodData['range'],
                 ];

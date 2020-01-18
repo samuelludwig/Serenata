@@ -1,5 +1,5 @@
 ## 5.3.0 (Unreleased)
-* To be determined
+* [Fix notice `Undefined index: endLine in phar:///.../src/Analysis/Relations/TraitUsageResolver.php on line 209`](https://gitlab.com/Serenata/Serenata/issues/306)
 
 ## 5.2.0
 * Test PHP 7.4 in CI
