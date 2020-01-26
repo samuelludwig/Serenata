@@ -36,7 +36,7 @@ final class TypeList extends ImmutableSet
      */
     public static function createFromStringTypeList(string ...$types): self
     {
-        return new self(...array_map(function (string $type) {
+        return new self(...array_map(function (string $type): Type {
             return Type::createFromString($type);
         }, $types));
     }
