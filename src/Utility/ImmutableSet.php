@@ -11,16 +11,20 @@ use IteratorAggregate;
  * Represents an immutable set of values.
  *
  * @final
+ *
+ * @template T
+ *
+ * @implements IteratorAggregate<int,T>
  */
 class ImmutableSet implements IteratorAggregate
 {
     /**
-     * @var mixed[]
+     * @var T[]
      */
     private $elements;
 
     /**
-     * @param mixed[] ...$elements
+     * @param T[] ...$elements
      */
     public function __construct(...$elements)
     {
@@ -28,7 +32,7 @@ class ImmutableSet implements IteratorAggregate
     }
 
     /**
-     * @return mixed[]
+     * @return T[]
      */
     public function toArray(): array
     {
@@ -36,7 +40,7 @@ class ImmutableSet implements IteratorAggregate
     }
 
     /**
-     * @param mixed $element
+     * @param T $element
      *
      * @return bool
      */
@@ -54,7 +58,7 @@ class ImmutableSet implements IteratorAggregate
     }
 
     /**
-     * @param ImmutableSet $other
+     * @param ImmutableSet<T> $other
      *
      * @return bool
      */
@@ -68,7 +72,7 @@ class ImmutableSet implements IteratorAggregate
     /**
      * @param Closure $closure
      *
-     * @return static
+     * @return static<T>
      */
     public function filter(Closure $closure): ImmutableSet
     {
