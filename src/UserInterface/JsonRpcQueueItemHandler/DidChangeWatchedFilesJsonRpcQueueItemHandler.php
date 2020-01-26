@@ -2,12 +2,14 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\FileEvent;
@@ -42,7 +44,7 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams();
 
@@ -52,7 +54,11 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
 
         $this->handle($this->createParamsFromRawArray($parameters), $queueItem->getJsonRpcMessageSender());
 
-        return null; // This is a notification that doesn't expect a response.
+        // This is a notification that doesn't expect a response.
+        $deferred = new Deferred();
+        $deferred->resolve(null);
+
+        return $deferred->promise();
     }
 
     /**

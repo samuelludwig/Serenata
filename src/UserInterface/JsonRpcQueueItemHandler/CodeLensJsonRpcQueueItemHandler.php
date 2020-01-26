@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\CodeLenses\CodeLens;
 use Serenata\CodeLenses\CodeLensesRetriever;
 
@@ -9,7 +12,6 @@ use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Utility\TextDocumentItem;
 
@@ -43,17 +45,22 @@ final class CodeLensJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        return new JsonRpcResponse(
+        $response = new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
             $this->getAll(
                 $parameters['textDocument']['uri'],
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri'])
             )
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

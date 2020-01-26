@@ -2,11 +2,13 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Symbols\SymbolInformation;
 use Serenata\Symbols\DocumentSymbolRetriever;
@@ -39,14 +41,19 @@ final class DocumentSymbolJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        return new JsonRpcResponse(
+        $response = new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
             $this->getAll($parameters['textDocument']['uri'])
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

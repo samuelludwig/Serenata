@@ -3,7 +3,7 @@
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
 /**
- * Base class for commands.
+ * Base class for queue item handlers.
  */
 abstract class AbstractJsonRpcQueueItemHandler implements JsonRpcQueueItemHandlerInterface
 {

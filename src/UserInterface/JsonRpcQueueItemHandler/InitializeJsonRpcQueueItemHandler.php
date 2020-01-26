@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use UnexpectedValueException;
 
 use Serenata\Indexing\Indexer;
@@ -15,7 +18,6 @@ use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\MessageType;
@@ -118,7 +120,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $params = $queueItem->getRequest()->getParams();
 
@@ -159,14 +161,14 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      *
      * @throws InvalidArgumentsException
      *
-     * @return JsonRpcResponse|null
+     * @return ExtendedPromiseInterface
      */
     public function initialize(
         InitializeParams $initializeParams,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender,
         JsonRpcRequest $jsonRpcRequest,
         bool $initializeIndexForProject = true
-    ): ?JsonRpcResponse {
+    ): ExtendedPromiseInterface {
         if ($this->activeWorkspaceManager->getActiveWorkspace() !== null) {
             throw new UnexpectedValueException(
                 'Initialize was already called, send a shutdown request first if you want to initialize another project'
@@ -235,7 +237,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
             }
         }
 
-        return new JsonRpcResponse(
+        $response = new JsonRpcResponse(
             $jsonRpcRequest->getId(),
             new InitializeResult(
                 new ServerCapabilities(
@@ -282,6 +284,11 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                 )
             )
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Common\Position;
 
 use Serenata\Indexing\TextDocumentContentRegistry;
@@ -10,7 +13,6 @@ use Serenata\GotoDefinition\DefinitionLocator;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
@@ -45,11 +47,11 @@ final class DefinitionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        return new JsonRpcResponse(
+        $response = new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
             $this->gotoDefinition(
                 $parameters['textDocument']['uri'],
@@ -57,6 +59,11 @@ final class DefinitionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
                 new Position($parameters['position']['line'], $parameters['position']['character'])
             )
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

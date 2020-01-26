@@ -8,6 +8,8 @@ use RuntimeException;
 
 use Ds\Vector;
 
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Indexing\IncorrectDatabaseVersionException;
 
 use Serenata\UserInterface\JsonRpcQueueItemHandler;
@@ -60,47 +62,75 @@ final class JsonRpcQueueItemProcessor
      */
     public function process(JsonRpcQueueItem $queueItem): void
     {
-        $error = null;
-        $message = null;
-
         if ($this->activeWorkspaceManager->getActiveWorkspace() === null &&
             $queueItem->getRequest()->getMethod() !== 'initialize'
         ) {
-            $error = new JsonRpcError(
-                JsonRpcErrorCode::SERVER_NOT_INITIALIZED,
-                'Server not initialized yet, no active workspace'
+            $queueItem->getJsonRpcMessageSender()->send(
+                new JsonRpcResponse($queueItem->getRequest()->getId(), null, new JsonRpcError(
+                    JsonRpcErrorCode::SERVER_NOT_INITIALIZED,
+                    'Server not initialized yet, no active workspace'
+                ))
             );
-        } elseif (!$queueItem->getIsCancelled()) {
-            try {
-                $message = $this->handle($queueItem);
-            } catch (UnknownJsonRpcRequestMethodException $e) {
-                $error = new JsonRpcError(JsonRpcErrorCode::METHOD_NOT_FOUND, $e->getMessage());
-            } catch (RequestParsingException $e) {
-                $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-            } catch (JsonRpcQueueItemHandler\InvalidArgumentsException $e) {
-                $error = new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $e->getMessage());
-            } catch (IncorrectDatabaseVersionException $e) {
-                $error = new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $e->getMessage());
-            } catch (RuntimeException $e) {
-                $error = new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $e->getMessage());
-            } catch (Throwable $e) {
-                $error = new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $e->getMessage(), [
-                    'line'      => $e->getLine(),
-                    'file'      => $e->getFile(),
-                    'backtrace' => $this->getCompleteBacktraceFromThrowable($e),
-                ]);
+
+            return;
+        }
+
+        if ($queueItem->getIsCancelled()) {
+            $queueItem->getJsonRpcMessageSender()->send(
+                new JsonRpcResponse($queueItem->getRequest()->getId(), null, new JsonRpcError(
+                    JsonRpcErrorCode::REQUEST_CANCELLED,
+                    'Request was cancelled'
+                ))
+            );
+
+            return;
+        }
+
+        $onFulfilled = function (?JsonRpcMessageInterface $message) use ($queueItem): void {
+            if ($message !== null) {
+                $queueItem->getJsonRpcMessageSender()->send($message);
             }
-        } else {
-            $error = new JsonRpcError(JsonRpcErrorCode::REQUEST_CANCELLED, 'Request was cancelled');
+        };
+
+        $onRejected = function (Throwable $throwable) use ($queueItem): void {
+            $queueItem->getJsonRpcMessageSender()->send(new JsonRpcResponse(
+                $queueItem->getRequest()->getId(),
+                null,
+                $this->convertExceptionToJsonRpcError($throwable)
+            ));
+        };
+
+        try {
+            $this->handle($queueItem)->then($onFulfilled, $onRejected);
+        } catch (Throwable $throwable) {
+            $onRejected($throwable);
+        }
+    }
+
+    /**
+     * @param Throwable $throwable
+     *
+     * @return JsonRpcError
+     */
+    private function convertExceptionToJsonRpcError(Throwable $throwable): JsonRpcError
+    {
+        if ($throwable instanceof UnknownJsonRpcRequestMethodException) {
+            return new JsonRpcError(JsonRpcErrorCode::METHOD_NOT_FOUND, $throwable->getMessage());
+        } elseif ($throwable instanceof RequestParsingException) {
+            return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage());
+        } elseif ($throwable instanceof JsonRpcQueueItemHandler\InvalidArgumentsException) {
+            return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage());
+        } elseif ($throwable instanceof IncorrectDatabaseVersionException) {
+            return new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $throwable->getMessage());
+        } elseif ($throwable instanceof RuntimeException) {
+            return new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $throwable->getMessage());
         }
 
-        if ($error !== null) {
-            $message = new JsonRpcResponse($queueItem->getRequest()->getId(), null, $error);
-        }
-
-        if ($message !== null) {
-            $queueItem->getJsonRpcMessageSender()->send($message);
-        }
+        return new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $throwable->getMessage(), [
+            'line'      => $throwable->getLine(),
+            'file'      => $throwable->getFile(),
+            'backtrace' => $this->getCompleteBacktraceFromThrowable($throwable),
+        ]);
     }
 
     /**
@@ -111,9 +141,9 @@ final class JsonRpcQueueItemProcessor
      * @throws UnknownJsonRpcRequestMethodException
      * @throws Throwable
      *
-     * @return JsonRpcMessageInterface|null
+     * @return ExtendedPromiseInterface ExtendedPromiseInterface<JsonRpcMessageInterface|null>
      */
-    private function handle(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    private function handle(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $params = $queueItem->getRequest()->getParams();
 

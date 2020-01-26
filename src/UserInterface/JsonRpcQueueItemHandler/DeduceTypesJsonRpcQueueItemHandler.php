@@ -2,13 +2,15 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Common\Position;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Utility\TextDocumentItem;
 use Serenata\Utility\SourceCodeStreamReader;
@@ -45,7 +47,7 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
@@ -77,7 +79,10 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
             isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
         );
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
+        $deferred = new Deferred();
+        $deferred->resolve(new JsonRpcResponse($queueItem->getRequest()->getId(), $result));
+
+        return $deferred->promise();
     }
 
     /**

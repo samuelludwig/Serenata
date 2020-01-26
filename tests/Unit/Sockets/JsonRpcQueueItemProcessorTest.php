@@ -5,6 +5,8 @@ namespace Serenata\Tests\Unit\Sockets;
 use LogicException;
 use UnexpectedValueException;
 
+use React\Promise\Deferred;
+
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
@@ -114,7 +116,12 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
 
         $response = new JsonRpcResponse('theRequestId', 'result', null, '2.0');
 
-        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->willReturn($response);
+        $responseDeferred = new Deferred();
+        $responseDeferred->resolve($response);
+
+        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->willReturn(
+            $responseDeferred->promise()
+        );
 
         $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
             function (JsonRpcResponse $jsonRpcResponse) use ($response) {
@@ -195,6 +202,35 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
                 static::assertSame('theRequestId', $jsonRpcResponse->getId());
                 static::assertSame(JsonRpcErrorCode::REQUEST_CANCELLED, $jsonRpcResponse->getError()->getCode());
                 static::assertSame('Request was cancelled', $jsonRpcResponse->getError()->getMessage());
+                static::assertSame(null, $jsonRpcResponse->getError()->getData());
+            }
+        );
+
+        $this->jsonRpcQueueItemProcessor->process($queueItem);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSendsHandlesPromiseErrorsWhenExceptionOccursDuringCommandRequestHandling(): void
+    {
+        $queueItem = new JsonRpcQueueItem(
+            new JsonRpcRequest('theRequestId', $this->testMethod),
+            $this->jsonRpcResponseSenderMock
+        );
+
+        $responseDeferred = new Deferred();
+        $responseDeferred->reject(new UnexpectedValueException('Exception message'));
+
+        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->willReturn(
+            $responseDeferred->promise()
+        );
+
+        $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
+            function (JsonRpcResponse $jsonRpcResponse) {
+                static::assertSame('theRequestId', $jsonRpcResponse->getId());
+                static::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
+                static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
                 static::assertSame(null, $jsonRpcResponse->getError()->getData());
             }
         );

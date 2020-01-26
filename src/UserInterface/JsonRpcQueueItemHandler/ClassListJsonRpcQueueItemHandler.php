@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\ClasslikeListProviderInterface;
 
 use Serenata\Analysis\Typing\FileClasslikeListProviderInterface;
@@ -10,7 +13,6 @@ use Serenata\Indexing\StorageInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * JsonRpcQueueItemHandlerthat shows a list of available classes, interfaces and traits.
@@ -52,16 +54,21 @@ final class ClassListJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
         $uri = $arguments['uri'] ?? null;
 
-        return new JsonRpcResponse(
+        $response = new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
             ($uri !== null) ? $this->getAllForFilePath($uri) : $this->getAll()
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

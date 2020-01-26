@@ -2,9 +2,11 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * JsonRpcQueueItemHandlerthat cancels an open request.
@@ -27,7 +29,7 @@ final class CancelRequestJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIte
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
@@ -37,6 +39,10 @@ final class CancelRequestJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIte
 
         $this->requestQueue->cancel($parameters['id']);
 
-        return null;
+        // This is a notification that doesn't expect a response.
+        $deferred = new Deferred();
+        $deferred->resolve(null);
+
+        return $deferred->promise();
     }
 }

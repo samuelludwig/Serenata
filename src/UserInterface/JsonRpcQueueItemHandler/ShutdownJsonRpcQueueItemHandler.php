@@ -2,13 +2,15 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\ClearableCacheInterface;
 
 use Serenata\Indexing\ManagerRegistry;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Workspace\ActiveWorkspaceManager;
 
@@ -50,11 +52,14 @@ final class ShutdownJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHand
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $this->shutdown();
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), null);
+        $deferred = new Deferred();
+        $deferred->resolve(new JsonRpcResponse($queueItem->getRequest()->getId(), null));
+
+        return $deferred->promise();
     }
 
     /**

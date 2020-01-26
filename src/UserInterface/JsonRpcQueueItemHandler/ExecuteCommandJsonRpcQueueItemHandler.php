@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Commands\CommandFactory;
 use Serenata\Commands\CommandExecutorFactory;
 use Serenata\Commands\BadCommandArgumentsException;
@@ -10,7 +13,6 @@ use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Handler that executes a command requested by the client.
@@ -50,7 +52,7 @@ final class ExecuteCommandJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
@@ -75,6 +77,9 @@ final class ExecuteCommandJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
             ));
         }
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), null);
+        $deferred = new Deferred();
+        $deferred->resolve(new JsonRpcResponse($queueItem->getRequest()->getId(), null));
+
+        return $deferred->promise();
     }
 }

@@ -2,13 +2,15 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * JsonRpcQueueItemHandlerthat shows information about a class, interface or trait.
@@ -40,7 +42,7 @@ final class ClassInfoJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
@@ -50,7 +52,13 @@ final class ClassInfoJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
             );
         }
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getClassInfo($arguments['name']));
+        $deferred = new Deferred();
+        $deferred->resolve(new JsonRpcResponse(
+            $queueItem->getRequest()->getId(),
+            $this->getClassInfo($arguments['name'])
+        ));
+
+        return $deferred->promise();
     }
 
     /**

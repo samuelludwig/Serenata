@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Linting\Linter;
@@ -9,7 +12,6 @@ use Serenata\Linting\PublishDiagnosticsParams;
 
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Handles diagnostics requests.
@@ -42,7 +44,7 @@ final class DiagnosticsJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
@@ -51,7 +53,7 @@ final class DiagnosticsJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
         }
 
         // Don't send a response, but send a notification (request with null ID) instead.
-        return new JsonRpcRequest(
+        $response = new JsonRpcRequest(
             null,
             'textDocument/publishDiagnostics',
             $this->lint(
@@ -59,6 +61,11 @@ final class DiagnosticsJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
                 $this->textDocumentContentRegistry->get($parameters['uri'])
             )->jsonSerialize()
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

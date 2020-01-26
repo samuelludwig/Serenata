@@ -2,13 +2,15 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Common\Position;
 
 use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 use Serenata\Tooltips\TooltipResult;
 use Serenata\Tooltips\TooltipProvider;
@@ -45,11 +47,11 @@ final class HoverJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandler
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams() ?: [];
 
-        return new JsonRpcResponse(
+        $response = new JsonRpcResponse(
             $queueItem->getRequest()->getId(),
             $this->getTooltip(
                 $parameters['textDocument']['uri'],
@@ -57,6 +59,11 @@ final class HoverJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandler
                 new Position($parameters['position']['line'], $parameters['position']['character'])
             )
         );
+
+        $deferred = new Deferred();
+        $deferred->resolve($response);
+
+        return $deferred->promise();
     }
 
     /**

@@ -2,11 +2,13 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\FunctionListProviderInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * JsonRpcQueueItemHandlerthat shows a list of global functions.
@@ -31,9 +33,12 @@ final class GlobalFunctionsJsonRpcQueueItemHandler extends AbstractJsonRpcQueueI
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getGlobalFunctions());
+        $deferred = new Deferred();
+        $deferred->resolve(new JsonRpcResponse($queueItem->getRequest()->getId(), $this->getGlobalFunctions()));
+
+        return $deferred->promise();
     }
 
      /**

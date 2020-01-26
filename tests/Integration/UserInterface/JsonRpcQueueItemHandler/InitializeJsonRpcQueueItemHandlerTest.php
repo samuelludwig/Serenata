@@ -90,46 +90,48 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             false
         );
 
-        static::assertEquals(new JsonRpcResponse('TESTID', new InitializeResult(new ServerCapabilities(
-            new TextDocumentSyncOptions(
+        $response->done(function (JsonRpcResponse $response): void {
+            static::assertEquals(new JsonRpcResponse('TESTID', new InitializeResult(new ServerCapabilities(
+                new TextDocumentSyncOptions(
+                    false,
+                    1,
+                    false,
+                    false,
+                    new SaveOptions(true)
+                ),
+                true,
+                new CompletionOptions(false, ['>', '$', ':']),
+                new SignatureHelpOptions(['(', ',']),
+                true,
                 false,
-                1,
                 false,
-                false,
-                new SaveOptions(true)
-            ),
-            true,
-            new CompletionOptions(false, ['>', '$', ':']),
-            new SignatureHelpOptions(['(', ',']),
-            true,
-            false,
-            false,
-            [
-                'workDoneProgress' => true,
-            ],
-            true,
-            true,
-            false,
-            false,
-            [
-                'resolveProvider' => true,
-            ],
-            false,
-            false,
-            null,
-            false,
-            null,
-            false,
-            false,
-            null,
-            [
-                'workspaceFolders' => [
-                    'supported'           => false,
-                    'changeNotifications' => false,
+                [
+                    'workDoneProgress' => true,
                 ],
-            ],
-            null
-        ))), $response);
+                true,
+                true,
+                false,
+                false,
+                [
+                    'resolveProvider' => true,
+                ],
+                false,
+                false,
+                null,
+                false,
+                null,
+                false,
+                false,
+                null,
+                [
+                    'workspaceFolders' => [
+                        'supported'           => false,
+                        'changeNotifications' => false,
+                    ],
+                ],
+                null
+            ))), $response);
+        });
     }
 
     /**

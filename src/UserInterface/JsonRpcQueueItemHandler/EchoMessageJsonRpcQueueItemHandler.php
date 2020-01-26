@@ -2,8 +2,10 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * Special command that sends back (echoes) the message included in the request.
@@ -15,7 +17,7 @@ final class EchoMessageJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
@@ -23,6 +25,9 @@ final class EchoMessageJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
             throw new InvalidArgumentsException('Missing "message" in parameters for request');
         }
 
-        return $arguments['message'];
+        $deferred = new Deferred();
+        $deferred->resolve($arguments['message']);
+
+        return $deferred->promise();
     }
 }

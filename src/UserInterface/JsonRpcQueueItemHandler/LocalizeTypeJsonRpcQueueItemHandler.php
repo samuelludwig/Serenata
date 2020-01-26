@@ -2,6 +2,9 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Analysis\Visiting\UseStatementKind;
 
 use Serenata\Common\Position;
@@ -13,7 +16,6 @@ use Serenata\NameQualificationUtilities\PositionalNameLocalizerFactoryInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * JsonRpcQueueItemHandlerthat makes a FQCN relative to local use statements in a file.
@@ -45,7 +47,7 @@ final class LocalizeTypeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItem
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $arguments = $queueItem->getRequest()->getParams() ?: [];
 
@@ -66,7 +68,10 @@ final class LocalizeTypeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItem
             isset($arguments['kind']) ? $arguments['kind'] : UseStatementKind::TYPE_CLASSLIKE
         );
 
-        return new JsonRpcResponse($queueItem->getRequest()->getId(), $type);
+        $deferred = new Deferred();
+        $deferred->resolve(new JsonRpcResponse($queueItem->getRequest()->getId(), $type));
+
+        return $deferred->promise();
     }
 
     /**

@@ -2,11 +2,13 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 /**
@@ -45,7 +47,7 @@ final class DidSaveJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandl
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
         $parameters = $queueItem->getRequest()->getParams();
 
@@ -55,7 +57,11 @@ final class DidSaveJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHandl
 
         $this->handle($parameters['textDocument']['uri'], $parameters['text'], $queueItem->getJsonRpcMessageSender());
 
-        return null; // This is a notification that doesn't expect a response.
+        // This is a notification that doesn't expect a response.
+        $deferred = new Deferred();
+        $deferred->resolve(null);
+
+        return $deferred->promise();
     }
 
     /**

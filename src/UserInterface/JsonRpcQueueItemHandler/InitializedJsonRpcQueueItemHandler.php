@@ -2,8 +2,10 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use React\Promise\Deferred;
+use React\Promise\ExtendedPromiseInterface;
+
 use Serenata\Sockets\JsonRpcQueueItem;
-use Serenata\Sockets\JsonRpcMessageInterface;
 
 /**
  * JsonRpcQueueItemHandlerthat handles the "initialized" notification.
@@ -13,8 +15,12 @@ final class InitializedJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
     /**
      * @inheritDoc
      */
-    public function execute(JsonRpcQueueItem $queueItem): ?JsonRpcMessageInterface
+    public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        return null; // This is a notification sent by the client that doesn't need any response.
+        // This is a notification that doesn't expect a response.
+        $deferred = new Deferred();
+        $deferred->resolve(null);
+
+        return $deferred->promise();
     }
 }
