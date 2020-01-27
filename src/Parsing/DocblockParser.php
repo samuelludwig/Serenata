@@ -4,7 +4,6 @@ namespace Serenata\Parsing;
 
 use DomainException;
 use InvalidArgumentException;
-use UnexpectedValueException;
 
 use League\HTMLToMarkdown\HtmlConverterInterface;
 
