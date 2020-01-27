@@ -93,6 +93,8 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
             ]);
         } catch (Throwable $t) {
             $this->handleThrowable($t);
+
+            $file = null; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
 
         if ($file === null) {

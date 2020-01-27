@@ -645,6 +645,9 @@ final class DocblockParser
         // phpcs:enable
         $methods = [];
 
+        $type = null;
+        $description = null;
+
         if (isset($tags[static::METHOD])) {
             foreach ($tags[static::METHOD] as $tag) {
                 // The method signature can contain spaces, so we can't use a simple filterParameterTag.
@@ -678,6 +681,7 @@ final class DocblockParser
 
                     $requiredParameters = [];
                     $optionalParameters = [];
+                    $methodSignature = null;
 
                     if (preg_match('/^([A-Za-z0-9_]+)\((.*)\)$/', $methodSignature, $match) !== false) {
                         $methodName = $match[1];
@@ -692,6 +696,9 @@ final class DocblockParser
                         );
 
                         foreach ($matches as $parameterMatch) {
+                            $parameterName = null;
+                            $parameterType = null;
+                            $defaultValue = null;
                             $partCount = count($parameterMatch);
 
                             if ($partCount === 4) {
