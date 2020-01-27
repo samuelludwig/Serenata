@@ -657,6 +657,7 @@ final class DocblockParser
                     $match
                 ) !== false) {
                     $partCount = count($match);
+                    $methodSignature = null;
 
                     if ($partCount === 5) {
                         $type = $match[2] !== null && $match[2] !== '' ? $match[2] : 'void';
@@ -681,7 +682,6 @@ final class DocblockParser
 
                     $requiredParameters = [];
                     $optionalParameters = [];
-                    $methodSignature = null;
 
                     if (preg_match('/^([A-Za-z0-9_]+)\((.*)\)$/', $methodSignature, $match) !== false) {
                         $methodName = $match[1];
