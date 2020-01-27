@@ -59,19 +59,20 @@ test:run-phpcs:
     dependencies:
         - build:php-7.4
 
-# TODO: Enable when all the existing errors have been fixed
-# test:run-phpstan:
-#     image: php:7.4-cli-alpine
-#     stage: test
-#     script:
-#         - php vendor/bin/phpstan analyse --level=max --no-interaction --no-progress --error-format codeClimate src > phpstan-report.json
-#     artifacts:
-#         when: always
-#         expire_in: 1 hrs
-#         paths:
-#             - phpstan-report.json
-#     dependencies:
-#         - build:php-7.4
+test:run-phpstan:
+    image: php:7.4-cli-alpine
+    stage: test
+    script:
+        # TODO: Enable when all the existing errors have been fixed (https://gitlab.com/Serenata/Serenata/issues/277).
+        # - php vendor/bin/phpstan analyse --level=max --no-interaction --no-progress --error-format codeClimate src > phpstan-report.json
+        - php vendor/bin/phpstan analyse --level=0 --no-interaction --no-progress --error-format codeClimate src > phpstan-report.json
+    artifacts:
+        when: always
+        expire_in: 1 hrs
+        paths:
+            - phpstan-report.json
+    dependencies:
+        - build:php-7.4
 
 .test-run-phpunit: &test-run-phpunit
     script:
