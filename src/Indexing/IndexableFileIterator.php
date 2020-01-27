@@ -63,7 +63,7 @@ final class IndexableFileIterator implements IteratorAggregate
         $isFile = is_file($uri);
 
         /** @var string[] $globsToAdhereTo */
-        $globsToAdhereTo = array_map(function (string $extension) {
+        $globsToAdhereTo = array_map(function (string $extension): string {
             return '*.' . $extension;
         }, $this->extensionsToIndex);
 

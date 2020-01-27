@@ -49,7 +49,7 @@ final class FunctionParameterPrettyPrinter
         $label = '';
 
         if (count($parameter['types']) > 0) {
-            $label .= $this->typeListPrettyPrinter->print(array_map(function (array $type) {
+            $label .= $this->typeListPrettyPrinter->print(array_map(function (array $type): string {
                 return $this->getClassNameFromFqcn($type['type']);
             }, $parameter['types']));
 

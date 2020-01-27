@@ -361,7 +361,7 @@ final class SignatureHelpRetriever
      */
     private function formatSignatureLabel(string $name, array $parameters): string
     {
-        return $name . '(' . implode(', ', array_map(function (ParameterInformation $parameterInformation) {
+        return $name . '(' . implode(', ', array_map(function (ParameterInformation $parameterInformation): string {
             return $parameterInformation->getLabel();
         }, $parameters)) . ')';
     }

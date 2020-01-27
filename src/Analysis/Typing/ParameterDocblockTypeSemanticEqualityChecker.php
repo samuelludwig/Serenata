@@ -138,7 +138,10 @@ final class ParameterDocblockTypeSemanticEqualityChecker
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
             return new DocblockTypeParser\CompoundDocblockType(
                 ...array_map(
-                    function (DocblockTypeParser\DocblockType $type) use ($filePosition, $positionalNameResolver) {
+                    function (DocblockTypeParser\DocblockType $type) use (
+                        $filePosition,
+                        $positionalNameResolver
+                    ): DocblockTypeParser\DocblockType {
                         return $this->getResolvedDocblockParameterType($type, $filePosition, $positionalNameResolver);
                     },
                     $docblockType->getParts()
@@ -192,7 +195,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
         TypeList $parameterTypeList,
         DocblockTypeParser\DocblockType $docblockType
     ): bool {
-        $parameterTypeListAsCompoundTypeString = implode('|', array_map(function (Type $type) {
+        $parameterTypeListAsCompoundTypeString = implode('|', array_map(function (Type $type): string {
             return $type->toString();
         }, $parameterTypeList->toArray()));
 
@@ -209,7 +212,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
      */
     private function doesParameterTypeListContainClassType(TypeList $typeList): bool
     {
-        return !$typeList->filter(function (Type $type) {
+        return !$typeList->filter(function (Type $type): bool {
             return $type instanceof ClassType;
         })->isEmpty();
     }
@@ -234,7 +237,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
 
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
             $docblockTypesThatAreNotArrayTypes = $docblockType->filter(
-                function (DocblockTypeParser\DocblockType $docblockType) {
+                function (DocblockTypeParser\DocblockType $docblockType): bool {
                     return
                         !$docblockType instanceof DocblockTypeParser\ArrayDocblockType &&
                         !$docblockType instanceof DocblockTypeParser\NullDocblockType;
@@ -271,7 +274,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
 
         if ($docblockType instanceof DocblockTypeParser\CompoundDocblockType) {
             $docblockTypesThatAreNotClassTypes = $docblockType->filter(
-                function (DocblockTypeParser\DocblockType $docblockType) {
+                function (DocblockTypeParser\DocblockType $docblockType): bool {
                     return
                         !$docblockType instanceof DocblockTypeParser\ClassDocblockType &&
                         !$docblockType instanceof DocblockTypeParser\NullDocblockType;
@@ -283,7 +286,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
             }
 
             $docblockTypesThatAreClassTypes = $docblockType->filter(
-                function (DocblockTypeParser\DocblockType $docblockType) {
+                function (DocblockTypeParser\DocblockType $docblockType): bool {
                     return $docblockType instanceof DocblockTypeParser\ClassDocblockType;
                 }
             );
@@ -293,7 +296,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
             $docblockTypesThatAreClassTypes = [$docblockType];
         }
 
-        $parameterClassTypes = $parameterTypeList->filter(function (Type $type) {
+        $parameterClassTypes = $parameterTypeList->filter(function (Type $type): bool {
             return $type instanceof ClassType;
         });
 

@@ -42,7 +42,7 @@ final class WorkspaceEventFunctionRegistryMediator
      */
     private function setup(): void
     {
-        $this->eventEmitter->on(WorkspaceEventName::CHANGED, function (string $filePath) {
+        $this->eventEmitter->on(WorkspaceEventName::CHANGED, function (string $filePath): void {
             $this->functionListRegistry->reset();
         });
     }

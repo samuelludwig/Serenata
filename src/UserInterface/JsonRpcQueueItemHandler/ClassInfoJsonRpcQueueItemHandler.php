@@ -44,7 +44,9 @@ final class ClassInfoJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($arguments['name'])) {
             throw new InvalidArgumentsException(

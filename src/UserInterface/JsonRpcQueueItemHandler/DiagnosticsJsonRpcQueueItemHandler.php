@@ -46,7 +46,9 @@ final class DiagnosticsJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $parameters = $queueItem->getRequest()->getParams() ?: [];
+        $parameters = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($parameters['uri'])) {
             throw new InvalidArgumentsException('"uri" parameter must be supplied');

@@ -75,7 +75,7 @@ final class ExpressionTypeInfoMap
         $newMap = [];
 
         foreach ($this->map as $expression => $data) {
-            if (in_array($expression, $exclusionList)) {
+            if (in_array($expression, $exclusionList, true)) {
                 $newMap[$expression] = $data;
             }
         }

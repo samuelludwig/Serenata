@@ -213,7 +213,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $throws[] = new Structures\ThrowsInfo(
                 $localType,
                 $type->toString(),
-                $throw['description'] ?: null
+                $throw['description'] !== '' ? $throw['description'] : null
             );
         }
 
@@ -223,8 +223,8 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $this->file,
             $range,
             $documentation['deprecated'],
-            $documentation['descriptions']['short'] ?: null,
-            $documentation['descriptions']['long'] ?: null,
+            $documentation['descriptions']['short'] !== '' ? $documentation['descriptions']['short'] : null,
+            $documentation['descriptions']['long'] !== '' ? $documentation['descriptions']['long'] : null,
             $documentation['return']['description'] ?? null,
             $returnTypeHint,
             $docComment !== '' && $docComment !== null,

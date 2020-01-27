@@ -56,7 +56,9 @@ final class ClassListJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         $uri = $arguments['uri'] ?? null;
 

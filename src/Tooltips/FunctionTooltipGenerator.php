@@ -121,7 +121,7 @@ final class FunctionTooltipGenerator
         $text = '#### • **' . $text . '**';
 
         if (count($parameter['types']) > 0) {
-            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
+            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type): string {
                 return $this->getClassNameFromFqcn($type['type']);
             }, $parameter['types']));
 
@@ -149,7 +149,7 @@ final class FunctionTooltipGenerator
         $returnDescription = null;
 
         if (count($functionInfo['returnTypes']) > 0) {
-            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type) {
+            $value = $this->tooltipTypeListPrettyPrinter->print(array_map(function (array $type): string {
                 return $this->getClassNameFromFqcn($type['type']);
             }, $functionInfo['returnTypes']));
 

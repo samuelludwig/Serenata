@@ -49,7 +49,7 @@ final class SocketServer
         $this->connectionMap = new SplObjectStorage();
         $this->connectionHandlerFactory = $connectionHandlerFactory;
 
-        $this->server->on('connection', function (Connection $connection) {
+        $this->server->on('connection', function (Connection $connection): void {
              $this->onConnectionEstablished($connection);
         });
     }
@@ -65,7 +65,7 @@ final class SocketServer
 
         $this->connectionMap->attach($connection, $handler);
 
-        $connection->on('close', function () use ($connection) {
+        $connection->on('close', function () use ($connection): void {
             $this->onConnectionClosed($connection);
         });
     }

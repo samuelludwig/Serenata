@@ -28,6 +28,6 @@ final class DocblockAnalyzer
             '@inheritDoc',
         ];
 
-        return in_array($shortDescription, $specialTags);
+        return in_array($shortDescription, $specialTags, true);
     }
 }

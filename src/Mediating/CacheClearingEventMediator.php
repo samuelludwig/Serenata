@@ -51,7 +51,7 @@ final class CacheClearingEventMediator
      */
     private function setup(): void
     {
-        $this->eventEmitter->on($this->eventName, function () {
+        $this->eventEmitter->on($this->eventName, function (): void {
             $this->clearCache();
         });
     }

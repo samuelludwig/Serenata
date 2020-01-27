@@ -53,11 +53,11 @@ final class ClasslikeIndexingStructureRegistryMediator
      */
     private function setup(): void
     {
-        $this->eventEmitter->on(IndexingEventName::CLASSLIKE_UPDATED, function (Structures\Classlike $classlike) {
+        $this->eventEmitter->on(IndexingEventName::CLASSLIKE_UPDATED, function (Structures\Classlike $classlike): void {
             $this->classlikeListRegistry->add($this->classlikeConverter->convert($classlike));
         });
 
-        $this->eventEmitter->on(IndexingEventName::CLASSLIKE_REMOVED, function (Structures\Classlike $classlike) {
+        $this->eventEmitter->on(IndexingEventName::CLASSLIKE_REMOVED, function (Structures\Classlike $classlike): void {
             $this->classlikeListRegistry->remove($this->classlikeConverter->convert($classlike));
         });
     }

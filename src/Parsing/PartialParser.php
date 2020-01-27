@@ -66,17 +66,21 @@ final class PartialParser implements Parser
 
         $correctedExpression = $this->getNormalizedCode($code);
 
-        $nodes = $this->tryParse($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithKeywordCorrection($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithFunctionTerminationCorrection($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithFunctionMissingArgumentCorrection($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithTernaryOperatorTerminationCorrection($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithDummyInsertion($correctedExpression);
-        $nodes = $nodes ?: $this->tryParseWithDoubleArrowFix($correctedExpression);
+        $isValid = function (?array $result): bool {
+            return $result !== null && $result !== [];
+        };
 
-        return $nodes;
+        $list = $this->tryParse($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithKeywordCorrection($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithFunctionTerminationCorrection($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithFunctionMissingArgumentCorrection($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithTernaryOperatorTerminationCorrection($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithDummyInsertion($correctedExpression);
+        $list = $isValid($list) ? $list : $this->tryParseWithDoubleArrowFix($correctedExpression);
+
+        return $list;
     }
 
     /**
@@ -294,7 +298,7 @@ final class PartialParser implements Parser
 
         $node = $nodes[count($nodes) - 1];
 
-        $removeDummies = function (Node $node) use ($dummyName, &$removeDummies) {
+        $removeDummies = function (Node $node) use ($dummyName, &$removeDummies): void {
             if ($node instanceof Node\Expr\PropertyFetch) {
                 if ($node->var instanceof Node\Expr\ClassConstFetch ||
                     $node->var instanceof Node\Expr\PropertyFetch

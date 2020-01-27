@@ -118,7 +118,7 @@ use Serenata\Indexing\StorageInterface;
      */
     private function getCheckedClasslikeInfo(string $fqcn, string $originFqcn): ArrayObject
     {
-        if (in_array($fqcn, $this->resolutionStack)) {
+        if (in_array($fqcn, $this->resolutionStack, true)) {
             throw new CircularDependencyException("Circular dependency detected from {$originFqcn} to {$fqcn}!");
         }
 
@@ -393,7 +393,7 @@ use Serenata\Indexing\StorageInterface;
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
-        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
+        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer): void {
             if ($type['resolvedType'] !== null) {
                 $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType(
                     $type['resolvedType'],
@@ -413,7 +413,7 @@ use Serenata\Indexing\StorageInterface;
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
-        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer) {
+        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer): void {
             $replacedThingy = $typeAnalyzer->interchangeStaticWithActualType($type['type'], $elementFqcn);
             $replacedThingy = $typeAnalyzer->interchangeThisWithActualType($replacedThingy, $elementFqcn);
 
@@ -432,7 +432,7 @@ use Serenata\Indexing\StorageInterface;
     {
         $typeAnalyzer = $this->typeAnalyzer;
 
-        $this->walkTypes($result, function (array &$type) use ($typeAnalyzer) {
+        $this->walkTypes($result, function (array &$type) use ($typeAnalyzer): void {
             if ($type['type'] !== null && $typeAnalyzer->isClassType($type['type'])) {
                 $type['resolvedType'] = $typeAnalyzer->getNormalizedFqcn($type['type']);
             } else {

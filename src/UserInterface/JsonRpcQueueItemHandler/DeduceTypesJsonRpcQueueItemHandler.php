@@ -49,7 +49,9 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($arguments['uri'])) {
             throw new InvalidArgumentsException('"uri" must be supplied');

@@ -32,7 +32,7 @@ final class TernaryNodeTypeDeducer extends AbstractNodeTypeDeducer
         }
 
         $firstOperandTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
-            $context->getNode()->if ?: $context->getNode()->cond,
+            $context->getNode()->if !== null ? $context->getNode()->if : $context->getNode()->cond,
             $context->getTextDocumentItem()
         ));
 

@@ -188,11 +188,11 @@ final class LocalTypeScanner
 
         $selfType = $this->deduceTypesFromSelf($textDocumentItem, $position);
         $selfType = array_shift($selfType);
-        $selfType = $selfType ?: '';
+        $selfType = $selfType !== null ? $selfType : '';
 
         $staticType = $this->deduceTypesFromStatic($textDocumentItem, $position);
         $staticType = array_shift($staticType);
-        $staticType = $staticType ?: '';
+        $staticType = $staticType !== null ? $staticType : '';
 
         foreach ($types as $type) {
             $type = $this->typeAnalyzer->interchangeSelfWithActualType($type, $selfType);

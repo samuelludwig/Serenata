@@ -27,7 +27,7 @@ final class TraitFilteringClasslikeListProvider implements ClasslikeListProvider
      */
     public function getAll(): array
     {
-        return array_filter($this->delegate->getAll(), function (array $classlike) {
+        return array_filter($this->delegate->getAll(), function (array $classlike): bool {
             return $classlike['type'] === ClasslikeTypeNameValue::TRAIT_;
         });
     }

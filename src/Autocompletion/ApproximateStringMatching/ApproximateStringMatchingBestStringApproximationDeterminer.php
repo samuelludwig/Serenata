@@ -127,7 +127,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
      */
     private function sortBestMatchScorePairs(array $bestMatchScorePairs): array
     {
-        usort($bestMatchScorePairs, function (array $a, array $b) {
+        usort($bestMatchScorePairs, function (array $a, array $b): int {
             return $a[1] <=> $b[1];
         });
 

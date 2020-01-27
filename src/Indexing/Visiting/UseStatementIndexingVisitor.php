@@ -116,7 +116,7 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     {
         $import = new Structures\FileNamespaceImport(
             $useStatement['range'],
-            $useStatement['alias'] ?: null,
+            $useStatement['alias'] !== '' ? $useStatement['alias'] : null,
             $useStatement['name'],
             $useStatement['kind'],
             $namespace

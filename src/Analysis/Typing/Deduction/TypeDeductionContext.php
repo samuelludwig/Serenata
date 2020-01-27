@@ -65,7 +65,7 @@ final class TypeDeductionContext
     public function getPosition(): Position
     {
         if (!$this->position) {
-            if (!$this->getNode()->getAttribute('startFilePos')) {
+            if ($this->getNode()->getAttribute('startFilePos') === null) {
                 throw new LogicException('No startFilePos attribute attached to node');
             }
 

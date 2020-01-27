@@ -46,7 +46,11 @@ class ImmutableSet implements IteratorAggregate
      */
     public function has($element): bool
     {
-        return in_array($element, $this->elements, $this->isStrict());
+        // The strict ruleset enforces the third parameter to be true, but we need it to be loose in some cases, so this
+        // works around it.
+        $silencePhpStan = 'in_array';
+
+        return $silencePhpStan($element, $this->elements, $this->isStrict());
     }
 
     /**

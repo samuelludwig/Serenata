@@ -69,7 +69,7 @@ abstract class AbstractApplication
         $container->set('application', $this);
 
         /** @var string $configurator To make setConfigurator below happy, as it does not mention callable. */
-        $configurator = function (ConfigurableDelegatingNodeTypeDeducer $deducer) use ($container) {
+        $configurator = function (ConfigurableDelegatingNodeTypeDeducer $deducer) use ($container): void {
             /** @var NodeTypeDeducerInterface $nodeTypeDeducer */
             $nodeTypeDeducer = $container->get('nodeTypeDeducer.instance');
 

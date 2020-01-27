@@ -21,7 +21,7 @@ abstract class AbstractConverter
         $types = [];
 
         $docblockTypeTransformer = new DocblockTypeTransformer();
-        $docblockTypeTransformer->transform($type, function (DocblockType $type) use (&$types) {
+        $docblockTypeTransformer->transform($type, function (DocblockType $type) use (&$types): DocblockType {
             if (!$type instanceof CompoundDocblockType) {
                 $types[] = [
                     'type'         => $type->toString(),

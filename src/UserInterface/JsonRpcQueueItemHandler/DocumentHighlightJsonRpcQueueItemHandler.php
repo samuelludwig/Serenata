@@ -48,7 +48,9 @@ final class DocumentHighlightJsonRpcQueueItemHandler extends AbstractJsonRpcQueu
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $parameters = $queueItem->getRequest()->getParams() ?: [];
+        $parameters = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         $response = new JsonRpcResponse(
             $queueItem->getRequest()->getId(),

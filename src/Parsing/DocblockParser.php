@@ -2,6 +2,7 @@
 
 namespace Serenata\Parsing;
 
+use DomainException;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
@@ -152,7 +153,6 @@ final class DocblockParser
         }
 
         $tags = [];
-        $result = [];
         $matches = [];
 
         $docblock = is_string($docblock) ? $docblock : null;
@@ -202,36 +202,44 @@ final class DocblockParser
             }
         }
 
-        $filterMethodMap = [
-            static::RETURN_VALUE   => 'filterReturn',
-            static::PARAM_TYPE     => 'filterParams',
-            static::VAR_TYPE       => 'filterVar',
-            static::DEPRECATED     => 'filterDeprecated',
-            static::THROWS         => 'filterThrows',
-            static::DESCRIPTION    => 'filterDescription',
-
-            static::METHOD         => 'filterMethod',
-
-            static::PROPERTY       => 'filterProperty',
-            static::PROPERTY_READ  => 'filterPropertyRead',
-            static::PROPERTY_WRITE => 'filterPropertyWrite',
-
-            static::CATEGORY       => 'filterCategory',
-            static::SUBPACKAGE     => 'filterSubpackage',
-            static::LINK           => 'filterLink',
-
-            static::ANNOTATION     => 'filterAnnotation',
-        ];
+        $result = [];
 
         foreach ($filters as $filter) {
-            if (!isset($filterMethodMap[$filter])) {
-                throw new UnexpectedValueException('Unknown filter passed!');
+            $methodResult = [];
+
+            if ($filter === static::RETURN_VALUE) {
+                $methodResult = $this->filterReturn($docblock, $itemName, $tags);
+            } elseif ($filter === static::PARAM_TYPE) {
+                $methodResult = $this->filterParams($docblock, $itemName, $tags);
+            } elseif ($filter === static::VAR_TYPE) {
+                $methodResult = $this->filterVar($docblock, $itemName, $tags);
+            } elseif ($filter === static::DEPRECATED) {
+                $methodResult = $this->filterDeprecated($docblock, $itemName, $tags);
+            } elseif ($filter === static::THROWS) {
+                $methodResult = $this->filterThrows($docblock, $itemName, $tags);
+            } elseif ($filter === static::DESCRIPTION) {
+                $methodResult = $this->filterDescription($docblock, $itemName, $tags);
+            } elseif ($filter === static::METHOD) {
+                $methodResult = $this->filterMethod($docblock, $itemName, $tags);
+            } elseif ($filter === static::PROPERTY) {
+                $methodResult = $this->filterProperty($docblock, $itemName, $tags);
+            } elseif ($filter === static::PROPERTY_READ) {
+                $methodResult = $this->filterPropertyRead($docblock, $itemName, $tags);
+            } elseif ($filter === static::PROPERTY_WRITE) {
+                $methodResult = $this->filterPropertyWrite($docblock, $itemName, $tags);
+            } elseif ($filter === static::CATEGORY) {
+                $methodResult = $this->filterCategory($docblock, $itemName, $tags);
+            } elseif ($filter === static::SUBPACKAGE) {
+                $methodResult = $this->filterSubpackage($docblock, $itemName, $tags);
+            } elseif ($filter === static::LINK) {
+                $methodResult = $this->filterLink($docblock, $itemName, $tags);
+            } elseif ($filter === static::ANNOTATION) {
+                $methodResult = $this->filterAnnotation($docblock, $itemName, $tags);
+            } else {
+                throw new DomainException('Unknown filter "' . $filter . '" passed');
             }
 
-            $result = array_merge(
-                $result,
-                $this->{$filterMethodMap[$filter]}($docblock, $itemName, $tags)
-            );
+            $result = array_merge($result, $methodResult);
         }
 
         return $result;
@@ -280,7 +288,9 @@ final class DocblockParser
      */
     private function stripDocblockLineDelimiters(string $docblock): string
     {
-        return preg_replace('/^[\t ]*\**[\t ]{0,1}/m', '', $docblock) ?: '';
+        $result = preg_replace('/^[\t ]*\**[\t ]{0,1}/m', '', $docblock);
+
+        return $result !== null ? $result : '';
     }
 
     /**
@@ -429,7 +439,7 @@ final class DocblockParser
         if (isset($tags[static::RETURN_VALUE])) {
             [$type, $description] = $this->filterParameterTag($tags[static::RETURN_VALUE][0], 2);
 
-            if ($type) {
+            if ($type !== null && $type !== '') {
                 $return = [
                     'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                     'description' => $description,
@@ -470,7 +480,7 @@ final class DocblockParser
             foreach ($tags[static::PARAM_TYPE] as $tag) {
                 [$type, $variableName, $description] = $this->filterParameterTag($tag, 3);
 
-                if (!$type || !$variableName) {
+                if ($type === '' || $type === null || $variableName === null || $variableName === '') {
                     continue;
                 }
 
@@ -524,7 +534,7 @@ final class DocblockParser
             foreach ($tags[static::VAR_TYPE] as $tag) {
                 [$varType, $varName, $varDescription] = $this->filterParameterTag($tag, 3);
 
-                if (!$varType) {
+                if ($varType === null || $varType === '') {
                     continue;
                 }
 
@@ -532,7 +542,7 @@ final class DocblockParser
 
                 $type = $this->docblockTypeParser->parse($varType);
 
-                if ($varName) {
+                if ($varName !== null && $varName !== '') {
                     $varName = $this->sanitizeText($varName);
 
                     if (mb_substr($varName, 0, 1) === '$') {
@@ -549,7 +559,9 @@ final class DocblockParser
                             'description' => trim($varName . ' ' . $varDescription),
                         ];
                     }
-                } elseif (!$varName && !$varDescription) {
+                } elseif (($varName === null || $varName === '') &&
+                    ($varDescription === null || $varDescription === '')
+                ) {
                     // Example: "@var DateTime".
                     $vars['$' . $itemName] = [
                         'type'        => $type,
@@ -603,7 +615,7 @@ final class DocblockParser
             foreach ($tags[static::THROWS] as $tag) {
                 [$type, $description] = $this->filterParameterTag($tag, 2);
 
-                if ($type) {
+                if ($type !== null && $type !== '') {
                     $throws[] = [
                         'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                         'description' => $description,
@@ -644,7 +656,7 @@ final class DocblockParser
                     $partCount = count($match);
 
                     if ($partCount === 5) {
-                        $type = $match[2] ?: 'void';
+                        $type = $match[2] !== null && $match[2] !== '' ? $match[2] : 'void';
                         $methodSignature = $match[3];
                         $description = $match[4];
                     } elseif ($partCount === 4) {
@@ -679,16 +691,16 @@ final class DocblockParser
                             PREG_SET_ORDER
                         );
 
-                        foreach ($matches as $match) {
-                            $partCount = count($match);
+                        foreach ($matches as $parameterMatch) {
+                            $partCount = count($parameterMatch);
 
                             if ($partCount === 4) {
-                                $parameterType = $match[1] ?: null;
-                                $parameterName = $match[2];
-                                $defaultValue = $match[3];
+                                $parameterType = $parameterMatch[1] !== '' ? $parameterMatch[1] : null;
+                                $parameterName = $parameterMatch[2];
+                                $defaultValue = $parameterMatch[3];
                             } elseif ($partCount === 3) {
-                                $parameterType = $match[1] ?: null;
-                                $parameterName = $match[2];
+                                $parameterType = $parameterMatch[1] !== '' ? $parameterMatch[1] : null;
+                                $parameterName = $parameterMatch[2];
                                 $defaultValue = null;
                             }
 
@@ -756,7 +768,7 @@ final class DocblockParser
                     [$type, $variableName, $description] = $this->filterParameterTag($tag, 3);
                 }
 
-                if (!$type || !$variableName) {
+                if ($type === null || $type === '' || $variableName === null || $variableName === '') {
                     continue;
                 }
 
@@ -866,7 +878,7 @@ final class DocblockParser
         }
 
         return [
-            'subpackage' => $name ? $this->sanitizeText($name) : null,
+            'subpackage' => $name !== '' ? $this->sanitizeText($name) : null,
         ];
     }
 
@@ -936,7 +948,7 @@ final class DocblockParser
         $summary = '';
         $description = '';
 
-        $lines = explode("\n", $docblock ?: '');
+        $lines = explode("\n", $docblock !== null ? $docblock : '');
 
         $isReadingSummary = true;
 

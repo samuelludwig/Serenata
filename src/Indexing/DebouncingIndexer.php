@@ -60,7 +60,7 @@ final class DebouncingIndexer implements IndexerInterface
             $this->eventLoop->cancelTimer($this->uriTimerMap[$uri]);
         }
 
-        $callback = function (/*TimerInterface $timer*/) use ($uri, $useLatestState, $jsonRpcMessageSender) {
+        $callback = function (/*TimerInterface $timer*/) use ($uri, $useLatestState, $jsonRpcMessageSender): void {
             $this->delegate->index($uri, $useLatestState, $jsonRpcMessageSender);
 
             unset($this->uriTimerMap[$uri]);

@@ -53,12 +53,18 @@ final class NamespaceIndexingNamespaceRegistryMediator
      */
     private function setup(): void
     {
-        $this->eventEmitter->on(IndexingEventName::NAMESPACE_UPDATED, function (Structures\FileNamespace $namespace) {
-            $this->namespaceListRegistry->add($this->namespaceConverter->convert($namespace));
-        });
+        $this->eventEmitter->on(
+            IndexingEventName::NAMESPACE_UPDATED,
+            function (Structures\FileNamespace $namespace): void {
+                $this->namespaceListRegistry->add($this->namespaceConverter->convert($namespace));
+            }
+        );
 
-        $this->eventEmitter->on(IndexingEventName::NAMESPACE_REMOVED, function (Structures\FileNamespace $namespace) {
-            $this->namespaceListRegistry->remove($this->namespaceConverter->convert($namespace));
-        });
+        $this->eventEmitter->on(
+            IndexingEventName::NAMESPACE_REMOVED,
+            function (Structures\FileNamespace $namespace): void {
+                $this->namespaceListRegistry->remove($this->namespaceConverter->convert($namespace));
+            }
+        );
     }
 }

@@ -54,7 +54,9 @@ final class ExecuteCommandJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $parameters = $queueItem->getRequest()->getParams() ?: [];
+        $parameters = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($parameters['command'])) {
             throw new InvalidArgumentsException('"command" must be supplied');

@@ -118,7 +118,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
 
         // Defines can be namespaced if their name contains slashes, see also
         // https://php.net/manual/en/function.define.php#90282
-        $name = new Node\Name((string) $nameValue->value);
+        $name = new Node\Name($nameValue->value);
 
         $type = new MixedDocblockType();
 

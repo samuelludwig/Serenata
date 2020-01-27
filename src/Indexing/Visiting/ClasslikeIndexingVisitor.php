@@ -312,8 +312,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $fqcn,
                 $this->file,
                 $range,
-                $documentation['descriptions']['short'] ?: null,
-                $documentation['descriptions']['long'] ?: null,
+                ((bool) $documentation['descriptions']['short']) ? $documentation['descriptions']['short'] : null,
+                ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,
                 $node->isAnonymous(),
                 $node->isAbstract(),
                 $node->isFinal(),
@@ -328,8 +328,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 '\\' . $node->namespacedName->toString(),
                 $this->file,
                 $range,
-                $documentation['descriptions']['short'] ?: null,
-                $documentation['descriptions']['long'] ?: null,
+                ((bool) $documentation['descriptions']['short']) ? $documentation['descriptions']['short'] : null,
+                ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,
                 $documentation['deprecated'],
                 $docComment !== '' && $docComment !== null
             );
@@ -339,8 +339,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 '\\' . $node->namespacedName->toString(),
                 $this->file,
                 $range,
-                $documentation['descriptions']['short'] ?: null,
-                $documentation['descriptions']['long'] ?: null,
+                ((bool) $documentation['descriptions']['short']) ? $documentation['descriptions']['short'] : null,
+                ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,
                 $documentation['deprecated'],
                 $docComment !== '' && $docComment !== null
             );
@@ -454,7 +454,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             }
         }
 
-        $implementedFqcns = array_unique(array_map(function (Node\Name $name) {
+        $implementedFqcns = array_unique(array_map(function (Node\Name $name): string {
             $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
             return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
@@ -479,7 +479,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function processInterfaceRelations(Node\Stmt\Interface_ $node, Structures\Interface_ $interface): void
     {
-        $extendedFqcns = array_unique(array_map(function (Node\Name $name) {
+        $extendedFqcns = array_unique(array_map(function (Node\Name $name): string {
             $resolvedName = NodeHelpers::fetchClassName($name->getAttribute('resolvedName'));
 
             return $this->typeAnalyzer->getNormalizedFqcn($resolvedName);
@@ -709,8 +709,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 false,
                 $node->isStatic(),
                 $docComment !== '' && $docComment !== null,
-                $shortDescription ?: null,
-                $documentation['descriptions']['long'] ?: null,
+                $shortDescription !== '' ? $shortDescription : null,
+                ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,
                 $varDocumentation ? $varDocumentation['description'] : null,
                 $this->classlikeStack->peek(),
                 $accessModifierMap[$accessModifier],
@@ -817,7 +817,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $throws[] = new Structures\ThrowsInfo(
                 $localType,
                 $type->toString(),
-                $throw['description'] ?: null
+                $throw['description'] !== '' ? $throw['description'] : null
             );
         }
 
@@ -838,8 +838,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $this->file,
             $range,
             $documentation['deprecated'],
-            $documentation['descriptions']['short'] ?: null,
-            $documentation['descriptions']['long'] ?: null,
+            ((bool) $documentation['descriptions']['short']) ? $documentation['descriptions']['short'] : null,
+            ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,
             $documentation['return']['description'] ?? null,
             $returnTypeHint,
             $this->classlikeStack->peek(),
@@ -1054,8 +1054,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $defaultValue,
             $documentation['deprecated'] ? 1 : 0,
             $docComment !== '' && $docComment !== null,
-            $shortDescription ?: null,
-            $documentation['descriptions']['long'] ?: null,
+            $shortDescription !== '' ? $shortDescription : null,
+            ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,
             $varDocumentation ? $varDocumentation['description'] : null,
             $type,
             $this->classlikeStack->peek(),
@@ -1099,7 +1099,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             true,
             $rawData['isStatic'],
             false,
-            $rawData['description'] ?: null,
+            $rawData['description'] !== '' ? $rawData['description'] : null,
             null,
             null,
             $classlike,

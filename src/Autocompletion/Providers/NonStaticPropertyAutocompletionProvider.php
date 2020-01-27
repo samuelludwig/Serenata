@@ -64,7 +64,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
             true
         );
 
-        $classlikeInfoElements = array_map(function (string $type) {
+        $classlikeInfoElements = array_map(function (string $type): ?array {
             try {
                 return $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException|CircularDependencyException $e) {

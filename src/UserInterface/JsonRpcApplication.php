@@ -136,7 +136,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
 
         $this->periodicQueueProcessingTimer = $loop->addPeriodicTimer(
             self::REQUEST_HANDLE_FREQUENCY_SECONDS,
-            function () {
+            function (): void {
                 $this->processNextQueueItem();
 
                 /** @var JsonRpcQueue $queue */
@@ -194,7 +194,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
         $loop = $this->getContainer()->get('eventLoop');
         $loop->addPeriodicTimer(
             self::CYCLE_COLLECTION_FREQUENCY_SECONDS,
-            function () {
+            function (): void {
                 // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
                 // Do *not* do this after every request handle as it puts a major strain on performance, especially
                 // during project indexing. Also don't cancel this timer when the last request is handled, as during

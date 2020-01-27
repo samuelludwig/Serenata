@@ -83,7 +83,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      */
     private function createSuggestion(array $variable, AutocompletionProviderContext $context): CompletionItem
     {
-        $typeArray = array_map(function (string $type) {
+        $typeArray = array_map(function (string $type): array {
             return [
                 'type' => $type,
             ];

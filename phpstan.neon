@@ -3,3 +3,9 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-php-parser/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+
+parameters:
+    ignoreErrors:
+        -
+            message: '#Variable property access on#'
+            path: 'src/Analysis/Visiting/ScopeLimitingVisitor.php'

@@ -76,7 +76,7 @@ abstract class AbstractResolver
         $info = [];
 
         foreach ($propertyData as $key => $value) {
-            if (in_array($key, $inheritedKeys)) {
+            if (in_array($key, $inheritedKeys, true)) {
                 $info[$key] = $value;
             }
         }
@@ -126,7 +126,7 @@ abstract class AbstractResolver
         $info = [];
 
         foreach ($methodData as $key => $value) {
-            if (in_array($key, $inheritedKeys)) {
+            if (in_array($key, $inheritedKeys, true)) {
                 $info[$key] = $value;
             }
         }

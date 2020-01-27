@@ -73,7 +73,7 @@ final class DocumentSymbolRetriever
             return $this->getMemberSymbolsForClasslike($classlike, $file);
         }, $file->getClasslikes());
 
-        return array_reduce($symbolLists, function (array $finalSymbolList, array $symbolList) {
+        return array_reduce($symbolLists, function (array $finalSymbolList, array $symbolList): array {
             return array_merge($finalSymbolList, $symbolList);
         }, []);
     }

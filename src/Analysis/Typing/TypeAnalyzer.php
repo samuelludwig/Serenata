@@ -51,7 +51,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
             SpecialDocblockTypeString::STATIC_,
             SpecialDocblockTypeString::THIS_,
             SpecialDocblockTypeString::ITERABLE_,
-        ]);
+        ], true);
 
         return $isReservedKeyword || $this->isArraySyntaxTypeHint($type);
     }

@@ -505,7 +505,9 @@ final class UseStatementInsertionCreator
                 return mb_strlen($firstClassNameParts[$i]) <=> mb_strlen($secondClassNameParts[$i]);
             }
 
-            return substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0) ?: 0;
+            $result = substr_compare($firstClassNameParts[$i], $secondClassNameParts[$i], 0);
+
+            return $result !== false ? $result : 0;
         }
 
         return count($firstClassNameParts) <=> count($secondClassNameParts);
@@ -549,16 +551,16 @@ final class UseStatementInsertionCreator
             );
         }
 
-        foreach ($nodes as $node) {
-            $endFilePos = $node->getAttribute('endFilePos');
-            $startFilePos = $node->getAttribute('startFilePos');
+        foreach ($nodes as $codeNode) {
+            $endFilePos = $codeNode->getAttribute('endFilePos');
+            $startFilePos = $codeNode->getAttribute('startFilePos');
 
             $byteOffset = $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE);
 
             if ($startFilePos > $byteOffset) {
                 break;
-            } elseif ($node instanceof Node\Stmt\Namespace_) {
-                return $node;
+            } elseif ($codeNode instanceof Node\Stmt\Namespace_) {
+                return $codeNode;
             }
         }
 

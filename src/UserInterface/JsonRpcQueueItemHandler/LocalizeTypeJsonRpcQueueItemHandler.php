@@ -49,7 +49,9 @@ final class LocalizeTypeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItem
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($arguments['type'])) {
             throw new InvalidArgumentsException('"type" must be supplied');

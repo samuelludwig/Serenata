@@ -19,7 +19,9 @@ final class EchoMessageJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $arguments = $queueItem->getRequest()->getParams() ?: [];
+        $arguments = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($arguments['message'])) {
             throw new InvalidArgumentsException('Missing "message" in parameters for request');

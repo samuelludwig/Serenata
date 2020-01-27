@@ -27,7 +27,7 @@ final class TypeListPrettyPrinter
      */
     public function print(array $types): string
     {
-        return implode('|', array_map(function (string $type) {
+        return implode('|', array_map(function (string $type): string {
             return $this->typePrettyPrinter->print($type);
         }, $types));
     }

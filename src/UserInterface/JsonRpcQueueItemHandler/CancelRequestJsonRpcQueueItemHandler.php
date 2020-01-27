@@ -31,7 +31,9 @@ final class CancelRequestJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIte
      */
     public function execute(JsonRpcQueueItem $queueItem): ExtendedPromiseInterface
     {
-        $parameters = $queueItem->getRequest()->getParams() ?: [];
+        $parameters = $queueItem->getRequest()->getParams() !== null ?
+            $queueItem->getRequest()->getParams() :
+            [];
 
         if (!isset($parameters['id'])) {
             throw new InvalidArgumentsException('"id" of request to cancel must be passed');

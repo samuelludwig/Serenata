@@ -53,11 +53,11 @@ final class FunctionIndexingFunctionRegistryMediator
      */
     private function setup(): void
     {
-        $this->eventEmitter->on(IndexingEventName::FUNCTION_UPDATED, function (Structures\Function_ $function) {
+        $this->eventEmitter->on(IndexingEventName::FUNCTION_UPDATED, function (Structures\Function_ $function): void {
             $this->functionListRegistry->add($this->functionConverter->convert($function));
         });
 
-        $this->eventEmitter->on(IndexingEventName::FUNCTION_REMOVED, function (Structures\Function_ $function) {
+        $this->eventEmitter->on(IndexingEventName::FUNCTION_REMOVED, function (Structures\Function_ $function): void {
             $this->functionListRegistry->remove($this->functionConverter->convert($function));
         });
     }
