@@ -55,6 +55,8 @@ final class UseStatementIndexingVisitor implements NodeVisitor
         }
 
         $this->useStatementFetchingVisitor->beforeTraverse($nodes);
+
+        return null;
     }
 
     /**
@@ -63,6 +65,8 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     public function enterNode(Node $node)
     {
         $this->useStatementFetchingVisitor->enterNode($node);
+
+        return null;
     }
 
     /**
@@ -71,6 +75,8 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     public function leaveNode(Node $node)
     {
         $this->useStatementFetchingVisitor->leaveNode($node);
+
+        return null;
     }
 
     /**
@@ -83,6 +89,8 @@ final class UseStatementIndexingVisitor implements NodeVisitor
         foreach ($this->useStatementFetchingVisitor->getNamespaces() as $namespace) {
             $this->indexNamespace($namespace);
         }
+
+        return null;
     }
 
     /**

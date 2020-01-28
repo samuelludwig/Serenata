@@ -70,6 +70,8 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
         //         $node->getAttribute('endLine') + 1
         //     );
         // }
+
+        return null;
     }
 
     /**
@@ -83,6 +85,8 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
                 new Position(mb_substr_count($this->code, "\n") + 1, 0)
             );
         }
+
+        return null;
     }
 
     /**
@@ -106,7 +110,7 @@ final class UseStatementFetchingVisitor extends NodeVisitorAbstract
         );
 
         $this->namespaces[++$this->lastNamespaceIndex] = [
-            'name'          => $node->name ? (string) $node->name : null,
+            'name'          => $node->name !== null ? (string) $node->name : null,
             'range'         => new Range(
                 Position::createFromByteOffset(
                     $node->getAttribute('startFilePos'),

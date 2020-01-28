@@ -49,6 +49,8 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->delete($metaStaticMethodType);
         }
+
+        return null;
     }
 
     /**
@@ -59,7 +61,7 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
         $namespaceName = $node->getAttribute('namespace');
 
         if (!$namespaceName instanceof Node\Name || $namespaceName->toString() !== 'PHPSTORM_META') {
-            return;
+            return null;
         }
 
         try {
@@ -67,8 +69,10 @@ final class MetaStaticMethodTypeIndexingVisitor extends NodeVisitorAbstract
                 $this->enterAssignNode($node);
             }
         } catch (UnexpectedValueException $e) {
-            return;
+            return null;
         }
+
+        return null;
     }
 
     /**

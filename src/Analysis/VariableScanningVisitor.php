@@ -86,6 +86,8 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Param) {
             $this->parseParam($node);
         }
+
+        return null;
     }
 
     /**

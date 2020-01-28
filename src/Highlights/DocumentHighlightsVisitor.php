@@ -61,18 +61,20 @@ final class DocumentHighlightsVisitor extends NodeVisitorAbstract
         $nodeFqcn = $this->findFqcnForNode($node);
 
         if ($nodeFqcn === null) {
-            return;
+            return null;
         }
 
         $referenceFqcn = $this->findFqcnForNode($this->referenceNode);
 
         if ($referenceFqcn === null) {
-            return;
+            return null;
         }
 
         if ($nodeFqcn === $referenceFqcn) {
             $this->pushHighlight($node);
         }
+
+        return null;
     }
 
     /**

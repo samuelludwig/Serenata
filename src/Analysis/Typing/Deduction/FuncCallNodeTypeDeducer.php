@@ -68,7 +68,7 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
             'fqcn' => $fqsen,
         ]);
 
-        if (!$globalFunction) {
+        if ($globalFunction === null) {
             return [];
         }
 

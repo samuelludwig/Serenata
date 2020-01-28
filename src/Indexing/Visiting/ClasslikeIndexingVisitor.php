@@ -74,7 +74,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $nodeTypeDeducer;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $accessModifierMap;
 
@@ -174,6 +174,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\TraitUse) {
             $this->parseTraitUseNode($node);
         }
+
+        return null;
     }
 
     /**
@@ -190,6 +192,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         } elseif ($node instanceof Node\Stmt\Trait_) {
             $this->processLeaveClasslikeNode($node);
         }
+
+        return null;
     }
 
     /**
@@ -207,6 +211,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->delete($classlike);
         }
+
+        return null;
     }
 
     /**
@@ -233,6 +239,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->persist($classlike);
         }
+
+        return null;
     }
 
     /**
@@ -268,7 +276,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $this->traitsUsed = [];
 
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+        $docComment = $node->getDocComment() !== null ? $node->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::DEPRECATED,
@@ -440,14 +448,14 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function processClassRelations(Node\Stmt\Class_ $node, Structures\Class_ $class): void
     {
-        if ($node->extends) {
+        if ($node->extends !== null) {
             $parent = NodeHelpers::fetchClassName($node->extends->getAttribute('resolvedName'));
 
             $parentFqcn = $this->typeAnalyzer->getNormalizedFqcn($parent);
 
             $linkEntity = $this->findStructureByFqcn($parentFqcn);
 
-            if ($linkEntity && $linkEntity instanceof Structures\Class_) {
+            if ($linkEntity !== null && $linkEntity instanceof Structures\Class_) {
                 $class->setParent($linkEntity);
             } else {
                 $class->setParentFqcn($parentFqcn);
@@ -463,7 +471,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         foreach ($implementedFqcns as $implementedFqcn) {
             $linkEntity = $this->findStructureByFqcn($implementedFqcn);
 
-            if ($linkEntity && $linkEntity instanceof Structures\Interface_) {
+            if ($linkEntity !== null && $linkEntity instanceof Structures\Interface_) {
                 $class->addInterface($linkEntity);
             } else {
                 $class->addInterfaceFqcn($implementedFqcn);
@@ -488,7 +496,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         foreach ($extendedFqcns as $extendedFqcn) {
             $linkEntity = $this->findStructureByFqcn($extendedFqcn);
 
-            if ($linkEntity && $linkEntity instanceof Structures\Interface_) {
+            if ($linkEntity !== null && $linkEntity instanceof Structures\Interface_) {
                 $interface->addParent($linkEntity);
             } else {
                 $interface->addParentFqcn($extendedFqcn);
@@ -504,7 +512,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function processTraitUseNode(Node\Stmt\TraitUse $node, Structures\Classlike $classlike): void
     {
-        if ($classlike instanceof Structures\Interface_) {
+        if (!$classlike instanceof Structures\Class_ && !$classlike instanceof Structures\Trait_) {
             return; // Nope, interfaces can't use traits.
         }
 
@@ -520,7 +528,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $linkEntity = $this->findStructureByFqcn($traitFqcn);
 
-            if ($linkEntity && $linkEntity instanceof Structures\Trait_) {
+            if ($linkEntity !== null && $linkEntity instanceof Structures\Trait_) {
                 $classlike->addTrait($linkEntity);
             } else {
                 $classlike->addTraitFqcn($traitFqcn);
@@ -531,7 +539,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         foreach ($node->adaptations as $adaptation) {
             if ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Alias) {
-                $traitFqcn = $adaptation->trait ?
+                $traitFqcn = $adaptation->trait !== null ?
                     NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName')) :
                     null;
 
@@ -551,7 +559,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $traitAlias = new Structures\ClassTraitAlias(
                         $classlike,
                         $traitFqcn,
-                        $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                        $accessModifier !== null ? $accessModifierMap[$accessModifier] : null,
                         $adaptation->method,
                         $adaptation->newName
                     );
@@ -559,7 +567,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $traitAlias = new Structures\TraitTraitAlias(
                         $classlike,
                         $traitFqcn,
-                        $accessModifier ? $accessModifierMap[$accessModifier] : null,
+                        $accessModifier !== null ? $accessModifierMap[$accessModifier] : null,
                         $adaptation->method,
                         $adaptation->newName
                     );
@@ -619,7 +627,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-            $defaultValue = $property->default ?
+            $defaultValue = $property->default !== null ?
                 substr(
                     $this->textDocumentItem->getText(),
                     $property->default->getAttribute('startFilePos'),
@@ -629,7 +637,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 ) :
                 null;
 
-            $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+            $docComment = $node->getDocComment() !== null ? $node->getDocComment()->getText() : null;
 
             $documentation = $this->docblockParser->parse($docComment, [
                 DocblockParser::VAR_TYPE,
@@ -728,7 +736,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function parseClassMethodNode(Node\Stmt\ClassMethod $node): void
     {
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+        $docComment = $node->getDocComment() !== null ? $node->getDocComment()->getText() : null;
 
         $returnTypeHint = null;
         $nodeType = $node->getReturnType();
@@ -769,9 +777,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $typeStringSpecification = null;
 
-        if ($documentation && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
+        if ($documentation !== null && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
             $typeStringSpecification = $documentation['return']['type'];
-        } elseif ($node->getReturnType()) {
+        } elseif ($node->getReturnType() !== null) {
             $nodeType = $node->getReturnType();
 
             if ($nodeType instanceof Node\NullableType) {
@@ -797,7 +805,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 
             $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
-        } elseif ($docComment) {
+        } elseif ($docComment !== null) {
             $returnType = new VoidDocblockType();
         } else {
             $returnType = new MixedDocblockType();
@@ -843,7 +851,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['return']['description'] ?? null,
             $returnTypeHint,
             $this->classlikeStack->peek(),
-            $accessModifier ? $accessModifierMap[$accessModifier] : null,
+            $accessModifier !== null? $accessModifierMap[$accessModifier] : null,
             false,
             $node->isStatic(),
             $node->isAbstract(),
@@ -875,7 +883,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 ($param->default instanceof Node\Expr\ConstFetch && $param->default->name->toString() === 'null')
             );
 
-            $defaultValue = $param->default ?
+            $defaultValue = $param->default !== null?
                 substr(
                     $this->textDocumentItem->getText(),
                     $param->default->getAttribute('startFilePos'),
@@ -892,7 +900,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             if ($parameterDoc) {
                 $typeStringSpecification = $parameterDoc['type'];
-            } elseif ($param->type) {
+            } elseif ($param->type !== null) {
                 $typeNode = $param->type;
 
                 if ($typeNode instanceof Node\NullableType) {
@@ -943,7 +951,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
                 $param->byRef,
-                !!$param->default,
+                $param->default !== null,
                 $param->variadic
             );
 
@@ -986,7 +994,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-        $docComment = $classConst->getDocComment() ? $classConst->getDocComment()->getText() : null;
+        $docComment = $classConst->getDocComment() !== null ? $classConst->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::VAR_TYPE,
@@ -1059,7 +1067,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $varDocumentation ? $varDocumentation['description'] : null,
             $type,
             $this->classlikeStack->peek(),
-            $accessModifier ? $accessModifierMap[$accessModifier] : null
+            $accessModifier !== null? $accessModifierMap[$accessModifier] : null
         );
 
         $this->storage->persist($constant);
@@ -1239,7 +1247,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      */
     private function getAccessModifierMap(): array
     {
-        if (!$this->accessModifierMap) {
+        if ($this->accessModifierMap === null) {
             $modifiers = $this->storage->getAccessModifiers();
 
             $this->accessModifierMap = [];

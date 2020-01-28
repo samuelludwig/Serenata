@@ -154,7 +154,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
      */
     private function uninstallPeriodicQueueProcessingTimer(): void
     {
-        if ($this->periodicQueueProcessingTimer) {
+        if ($this->periodicQueueProcessingTimer !== null) {
             /** @var LoopInterface $loop */
             $loop = $this->getContainer()->get('eventLoop');
             $loop->cancelTimer($this->periodicQueueProcessingTimer);

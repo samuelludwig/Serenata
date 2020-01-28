@@ -10,7 +10,7 @@ use Doctrine\Common\Cache\Cache;
 
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
 use Doctrine\ORM\EntityManager;
 

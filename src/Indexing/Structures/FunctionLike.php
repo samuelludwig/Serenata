@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Structures;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Serenata\Common\Range;
 
 use Serenata\DocblockTypeParser\DocblockType;
@@ -67,7 +69,7 @@ abstract class FunctionLike
     protected $throws;
 
     /**
-     * @var FunctionLikeParameter[]
+     * @var ArrayCollection<int,FunctionLikeParameter>
      */
     protected $parameters;
 

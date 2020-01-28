@@ -93,7 +93,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                     }
                 }
 
-                if ($node->else && $node->else->getAttribute('startFilePos') < $this->byteOffset) {
+                if ($node->else !== null && $node->else->getAttribute('startFilePos') < $this->byteOffset) {
                     $this->memorizeNodeProperties($node, ['stmts', 'elseifs', 'cond']);
 
                     $node->stmts = [];
@@ -133,7 +133,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                 // Finally statements have no own node, so use the first statement as a reference point instead. This
                 // won't be entirely correct, but it's the best we can do. See also
                 // https://github.com/nikic/PHP-Parser/issues/254
-                if ($node->finally && $node->finally->getAttribute('startFilePos') < $this->byteOffset) {
+                if ($node->finally !== null && $node->finally->getAttribute('startFilePos') < $this->byteOffset) {
                     $this->memorizeNodeProperties($node, ['stmts', 'catches']);
 
                     $node->stmts = [];
@@ -141,6 +141,8 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
                 }
             }
         }
+
+        return null;
     }
 
     /**
@@ -149,6 +151,8 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         $this->restoreNodeProperties($node);
+
+        return null;
     }
 
     /**

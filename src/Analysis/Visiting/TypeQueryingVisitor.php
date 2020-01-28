@@ -101,6 +101,8 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
         }
 
         $this->checkForScopeChange($node);
+
+        return null;
     }
 
     /**
@@ -263,7 +265,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\BinaryOp   $node
-     * @param TypePossibilityMap[] &$types
+     * @param TypePossibilityMap[] $types
      *
      * @return void
      */
@@ -287,7 +289,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\BinaryOp\Equal|Node\Expr\BinaryOp\Identical $node
-     * @param TypePossibilityMap[]                                  &$types
+     * @param TypePossibilityMap[]                                  $types
      *
      * @return void
      */
@@ -310,7 +312,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\BinaryOp\NotEqual|Node\Expr\BinaryOp\NotIdentical $node
-     * @param TypePossibilityMap[]                                        &$types
+     * @param TypePossibilityMap[]                                        $types
      *
      * @return void
      */
@@ -333,7 +335,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr            $node
-     * @param TypePossibilityMap[] &$types
+     * @param TypePossibilityMap[] $types
      *
      * @return void
      */
@@ -346,7 +348,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\BooleanNot $node
-     * @param TypePossibilityMap[] &$types
+     * @param TypePossibilityMap[] $types
      *
      * @return void
      */
@@ -378,7 +380,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\Instanceof_ $node
-     * @param TypePossibilityMap[]  &$types
+     * @param TypePossibilityMap[]  $types
      *
      * @return void
      */
@@ -403,7 +405,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node\Expr\FuncCall   $node
-     * @param TypePossibilityMap[] &$types
+     * @param TypePossibilityMap[] $types
      *
      * @return void
      */
@@ -450,7 +452,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param TypePossibilityMap[] &$types
+     * @param TypePossibilityMap[] $types
      * @param string               $expression
      * @param string               $type
      * @param int                  $possibility
@@ -479,7 +481,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         $docblock = $node->getDocComment();
 
-        if (!$docblock) {
+        if ($docblock === null || $docblock === '') {
             return;
         }
 

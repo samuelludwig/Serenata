@@ -105,6 +105,8 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->delete($function);
         }
+
+        return null;
     }
 
     /**
@@ -115,6 +117,8 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\Function_) {
             $this->indexFunction($node);
         }
+
+        return null;
     }
 
     /**
@@ -124,7 +128,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
      */
     private function indexFunction(Node\Stmt\Function_ $node): void
     {
-        $docComment = $node->getDocComment() ? $node->getDocComment()->getText() : null;
+        $docComment = $node->getDocComment() !== null ? $node->getDocComment()->getText() : null;
 
         $returnTypeHint = null;
         $nodeType = $node->getReturnType();
@@ -165,9 +169,9 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
         $typeStringSpecification = null;
 
-        if ($documentation && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
+        if ($documentation !== null && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
             $typeStringSpecification = $documentation['return']['type'];
-        } elseif ($node->getReturnType()) {
+        } elseif ($node->getReturnType() !== null) {
             $nodeType = $node->getReturnType();
 
             if ($nodeType instanceof Node\NullableType) {
@@ -193,7 +197,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
 
             $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
-        } elseif ($docComment) {
+        } elseif ($docComment !== null) {
             $returnType = new VoidDocblockType();
         } else {
             $returnType = new MixedDocblockType();
@@ -254,7 +258,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                 ($param->default instanceof Node\Expr\ConstFetch && $param->default->name->toString() === 'null')
             );
 
-            $defaultValue = $param->default ?
+            $defaultValue = $param->default !== null ?
                 substr(
                     $this->textDocumentItem->getText(),
                     $param->default->getAttribute('startFilePos'),
@@ -271,7 +275,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             if ($parameterDoc) {
                 $typeStringSpecification = $parameterDoc['type'];
-            } elseif ($param->type) {
+            } elseif ($param->type !== null) {
                 $typeNode = $param->type;
 
                 if ($typeNode instanceof Node\NullableType) {
@@ -322,7 +326,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                 $parameterDoc ? $parameterDoc['description'] : null,
                 $defaultValue,
                 $param->byRef,
-                !!$param->default,
+                $param->default !== null,
                 $param->variadic
             );
 

@@ -39,7 +39,7 @@ final class TraitUsageResolver extends AbstractResolver
                 ) {
                     $method['name'] = $traitAlias->getAlias() !== null ? $traitAlias->getAlias() : $method['name'];
 
-                    if ($traitAlias->getAccessModifier()) {
+                    if ($traitAlias->getAccessModifier() !== null) {
                         $method['isPublic'] =
                             ($traitAlias->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_);
 

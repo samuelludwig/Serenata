@@ -235,6 +235,8 @@ final class PartialParser implements Parser
                         $node->else = new Expr\Dummy();
                     }
                 }
+
+                return null;
             }
         });
 

@@ -102,6 +102,8 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
 
             $this->storage->delete($constant);
         }
+
+        return null;
     }
 
     /**
@@ -112,6 +114,8 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
         if ($node instanceof Node\Stmt\Const_) {
             $this->parseConstantStatementNode($node);
         }
+
+        return null;
     }
 
     /**
@@ -134,7 +138,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
      */
     private function indexConstant(Node\Const_ $node, Node\Stmt\Const_ $const): void
     {
-        $docComment = $const->getDocComment() ? $const->getDocComment()->getText() : null;
+        $docComment = $const->getDocComment() !== null ? $const->getDocComment()->getText() : null;
 
         $documentation = $this->docblockParser->parse($docComment, [
             DocblockParser::VAR_TYPE,

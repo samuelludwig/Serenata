@@ -18,6 +18,7 @@ final class FunctionLikeBodySkippingVisitor implements NodeVisitor
      */
     public function beforeTraverse(array $nodes)
     {
+        return null;
     }
 
     /**
@@ -28,6 +29,8 @@ final class FunctionLikeBodySkippingVisitor implements NodeVisitor
         if ($node instanceof Node\FunctionLike) {
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
+
+        return null;
     }
 
     /**
@@ -35,6 +38,7 @@ final class FunctionLikeBodySkippingVisitor implements NodeVisitor
      */
     public function leaveNode(Node $node)
     {
+        return null;
     }
 
     /**
@@ -42,5 +46,6 @@ final class FunctionLikeBodySkippingVisitor implements NodeVisitor
      */
     public function afterTraverse(array $nodes)
     {
+        return null;
     }
 }

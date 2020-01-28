@@ -76,6 +76,8 @@ final class NodeFetchingVisitor extends NodeVisitorAbstract
         if (!$node instanceof Node\Name && !$node instanceof Node\Identifier) {
             $this->mostInterestingNode = $node;
         }
+
+        return null;
     }
 
     /**

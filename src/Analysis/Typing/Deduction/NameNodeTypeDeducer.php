@@ -88,13 +88,13 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
                 $context->getPosition()
             );
 
-            if (!$currentClassName) {
+            if ($currentClassName === null) {
                 return [];
             }
 
             $classInfo = $this->classlikeInfoBuilder->build($currentClassName);
 
-            if (!$classInfo || count($classInfo['parents']) === 0) {
+            if ($classInfo === null || count($classInfo['parents']) === 0) {
                 return [];
             }
 

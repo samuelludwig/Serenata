@@ -404,20 +404,25 @@ final class UseStatementInsertionCreator
     ): bool {
         $useStatements = $this->retrieveRelevantUseStatements($textDocumentItem, $position);
 
-        /** @var Node\Stmt\Use_|Node\Stmt\GroupUse $useStatement */
-        return count(array_filter($useStatements, function (Node\Stmt $useStatement) use ($name, $kind): bool {
-            if ($this->getUseStatementNodeKind($useStatement) !== $kind) {
+        return count(array_filter(
+            $useStatements,
+            function (Node\Stmt $useStatement) use ($name, $kind): bool {
+                /** @var Node\Stmt\Use_|Node\Stmt\GroupUse $useStatement */
+                $useStatement = $useStatement;
+
+                if ($this->getUseStatementNodeKind($useStatement) !== $kind) {
+                    return false;
+                }
+
+                foreach ($useStatement->uses as $useUseNode) {
+                    if ($this->getFullNameFromUseUse($useStatement, $useUseNode) === $name) {
+                        return true;
+                    }
+                }
+
                 return false;
             }
-
-            foreach ($useStatement->uses as $useUseNode) {
-                if ($this->getFullNameFromUseUse($useStatement, $useUseNode) === $name) {
-                    return true;
-                }
-            }
-
-            return false;
-        })) > 0;
+        )) > 0;
     }
 
     /**

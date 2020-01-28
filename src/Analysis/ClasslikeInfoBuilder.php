@@ -142,7 +142,7 @@ use Serenata\Indexing\StorageInterface;
     {
         $classlike = $this->storage->findStructureByFqcn($fqcn);
 
-        if (!$classlike) {
+        if ($classlike === null) {
             throw new UnexpectedValueException('The structural element "' . $fqcn . '" was not found!');
         }
 

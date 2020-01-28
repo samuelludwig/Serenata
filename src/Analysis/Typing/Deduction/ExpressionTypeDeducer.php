@@ -153,6 +153,8 @@ final class ExpressionTypeDeducer
             public function enterNode(Node $node)
             {
                 $node->setAttribute('namespace', $this->namespaceNode);
+
+                return null;
             }
         });
 

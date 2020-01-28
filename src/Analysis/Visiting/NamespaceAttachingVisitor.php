@@ -29,5 +29,7 @@ final class NamespaceAttachingVisitor extends NameResolver
         parent::enterNode($node);
 
         $node->setAttribute('namespace', $this->nameContext->getNamespace());
+
+        return null;
     }
 }

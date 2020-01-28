@@ -71,7 +71,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function getNormalizedFqcn(string $fqcn): string
     {
-        if ($fqcn && $fqcn[0] !== '\\') {
+        if ($fqcn !== '' && $fqcn[0] !== '\\') {
             return '\\' . $fqcn;
         }
 

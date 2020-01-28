@@ -35,6 +35,8 @@ final class ParentAttachingVisitor extends NodeVisitorAbstract
         $node->setAttribute('parent', $this->stack->isEmpty() ? null : $this->stack->top());
 
         $this->stack->push($node);
+
+        return null;
     }
 
     /**
@@ -45,5 +47,7 @@ final class ParentAttachingVisitor extends NodeVisitorAbstract
         parent::leaveNode($node);
 
         $this->stack->pop();
+
+        return null;
     }
 }

@@ -25,7 +25,7 @@ final class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeduce
      */
     public function deduce(TypeDeductionContext $context): array
     {
-        if (!$this->nodeTypeDeducer) {
+        if ($this->nodeTypeDeducer === null) {
             throw new TypeDeductionException('No node type deducer to delegate to configured!');
         }
 

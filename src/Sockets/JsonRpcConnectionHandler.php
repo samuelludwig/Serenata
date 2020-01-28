@@ -294,7 +294,7 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
 
         $contentLength = trim($contentLength);
 
-        if (!$contentLength || !is_numeric($contentLength)) {
+        if ($contentLength === null || $contentLength === '' || !is_numeric($contentLength)) {
             throw new RequestParsingException('Content of the Content-Length header is not a valid number');
         }
 

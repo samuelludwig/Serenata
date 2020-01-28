@@ -146,7 +146,7 @@ final class TooltipProvider
         $node = $result->getNode();
         $nearestInterestingNode = $result->getNearestInterestingNode();
 
-        if (!$node) {
+        if ($node === null) {
             throw new UnexpectedValueException(
                 'No node found at location ' . $position->getLine() . ':' . $position->getCharacter()
             );

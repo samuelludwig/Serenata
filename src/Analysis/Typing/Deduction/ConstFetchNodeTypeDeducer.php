@@ -79,7 +79,7 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             'fqcn' => $fqsen,
         ]);
 
-        if (!$globalConstant) {
+        if ($globalConstant === null) {
             return [];
         }
 

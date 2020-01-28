@@ -97,6 +97,8 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         ) {
             $this->parseDefineNode($node);
         }
+
+        return null;
     }
 
     /**

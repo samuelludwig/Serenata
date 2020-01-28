@@ -36,12 +36,14 @@ final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
 
         if ($node instanceof Node\FunctionLike) {
             if ($node->getStmts() === null) {
-                return; // Skip methods without a body (e.g. interface or abstract ones).
+                return null; // Skip methods without a body (e.g. interface or abstract ones).
             }
 
             $node->setAttribute('bodyStartFilePos', $this->locateBodyStartByteOffset($node));
             $node->setAttribute('bodyEndFilePos', $this->locateBodyEndByteOffset($node));
         }
+
+        return null;
     }
 
     /**

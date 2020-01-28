@@ -20,8 +20,8 @@ final class CompletionItemDetailFormatter
     {
         return implode(' — ', array_filter([
             $this->formatTypes($typeArrayList),
-            $accessModifierName ? $this->formatAccessModifier($accessModifierName) : null,
-            $declaringStructureFqcn ? $this->formatDeclaringStructure($declaringStructureFqcn) : null,
+            $accessModifierName !== null ? $this->formatAccessModifier($accessModifierName) : null,
+            $declaringStructureFqcn !== null ? $this->formatDeclaringStructure($declaringStructureFqcn) : null,
         ]));
     }
 
