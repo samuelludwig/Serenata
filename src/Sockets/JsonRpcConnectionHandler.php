@@ -298,6 +298,6 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
             throw new RequestParsingException('Content of the Content-Length header is not a valid number');
         }
 
-        return $contentLength;
+        return (int) $contentLength;
     }
 }

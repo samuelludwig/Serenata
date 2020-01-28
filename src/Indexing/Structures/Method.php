@@ -61,7 +61,7 @@ class Method extends FunctionLike
      * @param bool           $isAbstract
      * @param bool           $isFinal
      * @param bool           $hasDocblock
-     * @param array[]        $throws
+     * @param ThrowsInfo[]   $throws
      * @param DocblockType   $returnType
      */
     public function __construct(

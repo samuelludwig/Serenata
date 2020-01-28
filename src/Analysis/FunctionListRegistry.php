@@ -13,7 +13,7 @@ final class FunctionListRegistry implements FunctionListProviderInterface
     private $delegate;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $registry;
 

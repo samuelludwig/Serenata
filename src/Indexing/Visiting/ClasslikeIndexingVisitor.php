@@ -94,7 +94,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $classlikeStack;
 
     /**
-     * @var string[]
+     * @var array<string,bool>
      */
     private $traitsUsed = [];
 
@@ -108,17 +108,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * We could also flush the changes constantly, but this hurts performance and not fetching information we already
      * have benefits performance in large files with many interdependencies.
      *
-     * @var SplObjectStorage<Classlike>
+     * @var SplObjectStorage
      */
     private $classlikesFound;
 
     /**
-     * @var SplObjectStorage<Classlike>
+     * @var SplObjectStorage
      */
     private $relationsStorage;
 
     /**
-     * @var SplObjectStorage<Classlike>
+     * @var SplObjectStorage
      */
     private $traitUseStorage;
 

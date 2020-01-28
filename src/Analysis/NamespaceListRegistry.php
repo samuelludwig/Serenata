@@ -13,7 +13,7 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     private $delegate;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $registry;
 

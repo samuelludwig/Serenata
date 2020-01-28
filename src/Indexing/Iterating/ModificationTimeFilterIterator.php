@@ -32,7 +32,7 @@ final class ModificationTimeFilterIterator extends FilterIterator
     /**
      * @inheritDoc
      */
-    public function accept()
+    public function accept(): bool
     {
         /** @var SplFileInfo $value */
         $value = $this->current();

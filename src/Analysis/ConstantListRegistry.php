@@ -13,7 +13,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
     private $delegate;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $registry;
 

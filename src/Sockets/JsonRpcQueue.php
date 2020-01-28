@@ -21,7 +21,7 @@ final class JsonRpcQueue
     private $queue;
 
     /**
-     * @var string[]
+     * @var array<string,bool>
      */
     private $cancelledIds = [];
 

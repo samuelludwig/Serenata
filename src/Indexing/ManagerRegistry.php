@@ -38,12 +38,12 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
     private $cache;
 
     /**
-     * @var Connection
+     * @var Connection|null
      */
     private $connection;
 
     /**
-     * @var EntityManager
+     * @var EntityManager|null
      */
     private $entityManager;
 
@@ -81,7 +81,10 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
     protected function getService($name)
     {
         if ($name === 'defaultConnection') {
-            return $this->getConnectionInstance();
+            /** @var EntityManager $connection Because overridden method docblock return type is incorrect. */
+            $connection = $this->getConnectionInstance();
+
+            return $connection;
         } elseif ($name === 'defaultEntityManager') {
             return $this->getEntityManagerInstance();
         }

@@ -34,7 +34,7 @@ class Function_ extends FunctionLike
      * @param string|null  $returnDescription
      * @param string|null  $returnTypeHint
      * @param bool         $hasDocblock
-     * @param array[]      $throws
+     * @param ThrowsInfo[] $throws
      * @param DocblockType $returnType
      */
     public function __construct(

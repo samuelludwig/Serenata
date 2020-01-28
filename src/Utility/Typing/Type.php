@@ -43,7 +43,7 @@ namespace Serenata\Utility\Typing;
     /**
      * @param string $type
      *
-     * @return static
+     * @return SpecialType|ClassType
      */
     public static function createFromString(string $type)
     {
