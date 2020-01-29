@@ -48,7 +48,7 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
     {
         $parameters = $queueItem->getRequest()->getParams();
 
-        if ($parameters === null || $parameters === '') {
+        if ($parameters === null || $parameters === []) {
             throw new InvalidArgumentsException('Missing parameters for didChangeWatchedFiles request');
         }
 

@@ -94,7 +94,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             $classInfo = $this->classlikeInfoBuilder->build($currentClassName);
 
-            if ($classInfo === null || count($classInfo['parents']) === 0) {
+            if (count($classInfo['parents']) === 0) {
                 return [];
             }
 

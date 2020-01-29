@@ -2,8 +2,6 @@
 
 namespace Serenata\Indexing\Structures;
 
-use DomainException;
-
 use Serenata\Common\Range;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -144,10 +142,6 @@ class Trait_ extends Classlike
      */
     public function addTraitUser(Classlike $classlike): void
     {
-        if (!$classlike instanceof Class_ && !$classlike instanceof Trait_) {
-            throw new DomainException('Only classes and other traits can use traits');
-        }
-
         if ($this->isAddingTraitUser) {
             return; // Don't loop infinitely whilst maintaining bidirectional association.
         }

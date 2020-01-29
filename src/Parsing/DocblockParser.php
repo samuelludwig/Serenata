@@ -558,9 +558,7 @@ final class DocblockParser
                             'description' => trim($varName . ' ' . $varDescription),
                         ];
                     }
-                } elseif (($varName === null || $varName === '') &&
-                    ($varDescription === null || $varDescription === '')
-                ) {
+                } elseif ($varDescription === null || $varDescription === '') {
                     // Example: "@var DateTime".
                     $vars['$' . $itemName] = [
                         'type'        => $type,

@@ -29,7 +29,7 @@ use Serenata\Parsing\Node\Keyword\Static_;
 final class PartialParser implements Parser
 {
     /**
-     * @var Parser
+     * @var Parser|null
      */
     private $strictParser;
 
@@ -339,8 +339,6 @@ final class PartialParser implements Parser
         } catch (Error $e) {
             return null;
         }
-
-        return null;
     }
 
     /**
@@ -348,7 +346,7 @@ final class PartialParser implements Parser
      */
     private function getStrictParser(): Parser
     {
-        if (!$this->strictParser instanceof Parser) {
+        if ($this->strictParser === null) {
             $this->strictParser = $this->parserFactory->create(ParserFactory::PREFER_PHP7, $this->lexer);
         }
 

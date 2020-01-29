@@ -481,7 +481,7 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
     {
         $docblock = $node->getDocComment();
 
-        if ($docblock === null || $docblock === '') {
+        if ($docblock === null) {
             return;
         }
 

@@ -35,14 +35,9 @@ final class ClasslikeConstantConverter
     public function convertForClass(Structures\ClassConstant $constant, ArrayAccess $class): array
     {
         return array_merge($this->constantConverter->convert($constant), [
-            'isPublic' => $constant->getAccessModifier() !== null ?
-                $constant->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_ : true,
-
-            'isProtected' => $constant->getAccessModifier() !== null ?
-                $constant->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_ : false,
-
-            'isPrivate' => $constant->getAccessModifier() !== null ?
-                $constant->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_ : false,
+            'isPublic'    => $constant->getAccessModifier()->getName() === AccessModifierNameValue::PUBLIC_,
+            'isProtected' => $constant->getAccessModifier()->getName() === AccessModifierNameValue::PROTECTED_,
+            'isPrivate'   => $constant->getAccessModifier()->getName() === AccessModifierNameValue::PRIVATE_,
 
             'declaringClass' => [
                 'fqcn'      => $class['fqcn'],

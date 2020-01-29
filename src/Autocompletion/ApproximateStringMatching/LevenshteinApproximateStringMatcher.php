@@ -90,9 +90,9 @@ final class LevenshteinApproximateStringMatcher implements ApproximateStringMatc
      * @param string $approximation
      * @param string $referenceText
      *
-     * @return float|null
+     * @return int|null
      */
-    private function calculateFuzzyMatchScore(string $approximation, string $referenceText): ?float
+    private function calculateFuzzyMatchScore(string $approximation, string $referenceText): ?int
     {
         $score = @levenshtein(
             $referenceText,

@@ -169,7 +169,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
         $typeStringSpecification = null;
 
-        if ($documentation !== null && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
+        if ($documentation['return'] !== null && $documentation['return']['type'] !== null) {
             $typeStringSpecification = $documentation['return']['type'];
         } elseif ($node->getReturnType() !== null) {
             $nodeType = $node->getReturnType();

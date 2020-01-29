@@ -2,7 +2,6 @@
 
 namespace Serenata\Analysis\Node;
 
-use LogicException;
 use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
@@ -57,12 +56,7 @@ final class MethodCallMethodInfoRetriever
      */
     public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
     {
-        if (!$node instanceof Node\Expr\MethodCall &&
-            !$node instanceof Node\Expr\StaticCall &&
-            !$node instanceof Node\Expr\New_
-        ) {
-            throw new LogicException('Expected method call node, got ' . get_class($node) . ' instead');
-        } elseif ($node instanceof Node\Expr\New_) {
+        if ($node instanceof Node\Expr\New_) {
             if ($node->class instanceof Node\Expr) {
                 // Can't currently deduce type of an expression such as "$this->{$foo}()";
                 throw new UnexpectedValueException('Can\'t determine information of dynamic method call');

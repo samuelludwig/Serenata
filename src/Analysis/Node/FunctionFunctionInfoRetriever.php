@@ -2,7 +2,6 @@
 
 namespace Serenata\Analysis\Node;
 
-use LogicException;
 use UnexpectedValueException;
 
 use Serenata\Analysis\FunctionListProviderInterface;
@@ -54,11 +53,7 @@ final class FunctionFunctionInfoRetriever
     {
         if ($node instanceof Node\Stmt\Function_) {
             return $this->getFunctionInfo('\\' . $node->namespacedName->toString());
-        } elseif (!$node instanceof Node\Expr\FuncCall) {
-            throw new LogicException(
-                'Expected function definition node or function call node, got ' . get_class($node) . ' instead'
-            );
-        } elseif ($node->name instanceof Node\Expr) {
+        } elseif (/*$node instanceof Node\Expr\FuncCall && */$node->name instanceof Node\Expr) {
             throw new UnexpectedValueException(
                 'Determining the info for dynamic function calls is currently not supported'
             );

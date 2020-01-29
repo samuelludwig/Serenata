@@ -53,13 +53,16 @@ final class NonStaticMethodAutocompletionApplicabilityChecker implements Autocom
             in_array($node->class->toString(), ['self', 'parent'], true)
         ) {
             return true;
-        } elseif ($node instanceof Node\Expr\StaticPropertyFetch &&
-            !$node->name instanceof Node\VarLikeIdentifier &&
-            !$node->name instanceof Node\Expr &&
-            $node->class instanceof Node\Name &&
-            in_array($node->class->toString(), ['self', 'parent'], true)
-        ) {
-            return true;
+        } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
+            /** @var Node $name To fix PHPStan error, because this can also be an error node. */
+            $name = $node->name;
+
+            if (!$name instanceof Node\VarLikeIdentifier &&
+                !$name instanceof Node\Expr &&
+                $node->class instanceof Node\Name &&
+                in_array($node->class->toString(), ['self', 'parent'], true)) {
+                return true;
+            }
         } elseif ($node instanceof Node\Expr\ClassConstFetch &&
             $node->class instanceof Node\Name &&
             in_array($node->class->toString(), ['self', 'parent'], true)

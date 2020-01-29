@@ -51,11 +51,13 @@ final class StaticMethodAutocompletionApplicabilityChecker implements Autocomple
             !$node->name instanceof Node\Expr
         ) {
             return true;
-        } elseif ($node instanceof Node\Expr\StaticPropertyFetch &&
-            !$node->name instanceof Node\VarLikeIdentifier &&
-            !$node->name instanceof Node\Expr
-        ) {
-            return true;
+        } elseif ($node instanceof Node\Expr\StaticPropertyFetch) {
+            /** @var Node $name To fix PHPStan error, because this can also be an error node. */
+            $name = $node->name;
+
+            if (!$name instanceof Node\VarLikeIdentifier && !$name instanceof Node\Expr) {
+                return true;
+            }
         }
 
         return

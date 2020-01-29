@@ -563,7 +563,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $adaptation->method,
                         $adaptation->newName
                     );
-                } elseif ($classlike instanceof Structures\Trait_) {
+                } else /*if ($classlike instanceof Structures\Trait_)*/ {
                     $traitAlias = new Structures\TraitTraitAlias(
                         $classlike,
                         $traitFqcn,
@@ -571,8 +571,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $adaptation->method,
                         $adaptation->newName
                     );
-                } else {
-                    continue; // Can't add trait aliases in any other classlike type.
                 }
 
                 $this->storage->persist($traitAlias);
@@ -586,14 +584,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                         $traitFqcn,
                         $adaptation->method
                     );
-                } elseif ($classlike instanceof Structures\Trait_) {
+                } else /*if ($classlike instanceof Structures\Trait_)*/ {
                     $traitPrecedence = new Structures\TraitTraitPrecedence(
                         $classlike,
                         $traitFqcn,
                         $adaptation->method
                     );
-                } else {
-                    continue; // Can't add trait precedences in any other classlike type.
                 }
 
                 $this->storage->persist($traitPrecedence);
@@ -677,7 +673,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 if ($node->type instanceof Node\NullableType) {
                     $typeStringSpecification .= '|null';
                 }
-            } elseif ($property->default !== '' && $property->default !== null) {
+            } elseif ($property->default !== null) {
                 $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                     $property->default,
                     $this->textDocumentItem
@@ -777,7 +773,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
         $typeStringSpecification = null;
 
-        if ($documentation !== null && $documentation['return'] !== null && $documentation['return']['type'] !== null) {
+        if ($documentation['return'] !== null && $documentation['return']['type'] !== null) {
             $typeStringSpecification = $documentation['return']['type'];
         } elseif ($node->getReturnType() !== null) {
             $nodeType = $node->getReturnType();
