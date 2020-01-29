@@ -8,6 +8,8 @@ use Serenata\Utility\ImmutableSet;
  * Represents a list of (parameter, property, constant) types.
  *
  * This is a value object and immutable.
+ *
+ * @extends ImmutableSet<Type>
  */
 final class TypeList extends ImmutableSet
 {

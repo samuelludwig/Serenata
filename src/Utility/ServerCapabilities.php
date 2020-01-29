@@ -47,7 +47,7 @@ final class ServerCapabilities implements JsonSerializable
     private $implementationProvider;
 
     /**
-     * @var array|bool|null
+     * @var array<string,mixed>|bool|null
      */
     private $referencesProvider;
 
@@ -72,7 +72,7 @@ final class ServerCapabilities implements JsonSerializable
     private $codeActionProvider;
 
     /**
-     * @var array|null
+     * @var array<string,mixed>|null
      */
     private $codeLensProvider;
 
@@ -117,7 +117,7 @@ final class ServerCapabilities implements JsonSerializable
     private $executeCommandProvider;
 
     /**
-     * @var array|null
+     * @var array<string,mixed>|null
      */
     private $workspace;
 
@@ -134,12 +134,12 @@ final class ServerCapabilities implements JsonSerializable
      * @param bool|null                        $definitionProvider
      * @param bool|object|null                 $typeDefinitionProvider
      * @param bool|object|null                 $implementationProvider
-     * @param array|bool|null                  $referencesProvider
+     * @param array<string,mixed>|bool|null    $referencesProvider
      * @param bool|null                        $documentHighlightProvider
      * @param bool|null                        $documentSymbolProvider
      * @param bool|null                        $workspaceSymbolProvider
      * @param bool|object|null                 $codeActionProvider
-     * @param array|null                       $codeLensProvider
+     * @param array<string,mixed>|null         $codeLensProvider
      * @param bool|null                        $documentFormattingProvider
      * @param bool|null                        $documentRangeFormattingProvider
      * @param object|null                      $documentOnTypeFormattingProvider
@@ -148,7 +148,7 @@ final class ServerCapabilities implements JsonSerializable
      * @param bool|object|null                 $colorProvider
      * @param bool|object|null                 $foldingRangeProvider
      * @param object|null                      $executeCommandProvider
-     * @param array|null                       $workspace
+     * @param array<string,mixed>|null         $workspace
      * @param mixed|null                       $experimental
      */
     public function __construct(
@@ -258,7 +258,7 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return array|bool|null
+     * @return array<string,mixed>|bool|null
      */
     public function getReferencesProvider()
     {
@@ -298,7 +298,7 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     public function getCodeLensProvider(): ?array
     {
@@ -370,7 +370,7 @@ final class ServerCapabilities implements JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     public function getWorkspace(): ?array
     {

@@ -6,6 +6,10 @@ includes:
 
 parameters:
     ignoreErrors:
+        # We can fix this, but it's not our problem to fix and it's never called directly. We just want to just be
+        # able to use inheritDoc here.
+        - '#Method [A-Za-z\\]+::jsonSerialize\(\) return type has no value type specified in iterable type array.#'
+
         -
             message: '#Variable property access on#'
             path: 'src/Analysis/Visiting/ScopeLimitingVisitor.php'

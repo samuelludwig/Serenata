@@ -26,6 +26,8 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
     }
 
     /**
+     * @param array<string,mixed> $configuration
+     *
      * @throws WorkspaceConfigurationParsingException
      */
     private function validate(array $configuration): void
@@ -36,8 +38,8 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
     }
 
     /**
-     * @param array  $data
-     * @param string $key
+     * @param array<string, mixed> $data
+     * @param string               $key
      */
     private function expectKey(array $data, string $key): void
     {

@@ -10,7 +10,7 @@ use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 interface WorkspaceConfigurationParserInterface
 {
     /**
-     * @param array $configuration
+     * @param array<string,mixed> $configuration
      *
      * @throws WorkspaceConfigurationParsingException
      *
