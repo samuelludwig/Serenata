@@ -430,8 +430,12 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private function processClassLikeRelations(Node\Stmt\ClassLike $node, Structures\Classlike $classlike): void
     {
         if ($classlike instanceof Structures\Class_) {
+            assert($node instanceof Node\Stmt\Class_);
+
             $this->processClassRelations($node, $classlike);
         } elseif ($classlike instanceof Structures\Interface_) {
+            assert($node instanceof Node\Stmt\Interface_);
+
             $this->processInterfaceRelations($node, $classlike);
         } elseif ($classlike instanceof Structures\Trait_) {
             // Traits can't have relations.
@@ -1056,7 +1060,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $this->file,
             $range,
             $defaultValue,
-            $documentation['deprecated'] ? 1 : 0,
+            $documentation['deprecated'],
             $docComment !== '' && $docComment !== null,
             $shortDescription !== '' ? $shortDescription : null,
             ((bool) $documentation['descriptions']['long']) ? $documentation['descriptions']['long'] : null,

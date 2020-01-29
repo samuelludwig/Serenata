@@ -4,6 +4,8 @@ namespace Serenata\Indexing;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 use Doctrine\ORM\Tools\SchemaTool;
 
 use Serenata\Indexing\Structures\AccessModifierNameValue;
@@ -42,6 +44,8 @@ final class SchemaInitializer
     public function initialize(): void
     {
         $entityManager = $this->managerRegistry->getManager();
+
+        assert($entityManager instanceof EntityManagerInterface);
 
         $schemaTool = new SchemaTool($entityManager);
 
