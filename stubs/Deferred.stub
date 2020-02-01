@@ -1,0 +1,18 @@
+<?php
+
+namespace React\Promise;
+
+/**
+ * Provides stubs for the Deferred class. This can be removed once the appropriate fixes are merged upstream.
+ *
+ * @see https://github.com/reactphp/promise/pull/156
+ */
+class Deferred
+{
+    /**
+     * @return Promise
+     */
+    public function promise()
+    {
+    }
+}
