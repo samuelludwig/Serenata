@@ -208,7 +208,7 @@ final class JsonRpcQueueItemProcessor
         $item = $throwable;
 
         while ($item) {
-            $vector[] = $item;
+            $vector->push($item);
 
             $item = $item->getPrevious();
         }
