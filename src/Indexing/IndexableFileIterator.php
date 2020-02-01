@@ -4,6 +4,7 @@ namespace Serenata\Indexing;
 
 use Iterator;
 use Generator;
+use SplFileInfo;
 use IteratorIterator;
 use IteratorAggregate;
 
@@ -11,6 +12,8 @@ use Symfony\Component\Finder\Finder;
 
 /**
  * Iterator that iterates all indexable files for a path.
+ *
+ * @implements IteratorAggregate<SplFileInfo>
  */
 final class IndexableFileIterator implements IteratorAggregate
 {
@@ -42,7 +45,7 @@ final class IndexableFileIterator implements IteratorAggregate
     }
 
     /**
-     * @inheritDoc
+     * @return Iterator<SplFileInfo>
      */
     public function getIterator(): Iterator
     {
@@ -52,7 +55,7 @@ final class IndexableFileIterator implements IteratorAggregate
     /**
      * @param string $uri
      *
-     * @return Generator
+     * @return Generator<SplFileInfo>
      */
     private function iterate(string $uri): Generator
     {

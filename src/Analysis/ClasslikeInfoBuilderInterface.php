@@ -17,7 +17,7 @@ interface ClasslikeInfoBuilderInterface
      * @throws UnexpectedValueException
      * @throws CircularDependencyException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function build(string $fqcn): array;
 }

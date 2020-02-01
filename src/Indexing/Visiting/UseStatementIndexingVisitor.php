@@ -94,9 +94,7 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     }
 
     /**
-     * @param array $namespace
-     *
-     * @return void
+     * @param array<string,mixed> $namespace
      */
     private function indexNamespace(array $namespace): void
     {
@@ -115,10 +113,8 @@ final class UseStatementIndexingVisitor implements NodeVisitor
     }
 
     /**
-     * @param array                    $useStatement
+     * @param array<string,mixed>      $useStatement
      * @param Structures\FileNamespace $namespace
-     *
-     * @return void
      */
     private function indexUseStatement(array $useStatement, Structures\FileNamespace $namespace): void
     {

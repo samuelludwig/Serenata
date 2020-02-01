@@ -329,8 +329,8 @@ final class SignatureHelpRetriever
     }
 
     /**
-     * @param array $functionInfo
-     * @param int   $argumentIndex
+     * @param array<string,mixed> $functionInfo
+     * @param int                 $argumentIndex
      *
      * @throws UnexpectedValueException
      *
@@ -367,8 +367,8 @@ final class SignatureHelpRetriever
     }
 
     /**
-     * @param array $functionInfo
-     * @param int   $argumentIndex
+     * @param array<string,mixed> $functionInfo
+     * @param int                 $argumentIndex
      *
      * @throws UnexpectedValueException
      *
@@ -396,7 +396,7 @@ final class SignatureHelpRetriever
     }
 
     /**
-     * @param array $parameters
+     * @param array<array<string,mixed>> $parameters
      *
      * @return ParameterInformation[]
      */
@@ -412,7 +412,7 @@ final class SignatureHelpRetriever
     }
 
     /**
-     * @param array $parameter
+     * @param array<string,mixed> $parameter
      *
      * @return ParameterInformation
      */

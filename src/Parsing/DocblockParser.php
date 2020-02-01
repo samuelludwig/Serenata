@@ -140,10 +140,10 @@ final class DocblockParser
      *
      * @param string|false|null $docblock The docblock to parse. If null, the return array will be filled up with the
      *                                    correct keys, but they will be empty.
-     * @param array             $filters  Elements to search (see constants).
+     * @param string[]          $filters  Elements to search (see constants).
      * @param string            $itemName The name of the item (method, class, ...) the docblock is for.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function parse($docblock, array $filters, string $itemName): array
     {
@@ -185,7 +185,13 @@ final class DocblockParser
                 foreach ($segments as $segment) {
                     [$tag, $start, $end] = $segment;
 
-                    if (!$tag) {
+                    if ($tag === null) {
+                        continue;
+                    }
+
+                    assert(is_string($tag), 'Expected tag to be string');
+
+                    if ($tag === '') {
                         continue;
                     } elseif (!isset($tags[$tag])) {
                         $tags[$tag] = [];
@@ -422,13 +428,13 @@ final class DocblockParser
     /**
      * Filters out information about the return value of the function or method.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterReturn(?string $docblock, string $itemName, array $tags): array
     {
@@ -462,13 +468,13 @@ final class DocblockParser
     /**
      * Filters out information about the parameters of the function or method.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterParams(?string $docblock, string $itemName, array $tags): array
     {
@@ -516,13 +522,13 @@ final class DocblockParser
     /**
      * Filters out information about the variable.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterVar(?string $docblock, string $itemName, array $tags): array
     {
@@ -576,13 +582,13 @@ final class DocblockParser
     /**
      * Filters out deprecation information.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterDeprecated(?string $docblock, string $itemName, array $tags): array
     {
@@ -595,13 +601,13 @@ final class DocblockParser
     /**
      * Filters out information about what exceptions the method can throw.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterThrows(?string $docblock, string $itemName, array $tags): array
     {
@@ -629,13 +635,13 @@ final class DocblockParser
     /**
      * Filters out information about the magic methods of a class.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterMethod(?string $docblock, string $itemName, array $tags): array
     {
@@ -745,13 +751,13 @@ final class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string      $tagName
-     * @param string      $keyName
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string              $tagName
+     * @param string              $keyName
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterPropertyTag(
         string $tagName,
@@ -792,13 +798,13 @@ final class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterProperty(?string $docblock, string $itemName, array $tags): array
     {
@@ -809,13 +815,13 @@ final class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterPropertyRead(?string $docblock, string $itemName, array $tags): array
     {
@@ -826,13 +832,13 @@ final class DocblockParser
     /**
      * Filters out information about the magic properties of a class.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterPropertyWrite(?string $docblock, string $itemName, array $tags): array
     {
@@ -841,13 +847,13 @@ final class DocblockParser
     }
 
     /**
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterCategory(?string $docblock, string $itemName, array $tags): array
     {
@@ -864,13 +870,13 @@ final class DocblockParser
     }
 
     /**
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterSubpackage(?string $docblock, string $itemName, array $tags): array
     {
@@ -887,13 +893,13 @@ final class DocblockParser
     }
 
     /**
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterLink(?string $docblock, string $itemName, array $tags): array
     {
@@ -919,13 +925,13 @@ final class DocblockParser
     /**
      * Filters out annotation information.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterAnnotation(?string $docblock, string $itemName, array $tags): array
     {
@@ -938,13 +944,13 @@ final class DocblockParser
     /**
      * Filters out information about the description.
      *
-     * @param string|null $docblock
-     * @param string      $itemName
-     * @param array       $tags
+     * @param string|null         $docblock
+     * @param string              $itemName
+     * @param array<string,mixed> $tags
      *
      * phpcs:disable -- since PHPCS thinks these methods are unused.
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function filterDescription(?string $docblock, string $itemName, array $tags): array
     {

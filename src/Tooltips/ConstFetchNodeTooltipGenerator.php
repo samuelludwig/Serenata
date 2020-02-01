@@ -80,7 +80,7 @@ final class ConstFetchNodeTooltipGenerator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getConstantInfo(string $fullyQualifiedName): array
     {

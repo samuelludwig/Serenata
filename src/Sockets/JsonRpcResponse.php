@@ -76,7 +76,7 @@ final class JsonRpcResponse implements JsonRpcMessageInterface
     }
 
     /**
-     * @param array $array
+     * @param array<string,mixed> $array
      *
      * @return static
      */

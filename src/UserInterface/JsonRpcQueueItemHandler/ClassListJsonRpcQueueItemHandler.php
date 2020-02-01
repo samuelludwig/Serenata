@@ -74,7 +74,7 @@ final class ClassListJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
     }
 
     /**
-     * @return array
+     * @return array<string,mixed>
      */
     public function getAll(): array
     {
@@ -84,7 +84,7 @@ final class ClassListJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
     /**
      * @param string $uri
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function getAllForFilePath(string $uri): array
     {

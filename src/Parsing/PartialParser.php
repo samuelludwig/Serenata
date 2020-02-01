@@ -71,6 +71,7 @@ final class PartialParser implements Parser
         };
 
         $list = $this->tryParse($correctedExpression);
+        /** @var Node\Stmt[]|null $list We don't really return statements here, but it's fine for our purposes. */
         $list = $isValid($list) ? $list : $this->tryParseWithKeywordCorrection($correctedExpression);
         $list = $isValid($list) ? $list : $this->tryParseWithTrailingSemicolonCorrection($correctedExpression);
         $list = $isValid($list) ? $list : $this->tryParseWithHeredocTerminationCorrection($correctedExpression);
@@ -137,7 +138,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return Node[]|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithTrailingSemicolonCorrection(string $code): ?array
     {
@@ -147,7 +148,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return Node[]|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithHeredocTerminationCorrection(string $code): ?array
     {
@@ -157,7 +158,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return array|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithFunctionTerminationCorrection(string $code): ?array
     {
@@ -167,7 +168,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return array|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithFunctionMissingArgumentCorrection(string $code): ?array
     {
@@ -203,7 +204,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return Node[]|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithTernaryOperatorTerminationCorrection(string $code): ?array
     {
@@ -219,13 +220,22 @@ final class PartialParser implements Parser
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new class($dummyName) extends NodeVisitorAbstract {
+            /**
+             * @var string
+             */
             private $dummyName;
 
+            /**
+             * @param string $dummyName
+             */
             public function __construct(string $dummyName)
             {
                 $this->dummyName = $dummyName;
             }
 
+            /**
+             * @inheritDoc
+             */
             public function enterNode(Node $node)
             {
                 if ($node instanceof Node\Expr\Ternary) {
@@ -248,7 +258,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return Node[]|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithDummyInsertion(string $code): ?array
     {
@@ -277,7 +287,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return Node[]|null
+     * @return Node\Stmt[]|null
      */
     private function tryParseWithDoubleArrowFix(string $code): ?array
     {
@@ -330,7 +340,7 @@ final class PartialParser implements Parser
     /**
      * @param string $code
      *
-     * @return Node[]|null
+     * @return Node\Stmt[]|null
      */
     private function tryParse(string $code): ?array
     {

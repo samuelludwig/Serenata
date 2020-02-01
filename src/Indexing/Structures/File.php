@@ -35,27 +35,27 @@ class File
     private $indexedOn;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,Constant>
      */
     private $constants;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,Function_>
      */
     private $functions;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,Classlike>
      */
     private $classlikes;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,FileNamespace>
      */
     private $namespaces;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,MetaStaticMethodType>
      */
     private $metaStaticMethodTypes;
 

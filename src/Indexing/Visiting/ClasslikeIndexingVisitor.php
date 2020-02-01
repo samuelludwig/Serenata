@@ -30,6 +30,7 @@ use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\Indexing\Structures\Classlike;
+use Serenata\Indexing\Structures\AccessModifier;
 use Serenata\Indexing\Structures\AccessModifierNameValue;
 
 use Serenata\Parsing\DocblockParser;
@@ -74,7 +75,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $nodeTypeDeducer;
 
     /**
-     * @var array|null
+     * @var array<string,AccessModifier>|null
      */
     private $accessModifierMap;
 
@@ -89,7 +90,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     private $textDocumentItem;
 
     /**
-     * @var Stack Stack<Structures\Classlike>
+     * @var Stack<Structures\Classlike>
      */
     private $classlikeStack;
 
@@ -1074,12 +1075,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param array                     $rawData
+     * @param array<string,mixed>       $rawData
      * @param Structures\Classlike      $classlike
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
-     *
-     * @return void
      */
     private function indexMagicProperty(
         array $rawData,
@@ -1089,7 +1088,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     ): void {
         $type = new MixedDocblockType();
 
-        if ($rawData['type']) {
+        if ($rawData['type'] !== null && $rawData['type'] !== '') {
             $docblockType = $this->docblockTypeParser->parse($rawData['type']);
 
             $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
@@ -1119,7 +1118,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param array                     $rawData
+     * @param array<string,mixed>       $rawData
      * @param Structures\Classlike      $classlike
      * @param Structures\AccessModifier $accessModifier
      * @param FilePosition              $filePosition
@@ -1134,7 +1133,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     ): void {
         $returnType = new MixedDocblockType();
 
-        if ($rawData['type']) {
+        if ($rawData['type'] !== null && $rawData['type'] !== '') {
             $docblockType = $this->docblockTypeParser->parse($rawData['type']);
 
             $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
@@ -1216,8 +1215,6 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Structures\Classlike $classlike
-     *
-     * @return void
      */
     private function indexClassKeyword(Structures\Classlike $classlike): void
     {
@@ -1243,7 +1240,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @return array
+     * @return array<string,AccessModifier>
      */
     private function getAccessModifierMap(): array
     {

@@ -16,7 +16,7 @@ final class JsonRpcQueue
     private $jsonRpcRequestPriorityDeterminer;
 
     /**
-     * @var Ds\PriorityQueue
+     * @var Ds\PriorityQueue<JsonRpcQueueItem>
      */
     private $queue;
 

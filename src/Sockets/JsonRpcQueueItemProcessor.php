@@ -199,7 +199,7 @@ final class JsonRpcQueueItemProcessor
     /**
      * @param Throwable $throwable
      *
-     * @return Vector
+     * @return Vector<Throwable>
      */
     private function getThrowableVector(Throwable $throwable): Vector
     {

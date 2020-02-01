@@ -2,6 +2,7 @@
 
 namespace Serenata\Highlights;
 
+use PhpParser\Node;
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -80,7 +81,7 @@ final class DocumentHighlightsRetriever
      *
      * @throws Error
      *
-     * @return array
+     * @return Node[]
      */
     private function getNodes(string $code): array
     {

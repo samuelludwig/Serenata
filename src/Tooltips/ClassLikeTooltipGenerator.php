@@ -10,7 +10,7 @@ use LogicException;
 final class ClassLikeTooltipGenerator
 {
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */
@@ -27,7 +27,7 @@ final class ClassLikeTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */
@@ -41,7 +41,7 @@ final class ClassLikeTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string|null
      */
@@ -55,7 +55,7 @@ final class ClassLikeTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */
@@ -65,7 +65,7 @@ final class ClassLikeTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */

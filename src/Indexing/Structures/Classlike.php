@@ -57,17 +57,17 @@ abstract class Classlike
     protected $hasDocblock;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,ClassConstant>
      */
     protected $constants;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,Property>
      */
     protected $properties;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,Method>
      */
     protected $methods;
 

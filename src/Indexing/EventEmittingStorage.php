@@ -23,7 +23,7 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
      * By not immediately emitting events, we ensure that, for example, multiple persists of the same entity do not emit
      * the same event multiple times to avoid costly recomputations caused by listeners.
      *
-     * @var array
+     * @var array<string,array<string|mixed[]>> Should be a array<string,tuple<string,mixed[]>> actually.
      */
     private $scheduledEvents = [];
 
@@ -150,7 +150,10 @@ final class EventEmittingStorage implements StorageInterface, EventEmitterInterf
     private function dispatchScheduledEvents(): void
     {
         foreach ($this->scheduledEvents as $scheduledEvent) {
-            $this->emit($scheduledEvent[0], $scheduledEvent[1]);
+            /** @var mixed[] $data */
+            $data = $scheduledEvent[1];
+
+            $this->emit($scheduledEvent[0], $data);
         }
 
         $this->clearScheduledEvents();

@@ -12,7 +12,6 @@ use PhpParser\Node;
 
 use Serenata\Common\Position;
 
-
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -78,7 +77,7 @@ final class FuncCallNodeTooltipGenerator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getFunctionInfo(string $fullyQualifiedName): array
     {

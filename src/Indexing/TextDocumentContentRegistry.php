@@ -22,7 +22,7 @@ final class TextDocumentContentRegistry
     private $sourceCodeStreamReader;
 
     /**
-     * @var array
+     * @var array<string,string>
      */
     private $textDocumentContentsMap = [];
 

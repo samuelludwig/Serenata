@@ -99,7 +99,7 @@ final class ClassConstFetchNodeTooltipGenerator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getClassTypes(
         Node\Expr\ClassConstFetch $node,
@@ -128,7 +128,7 @@ final class ClassConstFetchNodeTooltipGenerator
      * @param string $classType
      * @param string $name
      *
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     private function fetchClassConstantInfo(string $classType, string $name): ?array
     {

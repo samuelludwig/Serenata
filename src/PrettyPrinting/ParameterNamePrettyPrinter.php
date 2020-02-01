@@ -8,7 +8,7 @@ namespace Serenata\PrettyPrinting;
 final class ParameterNamePrettyPrinter
 {
     /**
-     * @param array $parameter
+     * @param array<string,mixed> $parameter
      *
      * @return string
      */

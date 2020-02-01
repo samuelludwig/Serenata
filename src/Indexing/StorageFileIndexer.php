@@ -6,8 +6,10 @@ use DateTime;
 use Exception;
 use LogicException;
 
+use PhpParser\Node;
 use PhpParser\Error;
 use PhpParser\Parser;
+use PhpParser\NodeVisitor;
 use PhpParser\ErrorHandler;
 use PhpParser\NodeTraverser;
 
@@ -148,7 +150,7 @@ final class StorageFileIndexer implements FileIndexerInterface
      *
      * @throws Error
      *
-     * @return array
+     * @return Node\Stmt[]
      */
     private function getNodes(string $code): array
     {
@@ -164,7 +166,7 @@ final class StorageFileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param array            $nodes
+     * @param Node[]           $nodes
      * @param Structures\File  $file
      * @param TextDocumentItem $textDocumentItem
      *
@@ -200,7 +202,7 @@ final class StorageFileIndexer implements FileIndexerInterface
     }
 
     /**
-     * @param array            $nodes
+     * @param Node[]           $nodes
      * @param Structures\File  $file
      * @param TextDocumentItem $textDocumentItem
      *
@@ -231,7 +233,7 @@ final class StorageFileIndexer implements FileIndexerInterface
      * @param Structures\File  $file
      * @param TextDocumentItem $textDocumentItem
      *
-     * @return array
+     * @return NodeVisitor[]
      */
     private function getIndexingVisitors(Structures\File $file, TextDocumentItem $textDocumentItem): array
     {

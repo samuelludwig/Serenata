@@ -10,17 +10,17 @@ use PhpParser\PrettyPrinter;
 final class NodePrettyPrinter extends PrettyPrinter\Standard
 {
     // phpcs:disable
-    public function parsing_Node_Keyword_Static()
+    public function parsing_Node_Keyword_Static(): string
     {
         return 'static';
     }
 
-    public function parsing_Node_Keyword_Self()
+    public function parsing_Node_Keyword_Self(): string
     {
         return 'self';
     }
 
-    public function parsing_Node_Keyword_Parent()
+    public function parsing_Node_Keyword_Parent(): string
     {
         return 'parent';
     }

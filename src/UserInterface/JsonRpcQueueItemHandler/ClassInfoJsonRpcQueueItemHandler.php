@@ -66,7 +66,7 @@ final class ClassInfoJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
     /**
      * @param string $fqcn
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function getClassInfo(string $fqcn): array
     {

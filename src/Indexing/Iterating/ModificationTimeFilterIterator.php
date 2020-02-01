@@ -19,8 +19,8 @@ final class ModificationTimeFilterIterator extends FilterIterator
     private $fileModifiedMap;
 
     /**
-     * @param Iterator          $iterator
-     * @param Structures\File[] $filesInIndex
+     * @param Iterator<SplFileInfo> $iterator
+     * @param Structures\File[]     $filesInIndex
      */
     public function __construct(Iterator $iterator, array $filesInIndex)
     {

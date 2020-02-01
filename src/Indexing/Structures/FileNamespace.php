@@ -34,7 +34,7 @@ class FileNamespace
     private $file;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,FileNamespaceImport>
      */
     private $imports;
 

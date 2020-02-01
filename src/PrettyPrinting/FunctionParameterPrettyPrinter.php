@@ -40,7 +40,7 @@ final class FunctionParameterPrettyPrinter
     }
 
     /**
-     * @param array $parameter
+     * @param array<string,mixed> $parameter
      *
      * @return string
      */

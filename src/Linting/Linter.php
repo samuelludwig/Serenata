@@ -29,7 +29,7 @@ final class Linter
     /**
      * @param string $code
      *
-     * @return array
+     * @return Diagnostic[]
      */
     public function lint(string $code): array
     {

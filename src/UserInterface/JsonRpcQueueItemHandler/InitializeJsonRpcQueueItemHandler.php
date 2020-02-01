@@ -136,7 +136,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     }
 
     /**
-     * @param array $params
+     * @param array<string,mixed> $params
      *
      * @return InitializeParams
      */
@@ -313,7 +313,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     /**
      * @param string[] $uris
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getDefaultProjectConfiguration(array $uris): array
     {

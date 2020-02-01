@@ -62,7 +62,7 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
     }
 
     /**
-     * @param array $parameters
+     * @param array<string,mixed> $parameters
      *
      * @return DidChangeWatchedFilesParams
      */
@@ -72,7 +72,7 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
     }
 
     /**
-     * @param array $fileEvents
+     * @param array<string,mixed> $fileEvents
      *
      * @return FileEvent[]
      */

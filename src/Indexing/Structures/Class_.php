@@ -59,12 +59,12 @@ class Class_ extends Classlike
     private $traitFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,ClassTraitAlias>
      */
     private $traitAliases;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,ClassTraitPrecedence>
      */
     private $traitPrecedences;
 

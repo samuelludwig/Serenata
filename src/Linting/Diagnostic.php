@@ -39,17 +39,17 @@ final class Diagnostic implements JsonSerializable
     private $message;
 
     /**
-     * @var array|null
+     * @var array<array<string,mixed>>|null
      */
     private $relatedInformation;
 
     /**
-     * @param Range           $range
-     * @param int|null        $severity
-     * @param int|string|null $code
-     * @param string|null     $source
-     * @param string          $message
-     * @param array|null      $relatedInformation
+     * @param Range                           $range
+     * @param int|null                        $severity
+     * @param int|string|null                 $code
+     * @param string|null                     $source
+     * @param string                          $message
+     * @param array<array<string,mixed>>|null $relatedInformation
      */
     public function __construct(
         Range $range,
@@ -108,7 +108,7 @@ final class Diagnostic implements JsonSerializable
     }
 
     /**
-     * @return array|null
+     * @return array<array<string,mixed>>|null
      */
     public function getRelatedInformation(): ?array
     {

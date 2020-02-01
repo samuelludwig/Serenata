@@ -30,15 +30,15 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
     private $method;
 
     /**
-     * @var array|null
+     * @var array<string,mixed>|null
      */
     private $params;
 
     /**
-     * @param string|int|null $id
-     * @param string          $method
-     * @param array|null      $params
-     * @param string          $jsonrpc The version.
+     * @param string|int|null          $id
+     * @param string                   $method
+     * @param array<string,mixed>|null $params
+     * @param string                   $jsonrpc The version.
      */
     public function __construct($id, string $method, ?array $params = null, string $jsonrpc = '2.0')
     {
@@ -83,7 +83,7 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
     }
 
     /**
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     public function getParams(): ?array
     {
@@ -91,7 +91,7 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
     }
 
     /**
-     * @param array $array
+     * @param array<string,mixed> $array
      *
      * @return static
      */

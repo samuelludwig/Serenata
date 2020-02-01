@@ -84,7 +84,7 @@ final class CompletionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      * @param string   $code
      * @param Position $position
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function getSuggestions(string $uri, string $code, Position $position): array
     {

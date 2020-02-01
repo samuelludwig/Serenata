@@ -69,7 +69,7 @@ final class NameNodeDefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getClassLikeInfo(string $fullyQualifiedName): array
     {

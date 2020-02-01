@@ -34,7 +34,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $functionInfo
+     * @param array<string,mixed> $functionInfo
      *
      * @return string
      */
@@ -52,7 +52,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $functionInfo
+     * @param array<string,mixed> $functionInfo
      *
      * @return string
      */
@@ -66,7 +66,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $functionInfo
+     * @param array<string,mixed> $functionInfo
      *
      * @return string|null
      */
@@ -80,7 +80,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $functionInfo
+     * @param array<string,mixed> $functionInfo
      *
      * @return string|null
      */
@@ -100,7 +100,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $parameter
+     * @param array<string,mixed> $parameter
      *
      * @return string
      */
@@ -140,7 +140,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $functionInfo
+     * @param array<string,mixed> $functionInfo
      *
      * @return string
      */
@@ -166,7 +166,7 @@ final class FunctionTooltipGenerator
     }
 
     /**
-     * @param array $functionInfo
+     * @param array<string,mixed> $functionInfo
      *
      * @return string|null
      */

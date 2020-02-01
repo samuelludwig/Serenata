@@ -18,7 +18,7 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
     protected const HEADER_DELIMITER = "\r\n";
 
     /**
-     * @var array
+     * @var array<string,mixed>
      */
     private $request;
 
@@ -124,7 +124,7 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
             $this->request['length'] = $contentLength;
 
             $bytesRead = strlen($contentLengthHeader) + strlen(self::HEADER_DELIMITER);
-        } elseif (!$this->request['wasBoundaryFound']) {
+        } elseif ($this->request['wasBoundaryFound'] === false) {
             $header = $this->readRawHeader($data);
 
             if ($header === '') {

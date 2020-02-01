@@ -25,12 +25,12 @@ final class InitializeParams
     private $rootUri;
 
     /**
-     * @var array|null
+     * @var array<string,mixed>|null
      */
     private $initializationOptions;
 
     /**
-     * @var array
+     * @var array<string,mixed>
      */
     private $capabilities;
 
@@ -45,13 +45,13 @@ final class InitializeParams
     private $workspaceFolders;
 
     /**
-     * @param int|null      $processId
-     * @param string|null   $rootPath
-     * @param string|null   $rootUri
-     * @param array|null    $initializationOptions
-     * @param array         $capabilities
-     * @param string|null   $trace
-     * @param array[]|null  $workspaceFolders
+     * @param int|null                 $processId
+     * @param string|null              $rootPath
+     * @param string|null              $rootUri
+     * @param array<string,mixed>|null $initializationOptions
+     * @param array<string,mixed>      $capabilities
+     * @param string|null              $trace
+     * @param array[]|null             $workspaceFolders
      */
     public function __construct(
         ?int $processId,
@@ -96,7 +96,7 @@ final class InitializeParams
     }
 
     /**
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     public function getInitializationOptions(): ?array
     {
@@ -104,7 +104,7 @@ final class InitializeParams
     }
 
     /**
-     * @return array
+     * @return array<string,mixed>
      */
     public function getCapabilities(): array
     {

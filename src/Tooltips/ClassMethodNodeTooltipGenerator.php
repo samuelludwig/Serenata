@@ -89,7 +89,7 @@ final class ClassMethodNodeTooltipGenerator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getMethodInfo(string $fqcn, string $method): array
     {

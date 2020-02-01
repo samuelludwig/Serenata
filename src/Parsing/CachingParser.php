@@ -2,6 +2,7 @@
 
 namespace Serenata\Parsing;
 
+use PhpParser\Node;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
 
@@ -19,7 +20,7 @@ final class CachingParser implements Parser
     private $proxiedObject;
 
     /**
-     * @var array|null
+     * @var Node\Stmt[]|null
      */
     private $cache = null;
 

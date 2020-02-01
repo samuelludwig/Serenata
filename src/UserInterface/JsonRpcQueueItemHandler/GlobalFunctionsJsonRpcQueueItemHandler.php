@@ -42,7 +42,7 @@ final class GlobalFunctionsJsonRpcQueueItemHandler extends AbstractJsonRpcQueueI
     }
 
      /**
-      * @return array
+      * @return array<string,mixed>
       */
     public function getGlobalFunctions(): array
     {

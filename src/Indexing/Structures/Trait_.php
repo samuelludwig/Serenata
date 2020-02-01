@@ -27,12 +27,12 @@ class Trait_ extends Classlike
     private $traitUserFqcns;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,TraitTraitAlias>
      */
     private $traitAliases;
 
     /**
-     * @var ArrayCollection
+     * @var ArrayCollection<int,TraitTraitPrecedence>
      */
     private $traitPrecedences;
 
@@ -99,8 +99,6 @@ class Trait_ extends Classlike
 
     /**
      * @param string $fqcn
-     *
-     * @return void
      */
     public function addTraitFqcn(string $fqcn): void
     {
@@ -109,8 +107,6 @@ class Trait_ extends Classlike
 
     /**
      * @param Trait_ $trait
-     *
-     * @return void
      */
     public function addTrait(Trait_ $trait): void
     {
@@ -137,8 +133,6 @@ class Trait_ extends Classlike
 
     /**
      * @param Class_|Trait_ $classlike
-     *
-     * @return void
      */
     public function addTraitUser(Classlike $classlike): void
     {
@@ -165,8 +159,6 @@ class Trait_ extends Classlike
 
     /**
      * @param TraitTraitAlias $classlikeTraitAlias
-     *
-     * @return void
      */
     public function addTraitAlias(TraitTraitAlias $classlikeTraitAlias): void
     {
@@ -183,8 +175,6 @@ class Trait_ extends Classlike
 
     /**
      * @param TraitTraitPrecedence $classlikeTraitPrecedence
-     *
-     * @return void
      */
     public function addTraitPrecedence(TraitTraitPrecedence $classlikeTraitPrecedence): void
     {

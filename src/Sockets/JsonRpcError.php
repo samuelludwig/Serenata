@@ -63,7 +63,7 @@ final class JsonRpcError implements JsonSerializable
     }
 
     /**
-     * @param array $array
+     * @param array<string,mixed> $array
      *
      * @return static
      */

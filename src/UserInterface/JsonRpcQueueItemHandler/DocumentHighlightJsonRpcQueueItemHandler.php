@@ -72,7 +72,7 @@ final class DocumentHighlightJsonRpcQueueItemHandler extends AbstractJsonRpcQueu
      * @param string   $code
      * @param Position $position
      *
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     public function getAll(string $uri, string $code, Position $position): ?array
     {

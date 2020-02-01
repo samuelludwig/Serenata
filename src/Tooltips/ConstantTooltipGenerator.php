@@ -21,7 +21,7 @@ final class ConstantTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */
@@ -37,7 +37,7 @@ final class ConstantTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */
@@ -51,7 +51,7 @@ final class ConstantTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string|null
      */
@@ -65,7 +65,7 @@ final class ConstantTooltipGenerator
     }
 
     /**
-     * @param array $info
+     * @param array<string,mixed> $info
      *
      * @return string
      */

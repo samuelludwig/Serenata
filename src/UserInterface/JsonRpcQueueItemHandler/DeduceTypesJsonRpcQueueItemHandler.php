@@ -59,7 +59,7 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
             throw new InvalidArgumentsException('"position" into the source must be supplied');
         }
 
-        if (isset($arguments['stdin']) && $arguments['stdin']) {
+        if (isset($arguments['stdin']) && $arguments['stdin'] !== '') {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromStdin();
         } else {
             $code = $this->sourceCodeStreamReader->getSourceCodeFromFile($arguments['uri']);
@@ -78,7 +78,7 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
             $code,
             $codeWithExpression,
             $position,
-            isset($arguments['ignore-last-element']) && $arguments['ignore-last-element']
+            isset($arguments['ignore-last-element']) && $arguments['ignore-last-element'] === true
         );
 
         $deferred = new Deferred();
@@ -94,7 +94,7 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
      * @param Position $position
      * @param bool     $ignoreLastElement
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function deduceTypes(
         string $uri,
