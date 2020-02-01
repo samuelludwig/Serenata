@@ -300,6 +300,7 @@ final class ParameterDocblockTypeSemanticEqualityChecker
             return $type instanceof ClassType;
         });
 
+        /** @var ClassType $parameterClassType */
         $parameterClassType = $parameterClassTypes->toArray()[0];
 
         foreach ($docblockTypesThatAreClassTypes as $docblockTypeThatIsClassType) {
