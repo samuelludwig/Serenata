@@ -65,7 +65,7 @@ test:run-phpstan:
     script:
         # TODO: Enable when all the existing errors have been fixed (https://gitlab.com/Serenata/Serenata/issues/277).
         # - php -d memory_limit=2048M vendor/bin/phpstan analyse --level=max --no-interaction --no-progress --error-format junit src > ./phpstan-report.xml
-        - php -d memory_limit=2048M vendor/bin/phpstan analyse --level=2 --no-interaction --no-progress --error-format junit src > ./phpstan-report.xml
+        - php -d memory_limit=2048M vendor/bin/phpstan analyse --level=5 --no-interaction --no-progress --error-format junit src > ./phpstan-report.xml
     artifacts:
         when: always
         expire_in: 1 hrs

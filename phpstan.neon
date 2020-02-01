@@ -5,6 +5,9 @@ includes:
     - vendor/phpstan/phpstan-strict-rules/rules.neon
 
 parameters:
+    # TODO: Remove this once all PHPStan issues are fixed and CI is at --level=max.
+    reportUnmatchedIgnoredErrors: false
+
     stubFiles:
         - stubs/Deferred.stub
 
