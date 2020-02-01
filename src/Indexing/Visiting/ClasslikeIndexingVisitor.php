@@ -29,7 +29,6 @@ use Serenata\DocblockTypeParser\SpecializedArrayDocblockType;
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
-use Serenata\Indexing\Structures\Classlike;
 use Serenata\Indexing\Structures\AccessModifier;
 use Serenata\Indexing\Structures\AccessModifierNameValue;
 
