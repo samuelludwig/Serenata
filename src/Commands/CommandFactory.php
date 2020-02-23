@@ -19,8 +19,8 @@ final class CommandFactory
     private const DUMMY_TITLE = 'Dummy title from CommandFactory';
 
     /**
-     * @param string     $name
-     * @param array|null $arguments
+     * @param string                   $name
+     * @param array<string,mixed>|null $arguments
      *
      * @throws BadCommandArgumentsException
      *
@@ -44,8 +44,8 @@ final class CommandFactory
     }
 
     /**
-     * @param array  $arguments
-     * @param string $key
+     * @param array<string,mixed> $arguments
+     * @param string              $key
      *
      * @throws BadCommandArgumentsException
      *
@@ -57,8 +57,8 @@ final class CommandFactory
     }
 
     /**
-     * @param array  $arguments
-     * @param string $key
+     * @param array<string,mixed> $arguments
+     * @param string              $key
      *
      * @throws BadCommandArgumentsException
      *
@@ -72,12 +72,12 @@ final class CommandFactory
     }
 
     /**
-     * @param array  $arguments
-     * @param string $key
+     * @param array<string,mixed> $arguments
+     * @param string              $key
      *
      * @throws BadCommandArgumentsException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function expectMap(array $arguments, string $key): array
     {
@@ -93,12 +93,12 @@ final class CommandFactory
     }
 
     // /**
-    //  * @param array  $arguments
-    //  * @param string $key
+    //  * @param array<string,mixed> $arguments
+    //  * @param string              $key
     //  *
     //  * @throws BadCommandArgumentsException
     //  *
-    //  * @return array
+    //  * @return mixed[]
     //  */
     // private function expectArray(array $arguments, string $key): array
     // {
@@ -114,8 +114,8 @@ final class CommandFactory
     // }
 
     /**
-     * @param array  $arguments
-     * @param string $key
+     * @param array<string,mixed> $arguments
+     * @param string              $key
      *
      * @throws BadCommandArgumentsException
      *
@@ -135,8 +135,8 @@ final class CommandFactory
     }
 
     /**
-     * @param array  $arguments
-     * @param string $key
+     * @param array<string,mixed> $arguments
+     * @param string              $key
      *
      * @throws BadCommandArgumentsException
      *
@@ -156,8 +156,8 @@ final class CommandFactory
     }
 
     /**
-     * @param array  $arguments
-     * @param string $key
+     * @param array<string,mixed> $arguments
+     * @param string              $key
      *
      * @throws BadCommandArgumentsException
      *

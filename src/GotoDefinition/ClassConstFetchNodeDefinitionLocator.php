@@ -93,7 +93,7 @@ final class ClassConstFetchNodeDefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return string[]
      */
     private function getClassTypes(
         Node\Expr\ClassConstFetch $node,
@@ -123,7 +123,7 @@ final class ClassConstFetchNodeDefinitionLocator
      * @param string $classType
      * @param string $name
      *
-     * @return array|null
+     * @return array<string,mixed>|null
      */
     private function fetchClassConstantInfo(string $classType, string $name): ?array
     {

@@ -73,7 +73,7 @@ final class FuncCallNodeDefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getFunctionInfo(string $fullyQualifiedName): array
     {
