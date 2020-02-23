@@ -1,0 +1,1292 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\ArrayCachingClasslikeExistenceChecker\\:\\:\\$cache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ArrayCachingClasslikeExistenceChecker.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\ArrayCachingGlobalConstantExistenceChecker\\:\\:\\$cache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ArrayCachingGlobalConstantExistenceChecker.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\ArrayCachingGlobalFunctionExistenceChecker\\:\\:\\$cache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ArrayCachingGlobalFunctionExistenceChecker.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\CachingFileNamespaceProvider\\:\\:\\$cache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/CachingFileNamespaceProvider.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\CachingNodeAtOffsetLocator\\:\\:\\$cache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/CachingNodeAtOffsetLocator.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:getCheckedClasslikeInfo\\(\\) return type with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:getUncheckedClasslikeInfo\\(\\) return type with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:fetchFlatClasslikeInfo\\(\\) return type with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildDirectChildrenInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildDirectImplementorsInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildTraitUsersInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildConstantsInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildPropertiesInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildMethodsInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildTraitsInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Parameter \\#3 \\$traitAliases of method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveUseOf\\(\\) expects array\\<Serenata\\\\Indexing\\\\Structures\\\\ClassTraitAlias\\>, array\\<Serenata\\\\Indexing\\\\Structures\\\\ClassTraitAlias\\|Serenata\\\\Indexing\\\\Structures\\\\TraitTraitAlias\\> given\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Parameter \\#4 \\$traitPrecedences of method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveUseOf\\(\\) expects array\\<Serenata\\\\Indexing\\\\Structures\\\\ClassTraitPrecedence\\>, array\\<Serenata\\\\Indexing\\\\Structures\\\\ClassTraitPrecedence\\|Serenata\\\\Indexing\\\\Structures\\\\TraitTraitPrecedence\\> given\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildParentsInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:buildInterfacesInfo\\(\\) has parameter \\$classlikeInfo with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:resolveSelfTypesTo\\(\\) has parameter \\$result with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:resolveStaticTypesTo\\(\\) has parameter \\$result with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:resolveNormalTypes\\(\\) has parameter \\$result with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeInfoBuilder\\:\\:walkTypes\\(\\) has parameter \\$result with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/ClasslikeInfoBuilder.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\ClasslikeListRegistry\\:\\:\\$registry type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeListRegistry\\:\\:add\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeListRegistry\\:\\:remove\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeListRegistry\\:\\:getRegistry\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ClasslikeRawConstantDataProviderInterface\\:\\:getClasslikeRawConstants\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ClasslikeRawConstantDataProviderInterface.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ConstantListProviderInterface\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListProviderInterface.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\ConstantListRegistry\\:\\:\\$registry type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ConstantListRegistry\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ConstantListRegistry\\:\\:add\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ConstantListRegistry\\:\\:remove\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ConstantListRegistry\\:\\:getRegistry\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\ConstantListRegistry\\:\\:getRegistry\\(\\) should return array but returns array\\|null\\.$#"
+			count: 1
+			path: src/Analysis/ConstantListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\ClasslikeConstantConverter\\:\\:convertForClass\\(\\) has parameter \\$class with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Conversion/ClasslikeConstantConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\ClasslikeConstantConverter\\:\\:convertForClass\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/ClasslikeConstantConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\ClasslikeConverter\\:\\:convert\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/ClasslikeConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\ConstantConverter\\:\\:convert\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/ConstantConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\FunctionConverter\\:\\:convert\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/FunctionConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\MethodConverter\\:\\:convertForClass\\(\\) has parameter \\$class with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Conversion/MethodConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\MethodConverter\\:\\:convertForClass\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/MethodConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\NamespaceConverter\\:\\:convert\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/NamespaceConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\PropertyConverter\\:\\:convertForClass\\(\\) has parameter \\$class with generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Conversion/PropertyConverter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Conversion\\\\PropertyConverter\\:\\:convertForClass\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/PropertyConverter.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method Serenata\\\\NameQualificationUtilities\\\\PositionalNameResolverInterface\\:\\:resolve\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Analysis/DocblockPositionalNameResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineClasslikeListProvider\\:\\:getAllForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineClasslikeListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineClasslikeListProvider\\:\\:mapClasslikes\\(\\) has parameter \\$classlikes with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineClasslikeListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineClasslikeListProvider\\:\\:mapClasslikes\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineClasslikeListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineConstantListProvider\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineConstantListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineNamespaceListProvider\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineNamespaceListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineNamespaceListProvider\\:\\:getAllForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineNamespaceListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineNamespaceListProvider\\:\\:mapNamespaces\\(\\) has parameter \\$namespaces with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineNamespaceListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\DoctrineNamespaceListProvider\\:\\:mapNamespaces\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/DoctrineNamespaceListProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\FileNamespaceListProviderInterface\\:\\:getAllForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/FileNamespaceListProviderInterface.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\NamespaceListProviderInterface\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListProviderInterface.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\NamespaceListRegistry\\:\\:\\$registry type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\NamespaceListRegistry\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\NamespaceListRegistry\\:\\:add\\(\\) has parameter \\$namespace with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\NamespaceListRegistry\\:\\:remove\\(\\) has parameter \\$namespace with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\NamespaceListRegistry\\:\\:getRegistry\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\NamespaceListRegistry\\:\\:getRegistry\\(\\) should return array but returns array\\|null\\.$#"
+			count: 1
+			path: src/Analysis/NamespaceListRegistry.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Node\\\\FunctionFunctionInfoRetriever\\:\\:retrieve\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Node/FunctionFunctionInfoRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Node\\\\FunctionFunctionInfoRetriever\\:\\:getFunctionInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Node/FunctionFunctionInfoRetriever.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\AbstractResolver\\:\\:isInheritingFullDocumentation\\(\\) has parameter \\$processedData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/AbstractResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\AbstractResolver\\:\\:extractInheritedPropertyInfo\\(\\) has parameter \\$propertyData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/AbstractResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\AbstractResolver\\:\\:extractInheritedPropertyInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/AbstractResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\AbstractResolver\\:\\:extractInheritedMethodInfo\\(\\) has parameter \\$inheritingMethodData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/AbstractResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\AbstractResolver\\:\\:extractInheritedMethodInfo\\(\\) has parameter \\$methodData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/AbstractResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\AbstractResolver\\:\\:extractInheritedMethodInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/AbstractResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOf\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOf\\(\\) has parameter \\$parent with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOfConstant\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOfConstant\\(\\) has parameter \\$parentConstantData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOfProperty\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOfProperty\\(\\) has parameter \\$parentPropertyData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOfMethod\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InheritanceResolver\\:\\:resolveInheritanceOfMethod\\(\\) has parameter \\$parentMethodData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/InheritanceResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InterfaceImplementationResolver\\:\\:resolveImplementationOf\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InterfaceImplementationResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InterfaceImplementationResolver\\:\\:resolveImplementationOf\\(\\) has parameter \\$interface with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InterfaceImplementationResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InterfaceImplementationResolver\\:\\:resolveInheritanceOfConstant\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InterfaceImplementationResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InterfaceImplementationResolver\\:\\:resolveInheritanceOfConstant\\(\\) has parameter \\$interfaceConstantData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/InterfaceImplementationResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InterfaceImplementationResolver\\:\\:resolveImplementationOfMethod\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/InterfaceImplementationResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\InterfaceImplementationResolver\\:\\:resolveImplementationOfMethod\\(\\) has parameter \\$interfaceMethodData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/InterfaceImplementationResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveUseOf\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/TraitUsageResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveUseOf\\(\\) has parameter \\$trait with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/TraitUsageResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveTraitUseOfProperty\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/TraitUsageResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveTraitUseOfProperty\\(\\) has parameter \\$traitPropertyData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/TraitUsageResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveTraitUseOfMethod\\(\\) has parameter \\$class with generic class ArrayObject but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Analysis/Relations/TraitUsageResolver.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Relations\\\\TraitUsageResolver\\:\\:resolveTraitUseOfMethod\\(\\) has parameter \\$traitMethodData with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Relations/TraitUsageResolver.php
+
+		-
+			message: "#^Parameter \\#1 \\$text of method Serenata\\\\Analysis\\\\SourceCodeReading\\\\TextEncodingConverterInterface\\:\\:convert\\(\\) expects string, string\\|false given\\.$#"
+			count: 1
+			path: src/Analysis/SourceCodeReading/FileSourceCodeStreamReader.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, string\\|false given\\.$#"
+			count: 1
+			path: src/Analysis/SourceCodeReading/TextToUtf8Converter.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\AbstractNodeTypeDeducer\\:\\:fetchResolvedTypeFromTypeArray\\(\\) has parameter \\$typeArray with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/AbstractNodeTypeDeducer.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\AbstractNodeTypeDeducer\\:\\:fetchResolvedTypesFromTypeArrays\\(\\) has parameter \\$typeArrays with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/AbstractNodeTypeDeducer.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\AbstractNodeTypeDeducer\\:\\:fetchResolvedTypesFromTypeArrays\\(\\) should return array\\<string\\> but returns array\\<string\\|null\\>\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/AbstractNodeTypeDeducer.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\ArrayDimFetchNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, string\\|null\\>\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ArrayDimFetchNodeTypeDeducer.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 2
+			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\ClassConstFetchNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, int\\|string\\>\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
+
+		-
+			message: "#^Property class@anonymous/Analysis/Typing/Deduction/ExpressionTypeDeducer\\.php\\:145\\:\\:\\$namespaceNode has no typehint specified\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ExpressionTypeDeducer.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\ForeachNodeLoopValueTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, string\\|null\\>\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
+
+		-
+			message: "#^Parameter \\#1 \\$line of class Serenata\\\\Common\\\\Position constructor expects int, int\\|null given\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:deduceTypesFromStatic\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
+
+		-
+			message: "#^Parameter \\#1 \\$typeSpecification of method Serenata\\\\Analysis\\\\Typing\\\\TypeAnalyzer\\:\\:getTypesForTypeSpecification\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
+
+		-
+			message: "#^Parameter \\#2 \\$node of method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:getTypesForBestMatchNode\\(\\) expects PhpParser\\\\Node, PhpParser\\\\Node\\|null given\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Expr\\\\Variable\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\MethodCallNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, int\\|string\\>\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/MethodCallNodeTypeDeducer.php
+
+		-
+			message: "#^Parameter \\#4 \\$defaultTypes of method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:getLocalExpressionTypes\\(\\) expects array\\<string\\>, array\\<int, int\\|string\\> given\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\PropertyFetchNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, int\\|string\\>\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\Typing\\\\FileClasslikeListProviderCachingDecorator\\:\\:\\$cache type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/FileClasslikeListProviderCachingDecorator.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\FileClasslikeListProviderCachingDecorator\\:\\:getAllForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/FileClasslikeListProviderCachingDecorator.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\FileClasslikeListProviderInterface\\:\\:getAllForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/FileClasslikeListProviderInterface.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\NamespaceImportProviderInterface\\:\\:getUseStatementsForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/NamespaceImportProviderInterface.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\NamespaceImportProviderInterface\\:\\:getNamespaces\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/NamespaceImportProviderInterface.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\ParameterDocblockTypeSemanticEqualityChecker\\:\\:isEqual\\(\\) has parameter \\$docblockParameter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/ParameterDocblockTypeSemanticEqualityChecker.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\ParameterDocblockTypeSemanticEqualityChecker\\:\\:isEqual\\(\\) has parameter \\$parameter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/ParameterDocblockTypeSemanticEqualityChecker.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\ParameterDocblockTypeSemanticEqualityChecker\\:\\:calculateParameterTypeList\\(\\) has parameter \\$parameter with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Typing/ParameterDocblockTypeSemanticEqualityChecker.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\VariableScanner\\:\\:getAvailableVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/VariableScanner.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\VariableScanner\\:\\:getNodes\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/VariableScanner.php
+
+		-
+			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
+			count: 2
+			path: src/Analysis/VariableScanningVisitor.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\ExpressionTypeInfoMap\\:\\:\\$map type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/ExpressionTypeInfoMap.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\FunctionLikeBodyOffsetAttachingVisitor\\:\\:\\$tokens type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/FunctionLikeBodyOffsetAttachingVisitor.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Visiting\\\\FunctionLikeBodyOffsetAttachingVisitor\\:\\:__construct\\(\\) has parameter \\$tokens with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/FunctionLikeBodyOffsetAttachingVisitor.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\ScopeLimitingVisitor\\:\\:\\$memorizedNodeProperties type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/ScopeLimitingVisitor.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Visiting\\\\ScopeLimitingVisitor\\:\\:memorizeNodeProperties\\(\\) has parameter \\$properties with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/ScopeLimitingVisitor.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\TypePossibilityMap\\:\\:\\$map type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/TypePossibilityMap.php
+
+		-
+			message: "#^Method Serenata\\\\Analysis\\\\Visiting\\\\TypePossibilityMap\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/TypePossibilityMap.php
+
+		-
+			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
+			count: 3
+			path: src/Analysis/Visiting/TypeQueryingVisitor.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Expr\\\\Variable\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/TypeQueryingVisitor.php
+
+		-
+			message: "#^Cannot cast PhpParser\\\\Node\\\\Expr\\|string to string\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/TypeQueryingVisitor.php
+
+		-
+			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\UseStatementFetchingVisitor\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/UseStatementFetchingVisitor.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:partitionByScore\\(\\) has parameter \\$items with no value type specified in iterable type iterable\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:partitionByScore\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:pruneUndesiredPartitions\\(\\) has parameter \\$partitions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:pruneUndesiredPartitions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:sortPartitionsByHighestScore\\(\\) has parameter \\$partitions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:sortPartitionsByHighestScore\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:retrieveBestMatchScorePairsFromPartitions\\(\\) has parameter \\$partitions with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:retrieveBestMatchScorePairsFromPartitions\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:sortBestMatchScorePairs\\(\\) has parameter \\$bestMatchScorePairs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:sortBestMatchScorePairs\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:extractMatchesFromBestMatchScorePairs\\(\\) has parameter \\$bestMatchScorePairs with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:extractMatchesFromBestMatchScorePairs\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
+
+		-
+			message: "#^Class Serenata\\\\Autocompletion\\\\CompletionItem implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetSet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetExists\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetUnset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetGet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
+			count: 1
+			path: src/Autocompletion/CompletionItem.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\FunctionAutocompletionSuggestionLabelCreator\\:\\:create\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/FunctionAutocompletionSuggestionLabelCreator.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\FunctionParametersEvaluator\\:\\:hasRequiredParameters\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/FunctionParametersEvaluator.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClassConstantAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClassConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClassConstantAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) return type has no value type specified in iterable type Generator\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClassConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClassConstantAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$constant with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClassConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClassConstantAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$constant with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClassConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClassConstantAutocompletionProvider\\:\\:extractProtectionLevelStringFromMemberData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClassConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClasslikeAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClasslikeAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClasslikeAutocompletionProvider\\:\\:getFqcnWithoutLeadingSlash\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClasslikeAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClasslikeAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClasslikeAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClasslikeAutocompletionProvider\\:\\:getInsertTextForSuggestion\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClasslikeAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ClasslikeAutocompletionProvider\\:\\:createAdditionalTextEditsForSuggestion\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ClasslikeAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ConstantAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$constant with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ConstantAutocompletionProvider\\:\\:getFqcnWithoutLeadingSlash\\(\\) has parameter \\$classlike with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ConstantAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$constant with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ConstantAutocompletionProvider\\:\\:getInsertTextForSuggestion\\(\\) has parameter \\$constant with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\ConstantAutocompletionProvider\\:\\:createAdditionalTextEditsForSuggestion\\(\\) has parameter \\$constant with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ConstantAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\DocblockTagAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$tag with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/DocblockTagAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\DocblockTagAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$tag with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/DocblockTagAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\FunctionAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/FunctionAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\FunctionAutocompletionProvider\\:\\:getFqcnWithoutLeadingSlash\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/FunctionAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\FunctionAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/FunctionAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\FunctionAutocompletionProvider\\:\\:getInsertTextForSuggestion\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/FunctionAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\FunctionAutocompletionProvider\\:\\:createAdditionalTextEditsForSuggestion\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/FunctionAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\KeywordAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$keyword with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/KeywordAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\KeywordAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$keyword with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/KeywordAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\KeywordAutocompletionProvider\\:\\:getKeywords\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/KeywordAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\LocalVariableAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$variable with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/LocalVariableAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\LocalVariableAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$variable with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/LocalVariableAutocompletionProvider.php
+
+		-
+			message: "#^PHPDoc tag @var for variable \\$bestApproximations has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NamespaceAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NamespaceAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$namespace with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NamespaceAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NamespaceAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$namespace with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NamespaceAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticMethodAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticMethodAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) return type has no value type specified in iterable type Generator\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticMethodAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$method with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticMethodAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$method with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticMethodAutocompletionProvider\\:\\:getInsertTextForSuggestion\\(\\) has parameter \\$method with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticMethodAutocompletionProvider\\:\\:extractProtectionLevelStringFromMemberData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticPropertyAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticPropertyAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) return type has no value type specified in iterable type Generator\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticPropertyAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$property with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticPropertyAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$property with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\NonStaticPropertyAutocompletionProvider\\:\\:extractProtectionLevelStringFromMemberData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/NonStaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of method Serenata\\\\Autocompletion\\\\Providers\\\\ParameterNameAutocompletionProvider\\:\\:generateSuggestionsForName\\(\\) expects string, string\\|null given\\.$#"
+			count: 2
+			path: src/Autocompletion/Providers/ParameterNameAutocompletionProvider.php
+
+		-
+			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ParameterNameAutocompletionProvider.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, array\\<int, string\\>\\|false given\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/ParameterNameAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticMethodAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticMethodAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) return type has no value type specified in iterable type Generator\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticMethodAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$method with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticMethodAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$method with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticMethodAutocompletionProvider\\:\\:getInsertTextForSuggestion\\(\\) has parameter \\$method with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticMethodAutocompletionProvider\\:\\:extractProtectionLevelStringFromMemberData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticMethodAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticPropertyAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticPropertyAutocompletionProvider\\:\\:createSuggestionsForClasslikeInfo\\(\\) return type has no value type specified in iterable type Generator\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticPropertyAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$property with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticPropertyAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$property with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\StaticPropertyAutocompletionProvider\\:\\:extractProtectionLevelStringFromMemberData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/StaticPropertyAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\SuperglobalAutocompletionProvider\\:\\:createSuggestion\\(\\) has parameter \\$superGlobal with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/SuperglobalAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\SuperglobalAutocompletionProvider\\:\\:getTextEditForSuggestion\\(\\) has parameter \\$superGlobal with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/SuperglobalAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\Autocompletion\\\\Providers\\\\SuperglobalAutocompletionProvider\\:\\:getSuperGlobals\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Autocompletion/Providers/SuperglobalAutocompletionProvider.php
+
+		-
+			message: "#^Method Serenata\\\\CodeLenses\\\\CodeLensesRetriever\\:\\:generateMethodOverrideAndImplementationLenses\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/CodeLenses/CodeLensesRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\CodeLenses\\\\CodeLensesRetriever\\:\\:generateMethodOverrideAndImplementationLenses\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/CodeLenses/CodeLensesRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\CodeLenses\\\\CodeLensesRetriever\\:\\:generatePropertyOverrideLenses\\(\\) has parameter \\$classlikeInfo with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/CodeLenses/CodeLensesRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\CodeLenses\\\\CodeLensesRetriever\\:\\:generatePropertyOverrideLenses\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/CodeLenses/CodeLensesRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\GotoDefinition\\\\DefinitionLocator\\:\\:getNodeAt\\(\\) should return PhpParser\\\\Node but returns PhpParser\\\\Node\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/DefinitionLocator.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class PhpParser\\\\Node\\\\Name\\\\FullyQualified constructor expects array\\<string\\>\\|PhpParser\\\\Node\\\\Name\\|string, PhpParser\\\\Node\\\\Name\\|null given\\.$#"
+			count: 1
+			path: src/GotoDefinition/DefinitionLocator.php
+
+		-
+			message: "#^Offset 'range' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/MethodCallNodeDefinitionLocator.php
+
+		-
+			message: "#^Offset 'uri' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/MethodCallNodeDefinitionLocator.php
+
+		-
+			message: "#^Offset 'range' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/PropertyFetchDefinitionLocator.php
+
+		-
+			message: "#^Offset 'uri' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/PropertyFetchDefinitionLocator.php
+
+		-
+			message: "#^Offset 'range' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/StaticMethodCallNodeDefinitionLocator.php
+
+		-
+			message: "#^Offset 'uri' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/StaticMethodCallNodeDefinitionLocator.php
+
+		-
+			message: "#^Offset 'range' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/StaticPropertyFetchNodeDefinitionLocator.php
+
+		-
+			message: "#^Offset 'uri' does not exist on array\\|null\\.$#"
+			count: 1
+			path: src/GotoDefinition/StaticPropertyFetchNodeDefinitionLocator.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:beginTransaction\\(\\)\\.$#"
+			count: 1
+			path: src/Indexing/DoctrineStorage.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:commit\\(\\)\\.$#"
+			count: 1
+			path: src/Indexing/DoctrineStorage.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:rollback\\(\\)\\.$#"
+			count: 1
+			path: src/Indexing/DoctrineStorage.php
+
+		-
+			message: "#^Cannot call method setCacheFactory\\(\\) on Doctrine\\\\ORM\\\\Cache\\\\CacheConfiguration\\|null\\.$#"
+			count: 1
+			path: src/Indexing/ManagerRegistry.php
+
+		-
+			message: "#^Parameter \\#2 \\$classlike of method Serenata\\\\Indexing\\\\Visiting\\\\ClasslikeIndexingVisitor\\:\\:processClassLikeRelations\\(\\) expects Serenata\\\\Indexing\\\\Structures\\\\Classlike, object given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Parameter \\#2 \\$classlike of method Serenata\\\\Indexing\\\\Visiting\\\\ClasslikeIndexingVisitor\\:\\:processTraitUseNode\\(\\) expects Serenata\\\\Indexing\\\\Structures\\\\Classlike, object given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Cannot access property \\$name on PhpParser\\\\Node\\\\Identifier\\|null\\.$#"
+			count: 3
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Cannot call method getAttribute\\(\\) on PhpParser\\\\Node\\\\Name\\|null\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Identifier\\|PhpParser\\\\Node\\\\Name\\|PhpParser\\\\Node\\\\UnionType\\:\\:toString\\(\\)\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Parameter \\#10 \\$accessModifier of class Serenata\\\\Indexing\\\\Structures\\\\Method constructor expects Serenata\\\\Indexing\\\\Structures\\\\AccessModifier, Serenata\\\\Indexing\\\\Structures\\\\AccessModifier\\|null given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of class Serenata\\\\Indexing\\\\Structures\\\\MethodParameter constructor expects string, PhpParser\\\\Node\\\\Expr\\|string given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Parameter \\#12 \\$accessModifier of class Serenata\\\\Indexing\\\\Structures\\\\ClassConstant constructor expects Serenata\\\\Indexing\\\\Structures\\\\AccessModifier, Serenata\\\\Indexing\\\\Structures\\\\AccessModifier\\|null given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Method Serenata\\\\Indexing\\\\Visiting\\\\ClasslikeIndexingVisitor\\:\\:findStructureByFqcn\\(\\) should return Serenata\\\\Indexing\\\\Structures\\\\Classlike\\|null but returns object\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
+
+		-
+			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Identifier\\|PhpParser\\\\Node\\\\Name\\|PhpParser\\\\Node\\\\UnionType\\:\\:toString\\(\\)\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
+
+		-
+			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
+
+		-
+			message: "#^Parameter \\#2 \\$name of class Serenata\\\\Indexing\\\\Structures\\\\FunctionParameter constructor expects string, PhpParser\\\\Node\\\\Expr\\|string given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
+
+		-
+			message: "#^Offset 'type' does not exist on array\\('type' \\=\\> int\\|null, 'text' \\=\\> string\\)\\|null\\.$#"
+			count: 12
+			path: src/Parsing/LastExpressionParser.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 1
+			path: src/Parsing/PartialParser.php
+
+		-
+			message: "#^Method Serenata\\\\Sockets\\\\JsonRpcConnectionHandler\\:\\:getEncodedResponse\\(\\) should return string but returns string\\|false\\.$#"
+			count: 1
+			path: src/Sockets/JsonRpcConnectionHandler.php
+
+		-
+			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\|false given\\.$#"
+			count: 1
+			path: src/Sockets/JsonRpcConnectionHandler.php
+
+		-
+			message: "#^Parameter \\#1 \\$requestId of method Serenata\\\\Sockets\\\\JsonRpcQueue\\:\\:getIsCancelled\\(\\) expects string, int\\|string given\\.$#"
+			count: 1
+			path: src/Sockets/JsonRpcQueue.php
+
+		-
+			message: "#^Parameter \\#1 \\$requestId of method Serenata\\\\Sockets\\\\JsonRpcQueue\\:\\:pruneCancelled\\(\\) expects string, int\\|string given\\.$#"
+			count: 1
+			path: src/Sockets/JsonRpcQueue.php
+
+		-
+			message: "#^Method Serenata\\\\Symbols\\\\DocumentSymbolRetriever\\:\\:getMemberSymbolsForClasslike\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, Serenata\\\\Symbols\\\\SymbolInformation\\>\\.$#"
+			count: 1
+			path: src/Symbols/DocumentSymbolRetriever.php
+
+		-
+			message: "#^Method Serenata\\\\Tooltips\\\\ClassConstFetchNodeTooltipGenerator\\:\\:getClassTypes\\(\\) should return array\\<string, mixed\\> but returns array\\<string\\>\\.$#"
+			count: 1
+			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
+
+		-
+			message: "#^Parameter \\#1 \\$functionInfo of method Serenata\\\\Tooltips\\\\FunctionTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
+			count: 1
+			path: src/Tooltips/MethodCallNodeTooltipGenerator.php
+
+		-
+			message: "#^Parameter \\#1 \\$info of method Serenata\\\\Tooltips\\\\PropertyTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
+			count: 1
+			path: src/Tooltips/PropertyFetchNodeTooltipGenerator.php
+
+		-
+			message: "#^Parameter \\#1 \\$functionInfo of method Serenata\\\\Tooltips\\\\FunctionTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
+			count: 1
+			path: src/Tooltips/StaticMethodCallNodeTooltipGenerator.php
+
+		-
+			message: "#^Parameter \\#1 \\$info of method Serenata\\\\Tooltips\\\\PropertyTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
+			count: 1
+			path: src/Tooltips/StaticPropertyFetchNodeTooltipGenerator.php
+
+		-
+			message: "#^Method Serenata\\\\Tooltips\\\\TooltipProvider\\:\\:getNodeAt\\(\\) should return PhpParser\\\\Node but returns PhpParser\\\\Node\\|null\\.$#"
+			count: 1
+			path: src/Tooltips/TooltipProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$name of class PhpParser\\\\Node\\\\Name\\\\FullyQualified constructor expects array\\<string\\>\\|PhpParser\\\\Node\\\\Name\\|string, PhpParser\\\\Node\\\\Name\\|null given\\.$#"
+			count: 1
+			path: src/Tooltips/TooltipProvider.php
+
+		-
+			message: "#^Cannot call method setAutoExit\\(\\) on Symfony\\\\Component\\\\Console\\\\Application\\|null\\.$#"
+			count: 1
+			path: src/UserInterface/JsonRpcApplication.php
+
+		-
+			message: "#^Cannot call method setDefaultCommand\\(\\) on Symfony\\\\Component\\\\Console\\\\Application\\|null\\.$#"
+			count: 1
+			path: src/UserInterface/JsonRpcApplication.php
+
+		-
+			message: "#^Cannot call method run\\(\\) on Symfony\\\\Component\\\\Console\\\\Application\\|null\\.$#"
+			count: 1
+			path: src/UserInterface/JsonRpcApplication.php
+

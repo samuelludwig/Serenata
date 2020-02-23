@@ -3,11 +3,10 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-php-parser/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+    # TODO: Remove when all the existing errors have been fixed (https://gitlab.com/Serenata/Serenata/issues/277).
+    - phpstan-baseline.neon
 
 parameters:
-    # TODO: Remove this once all PHPStan issues are fixed and CI is at --level=max.
-    reportUnmatchedIgnoredErrors: false
-
     featureToggles:
         parallel: true
 
@@ -15,13 +14,6 @@ parameters:
         - stubs/Deferred.stub
 
     ignoreErrors:
-        # Don't report errors about stubs. It doesn't seem to matter if this folder is explicitly analyzed or not,
-        # PHPStan keeps complaining about errors in them. I don't understand why, because the types should resolve
-        # properly and they work as intended.
-        -
-            message: '#.+#'
-            path: 'stubs'
-
         # We can fix these, but they aren't our problem to fix and it's never called directly. We just want to just be
         # able to use inheritDoc here.
         - '#Method [A-Za-z\\_]+::jsonSerialize\(\) return type has no value type specified in iterable type array.#'

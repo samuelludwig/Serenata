@@ -2,6 +2,9 @@
 
 namespace React\Promise;
 
+// NOTE: No idea why this is necessary, but PHPStan complains that this class does not exist otherwise.
+class Promise {}
+
 /**
  * Provides stubs for the Deferred class. This can be removed once the appropriate fixes are merged upstream.
  *
