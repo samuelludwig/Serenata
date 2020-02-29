@@ -34,7 +34,7 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
      * original values on exit (see also {@see leaveNode}). If this didn't happen, the change would be destructive and
      * for the original state to be retrieved the entire source would need to be reparsed.
      *
-     * @var array
+     * @var array<string,array<string,mixed>>
      */
     private $memorizedNodeProperties;
 
@@ -156,10 +156,8 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node  $node
-     * @param array $properties
-     *
-     * @return void
+     * @param Node                $node
+     * @param array<string,mixed> $properties
      */
     private function memorizeNodeProperties(Node $node, array $properties): void
     {
@@ -174,8 +172,6 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
 
     /**
      * @param Node $node
-     *
-     * @return void
      */
     private function restoreNodeProperties(Node $node): void
     {

@@ -143,6 +143,9 @@ final class ExpressionTypeDeducer
 
         $traverser = new NodeTraverser();
         $traverser->addVisitor(new class($namespaceNode) extends NodeVisitorAbstract {
+            /**
+             * @var Node\Name|null
+             */
             private $namespaceNode;
 
             public function __construct(?Node\Name $namespaceNode)

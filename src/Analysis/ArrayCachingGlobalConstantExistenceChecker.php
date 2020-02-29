@@ -17,7 +17,7 @@ final class ArrayCachingGlobalConstantExistenceChecker implements
     private $delegate;
 
     /**
-     * @var array
+     * @var array<string,bool>
      */
     private $cache = [];
 

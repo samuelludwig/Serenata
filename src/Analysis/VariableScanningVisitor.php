@@ -109,6 +109,10 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      */
     private function parseClosureUse(Node\Expr\ClosureUse $node): void
     {
+        if (!is_string($node->var->name)) {
+            return;
+        }
+
         $this->variables[] = '$' . $node->var->name;
     }
 
@@ -120,6 +124,8 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
     private function parseParam(Node\Param $node): void
     {
         if (!$node->var instanceof Node\Expr\Variable) {
+            return;
+        } elseif (!is_string($node->var->name)) {
             return;
         }
 

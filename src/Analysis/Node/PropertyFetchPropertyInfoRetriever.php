@@ -50,7 +50,7 @@ final class PropertyFetchPropertyInfoRetriever
      * @throws UnexpectedValueException when a dynamic property fetch is passed.
      * @throws UnexpectedValueException when the type the property is fetched from could not be determined.
      *
-     * @return array[]
+     * @return array<array<string,mixed>>
      */
     public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
     {

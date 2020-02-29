@@ -76,7 +76,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
     }
 
     /**
-     * @param array                         $variable
+     * @param array<string,mixed>           $variable
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -110,7 +110,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $variable
+     * @param array<string,mixed>           $variable
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit

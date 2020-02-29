@@ -13,7 +13,7 @@ final class ArrayCachingClasslikeExistenceChecker implements ClasslikeExistenceC
     private $delegate;
 
     /**
-     * @var array
+     * @var array<string,bool>
      */
     private $cache = [];
 

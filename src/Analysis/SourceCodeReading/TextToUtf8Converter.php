@@ -14,7 +14,7 @@ final class TextToUtf8Converter implements TextEncodingConverterInterface
     {
         $encoding = mb_detect_encoding($code, null, true);
 
-        if (!$encoding) {
+        if ($encoding === false) {
             $encoding = 'ASCII';
         }
 

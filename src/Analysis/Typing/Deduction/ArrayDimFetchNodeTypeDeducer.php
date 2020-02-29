@@ -57,6 +57,6 @@ final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             }
         }
 
-        return array_unique($elementTypes);
+        return array_unique(array_filter($elementTypes));
     }
 }

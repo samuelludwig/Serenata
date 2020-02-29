@@ -17,7 +17,7 @@ final class CachingNodeAtOffsetLocator implements NodeAtOffsetLocatorInterface, 
     private $delegate;
 
     /**
-     * @var array
+     * @var array<string,NodeAtOffsetLocatorResult>
      */
     private $cache = [];
 

@@ -19,20 +19,18 @@ interface NamespaceImportProviderInterface
     /**
      * @param string $filePath
      *
-     * @return array {
-     *
-     *     @var string $fqcn
-     *     @var string $alias
-     *     @var string $kind
-     *     @var int    $line
+     * @return array<string,mixed> array {
+     *     string $fqcn
+     *     string $alias
+     *     string $kind
+     *     int    $line
      * }
      */
     public function getUseStatementsForFile(string $filePath): array;
 
     /**
-     * @return array {
-     *
-     *     @var string $name
+     * @return array<string,mixed> array {
+     *     string $name
      * }
      */
     public function getNamespaces(): array;

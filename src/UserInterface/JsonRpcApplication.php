@@ -57,6 +57,8 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
                 ->setCode(Closure::fromCallable([$this, 'runEventLoop']))
             ->getApplication();
 
+        assert($application !== null);
+
         $application->setAutoExit(false);
         $application->setDefaultCommand('start', true);
 

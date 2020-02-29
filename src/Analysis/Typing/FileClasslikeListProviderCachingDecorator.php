@@ -19,7 +19,7 @@ final class FileClasslikeListProviderCachingDecorator implements
     private $fileClasslikeListProviderInterface;
 
     /**
-     * @var array
+     * @var array<string,array<string,array<string,mixed>>>
      */
     private $cache;
 

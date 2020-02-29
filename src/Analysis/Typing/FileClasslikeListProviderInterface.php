@@ -16,7 +16,7 @@ interface FileClasslikeListProviderInterface
      *
      * @throws RuntimeException
      *
-     * @return array array<string, array> mapping FQCN's to classlikes.
+     * @return array<string,array<string,mixed>> mapping FQCN's to classlikes.
      */
     public function getAllForFile(Structures\File $file): array;
 }

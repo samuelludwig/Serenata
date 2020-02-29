@@ -81,9 +81,9 @@ final class CodeLensesRetriever
     }
 
     /**
-     * @param array $classlikeInfo
+     * @param array<string,mixed> $classlikeInfo
      *
-     * @return array
+     * @return CodeLens[]
      */
     private function generateMethodOverrideAndImplementationLenses(array $classlikeInfo): array
     {
@@ -121,9 +121,9 @@ final class CodeLensesRetriever
     }
 
     /**
-     * @param array $classlikeInfo
+     * @param array<string,mixed> $classlikeInfo
      *
-     * @return array
+     * @return CodeLens[]
      */
     private function generatePropertyOverrideLenses(array $classlikeInfo): array
     {

@@ -105,9 +105,9 @@ final class TypeAnalyzer implements TypeNormalizerInterface
     /**
      * @param string $type
      *
-     * @return string|null
+     * @return string
      */
-    public function getValueTypeFromArraySyntaxTypeHint(string $type): ?string
+    public function getValueTypeFromArraySyntaxTypeHint(string $type): string
     {
         $matches = [];
 

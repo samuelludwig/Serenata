@@ -14,12 +14,10 @@ use Serenata\Indexing\Structures\AccessModifierNameValue;
 final class TraitUsageResolver extends AbstractResolver
 {
     /**
-     * @param ArrayObject                       $trait
-     * @param ArrayObject                       $class
-     * @param Structures\ClassTraitAlias[]      $traitAliases
-     * @param Structures\ClassTraitPrecedence[] $traitPrecedences
-     *
-     * @return void
+     * @param ArrayObject<string,mixed>                                           $trait
+     * @param ArrayObject<string,mixed>                                           $class
+     * @param Structures\ClassTraitAlias[]|Structures\TraitTraitAlias[]           $traitAliases
+     * @param Structures\ClassTraitPrecedence[]|Structures\TraitTraitPrecedence[] $traitPrecedences
      */
     public function resolveUseOf(
         ArrayObject $trait,
@@ -75,10 +73,8 @@ final class TraitUsageResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $traitPropertyData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $traitPropertyData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveTraitUseOfProperty(array $traitPropertyData, ArrayObject $class): void
     {
@@ -95,7 +91,9 @@ final class TraitUsageResolver extends AbstractResolver
                 'range'              => $traitPropertyData['range'],
             ];
 
-            if ($traitPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
+            if ($traitPropertyData['hasDocumentation'] !== false &&
+                $this->isInheritingFullDocumentation($childProperty)
+            ) {
                 $inheritedData = $this->extractInheritedPropertyInfo($traitPropertyData);
             } elseif ($childProperty['longDescription'] !== null && $traitPropertyData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
@@ -133,10 +131,8 @@ final class TraitUsageResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $traitMethodData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $traitMethodData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveTraitUseOfMethod(array $traitMethodData, ArrayObject $class): void
     {
@@ -192,7 +188,7 @@ final class TraitUsageResolver extends AbstractResolver
                 }
             }
 
-            if ($traitMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
+            if ($traitMethodData['hasDocumentation'] !== false && $this->isInheritingFullDocumentation($childMethod)) {
                 $inheritedData = $this->extractInheritedMethodInfo($traitMethodData, $childMethod);
             } elseif ($childMethod['longDescription'] !== null && $traitMethodData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(

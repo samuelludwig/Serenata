@@ -4,6 +4,7 @@ namespace Serenata\Analysis;
 
 use UnexpectedValueException;
 
+use PhpParser\Node;
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ErrorHandler;
@@ -37,7 +38,7 @@ final class VariableScanner
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @return array
+     * @return array<string,array<string,mixed>>
      */
     public function getAvailableVariables(TextDocumentItem $textDocumentItem, Position $position): array
     {
@@ -79,7 +80,7 @@ final class VariableScanner
      *
      * @throws Error
      *
-     * @return array
+     * @return Node[]
      */
     private function getNodes(string $code): array
     {

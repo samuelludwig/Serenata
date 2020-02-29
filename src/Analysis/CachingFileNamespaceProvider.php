@@ -2,6 +2,7 @@
 
 namespace Serenata\Analysis;
 
+use Serenata\NameQualificationUtilities\Namespace_;
 use Serenata\NameQualificationUtilities\FileNamespaceProviderInterface;
 
 /**
@@ -15,7 +16,7 @@ final class CachingFileNamespaceProvider implements FileNamespaceProviderInterfa
     private $delegate;
 
     /**
-     * @var array
+     * @var array<string,array<Namespace_>>
      */
     private $cache = [];
 

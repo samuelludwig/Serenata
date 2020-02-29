@@ -10,7 +10,7 @@ use PhpParser\Node;
 final class ExpressionTypeInfoMap
 {
     /**
-     * @var array
+     * @var array<string,ExpressionTypeInfo>
      */
     private $map = [];
 

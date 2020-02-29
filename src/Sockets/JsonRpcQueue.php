@@ -60,9 +60,9 @@ final class JsonRpcQueue
         $requestQueueItem = $this->queue->pop();
 
         if ($requestQueueItem->getRequest()->getId() !== null &&
-            $this->getIsCancelled($requestQueueItem->getRequest()->getId())
+            $this->getIsCancelled((string) $requestQueueItem->getRequest()->getId())
         ) {
-            $this->pruneCancelled($requestQueueItem->getRequest()->getId());
+            $this->pruneCancelled((string) $requestQueueItem->getRequest()->getId());
 
             return new JsonRpcQueueItem(
                 $requestQueueItem->getRequest(),

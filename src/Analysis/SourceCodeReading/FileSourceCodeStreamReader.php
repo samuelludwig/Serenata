@@ -34,6 +34,8 @@ final class FileSourceCodeStreamReader implements FileSourceCodeReaderInterface
     {
         $code = stream_get_contents($this->stream);
 
+        assert($code !== false, 'Could not read contents from stream. False was returned where a string was expected.');
+
         return $this->textEncodingConverter->convert($code);
     }
 }

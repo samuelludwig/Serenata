@@ -15,12 +15,12 @@ use PhpParser\NodeVisitorAbstract;
 final class FunctionLikeBodyOffsetAttachingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     private $tokens;
 
     /**
-     * @param array $tokens
+     * @param mixed[] $tokens
      */
     public function __construct(array $tokens)
     {

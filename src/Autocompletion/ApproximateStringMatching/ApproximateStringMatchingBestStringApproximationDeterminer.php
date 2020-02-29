@@ -49,11 +49,13 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     }
 
     /**
-     * @param iterable $items
-     * @param string   $itemValueKey
-     * @param string   $referenceText
+     * @param iterable<T> $items
+     * @param string      $itemValueKey
+     * @param string      $referenceText
      *
-     * @return array
+     * @return array<int|string,array<int,T>>
+     *
+     * @template T
      */
     private function partitionByScore(iterable $items, string $itemValueKey, string $referenceText): array
     {
@@ -73,9 +75,11 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     }
 
     /**
-     * @param array $partitions
+     * @param array<T> $partitions
      *
-     * @return array
+     * @return array<T>
+     *
+     * @template T
      */
     private function pruneUndesiredPartitions(array $partitions): array
     {
@@ -86,9 +90,11 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     }
 
     /**
-     * @param array $partitions
+     * @param array<T> $partitions
      *
-     * @return array
+     * @return array<T>
+     *
+     * @template T
      */
     private function sortPartitionsByHighestScore(array $partitions): array
     {
@@ -98,10 +104,12 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     }
 
     /**
-     * @param array    $partitions
+     * @param array<int,array<T>>    $partitions
      * @param int|null $limit
      *
-     * @return array
+     * @return array<array<mixed>>
+     *
+     * @template T
      */
     private function retrieveBestMatchScorePairsFromPartitions(array $partitions, ?int $limit): array
     {
@@ -121,9 +129,11 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     }
 
     /**
-     * @param array $bestMatchScorePairs
+     * @param array<array<T>> $bestMatchScorePairs
      *
-     * @return array
+     * @return array<array<T>>
+     *
+     * @template T
      */
     private function sortBestMatchScorePairs(array $bestMatchScorePairs): array
     {
@@ -135,9 +145,11 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     }
 
     /**
-     * @param array $bestMatchScorePairs
+     * @param array<array<T>> $bestMatchScorePairs
      *
-     * @return array
+     * @return array<array<T>>
+     *
+     * @template T
      */
     private function extractMatchesFromBestMatchScorePairs(array $bestMatchScorePairs): array
     {

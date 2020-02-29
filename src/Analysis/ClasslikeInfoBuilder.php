@@ -114,7 +114,7 @@ use Serenata\Indexing\StorageInterface;
      *
      * @throws CircularDependencyException
      *
-     * @return ArrayObject
+     * @return ArrayObject<string,mixed>
      */
     private function getCheckedClasslikeInfo(string $fqcn, string $originFqcn): ArrayObject
     {
@@ -136,7 +136,7 @@ use Serenata\Indexing\StorageInterface;
      *
      * @throws UnexpectedValueException
      *
-     * @return ArrayObject
+     * @return ArrayObject<string,mixed>
      */
     private function getUncheckedClasslikeInfo(string $fqcn): ArrayObject
     {
@@ -155,7 +155,7 @@ use Serenata\Indexing\StorageInterface;
      *
      * @param Structures\Classlike $classlike
      *
-     * @return ArrayObject
+     * @return ArrayObject<string,mixed>
      */
     private function fetchFlatClasslikeInfo(Structures\Classlike $classlike): ArrayObject
     {
@@ -196,10 +196,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildDirectChildrenInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -213,10 +211,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildDirectImplementorsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -230,10 +226,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildTraitUsersInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -247,10 +241,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildConstantsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -263,10 +255,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildPropertiesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -279,10 +269,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildMethodsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -295,10 +283,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject         $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildTraitsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -326,10 +312,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildParentsInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -358,10 +342,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject          $classlikeInfo
-     * @param Structures\Classlike $classlike
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $classlikeInfo
+     * @param Structures\Classlike      $classlike
      */
     private function buildInterfacesInfo(ArrayObject $classlikeInfo, Structures\Classlike $classlike): void
     {
@@ -384,10 +366,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject $result
-     * @param string      $elementFqcn
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $result
+     * @param string                    $elementFqcn
      */
     private function resolveSelfTypesTo(ArrayObject $result, $elementFqcn): void
     {
@@ -404,10 +384,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject $result
-     * @param string      $elementFqcn
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $result
+     * @param string                    $elementFqcn
      */
     private function resolveStaticTypesTo(ArrayObject $result, $elementFqcn): void
     {
@@ -424,9 +402,7 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject $result
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $result
      */
     private function resolveNormalTypes(ArrayObject $result): void
     {
@@ -442,10 +418,8 @@ use Serenata\Indexing\StorageInterface;
     }
 
     /**
-     * @param ArrayObject $result
-     * @param callable    $callable
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $result
+     * @param callable                  $callable
      */
     private function walkTypes(ArrayObject $result, callable $callable): void
     {

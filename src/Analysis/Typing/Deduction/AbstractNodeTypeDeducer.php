@@ -8,7 +8,7 @@ namespace Serenata\Analysis\Typing\Deduction;
 abstract class AbstractNodeTypeDeducer implements NodeTypeDeducerInterface
 {
     /**
-     * @param array $typeArray
+     * @param array<string,mixed> $typeArray
      *
      * @return string|null
      */
@@ -18,9 +18,9 @@ abstract class AbstractNodeTypeDeducer implements NodeTypeDeducerInterface
     }
 
     /**
-     * @param array $typeArrays
+     * @param array<array<string,mixed>> $typeArrays
      *
-     * @return string[]
+     * @return array<string|null>
      */
     protected function fetchResolvedTypesFromTypeArrays(array $typeArrays): array
     {

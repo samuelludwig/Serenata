@@ -17,7 +17,7 @@ final class TypePossibilityMap
      *
      * @see TypePossibility
      *
-     * @var array
+     * @var array<string,int>
      */
     private $map = [];
 
@@ -55,7 +55,7 @@ final class TypePossibilityMap
     }
 
     /**
-     * @return array
+     * @return array<string,int>
      */
     public function getAll(): array
     {
