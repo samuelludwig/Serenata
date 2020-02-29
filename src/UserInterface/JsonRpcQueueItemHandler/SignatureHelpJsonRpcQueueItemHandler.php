@@ -8,6 +8,7 @@ use React\Promise\ExtendedPromiseInterface;
 use Serenata\Common\Position;
 
 use Serenata\Indexing\TextDocumentContentRegistry;
+use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\SignatureHelp\SignatureHelp;
 use Serenata\SignatureHelp\SignatureHelpRetriever;
@@ -15,6 +16,9 @@ use Serenata\SignatureHelp\SignatureHelpRetriever;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\MessageType;
+use Serenata\Utility\MessageLogger;
+use Serenata\Utility\LogMessageParams;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -33,15 +37,23 @@ final class SignatureHelpJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIte
     private $signatureHelpRetriever;
 
     /**
+     * @var MessageLogger
+     */
+    private $messageLogger;
+
+    /**
      * @param TextDocumentContentRegistry $textDocumentContentRegistry
      * @param SignatureHelpRetriever      $signatureHelpRetriever
+     * @param MessageLogger               $messageLogger
      */
     public function __construct(
         TextDocumentContentRegistry $textDocumentContentRegistry,
-        SignatureHelpRetriever $signatureHelpRetriever
+        SignatureHelpRetriever $signatureHelpRetriever,
+        MessageLogger $messageLogger
     ) {
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
         $this->signatureHelpRetriever = $signatureHelpRetriever;
+        $this->messageLogger = $messageLogger;
     }
 
     /**
@@ -53,14 +65,22 @@ final class SignatureHelpJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIte
             $queueItem->getRequest()->getParams() :
             [];
 
-        $response = new JsonRpcResponse(
-            $queueItem->getRequest()->getId(),
-            $this->signatureHelp(
+        try {
+            $result = $this->signatureHelp(
                 $parameters['textDocument']['uri'],
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
                 new Position($parameters['position']['line'], $parameters['position']['character'])
-            )
-        );
+            );
+        } catch (FileNotFoundStorageException $e) {
+            $this->messageLogger->log(
+                new LogMessageParams(MessageType::WARNING, $e->getMessage()),
+                $queueItem->getJsonRpcMessageSender()
+            );
+
+            $result = null;
+        }
+
+        $response = new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
 
         $deferred = new Deferred();
         $deferred->resolve($response);

@@ -6,12 +6,17 @@ use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
 use Serenata\Indexing\StorageInterface;
+use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
 use Serenata\Symbols\SymbolInformation;
 use Serenata\Symbols\DocumentSymbolRetriever;
+
+use Serenata\Utility\MessageType;
+use Serenata\Utility\MessageLogger;
+use Serenata\Utility\LogMessageParams;
 
 /**
  * Handler that retrieves a list of known symbols for a document.
@@ -29,13 +34,23 @@ final class DocumentSymbolJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
     private $documentSymbolRetriever;
 
     /**
+     * @var MessageLogger
+     */
+    private $messageLogger;
+
+    /**
      * @param StorageInterface        $storage
      * @param DocumentSymbolRetriever $documentSymbolRetriever
+     * @param MessageLogger           $messageLogger
      */
-    public function __construct(StorageInterface $storage, DocumentSymbolRetriever $documentSymbolRetriever)
-    {
+    public function __construct(
+        StorageInterface $storage,
+        DocumentSymbolRetriever $documentSymbolRetriever,
+        MessageLogger $messageLogger
+    ) {
         $this->storage = $storage;
         $this->documentSymbolRetriever = $documentSymbolRetriever;
+        $this->messageLogger = $messageLogger;
     }
 
     /**
@@ -47,10 +62,20 @@ final class DocumentSymbolJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
             $queueItem->getRequest()->getParams() :
             [];
 
-        $response = new JsonRpcResponse(
-            $queueItem->getRequest()->getId(),
-            $this->getAll($parameters['textDocument']['uri'])
-        );
+        $results = [];
+
+        try {
+            $results = $this->getAll($parameters['textDocument']['uri']);
+        } catch (FileNotFoundStorageException $e) {
+            $this->messageLogger->log(
+                new LogMessageParams(MessageType::WARNING, $e->getMessage()),
+                $queueItem->getJsonRpcMessageSender()
+            );
+
+            $result = null;
+        }
+
+        $response = new JsonRpcResponse($queueItem->getRequest()->getId(), $results);
 
         $deferred = new Deferred();
         $deferred->resolve($response);
@@ -65,8 +90,6 @@ final class DocumentSymbolJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
      */
     public function getAll(string $uri): ?array
     {
-        $file = $this->storage->getFileByUri($uri);
-
-        return $this->documentSymbolRetriever->retrieve($file);
+        return $this->documentSymbolRetriever->retrieve($this->storage->getFileByUri($uri));
     }
 }

@@ -17,7 +17,7 @@ services:
             - '@backendIndexer'
             - '@schemaInitializer'
             - '@indexFilePruner'
-            - '@requestQueue'
+            - '@messageLogger'
             - '@pathNormalizer'
 
     initializedJsonRpcQueueItemHandler:
@@ -43,6 +43,7 @@ services:
         arguments:
             - '@textDocumentContentRegistry'
             - '@tooltipProvider'
+            - '@messageLogger'
 
     classListJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\ClassListJsonRpcQueueItemHandler
@@ -96,6 +97,7 @@ services:
         arguments:
             - '@textDocumentContentRegistry'
             - '@signatureHelpRetriever'
+            - '@messageLogger'
 
     completionJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\CompletionJsonRpcQueueItemHandler
@@ -109,24 +111,28 @@ services:
         arguments:
             - '@definitionLocator'
             - '@textDocumentContentRegistry'
+            - '@messageLogger'
 
     codeLensJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\CodeLensJsonRpcQueueItemHandler
         arguments:
             - '@codeLensesRetriever'
             - '@textDocumentContentRegistry'
+            - '@messageLogger'
 
     documentHighlightJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DocumentHighlightJsonRpcQueueItemHandler
         arguments:
             - '@documentHighlightsRetriever'
             - '@textDocumentContentRegistry'
+            - '@messageLogger'
 
     documentSymbolJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DocumentSymbolJsonRpcQueueItemHandler
         arguments:
             - '@storage'
             - '@documentSymbolRetriever'
+            - '@messageLogger'
 
     executeCommandJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\ExecuteCommandJsonRpcQueueItemHandler

@@ -2,6 +2,11 @@ parameters:
 
 
 services:
+    messageLogger:
+        class: Serenata\Utility\MessageLogger
+        arguments:
+            - '@requestQueue'
+
     sourceCodeStreamReader:
         class: Serenata\Utility\SourceCodeStreamReader
         arguments:

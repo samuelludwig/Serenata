@@ -11,10 +11,15 @@ use Serenata\Indexing\TextDocumentContentRegistry;
 
 use Serenata\GotoDefinition\DefinitionLocator;
 
+use Serenata\Indexing\FileNotFoundStorageException;
+
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
 use Serenata\Utility\Location;
+use Serenata\Utility\MessageType;
+use Serenata\Utility\MessageLogger;
+use Serenata\Utility\LogMessageParams;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -33,15 +38,23 @@ final class DefinitionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     private $textDocumentContentRegistry;
 
     /**
+     * @var MessageLogger
+     */
+    private $messageLogger;
+
+    /**
      * @param DefinitionLocator           $definitionLocator
      * @param TextDocumentContentRegistry $textDocumentContentRegistry
+     * @param MessageLogger               $messageLogger
      */
     public function __construct(
         DefinitionLocator $definitionLocator,
-        TextDocumentContentRegistry $textDocumentContentRegistry
+        TextDocumentContentRegistry $textDocumentContentRegistry,
+        MessageLogger $messageLogger
     ) {
         $this->definitionLocator = $definitionLocator;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
+        $this->messageLogger = $messageLogger;
     }
 
     /**
@@ -53,14 +66,22 @@ final class DefinitionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
             $queueItem->getRequest()->getParams() :
             [];
 
-        $response = new JsonRpcResponse(
-            $queueItem->getRequest()->getId(),
-            $this->gotoDefinition(
+        try {
+            $result = $this->gotoDefinition(
                 $parameters['textDocument']['uri'],
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
                 new Position($parameters['position']['line'], $parameters['position']['character'])
-            )
-        );
+            );
+        } catch (FileNotFoundStorageException $e) {
+            $this->messageLogger->log(
+                new LogMessageParams(MessageType::WARNING, $e->getMessage()),
+                $queueItem->getJsonRpcMessageSender()
+            );
+
+            $result = null;
+        }
+
+        $response = new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
 
         $deferred = new Deferred();
         $deferred->resolve($response);

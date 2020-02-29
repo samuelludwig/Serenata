@@ -22,6 +22,7 @@ use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
 use Serenata\Utility\MessageType;
 use Serenata\Utility\SaveOptions;
+use Serenata\Utility\MessageLogger;
 use Serenata\Utility\InitializeParams;
 use Serenata\Utility\InitializeResult;
 use Serenata\Utility\LogMessageParams;
@@ -76,9 +77,9 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     private $indexFilePruner;
 
     /**
-     * @var JsonRpcQueue
+     * @var MessageLogger
      */
-    private $queue;
+    private $messageLogger;
 
     /**
      * @var PathNormalizer
@@ -93,7 +94,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
      * @param Indexer                               $indexer
      * @param SchemaInitializer                     $schemaInitializer
      * @param IndexFilePruner                       $indexFilePruner
-     * @param JsonRpcQueue                          $queue
+     * @param MessageLogger                         $messageLogger
      */
     public function __construct(
         ActiveWorkspaceManager $activeWorkspaceManager,
@@ -103,7 +104,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         Indexer $indexer,
         SchemaInitializer $schemaInitializer,
         IndexFilePruner $indexFilePruner,
-        JsonRpcQueue $queue,
+        MessageLogger $messageLogger,
         PathNormalizer $pathNormalizer
     ) {
         $this->activeWorkspaceManager = $activeWorkspaceManager;
@@ -113,7 +114,7 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
         $this->indexer = $indexer;
         $this->schemaInitializer = $schemaInitializer;
         $this->indexFilePruner = $indexFilePruner;
-        $this->queue = $queue;
+        $this->messageLogger = $messageLogger;
         $this->pathNormalizer = $pathNormalizer;
     }
 
@@ -199,22 +200,14 @@ final class InitializeJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
 
             $configuration = $this->getDefaultProjectConfiguration($uris);
 
-            $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
-                'message' => new JsonRpcRequest(
-                    null,
-                    'window/logMessage',
-                    (new LogMessageParams(
-                        MessageType::INFO,
-                        'No explicit project configuration found, automatically generating one and using the ' .
-                        'system\'s temp folder to store the index database. You should consider setting up a ' .
-                        'Serenata configuration file, see also ' .
-                        'https://gitlab.com/Serenata/Serenata/wikis/Setting%20Up%20Your%20Project for more ' .
-                        'information.'
-                    ))->jsonSerialize()
-                ),
-            ]);
-
-            $this->queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
+            $this->messageLogger->log(new LogMessageParams(
+                MessageType::INFO,
+                'No explicit project configuration found, automatically generating one and using the ' .
+                'system\'s temp folder to store the index database. You should consider setting up a ' .
+                'Serenata configuration file, see also ' .
+                'https://gitlab.com/Serenata/Serenata/wikis/Setting%20Up%20Your%20Project for more ' .
+                'information.'
+            ), $jsonRpcMessageSender);
         }
 
         $workspaceConfiguration = $this->workspaceConfigurationParser->parse($configuration);

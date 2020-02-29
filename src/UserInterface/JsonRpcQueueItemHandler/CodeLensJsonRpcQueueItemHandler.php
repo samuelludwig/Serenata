@@ -9,10 +9,14 @@ use Serenata\CodeLenses\CodeLens;
 use Serenata\CodeLenses\CodeLensesRetriever;
 
 use Serenata\Indexing\TextDocumentContentRegistry;
+use Serenata\Indexing\FileNotFoundStorageException;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\MessageType;
+use Serenata\Utility\MessageLogger;
+use Serenata\Utility\LogMessageParams;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -31,15 +35,23 @@ final class CodeLensJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHand
     private $textDocumentContentRegistry;
 
     /**
+     * @var MessageLogger
+     */
+    private $messageLogger;
+
+    /**
      * @param CodeLensesRetriever         $codeLensesRetriever
      * @param TextDocumentContentRegistry $textDocumentContentRegistry
+     * @param MessageLogger               $messageLogger
      */
     public function __construct(
         CodeLensesRetriever $codeLensesRetriever,
-        TextDocumentContentRegistry $textDocumentContentRegistry
+        TextDocumentContentRegistry $textDocumentContentRegistry,
+        MessageLogger $messageLogger
     ) {
         $this->codeLensesRetriever = $codeLensesRetriever;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
+        $this->messageLogger = $messageLogger;
     }
 
     /**
@@ -51,13 +63,21 @@ final class CodeLensJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHand
             $queueItem->getRequest()->getParams() :
             [];
 
-        $response = new JsonRpcResponse(
-            $queueItem->getRequest()->getId(),
-            $this->getAll(
+        try {
+            $result = $this->getAll(
                 $parameters['textDocument']['uri'],
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri'])
-            )
-        );
+            );
+        } catch (FileNotFoundStorageException $e) {
+            $this->messageLogger->log(
+                new LogMessageParams(MessageType::WARNING, $e->getMessage()),
+                $queueItem->getJsonRpcMessageSender()
+            );
+
+            $result = null;
+        }
+
+        $response = new JsonRpcResponse($queueItem->getRequest()->getId(), $result);
 
         $deferred = new Deferred();
         $deferred->resolve($response);

@@ -1,5 +1,7 @@
 ## 5.3.0 (Unreleased)
 * [Fix notice `Undefined index: endLine in phar:///.../src/Analysis/Relations/TraitUsageResolver.php on line 209`](https://gitlab.com/Serenata/Serenata/issues/306)
+* [Log warning instead of sending error response when file is not found in index to fix clients such as VSCode annoying user with hard error screens](https://gitlab.com/Serenata/Serenata/issues/307)
+    * I'm not particularly happy with this solution. If a client requests functionality in a document the server does not know, an error response sounds appropriate because the latter cannot sanely handle the request. Returning empty responses misleads the client into thinking sort of processing happened and there were no results. Yet, VSCode insists on throwing response errors in the user's face, so this sends a warning notification instead.
 
 ## 5.2.0
 * Test PHP 7.4 in CI
