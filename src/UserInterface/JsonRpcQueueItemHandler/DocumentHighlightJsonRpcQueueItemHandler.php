@@ -10,6 +10,8 @@ use Serenata\Common\Position;
 use Serenata\Indexing\TextDocumentContentRegistry;
 use Serenata\Indexing\FileNotFoundStorageException;
 
+use Serenata\NameQualificationUtilities\PositionOutOfBoundsPositionalNamespaceDeterminerException;
+
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
@@ -70,7 +72,7 @@ final class DocumentHighlightJsonRpcQueueItemHandler extends AbstractJsonRpcQueu
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
                 new Position($parameters['position']['line'], $parameters['position']['character'])
             );
-        } catch (FileNotFoundStorageException $e) {
+        } catch (FileNotFoundStorageException|PositionOutOfBoundsPositionalNamespaceDeterminerException $e) {
             $this->messageLogger->log(
                 new LogMessageParams(MessageType::WARNING, $e->getMessage()),
                 $queueItem->getJsonRpcMessageSender()

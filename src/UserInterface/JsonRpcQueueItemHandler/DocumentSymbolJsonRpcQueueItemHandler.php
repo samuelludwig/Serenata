@@ -8,6 +8,8 @@ use React\Promise\ExtendedPromiseInterface;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileNotFoundStorageException;
 
+use Serenata\NameQualificationUtilities\PositionOutOfBoundsPositionalNamespaceDeterminerException;
+
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
@@ -66,7 +68,7 @@ final class DocumentSymbolJsonRpcQueueItemHandler extends AbstractJsonRpcQueueIt
 
         try {
             $results = $this->getAll($parameters['textDocument']['uri']);
-        } catch (FileNotFoundStorageException $e) {
+        } catch (FileNotFoundStorageException|PositionOutOfBoundsPositionalNamespaceDeterminerException $e) {
             $this->messageLogger->log(
                 new LogMessageParams(MessageType::WARNING, $e->getMessage()),
                 $queueItem->getJsonRpcMessageSender()

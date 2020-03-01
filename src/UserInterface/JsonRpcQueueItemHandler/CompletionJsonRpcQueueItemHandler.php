@@ -14,10 +14,16 @@ use Serenata\Autocompletion\Providers\AutocompletionProviderInterface;
 use Serenata\Common\Position;
 
 use Serenata\Indexing\TextDocumentContentRegistry;
+use Serenata\Indexing\FileNotFoundStorageException;
+
+use Serenata\NameQualificationUtilities\PositionOutOfBoundsPositionalNamespaceDeterminerException;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
+use Serenata\Utility\MessageType;
+use Serenata\Utility\MessageLogger;
+use Serenata\Utility\LogMessageParams;
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -41,18 +47,26 @@ final class CompletionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
     private $autocompletionPrefixDeterminer;
 
     /**
+     * @var MessageLogger
+     */
+    private $messageLogger;
+
+    /**
      * @param AutocompletionProviderInterface         $autocompletionProvider
      * @param TextDocumentContentRegistry             $textDocumentContentRegistry
      * @param AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+     * @param MessageLogger                           $messageLogger
      */
     public function __construct(
         AutocompletionProviderInterface $autocompletionProvider,
         TextDocumentContentRegistry $textDocumentContentRegistry,
-        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer
+        AutocompletionPrefixDeterminerInterface $autocompletionPrefixDeterminer,
+        MessageLogger $messageLogger
     ) {
         $this->autocompletionProvider = $autocompletionProvider;
         $this->textDocumentContentRegistry = $textDocumentContentRegistry;
         $this->autocompletionPrefixDeterminer = $autocompletionPrefixDeterminer;
+        $this->messageLogger = $messageLogger;
     }
 
     /**
@@ -64,14 +78,22 @@ final class CompletionJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHa
             $queueItem->getRequest()->getParams() :
             [];
 
-        $response = new JsonRpcResponse($queueItem->getRequest()->getId(), new CompletionList(
-            true,
-            $this->getSuggestions(
+        try {
+            $results = $this->getSuggestions(
                 $parameters['textDocument']['uri'],
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri']),
                 new Position($parameters['position']['line'], $parameters['position']['character'])
-            )
-        ));
+            );
+        } catch (FileNotFoundStorageException|PositionOutOfBoundsPositionalNamespaceDeterminerException $e) {
+            $this->messageLogger->log(
+                new LogMessageParams(MessageType::WARNING, $e->getMessage()),
+                $queueItem->getJsonRpcMessageSender()
+            );
+
+            $results = [];
+        }
+
+        $response = new JsonRpcResponse($queueItem->getRequest()->getId(), new CompletionList(true, $results));
 
         $deferred = new Deferred();
         $deferred->resolve($response);

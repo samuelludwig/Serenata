@@ -11,6 +11,8 @@ use Serenata\CodeLenses\CodeLensesRetriever;
 use Serenata\Indexing\TextDocumentContentRegistry;
 use Serenata\Indexing\FileNotFoundStorageException;
 
+use Serenata\NameQualificationUtilities\PositionOutOfBoundsPositionalNamespaceDeterminerException;
+
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
 
@@ -68,7 +70,7 @@ final class CodeLensJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHand
                 $parameters['textDocument']['uri'],
                 $this->textDocumentContentRegistry->get($parameters['textDocument']['uri'])
             );
-        } catch (FileNotFoundStorageException $e) {
+        } catch (FileNotFoundStorageException|PositionOutOfBoundsPositionalNamespaceDeterminerException $e) {
             $this->messageLogger->log(
                 new LogMessageParams(MessageType::WARNING, $e->getMessage()),
                 $queueItem->getJsonRpcMessageSender()

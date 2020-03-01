@@ -105,6 +105,7 @@ services:
             - '@autocompletionProvider'
             - '@textDocumentContentRegistry'
             - '@defaultAutocompletionPrefixDeterminer'
+            - '@messageLogger'
 
     definitionJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DefinitionJsonRpcQueueItemHandler
