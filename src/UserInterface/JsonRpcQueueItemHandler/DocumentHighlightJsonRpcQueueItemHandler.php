@@ -78,7 +78,7 @@ final class DocumentHighlightJsonRpcQueueItemHandler extends AbstractJsonRpcQueu
                 $queueItem->getJsonRpcMessageSender()
             );
 
-            $result = null;
+            $results = [];
         }
 
         $response = new JsonRpcResponse($queueItem->getRequest()->getId(), $results);
