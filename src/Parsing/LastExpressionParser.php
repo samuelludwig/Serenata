@@ -283,12 +283,12 @@ final class LastExpressionParser implements Parser
         if ($nodes === null || count($nodes) === 0) {
             throw new Error(
                 'Could not parse the code, even after attempting corrections. The following snippet failed: ' .
-                '<<<' . $code . '>>>, the expression was <<<' . $expression . '>>>'
+                '❰' . $code . '❱, the expression was ❰' . $expression . '❱'
             );
         } elseif (count($nodes) > 1) {
             throw new Error(
                 'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
-                'snippet <<<' . $code . '>>>, the expression was <<<' . $expression . '>>>'
+                'snippet ❰' . $code . '❱, the expression was ❰' . $expression . '❱'
             );
         }
 
