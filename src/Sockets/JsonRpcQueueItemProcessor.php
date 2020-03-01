@@ -114,23 +114,25 @@ final class JsonRpcQueueItemProcessor
      */
     private function convertExceptionToJsonRpcError(Throwable $throwable): JsonRpcError
     {
-        if ($throwable instanceof UnknownJsonRpcRequestMethodException) {
-            return new JsonRpcError(JsonRpcErrorCode::METHOD_NOT_FOUND, $throwable->getMessage());
-        } elseif ($throwable instanceof RequestParsingException) {
-            return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage());
-        } elseif ($throwable instanceof JsonRpcQueueItemHandler\InvalidArgumentsException) {
-            return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage());
-        } elseif ($throwable instanceof IncorrectDatabaseVersionException) {
-            return new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $throwable->getMessage());
-        } elseif ($throwable instanceof RuntimeException) {
-            return new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $throwable->getMessage());
-        }
-
-        return new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $throwable->getMessage(), [
+        $data = [
             'line'      => $throwable->getLine(),
             'file'      => $throwable->getFile(),
             'backtrace' => $this->getCompleteBacktraceFromThrowable($throwable),
-        ]);
+        ];
+
+        if ($throwable instanceof UnknownJsonRpcRequestMethodException) {
+            return new JsonRpcError(JsonRpcErrorCode::METHOD_NOT_FOUND, $throwable->getMessage(), $data);
+        } elseif ($throwable instanceof RequestParsingException) {
+            return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage(), $data);
+        } elseif ($throwable instanceof JsonRpcQueueItemHandler\InvalidArgumentsException) {
+            return new JsonRpcError(JsonRpcErrorCode::INVALID_PARAMS, $throwable->getMessage(), $data);
+        } elseif ($throwable instanceof IncorrectDatabaseVersionException) {
+            return new JsonRpcError(JsonRpcErrorCode::DATABASE_VERSION_MISMATCH, $throwable->getMessage(), $data);
+        } elseif ($throwable instanceof RuntimeException) {
+            return new JsonRpcError(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $throwable->getMessage(), $data);
+        }
+
+        return new JsonRpcError(JsonRpcErrorCode::FATAL_SERVER_ERROR, $throwable->getMessage(), $data);
     }
 
     /**

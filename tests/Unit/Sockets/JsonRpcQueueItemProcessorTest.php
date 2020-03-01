@@ -151,7 +151,13 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
                 static::assertSame('theRequestId', $jsonRpcResponse->getId());
                 static::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
                 static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
-                static::assertSame(null, $jsonRpcResponse->getError()->getData());
+
+                $data =  $jsonRpcResponse->getError()->getData();
+
+                static::assertNotNull($data);
+                static::assertNotNull($data['line']);
+                static::assertNotNull($data['file']);
+                static::assertNotNull($data['backtrace']);
             }
         );
 
