@@ -135,15 +135,13 @@ final class StorageFileIndexer implements FileIndexerInterface
         } catch (Exception $e) {
             $this->storage->rollbackTransaction();
 
-            // TODO: Reenable after bug is fixed.
-            throw $e;
-            // throw new LogicException(
-            //     'Could not index file due to an internal exception. This likely means an exception should be caught ' .
-            //     'at a deeper level (if it is acceptable) or there is a bug. The file is "' .
-            //     $textDocumentItem->getUri() . '" and the exact exception message: "' . $e->getMessage() . '"',
-            //     0,
-            //     $e
-            // );
+            throw new LogicException(
+                'Could not index file due to an internal exception. This likely means an exception should be caught ' .
+                'at a deeper level (if it is acceptable) or there is a bug. The file is "' .
+                $textDocumentItem->getUri() . '" and the exact exception message: "' . $e->getMessage() . '"',
+                0,
+                $e
+            );
         }
     }
 
