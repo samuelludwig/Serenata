@@ -53,11 +53,11 @@ final class MetadataAttachingParser implements Parser
 
         $traverser = new NodeTraverser();
 
-        $traverser->addVisitor(new NameResolver(null, [
+        $traverser->addVisitor(new NameResolver($errorHandler, [
             'replaceNodes' => false,
         ]));
 
-        $traverser->addVisitor(new NamespaceAttachingVisitor());
+        $traverser->addVisitor(new NamespaceAttachingVisitor($errorHandler));
         $traverser->addVisitor(new ParentAttachingVisitor());
         $traverser->addVisitor(new FunctionLikeBodyOffsetAttachingVisitor($this->lexer->getTokens()));
 

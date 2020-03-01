@@ -3,6 +3,7 @@
 namespace Serenata\Analysis\Visiting;
 
 use PhpParser\Node;
+use PhpParser\ErrorHandler;
 
 use PhpParser\NodeVisitor\NameResolver;
 
@@ -12,11 +13,11 @@ use PhpParser\NodeVisitor\NameResolver;
 final class NamespaceAttachingVisitor extends NameResolver
 {
     /**
-     * Constructor.
+     * @param ErrorHandler|null $errorHandler
      */
-    public function __construct()
+    public function __construct(?ErrorHandler $errorHandler = null)
     {
-        parent::__construct(null, [
+        parent::__construct($errorHandler, [
             'replaceNodes' => false,
         ]);
     }
