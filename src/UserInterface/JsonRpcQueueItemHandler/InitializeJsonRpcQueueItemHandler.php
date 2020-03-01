@@ -14,7 +14,6 @@ use Serenata\Indexing\PathNormalizer;
 use Serenata\Indexing\SchemaInitializer;
 use Serenata\Indexing\StorageVersionChecker;
 
-use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
