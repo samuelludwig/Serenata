@@ -10,7 +10,7 @@ interface ClasslikeRawConstantDataProviderInterface
     /**
      * @param int $id
      *
-     * @return array
+     * @return array<array<string,mixed>>
      */
     public function getClasslikeRawConstants(int $id): array;
 }

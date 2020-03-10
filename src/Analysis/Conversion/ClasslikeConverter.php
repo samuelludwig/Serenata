@@ -12,7 +12,7 @@ final class ClasslikeConverter extends AbstractConverter
     /**
      * @param Structures\Classlike $classlike
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convert(Structures\Classlike $classlike): array
     {

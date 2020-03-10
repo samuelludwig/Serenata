@@ -13,7 +13,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
     private $delegate;
 
     /**
-     * @var array|null
+     * @var array<string,array<string,mixed>>|null
      */
     private $registry;
 
@@ -34,7 +34,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
     }
 
      /**
-      * @param array $function
+      * @param array<string,mixed> $function
       */
     public function add(array $function): void
     {
@@ -44,7 +44,7 @@ final class ConstantListRegistry implements ConstantListProviderInterface
     }
 
      /**
-      * @param array $function
+      * @param array<string,mixed> $function
       */
     public function remove(array $function): void
     {
@@ -64,11 +64,13 @@ final class ConstantListRegistry implements ConstantListProviderInterface
     }
 
      /**
-      * @return array
+      * @return array<string,array<string,mixed>>
       */
     private function getRegistry(): array
     {
         $this->initializeRegistryIfNecessary();
+
+        assert($this->registry !== null);
 
         return $this->registry;
     }

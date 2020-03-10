@@ -99,6 +99,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
             }
         }, $types);
 
+        /** @var array<array<string,mixed>> $classlikeInfoElements */
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         $shouldIncludeParanthesesInInsertText = $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator
@@ -114,11 +115,11 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     }
 
     /**
-     * @param array                         $classlikeInfo
+     * @param array<string,mixed>           $classlikeInfo
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
-     * @return Generator
+     * @return Generator<CompletionItem>
      */
     private function createSuggestionsForClasslikeInfo(
         array $classlikeInfo,
@@ -133,7 +134,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     }
 
     /**
-     * @param array                         $method
+     * @param array<string,mixed>           $method
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
@@ -169,7 +170,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $method
+     * @param array<string,mixed>           $method
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
@@ -187,8 +188,8 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     }
 
     /**
-     * @param array $method
-     * @param bool  $shouldIncludeParanthesesInInsertText
+     * @param array<string,mixed> $method
+     * @param bool                $shouldIncludeParanthesesInInsertText
      *
      * @return string
      */
@@ -208,7 +209,7 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
     }
 
     /**
-     * @param array $data
+     * @param array<string,mixed> $data
      *
      * @return string
      */

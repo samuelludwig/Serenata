@@ -12,7 +12,7 @@ final class NamespaceConverter extends AbstractConverter
     /**
      * @param Structures\FileNamespace $namespace
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convert(Structures\FileNamespace $namespace): array
     {

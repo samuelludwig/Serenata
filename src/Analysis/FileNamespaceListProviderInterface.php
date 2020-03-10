@@ -16,7 +16,7 @@ interface FileNamespaceListProviderInterface
      *
      * @throws RuntimeException
      *
-     * @return array array<string, array> mapping namespace ID's to namespaces.
+     * @return array<string,array<string,mixed>> mapping namespace ID's to namespaces.
      */
     public function getAllForFile(Structures\File $file): array;
 }

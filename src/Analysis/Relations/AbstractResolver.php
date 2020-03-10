@@ -28,7 +28,7 @@ abstract class AbstractResolver
      * Returns a boolean indicating whether the specified item will inherit documentation from a parent item (if
      * present).
      *
-     * @param array $processedData
+     * @param array<string,mixed> $processedData
      *
      * @return bool
      */
@@ -58,9 +58,9 @@ abstract class AbstractResolver
     }
 
     /**
-     * @param array $propertyData
+     * @param array<string,mixed> $propertyData
      *
-     * @return array
+     * @return array<string,mixed>
      */
     protected function extractInheritedPropertyInfo(array $propertyData): array
     {
@@ -85,10 +85,10 @@ abstract class AbstractResolver
     }
 
     /**
-     * @param array $methodData
-     * @param array $inheritingMethodData
+     * @param array<string,mixed> $methodData
+     * @param array<string,mixed> $inheritingMethodData
      *
-     * @return array
+     * @return array<string,mixed>
      */
     protected function extractInheritedMethodInfo(array $methodData, array $inheritingMethodData): array
     {

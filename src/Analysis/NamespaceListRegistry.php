@@ -13,7 +13,7 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     private $delegate;
 
     /**
-     * @var array|null
+     * @var array<string,array<string,mixed>>|null
      */
     private $registry;
 
@@ -34,7 +34,7 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     }
 
     /**
-     * @param array $namespace
+     * @param array<string,mixed> $namespace
      */
     public function add(array $namespace): void
     {
@@ -44,7 +44,7 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     }
 
     /**
-     * @param array $namespace
+     * @param array<string,mixed> $namespace
      */
     public function remove(array $namespace): void
     {
@@ -64,11 +64,13 @@ final class NamespaceListRegistry implements NamespaceListProviderInterface
     }
 
     /**
-     * @return array
+     * @return array<string,array<string,mixed>>
      */
     private function getRegistry(): array
     {
         $this->initializeRegistryIfNecessary();
+
+        assert($this->registry !== null);
 
         return $this->registry;
     }

@@ -12,7 +12,7 @@ final class ConstantConverter extends AbstractConverter
     /**
      * @param Structures\ConstantLike $constant
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convert(Structures\ConstantLike $constant): array
     {

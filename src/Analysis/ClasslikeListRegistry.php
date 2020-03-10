@@ -13,7 +13,7 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
     private $delegate;
 
     /**
-     * @var array|null
+     * @var array<string,array<string,mixed>>|null
      */
     private $registry;
 
@@ -34,7 +34,7 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
     }
 
     /**
-     * @param array $classlike
+     * @param array<string,mixed> $classlike
      */
     public function add(array $classlike): void
     {
@@ -44,7 +44,7 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
     }
 
     /**
-     * @param array $classlike
+     * @param array<string,mixed> $classlike
      */
     public function remove(array $classlike): void
     {
@@ -64,7 +64,7 @@ final class ClasslikeListRegistry implements ClasslikeListProviderInterface
     }
 
     /**
-     * @return array
+     * @return array<string,array<string,mixed>>
      */
     private function getRegistry(): array
     {

@@ -14,10 +14,8 @@ use ArrayObject;
 final class InterfaceImplementationResolver extends AbstractResolver
 {
     /**
-     * @param ArrayObject $interface
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $interface
+     * @param ArrayObject<string,mixed> $class
      */
     public function resolveImplementationOf(ArrayObject $interface, ArrayObject $class): void
     {
@@ -31,10 +29,8 @@ final class InterfaceImplementationResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $interfaceConstantData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $interfaceConstantData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveInheritanceOfConstant(array $interfaceConstantData, ArrayObject $class): void
     {
@@ -57,10 +53,8 @@ final class InterfaceImplementationResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $interfaceMethodData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $interfaceMethodData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveImplementationOfMethod(array $interfaceMethodData, ArrayObject $class): void
     {

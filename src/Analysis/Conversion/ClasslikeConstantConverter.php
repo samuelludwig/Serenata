@@ -27,10 +27,10 @@ final class ClasslikeConstantConverter
     }
 
     /**
-     * @param Structures\ClassConstant $constant
-     * @param ArrayAccess              $class
+     * @param Structures\ClassConstant  $constant
+     * @param ArrayAccess<string,mixed> $class
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convertForClass(Structures\ClassConstant $constant, ArrayAccess $class): array
     {

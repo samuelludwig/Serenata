@@ -94,7 +94,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param array                         $classlike
+     * @param array<string,mixed>           $classlike
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -119,7 +119,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param array $classlike
+     * @param array<string,mixed> $classlike
      *
      * @return string
      */
@@ -142,7 +142,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $classlike
+     * @param array<string,mixed>           $classlike
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
@@ -153,7 +153,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param array                         $classlike
+     * @param array<string,mixed>           $classlike
      * @param AutocompletionProviderContext $context
      *
      * @return string
@@ -182,7 +182,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param array                         $classlike
+     * @param array<string,mixed>           $classlike
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit[]

@@ -10,10 +10,8 @@ use ArrayObject;
 final class InheritanceResolver extends AbstractResolver
 {
     /**
-     * @param ArrayObject $parent
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param ArrayObject<string,mixed> $parent
+     * @param ArrayObject<string,mixed> $class
      */
     public function resolveInheritanceOf(ArrayObject $parent, ArrayObject $class): void
     {
@@ -47,10 +45,8 @@ final class InheritanceResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentConstantData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $parentConstantData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveInheritanceOfConstant(array $parentConstantData, ArrayObject $class): void
     {
@@ -73,10 +69,8 @@ final class InheritanceResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentPropertyData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $parentPropertyData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveInheritanceOfProperty(array $parentPropertyData, ArrayObject $class): void
     {
@@ -129,10 +123,8 @@ final class InheritanceResolver extends AbstractResolver
     }
 
     /**
-     * @param array       $parentMethodData
-     * @param ArrayObject $class
-     *
-     * @return void
+     * @param array<string,mixed>       $parentMethodData
+     * @param ArrayObject<string,mixed> $class
      */
     private function resolveInheritanceOfMethod(array $parentMethodData, ArrayObject $class): void
     {

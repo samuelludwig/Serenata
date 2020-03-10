@@ -14,10 +14,10 @@ use Serenata\Indexing\Structures\AccessModifierNameValue;
 final class MethodConverter extends FunctionConverter
 {
     /**
-     * @param Structures\Method $method
-     * @param ArrayAccess       $class
+     * @param Structures\Method         $method
+     * @param ArrayAccess<string,mixed> $class
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convertForClass(Structures\Method $method, ArrayAccess $class): array
     {

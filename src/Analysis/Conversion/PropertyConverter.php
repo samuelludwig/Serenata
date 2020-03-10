@@ -14,10 +14,10 @@ use Serenata\Indexing\Structures\AccessModifierNameValue;
 final class PropertyConverter extends AbstractConverter
 {
     /**
-     * @param Structures\Property $property
-     * @param ArrayAccess         $class
+     * @param Structures\Property       $property
+     * @param ArrayAccess<string,mixed> $class
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convertForClass(Structures\Property $property, ArrayAccess $class): array
     {

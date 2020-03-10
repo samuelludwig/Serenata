@@ -14,7 +14,7 @@ use Serenata\Indexing\Structures;
     /**
      * @param Structures\FunctionLike $function
      *
-     * @return array
+     * @return array<string,mixed>
      */
     public function convert(Structures\FunctionLike $function): array
     {
