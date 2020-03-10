@@ -97,11 +97,15 @@ final class IndexableFileIterator implements IteratorAggregate
                 //
                 // yield new SplFileInfo(implode(DIRECTORY_SEPARATOR, $pathParts));
 
-                if ($isFile && $item->getFilename() !== basename($uri)) {
-                    continue;
-                }
+                if (!$isFile) {
+                    yield $item;
+                } elseif ($item->getFilename() === basename($uri)) {
+                    // We scan the parent folder for files, see above. Breaking avoids scanning other files and,
+                    // possibly, folders recursively.
+                    yield $item;
 
-                yield $item;
+                    break;
+                }
             }
         }
     }

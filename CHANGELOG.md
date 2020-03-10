@@ -1,4 +1,5 @@
 ## 5.3.0 (Unreleased)
+* Avoid unnecessary file and folder scanning when reindexing single files.
 * Try harder to remain functional instead of errorring out if duplicate imports exist.
 * [Fix notice `Undefined index: endLine in phar:///.../src/Analysis/Relations/TraitUsageResolver.php on line 209`](https://gitlab.com/Serenata/Serenata/issues/306)
 * Fix files starting with a dot or files inside a folder starting with a dot no longer being indexed.
