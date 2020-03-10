@@ -146,6 +146,28 @@ final class FileIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testIndexingDoesNotIgnoreFilesThatStartWithDotSuchAsMetaFiles(): void
+    {
+        $path = $this->getPathFor('.phpstorm.meta.phpt');
+
+        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            [],
+            ':memory:',
+            7.1,
+            [],
+            ['phpt']
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(1, $files, 'Files that start with a dot such as PhpStorm meta files should be indexed');
+    }
+
+    /**
+     * @return void
+     */
     public function testFileIndexIsSkippedIfSourceDidNotChange(): void
     {
         $path = $this->getPathFor('TestFile.phpt');

@@ -67,7 +67,7 @@ final class IndexableFileIterator implements IteratorAggregate
 
         /** @var string[] $globsToAdhereTo */
         $globsToAdhereTo = array_map(function (string $extension): string {
-            return '*.' . $extension;
+            return '/\.' . $extension . '$/';
         }, $this->extensionsToIndex);
 
         $finder = new Finder();
@@ -75,7 +75,7 @@ final class IndexableFileIterator implements IteratorAggregate
             // For single URIs, move up to parent folder so we can follow the same flow and pattern matching.
             ->in($isFile ? dirname($uri) : $uri)
             ->ignoreUnreadableDirs(true)
-            ->ignoreDotFiles(true)
+            ->ignoreDotFiles(false)
             ->ignoreVCS(true)
             ->followLinks()
             ->name($globsToAdhereTo);
