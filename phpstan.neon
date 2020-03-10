@@ -7,9 +7,6 @@ includes:
     - phpstan-baseline.neon
 
 parameters:
-    featureToggles:
-        parallel: true
-
     stubFiles:
         - stubs/Deferred.stub
 
