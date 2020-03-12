@@ -51,5 +51,19 @@
     "config": {
         "sort-packages": true,
         "preferred-install": "dist"
-    }
+    },
+    "funding": [
+        {
+            "type": "liberapay",
+            "url": "https://liberapay.com/Gert-dev"
+        },
+        {
+            "type": "paypal",
+            "url": "https://www.paypal.me/gertdev"
+        },
+        {
+            "type": "other",
+            "url": "https://serenata.gitlab.io/#support"
+        }
+    ]
 }
