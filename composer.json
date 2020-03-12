@@ -52,6 +52,9 @@
         "sort-packages": true,
         "preferred-install": "dist"
     },
+    "bin": [
+        "src/Main.php"
+    ],
     "funding": [
         {
             "type": "liberapay",
