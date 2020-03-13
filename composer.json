@@ -15,6 +15,7 @@
         "jetbrains/phpstorm-stubs": "dev-master@dev",
         "league/html-to-markdown": "^4.8",
         "nikic/php-parser": "^4.3",
+        "ocramius/package-versions": "1.4.*",
         "php-ds/php-ds": "^1.2",
         "react/promise": "^2.7",
         "react/socket": "^1.3",
