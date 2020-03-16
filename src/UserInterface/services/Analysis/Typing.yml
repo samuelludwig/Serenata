@@ -7,14 +7,6 @@ parameters:
 
 
 services:
-    parameterDocblockTypeSemanticEqualityChecker:
-        class: Serenata\Analysis\Typing\ParameterDocblockTypeSemanticEqualityChecker
-        arguments:
-            - '@structureAwareNameResolverFactory'
-            - '@classlikeInfoBuilder'
-            - '@docblockTypeParser'
-            - '@docblockTypeEquivalenceComparator'
-
     docblockTypeTransformer:
         class: Serenata\DocblockTypeParser\DocblockTypeTransformer
 

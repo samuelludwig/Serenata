@@ -96,21 +96,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
 
 		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\ParameterDocblockTypeSemanticEqualityChecker\\:\\:isEqual\\(\\) has parameter \\$docblockParameter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Analysis/Typing/ParameterDocblockTypeSemanticEqualityChecker.php
-
-		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\ParameterDocblockTypeSemanticEqualityChecker\\:\\:isEqual\\(\\) has parameter \\$parameter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Analysis/Typing/ParameterDocblockTypeSemanticEqualityChecker.php
-
-		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\ParameterDocblockTypeSemanticEqualityChecker\\:\\:calculateParameterTypeList\\(\\) has parameter \\$parameter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Analysis/Typing/ParameterDocblockTypeSemanticEqualityChecker.php
-
-		-
 			message: "#^Parameter \\#2 \\$properties of method Serenata\\\\Analysis\\\\Visiting\\\\ScopeLimitingVisitor\\:\\:memorizeNodeProperties\\(\\) expects array\\<string, mixed\\>, array\\<int, string\\> given\\.$#"
 			count: 5
 			path: src/Analysis/Visiting/ScopeLimitingVisitor.php
