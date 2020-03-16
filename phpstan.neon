@@ -15,6 +15,7 @@ parameters:
         # able to use inheritDoc here.
         - '#Method [A-Za-z\\_]+::jsonSerialize\(\) return type has no value type specified in iterable type array.#'
         - '#Method [A-Za-z\\_]+::getSubNodeNames\(\) return type has no value type specified in iterable type array.#'
+        - '#return type has no value type specified in iterable type Symfony\\Component\\Process\\Process.#'
 
         -
             message: '#Variable property access on#'
