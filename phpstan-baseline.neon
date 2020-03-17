@@ -555,3 +555,838 @@ parameters:
 			count: 1
 			path: src/Tooltips/TooltipProvider.php
 
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:tearDown\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method clearCache\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Negated boolean expression is always false\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, Symfony\\\\Component\\\\DependencyInjection\\\\ContainerBuilder given\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:prepareContainer\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$indexer of method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:indexUriViaIndexer\\(\\) expects Serenata\\\\Indexing\\\\IndexerInterface, object\\|null given\\.$#"
+			count: 4
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method update\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method clear\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method run\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method getManager\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/AbstractIntegrationTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ClasslikeListProviderTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 12
+			path: tests/Integration/Analysis/ClasslikeListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/ClasslikeListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/ClasslikeListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method add\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method clearCache\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 12
+			path: tests/Integration/Analysis/ConstantListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/ConstantListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/ConstantListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Analysis/ConstantListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method add\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ConstantListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ConstantListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ConstantListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method clearCache\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ConstantListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/ConstantListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FileNamespaceListProviderTest.php
+
+		-
+			message: "#^Cannot call method getAllForFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FileNamespaceListProviderTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 12
+			path: tests/Integration/Analysis/FunctionListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/FunctionListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/FunctionListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method add\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method clearCache\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/NamespaceListProviderTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"bool\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/NamespaceListProviderTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 6
+			path: tests/Integration/Analysis/NamespaceListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/NamespaceListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/NamespaceListRegistryIndexSynchronizationTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Analysis/NamespaceListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method add\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/NamespaceListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/NamespaceListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/NamespaceListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method clearCache\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/NamespaceListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/NamespaceListRegistryWorkspaceInteractionTest.php
+
+		-
+			message: "#^Cannot call method deduceTypes\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Cannot call method deduce\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$text of class Serenata\\\\Utility\\\\TextDocumentItem constructor expects string, string\\|false given\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$string of static method Serenata\\\\Common\\\\Position\\:\\:createFromByteOffset\\(\\) expects string, string\\|false given\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Analysis\\\\Typing\\\\Deduction\\\\ExpressionTypeDeducerTest\\:\\:deduceTypesFromExpressionWithMeta\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$haystack of function mb_strpos expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Analysis\\\\Typing\\\\Deduction\\\\ExpressionTypeDeducerTest\\:\\:getMarkerOffset\\(\\) should return int but returns int\\|false\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/Typing/FileClasslikeListProviderTest.php
+
+		-
+			message: "#^Cannot call method getAllForFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/Typing/FileClasslikeListProviderTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/VariableScannerTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/VariableScannerTest.php
+
+		-
+			message: "#^Cannot call method getAvailableVariables\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Analysis/VariableScannerTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$text of class Serenata\\\\Utility\\\\TextDocumentItem constructor expects string, string\\|false given\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/VariableScannerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Analysis\\\\VariableScannerTest\\:\\:getAvailableVariables\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/VariableScannerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$offset of static method Serenata\\\\Common\\\\Position\\:\\:createFromByteOffset\\(\\) expects int, int\\|null given\\.$#"
+			count: 1
+			path: tests/Integration/Analysis/VariableScannerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Autocompletion\\\\ApplicabilityChecking\\\\AbstractAutocompletionApplicabilityCheckerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Integration/Autocompletion/ApplicabilityChecking/AbstractAutocompletionApplicabilityCheckerTest.php
+
+		-
+			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
+			count: 1
+			path: tests/Integration/Autocompletion/ApplicabilityChecking/AbstractAutocompletionApplicabilityCheckerTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Autocompletion/Providers/AbstractAutocompletionProviderTest.php
+
+		-
+			message: "#^Cannot call method provide\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Autocompletion/Providers/AbstractAutocompletionProviderTest.php
+
+		-
+			message: "#^Cannot call method determine\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Autocompletion/Providers/AbstractAutocompletionProviderTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Autocompletion\\\\Providers\\\\AbstractAutocompletionProviderTest\\:\\:getMarkerOffset\\(\\) should return int but returns int\\|false\\.$#"
+			count: 1
+			path: tests/Integration/Autocompletion/Providers/AbstractAutocompletionProviderTest.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Highlights/DocumentHighlightsRetrieverTest.php
+
+		-
+			message: "#^Cannot call method retrieve\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Highlights/DocumentHighlightsRetrieverTest.php
+
+		-
+			message: "#^Cannot call method index\\(\\) on object\\|null\\.$#"
+			count: 5
+			path: tests/Integration/Indexing/FileIndexingTest.php
+
+		-
+			message: "#^Cannot call method getFiles\\(\\) on object\\|null\\.$#"
+			count: 10
+			path: tests/Integration/Indexing/FileIndexingTest.php
+
+		-
+			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
+			count: 5
+			path: tests/Integration/Indexing/FileIndexingTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Linting\\\\LinterTest\\:\\:lintFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Linting/LinterTest.php
+
+		-
+			message: "#^Cannot call method lint\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Linting/LinterTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Refactoring/UseStatementInsertionCreatorTest.php
+
+		-
+			message: "#^Cannot call method create\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Refactoring/UseStatementInsertionCreatorTest.php
+
+		-
+			message: "#^Cannot call method getSignatures\\(\\) on Serenata\\\\SignatureHelp\\\\SignatureHelp\\|null\\.$#"
+			count: 6
+			path: tests/Integration/SignatureHelp/SignatureHelpRetrieverTest.php
+
+		-
+			message: "#^Cannot call method getActiveParameter\\(\\) on Serenata\\\\SignatureHelp\\\\SignatureHelp\\|null\\.$#"
+			count: 3
+			path: tests/Integration/SignatureHelp/SignatureHelpRetrieverTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, array\\<Serenata\\\\SignatureHelp\\\\ParameterInformation\\>\\|null given\\.$#"
+			count: 2
+			path: tests/Integration/SignatureHelp/SignatureHelpRetrieverTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/SignatureHelp/SignatureHelpRetrieverTest.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/SignatureHelp/SignatureHelpRetrieverTest.php
+
+		-
+			message: "#^Only booleans are allowed in a negated boolean, Serenata\\\\SignatureHelp\\\\SignatureHelp\\|null given\\.$#"
+			count: 4
+			path: tests/Integration/SignatureHelp/SignatureHelpRetrieverTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Symbols\\\\DocumentSymbolRetrieverTest\\:\\:getSymbolsForFile\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/Symbols/DocumentSymbolRetrieverTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Symbols/DocumentSymbolRetrieverTest.php
+
+		-
+			message: "#^Cannot call method retrieve\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Symbols/DocumentSymbolRetrieverTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Tooltips/TooltipProviderTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Tooltips/TooltipProviderTest.php
+
+		-
+			message: "#^Cannot call method get\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Tooltips/TooltipProviderTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:arrayHasKey\\(\\)\\.$#"
+			count: 24
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:logicalNot\\(\\)\\.$#"
+			count: 2
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertNotNull\\(\\) with array will always evaluate to true\\.$#"
+			count: 4
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\ClassInfoJsonRpcQueueItemHandlerTest\\:\\:getClassInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method getClassInfo\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassListJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method getAllForFilePath\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassListJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:arrayHasKey\\(\\)\\.$#"
+			count: 5
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:logicalNot\\(\\)\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\GlobalConstantsJsonRpcQueueItemHandlerTest\\:\\:getGlobalConstants\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method getGlobalConstants\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method getGlobalFunctions\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalFunctionsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:arrayHasKey\\(\\)\\.$#"
+			count: 3
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalFunctionsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:logicalNot\\(\\)\\.$#"
+			count: 1
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalFunctionsJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method localizeType\\(\\) on object\\|null\\.$#"
+			count: 17
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/LocalizeTypeJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Cannot call method resolveType\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ResolveTypeJsonRpcQueueItemHandlerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:markTestSkipped\\(\\)\\.$#"
+			count: 1
+			path: tests/Performance/AbstractPerformanceTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Performance/AutocompletionPerformanceTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Performance/AutocompletionPerformanceTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Performance/AutocompletionPerformanceTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Performance/AutocompletionPerformanceTest.php
+
+		-
+			message: "#^Cannot call method provide\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Performance/AutocompletionPerformanceTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Performance/AutocompletionPerformanceTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Performance/FunctionListProvidingPerformanceTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Performance/FunctionListProvidingPerformanceTest.php
+
+		-
+			message: "#^Anonymous function has an unused use \\$pathToIndex\\.$#"
+			count: 2
+			path: tests/Performance/FunctionListProvidingPerformanceTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Performance/FunctionListProvidingPerformanceTest.php
+
+		-
+			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Performance/FunctionListProvidingPerformanceTest.php
+
+		-
+			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Performance/IndexingPerformanceTest.php
+
+		-
+			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Performance/IndexingPerformanceTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Performance/IndexingPerformanceTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Analysis\\\\FilePositionClasslikeDeterminerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Unit/Analysis/FilePositionClasslikeDeterminerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Analysis\\\\Typing\\\\Deduction\\\\ClassLikeNodeTypeDeducerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Unit/Analysis/Typing/Deduction/ClassLikeNodeTypeDeducerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$nodes of method PhpParser\\\\NodeTraverser\\:\\:traverse\\(\\) expects array\\<PhpParser\\\\Node\\>, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
+			count: 1
+			path: tests/Unit/Analysis/Visiting/ScopeLimitingVisitorTest.php
+
+		-
+			message: "#^Unable to resolve the template type T in call to method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:determine\\(\\)$#"
+			count: 1
+			path: tests/Unit/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminerTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Autocompletion\\\\AutocompletionPrefixDeterminerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$autocompletionPrefixBoundaryTokenRetriever of class Serenata\\\\Autocompletion\\\\AutocompletionPrefixDeterminer constructor expects Serenata\\\\Autocompletion\\\\AutocompletionPrefixBoundaryTokenRetrieverInterface, PHPUnit_Framework_MockObject_MockObject given\\.$#"
+			count: 2
+			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
+			count: 2
+			path: tests/Unit/Autocompletion/Providers/FuzzyMatchingAutocompletionProviderTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Unit/Indexing/EventEmittingStorageTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
+			count: 5
+			path: tests/Unit/Indexing/FilePruningTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
+			count: 1
+			path: tests/Unit/Indexing/FilePruningTest.php
+
+		-
+			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"
+			count: 5
+			path: tests/Unit/Parsing/LastExpressionParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\:\\:\\$name\\.$#"
+			count: 31
+			path: tests/Unit/Parsing/LastExpressionParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 26
+			path: tests/Unit/Parsing/LastExpressionParserTest.php
+
+		-
+			message: "#^Cannot access property \\$value on PhpParser\\\\Node\\\\Expr\\|null\\.$#"
+			count: 1
+			path: tests/Unit/Parsing/LastExpressionParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 1
+			path: tests/Unit/Parsing/LastExpressionParserTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
+			count: 33
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$stack of function array_shift expects array, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
+			count: 32
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"
+			count: 7
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 3
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
+			count: 19
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\:\\:\\$name\\.$#"
+			count: 8
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\VarLikeIdentifier\\:\\:\\$name\\.$#"
+			count: 1
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\|PhpParser\\\\Node\\\\Stmt\\\\Class_\\:\\:toString\\(\\)\\.$#"
+			count: 1
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Cannot access property \\$value on PhpParser\\\\Node\\\\Expr\\|null\\.$#"
+			count: 1
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\:\\:\\$value\\.$#"
+			count: 2
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'PhpParser\\\\\\\\Node\\\\\\\\Arg' and PhpParser\\\\Node\\\\Arg will always evaluate to true\\.$#"
+			count: 12
+			path: tests/Unit/Parsing/PartialParserTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Sockets\\\\JsonRpcQueueItemProcessorTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
+			count: 9
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 5
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Cannot call method getCode\\(\\) on Serenata\\\\Sockets\\\\JsonRpcError\\|null\\.$#"
+			count: 4
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Cannot call method getMessage\\(\\) on Serenata\\\\Sockets\\\\JsonRpcError\\|null\\.$#"
+			count: 4
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Cannot call method getData\\(\\) on Serenata\\\\Sockets\\\\JsonRpcError\\|null\\.$#"
+			count: 4
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:throwException\\(\\)\\.$#"
+			count: 1
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
+			count: 1
+			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Sockets\\\\JsonRpcQueueTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/Unit/Sockets/JsonRpcQueueTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$jsonRpcRequestPriorityDeterminer of class Serenata\\\\Sockets\\\\JsonRpcQueue constructor expects Serenata\\\\Sockets\\\\JsonRpcRequestPriorityDeterminerInterface, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
+			count: 7
+			path: tests/Unit/Sockets/JsonRpcQueueTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
+			count: 1
+			path: tests/Unit/Sockets/JsonRpcQueueTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
+			count: 1
+			path: tests/Unit/Sockets/JsonRpcQueueTest.php
+
