@@ -82,10 +82,14 @@ final class JsonRpcResponse implements JsonRpcMessageInterface
      */
     public static function createFromArray(array $array)
     {
+        $error = isset($array['error']) ?
+            (new JsonRpcError($array['error']['code'], $array['error']['message'], $array['error']['data'] ?? null)) :
+            null;
+
         return new static(
             $array['id'],
             isset($array['result']) ? $array['result'] : null,
-            isset($array['error']) ? $array['error'] : null,
+            $error,
             $array['jsonrpc']
         );
     }

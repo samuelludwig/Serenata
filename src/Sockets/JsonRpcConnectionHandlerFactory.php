@@ -10,16 +10,16 @@ use React\Socket\ConnectionInterface;
 final class JsonRpcConnectionHandlerFactory implements ConnectionHandlerFactoryInterface
 {
     /**
-     * @var JsonRpcRequestHandlerInterface
+     * @var JsonRpcMessageHandlerInterface
      */
-    private $jsonRpcRequestHandler;
+    private $jsonRpcMessageHandler;
 
     /**
-     * @param JsonRpcRequestHandlerInterface $jsonRpcRequestHandler
+     * @param JsonRpcMessageHandlerInterface $jsonRpcMessageHandler
      */
-    public function __construct(JsonRpcRequestHandlerInterface $jsonRpcRequestHandler)
+    public function __construct(JsonRpcMessageHandlerInterface $jsonRpcMessageHandler)
     {
-        $this->jsonRpcRequestHandler = $jsonRpcRequestHandler;
+        $this->jsonRpcMessageHandler = $jsonRpcMessageHandler;
     }
 
     /**
@@ -27,6 +27,6 @@ final class JsonRpcConnectionHandlerFactory implements ConnectionHandlerFactoryI
      */
     public function create(ConnectionInterface $connection)
     {
-        return new JsonRpcConnectionHandler($connection, $this->jsonRpcRequestHandler);
+        return new JsonRpcConnectionHandler($connection, $this->jsonRpcMessageHandler);
     }
 }

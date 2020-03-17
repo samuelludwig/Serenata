@@ -14,8 +14,9 @@ use Serenata\Sockets\JsonRpcQueue;
 use Serenata\Sockets\SocketServer;
 use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
+use Serenata\Sockets\JsonRpcMessageInterface;
 use Serenata\Sockets\JsonRpcQueueItemProcessor;
-use Serenata\Sockets\JsonRpcRequestHandlerInterface;
+use Serenata\Sockets\JsonRpcMessageHandlerInterface;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 use Serenata\Sockets\JsonRpcConnectionHandlerFactory;
 
@@ -29,7 +30,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Application extension that can handle JSON-RPC requests.
  */
-final class JsonRpcApplication extends AbstractApplication implements JsonRpcRequestHandlerInterface
+final class JsonRpcApplication extends AbstractApplication implements JsonRpcMessageHandlerInterface
 {
     /**
      * @var float
@@ -68,11 +69,17 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcReq
     /**
      * @inheritDoc
      */
-    public function handle(JsonRpcRequest $request, JsonRpcMessageSenderInterface $jsonRpcMessageSender): void
+    public function handle(JsonRpcMessageInterface $message, JsonRpcMessageSenderInterface $jsonRpcMessageSender): void
     {
+        if (!$message instanceof JsonRpcRequest) {
+            throw new UnexpectedValueException(
+                "Serenata doesn't know how to react to responses at the moment and can only handle requests"
+            );
+        }
+
         /** @var JsonRpcQueue $queue */
         $queue = $this->getContainer()->get('requestQueue');
-        $queue->push(new JsonRpcQueueItem($request, $jsonRpcMessageSender));
+        $queue->push(new JsonRpcQueueItem($message, $jsonRpcMessageSender));
 
         $this->ensurePeriodicQueueProcessingTimerIsInstalled();
     }

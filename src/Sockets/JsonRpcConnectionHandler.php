@@ -28,18 +28,18 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
     private $connection;
 
     /**
-     * @var JsonRpcRequestHandlerInterface
+     * @var JsonRpcMessageHandlerInterface
      */
-    private $jsonRpcRequestHandler;
+    private $jsonRpcMessageHandler;
 
     /**
      * @param ConnectionInterface            $connection
-     * @param JsonRpcRequestHandlerInterface $jsonRpcRequestHandler
+     * @param JsonRpcMessageHandlerInterface $jsonRpcMessageHandler
      */
-    public function __construct(ConnectionInterface $connection, JsonRpcRequestHandlerInterface $jsonRpcRequestHandler)
+    public function __construct(ConnectionInterface $connection, JsonRpcMessageHandlerInterface $jsonRpcMessageHandler)
     {
         $this->connection = $connection;
-        $this->jsonRpcRequestHandler = $jsonRpcRequestHandler;
+        $this->jsonRpcMessageHandler = $jsonRpcMessageHandler;
 
         $this->setup();
     }
@@ -155,19 +155,29 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
      */
     private function processRequest(): void
     {
-        $jsonRpcRequest = null;
+        $message = null;
+        $data = json_decode($this->request['content'], true);
 
-        try {
-            $jsonRpcRequest = $this->getJsonRpcRequestFromRequestContent($this->request['content']);
-        } catch (UnexpectedValueException $e) {
-            $jsonRpcRequest = null;
+        if (is_array($data)) {
+            try {
+                if (array_key_exists('result', $data) ||
+                    array_key_exists('error', $data)
+                ) {
+                    $message = JsonRpcResponse::createFromArray($data);
+                } else {
+                    $message = JsonRpcRequest::createFromArray($data);
+                }
+            } catch (UnexpectedValueException $e) {
+                $message = null;
+            }
         }
 
-        if ($jsonRpcRequest !== null) {
-            $this->jsonRpcRequestHandler->handle($jsonRpcRequest, $this);
+        if ($message !== null) {
+            $this->jsonRpcMessageHandler->handle($message, $this);
         } else {
             trigger_error(
-                'The request body was not valid JSON. Its content was "' . $this->request['content'] . '"',
+                'Received message containing request body that is not valid JSON for JSON-RPC or its data is ' .
+                    'malformed. Content was "' . $this->request['content'] . '"',
                 E_USER_WARNING
             );
         }
@@ -233,16 +243,6 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
         }
 
         return $data;
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return JsonRpcRequest
-     */
-    private function getJsonRpcRequestFromRequestContent(string $content): JsonRpcRequest
-    {
-        return JsonRpcRequest::createFromJson($this->request['content']);
     }
 
     /**

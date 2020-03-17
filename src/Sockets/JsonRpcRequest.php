@@ -117,24 +117,6 @@ final class JsonRpcRequest implements JsonRpcMessageInterface
     }
 
     /**
-     * @param string $json
-     *
-     * @throws UnexpectedValueException
-     *
-     * @return static
-     */
-    public static function createFromJson(string $json)
-    {
-        $data = json_decode($json, true);
-
-        if (!is_array($data)) {
-            throw new UnexpectedValueException('The specified JSON did not evaluate to an array');
-        }
-
-        return static::createFromArray($data);
-    }
-
-    /**
      * @inheritDoc
      */
     public function jsonSerialize(): array

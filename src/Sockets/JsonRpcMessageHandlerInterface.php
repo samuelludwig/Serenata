@@ -3,18 +3,16 @@
 namespace Serenata\Sockets;
 
 /**
- * Interface for {@see JsonRpcRequest} handlers.
+ * Interface for {@see JsonRpcMessageInterface} handlers.
  */
-interface JsonRpcRequestHandlerInterface
+interface JsonRpcMessageHandlerInterface
 {
     /**
      * @param JsonRpcRequest                 $request
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
-     *
-     * @return void
      */
     public function handle(
-        JsonRpcRequest $request,
+        JsonRpcMessageInterface $message,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void;
 }
