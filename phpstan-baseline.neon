@@ -941,6 +941,61 @@ parameters:
 			path: tests/Integration/Autocompletion/Providers/AbstractAutocompletionProviderTest.php
 
 		-
+			message: "#^Cannot call method create\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Commands/OpenTextDocumentCommandExecutorTest.php
+
+		-
+			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Cannot call method locate\\(\\) on object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Cannot call method getResult\\(\\) on Serenata\\\\GotoDefinition\\\\GotoDefinitionResponse\\|null\\.$#"
+			count: 13
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Variable \\$resultBeforeRange might not be defined\\.$#"
+			count: 6
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between false and false will always evaluate to true\\.$#"
+			count: 2
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Call to an undefined method Serenata\\\\GotoDefinition\\\\GotoDefinitionResponse\\:\\:getUri\\(\\)\\.$#"
+			count: 2
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Cannot access offset 0 on array\\<Serenata\\\\Utility\\\\Location\\>\\|Serenata\\\\Utility\\\\Location\\.$#"
+			count: 11
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Cannot access offset 0 on array\\<Serenata\\\\Utility\\\\Location\\>\\|Serenata\\\\Utility\\\\Location\\|null\\.$#"
+			count: 8
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Variable \\$resultAfterRange might not be defined\\.$#"
+			count: 7
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
+			message: "#^Call to an undefined method Serenata\\\\GotoDefinition\\\\GotoDefinitionResponse\\:\\:getLine\\(\\)\\.$#"
+			count: 1
+			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
+
+		-
 			message: "#^Cannot call method get\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: tests/Integration/Highlights/DocumentHighlightsRetrieverTest.php
@@ -949,6 +1004,81 @@ parameters:
 			message: "#^Cannot call method retrieve\\(\\) on object\\|null\\.$#"
 			count: 3
 			path: tests/Integration/Highlights/DocumentHighlightsRetrieverTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 4
+			path: tests/Integration/Indexing/ClassConstantIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/ClassConstantIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/ClassConstantIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 7
+			path: tests/Integration/Indexing/ClassIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 2
+			path: tests/Integration/Indexing/ClassIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 2
+			path: tests/Integration/Indexing/ClassIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/ConstantIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Indexing/ConstantIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/ConstantIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/DefineIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Indexing/DefineIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/DefineIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/FileIndexerFileNamespaceProviderCombinationTest.php
+
+		-
+			message: "#^Cannot call method provide\\(\\) on object\\|null\\.$#"
+			count: 2
+			path: tests/Integration/Indexing/FileIndexerFileNamespaceProviderCombinationTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/FileIndexerFileNamespaceProviderCombinationTest.php
 
 		-
 			message: "#^Cannot call method index\\(\\) on object\\|null\\.$#"
@@ -966,6 +1096,141 @@ parameters:
 			path: tests/Integration/Indexing/FileIndexingTest.php
 
 		-
+			message: "#^Call to an undefined method Serenata\\\\Indexing\\\\Structures\\\\FunctionLikeParameter\\:\\:getFunction\\(\\)\\.$#"
+			count: 2
+			path: tests/Integration/Indexing/FunctionIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/FunctionIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Indexing/FunctionIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/FunctionIndexingTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 7
+			path: tests/Integration/Indexing/ImportIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/ImportIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/ImportIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 4
+			path: tests/Integration/Indexing/InterfaceIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/InterfaceIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/InterfaceIndexingTest.php
+
+		-
+			message: "#^Cannot call method getMetaStaticMethodTypesFor\\(\\) on object\\|null\\.$#"
+			count: 4
+			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 8
+			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
+
+		-
+			message: "#^Call to an undefined method Serenata\\\\Indexing\\\\Structures\\\\FunctionLikeParameter\\:\\:getMethod\\(\\)\\.$#"
+			count: 4
+			path: tests/Integration/Indexing/MethodIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/MethodIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 3
+			path: tests/Integration/Indexing/MethodIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/MethodIndexingTest.php
+
+		-
+			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
+			count: 5
+			path: tests/Integration/Indexing/NamespaceIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/NamespaceIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/NamespaceIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 7
+			path: tests/Integration/Indexing/PropertyIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/PropertyIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/PropertyIndexingTest.php
+
+		-
+			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
+			count: 8
+			path: tests/Integration/Indexing/TraitIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/TraitIndexingTest.php
+
+		-
+			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
+			count: 1
+			path: tests/Integration/Indexing/TraitIndexingTest.php
+
+		-
 			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Linting\\\\LinterTest\\:\\:lintFile\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Integration/Linting/LinterTest.php
@@ -974,6 +1239,11 @@ parameters:
 			message: "#^Cannot call method lint\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: tests/Integration/Linting/LinterTest.php
+
+		-
+			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Parsing\\\\DocblockParserTest\\:\\:getDocblockParser\\(\\) should return Serenata\\\\Parsing\\\\DocblockParser but returns object\\|null\\.$#"
+			count: 1
+			path: tests/Integration/Parsing/DocblockParserTest.php
 
 		-
 			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
@@ -1249,6 +1519,11 @@ parameters:
 			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
 			count: 1
 			path: tests/Unit/Indexing/FilePruningTest.php
+
+		-
+			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertEquals\\(\\)\\.$#"
+			count: 6
+			path: tests/Unit/Indexing/PathNormalizerTest.php
 
 		-
 			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"
