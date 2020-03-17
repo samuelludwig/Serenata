@@ -6,9 +6,14 @@ use React;
 
 use PHPUnit\Framework\TestCase;
 
-// use Serenata\Sockets\JsonRpcRequest;
-// use Serenata\Sockets\JsonRpcConnectionHandler;
-// use Serenata\Sockets\JsonRpcRequestHandlerInterface;
+use Serenata\Sockets\JsonRpcError;
+use Serenata\Sockets\JsonRpcRequest;
+use Serenata\Sockets\JsonRpcResponse;
+use Serenata\Sockets\JsonRpcErrorCode;
+use Serenata\Sockets\JsonRpcMessageInterface;
+use Serenata\Sockets\JsonRpcConnectionHandler;
+use Serenata\Sockets\JsonRpcMessageSenderInterface;
+use Serenata\Sockets\JsonRpcMessageHandlerInterface;
 
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 
@@ -82,68 +87,128 @@ final class JsonRpcApplicationTest extends TestCase
         static::assertTrue($didConnect, 'Timed out trying to connect to TCP server instance using client');
     }
 
-    // /**
-    //  * @return void
-    //  */
-    // public function testSendingJsonRpcRequestAndReceivingResponseWorks(): void
-    // {
-    //     $process = $this->spawnTestInstance();
-    //     $process->setTimeout(5);
-    //     $process->start();
+    /**
+     * @return void
+     */
+    public function testSendingJsonRpcRequestAndReceivingResponseWorks(): void
+    {
+        $connectionHandler = function (JsonRpcConnectionHandler $handler): void {
+            $handler->send(new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
+                'message' => new JsonRpcRequest(null, 'serenata/test/hello', [
+                    'greeting' => 'hi!',
+                ]),
+            ]));
+        };
 
-    //     $this->waitForServerStart($process);
+        $incomingMessageHandler = function (JsonRpcMessageInterface $message): void {
+            static::assertEquals(
+                new JsonRpcResponse(
+                    null,
+                    null,
+                    new JsonRpcError(
+                        JsonRpcErrorCode::SERVER_NOT_INITIALIZED,
+                        'Server not initialized yet, no active workspace'
+                    )
+                ),
+                $message,
+                'Response sent back by server was expected to be error that server is not yet initialized'
+            );
+        };
 
-    //     $eventLoop = React\EventLoop\Factory::create();
-    //     $connector = new React\Socket\Connector($eventLoop, [
-    //         'timeout' => 5,
-    //     ]);
+        $this->setupTestScenario($connectionHandler, $incomingMessageHandler, 1);
+    }
 
-    //     $jsonRpcRequestHandlerMock = self::getMockBuilder(JsonRpcRequestHandlerInterface::class)->getMock();
-    //     $jsonRpcRequestHandlerMock->expects(self::once())->method('handle')->willReturn(new JsonRpcRequest(null, 'serenata/test/hello', [
-    //         'greeting' => 'hi!',
-    //     ]));
+    /**
+     * @param callable(JsonRpcConnectionHandler):void $connectionHandler
+     * @param callable(JsonRpcMessageInterface):void  $incomingMessageHandler
+     * @param int $amountOfMessagesToWaitFor
+     */
+    private function setupTestScenario(
+        callable $connectionHandler,
+        callable $incomingMessageHandler,
+        int $amountOfMessagesToWaitFor = 1
+    ): void {
+        $process = $this->spawnTestInstance();
+        $process->setTimeout(5);
+        $process->start();
 
-    //     $connector
-    //         ->connect(self::TCP_TEST_URI)
-    //         ->then(
-    //             function (React\Socket\ConnectionInterface $connection) use (
-    //                 &$didConnect,
-    //                 $jsonRpcRequestHandlerMock
-    //             ): void {
-    //                 // Also used by the server to process requests, but no reason we can't also use it for the client.
-    //                 $clientConnectionHandler = new JsonRpcConnectionHandler($connection, $jsonRpcRequestHandlerMock);
+        $this->waitForServerStart($process);
 
-    //                 $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage', [
-    //                     'message' => new JsonRpcRequest(null, 'serenata/test/hello', [
-    //                         'greeting' => 'hi!',
-    //                     ]),
-    //                 ]);
+        $eventLoop = React\EventLoop\Factory::create();
+        $connector = new React\Socket\Connector($eventLoop, [
+            'timeout' => 5,
+        ]);
 
-    //                 $clientConnectionHandler->send($request);
-    //             },
-    //             function (): void {
-    //                 static::fail('Failed connecting to TCP server instance using client for an unknown reason');
-    //             }
-    //         );
+        $jsonRpcMessageHandlerStub = new class implements JsonRpcMessageHandlerInterface {
+            /**
+             * @var JsonRpcMessageInterface[]
+             */
+            public $messages = [];
 
-    //     $eventLoop->addTimer(5, function () use ($eventLoop): void {
+            public function handle(
+                JsonRpcMessageInterface $message,
+                JsonRpcMessageSenderInterface $jsonRpcMessageSender
+            ): void {
+                $this->messages[] = $message;
+            }
+        };
 
+        $connector
+            ->connect(self::TCP_TEST_URI)
+            ->then(
+                function (React\Socket\ConnectionInterface $connection) use (
+                    $jsonRpcMessageHandlerStub,
+                    $connectionHandler
+                ): void {
+                    // Also used by the server to process requests, but no reason we can't also use it for the client.
+                    $clientConnectionHandler = new JsonRpcConnectionHandler($connection, $jsonRpcMessageHandlerStub);
 
-    //         // TODO: Need to wait here for request to actually propagate to server, then give server chance
-    //         // to actually handle it and send back info over socket. Need to wait for main loop.
-    //         // sleep(2);
+                    $connectionHandler($clientConnectionHandler);
+                },
+                function (): void {
+                    static::fail('Failed connecting to TCP server instance using client for an unknown reason');
+                }
+            );
 
-    //         // $connection->end();
-    //         // $eventLoop->stop();
+        $complete = function () use (
+            $eventLoop,
+            $jsonRpcMessageHandlerStub,
+            $amountOfMessagesToWaitFor,
+            $incomingMessageHandler
+        ): void {
+            static::assertCount(
+                $amountOfMessagesToWaitFor,
+                $jsonRpcMessageHandlerStub->messages,
+                'Too few messages were sent back from the server to the client (fewer than expected)'
+            );
 
+            foreach ($jsonRpcMessageHandlerStub->messages as $message) {
+                $incomingMessageHandler($message);
+            }
 
-    //         $eventLoop->stop();
-    //     });
+            $eventLoop->stop();
+        };
 
-    //     $eventLoop->run();
+        $eventLoop->addPeriodicTimer(0.1, function () use (
+            $complete,
+            $amountOfMessagesToWaitFor,
+            $jsonRpcMessageHandlerStub
+        ): void {
+            if (count($jsonRpcMessageHandlerStub->messages) < $amountOfMessagesToWaitFor) {
+                return; // Wait a little longer.
+            }
 
-    //     $process->stop();
-    // }
+            $complete();
+        });
+
+        $eventLoop->addTimer(5, function () use ($complete): void {
+            $complete();
+        });
+
+        $eventLoop->run();
+
+        $process->stop();
+    }
 
     /**
      * @param Process $process
