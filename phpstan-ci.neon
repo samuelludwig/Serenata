@@ -1,0 +1,7 @@
+includes:
+    - phpstan.neon
+    # TODO: Remove when all the existing errors have been fixed (https://gitlab.com/Serenata/Serenata/issues/277).
+    - phpstan-baseline.neon
+
+parameters:
+    tmpDir: ./cache/phpstan

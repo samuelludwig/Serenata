@@ -3,8 +3,6 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-php-parser/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
-    # TODO: Remove when all the existing errors have been fixed (https://gitlab.com/Serenata/Serenata/issues/277).
-    - phpstan-baseline.neon
 
 parameters:
     stubFiles:
