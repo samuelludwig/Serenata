@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Unit\Parsing;
+namespace Serenata\Tests\Integration\Parsing;
 
 use Serenata\DocblockTypeParser\IntDocblockType;
 use Serenata\DocblockTypeParser\BoolDocblockType;

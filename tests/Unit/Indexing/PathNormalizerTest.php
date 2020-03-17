@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Unit\Sockets;
+namespace Serenata\Tests\Unit\Indexing;
 
 use PHPUnit\Framework\TestCase;
 

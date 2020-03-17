@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Unit\Commands;
+namespace Serenata\Tests\Integration\Commands;
 
 use Serenata\Commands\ClientCommandName;
 use Serenata\Commands\OpenTextDocumentCommand;

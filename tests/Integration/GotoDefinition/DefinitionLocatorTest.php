@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Unit\SignatureHelp;
+namespace Serenata\Tests\Integration\GotoDefinition;
 
 use UnexpectedValueException;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Serenata\Tests\Integration\Tooltips;
+namespace Serenata\Tests\Integration\Indexing;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
