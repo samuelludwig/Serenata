@@ -64,10 +64,12 @@ test:run-phpstan:
     stage: test
     script:
         - php -d memory_limit=2048M vendor/bin/phpstan analyse -c phpstan-ci.neon --level=max --no-interaction --no-progress --error-format junit src tests > ./phpstan-report.xml
-    cache:
-        key: "$CI_JOB_NAME-phpstan-cache"
-        paths:
-            - cache/phpstan
+    # FIXME: Gitlab CI keeps complaining about "file does not exist". Well, *obviously* it doesn't, it has to be
+    # created by PHPStan first...
+    # cache:
+    #     key: "$CI_JOB_NAME-phpstan-cache"
+    #     paths:
+    #         - cache/phpstan
     artifacts:
         when: always
         expire_in: 1 hrs
