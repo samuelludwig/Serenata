@@ -8,7 +8,7 @@ namespace Serenata\Sockets;
 interface JsonRpcMessageHandlerInterface
 {
     /**
-     * @param JsonRpcRequest                 $request
+     * @param JsonRpcMessageInterface       $message
      * @param JsonRpcMessageSenderInterface $jsonRpcMessageSender
      */
     public function handle(
