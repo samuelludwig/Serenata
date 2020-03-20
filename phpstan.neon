@@ -3,6 +3,7 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-php-parser/extension.neon
     - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/pepakriz/phpstan-exception-rules/extension.neon
 
 parameters:
     level: max
@@ -13,6 +14,19 @@ parameters:
 
     stubFiles:
         - stubs/Deferred.stub
+
+    exceptionRules:
+        reportUnusedCatchesOfUncheckedExceptions: true
+        reportUnusedCheckedThrowsInSubtypes: true
+        reportCheckedThrowsInGlobalScope: true
+        ignoreDescriptiveUncheckedExceptions: false
+        uncheckedExceptions:
+            - RuntimeException
+            - LogicException
+        methodWhitelist:
+            # Don't report tests. Either we have annotations to check for exceptions or they shouldn't happen, in which
+            # case tests will fail anyway and this is intended.
+            PHPUnit\Framework\TestCase: '#.+#'
 
     ignoreErrors:
         # We can fix these, but they aren't our problem to fix and it's never called directly. We just want to just be
