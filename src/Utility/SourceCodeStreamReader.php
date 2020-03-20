@@ -58,7 +58,6 @@ final class SourceCodeStreamReader
     /**
      * @param string|null $file
      *
-     * @throws UnexpectedValueException if the file doesn't exist or it is unreadable.
      * @throws FileSourceCodeReaderException
      *
      * @return string
@@ -66,7 +65,7 @@ final class SourceCodeStreamReader
     public function getSourceCodeFromFile(?string $file): string
     {
         if ($file === null) {
-            throw new UnexpectedValueException("The file {$file} does not exist!");
+            throw new FileSourceCodeReaderException("File {$file} does not exist");
         }
 
         return $this->fileSourceCodeFileReaderFactory->create($file)->read();

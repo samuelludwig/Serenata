@@ -7,6 +7,7 @@ use DomainException;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
 
 /**
  * Generates an appropriate handler for a {@see JsonRpcQueueItem}
@@ -73,6 +74,12 @@ final class JsonRpcQueueItemHandlerFactory implements JsonRpcQueueItemHandlerFac
             return $this->container->get($methodServiceNameMap[$method]);
         } catch (NotFoundExceptionInterface $e) {
             throw new LogicException('Missing service for handling request "' . $method . '"', 0, $e);
+        } catch (ContainerExceptionInterface $e) {
+            throw new LogicException(
+                'Could not retrieve service for handling request "' . $method . '" due to error',
+                0,
+                $e
+            );
         }
     }
 }

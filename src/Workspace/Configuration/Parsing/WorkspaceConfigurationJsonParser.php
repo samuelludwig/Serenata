@@ -40,6 +40,8 @@ final class WorkspaceConfigurationJsonParser implements WorkspaceConfigurationPa
     /**
      * @param array<string, mixed> $data
      * @param string               $key
+     *
+     * @throws WorkspaceConfigurationParsingException
      */
     private function expectKey(array $data, string $key): void
     {
