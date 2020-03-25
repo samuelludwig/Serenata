@@ -2,7 +2,6 @@
 
 namespace Serenata\UserInterface;
 
-use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use Serenata\Analysis\Typing\Deduction\ConfigurableDelegatingNodeTypeDeducer;
 
 use Symfony\Component\Config\FileLocator;
