@@ -78,7 +78,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcMes
         }
 
         /** @var JsonRpcQueue $queue */
-        $queue = $this->getContainer()->get('requestQueue');
+        $queue = $this->getContainer()->get(JsonRpcQueue::class);
         $queue->push(new JsonRpcQueueItem($message, $jsonRpcMessageSender));
 
         $this->ensurePeriodicQueueProcessingTimerIsInstalled();
@@ -149,7 +149,7 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcMes
                 $this->processNextQueueItem();
 
                 /** @var JsonRpcQueue $queue */
-                $queue = $this->getContainer()->get('requestQueue');
+                $queue = $this->getContainer()->get(JsonRpcQueue::class);
 
                 if ($queue->isEmpty()) {
                     $this->uninstallPeriodicQueueProcessingTimer();
@@ -178,10 +178,10 @@ final class JsonRpcApplication extends AbstractApplication implements JsonRpcMes
     private function processNextQueueItem(): void
     {
         /** @var JsonRpcQueue $queue */
-        $queue = $this->getContainer()->get('requestQueue');
+        $queue = $this->getContainer()->get(JsonRpcQueue::class);
 
         /** @var JsonRpcQueueItemProcessor $processor */
-        $processor = $this->getContainer()->get('jsonRpcQueueItemProcessor');
+        $processor = $this->getContainer()->get(JsonRpcQueueItemProcessor::class);
         $processor->process($queue->pop());
     }
 

@@ -8,13 +8,11 @@ services:
 
     tooltipTypeListPrettyPrinter:
         class: Serenata\Tooltips\TooltipTypeListPrettyPrinter
-        arguments:
-            - '@typeListPrettyPrinter'
 
     functionTooltipGenerator:
         class: Serenata\Tooltips\FunctionTooltipGenerator
         arguments:
-            - '@parameterNamePrettyPrinter'
+            - '@Serenata\PrettyPrinting\ParameterNamePrettyPrinter'
             - '@tooltipTypeListPrettyPrinter'
 
     propertyTooltipGenerator:

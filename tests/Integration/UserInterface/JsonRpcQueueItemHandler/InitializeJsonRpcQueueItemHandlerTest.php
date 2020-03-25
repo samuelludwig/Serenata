@@ -360,7 +360,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
      */
     private function getActiveWorkspaceManager(): ActiveWorkspaceManager
     {
-        $manager = $this->container->get('activeWorkspaceManager');
+        $manager = $this->container->get(ActiveWorkspaceManager::class);
 
         assert($manager instanceof ActiveWorkspaceManager);
 

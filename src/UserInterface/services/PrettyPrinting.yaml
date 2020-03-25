@@ -6,26 +6,9 @@ services:
         autowire: true
         public: true
 
-    nodePrettyPrinter:
-        class: Serenata\PrettyPrinting\NodePrettyPrinter
-
-    typePrettyPrinter:
-        class: Serenata\PrettyPrinting\TypePrettyPrinter
-
-    typeListPrettyPrinter:
-        class: Serenata\PrettyPrinting\TypeListPrettyPrinter
-        arguments:
-            - '@typePrettyPrinter'
-
-    parameterDefaultValuePrettyPrinter:
-        class: Serenata\PrettyPrinting\ParameterDefaultValuePrettyPrinter
-
-    parameterNamePrettyPrinter:
-        class: Serenata\PrettyPrinting\ParameterNamePrettyPrinter
-
-    functionParameterPrettyPrinter:
-        class: Serenata\PrettyPrinting\FunctionParameterPrettyPrinter
-        arguments:
-            - '@parameterDefaultValuePrettyPrinter'
-            - '@typeListPrettyPrinter'
-            - '@parameterNamePrettyPrinter'
+    Serenata\PrettyPrinting\NodePrettyPrinter:
+    Serenata\PrettyPrinting\TypePrettyPrinter:
+    Serenata\PrettyPrinting\TypeListPrettyPrinter:
+    Serenata\PrettyPrinting\ParameterDefaultValuePrettyPrinter:
+    Serenata\PrettyPrinting\ParameterNamePrettyPrinter:
+    Serenata\PrettyPrinting\FunctionParameterPrettyPrinter:

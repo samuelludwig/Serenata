@@ -6,9 +6,7 @@ services:
         autowire: true
         public: true
 
-    activeWorkspaceManager:
-        class: Serenata\Workspace\ActiveWorkspaceManager
-        public: true
+    Serenata\Workspace\ActiveWorkspaceManager:
 
     workspaceConfigurationJsonParser:
         class: Serenata\Workspace\Configuration\Parsing\WorkspaceConfigurationJsonParser

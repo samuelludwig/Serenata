@@ -53,7 +53,7 @@ services:
     directoryIndexRequestDemuxer:
         class: Serenata\Indexing\DirectoryIndexRequestDemuxer
         arguments:
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'
             - '@directoryIndexableFileIteratorFactory'
             - '@pathNormalizer'
 
@@ -109,13 +109,13 @@ services:
             - '@pathNormalizer'
             - '@sourceCodeStreamReader'
             - '@textDocumentContentRegistry'
-            - '@activeWorkspaceManager'
+            - '@Serenata\Workspace\ActiveWorkspaceManager'
 
     diagnosticsSchedulingIndexer:
         class: Serenata\Indexing\DiagnosticsSchedulingIndexer
         arguments:
             - '@backendIndexer'
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'
 
     debouncingIndexer:
         class: Serenata\Indexing\DebouncingIndexer

@@ -14,6 +14,8 @@ use Serenata\Sockets\JsonRpcMessageSenderInterface;
 use Serenata\UserInterface\JsonRpcApplication;
 use Serenata\UserInterface\AbstractApplication;
 
+use Serenata\Workspace\ActiveWorkspaceManager;
+
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 
 use Serenata\Workspace\Workspace;
@@ -113,7 +115,7 @@ abstract class AbstractIntegrationTest extends TestCase
         $container->get('schemaInitializer')->initialize();
         $container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
-        $container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,
@@ -215,7 +217,7 @@ abstract class AbstractIntegrationTest extends TestCase
      */
     protected function getRequestQueue(): JsonRpcQueue
     {
-        $queue = $this->container->get('requestQueue');
+        $queue = $this->container->get(JsonRpcQueue::class);
 
         assert($queue instanceof JsonRpcQueue);
 

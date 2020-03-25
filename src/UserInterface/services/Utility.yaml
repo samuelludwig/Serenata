@@ -9,14 +9,13 @@ services:
     messageLogger:
         class: Serenata\Utility\MessageLogger
         arguments:
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'
 
     sourceCodeStreamReader:
         class: Serenata\Utility\SourceCodeStreamReader
         arguments:
             - '@fileSourceCodeFileReader.fileReaderFactory'
             - '@fileSourceCodeFileReader.streamReaderFactory'
-            - '@stdinStream'
+            - '@Serenata\Utility\StdinStream'
 
-    stdinStream:
-        class: Serenata\Utility\StdinStream
+    Serenata\Utility\StdinStream:

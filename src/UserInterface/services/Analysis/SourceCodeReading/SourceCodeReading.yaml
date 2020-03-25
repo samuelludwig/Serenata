@@ -6,21 +6,16 @@ services:
         autowire: true
         public: true
 
-    textEncodingConverter.textToUtf8Converter:
-        class: Serenata\Analysis\SourceCodeReading\TextToUtf8Converter
+    Serenata\Analysis\SourceCodeReading\TextToUtf8Converter:
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@classlikeInfoBuilder'
 
-    fileSourceCodeFileReader.textEncodingConverter:
-        alias: textEncodingConverter.textToUtf8Converter
+    Serenata\Analysis\SourceCodeReading\TextEncodingConverterInterface:
+        alias: Serenata\Analysis\SourceCodeReading\TextToUtf8Converter
 
     fileSourceCodeFileReader.fileReaderFactory:
         class: Serenata\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory
-        arguments:
-            - '@fileSourceCodeFileReader.textEncodingConverter'
 
     fileSourceCodeFileReader.streamReaderFactory:
         class: Serenata\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory
-        arguments:
-            - '@fileSourceCodeFileReader.textEncodingConverter'

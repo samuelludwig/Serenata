@@ -6,6 +6,8 @@ use Serenata\Tests\Integration\AbstractIntegrationTest;
 
 use Serenata\Utility\TextDocumentItem;
 
+use Serenata\Workspace\ActiveWorkspaceManager;
+
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 
 use Serenata\Workspace\Workspace;
@@ -62,7 +64,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor('TestFile.phpt');
 
-        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,
@@ -84,7 +86,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor('Folder');
 
-        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,
@@ -106,7 +108,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor('TestFile.phpt');
 
-        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,
@@ -128,7 +130,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor('TestFile.phpt');
 
-        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,
@@ -150,7 +152,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
     {
         $path = $this->getPathFor('.phpstorm.meta.phpt');
 
-        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,

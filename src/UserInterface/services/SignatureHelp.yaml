@@ -12,4 +12,4 @@ services:
             - '@nodeAtOffsetLocator'
             - '@functionFunctionInfoRetriever'
             - '@methodCallMethodInfoRetriever'
-            - '@functionParameterPrettyPrinter'
+            - '@Serenata\PrettyPrinting\FunctionParameterPrettyPrinter'

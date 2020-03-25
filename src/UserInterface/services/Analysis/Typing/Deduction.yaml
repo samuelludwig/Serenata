@@ -11,7 +11,7 @@ services:
         arguments:
             - '@parser'
             - '@docblockParser'
-            - '@nodePrettyPrinter'
+            - '@Serenata\PrettyPrinting\NodePrettyPrinter'
 
     localTypeScanner:
         class: Serenata\Analysis\Typing\Deduction\LocalTypeScanner
@@ -116,7 +116,7 @@ services:
         arguments:
             - '@propertyFetchPropertyInfoRetriever'
             - '@localTypeScanner'
-            - '@nodePrettyPrinter'
+            - '@Serenata\PrettyPrinting\NodePrettyPrinter'
 
     classConstFetchNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer

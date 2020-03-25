@@ -4,6 +4,8 @@ namespace Serenata\Tests\Integration\Analysis;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
+use Serenata\Workspace\ActiveWorkspaceManager;
+
 use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 
 use Serenata\Workspace\Workspace;
@@ -32,7 +34,7 @@ final class FunctionListRegistryWorkspaceInteractionTest extends AbstractIntegra
         $this->container->get('schemaInitializer')->initialize();
         $this->container->get('cacheClearingEventMediator.clearableCache')->clearCache();
 
-        $this->container->get('activeWorkspaceManager')->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
             [],
             ':memory:',
             7.1,

@@ -9,12 +9,12 @@ services:
     cancelRequestJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\CancelRequestJsonRpcQueueItemHandler
         arguments:
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'
 
     initializeJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\InitializeJsonRpcQueueItemHandler
         arguments:
-            - '@activeWorkspaceManager'
+            - '@Serenata\Workspace\ActiveWorkspaceManager'
             - '@workspaceConfigurationJsonParser'
             - '@managerRegistry'
             - '@storageVersionChecker'
@@ -31,13 +31,13 @@ services:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\ShutdownJsonRpcQueueItemHandler
         arguments:
             - '@managerRegistry'
-            - '@activeWorkspaceManager'
+            - '@Serenata\Workspace\ActiveWorkspaceManager'
             - '@cacheClearingEventMediator.clearableCache'
 
     exitJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\ExitJsonRpcQueueItemHandler
         arguments:
-            - '@activeWorkspaceManager'
+            - '@Serenata\Workspace\ActiveWorkspaceManager'
 
     echoMessageJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\EchoMessageJsonRpcQueueItemHandler
@@ -82,7 +82,7 @@ services:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\LocalizeTypeJsonRpcQueueItemHandler
         arguments:
             - '@storage'
-            - '@positionalNameLocalizerFactory'
+            - '@Serenata\NameQualificationUtilities\PositionalNameLocalizerFactory'
 
     diagnosticsJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DiagnosticsJsonRpcQueueItemHandler
@@ -144,7 +144,7 @@ services:
         arguments:
             - '@commandExecutorFactory'
             - '@commandFactory'
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'
 
     didChangeConfigurationJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\DidChangeConfigurationJsonRpcQueueItemHandler
@@ -181,9 +181,9 @@ services:
     setTraceNotificationJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\SetTraceJsonRpcQueueItemHandler
         arguments:
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'
 
     logTraceNotificationJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\LogTraceJsonRpcQueueItemHandler
         arguments:
-            - '@requestQueue'
+            - '@Serenata\Sockets\JsonRpcQueue'

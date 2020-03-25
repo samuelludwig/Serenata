@@ -15,7 +15,9 @@ services:
             - React\EventLoop\Factory
             - create
 
-    jsonRpcQueueItemHandlerFactory:
-        class: Serenata\UserInterface\JsonRpcQueueItemHandlerFactory
+    Serenata\UserInterface\JsonRpcQueueItemHandlerFactory:
         arguments:
             - '@service_container'
+
+    Serenata\UserInterface\JsonRpcQueueItemHandlerFactoryInterface:
+        alias: Serenata\UserInterface\JsonRpcQueueItemHandlerFactory

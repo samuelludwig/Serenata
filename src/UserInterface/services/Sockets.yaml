@@ -6,17 +6,12 @@ services:
         autowire: true
         public: true
 
-    requestQueue:
-        class: Serenata\Sockets\JsonRpcQueue
-        arguments:
-            - '@jsonRpcRequestPriorityDeterminer'
+    Serenata\Sockets\JsonRpcQueue:
+    Serenata\Sockets\JsonRpcRequestPriorityDeterminer:
 
-    jsonRpcQueueItemProcessor:
-        class: Serenata\Sockets\JsonRpcQueueItemProcessor
-        arguments:
-            - '@jsonRpcQueueItemHandlerFactory'
-            - '@stdinStream'
-            - '@activeWorkspaceManager'
+    Serenata\Sockets\JsonRpcRequestPriorityDeterminerInterface:
+        alias: Serenata\Sockets\JsonRpcRequestPriorityDeterminer
 
-    jsonRpcRequestPriorityDeterminer:
-        class: Serenata\Sockets\JsonRpcRequestPriorityDeterminer
+    Serenata\Sockets\JsonRpcQueueItemProcessor:
+        arguments:
+            $stdinStream: '@Serenata\Utility\StdinStream'

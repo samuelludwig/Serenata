@@ -6,7 +6,6 @@ services:
         autowire: true
         public: true
 
-    positionalNameLocalizerFactory:
-        class: Serenata\NameQualificationUtilities\PositionalNameLocalizerFactory
+    Serenata\NameQualificationUtilities\PositionalNameLocalizerFactory:
         arguments:
             - '@positionalNamespaceDeterminer'
