@@ -52,7 +52,7 @@ abstract class AbstractApplication
     private function registerYamlServices(ContainerBuilder $container): void
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/services'));
-        $loader->load('Main.yml');
+        $loader->load('Main.yaml');
     }
 
     /**

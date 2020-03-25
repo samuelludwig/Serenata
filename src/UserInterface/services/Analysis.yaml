@@ -1,5 +1,5 @@
 imports:
-    - { resource: Analysis/Typing.yml }
+    - { resource: Analysis/Typing.yaml }
 
 parameters:
 

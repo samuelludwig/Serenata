@@ -1,7 +1,7 @@
 imports:
-    - { resource: Autocompletion/ApplicabilityChecking.yml }
-    - { resource: Autocompletion/ApproximateStringMatching.yml }
-    - { resource: Autocompletion/Providers.yml }
+    - { resource: Autocompletion/ApplicabilityChecking.yaml }
+    - { resource: Autocompletion/ApproximateStringMatching.yaml }
+    - { resource: Autocompletion/Providers.yaml }
 
 parameters:
 

@@ -1,0 +1,25 @@
+imports:
+    - { resource: Analysis.yaml }
+    - { resource: Autocompletion.yaml }
+    - { resource: GotoDefinition.yaml }
+    - { resource: Command.yaml }
+    - { resource: Indexing.yaml }
+    - { resource: Linting.yaml }
+    - { resource: Mediating.yaml }
+    - { resource: Parsing.yaml }
+    - { resource: PrettyPrinting.yaml }
+    - { resource: Refactoring.yaml }
+    - { resource: SignatureHelp.yaml }
+    - { resource: CodeLenses.yaml }
+    - { resource: Highlights.yaml }
+    - { resource: Sockets.yaml }
+    - { resource: Symbols.yaml }
+    - { resource: Tooltips.yaml }
+    - { resource: UserInterface.yaml }
+    - { resource: Utility.yaml }
+    - { resource: Workspace.yaml }
+
+parameters:
+
+
+services:
