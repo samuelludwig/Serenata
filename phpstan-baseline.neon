@@ -1157,7 +1157,7 @@ parameters:
 
 		-
 			message: "#^Missing @throws Exception annotation$#"
-			count: 13
+			count: 12
 			path: src/UserInterface/AbstractApplication.php
 
 		-
