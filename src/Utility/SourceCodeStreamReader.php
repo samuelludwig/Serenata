@@ -2,8 +2,6 @@
 
 namespace Serenata\Utility;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\SourceCodeReading\FileSourceCodeReaderException;
 use Serenata\Analysis\SourceCodeReading\FileSourceCodeFileReaderFactory;
 use Serenata\Analysis\SourceCodeReading\FileSourceCodeStreamReaderFactory;
