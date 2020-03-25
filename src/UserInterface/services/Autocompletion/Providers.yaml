@@ -3,6 +3,10 @@ parameters:
     autocompletion.finalSuggestionsResultLimit: 50
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     keywordAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\KeywordAutocompletionProvider
 

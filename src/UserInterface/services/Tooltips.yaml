@@ -2,6 +2,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     tooltipTypeListPrettyPrinter:
         class: Serenata\Tooltips\TooltipTypeListPrettyPrinter
         arguments:

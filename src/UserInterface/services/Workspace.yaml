@@ -2,8 +2,13 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     activeWorkspaceManager:
         class: Serenata\Workspace\ActiveWorkspaceManager
+        public: true
 
     workspaceConfigurationJsonParser:
         class: Serenata\Workspace\Configuration\Parsing\WorkspaceConfigurationJsonParser

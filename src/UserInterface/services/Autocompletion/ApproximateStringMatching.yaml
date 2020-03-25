@@ -2,6 +2,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     approximateStringMatchingBestStringApproximationDeterminer:
         class: Serenata\Autocompletion\ApproximateStringMatching\ApproximateStringMatchingBestStringApproximationDeterminer
         arguments:

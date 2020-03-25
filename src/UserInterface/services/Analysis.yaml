@@ -5,6 +5,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     fileNamespaceProvider.storageBackend:
         class: Serenata\Analysis\StorageFileNamespaceProvider
         arguments:

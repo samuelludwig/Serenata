@@ -2,6 +2,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     textEncodingConverter.textToUtf8Converter:
         class: Serenata\Analysis\SourceCodeReading\TextToUtf8Converter
         arguments:

@@ -5,6 +5,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     eventLoop:
         class: React\EventLoop\LoopInterface
         factory:

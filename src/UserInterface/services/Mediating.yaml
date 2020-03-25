@@ -2,6 +2,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     cacheClearingEventMediator.clearableCache:
         class: Serenata\Analysis\ClearableCacheCollection
         arguments:

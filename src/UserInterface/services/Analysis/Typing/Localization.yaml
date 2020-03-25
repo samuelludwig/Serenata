@@ -2,6 +2,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     positionalNameLocalizerFactory:
         class: Serenata\NameQualificationUtilities\PositionalNameLocalizerFactory
         arguments:

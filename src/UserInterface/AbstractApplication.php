@@ -43,6 +43,8 @@ abstract class AbstractApplication
         $this->registerYamlServices($container);
         $this->registerServices($container);
 
+        $container->compile(true);
+
         return $container;
     }
 

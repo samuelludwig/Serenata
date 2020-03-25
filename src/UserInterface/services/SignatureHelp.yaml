@@ -2,6 +2,10 @@ parameters:
 
 
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     signatureHelpRetriever:
         class: Serenata\SignatureHelp\SignatureHelpRetriever
         arguments:
