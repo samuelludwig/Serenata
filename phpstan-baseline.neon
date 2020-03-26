@@ -936,12 +936,22 @@ parameters:
 			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
 
 		-
-			message: "#^Offset 'type' does not exist on array\\('type' \\=\\> int\\|null, 'text' \\=\\> string\\)\\|null\\.$#"
-			count: 12
+			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
+			count: 1
 			path: src/Parsing/LastExpressionParser.php
 
 		-
-			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
+			message: "#^Variable \\$token might not be defined\\.$#"
+			count: 5
+			path: src/Parsing/LastExpressionParser.php
+
+		-
+			message: "#^Offset 'type' does not exist on array\\<string, mixed\\>\\|null\\.$#"
+			count: 7
+			path: src/Parsing/LastExpressionParser.php
+
+		-
+			message: "#^Variable \\$i might not be defined\\.$#"
 			count: 1
 			path: src/Parsing/LastExpressionParser.php
 

@@ -38,40 +38,103 @@ final class LastExpressionParser implements Parser
     }
 
     /**
+     * @inheritDoc
+     */
+    public function parse(string $code, ?ErrorHandler $errorHandler = null)
+    {
+        if ($errorHandler !== null) {
+            throw new LogicException(
+                'Error handling is not supported as error recovery will be attempted automatically'
+            );
+        }
+
+        $code = $this->getNormalizedCode($code);
+        $boundary = $this->getStartOfExpression($code);
+
+        $expression = substr($code, $boundary);
+        $expression = trim($expression);
+
+        if ($expression !== '') {
+            $nodes = $this->delegate->parse($expression, $errorHandler);
+        } else {
+            $nodes = [new Nop()];
+        }
+
+        if ($nodes === null || count($nodes) === 0) {
+            throw new Error(
+                'Could not parse the code, even after attempting corrections. The following snippet failed: ' .
+                '❰' . $code . '❱, the expression was ❰' . $expression . '❱'
+            );
+        } elseif (count($nodes) > 1) {
+            throw new Error(
+                'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
+                'snippet ❰' . $code . '❱, the expression was ❰' . $expression . '❱'
+            );
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * Retrieves the last node (i.e. expression, statement, ...) at the specified location.
+     *
+     * This will also attempt to deal with incomplete expressions and statements.
+     *
+     * @param string   $source
+     * @param int|null $offset
+     *
+     * @throws Error
+     *
+     * @return Node|null
+     */
+    public function getLastNodeAt(string $source, ?int $offset = null): ?Node
+    {
+        if ($offset !== null) {
+            $source = substr($source, 0, $offset);
+        }
+
+        $nodes = $this->parse($source);
+
+        if ($nodes === null) {
+            return null;
+        }
+
+        return array_shift($nodes);
+    }
+
+    /**
      * Retrieves the start of the expression (as byte offset) that ends at the end of the specified source code string.
      *
      * @param string $code
      *
      * @return int
      */
-    public function getStartOfExpression(string $code): int
+    private function getStartOfExpression(string $code): int
     {
         if ($code === '') {
             return 0;
         }
 
-        $parenthesesOpened = 0;
-        $parenthesesClosed = 0;
-        $squareBracketsOpened = 0;
-        $squareBracketsClosed = 0;
-        $squiggleBracketsOpened = 0;
-        $squiggleBracketsClosed = 0;
-
-        $isInDoubleQuotedString = false;
-        $startedStaticClassName = false;
-
-        $token = null;
         $tokens = @token_get_all($code);
 
-        $skippableTokens = $this->parserTokenHelper->getSkippableTokens();
-        $castBoundaryTokens = $this->parserTokenHelper->getCastBoundaryTokens();
-        $expressionBoundaryTokens = $this->parserTokenHelper->getExpressionBoundaryTokens();
+        $heredocStart = $this->tryGetStartOfHeredocExpression($code, $tokens);
 
-        // Characters that include operators that are, for some reason, not token types...
-        $expressionBoundaryCharacters = [
-            '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@',
-        ];
+        if ($heredocStart !== null) {
+            return $heredocStart;
+        }
 
+        return $this->getStartOfOtherExpression($code, $tokens);
+    }
+
+    /**
+     * @param string  $code
+     * @param mixed[] $tokens
+     *
+     * @return int|null
+     */
+    private function tryGetStartOfHeredocExpression(string $code, array $tokens): ?int
+    {
+        $i = 0;
         $hereDocsOpened = 0;
         $hereDocsClosed = 0;
         $tokenStartOffset = strlen($code);
@@ -79,8 +142,6 @@ final class LastExpressionParser implements Parser
         $busyWithTermination = false;
         $isWalkingHeredocStart = false;
         $isWalkingHeredocEnd = false;
-
-        $i = 0;
 
         // Heredocs don't always have a termination token, catch those early as heredocs can contain interpolated
         // expressions, which must then be ignored.
@@ -126,20 +187,48 @@ final class LastExpressionParser implements Parser
             }
         }
 
+        return null;
+    }
+
+    /**
+     * @param string  $code
+     * @param mixed[] $tokens
+     *
+     * @return int
+     */
+    private function getStartOfOtherExpression(string $code, array $tokens): int
+    {
+        $parenthesesOpened = 0;
+        $parenthesesClosed = 0;
+        $squareBracketsOpened = 0;
+        $squareBracketsClosed = 0;
+        $squiggleBracketsOpened = 0;
+        $squiggleBracketsClosed = 0;
+
+        $isInDoubleQuotedString = false;
+        $startedStaticClassName = false;
+
+        $token = null;
+
+        $skippableTokens = $this->parserTokenHelper->getSkippableTokens();
+        $castBoundaryTokens = $this->parserTokenHelper->getCastBoundaryTokens();
+        $expressionBoundaryTokens = $this->parserTokenHelper->getExpressionBoundaryTokens();
+
+        // Characters that include operators that are, for some reason, not token types...
+        $expressionBoundaryCharacters = [
+            '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@',
+        ];
+
         $tokenStartOffset = strlen($code);
         $currentTokenIndex = count($tokens);
+        $tokenInfoMap = $this->generateTokenInfoMap($code, $tokens);
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
-                $token = $tokens[--$currentTokenIndex];
-
-                $tokenString = is_array($token) ? $token[1] : $token;
-                $tokenStartOffset = ($i + 1) - strlen($tokenString);
-
-                $token = [
-                    'type' => is_array($token) ? $token[0] : null,
-                    'text' => $tokenString,
-                ];
+                $token = $tokenInfoMap[$i];
+                $currentTokenIndex = $token['tokenIndex'];
+                $tokenStartOffset = $token['startOffset'];
+                $tokenString = $token['text'];
             }
 
             if (in_array($token['type'], $skippableTokens, true)) {
@@ -231,68 +320,35 @@ final class LastExpressionParser implements Parser
     }
 
     /**
-     * Retrieves the last node (i.e. expression, statement, ...) at the specified location.
+     * @param string  $code
+     * @param mixed[] $tokens
      *
-     * This will also attempt to deal with incomplete expressions and statements.
-     *
-     * @param string   $source
-     * @param int|null $offset
-     *
-     * @throws Error
-     *
-     * @return Node|null
+     * @return array<int,array<string,mixed>>
      */
-    public function getLastNodeAt(string $source, ?int $offset = null): ?Node
+    private function generateTokenInfoMap(string $code, array $tokens): array
     {
-        if ($offset !== null) {
-            $source = substr($source, 0, $offset);
+        $tokenStartOffset = strlen($code);
+        $currentTokenIndex = count($tokens);
+
+        $tokenInfoMap = [];
+
+        for ($i = strlen($code) - 1; $i >= 0; --$i) {
+            if ($i < $tokenStartOffset) {
+                $token = $tokens[--$currentTokenIndex];
+
+                $tokenString = is_array($token) ? $token[1] : $token;
+                $tokenStartOffset = ($i + 1) - strlen($tokenString);
+
+                $tokenInfoMap[$i] = [
+                    'type' => is_array($token) ? $token[0] : null,
+                    'text' => $tokenString,
+                    'startOffset' => $tokenStartOffset,
+                    'tokenIndex' => $currentTokenIndex,
+                ];
+            }
         }
 
-        $nodes = $this->parse($source);
-
-        if ($nodes === null) {
-            return null;
-        }
-
-        return array_shift($nodes);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function parse(string $code, ?ErrorHandler $errorHandler = null)
-    {
-        if ($errorHandler !== null) {
-            throw new LogicException(
-                'Error handling is not supported as error recovery will be attempted automatically'
-            );
-        }
-
-        $code = $this->getNormalizedCode($code);
-        $boundary = $this->getStartOfExpression($code);
-
-        $expression = substr($code, $boundary);
-        $expression = trim($expression);
-
-        if ($expression !== '') {
-            $nodes = $this->delegate->parse($expression, $errorHandler);
-        } else {
-            $nodes = [new Nop()];
-        }
-
-        if ($nodes === null || count($nodes) === 0) {
-            throw new Error(
-                'Could not parse the code, even after attempting corrections. The following snippet failed: ' .
-                '❰' . $code . '❱, the expression was ❰' . $expression . '❱'
-            );
-        } elseif (count($nodes) > 1) {
-            throw new Error(
-                'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
-                'snippet ❰' . $code . '❱, the expression was ❰' . $expression . '❱'
-            );
-        }
-
-        return $nodes;
+        return $tokenInfoMap;
     }
 
     /**
