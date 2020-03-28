@@ -1,11 +1,12 @@
 ## 5.3.0 (Unreleased)
 * Avoid unnecessary file and folder scanning when reindexing single files.
 * Try harder to remain functional instead of errorring out if duplicate imports exist.
-* [Fix notice `Undefined index: endLine in phar:///.../src/Analysis/Relations/TraitUsageResolver.php on line 209`](https://gitlab.com/Serenata/Serenata/issues/306)
+* [Fix notice `Undefined index: endLine in phar:///.../src/Analysis/Relations/TraitUsageResolver.php on line 209`](https://gitlab.com/Serenata/Serenata/issues/306).
 * Fix files starting with a dot or files inside a folder starting with a dot no longer being indexed.
     * This also caused `.phpstorm.meta.php` files to no longer be indexed.
     * This also resulted in "Could not find file Y in index" errors for these files.
-* [Log warning instead of sending error response when file is not found in index or position is unknown to fix clients such as VSCode annoying user with hard error screens](https://gitlab.com/Serenata/Serenata/issues/307)
+* Improve error recovery when encountering unterminated expressions ending on square brackets or pararentheses such as `array_merge() $this->test` or `[] $this->test`.
+* [Log warning instead of sending error response when file is not found in index or position is unknown to fix clients such as VSCode annoying user with hard error screens](https://gitlab.com/Serenata/Serenata/issues/307).
     * I'm not particularly happy with this solution. If a client requests functionality in a document the server does not know, an error response sounds appropriate because the latter cannot sanely handle the request. Returning empty responses misleads the client into thinking sort of processing happened and there were no results. Yet, VSCode insists on throwing response errors in the user's face, so this sends a warning notification instead.
 
 ## 5.2.0

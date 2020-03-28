@@ -49,7 +49,7 @@ final class ParserTokenHelper
     public function getSkippableTokens(): array
     {
         return [
-            T_COMMENT, T_DOC_COMMENT, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING,
+            T_COMMENT, T_DOC_COMMENT, T_WHITESPACE, T_ENCAPSED_AND_WHITESPACE, T_CONSTANT_ENCAPSED_STRING, T_STRING,
         ];
     }
 }

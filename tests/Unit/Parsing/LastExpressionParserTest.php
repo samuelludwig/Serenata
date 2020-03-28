@@ -1190,4 +1190,44 @@ SOURCE;
         static::assertSame('this', $result->expr->var->name);
         static::assertSame('one', $result->expr->name->name);
     }
+
+    /**
+     * @return void
+     */
+    public function testStopsWhenEncounteringClosingParenthesisWhenJustHavingSeenASymbolThatCannotBePrecededByIt(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            array_merge()
+            $this->one
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertSame('this', $result->expr->var->name);
+        static::assertSame('one', $result->expr->name->name);
+    }
+
+    /**
+     * @return void
+     */
+    public function testStopsWhenEncounteringClosingSquareBracketWhenJustHavingSeenASymbolThatCannotBePrecededByIt(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            []
+            $this->one
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertSame('this', $result->expr->var->name);
+        static::assertSame('one', $result->expr->name->name);
+    }
 }

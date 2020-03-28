@@ -213,11 +213,7 @@ final class LastExpressionParser implements Parser
         $skippableTokens = $this->parserTokenHelper->getSkippableTokens();
         $castBoundaryTokens = $this->parserTokenHelper->getCastBoundaryTokens();
         $expressionBoundaryTokens = $this->parserTokenHelper->getExpressionBoundaryTokens();
-
-        // Characters that include operators that are, for some reason, not token types...
-        $expressionBoundaryCharacters = [
-            '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@',
-        ];
+        $expressionBoundaryCharacters = $this->getExpressionBoundaryCharacters();
 
         $tokenStartOffset = strlen($code);
         $currentTokenIndex = count($tokens);
@@ -249,7 +245,9 @@ final class LastExpressionParser implements Parser
                         return ++$i;
                     }
                 } elseif ($code[$i] === ')') {
-                    if (in_array($token['type'], $castBoundaryTokens, true)) {
+                    if ($this->isParenthesisFollowedByImpossibleCharacter($code, $i, $tokenInfoMap) ||
+                        in_array($token['type'], $castBoundaryTokens, true)
+                    ) {
                         return ++$i;
                     }
 
@@ -262,6 +260,10 @@ final class LastExpressionParser implements Parser
                         return ++$i;
                     }
                 } elseif ($code[$i] === ']') {
+                    if ($this->isSquareBracketFollowedByImpossibleCharacter($code, $i, $tokenInfoMap)) {
+                        return ++$i;
+                    }
+
                     ++$squareBracketsClosed;
                 } elseif ($code[$i] === '{') {
                     ++$squiggleBracketsOpened;
@@ -320,6 +322,71 @@ final class LastExpressionParser implements Parser
     }
 
     /**
+     * @param string                         $code
+     * @param int                            $i
+     * @param array<int,array<string,mixed>> $tokenInfoMap
+     *
+     * @return bool
+     */
+    private function isParenthesisFollowedByImpossibleCharacter(string $code, int $i, array $tokenInfoMap): bool
+    {
+        $skippableTokens = $this->parserTokenHelper->getSkippableTokens();
+        $expressionBoundaryTokens = $this->parserTokenHelper->getExpressionBoundaryTokens();
+        $expressionBoundaryCharacters = $this->getExpressionBoundaryCharacters();
+
+        $nextNonWhitespace = null;
+
+        for ($j = $i + 1; $j < count($tokenInfoMap); ++$j) {
+            if (!in_array($tokenInfoMap[$j]['type'], $skippableTokens, true)) {
+                $nextNonWhitespace = $j;
+
+                break;
+            }
+        }
+
+        if ($nextNonWhitespace !== null) {
+            // Alphanumeric, variable start, ...
+            if (!in_array($code[$nextNonWhitespace], $expressionBoundaryCharacters, true) &&
+                !in_array($tokenInfoMap[$nextNonWhitespace]['type'], $expressionBoundaryTokens, true) &&
+                $code[$nextNonWhitespace] !== '{' &&
+                $code[$nextNonWhitespace] !== '}' &&
+                $code[$nextNonWhitespace] !== '[' &&
+                $code[$nextNonWhitespace] !== ']' &&
+                $code[$nextNonWhitespace] !== '(' &&
+                $code[$nextNonWhitespace] !== ')'
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string                         $code
+     * @param int                            $i
+     * @param array<int,array<string,mixed>> $tokenInfoMap
+     *
+     * @return bool
+     */
+    private function isSquareBracketFollowedByImpossibleCharacter(string $code, int $i, array $tokenInfoMap): bool
+    {
+        return $this->isParenthesisFollowedByImpossibleCharacter($code, $i, $tokenInfoMap);
+    }
+
+    /**
+     * Retrieves characters that include operators that are, for some reason, not token types.
+     *
+     * @return string[]
+     */
+    private function getExpressionBoundaryCharacters(): array
+    {
+        return [
+            '.', ',', '?', ';', '=', '+', '-', '*', '/', '<', '>', '%', '|', '&', '^', '~', '!', '@',
+        ];
+    }
+
+    /**
      * @param string  $code
      * @param mixed[] $tokens
      *
@@ -338,14 +405,14 @@ final class LastExpressionParser implements Parser
 
                 $tokenString = is_array($token) ? $token[1] : $token;
                 $tokenStartOffset = ($i + 1) - strlen($tokenString);
-
-                $tokenInfoMap[$i] = [
-                    'type' => is_array($token) ? $token[0] : null,
-                    'text' => $tokenString,
-                    'startOffset' => $tokenStartOffset,
-                    'tokenIndex' => $currentTokenIndex,
-                ];
             }
+
+            $tokenInfoMap[$i] = [
+                'type' => is_array($token) ? $token[0] : null,
+                'text' => $tokenString,
+                'startOffset' => $tokenStartOffset,
+                'tokenIndex' => $currentTokenIndex,
+            ];
         }
 
         return $tokenInfoMap;

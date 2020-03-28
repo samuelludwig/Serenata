@@ -942,7 +942,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$token might not be defined\\.$#"
-			count: 5
+			count: 6
 			path: src/Parsing/LastExpressionParser.php
 
 		-
@@ -952,6 +952,11 @@ parameters:
 
 		-
 			message: "#^Variable \\$i might not be defined\\.$#"
+			count: 1
+			path: src/Parsing/LastExpressionParser.php
+
+		-
+			message: "#^Variable \\$tokenString might not be defined\\.$#"
 			count: 1
 			path: src/Parsing/LastExpressionParser.php
 
@@ -2342,12 +2347,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\:\\:\\$name\\.$#"
-			count: 31
+			count: 33
 			path: tests/Unit/Parsing/LastExpressionParserTest.php
 
 		-
 			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
-			count: 26
+			count: 28
 			path: tests/Unit/Parsing/LastExpressionParserTest.php
 
 		-
