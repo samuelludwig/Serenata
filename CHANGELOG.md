@@ -8,6 +8,8 @@
 * Improve error recovery when encountering unterminated expressions ending on square brackets or pararentheses such as `array_merge() $this->test` or `[] $this->test`.
 * [Log warning instead of sending error response when file is not found in index or position is unknown to fix clients such as VSCode annoying user with hard error screens](https://gitlab.com/Serenata/Serenata/issues/307).
     * I'm not particularly happy with this solution. If a client requests functionality in a document the server does not know, an error response sounds appropriate because the latter cannot sanely handle the request. Returning empty responses misleads the client into thinking sort of processing happened and there were no results. Yet, VSCode insists on throwing response errors in the user's face, so this sends a warning notification instead.
+* Type parsing has been rewritten to use [PHPStan's docblock parser](https://github.com/phpstan/phpdoc-parser) to allow future parsing of extended docblock types such as generic types, array shapes and callables.
+    * This should have little to no functional effect on most code bases. There may be small differences around exotic types that require changing. Before these would likely be parsed differently by PHPStan and other static analyzers, so having them consistent is beneficial.
 
 ## 5.2.0
 * Test PHP 7.4 in CI

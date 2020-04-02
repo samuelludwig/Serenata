@@ -2,7 +2,7 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
 /**
  * Represents a method parameter.
@@ -17,21 +17,21 @@ class MethodParameter extends FunctionLikeParameter
     private $method;
 
     /**
-     * @param Method       $method
-     * @param string       $name
-     * @param string|null  $typeHint
-     * @param DocblockType $type
-     * @param string|null  $description
-     * @param string|null  $defaultValue
-     * @param bool         $isReference
-     * @param bool         $isOptional
-     * @param bool         $isVariadic
+     * @param Method      $method
+     * @param string      $name
+     * @param string|null $typeHint
+     * @param TypeNode    $type
+     * @param string|null $description
+     * @param string|null $defaultValue
+     * @param bool        $isReference
+     * @param bool        $isOptional
+     * @param bool        $isVariadic
      */
     public function __construct(
         Method $method,
         string $name,
         ?string $typeHint,
-        DocblockType $type,
+        TypeNode $type,
         ?string $description,
         ?string $defaultValue,
         bool $isReference,

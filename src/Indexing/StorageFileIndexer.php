@@ -18,7 +18,7 @@ use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 use Serenata\Analysis\Typing\TypeAnalyzer;
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
 
-use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 use Serenata\Parsing\DocblockParser;
 

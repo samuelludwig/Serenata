@@ -22,6 +22,7 @@ services:
             - '@foreachNodeLoopValueTypeDeducer'
             - '@functionLikeParameterTypeDeducer'
             - '@expressionLocalTypeAnalyzer'
+            - '@docblockTypeParser'
 
     variableNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\VariableNodeTypeDeducer
@@ -151,7 +152,6 @@ services:
     functionLikeParameterTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer
         arguments:
-            - '@typeAnalyzer'
             - '@docblockParser'
 
     expressionNodeTypeDeducer:

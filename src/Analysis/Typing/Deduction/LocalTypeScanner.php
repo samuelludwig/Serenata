@@ -2,6 +2,10 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
@@ -15,6 +19,8 @@ use Serenata\Common\FilePosition;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
 use Serenata\Parsing;
+
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
@@ -58,12 +64,18 @@ final class LocalTypeScanner
     private $expressionLocalTypeAnalyzer;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFacotry
      * @param TypeAnalyzer                               $typeAnalyzer
      * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
      * @param ForeachNodeLoopValueTypeDeducer            $foreachNodeLoopValueTypeDeducer
      * @param FunctionLikeParameterTypeDeducer           $functionLikeParameterTypeDeducer
      * @param ExpressionLocalTypeAnalyzer                $expressionLocalTypeAnalyzer
+     * @param DocblockTypeParserInterface                $docblockTypeParser
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFacotry,
@@ -71,7 +83,8 @@ final class LocalTypeScanner
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ForeachNodeLoopValueTypeDeducer $foreachNodeLoopValueTypeDeducer,
         FunctionLikeParameterTypeDeducer $functionLikeParameterTypeDeducer,
-        ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer
+        ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser
     ) {
         $this->structureAwareNameResolverFacotry = $structureAwareNameResolverFacotry;
         $this->typeAnalyzer = $typeAnalyzer;
@@ -79,6 +92,7 @@ final class LocalTypeScanner
         $this->foreachNodeLoopValueTypeDeducer = $foreachNodeLoopValueTypeDeducer;
         $this->functionLikeParameterTypeDeducer = $functionLikeParameterTypeDeducer;
         $this->expressionLocalTypeAnalyzer = $expressionLocalTypeAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
     }
 
     /**
@@ -264,7 +278,15 @@ final class LocalTypeScanner
         array $defaultTypes = []
     ): array {
         if ($expressionTypeInfo->hasBestTypeOverrideMatch()) {
-            return $this->typeAnalyzer->getTypesForTypeSpecification($expressionTypeInfo->getBestTypeOverrideMatch());
+            $type = $this->docblockTypeParser->parse($expressionTypeInfo->getBestTypeOverrideMatch());
+
+            if ($type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode) {
+                return array_map(function (TypeNode $nestedType): string {
+                    return (string) $nestedType;
+                }, $type->types);
+            }
+
+            return [(string) $type];
         }
 
         $types = $defaultTypes;

@@ -4,9 +4,9 @@ namespace Serenata\Indexing\Structures;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Serenata\Common\Range;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use Serenata\Common\Range;
 
 /**
  * Contains common properties for function-like structural elements.
@@ -74,7 +74,7 @@ abstract class FunctionLike
     protected $parameters;
 
     /**
-     * @var DocblockType
+     * @var TypeNode
      */
     protected $returnType;
 
@@ -185,9 +185,9 @@ abstract class FunctionLike
     }
 
     /**
-     * @return DocblockType
+     * @return TypeNode
      */
-    public function getReturnType(): DocblockType
+    public function getReturnType(): TypeNode
     {
         return $this->returnType;
     }

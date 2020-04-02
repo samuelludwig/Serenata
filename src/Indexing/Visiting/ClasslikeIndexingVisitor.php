@@ -7,6 +7,9 @@ use SplObjectStorage;
 
 use Ds\Stack;
 
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
@@ -20,11 +23,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\DocblockTypeParser\VoidDocblockType;
-use Serenata\DocblockTypeParser\MixedDocblockType;
-use Serenata\DocblockTypeParser\StringDocblockType;
-use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
-use Serenata\DocblockTypeParser\SpecializedArrayDocblockType;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
@@ -693,7 +692,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
             } else {
-                $type = new MixedDocblockType();
+                $type = new IdentifierTypeNode('mixed');
             }
 
             $accessModifierMap = $this->getAccessModifierMap();
@@ -806,9 +805,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
         } elseif ($docComment !== null) {
-            $returnType = new VoidDocblockType();
+            $returnType = new IdentifierTypeNode('void');
         } else {
-            $returnType = new MixedDocblockType();
+            $returnType = new IdentifierTypeNode('mixed');
         }
 
         $throws = [];
@@ -818,13 +817,13 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $docblockType = $this->docblockTypeParser->parse($throw['type']);
 
-            $localType = $docblockType->toString();
+            $localType = (string) $docblockType;
 
             $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
 
             $throws[] = new Structures\ThrowsInfo(
                 $localType,
-                $type->toString(),
+                (string) $type,
                 $throw['description'] !== '' ? $throw['description'] : null
             );
         }
@@ -936,11 +935,11 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
             } else {
-                $type = new MixedDocblockType();
+                $type = new IdentifierTypeNode('mixed');
             }
 
             if ($param->variadic) {
-                $type = new SpecializedArrayDocblockType($type);
+                $type = new ArrayTypeNode($type);
             }
 
             $parameter = new Structures\MethodParameter(
@@ -1040,7 +1039,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
         } else {
-            $type = new MixedDocblockType();
+            $type = new IdentifierTypeNode('mixed');
         }
 
         $accessModifierMap = $this->getAccessModifierMap();
@@ -1085,7 +1084,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
-        $type = new MixedDocblockType();
+        $type = new IdentifierTypeNode('mixed');
 
         if ($rawData['type'] !== null && $rawData['type'] !== '') {
             $docblockType = $this->docblockTypeParser->parse($rawData['type']);
@@ -1130,7 +1129,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         Structures\AccessModifier $accessModifier,
         FilePosition $filePosition
     ): void {
-        $returnType = new MixedDocblockType();
+        $returnType = new IdentifierTypeNode('mixed');
 
         if ($rawData['type'] !== null && $rawData['type'] !== '') {
             $docblockType = $this->docblockTypeParser->parse($rawData['type']);
@@ -1164,7 +1163,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         $this->storage->persist($method);
 
         foreach ($rawData['requiredParameters'] as $parameterName => $parameter) {
-            $type = new MixedDocblockType();
+            $type = new IdentifierTypeNode('mixed');
 
             if ($parameter['type']) {
                 $docblockType = $this->docblockTypeParser->parse($parameter['type']);
@@ -1188,7 +1187,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
         }
 
         foreach ($rawData['optionalParameters'] as $parameterName => $parameter) {
-            $type = new MixedDocblockType();
+            $type = new IdentifierTypeNode('mixed');
 
             if ($parameter['type']) {
                 $docblockType = $this->docblockTypeParser->parse($parameter['type']);
@@ -1230,7 +1229,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             'PHP built-in class constant that evaluates to the FQCN.',
             null,
             null,
-            new StringDocblockType(),
+            new IdentifierTypeNode('string'),
             $classlike,
             $this->getAccessModifierMap()[AccessModifierNameValue::PUBLIC_]
         );

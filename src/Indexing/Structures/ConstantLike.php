@@ -2,9 +2,9 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Serenata\Common\Range;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use Serenata\Common\Range;
 
 /**
  * Contains common properties for constant-like structural elements.
@@ -62,7 +62,7 @@ abstract class ConstantLike
     protected $typeDescription;
 
     /**
-     * @var DocblockType
+     * @var TypeNode
      */
     protected $type;
 
@@ -147,9 +147,9 @@ abstract class ConstantLike
     }
 
     /**
-     * @return DocblockType
+     * @return TypeNode
      */
-    public function getType(): DocblockType
+    public function getType(): TypeNode
     {
         return $this->type;
     }

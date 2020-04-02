@@ -2,6 +2,9 @@
 
 namespace Serenata\Indexing\Visiting;
 
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
@@ -14,10 +17,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\DocblockTypeParser\VoidDocblockType;
-use Serenata\DocblockTypeParser\MixedDocblockType;
-use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
-use Serenata\DocblockTypeParser\SpecializedArrayDocblockType;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
@@ -198,9 +198,9 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             $returnType = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
         } elseif ($docComment !== null) {
-            $returnType = new VoidDocblockType();
+            $returnType = new IdentifierTypeNode('void');
         } else {
-            $returnType = new MixedDocblockType();
+            $returnType = new IdentifierTypeNode('mixed');
         }
 
         $throws = [];
@@ -210,13 +210,13 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             $docblockType = $this->docblockTypeParser->parse($throw['type']);
 
-            $localType = $docblockType->toString();
+            $localType = (string) $docblockType;
 
             $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
 
             $throws[] = new Structures\ThrowsInfo(
                 $localType,
-                $type->toString(),
+                (string) $type,
                 $throw['description'] !== '' ? $throw['description'] : null
             );
         }
@@ -311,11 +311,11 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
                 $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
             } else {
-                $type = new MixedDocblockType();
+                $type = new IdentifierTypeNode('mixed');
             }
 
             if ($param->variadic) {
-                $type = new SpecializedArrayDocblockType($type);
+                $type = new ArrayTypeNode($type);
             }
 
             $parameter = new Structures\FunctionParameter(

@@ -4,18 +4,15 @@ namespace Serenata\Analysis\Typing;
 
 use UnexpectedValueException;
 
-use Serenata\DocblockTypeParser\SpecialDocblockTypeString;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 /**
  * Provides functionality for analyzing type names.
+ *
+ * @deprecated Determining if something is a special type or not can be done by using instanceof on AST nodes.
  */
 final class TypeAnalyzer implements TypeNormalizerInterface
 {
-    /**
-     * @var string
-     */
-    protected const TYPE_SPLITTER   = '|';
-
     /**
      * @var string
      */
@@ -33,25 +30,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function isSpecialType(string $type): bool
     {
-        $isReservedKeyword = in_array($type, [
-            SpecialDocblockTypeString::STRING_,
-            SpecialDocblockTypeString::INT_,
-            SpecialDocblockTypeString::BOOL_,
-            SpecialDocblockTypeString::FLOAT_,
-            SpecialDocblockTypeString::OBJECT_,
-            SpecialDocblockTypeString::MIXED_,
-            SpecialDocblockTypeString::ARRAY_,
-            SpecialDocblockTypeString::RESOURCE_,
-            SpecialDocblockTypeString::VOID_,
-            SpecialDocblockTypeString::NULL_,
-            SpecialDocblockTypeString::CALLABLE_,
-            SpecialDocblockTypeString::FALSE_,
-            SpecialDocblockTypeString::TRUE_,
-            SpecialDocblockTypeString::SELF_,
-            SpecialDocblockTypeString::STATIC_,
-            SpecialDocblockTypeString::THIS_,
-            SpecialDocblockTypeString::ITERABLE_,
-        ], true);
+        $isReservedKeyword = in_array($type, SpecialDocblockTypeIdentifierLiteral::getValues(), true);
 
         return $isReservedKeyword || $this->isArraySyntaxTypeHint($type);
     }
@@ -79,23 +58,11 @@ final class TypeAnalyzer implements TypeNormalizerInterface
     }
 
     /**
-     * Splits a docblock type specification up into different (docblock) types.
-     *
-     * @param string $typeSpecification
-     *
-     * @example "int|string" becomes ["int", "string"].
-     *
-     * @return string[]
-     */
-    public function getTypesForTypeSpecification(string $typeSpecification): array
-    {
-        return explode(self::TYPE_SPLITTER, $typeSpecification);
-    }
-
-    /**
      * @param string $type
      *
      * @return bool
+     *
+     * @deprecated Cannot handle parantheses or extended docblock types. Use the docblock type parser service instead.
      */
     public function isArraySyntaxTypeHint(string $type): bool
     {
@@ -106,6 +73,8 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      * @param string $type
      *
      * @return string
+     *
+     * @deprecated Cannot handle parantheses or extended docblock types. Use the docblock type parser service instead.
      */
     public function getValueTypeFromArraySyntaxTypeHint(string $type): string
     {
@@ -131,7 +100,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeSelfWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, SpecialDocblockTypeString::SELF_, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeIdentifierLiteral::SELF_, $newType);
     }
 
     /**
@@ -147,7 +116,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeStaticWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, SpecialDocblockTypeString::STATIC_, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeIdentifierLiteral::STATIC_, $newType);
     }
 
     /**
@@ -163,7 +132,7 @@ final class TypeAnalyzer implements TypeNormalizerInterface
      */
     public function interchangeThisWithActualType(string $docblockType, string $newType): string
     {
-        return $this->interchangeType($docblockType, SpecialDocblockTypeString::THIS_, $newType);
+        return $this->interchangeType($docblockType, SpecialDocblockTypeIdentifierLiteral::THIS_, $newType);
     }
 
     /**

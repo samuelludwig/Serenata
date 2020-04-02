@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Visiting;
 
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 
@@ -14,8 +16,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\DocblockTypeParser\MixedDocblockType;
-use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
@@ -199,7 +200,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
 
             $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
         } else {
-            $type = new MixedDocblockType();
+            $type = new IdentifierTypeNode('mixed');
         }
 
         $constant = new Structures\Constant(

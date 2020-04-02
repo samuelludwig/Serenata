@@ -2,9 +2,9 @@
 
 namespace Serenata\Analysis\Conversion;
 
-use Serenata\DocblockTypeParser\DocblockType;
-use Serenata\DocblockTypeParser\CompoundDocblockType;
-use Serenata\DocblockTypeParser\DocblockTypeTransformer;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 
 /**
  * Base class for converters.
@@ -12,26 +12,21 @@ use Serenata\DocblockTypeParser\DocblockTypeTransformer;
 abstract class AbstractConverter
 {
     /**
-     * @param DocblockType $type
+     * @param TypeNode $type
      *
      * @return array[]
      */
-    protected function convertDocblockType(DocblockType $type): array
+    protected function convertDocblockType(TypeNode $type): array
     {
-        $types = [];
+        if ($type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode) {
+            return array_merge(...array_map(function (TypeNode $nestedType): array {
+                return $this->convertDocblockType($nestedType);
+            }, $type->types));
+        }
 
-        $docblockTypeTransformer = new DocblockTypeTransformer();
-        $docblockTypeTransformer->transform($type, function (DocblockType $type) use (&$types): DocblockType {
-            if (!$type instanceof CompoundDocblockType) {
-                $types[] = [
-                    'type'         => $type->toString(),
-                    'resolvedType' => $type->toString(),
-                ];
-            }
-
-            return $type;
-        });
-
-        return $types;
+        return [[
+            'type'         => (string) $type,
+            'resolvedType' => (string) $type,
+        ]];
     }
 }

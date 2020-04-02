@@ -2,9 +2,9 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Serenata\Common\Range;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use Serenata\Common\Range;
 
 /**
  * Represents a class constant.
@@ -33,7 +33,7 @@ class ClassConstant extends ConstantLike
      * @param string|null    $shortDescription
      * @param string|null    $longDescription
      * @param string|null    $typeDescription
-     * @param DocblockType   $type
+     * @param TypeNode       $type
      * @param Classlike      $classlike
      * @param AccessModifier $accessModifier
      */
@@ -47,7 +47,7 @@ class ClassConstant extends ConstantLike
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        DocblockType $type,
+        TypeNode $type,
         Classlike $classlike,
         AccessModifier $accessModifier
     ) {

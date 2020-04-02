@@ -2,14 +2,14 @@
 
 namespace Serenata\Tests\Integration\Parsing;
 
-use Serenata\DocblockTypeParser\IntDocblockType;
-use Serenata\DocblockTypeParser\BoolDocblockType;
-use Serenata\DocblockTypeParser\NullDocblockType;
-use Serenata\DocblockTypeParser\ClassDocblockType;
-use Serenata\DocblockTypeParser\StringDocblockType;
-use Serenata\DocblockTypeParser\CompoundDocblockType;
+use PHPStan\PhpDocParser\Ast\Type;
+
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use Serenata\Parsing\DocblockParser;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
@@ -29,7 +29,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$foo' => [
-                'type'        => new StringDocblockType(),
+                'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                 'description' => 'Test description.',
                 'isVariadic'  => false,
                 'isReference' => false,
@@ -51,7 +51,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$foo' => [
-                'type'        => new StringDocblockType(),
+                'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                 'description' => 'Test description with @ sign.',
                 'isVariadic'  => false,
                 'isReference' => false,
@@ -71,10 +71,10 @@ final class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$someString' => [
-                'type' => new CompoundDocblockType(
-                    new StringDocblockType(),
-                    new NullDocblockType()
-                ),
+                'type' => new UnionTypeNode([
+                    new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
+                    new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+                ]),
 
                 'description' => 'Имя файла пат',
                 'isVariadic'  => false,
@@ -99,7 +99,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$someProperty' => [
-                'type'        => new IntDocblockType(),
+                'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::INT_),
                 'description' => '',
             ],
         ], $result['var']);
@@ -117,7 +117,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$someProperty' => [
-                'type'        => new IntDocblockType(),
+                'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::INT_),
                 'description' => 'Some description',
             ],
         ], $result['var']);
@@ -151,7 +151,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
         ', [DocblockParser::THROWS], '');
 
         static::assertCount(1, $result['throws']);
-        static::assertEquals(new ClassDocblockType('\UnexpectedValueException'), $result['throws'][0]['type']);
+        static::assertEquals(new IdentifierTypeNode('\UnexpectedValueException'), $result['throws'][0]['type']);
         static::assertSame('Some description', $result['throws'][0]['description']);
     }
 
@@ -168,7 +168,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
         ', [DocblockParser::THROWS], '');
 
         static::assertCount(1, $result['throws']);
-        static::assertEquals(new ClassDocblockType('\UnexpectedValueException'), $result['throws'][0]['type']);
+        static::assertEquals(new IdentifierTypeNode('\UnexpectedValueException'), $result['throws'][0]['type']);
         static::assertSame(null, $result['throws'][0]['description']);
     }
 
@@ -251,7 +251,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
 
         static::assertEquals([
             '$test' => [
-                'type'        => new StringDocblockType(),
+                'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                 'description' => 'A description.',
                 'isVariadic'  => false,
                 'isReference' => false,
@@ -413,7 +413,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
         static::assertEquals(
             [
                 '$test' => [
-                    'type'        => new StringDocblockType(),
+                    'type'        => new Type\IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                     'description' => null,
                     'isVariadic'  => false,
                     'isReference' => false,
@@ -423,7 +423,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
         );
 
         static::assertEquals([
-            'type'        => new BoolDocblockType(),
+            'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::BOOL_),
             'description' => null,
         ], $result['return']);
     }

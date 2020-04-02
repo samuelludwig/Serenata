@@ -2,6 +2,8 @@
 
 namespace Serenata\Indexing\Visiting;
 
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
@@ -10,8 +12,7 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\DocblockTypeParser\MixedDocblockType;
-use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 use Serenata\Utility\PositionEncoding;
 
@@ -122,7 +123,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         // https://php.net/manual/en/function.define.php#90282
         $name = new Node\Name($nameValue->value);
 
-        $type = new MixedDocblockType();
+        $type = new IdentifierTypeNode('mixed');
 
         $defaultValue = substr(
             $this->textDocumentItem->getText(),

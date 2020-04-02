@@ -9,7 +9,7 @@ use League\HTMLToMarkdown\HtmlConverterInterface;
 
 use Serenata\Analysis\DocblockAnalyzer;
 
-use Serenata\DocblockTypeParser\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 /**
  * Parser for PHP docblocks.

@@ -2,11 +2,11 @@
 
 namespace Serenata\Indexing\Structures;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use Serenata\Common\Range;
 
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Serenata\DocblockTypeParser\DocblockType;
 
 /**
  * Represents a (global) function.
@@ -35,7 +35,7 @@ class Function_ extends FunctionLike
      * @param string|null  $returnTypeHint
      * @param bool         $hasDocblock
      * @param ThrowsInfo[] $throws
-     * @param DocblockType $returnType
+     * @param TypeNode     $returnType
      */
     public function __construct(
         string $name,
@@ -49,7 +49,7 @@ class Function_ extends FunctionLike
         ?string $returnTypeHint,
         bool $hasDocblock,
         array $throws,
-        DocblockType $returnType
+        TypeNode $returnType
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;

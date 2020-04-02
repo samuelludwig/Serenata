@@ -2,9 +2,9 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Serenata\Common\Range;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use Serenata\Common\Range;
 
 /**
  * Represents a (global) constant.
@@ -19,17 +19,17 @@ class Constant extends ConstantLike
     private $fqcn;
 
     /**
-     * @param string       $name
-     * @param string       $fqcn
-     * @param File         $file
-     * @param Range        $range
-     * @param string       $defaultValue
-     * @param bool         $isDeprecated
-     * @param bool         $hasDocblock
-     * @param string|null  $shortDescription
-     * @param string|null  $longDescription
-     * @param string|null  $typeDescription
-     * @param DocblockType $type
+     * @param string      $name
+     * @param string      $fqcn
+     * @param File        $file
+     * @param Range       $range
+     * @param string      $defaultValue
+     * @param bool        $isDeprecated
+     * @param bool        $hasDocblock
+     * @param string|null $shortDescription
+     * @param string|null $longDescription
+     * @param string|null $typeDescription
+     * @param TypeNode    $type
      */
     public function __construct(
         string $name,
@@ -42,7 +42,7 @@ class Constant extends ConstantLike
         ?string $shortDescription,
         ?string $longDescription,
         ?string $typeDescription,
-        DocblockType $type
+        TypeNode $type
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;

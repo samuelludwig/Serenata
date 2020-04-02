@@ -4,11 +4,12 @@ namespace Serenata\Analysis\Typing;
 
 use Closure;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use Serenata\Common\FilePosition;
 
-use Serenata\DocblockTypeParser\DocblockType;
-use Serenata\DocblockTypeParser\ClassDocblockType;
-use Serenata\DocblockTypeParser\DocblockTypeTransformerInterface;
+use Serenata\Parsing\DocblockTypeTransformerInterface;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
@@ -28,24 +29,32 @@ final class TypeResolvingDocblockTypeTransformer
     private $structureAwareNameResolverFactory;
 
     /**
+     * @var TypeAnalyzer
+     */
+    private $typeAnalyzer;
+
+    /**
      * @param DocblockTypeTransformerInterface           $docblockTypeTransformer
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+     * @param TypeAnalyzer                               $typeAnalyzer
      */
     public function __construct(
         DocblockTypeTransformerInterface $docblockTypeTransformer,
-        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
+        StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
+        TypeAnalyzer $typeAnalyzer
     ) {
         $this->docblockTypeTransformer = $docblockTypeTransformer;
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
+        $this->typeAnalyzer = $typeAnalyzer;
     }
 
     /**
-     * @param DocblockType $type
+     * @param TypeNode     $type
      * @param FilePosition $filePosition
      *
-     * @return DocblockType
+     * @return TypeNode
      */
-    public function resolve(DocblockType $type, FilePosition $filePosition): DocblockType
+    public function resolve(TypeNode $type, FilePosition $filePosition): TypeNode
     {
         return $this->docblockTypeTransformer->transform($type, $this->createTransformer($filePosition));
     }
@@ -59,9 +68,9 @@ final class TypeResolvingDocblockTypeTransformer
     {
         $positionalNameResolver = $this->structureAwareNameResolverFactory->create($filePosition);
 
-        return function (DocblockType $type) use ($positionalNameResolver, $filePosition): DocblockType {
-            if ($type instanceof ClassDocblockType) {
-                return new ClassDocblockType($positionalNameResolver->resolve($type->getName(), $filePosition));
+        return function (TypeNode $type) use ($positionalNameResolver, $filePosition): TypeNode {
+            if ($type instanceof IdentifierTypeNode && $this->typeAnalyzer->isClassType((string) $type)) {
+                return new IdentifierTypeNode($positionalNameResolver->resolve((string) $type, $filePosition));
             }
 
             return $type;

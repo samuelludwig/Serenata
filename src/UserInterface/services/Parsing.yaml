@@ -75,8 +75,12 @@ services:
             - '@docblockTypeParser'
             - '@docblockHtmlToMarkdownConverter'
 
+    PHPStan\PhpDocParser\Lexer\Lexer:
+    PHPStan\PhpDocParser\Parser\TypeParser:
+    Serenata\Parsing\PhpstanDocblockTypeParser:
+
     docblockTypeParser:
-        class: Serenata\DocblockTypeParser\DocblockTypeParser
+        alias: Serenata\Parsing\PhpstanDocblockTypeParser
 
     docblockTypeEquivalenceComparator:
         class: Serenata\DocblockTypeParser\DocblockTypeEquivalenceComparator

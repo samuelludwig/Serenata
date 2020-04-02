@@ -2,9 +2,11 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use PhpParser\Node;
 
 use Serenata\Parsing\DocblockParser;
 
@@ -16,11 +18,6 @@ use Serenata\Utility\NodeHelpers;
 final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @var DocblockParser
      */
     private $docblockParser;
@@ -31,12 +28,10 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     private $functionDocblock;
 
     /**
-     * @param TypeAnalyzer   $typeAnalyzer
      * @param DocblockParser $docblockParser
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, DocblockParser $docblockParser)
+    public function __construct(DocblockParser $docblockParser)
     {
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->docblockParser = $docblockParser;
     }
 
@@ -66,9 +61,15 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
             ], '');
 
             if (isset($result['params']['$' . $varNode->name])) {
-                return $this->typeAnalyzer->getTypesForTypeSpecification(
-                    $result['params']['$' . $varNode->name]['type']
-                );
+                $type = $result['params']['$' . $varNode->name]['type'];
+
+                if ($type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode) {
+                    return array_map(function (TypeNode $nestedType): string {
+                        return (string) $nestedType;
+                    }, $type->types);
+                }
+
+                return [(string) $type];
             }
         }
 
@@ -108,6 +109,8 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     }
 
     /**
+     * @todo Refactor. This is crap. Should use a factory or something.
+     *
      * @param string|null $functionDocblock
      */
     public function setFunctionDocblock(?string $functionDocblock): void

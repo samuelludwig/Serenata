@@ -37,7 +37,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
         static::assertNull($constant->getShortDescription());
         static::assertNull($constant->getLongDescription());
         static::assertNull($constant->getTypeDescription());
-        static::assertSame('string', $constant->getType()->toString());
+        static::assertSame('string', (string) $constant->getType());
         static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
@@ -74,7 +74,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
         static::assertSame('PHP built-in class constant that evaluates to the FQCN.', $constant->getShortDescription());
         static::assertNull($constant->getLongDescription());
         static::assertNull($constant->getTypeDescription());
-        static::assertSame('string', $constant->getType()->toString());
+        static::assertSame('string', (string) $constant->getType());
         static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
@@ -145,7 +145,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeFromDocblock.phpt');
 
-        static::assertSame('int', $constant->getType()->toString());
+        static::assertSame('int', (string) $constant->getType());
     }
 
     /**
@@ -155,7 +155,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('\N\A', $constant->getType()->toString());
+        static::assertSame('\N\A', (string) $constant->getType());
     }
 
     /**
@@ -205,7 +205,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantNoTypeSpecification.phpt');
 
-        static::assertSame('mixed', $constant->getType()->toString());
+        static::assertSame('mixed', (string) $constant->getType());
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
 /**
  * Represents a function-like parameter.
@@ -25,7 +25,7 @@ abstract class FunctionLikeParameter
     protected $typeHint;
 
     /**
-     * @var DocblockType
+     * @var TypeNode
      */
     protected $type;
 
@@ -79,9 +79,9 @@ abstract class FunctionLikeParameter
     }
 
     /**
-     * @return DocblockType
+     * @return TypeNode
      */
-    public function getType(): DocblockType
+    public function getType(): TypeNode
     {
         return $this->type;
     }

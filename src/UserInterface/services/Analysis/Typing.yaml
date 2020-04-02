@@ -12,10 +12,11 @@ services:
         public: true
 
     docblockTypeTransformer:
-        class: Serenata\DocblockTypeParser\DocblockTypeTransformer
+        class: Serenata\Parsing\DocblockTypeTransformer
 
     typeResolvingDocblockTypeTransformer:
         class: Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer
         arguments:
             - '@docblockTypeTransformer'
             - '@structureAwareNameResolverFactory'
+            - '@typeAnalyzer'

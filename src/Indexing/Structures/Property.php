@@ -2,9 +2,9 @@
 
 namespace Serenata\Indexing\Structures;
 
-use Serenata\Common\Range;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\DocblockTypeParser\DocblockType;
+use Serenata\Common\Range;
 
 /**
  * Represents a property.
@@ -84,7 +84,7 @@ class Property
     private $accessModifier;
 
     /**
-     * @var DocblockType
+     * @var TypeNode
      */
     private $type;
 
@@ -102,7 +102,7 @@ class Property
      * @param string|null    $typeDescription
      * @param Classlike      $classlike
      * @param AccessModifier $accessModifier
-     * @param DocblockType   $type
+     * @param TypeNode       $type
      */
     public function __construct(
         string $name,
@@ -118,7 +118,7 @@ class Property
         ?string $typeDescription,
         Classlike $classlike,
         AccessModifier $accessModifier,
-        DocblockType $type
+        TypeNode $type
     ) {
         $this->id = uniqid('', true);
         $this->name = $name;
@@ -252,9 +252,9 @@ class Property
     }
 
     /**
-     * @return DocblockType
+     * @return TypeNode
      */
-    public function getType(): DocblockType
+    public function getType(): TypeNode
     {
         return $this->type;
     }
