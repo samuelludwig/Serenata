@@ -49,7 +49,7 @@ test:run-phpcs:
     image: php:7.4-cli-alpine
     stage: test
     script:
-        - php vendor/bin/phpcs src -n --report-junit=./phpcs-test-report.xml
+        - php vendor/bin/phpcs src -n --warning-severity=8 --report-junit=./phpcs-test-report.xml
     artifacts:
         expire_in: 1 hrs
         paths:
