@@ -96,7 +96,6 @@ final class IndexableFileIterator implements IteratorAggregate
                 // array_unshift($pathParts, $protocol);
                 //
                 // yield new SplFileInfo(implode(DIRECTORY_SEPARATOR, $pathParts));
-
                 if (!$isFile) {
                     yield $item;
                 } elseif ($item->getFilename() === basename($uri)) {
