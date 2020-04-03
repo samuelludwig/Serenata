@@ -15,7 +15,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
 
         $unknownFileNames = array_diff($this->getFileNamesWhereShouldApply(), $this->getFileNamesToEvaluate());
 
-        if (!empty($unknownFileNames)) {
+        if ($unknownFileNames !== []) {
             static::fail(
                 'Only specify files that are in the list of file names to evaluate. If adding a new file, add it to ' .
                 'the base list so it is automatically evaluated for other providers as well. File names to add: ' .

@@ -5,7 +5,6 @@ namespace Serenata\Tests\Integration\Parsing;
 use PHPStan\PhpDocParser\Ast\Type;
 
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use Serenata\Parsing\DocblockParser;

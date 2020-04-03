@@ -21,6 +21,7 @@ use Serenata\Workspace\Configuration\WorkspaceConfiguration;
 use Serenata\Workspace\Workspace;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -173,6 +174,7 @@ abstract class AbstractIntegrationTest extends TestCase
     ): void {
         // @TODO Fix all callers - string $uri should already be a valid uri before being passed here.
         $normalized = $this->normalizePath($uri);
+
         if ($source !== null) {
             $this->container->get('textDocumentContentRegistry')->update($normalized, $source);
         } else {
