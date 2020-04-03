@@ -1831,11 +1831,6 @@ parameters:
 			path: tests/Integration/Autocompletion/ApplicabilityChecking/AbstractAutocompletionApplicabilityCheckerTest.php
 
 		-
-			message: "#^Construct empty\\(\\) is not allowed\\. Use more strict comparison\\.$#"
-			count: 1
-			path: tests/Integration/Autocompletion/ApplicabilityChecking/AbstractAutocompletionApplicabilityCheckerTest.php
-
-		-
 			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
 			count: 2
 			path: tests/Integration/Autocompletion/Providers/AbstractAutocompletionProviderTest.php
@@ -2352,11 +2347,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: tests/Performance/FunctionListProvidingPerformanceTest.php
-
-		-
-			message: "#^Anonymous function has an unused use \\$pathToIndex\\.$#"
 			count: 2
 			path: tests/Performance/FunctionListProvidingPerformanceTest.php
 
