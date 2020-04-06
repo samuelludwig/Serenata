@@ -29,7 +29,7 @@ $a-> // Autocompletion for both DateTime and Locale are shown.
 $a = [];
 $b = $a[1];
 
-$b-> // Autcompletion for B.
+$b-> // Autocompletion for B.
 ```
 
 * Deducing types from arrays using generic syntax when looping over elements of arrays now works:
