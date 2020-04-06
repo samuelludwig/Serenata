@@ -157,13 +157,7 @@ final class DocblockParser
         $docblock = is_string($docblock) ? $docblock : null;
 
         if ($docblock !== null && $docblock !== '') {
-            $docblock = $this->stripDocblockDelimiters($docblock);
-
-            try {
-                $docblock = $this->htmlToMarkdownConverter->convert($docblock);
-            } catch (InvalidArgumentException $e) {
-                $docblock = null;
-            }
+            $docblock = $this->normalizeDocblock($docblock);
 
             if ($docblock !== null) {
                 preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
@@ -255,13 +249,14 @@ final class DocblockParser
      *
      * @return string
      */
-    private function stripDocblockDelimiters(string $docblock): string
+    private function normalizeDocblock(string $docblock): string
     {
         $docblock = trim($docblock);
 
         $docblock = $this->stripDocblockStartDelimiter($docblock);
         $docblock = $this->stripDocblockEndDelimiter($docblock);
         $docblock = $this->stripDocblockLineDelimiters($docblock);
+        $docblock = $this->normalizeNewlines($docblock);
 
         return trim($docblock);
     }
@@ -447,7 +442,7 @@ final class DocblockParser
             if ($type !== null && $type !== '') {
                 $return = [
                     'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
-                    'description' => $description,
+                    'description' => $description !== null ? $this->convertHtmlToMarkdown($description) : null,
                 ];
             }
         } elseif ($docblock !== null) {
@@ -507,7 +502,7 @@ final class DocblockParser
 
                 $params[$variableName] = [
                     'type'        => $this->docblockTypeParser->parse($type),
-                    'description' => $description,
+                    'description' => $description !== null ? $this->convertHtmlToMarkdown($description) : null,
                     'isVariadic'  => $isVariadic,
                     'isReference' => $isReference,
                 ];
@@ -555,13 +550,14 @@ final class DocblockParser
                         // documents, it must match the property we're fetching documentation about.
                         $vars[$varName] = [
                             'type'        => $type,
-                            'description' => $varDescription,
+                            'description' => $varDescription !== null ?
+                                $this->convertHtmlToMarkdown($varDescription) : null,
                         ];
                     } else {
                         // Example: "@var DateTime My description".
                         $vars['$' . $itemName] = [
                             'type'        => $type,
-                            'description' => trim($varName . ' ' . $varDescription),
+                            'description' => $this->convertHtmlToMarkdown(trim($varName . ' ' . $varDescription)),
                         ];
                     }
                 } elseif ($varDescription === null || $varDescription === '') {
@@ -621,7 +617,7 @@ final class DocblockParser
                 if ($type !== null && $type !== '') {
                     $throws[] = [
                         'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
-                        'description' => $description,
+                        'description' => $description !== null ? $this->convertHtmlToMarkdown($description) : null,
                     ];
                 }
             }
@@ -737,7 +733,9 @@ final class DocblockParser
                         'isStatic'            => $isStatic,
                         'requiredParameters'  => $requiredParameters,
                         'optionalParameters'  => $optionalParameters,
-                        'description'         => $description,
+
+                        'description' => $description !== null ?
+                            $this->convertHtmlToMarkdown($description) : null,
                     ];
                 }
             }
@@ -785,7 +783,7 @@ final class DocblockParser
                 $properties[$this->sanitizeText($variableName)] = [
                     'type'        => $this->docblockTypeParser->parse($this->sanitizeText($type)),
                     'isStatic'    => ($staticKeyword === 'static'),
-                    'description' => $description,
+                    'description' => $description !== null ? $this->convertHtmlToMarkdown($description) : null,
                 ];
             }
         }
@@ -912,7 +910,7 @@ final class DocblockParser
             if ($uri !== null && $uri !== '') {
                 $links[] = [
                     'uri'         => $this->sanitizeText($uri),
-                    'description' => $description,
+                    'description' => $description !== null ? $this->convertHtmlToMarkdown($description) : null,
                 ];
             }
         }
@@ -982,8 +980,8 @@ final class DocblockParser
 
         return [
             'descriptions' => [
-                'short' => $this->sanitizeText($summary),
-                'long'  => $this->sanitizeText($description),
+                'short' => $this->convertHtmlToMarkdown($this->sanitizeText($summary)),
+                'long'  => $this->convertHtmlToMarkdown($this->sanitizeText($description)),
             ],
         ];
     }
@@ -993,9 +991,23 @@ final class DocblockParser
      *
      * @return string
      */
+    public function convertHtmlToMarkdown(string $text): string
+    {
+        try {
+            return $this->htmlToMarkdownConverter->convert($text);
+        } catch (InvalidArgumentException $e) {
+            return $text;
+        }
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return string
+     */
     private function sanitizeText(string $text): string
     {
-        return trim($this->normalizeNewlines($text));
+        return trim($text);
     }
 
     /**
