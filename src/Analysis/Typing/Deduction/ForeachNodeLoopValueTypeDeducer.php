@@ -4,11 +4,14 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use PhpParser\Node;
 
 use Serenata\Parsing\InvalidTypeNode;
 use Serenata\Parsing\ToplevelTypeExtractorInterface;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 /**
  * Type deducer that can deduce the type of the loop value of a {@see Node\Stmt\Foreach_} node.
@@ -54,6 +57,15 @@ final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
         foreach ($this->toplevelTypeExtractor->extract($type) as $type) {
             if ($type instanceof ArrayTypeNode) {
                 return $type->type;
+            } elseif ($type instanceof GenericTypeNode &&
+                $type->type instanceof IdentifierTypeNode &&
+                $type->type->name === SpecialDocblockTypeIdentifierLiteral::ARRAY_
+            ) {
+                if (isset($type->genericTypes[1])) {
+                    return $type->genericTypes[1];
+                } elseif (isset($type->genericTypes[0])) {
+                    return $type->genericTypes[0];
+                }
             }
         }
 

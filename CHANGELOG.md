@@ -11,6 +11,37 @@
 * Type parsing and deduction has been rewritten to use [PHPStan's docblock parser](https://github.com/phpstan/phpdoc-parser) to allow future parsing of extended docblock types such as generic types, array shapes and callables.
 * Fixed the type deducer getting confused and thinking `Foo ...$foo = null` meant `$foo` is an `array<Foo|null>` instead of an `array<Foo>|null`, since the `null` by assignment refers to the parameter here, not the other type as it does for non-variadic parameters.
 * Fixed the docblock parsing incorrectly stripping generic syntax from types, causing them to never show up in tooltips and other places.
+* Using intersection types will now no longer break autocompletion:
+
+```php
+<?php
+
+/** @var \DateTime|\Locale $a */
+$a-> // Autocompletion for both DateTime and Locale are shown.
+```
+
+* Deducing types from arrays using generic syntax when fetching elements from arrays now works:
+
+```php
+<?php
+
+/** @var array<int,B> $a */
+$a = [];
+$b = $a[1];
+
+$b-> // Autcompletion for B.
+```
+
+* Deducing types from arrays using generic syntax when looping over elements of arrays now works:
+
+```php
+<?php
+
+/** @var array<int,B> $a */
+foreach ($a as $b) {
+    $b-> // Autocompletion for B.
+}
+```
 
 ## 5.2.0
 * Test PHP 7.4 in CI

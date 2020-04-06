@@ -226,6 +226,11 @@ parameters:
 			path: src/Analysis/Typing/Deduction/ArrayDimFetchNodeTypeDeducer.php
 
 		-
+			message: "#^Instanceof between PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode and PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode will always evaluate to true\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ArrayDimFetchNodeTypeDeducer.php
+
+		-
 			message: "#^Argument of an invalid type PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
@@ -252,6 +257,11 @@ parameters:
 
 		-
 			message: "#^Foreach overwrites \\$type with its value variable\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
+
+		-
+			message: "#^Instanceof between PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode and PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode will always evaluate to true\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
 
@@ -934,6 +944,11 @@ parameters:
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
 			count: 3
 			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
+
+		-
+			message: "#^Strict comparison using \\!\\=\\= between string and null will always evaluate to true\\.$#"
+			count: 1
+			path: src/Parsing/DocblockParser.php
 
 		-
 			message: "#^Instanceof between PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode and PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IntersectionTypeNode will always evaluate to false\\.$#"

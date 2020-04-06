@@ -40,6 +40,17 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCorrectlyHandlesIntersectionTypes(): void
+    {
+        $output = $this->deduceTypesFromExpression('IntersectionTypes.phpt', '$a');
+
+        // TODO: Not quite correct, but good enough for type analysis for now as they are handled the same.
+        static::assertSame('(\A | \B)', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyResolvesThisInClass(): void
     {
         $output = $this->deduceTypesFromExpression('ThisInClass.phpt', '$this');
@@ -514,6 +525,26 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testCorrectlyAnalyzesForeachWithGenericSequentialArraySyntax(): void
+    {
+        $output = $this->deduceTypesFromExpression('ForeachWithGenericSequentialArraySyntax.phpt', '$a');
+
+        static::assertSame('\DateTime', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesForeachWithGenericAssociativeArraySyntax(): void
+    {
+        $output = $this->deduceTypesFromExpression('ForeachWithGenericAssociativeArraySyntax.phpt', '$a');
+
+        static::assertSame('\DateTime', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyAnalyzesForeachWithStaticMethodCallReturningArrayWithSelfObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithSelfObjects.phpt', '$b');
@@ -816,6 +847,26 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjects.phpt', '$b');
+
+        static::assertSame('\A\B', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesArrayElementOfGenericAssociativeArrayWithObjects(): void
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfGenericAssociativeArrayWithObjects.phpt', '$b');
+
+        static::assertSame('\A\B', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCorrectlyAnalyzesArrayElementOfGenericSequentialArrayWithObjects(): void
+    {
+        $output = $this->deduceTypesFromExpression('ArrayElementOfGenericSequentialArrayWithObjects.phpt', '$b');
 
         static::assertSame('\A\B', (string) $output);
     }

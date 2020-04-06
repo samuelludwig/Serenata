@@ -5,6 +5,7 @@ namespace Serenata\Analysis\Typing\Deduction;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use PhpParser\Node;
@@ -61,6 +62,15 @@ final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                 $elementTypes[] = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_);
             } elseif ($type instanceof ArrayTypeNode) {
                 $elementTypes[] = $type->type;
+            } elseif ($type instanceof GenericTypeNode &&
+                $type->type instanceof IdentifierTypeNode &&
+                $type->type->name === SpecialDocblockTypeIdentifierLiteral::ARRAY_
+            ) {
+                if (isset($type->genericTypes[1])) {
+                    return $type->genericTypes[1];
+                } elseif (isset($type->genericTypes[0])) {
+                    return $type->genericTypes[0];
+                }
             } else {
                 // TODO: This could be an object implementing ArrayAccess. Consult the object's interfaces and methods.
                 $elementTypes[] = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::MIXED_);
