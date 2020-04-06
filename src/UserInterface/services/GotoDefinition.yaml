@@ -48,6 +48,7 @@ services:
         arguments:
             - '@nameNodeFqsenDeterminer'
             - '@classlikeInfoBuilder'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     staticMethodCallNodeDefinitionLocator:
         class: Serenata\GotoDefinition\StaticMethodCallNodeDefinitionLocator

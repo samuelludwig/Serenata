@@ -288,6 +288,7 @@ services:
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     functionFunctionInfoRetriever:
         class: Serenata\Analysis\Node\FunctionFunctionInfoRetriever
@@ -300,3 +301,4 @@ services:
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'

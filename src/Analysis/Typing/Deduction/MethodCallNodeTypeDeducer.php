@@ -4,9 +4,16 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
+
+use Serenata\Parsing\InvalidTypeNode;
+use Serenata\Parsing\TypeNodeUnwrapper;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node.
@@ -19,17 +26,26 @@ final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $methodCallMethodInfoRetriever;
 
     /**
-     * @param MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever
+     * @var DocblockTypeParserInterface
      */
-    public function __construct(MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever)
-    {
+    private $docblockTypeParser;
+
+    /**
+     * @param MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever
+     * @param DocblockTypeParserInterface   $docblockTypeParser
+     */
+    public function __construct(
+        MethodCallMethodInfoRetriever $methodCallMethodInfoRetriever,
+        DocblockTypeParserInterface $docblockTypeParser
+    ) {
         $this->methodCallMethodInfoRetriever = $methodCallMethodInfoRetriever;
+        $this->docblockTypeParser = $docblockTypeParser;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\MethodCall &&
             !$context->getNode() instanceof Node\Expr\StaticCall
@@ -46,20 +62,19 @@ final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
                 $context->getPosition()
             );
         } catch (UnexpectedValueException $e) {
-            return [];
+            return new InvalidTypeNode();
         }
 
         $types = [];
 
         foreach ($infoItems as $info) {
-            $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays($info['returnTypes']);
-
-            if (count($fetchedTypes) > 0) {
-                $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-            }
+            $types = array_merge($types, $this->fetchResolvedTypesFromTypeArrays($info['returnTypes']));
         }
 
-        // Use associative array to avoid duplicate types.
-        return array_keys($types);
+        $types = array_map(function (string $type): TypeNode {
+            return $this->docblockTypeParser->parse($type);
+        }, $types);
+
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($types));
     }
 }

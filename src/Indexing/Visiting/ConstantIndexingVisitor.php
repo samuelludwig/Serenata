@@ -16,8 +16,6 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\Parsing\DocblockTypeParserInterface;
-
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
@@ -42,11 +40,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     private $docblockParser;
 
     /**
-     * @var DocblockTypeParserInterface
-     */
-    private $docblockTypeParser;
-
-    /**
      * @var TypeResolvingDocblockTypeTransformer
      */
     private $typeResolvingDocblockTypeTransformer;
@@ -69,7 +62,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     /**
      * @param StorageInterface                     $storage
      * @param DocblockParser                       $docblockParser
-     * @param DocblockTypeParserInterface          $docblockTypeParser
      * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
      * @param NodeTypeDeducerInterface             $nodeTypeDeducer
      * @param Structures\File                      $file
@@ -78,7 +70,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     public function __construct(
         StorageInterface $storage,
         DocblockParser $docblockParser,
-        DocblockTypeParserInterface $docblockTypeParser,
         TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         Structures\File $file,
@@ -86,7 +77,6 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
     ) {
         $this->storage = $storage;
         $this->docblockParser = $docblockParser;
-        $this->docblockTypeParser = $docblockTypeParser;
         $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->file = $file;
@@ -174,7 +164,7 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
             )
         );
 
-        $typeStringSpecification = null;
+        $unresolvedType = null;
 
         if ($varDocumentation) {
             // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
@@ -183,22 +173,18 @@ final class ConstantIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription = $varDocumentation['description'];
             }
 
-            $typeStringSpecification = $varDocumentation['type'];
+            $unresolvedType = $varDocumentation['type'];
         } else {
-            $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                 $node->value,
                 $this->textDocumentItem
             ));
-
-            $typeStringSpecification = implode('|', $typeList);
         }
 
         $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-        if ($typeStringSpecification) {
-            $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
-
-            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+        if ($unresolvedType !== null) {
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
         } else {
             $type = new IdentifierTypeNode('mixed');
         }

@@ -4,10 +4,17 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+
 use PhpParser\Node;
 use PhpParser\PrettyPrinterAbstract;
 
 use Serenata\Analysis\Node\PropertyFetchPropertyInfoRetriever;
+
+use Serenata\Parsing\InvalidTypeNode;
+use Serenata\Parsing\TypeNodeUnwrapper;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\PropertyFetch} node.
@@ -30,24 +37,32 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $prettyPrinter;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
      * @param PropertyFetchPropertyInfoRetriever $propertyFetchPropertyInfoRetriever
      * @param LocalTypeScanner                   $localTypeScanner
      * @param PrettyPrinterAbstract              $prettyPrinter
+     * @param DocblockTypeParserInterface        $docblockTypeParser
      */
     public function __construct(
         PropertyFetchPropertyInfoRetriever $propertyFetchPropertyInfoRetriever,
         LocalTypeScanner $localTypeScanner,
-        PrettyPrinterAbstract $prettyPrinter
+        PrettyPrinterAbstract $prettyPrinter,
+        DocblockTypeParserInterface $docblockTypeParser
     ) {
         $this->propertyFetchPropertyInfoRetriever = $propertyFetchPropertyInfoRetriever;
         $this->localTypeScanner = $localTypeScanner;
         $this->prettyPrinter = $prettyPrinter;
+        $this->docblockTypeParser = $docblockTypeParser;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\PropertyFetch &&
             !$context->getNode() instanceof Node\Expr\StaticPropertyFetch
@@ -64,7 +79,7 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                 $context->getPosition()
             );
         } catch (UnexpectedValueException $e) {
-            return [];
+            return new InvalidTypeNode();
         }
 
         $types = [];
@@ -82,17 +97,21 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $expressionString = $this->prettyPrinter->prettyPrintExpr($context->getNode());
 
-        $localTypes = $this->localTypeScanner->getLocalExpressionTypes(
+        $localType = $this->localTypeScanner->getLocalExpressionTypes(
             $context->getTextDocumentItem(),
             $context->getPosition(),
             $expressionString,
             $types
         );
 
-        if (count($localTypes) > 0) {
-            return $localTypes;
+        if (!$localType instanceof InvalidTypeNode) {
+            return $localType;
         }
 
-        return $types;
+        $types = array_map(function (string $type): TypeNode {
+            return $this->docblockTypeParser->parse($type);
+        }, $types);
+
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($types));
     }
 }

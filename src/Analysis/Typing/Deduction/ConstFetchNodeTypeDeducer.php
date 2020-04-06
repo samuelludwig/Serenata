@@ -2,9 +2,10 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
-use Serenata\Analysis\Conversion\ConstantConverter;
+use PhpParser\Node;
 
 use Serenata\Common\FilePosition;
 
@@ -12,6 +13,8 @@ use Serenata\Indexing\Structures;
 use Serenata\Indexing\ManagerRegistry;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\NodeHelpers;
 
@@ -31,29 +34,21 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $managerRegistry;
 
     /**
-     * @var ConstantConverter
-     */
-    private $constantConverter;
-
-    /**
      * @param StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory
      * @param ManagerRegistry                            $managerRegistry
-     * @param ConstantConverter                          $constantConverter
      */
     public function __construct(
         StructureAwareNameResolverFactoryInterface $structureAwareNameResolverFactory,
-        ManagerRegistry $managerRegistry,
-        ConstantConverter $constantConverter
+        ManagerRegistry $managerRegistry
     ) {
         $this->structureAwareNameResolverFactory = $structureAwareNameResolverFactory;
         $this->managerRegistry = $managerRegistry;
-        $this->constantConverter = $constantConverter;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\ConstFetch) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
@@ -62,9 +57,9 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         $name = NodeHelpers::fetchClassName($context->getNode()->name);
 
         if ($name === 'null') {
-            return ['null'];
+            return new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_);
         } elseif ($name === 'true' || $name === 'false') {
-            return ['bool'];
+            return new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::BOOL_);
         }
 
         $filePosition = new FilePosition(
@@ -80,11 +75,9 @@ final class ConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
         ]);
 
         if ($globalConstant === null) {
-            return [];
+            return new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::MIXED_);
         }
 
-        $convertedGlobalConstant = $this->constantConverter->convert($globalConstant);
-
-        return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalConstant['types']);
+        return $globalConstant->getType();
     }
 }

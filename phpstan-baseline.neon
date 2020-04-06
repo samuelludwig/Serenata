@@ -36,6 +36,11 @@ parameters:
 			path: src/Analysis/ConstantListRegistry.php
 
 		-
+			message: "#^Anonymous function should have native return typehint \"array\"\\.$#"
+			count: 1
+			path: src/Analysis/Conversion/AbstractConverter.php
+
+		-
 			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\UnresolvableNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/DocblockPositionalNameResolver.php
@@ -206,22 +211,22 @@ parameters:
 			path: src/Analysis/TraitFilteringClasslikeListProvider.php
 
 		-
+			message: "#^Foreach overwrites \\$type with its value variable\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ArrayDimFetchNodeTypeDeducer.php
+
+		-
+			message: "#^Argument of an invalid type PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
+
+		-
 			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
 			count: 2
 			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
 
 		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\ClassConstFetchNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, int\\|string\\>\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ConstFetchNodeTypeDeducer.php
-
-		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\ConstFetchNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<string\\|null\\>\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/ConstFetchNodeTypeDeducer.php
 
@@ -236,9 +241,14 @@ parameters:
 			path: src/Analysis/Typing/Deduction/ExpressionTypeDeducer.php
 
 		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\FuncCallNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<string\\|null\\>\\.$#"
+			message: "#^Foreach overwrites \\$type with its value variable\\.$#"
 			count: 1
-			path: src/Analysis/Typing/Deduction/FuncCallNodeTypeDeducer.php
+			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$typeResolvingDocblockTypeTransformer      \\$TypeResolvingDocblockTypeTransformer\\)\\: Unexpected token \"\\$typeResolvingDocblockTypeTransformer\", expected type at offset 587$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
 
 		-
 			message: "#^Parameter \\#1 \\$line of class Serenata\\\\Common\\\\Position constructor expects int, int\\|null given\\.$#"
@@ -246,18 +256,8 @@ parameters:
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
 
 		-
-			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 5
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:deduceTypesFromStatic\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
 
 		-
@@ -276,9 +276,14 @@ parameters:
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
 
 		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\MethodCallNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, int\\|string\\>\\.$#"
+			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
 			count: 1
-			path: src/Analysis/Typing/Deduction/MethodCallNodeTypeDeducer.php
+			path: src/Analysis/Typing/Deduction/MethodCallNodeMetaTypeDeducer.php
+
+		-
+			message: "#^Static call to instance method Serenata\\\\Parsing\\\\SpecialDocblockTypeIdentifierLiteral\\:\\:getValues\\(\\)\\.$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/MethodCallNodeMetaTypeDeducer.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
@@ -292,11 +297,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#4 \\$defaultTypes of method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:getLocalExpressionTypes\\(\\) expects array\\<string\\>, array\\<int, int\\|string\\> given\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
-
-		-
-			message: "#^Method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\PropertyFetchNodeTypeDeducer\\:\\:deduce\\(\\) should return array\\<string\\> but returns array\\<int, int\\|string\\>\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
 
@@ -663,6 +663,11 @@ parameters:
 		-
 			message: "#^Useless @throws UnexpectedValueException annotation$#"
 			count: 2
+			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
+
+		-
+			message: "#^Foreach overwrites \\$classType with its value variable\\.$#"
+			count: 1
 			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
 
 		-
@@ -1181,11 +1186,6 @@ parameters:
 			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
 
 		-
-			message: "#^Method Serenata\\\\Tooltips\\\\ClassConstFetchNodeTooltipGenerator\\:\\:getClassTypes\\(\\) should return array\\<string, mixed\\> but returns array\\<string\\>\\.$#"
-			count: 1
-			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
-
-		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
 			count: 2
 			path: src/Tooltips/ClassMethodNodeTooltipGenerator.php
@@ -1319,6 +1319,11 @@ parameters:
 			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/CompletionJsonRpcQueueItemHandler.php
+
+		-
+			message: "#^Method Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\DeduceTypesJsonRpcQueueItemHandler\\:\\:deduceTypes\\(\\) should return array\\<string, mixed\\> but returns PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\\.$#"
+			count: 1
+			path: src/UserInterface/JsonRpcQueueItemHandler/DeduceTypesJsonRpcQueueItemHandler.php
 
 		-
 			message: "#^Unused @throws Throwable annotation$#"
@@ -1768,11 +1773,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$string of static method Serenata\\\\Common\\\\Position\\:\\:createFromByteOffset\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
-			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Analysis\\\\Typing\\\\Deduction\\\\ExpressionTypeDeducerTest\\:\\:deduceTypesFromExpressionWithMeta\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: tests/Integration/Analysis/Typing/Deduction/ExpressionTypeDeducerTest.php
 
 		-

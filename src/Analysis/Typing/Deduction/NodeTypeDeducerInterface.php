@@ -2,6 +2,8 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 /**
  * Interface for classes that can deduce the type of a node.
  */
@@ -12,7 +14,7 @@ interface NodeTypeDeducerInterface
      *
      * @throws TypeDeductionException
      *
-     * @return string[]
+     * @return TypeNode
      */
-    public function deduce(TypeDeductionContext $context): array;
+    public function deduce(TypeDeductionContext $context): TypeNode;
 }

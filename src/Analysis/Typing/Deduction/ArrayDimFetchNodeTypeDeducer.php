@@ -2,9 +2,16 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use PhpParser\Node;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Parsing\TypeNodeUnwrapper;
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ArrayDimFetch} node.
@@ -12,51 +19,54 @@ use Serenata\Analysis\Typing\TypeAnalyzer;
 final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 {
     /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
-    /**
      * @var NodeTypeDeducerInterface
      */
     private $nodeTypeDeducer;
 
     /**
-     * @param TypeAnalyzer             $typeAnalyzer
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
+     * @var ToplevelTypeExtractorInterface
      */
-    public function __construct(TypeAnalyzer $typeAnalyzer, NodeTypeDeducerInterface $nodeTypeDeducer)
-    {
-        $this->typeAnalyzer = $typeAnalyzer;
+    private $toplevelTypeExtractor;
+
+    /**
+     * @param NodeTypeDeducerInterface       $nodeTypeDeducer
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
+     */
+    public function __construct(
+        NodeTypeDeducerInterface $nodeTypeDeducer,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
+    ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\ArrayDimFetch) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        $types = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $context->getNode()->var,
             $context->getTextDocumentItem()
         ));
 
         $elementTypes = [];
 
-        foreach ($types as $type) {
-            if ($type === 'string') {
-                $elementTypes[] = 'string';
-            } elseif ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
-                $elementTypes[] = $this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type);
+        foreach ($this->toplevelTypeExtractor->extract($type) as $type) {
+            if ($type instanceof IdentifierTypeNode && $type->name === SpecialDocblockTypeIdentifierLiteral::STRING_) {
+                $elementTypes[] = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_);
+            } elseif ($type instanceof ArrayTypeNode) {
+                $elementTypes[] = $type->type;
             } else {
-                $elementTypes[] = 'mixed';
+                // TODO: This could be an object implementing ArrayAccess. Consult the object's interfaces and methods.
+                $elementTypes[] = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::MIXED_);
             }
         }
 
-        return array_unique(array_filter($elementTypes));
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($elementTypes));
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 /**
  * Type deducer that can deduce the type of a {@see Node} object by delegating it to another (configurable) object.
  */
@@ -23,7 +25,7 @@ final class ConfigurableDelegatingNodeTypeDeducer extends AbstractNodeTypeDeduce
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if ($this->nodeTypeDeducer === null) {
             throw new TypeDeductionException('No node type deducer to delegate to configured!');

@@ -8,6 +8,7 @@ use SplObjectStorage;
 use Ds\Stack;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use PhpParser\Node;
@@ -32,6 +33,7 @@ use Serenata\Indexing\Structures\AccessModifier;
 use Serenata\Indexing\Structures\AccessModifierNameValue;
 
 use Serenata\Parsing\DocblockParser;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\NodeHelpers;
 use Serenata\Utility\PositionEncoding;
@@ -650,7 +652,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $shortDescription = $documentation['descriptions']['short'];
 
-            $typeStringSpecification = null;
+            $unresolvedType = null;
 
             if ($varDocumentation) {
                 // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
@@ -659,7 +661,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $shortDescription = $varDocumentation['description'];
                 }
 
-                $typeStringSpecification = $varDocumentation['type'];
+                $unresolvedType = $varDocumentation['type'];
             } elseif ($node->type !== null) {
                 $typeNode = $node->type;
 
@@ -668,29 +670,28 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 if ($typeNode instanceof Node\Name) {
-                    $typeStringSpecification = NodeHelpers::fetchClassName($typeNode);
+                    $unresolvedType = new IdentifierTypeNode(NodeHelpers::fetchClassName($typeNode));
                 } elseif ($typeNode instanceof Node\Identifier) {
-                    $typeStringSpecification = $typeNode->name;
+                    $unresolvedType = new IdentifierTypeNode($typeNode->name);
                 }
 
                 if ($node->type instanceof Node\NullableType) {
-                    $typeStringSpecification .= '|null';
+                    $unresolvedType = new UnionTypeNode([
+                        $unresolvedType,
+                        new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+                    ]);
                 }
             } elseif ($property->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                     $property->default,
                     $this->textDocumentItem
                 ));
-
-                $typeStringSpecification = implode('|', $typeList);
             }
 
-            if ($typeStringSpecification) {
+            if ($unresolvedType !== null) {
                 $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
-
-                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
             } else {
                 $type = new IdentifierTypeNode('mixed');
             }
@@ -895,10 +896,10 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
-            $typeStringSpecification = null;
+            $unresolvedType = null;
 
             if ($parameterDoc) {
-                $typeStringSpecification = $parameterDoc['type'];
+                $unresolvedType = $parameterDoc['type'];
             } elseif ($param->type !== null) {
                 $typeNode = $param->type;
 
@@ -907,35 +908,37 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 if ($typeNode instanceof Node\Name) {
-                    $typeStringSpecification = NodeHelpers::fetchClassName($typeNode);
+                    $unresolvedType = new IdentifierTypeNode(NodeHelpers::fetchClassName($typeNode));
                 } elseif ($typeNode instanceof Node\Identifier) {
-                    $typeStringSpecification = $typeNode->name;
+                    $unresolvedType = new IdentifierTypeNode($typeNode->name);
                 }
 
                 if ($param->type instanceof Node\NullableType) {
-                    $typeStringSpecification .= '|null';
+                    $unresolvedType = new UnionTypeNode([
+                        $unresolvedType,
+                        new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+                    ]);
                 } elseif ($param->default instanceof Node\Expr\ConstFetch &&
-                    $param->default->name->toString() === 'null'
+                    $param->default->name->toString() === SpecialDocblockTypeIdentifierLiteral::NULL_
                 ) {
-                    $typeStringSpecification .= '|null';
+                    $unresolvedType = new UnionTypeNode([
+                        $unresolvedType,
+                        new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+                    ]);
                 }
             } elseif ($param->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                     $param->default,
                     $this->textDocumentItem
                 ));
-
-                $typeStringSpecification = implode('|', $typeList);
             }
 
-            if ($typeStringSpecification) {
+            if ($unresolvedType !== null) {
                 $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
-
-                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
             } else {
-                $type = new IdentifierTypeNode('mixed');
+                $type = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::MIXED_);
             }
 
             if ($param->variadic) {
@@ -1013,7 +1016,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $node->value->getAttribute('endFilePos') - $node->value->getAttribute('startFilePos') + 1
         );
 
-        $typeStringSpecification = null;
+        $unresolvedType = null;
 
         if ($varDocumentation) {
             // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
@@ -1022,22 +1025,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $shortDescription = $varDocumentation['description'];
             }
 
-            $typeStringSpecification = $varDocumentation['type'];
+            $unresolvedType = $varDocumentation['type'];
         } else {
-            $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                 $node->value,
                 $this->textDocumentItem
             ));
-
-            $typeStringSpecification = implode('|', $typeList);
         }
 
         $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-        if ($typeStringSpecification) {
-            $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
-
-            $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+        if ($unresolvedType !== null) {
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
         } else {
             $type = new IdentifierTypeNode('mixed');
         }

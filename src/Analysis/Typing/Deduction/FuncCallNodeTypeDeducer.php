@@ -2,14 +2,16 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\Analysis\Conversion\FunctionConverter;
+use PhpParser\Node;
 
 use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
 
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\ManagerRegistry;
+
+use Serenata\Parsing\InvalidTypeNode;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\FuncCall} node.
@@ -22,39 +24,31 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $managerRegistry;
 
     /**
-     * @var FunctionConverter
-     */
-    private $functionConverter;
-
-    /**
      * @var FunctionCallNodeFqsenDeterminer
      */
     private $functionCallNodeFqsenDeterminer;
 
     /**
      * @param ManagerRegistry                 $managerRegistry
-     * @param FunctionConverter               $functionConverter
      * @param FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
      */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        FunctionConverter $functionConverter,
         FunctionCallNodeFqsenDeterminer $functionCallNodeFqsenDeterminer
     ) {
         $this->managerRegistry = $managerRegistry;
-        $this->functionConverter = $functionConverter;
         $this->functionCallNodeFqsenDeterminer = $functionCallNodeFqsenDeterminer;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\FuncCall) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         } elseif ($context->getNode()->name instanceof Node\Expr) {
-            return []; // Can't currently deduce type of an expression such as "{$foo}()";
+            return new InvalidTypeNode(); // Can't currently deduce type of an expression such as "{$foo}()";
         }
 
         $fqsen = $this->functionCallNodeFqsenDeterminer->determine(
@@ -69,11 +63,9 @@ final class FuncCallNodeTypeDeducer extends AbstractNodeTypeDeducer
         ]);
 
         if ($globalFunction === null) {
-            return [];
+            return new InvalidTypeNode();
         }
 
-        $convertedGlobalFunction = $this->functionConverter->convert($globalFunction);
-
-        return $this->fetchResolvedTypesFromTypeArrays($convertedGlobalFunction['returnTypes']);
+        return $globalFunction->getReturnType();
     }
 }

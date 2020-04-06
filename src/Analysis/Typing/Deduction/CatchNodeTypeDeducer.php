@@ -2,7 +2,12 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+
 use PhpParser\Node;
+
+use Serenata\Parsing\TypeNodeUnwrapper;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Stmt\Catch_} node.
@@ -25,23 +30,19 @@ final class CatchNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Stmt\Catch_) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        $types = array_map(function (Node\Name $name) use ($context): array {
+        $types = array_map(function (Node\Name $name) use ($context): TypeNode {
             return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                 $name,
                 $context->getTextDocumentItem()
             ));
         }, $context->getNode()->types);
 
-        $types = array_reduce($types, function (array $subTypes, $carry): array {
-            return array_merge($carry, $subTypes);
-        }, []);
-
-        return $types;
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($types));
     }
 }

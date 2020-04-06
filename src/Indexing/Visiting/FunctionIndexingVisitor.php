@@ -3,6 +3,7 @@
 namespace Serenata\Indexing\Visiting;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use PhpParser\Node;
@@ -23,6 +24,7 @@ use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
 
 use Serenata\Parsing\DocblockParser;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\NodeHelpers;
 use Serenata\Utility\PositionEncoding;
@@ -271,10 +273,10 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
-            $typeStringSpecification = null;
+            $unresolvedType = null;
 
             if ($parameterDoc) {
-                $typeStringSpecification = $parameterDoc['type'];
+                $unresolvedType = $parameterDoc['type'];
             } elseif ($param->type !== null) {
                 $typeNode = $param->type;
 
@@ -283,33 +285,35 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                 }
 
                 if ($typeNode instanceof Node\Name) {
-                    $typeStringSpecification = NodeHelpers::fetchClassName($typeNode);
+                    $unresolvedType = new IdentifierTypeNode(NodeHelpers::fetchClassName($typeNode));
                 } elseif ($typeNode instanceof Node\Identifier) {
-                    $typeStringSpecification = $typeNode->name;
+                    $unresolvedType = new IdentifierTypeNode($typeNode->name);
                 }
 
                 if ($param->type instanceof Node\NullableType) {
-                    $typeStringSpecification .= '|null';
+                    $unresolvedType = new UnionTypeNode([
+                        $unresolvedType,
+                        new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+                    ]);
                 } elseif ($param->default instanceof Node\Expr\ConstFetch &&
                     $param->default->name->toString() === 'null'
                 ) {
-                    $typeStringSpecification .= '|null';
+                    $unresolvedType = new UnionTypeNode([
+                        $unresolvedType,
+                        new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+                    ]);
                 }
             } elseif ($param->default !== null) {
-                $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                     $param->default,
                     $this->textDocumentItem
                 ));
-
-                $typeStringSpecification = implode('|', $typeList);
             }
 
-            if ($typeStringSpecification) {
+            if ($unresolvedType !== null) {
                 $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
-
-                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
+                $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
             } else {
                 $type = new IdentifierTypeNode('mixed');
             }

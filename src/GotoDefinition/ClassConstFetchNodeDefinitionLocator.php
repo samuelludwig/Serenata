@@ -4,6 +4,8 @@ namespace Serenata\GotoDefinition;
 
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
@@ -13,6 +15,7 @@ use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
 
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
 
 use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
@@ -33,15 +36,23 @@ final class ClassConstFetchNodeDefinitionLocator
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
-     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
+     * @param NodeTypeDeducerInterface       $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface  $classlikeInfoBuilder
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -64,11 +75,11 @@ final class ClassConstFetchNodeDefinitionLocator
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
 
-        $classTypes = $this->getClassTypes($node, $textDocumentItem, $position);
+        $classType = $this->getClassTypes($node, $textDocumentItem, $position);
 
         $definitions = [];
 
-        foreach ($classTypes as $classType) {
+        foreach ($this->toplevelTypeExtractor->extract($classType) as $classType) {
             $constantInfo = $this->fetchClassConstantInfo($classType, $node->name);
 
             if ($constantInfo === null) {
@@ -93,17 +104,17 @@ final class ClassConstFetchNodeDefinitionLocator
      *
      * @throws UnexpectedValueException
      *
-     * @return string[]
+     * @return TypeNode
      */
     private function getClassTypes(
         Node\Expr\ClassConstFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): array {
+    ): TypeNode {
         $classTypes = [];
 
         try {
-            $classTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $classType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                 $node->class,
                 $textDocumentItem,
                 $position
@@ -112,11 +123,7 @@ final class ClassConstFetchNodeDefinitionLocator
             throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
         }
 
-        if (count($classTypes) === 0) {
-            throw new UnexpectedValueException('No types returned for class');
-        }
-
-        return $classTypes;
+        return $classType;
     }
 
     /**

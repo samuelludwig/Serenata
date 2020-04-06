@@ -79,6 +79,10 @@ services:
     PHPStan\PhpDocParser\Parser\TypeParser:
     Serenata\Parsing\PhpstanDocblockTypeParser:
 
+    Serenata\Parsing\ToplevelTypeExtractor:
+    Serenata\Parsing\ToplevelTypeExtractorInterface:
+        alias: Serenata\Parsing\ToplevelTypeExtractor
+
     docblockTypeParser:
         alias: Serenata\Parsing\PhpstanDocblockTypeParser
 

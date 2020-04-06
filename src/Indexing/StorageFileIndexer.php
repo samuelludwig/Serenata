@@ -241,7 +241,6 @@ final class StorageFileIndexer implements FileIndexerInterface
             new Visiting\ConstantIndexingVisitor(
                 $this->storage,
                 $this->docblockParser,
-                $this->docblockTypeParser,
                 $this->typeResolvingDocblockTypeTransformer,
                 $this->nodeTypeDeducer,
                 $file,
@@ -251,7 +250,6 @@ final class StorageFileIndexer implements FileIndexerInterface
             new Visiting\DefineIndexingVisitor(
                 $this->storage,
                 $this->nodeTypeDeducer,
-                $this->docblockTypeParser,
                 $this->typeResolvingDocblockTypeTransformer,
                 $file,
                 $textDocumentItem

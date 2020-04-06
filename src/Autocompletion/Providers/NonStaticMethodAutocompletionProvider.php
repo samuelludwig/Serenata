@@ -18,6 +18,8 @@ use Serenata\Autocompletion\CompletionItemDetailFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
 
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
+
 use Serenata\Utility\TextEdit;
 
 /**
@@ -56,12 +58,18 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
     private $functionParametersEvaluator;
 
     /**
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
      * @param ExpressionTypeDeducer                                         $expressionTypeDeducer
      * @param ClasslikeInfoBuilderInterface                                 $classlikeInfoBuilder
      * @param FunctionParametersEvaluator                                   $functionParametersEvaluator
      * @param FunctionAutocompletionSuggestionLabelCreator                  $functionAutocompletionSuggestionLabelCreator
      * @param FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator
      * @param CompletionItemDetailFormatter                                 $completionItemDetailFormatter
+     * @param ToplevelTypeExtractorInterface                                $toplevelTypeExtractor
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
@@ -69,7 +77,8 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         FunctionParametersEvaluator $functionParametersEvaluator,
         FunctionAutocompletionSuggestionLabelCreator $functionAutocompletionSuggestionLabelCreator,
         FunctionAutocompletionSuggestionParanthesesNecessityEvaluator $functionAutocompletionSuggestionParanthesesNecessityEvaluator,
-        CompletionItemDetailFormatter $completionItemDetailFormatter
+        CompletionItemDetailFormatter $completionItemDetailFormatter,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
@@ -77,6 +86,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
         $this->functionAutocompletionSuggestionLabelCreator = $functionAutocompletionSuggestionLabelCreator;
         $this->functionAutocompletionSuggestionParanthesesNecessityEvaluator = $functionAutocompletionSuggestionParanthesesNecessityEvaluator;
         $this->completionItemDetailFormatter = $completionItemDetailFormatter;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -84,7 +94,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
      */
     public function provide(AutocompletionProviderContext $context): iterable
     {
-        $types = $this->expressionTypeDeducer->deduce(
+        $type = $this->expressionTypeDeducer->deduce(
             $context->getTextDocumentItem(),
             $context->getPosition(),
             null,
@@ -97,7 +107,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 return null;
             }
-        }, $types);
+        }, $this->toplevelTypeExtractor->extract($type));
 
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 

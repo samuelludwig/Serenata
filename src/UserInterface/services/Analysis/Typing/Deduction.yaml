@@ -16,13 +16,14 @@ services:
     localTypeScanner:
         class: Serenata\Analysis\Typing\Deduction\LocalTypeScanner
         arguments:
-            - '@structureAwareNameResolverFactory'
             - '@typeAnalyzer'
             - '@nodeTypeDeducer'
             - '@foreachNodeLoopValueTypeDeducer'
             - '@functionLikeParameterTypeDeducer'
             - '@expressionLocalTypeAnalyzer'
             - '@docblockTypeParser'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
+            - '@typeResolvingDocblockTypeTransformer'
 
     variableNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\VariableNodeTypeDeducer
@@ -43,13 +44,12 @@ services:
         arguments:
             - '@structureAwareNameResolverFactory'
             - '@managerRegistry'
-            - '@constantConverter'
 
     arrayDimFetchNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\ArrayDimFetchNodeTypeDeducer
         arguments:
-            - '@typeAnalyzer'
             - '@nodeTypeDeducer'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     closureNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\ClosureNodeTypeDeducer
@@ -94,13 +94,13 @@ services:
         class: Serenata\Analysis\Typing\Deduction\FuncCallNodeTypeDeducer
         arguments:
             - '@managerRegistry'
-            - '@functionConverter'
             - '@functionCallNodeFqsenDeterminer'
 
     methodCallNodeTypeDeducer.delegate:
         class: Serenata\Analysis\Typing\Deduction\MethodCallNodeTypeDeducer
         arguments:
             - '@methodCallMethodInfoRetriever'
+            - '@docblockTypeParser'
 
     methodCallNodeMetaTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\MethodCallNodeMetaTypeDeducer
@@ -118,12 +118,14 @@ services:
             - '@propertyFetchPropertyInfoRetriever'
             - '@localTypeScanner'
             - '@Serenata\PrettyPrinting\NodePrettyPrinter'
+            - '@docblockTypeParser'
 
     classConstFetchNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\ClassConstFetchNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@docblockTypeParser'
 
     assignNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\AssignNodeTypeDeducer
@@ -134,6 +136,7 @@ services:
         class: Serenata\Analysis\Typing\Deduction\TernaryNodeTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     classLikeNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer
@@ -147,7 +150,7 @@ services:
         class: Serenata\Analysis\Typing\Deduction\ForeachNodeLoopValueTypeDeducer
         arguments:
             - '@nodeTypeDeducer'
-            - '@typeAnalyzer'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     functionLikeParameterTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\FunctionLikeParameterTypeDeducer

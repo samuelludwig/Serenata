@@ -12,8 +12,6 @@ use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
 
-use Serenata\Parsing\DocblockTypeParserInterface;
-
 use Serenata\Utility\PositionEncoding;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -44,11 +42,6 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     private $nodeTypeDeducer;
 
     /**
-     * @var DocblockTypeParserInterface
-     */
-    private $docblockTypeParser;
-
-    /**
      * @var TypeResolvingDocblockTypeTransformer
      */
     private $typeResolvingDocblockTypeTransformer;
@@ -66,7 +59,6 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     /**
      * @param StorageInterface                     $storage
      * @param NodeTypeDeducerInterface             $nodeTypeDeducer
-     * @param DocblockTypeParserInterface          $docblockTypeParser
      * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
      * @param Structures\File                      $file
      * @param TextDocumentItem                     $textDocumentItem
@@ -74,14 +66,12 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     public function __construct(
         StorageInterface $storage,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        DocblockTypeParserInterface $docblockTypeParser,
         TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         Structures\File $file,
         TextDocumentItem $textDocumentItem
     ) {
         $this->storage = $storage;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->docblockTypeParser = $docblockTypeParser;
         $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->file = $file;
         $this->textDocumentItem = $textDocumentItem;
@@ -145,20 +135,14 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
         );
 
         if (isset($node->args[1])) {
-            $typeList = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                 $node->args[1]->value,
                 $this->textDocumentItem
             ));
 
-            if (count($typeList) !== 0) {
-                $typeStringSpecification = implode('|', $typeList);
+            $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
 
-                $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
-
-                $docblockType = $this->docblockTypeParser->parse($typeStringSpecification);
-
-                $type = $this->typeResolvingDocblockTypeTransformer->resolve($docblockType, $filePosition);
-            }
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($type, $filePosition);
         }
 
         $constant = new Structures\Constant(

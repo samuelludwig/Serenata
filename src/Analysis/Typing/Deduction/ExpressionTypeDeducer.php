@@ -2,6 +2,8 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
@@ -11,6 +13,7 @@ use Serenata\Common\FilePosition;
 
 use Serenata\NameQualificationUtilities\PositionalNamespaceDeterminerInterface;
 
+use Serenata\Parsing\InvalidTypeNode;
 use Serenata\Parsing\LastExpressionParser;
 
 use Serenata\Utility\PositionEncoding;
@@ -57,21 +60,21 @@ final class ExpressionTypeDeducer
      * @param string|null      $expression
      * @param bool             $ignoreLastElement
      *
-     * @return string[]
+     * @return TypeNode
      */
     public function deduce(
         TextDocumentItem $textDocumentItem,
         Position $position,
         ?string $expression = null,
         bool $ignoreLastElement = false
-    ): array {
+    ): TypeNode {
         $node = $this->lastExpressionParser->getLastNodeAt(
             $expression !== null ? $expression : $textDocumentItem->getText(),
             $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
         );
 
         if ($node === null) {
-            return [];
+            return new InvalidTypeNode();
         } elseif ($node instanceof Node\Stmt\Expression) {
             $node = $node->expr;
         }
@@ -107,9 +110,9 @@ final class ExpressionTypeDeducer
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @return string[]
+     * @return TypeNode
      */
-    private function deduceTypesFromNode(Node $node, TextDocumentItem $textDocumentItem, Position $position): array
+    private function deduceTypesFromNode(Node $node, TextDocumentItem $textDocumentItem, Position $position): TypeNode
     {
         // We're dealing with partial code, its context may be lost because of it being invalid, so we can't rely on
         // the namespace attaching visitor here.

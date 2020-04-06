@@ -2,6 +2,8 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Parsing;
@@ -27,7 +29,7 @@ final class ParentNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Parsing\Node\Keyword\Parent_) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));

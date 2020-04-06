@@ -2,9 +2,18 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\MetadataProviderInterface;
+
+use Serenata\Parsing\InvalidTypeNode;
+use Serenata\Parsing\TypeNodeUnwrapper;
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\MethodCall} or a {@see Node\Expr\StaticCall} node based on
@@ -28,24 +37,32 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
     private $metadataProvider;
 
     /**
-     * @param NodeTypeDeducerInterface  $delegate
-     * @param NodeTypeDeducerInterface  $nodeTypeDeducer
-     * @param MetadataProviderInterface $metadataProvider
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
+     * @param NodeTypeDeducerInterface       $delegate
+     * @param NodeTypeDeducerInterface       $nodeTypeDeducer
+     * @param MetadataProviderInterface      $metadataProvider
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         NodeTypeDeducerInterface $delegate,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        MetadataProviderInterface $metadataProvider
+        MetadataProviderInterface $metadataProvider,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->delegate = $delegate;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->metadataProvider = $metadataProvider;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\MethodCall &&
             !$context->getNode() instanceof Node\Expr\StaticCall
@@ -60,7 +77,7 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
         $methodName = $context->getNode()->name;
 
         if (!$methodName instanceof Node\Identifier) {
-            return [];
+            return new InvalidTypeNode();
         }
 
         $typesOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
@@ -70,11 +87,15 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
 
         $staticTypes = [];
 
-        foreach ($typesOfVar as $type) {
-            $staticTypes = array_merge(
-                $staticTypes,
-                $this->metadataProvider->getMetaStaticMethodTypesFor($type, $methodName)
-            );
+        foreach ($this->toplevelTypeExtractor->extract($typesOfVar) as $type) {
+            if ($type instanceof IdentifierTypeNode &&
+                !in_array((string) $type, SpecialDocblockTypeIdentifierLiteral::getValues())
+            ) {
+                $staticTypes = array_merge(
+                    $staticTypes,
+                    $this->metadataProvider->getMetaStaticMethodTypesFor((string) $type, $methodName)
+                );
+            }
         }
 
         if (count($staticTypes) === 0) {
@@ -97,10 +118,10 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
             if ($relevantArgumentNode->value instanceof Node\Scalar\String_ &&
                 $relevantArgumentNode->value->value === $staticType->getValue()
             ) {
-                $types[] = $staticType->getReturnType();
+                $types[] = new IdentifierTypeNode($staticType->getReturnType());
             }
         }
 
-        return $types;
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($types));
     }
 }

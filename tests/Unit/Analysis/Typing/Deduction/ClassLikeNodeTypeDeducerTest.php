@@ -4,6 +4,8 @@ namespace Serenata\Tests\Unit\Analysis\Typing\Deduction;
 
 use DateTime;
 
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\ClassLikeNodeTypeDeducer;
 
@@ -36,7 +38,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
     {
         $node = new Node\Stmt\Class_('A');
 
-        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce(
+        static::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
             new TypeDeductionContext($node, new TextDocumentItem('', ''))
         ));
     }
@@ -50,7 +52,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce(
+        static::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
             new TypeDeductionContext($node, new TextDocumentItem('', ''))
         ));
     }
@@ -64,7 +66,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        static::assertSame(['A'], $this->classLikeNodeTypeDeducer->deduce(
+        static::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
             new TypeDeductionContext($node, new TextDocumentItem('', ''))
         ));
     }
@@ -80,8 +82,8 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
 
         $file = new Structures\File('file:////test/path', new DateTime(), []);
 
-        static::assertSame(
-            ['\(anonymous_d41d8cd98f00b204e9800998ecf8427e_9)'],
+        static::assertEquals(
+            new IdentifierTypeNode('\anonymous_d41d8cd98f00b204e9800998ecf8427e_9'),
             $this->classLikeNodeTypeDeducer->deduce(new TypeDeductionContext($node, new TextDocumentItem('', '')))
         );
     }

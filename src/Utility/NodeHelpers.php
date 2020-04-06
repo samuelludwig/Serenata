@@ -25,7 +25,7 @@ final class NodeHelpers
             throw new LogicException('Anonymous class node must have "startFilePos" attribute set');
         }
 
-        return '\\' . sprintf('(anonymous_%s_%s)', md5($filePath), $startFilePos);
+        return '\\' . sprintf('anonymous_%s_%s', md5($filePath), $startFilePos);
     }
 
     /**

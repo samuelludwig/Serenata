@@ -4,6 +4,8 @@ namespace Serenata\Tooltips;
 
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
@@ -12,6 +14,8 @@ use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
+
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
 
 use Serenata\Utility\TextDocumentItem;
 
@@ -36,18 +40,26 @@ final class ClassConstFetchNodeTooltipGenerator
     private $classlikeInfoBuilder;
 
     /**
-     * @param ConstantTooltipGenerator      $constantTooltipGenerator
-     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
-     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
+     * @param ConstantTooltipGenerator       $constantTooltipGenerator
+     * @param NodeTypeDeducerInterface       $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface  $classlikeInfoBuilder
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         ConstantTooltipGenerator $constantTooltipGenerator,
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->constantTooltipGenerator = $constantTooltipGenerator;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -70,12 +82,12 @@ final class ClassConstFetchNodeTooltipGenerator
             throw new UnexpectedValueException("Can't deduce the type of a non-string node");
         }
 
-        $classTypes = $this->getClassTypes($node, $textDocumentItem, $position);
+        $classType = $this->getClassTypes($node, $textDocumentItem, $position);
 
         $tooltips = [];
 
-        foreach ($classTypes as $classType) {
-            $constantInfo = $this->fetchClassConstantInfo($classType, $node->name);
+        foreach ($this->toplevelTypeExtractor->extract($classType) as $type) {
+            $constantInfo = $this->fetchClassConstantInfo($type, $node->name);
 
             if ($constantInfo === null) {
                 continue;
@@ -99,17 +111,17 @@ final class ClassConstFetchNodeTooltipGenerator
      *
      * @throws UnexpectedValueException
      *
-     * @return array<string,mixed>
+     * @return TypeNode
      */
     private function getClassTypes(
         Node\Expr\ClassConstFetch $node,
         TextDocumentItem $textDocumentItem,
         Position $position
-    ): array {
+    ): TypeNode {
         $classTypes = [];
 
         try {
-            $classTypes = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+            $classType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
                 $node->class,
                 $textDocumentItem
             ));
@@ -117,11 +129,7 @@ final class ClassConstFetchNodeTooltipGenerator
             throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
         }
 
-        if (count($classTypes) === 0) {
-            throw new UnexpectedValueException('No types returned for class');
-        }
-
-        return $classTypes;
+        return $classType;
     }
 
     /**

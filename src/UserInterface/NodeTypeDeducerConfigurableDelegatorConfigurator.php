@@ -2,7 +2,7 @@
 
 namespace Serenata\UserInterface;
 
-use Exception;
+use Throwable;
 use LogicException;
 
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -38,8 +38,13 @@ class NodeTypeDeducerConfigurableDelegatorConfigurator
         try {
             /** @var NodeTypeDeducerInterface $nodeTypeDeducer */
             $nodeTypeDeducer = static::$container->get('nodeTypeDeducer.instance');
-        } catch (Exception $e) {
-            throw new LogicException('Could not fetch expected service nodeTypeDeducer.instance from container', 0, $e);
+        } catch (Throwable $e) {
+            throw new LogicException(
+                'Could not fetch expected service nodeTypeDeducer.instance from container, its definition may ' .
+                'contain errors',
+                0,
+                $e
+            );
         }
 
         // Avoid circular references due to two-way object usage.

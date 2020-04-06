@@ -4,9 +4,15 @@ namespace Serenata\Analysis\Typing\Deduction;
 
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+
+use Serenata\Parsing\TypeNodeUnwrapper;
+use Serenata\Parsing\DocblockTypeParserInterface;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ClassConstFetch} node.
@@ -24,21 +30,29 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $classlikeInfoBuilder;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
      * @param NodeTypeDeducerInterface      $nodeTypeDeducer
      * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @param DocblockTypeParserInterface   $docblockTypeParser
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
+        DocblockTypeParserInterface $docblockTypeParser
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->docblockTypeParser = $docblockTypeParser;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Expr\ClassConstFetch) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
@@ -61,17 +75,14 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             }
 
             if (isset($info['constants'][$context->getNode()->name->name])) {
-                $fetchedTypes = $this->fetchResolvedTypesFromTypeArrays(
+                $types[] = TypeNodeUnwrapper::unwrap(new UnionTypeNode(array_map(function (string $type): TypeNode {
+                    return $this->docblockTypeParser->parse($type);
+                }, $this->fetchResolvedTypesFromTypeArrays(
                     $info['constants'][$context->getNode()->name->name]['types']
-                );
-
-                if (count($fetchedTypes) > 0) {
-                    $types += array_combine($fetchedTypes, array_fill(0, count($fetchedTypes), true));
-                }
+                ))));
             }
         }
 
-        // We use an associative array so we automatically avoid duplicate types.
-        return array_keys($types);
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($types));
     }
 }

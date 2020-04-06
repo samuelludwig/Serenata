@@ -13,6 +13,8 @@ use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
 
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
+
 use Serenata\Utility\TextDocumentItem;
 
 /**
@@ -31,15 +33,23 @@ final class PropertyFetchPropertyInfoRetriever
     private $classlikeInfoBuilder;
 
     /**
-     * @param NodeTypeDeducerInterface      $nodeTypeDeducer
-     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
+     * @param NodeTypeDeducerInterface       $nodeTypeDeducer
+     * @param ClasslikeInfoBuilderInterface  $classlikeInfoBuilder
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
-        ClasslikeInfoBuilderInterface $classlikeInfoBuilder
+        ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -61,7 +71,7 @@ final class PropertyFetchPropertyInfoRetriever
 
         $objectNode = ($node instanceof Node\Expr\PropertyFetch) ? $node->var : $node->class;
 
-        $typesOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        $typeOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $objectNode,
             $textDocumentItem,
             $position
@@ -69,11 +79,11 @@ final class PropertyFetchPropertyInfoRetriever
 
         $infoElements = [];
 
-        foreach ($typesOfVar as $type) {
+        foreach ($this->toplevelTypeExtractor->extract($typeOfVar) as $type) {
             $info = null;
 
             try {
-                $info = $this->classlikeInfoBuilder->build($type);
+                $info = $this->classlikeInfoBuilder->build((string) $type);
             } catch (UnexpectedValueException $e) {
                 continue;
             }

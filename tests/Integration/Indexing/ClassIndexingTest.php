@@ -139,8 +139,8 @@ final class ClassIndexingTest extends AbstractIntegrationTest
 
         $filePath = $this->normalizePath($this->getPathFor($fileName));
 
-        static::assertSame('(anonymous_' . md5($filePath) . '_19)', $structure->getName());
-        static::assertSame('\\(anonymous_' . md5($filePath) . '_19)', $structure->getFqcn());
+        static::assertSame('anonymous_' . md5($filePath) . '_19', $structure->getName());
+        static::assertSame('\\anonymous_' . md5($filePath) . '_19', $structure->getFqcn());
         static::assertTrue($structure->getIsAnonymous());
     }
 

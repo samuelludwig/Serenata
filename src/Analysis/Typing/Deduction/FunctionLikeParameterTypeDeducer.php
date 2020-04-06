@@ -3,12 +3,15 @@
 namespace Serenata\Analysis\Typing\Deduction;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use PhpParser\Node;
 
 use Serenata\Parsing\DocblockParser;
+use Serenata\Parsing\InvalidTypeNode;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\NodeHelpers;
 
@@ -38,7 +41,7 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Param) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
@@ -47,9 +50,9 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
         $varNode = $context->getNode()->var;
 
         if ($varNode instanceof Node\Expr\Error) {
-            return [];
+            return new InvalidTypeNode();
         } elseif ($varNode->name instanceof Node\Expr) {
-            return [];
+            return new InvalidTypeNode();
         }
 
         $docBlock = $this->getFunctionDocblock();
@@ -61,43 +64,58 @@ final class FunctionLikeParameterTypeDeducer extends AbstractNodeTypeDeducer
             ], '');
 
             if (isset($result['params']['$' . $varNode->name])) {
-                $type = $result['params']['$' . $varNode->name]['type'];
-
-                if ($type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode) {
-                    return array_map(function (TypeNode $nestedType): string {
-                        return (string) $nestedType;
-                    }, $type->types);
-                }
-
-                return [(string) $type];
+                return $result['params']['$' . $varNode->name]['type'];
             }
         }
 
-        $isNullable = false;
+        $isNullableInType = false;
+        $isNullableByAssignment = false;
         $typeNode = $context->getNode()->type;
 
         if ($typeNode instanceof Node\NullableType) {
             $typeNode = $typeNode->type;
-            $isNullable = true;
+            $isNullableInType = true;
         } elseif ($context->getNode()->default instanceof Node\Expr\ConstFetch &&
             $context->getNode()->default->name->toString() === 'null'
         ) {
-            $isNullable = true;
+            $isNullableByAssignment = true;
         }
 
         if ($typeNode instanceof Node\Name) {
-            $typeHintType = NodeHelpers::fetchClassName($typeNode);
-
-            if ($context->getNode()->variadic) {
-                $typeHintType .= '[]';
-            }
-
-            return $isNullable ? [$typeHintType, 'null'] : [$typeHintType];
+            $typeHintType = new IdentifierTypeNode(NodeHelpers::fetchClassName($typeNode));
         } elseif ($context->getNode()->type instanceof Node\Identifier) {
-            return [$context->getNode()->type->name];
+            $typeHintType = new IdentifierTypeNode($context->getNode()->type->name);
+        } else {
+            return new InvalidTypeNode();
         }
 
-        return [];
+        /*
+            ?Foo $foo           -> $foo has type Foo|null.
+            Foo $foo = null     -> $foo has type Foo|null.
+            ?Foo ...$foo        -> $foo has type array<Foo|null>.
+            Foo ...$foo = null  -> $foo has type array<Foo>|null.
+            ?Foo ...$foo = null -> $foo has type array<Foo|null>|null.
+         */
+        if ($isNullableInType) {
+            $typeHintType = new UnionTypeNode([
+                $typeHintType,
+                new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+            ]);
+        }
+
+        if ($context->getNode()->variadic) {
+            $typeHintType = new ArrayTypeNode($typeHintType);
+        }
+
+        // Extra check to ensure we don't apply nullability to twice in the case of "?Foo $foo = null'.
+        if ($isNullableByAssignment && ($context->getNode()->variadic || !$isNullableInType)) {
+            $typeHintType = new UnionTypeNode([
+                $typeHintType,
+                new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::NULL_),
+            ]);
+        }
+
+        return $typeHintType;
     }
 
     /**

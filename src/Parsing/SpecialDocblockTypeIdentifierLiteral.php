@@ -100,12 +100,22 @@ class SpecialDocblockTypeIdentifierLiteral
     /**
      * @var string
      */
+    public const PARENT_ = 'parent';
+
+    /**
+     * @var string
+     */
     public const THIS_ = '$this';
 
     /**
      * @var string
      */
     public const ITERABLE_ = 'iterable';
+
+    /**
+     * @var string
+     */
+    public const NEVER = 'never';
 
     /**
      * @return string[]
@@ -131,8 +141,10 @@ class SpecialDocblockTypeIdentifierLiteral
             self::TRUE_,
             self::SELF_,
             self::STATIC_,
+            self::PARENT_,
             self::THIS_,
             self::ITERABLE_,
+            self::NEVER,
         ];
     }
 }

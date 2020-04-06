@@ -15,6 +15,8 @@ use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
+
 use Serenata\Utility\TextEdit;
 
 /**
@@ -38,18 +40,26 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     private $completionItemDetailFormatter;
 
     /**
-     * @param ExpressionTypeDeducer         $expressionTypeDeducer
-     * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
-     * @param CompletionItemDetailFormatter $completionItemDetailFormatter
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
+     * @param ExpressionTypeDeducer          $expressionTypeDeducer
+     * @param ClasslikeInfoBuilderInterface  $classlikeInfoBuilder
+     * @param CompletionItemDetailFormatter  $completionItemDetailFormatter
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         ExpressionTypeDeducer $expressionTypeDeducer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
-        CompletionItemDetailFormatter $completionItemDetailFormatter
+        CompletionItemDetailFormatter $completionItemDetailFormatter,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->expressionTypeDeducer = $expressionTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->completionItemDetailFormatter = $completionItemDetailFormatter;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -57,7 +67,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
      */
     public function provide(AutocompletionProviderContext $context): iterable
     {
-        $types = $this->expressionTypeDeducer->deduce(
+        $type = $this->expressionTypeDeducer->deduce(
             $context->getTextDocumentItem(),
             $context->getPosition(),
             null,
@@ -70,7 +80,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             } catch (UnexpectedValueException|CircularDependencyException $e) {
                 return null;
             }
-        }, $types);
+        }, $this->toplevelTypeExtractor->extract($type));
 
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 

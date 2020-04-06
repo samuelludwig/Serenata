@@ -3,8 +3,8 @@
 namespace Serenata\Analysis\Conversion;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
+
+use Serenata\Parsing\ToplevelTypeExtractor;
 
 /**
  * Base class for converters.
@@ -18,15 +18,13 @@ abstract class AbstractConverter
      */
     protected function convertDocblockType(TypeNode $type): array
     {
-        if ($type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode) {
-            return array_merge(...array_map(function (TypeNode $nestedType): array {
-                return $this->convertDocblockType($nestedType);
-            }, $type->types));
-        }
+        $typeExtractor = new ToplevelTypeExtractor();
 
-        return [[
-            'type'         => (string) $type,
-            'resolvedType' => (string) $type,
-        ]];
+        return array_map(function (TypeNode $nestedType) {
+            return [
+                'type'         => (string) $nestedType,
+                'resolvedType' => (string) $nestedType,
+            ];
+        }, $typeExtractor->extract($type));
     }
 }

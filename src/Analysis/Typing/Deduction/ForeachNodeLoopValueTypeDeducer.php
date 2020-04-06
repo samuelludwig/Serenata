@@ -2,9 +2,13 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+
 use PhpParser\Node;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
+use Serenata\Parsing\InvalidTypeNode;
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
 
 /**
  * Type deducer that can deduce the type of the loop value of a {@see Node\Stmt\Foreach_} node.
@@ -17,40 +21,42 @@ final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
     private $nodeTypeDeducer;
 
     /**
-     * @var TypeAnalyzer
+     * @var ToplevelTypeExtractorInterface
      */
-    private $typeAnalyzer;
+    private $toplevelTypeExtractor;
 
     /**
-     * @param NodeTypeDeducerInterface $nodeTypeDeducer
-     * @param TypeAnalyzer             $typeAnalyzer
+     * @param NodeTypeDeducerInterface       $nodeTypeDeducer
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
-    public function __construct(NodeTypeDeducerInterface $nodeTypeDeducer, TypeAnalyzer $typeAnalyzer)
-    {
+    public function __construct(
+        NodeTypeDeducerInterface $nodeTypeDeducer,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
+    ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
-        $this->typeAnalyzer = $typeAnalyzer;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Stmt\Foreach_) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        $types = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $context->getNode()->expr,
             $context->getTextDocumentItem()
         ));
 
-        foreach ($types as $type) {
-            if ($this->typeAnalyzer->isArraySyntaxTypeHint($type)) {
-                return [$this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($type)];
+        foreach ($this->toplevelTypeExtractor->extract($type) as $type) {
+            if ($type instanceof ArrayTypeNode) {
+                return $type->type;
             }
         }
 
-        return [];
+        return new InvalidTypeNode();
     }
 }

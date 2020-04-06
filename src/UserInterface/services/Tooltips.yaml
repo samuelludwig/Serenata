@@ -72,6 +72,7 @@ services:
             - '@constantTooltipGenerator'
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     functionNodeTooltipGenerator:
         class: Serenata\Tooltips\FunctionNodeTooltipGenerator

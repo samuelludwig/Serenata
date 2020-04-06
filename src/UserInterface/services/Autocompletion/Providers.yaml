@@ -176,6 +176,7 @@ services:
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
             - '@completionItemDetailFormatter'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     applicabilityCheckingNonStaticMethodAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -194,6 +195,7 @@ services:
             - '@functionAutocompletionSuggestionLabelCreator'
             - '@functionAutocompletionSuggestionParanthesesNecessityEvaluator'
             - '@completionItemDetailFormatter'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     applicabilityCheckingStaticMethodAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -209,6 +211,7 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@completionItemDetailFormatter'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     applicabilityCheckingNonStaticPropertyAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider
@@ -224,6 +227,7 @@ services:
             - '@expressionTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@completionItemDetailFormatter'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     applicabilityCheckingStaticPropertyAutocompletionProvider:
         class: Serenata\Autocompletion\Providers\ApplicabilityCheckingAutocompletionProvider

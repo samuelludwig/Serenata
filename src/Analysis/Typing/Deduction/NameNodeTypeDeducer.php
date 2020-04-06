@@ -2,6 +2,9 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
@@ -14,6 +17,9 @@ use Serenata\Analysis\Typing\TypeNormalizerInterface;
 use Serenata\Common\FilePosition;
 
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
+
+use Serenata\Parsing\InvalidTypeNode;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\NodeHelpers;
 
@@ -63,7 +69,7 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
     /**
      * @inheritDoc
      */
-    public function deduce(TypeDeductionContext $context): array
+    public function deduce(TypeDeductionContext $context): TypeNode
     {
         if (!$context->getNode() instanceof Node\Name) {
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
@@ -71,36 +77,38 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $nameString = NodeHelpers::fetchClassName($context->getNode());
 
-        if ($nameString === 'static' || $nameString === 'self') {
+        if ($nameString === SpecialDocblockTypeIdentifierLiteral::STATIC_ ||
+            $nameString === SpecialDocblockTypeIdentifierLiteral::SELF_
+        ) {
             $currentClass = $this->filePositionClasslikeDeterminer->determine(
                 $context->getTextDocumentItem(),
                 $context->getPosition()
             );
 
             if ($currentClass === null) {
-                return [];
+                return new InvalidTypeNode();
             }
 
-            return [$this->typeNormalizer->getNormalizedFqcn($currentClass)];
-        } elseif ($nameString === 'parent') {
+            return new IdentifierTypeNode($this->typeNormalizer->getNormalizedFqcn($currentClass));
+        } elseif ($nameString === SpecialDocblockTypeIdentifierLiteral::PARENT_) {
             $currentClassName = $this->filePositionClasslikeDeterminer->determine(
                 $context->getTextDocumentItem(),
                 $context->getPosition()
             );
 
             if ($currentClassName === null) {
-                return [];
+                return new InvalidTypeNode();
             }
 
             $classInfo = $this->classlikeInfoBuilder->build($currentClassName);
 
             if (count($classInfo['parents']) === 0) {
-                return [];
+                return new InvalidTypeNode();
             }
 
             $type = $classInfo['parents'][0];
 
-            return [$this->typeNormalizer->getNormalizedFqcn($type)];
+            return new IdentifierTypeNode($this->typeNormalizer->getNormalizedFqcn($type));
         }
 
         $filePosition = new FilePosition(
@@ -108,8 +116,8 @@ final class NameNodeTypeDeducer extends AbstractNodeTypeDeducer
             $context->getPosition()
         );
 
-        $fqcn = $this->structureAwareNameResolverFactory->create($filePosition)->resolve($nameString, $filePosition);
-
-        return [$fqcn];
+        return new IdentifierTypeNode(
+            $this->structureAwareNameResolverFactory->create($filePosition)->resolve($nameString, $filePosition)
+        );
     }
 }
