@@ -11,6 +11,7 @@ use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
+use Serenata\Parsing\InvalidTypeNode;
 use Serenata\Parsing\TypeNodeUnwrapper;
 use Serenata\Parsing\DocblockTypeParserInterface;
 
@@ -81,6 +82,10 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
                     $info['constants'][$context->getNode()->name->name]['types']
                 ))));
             }
+        }
+
+        if ($types === []) {
+            return new InvalidTypeNode();
         }
 
         return TypeNodeUnwrapper::unwrap(new UnionTypeNode($types));

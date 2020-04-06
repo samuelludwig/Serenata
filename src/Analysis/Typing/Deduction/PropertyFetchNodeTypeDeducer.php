@@ -108,6 +108,10 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             return $localType;
         }
 
+        if ($types === []) {
+            return new InvalidTypeNode();
+        }
+
         $types = array_map(function (string $type): TypeNode {
             return $this->docblockTypeParser->parse($type);
         }, $types);
