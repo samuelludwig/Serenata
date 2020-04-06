@@ -3,11 +3,12 @@
 namespace Serenata\Analysis\Typing\Deduction;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use PhpParser\Node;
 
-use Serenata\Analysis\Typing\TypeAnalyzer;
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
 
 use Serenata\Analysis\Visiting\ExpressionTypeInfo;
@@ -22,6 +23,8 @@ use Serenata\Parsing\InvalidTypeNode;
 use Serenata\Parsing\TypeNodeUnwrapper;
 use Serenata\Parsing\DocblockTypeParserInterface;
 use Serenata\Parsing\ToplevelTypeExtractorInterface;
+use Serenata\Parsing\DocblockTypeTransformerInterface;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\PositionEncoding;
 use Serenata\Utility\TextDocumentItem;
@@ -34,11 +37,6 @@ use Serenata\Utility\TextDocumentItem;
  */
 final class LocalTypeScanner
 {
-    /**
-     * @var TypeAnalyzer
-     */
-    private $typeAnalyzer;
-
     /**
      * @var NodeTypeDeducerInterface
      */
@@ -75,26 +73,30 @@ final class LocalTypeScanner
     private $typeResolvingDocblockTypeTransformer;
 
     /**
-     * @param TypeAnalyzer                               $typeAnalyzer
-     * @param NodeTypeDeducerInterface                   $nodeTypeDeducer
-     * @param ForeachNodeLoopValueTypeDeducer            $foreachNodeLoopValueTypeDeducer
-     * @param FunctionLikeParameterTypeDeducer           $functionLikeParameterTypeDeducer
-     * @param ExpressionLocalTypeAnalyzer                $expressionLocalTypeAnalyzer
-     * @param DocblockTypeParserInterface                $docblockTypeParser
-     * @param ToplevelTypeExtractorInterface             $toplevelTypeExtractor
-     * @param $typeResolvingDocblockTypeTransformer      $TypeResolvingDocblockTypeTransformer
+     * @var DocblockTypeTransformerInterface
+     */
+    private $docblockTypeTransformer;
+
+    /**
+     * @param NodeTypeDeducerInterface             $nodeTypeDeducer
+     * @param ForeachNodeLoopValueTypeDeducer      $foreachNodeLoopValueTypeDeducer
+     * @param FunctionLikeParameterTypeDeducer     $functionLikeParameterTypeDeducer
+     * @param ExpressionLocalTypeAnalyzer          $expressionLocalTypeAnalyzer
+     * @param DocblockTypeParserInterface          $docblockTypeParser
+     * @param ToplevelTypeExtractorInterface       $toplevelTypeExtractor
+     * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
+     * @param DocblockTypeTransformerInterface     $docblockTypeTransformer
      */
     public function __construct(
-        TypeAnalyzer $typeAnalyzer,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ForeachNodeLoopValueTypeDeducer $foreachNodeLoopValueTypeDeducer,
         FunctionLikeParameterTypeDeducer $functionLikeParameterTypeDeducer,
         ExpressionLocalTypeAnalyzer $expressionLocalTypeAnalyzer,
         DocblockTypeParserInterface $docblockTypeParser,
         ToplevelTypeExtractorInterface $toplevelTypeExtractor,
-        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
+        TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
+        DocblockTypeTransformerInterface $docblockTypeTransformer
     ) {
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->foreachNodeLoopValueTypeDeducer = $foreachNodeLoopValueTypeDeducer;
         $this->functionLikeParameterTypeDeducer = $functionLikeParameterTypeDeducer;
@@ -102,6 +104,7 @@ final class LocalTypeScanner
         $this->docblockTypeParser = $docblockTypeParser;
         $this->toplevelTypeExtractor = $toplevelTypeExtractor;
         $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
+        $this->docblockTypeTransformer = $docblockTypeTransformer;
     }
 
     /**
@@ -156,7 +159,7 @@ final class LocalTypeScanner
         Position $position,
         array $defaultTypes = []
     ): TypeNode {
-        $types = $this->getUnreferencedTypes(
+        $type = $this->getUnreferencedTypes(
             $expressionTypeInfoMap,
             $expression,
             $textDocumentItem,
@@ -168,20 +171,15 @@ final class LocalTypeScanner
 
         $resolvedTypes = [];
 
-        foreach ($types as $type) {
-            $typeLine = $expressionTypeInfo->hasBestTypeOverrideMatch() ?
-                $expressionTypeInfo->getBestTypeOverrideMatchLine() :
-                $position->getLine();
+        $typeLine = $expressionTypeInfo->hasBestTypeOverrideMatch() ?
+            $expressionTypeInfo->getBestTypeOverrideMatchLine() :
+            $position->getLine();
 
-            $filePosition = new FilePosition($textDocumentItem->getUri(), new Position($typeLine, 0));
+        assert($typeLine !== null);
 
-            $type = $this->docblockTypeParser->parse($type);
-            $type = $this->typeResolvingDocblockTypeTransformer->resolve($type, $filePosition);
+        $filePosition = new FilePosition($textDocumentItem->getUri(), new Position($typeLine, 0));
 
-            $resolvedTypes[] = $type;
-        }
-
-        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($resolvedTypes));
+        return $this->typeResolvingDocblockTypeTransformer->resolve($type, $filePosition);
     }
 
     /**
@@ -194,7 +192,7 @@ final class LocalTypeScanner
      * @param Position                  $position
      * @param string[]                  $defaultTypes
      *
-     * @return string[]
+     * @return TypeNode
      */
     private function getUnreferencedTypes(
         ExpressionTypeInfoMap $expressionTypeInfoMap,
@@ -202,7 +200,7 @@ final class LocalTypeScanner
         TextDocumentItem $textDocumentItem,
         Position $position,
         array $defaultTypes = []
-    ): array {
+    ): TypeNode {
         $expressionTypeInfo = $expressionTypeInfoMap->get($expression);
 
         $types = $this->getTypes($expressionTypeInfo, $expression, $textDocumentItem, $position, $defaultTypes);
@@ -210,31 +208,36 @@ final class LocalTypeScanner
         $unreferencedTypes = [];
 
         $selfType = $this->deduceTypesFromSelf($textDocumentItem, $position);
-        $selfType = array_shift($selfType);
-        $selfType = $selfType !== null ? $selfType : '';
-
         $staticType = $this->deduceTypesFromStatic($textDocumentItem, $position);
-        $staticType = array_shift($staticType);
-        $staticType = $staticType !== null ? $staticType : '';
 
-        foreach ($types as $type) {
-            $type = $this->typeAnalyzer->interchangeSelfWithActualType($type, $selfType);
-            $type = $this->typeAnalyzer->interchangeStaticWithActualType($type, $staticType);
-            $type = $this->typeAnalyzer->interchangeThisWithActualType($type, $staticType);
+        foreach ($types as $typeString) {
+            $type = $this->docblockTypeParser->parse($typeString);
 
-            $unreferencedTypes[] = $type;
+            $unreferencedTypes[] = $this->docblockTypeTransformer->transform($type, function (TypeNode $node) use ($selfType, $staticType): TypeNode {
+                if ($node instanceof IdentifierTypeNode) {
+                    if ($node->name === SpecialDocblockTypeIdentifierLiteral::SELF_) {
+                        return new IdentifierTypeNode($selfType);
+                    } elseif ($node->name === SpecialDocblockTypeIdentifierLiteral::STATIC_) {
+                        return new IdentifierTypeNode($staticType);
+                    }
+                } elseif ($node instanceof ThisTypeNode) {
+                    return new IdentifierTypeNode($staticType);
+                }
+
+                return $node;
+            });
         }
 
-        return $unreferencedTypes;
+        return TypeNodeUnwrapper::unwrap(new UnionTypeNode($unreferencedTypes));
     }
 
     /**
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @return string[]
+     * @return TypeNode
      */
-    private function deduceTypesFromSelf(TextDocumentItem $textDocumentItem, Position $position): array
+    private function deduceTypesFromSelf(TextDocumentItem $textDocumentItem, Position $position): TypeNode
     {
         $dummyNode = new Parsing\Node\Keyword\Self_();
         $dummyNode->setAttribute(
@@ -242,24 +245,20 @@ final class LocalTypeScanner
             $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
         );
 
-        $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $dummyNode,
             $textDocumentItem,
             $position
         ));
-
-        return array_map(function (TypeNode $nestedType): string {
-            return (string) $nestedType;
-        }, $this->toplevelTypeExtractor->extract($type));
     }
 
     /**
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @return string[]
+     * @return TypeNode
      */
-    private function deduceTypesFromStatic(TextDocumentItem $textDocumentItem, Position $position): array
+    private function deduceTypesFromStatic(TextDocumentItem $textDocumentItem, Position $position): TypeNode
     {
         $dummyNode = new Parsing\Node\Keyword\Static_();
         $dummyNode->setAttribute(
@@ -267,15 +266,11 @@ final class LocalTypeScanner
             $position->getAsByteOffsetInString($textDocumentItem->getText(), PositionEncoding::VALUE)
         );
 
-        $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        return $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $dummyNode,
             $textDocumentItem,
             $position
         ));
-
-        return array_map(function (TypeNode $nestedType): string {
-            return (string) $nestedType;
-        }, $this->toplevelTypeExtractor->extract($type));
     }
 
     /**

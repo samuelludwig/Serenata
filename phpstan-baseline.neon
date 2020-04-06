@@ -256,16 +256,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$typeResolvingDocblockTypeTransformer      \\$TypeResolvingDocblockTypeTransformer\\)\\: Unexpected token \"\\$typeResolvingDocblockTypeTransformer\", expected type at offset 587$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
-			message: "#^Parameter \\#1 \\$line of class Serenata\\\\Common\\\\Position constructor expects int, int\\|null given\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 5
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php

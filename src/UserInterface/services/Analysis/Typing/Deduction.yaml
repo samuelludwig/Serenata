@@ -16,7 +16,6 @@ services:
     localTypeScanner:
         class: Serenata\Analysis\Typing\Deduction\LocalTypeScanner
         arguments:
-            - '@typeAnalyzer'
             - '@nodeTypeDeducer'
             - '@foreachNodeLoopValueTypeDeducer'
             - '@functionLikeParameterTypeDeducer'
@@ -24,6 +23,7 @@ services:
             - '@docblockTypeParser'
             - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
             - '@typeResolvingDocblockTypeTransformer'
+            - '@docblockTypeTransformer'
 
     variableNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\VariableNodeTypeDeducer
