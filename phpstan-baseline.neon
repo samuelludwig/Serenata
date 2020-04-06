@@ -281,11 +281,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/MethodCallNodeMetaTypeDeducer.php
 
 		-
-			message: "#^Static call to instance method Serenata\\\\Parsing\\\\SpecialDocblockTypeIdentifierLiteral\\:\\:getValues\\(\\)\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/MethodCallNodeMetaTypeDeducer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
@@ -304,11 +299,6 @@ parameters:
 			message: "#^Unused @throws RuntimeException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/FileClasslikeListProviderCachingDecorator.php
-
-		-
-			message: "#^Static call to instance method Serenata\\\\Parsing\\\\SpecialDocblockTypeIdentifierLiteral\\:\\:getValues\\(\\)\\.$#"
-			count: 1
-			path: src/Analysis/Typing/TypeAnalyzer.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
