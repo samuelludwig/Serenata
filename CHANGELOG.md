@@ -16,7 +16,7 @@
 ```php
 <?php
 
-/** @var \DateTime|\Locale $a */
+/** @var \DateTime&\Locale $a */
 $a-> // Autocompletion for both DateTime and Locale are shown.
 ```
 
