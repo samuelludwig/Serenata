@@ -9,6 +9,9 @@ use Serenata\Common\FilePosition;
 use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
 use Serenata\NameQualificationUtilities\StructureAwareNameResolverFactoryInterface;
 
+use Serenata\Parsing\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeTransformerInterface;
+
 /**
  * Factory that creates instances of a {@see DocblockPositionalNameResolver}.
  */
@@ -25,13 +28,31 @@ final class DocblockPositionalNameResolverFactory implements StructureAwareNameR
     private $typeAnalyzer;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
+     * @var DocblockTypeTransformerInterface
+     */
+    private $docblockTypeTransformer;
+
+    /**
      * @param StructureAwareNameResolverFactoryInterface $delegate
      * @param TypeAnalyzer                               $typeAnalyzer
+     * @param DocblockTypeParserInterface                $docblockTypeParser
+     * @param DocblockTypeTransformerInterface           $docblockTypeTransformer
      */
-    public function __construct(StructureAwareNameResolverFactoryInterface $delegate, TypeAnalyzer $typeAnalyzer)
-    {
+    public function __construct(
+        StructureAwareNameResolverFactoryInterface $delegate,
+        TypeAnalyzer $typeAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        DocblockTypeTransformerInterface $docblockTypeTransformer
+    ) {
         $this->delegate = $delegate;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->docblockTypeTransformer = $docblockTypeTransformer;
     }
 
     /**
@@ -41,6 +62,11 @@ final class DocblockPositionalNameResolverFactory implements StructureAwareNameR
     {
         $delegate = $this->delegate->create($filePosition);
 
-        return new DocblockPositionalNameResolver($delegate, $this->typeAnalyzer);
+        return new DocblockPositionalNameResolver(
+            $delegate,
+            $this->typeAnalyzer,
+            $this->docblockTypeParser,
+            $this->docblockTypeTransformer
+        );
     }
 }

@@ -2,12 +2,20 @@
 
 namespace Serenata\Analysis;
 
+use Closure;
+
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
 use Serenata\Common\FilePosition;
 
 use Serenata\NameQualificationUtilities\NameKind;
 use Serenata\NameQualificationUtilities\PositionalNameResolverInterface;
+
+use Serenata\Parsing\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeTransformerInterface;
 
 /**
  * Name resolver that can resolve docblock names to their FQCN.
@@ -28,13 +36,31 @@ final class DocblockPositionalNameResolver implements PositionalNameResolverInte
     private $typeAnalyzer;
 
     /**
-     * @param PositionalNameResolverInterface $delegate
-     * @param TypeAnalyzer                    $typeAnalyzer
+     * @var DocblockTypeParserInterface
      */
-    public function __construct(PositionalNameResolverInterface $delegate, TypeAnalyzer $typeAnalyzer)
-    {
+    private $docblockTypeParser;
+
+    /**
+     * @var DocblockTypeTransformerInterface
+     */
+    private $docblockTypeTransformer;
+
+    /**
+     * @param PositionalNameResolverInterface  $delegate
+     * @param TypeAnalyzer                     $typeAnalyzer
+     * @param DocblockTypeParserInterface      $docblockTypeParser
+     * @param DocblockTypeTransformerInterface $docblockTypeTransformer
+     */
+    public function __construct(
+        PositionalNameResolverInterface $delegate,
+        TypeAnalyzer $typeAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        DocblockTypeTransformerInterface $docblockTypeTransformer
+    ) {
         $this->delegate = $delegate;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->docblockTypeTransformer = $docblockTypeTransformer;
     }
 
     /**
@@ -42,14 +68,25 @@ final class DocblockPositionalNameResolver implements PositionalNameResolverInte
      */
     public function resolve(string $name, FilePosition $filePosition, string $kind = NameKind::CLASSLIKE): string
     {
-        if ($this->typeAnalyzer->isArraySyntaxTypeHint($name)) {
-            $valueType = $this->typeAnalyzer->getValueTypeFromArraySyntaxTypeHint($name);
+        return (string) $this->docblockTypeTransformer->transform(
+            $this->docblockTypeParser->parse($name),
+            $this->createTransformer($filePosition, $kind)
+        );
+    }
 
-            $resolvedValueType = $this->delegate->resolve($valueType, $filePosition, $kind);
+    /**
+     * @param FilePosition $filePosition
+     *
+     * @return Closure
+     */
+    private function createTransformer(FilePosition $filePosition, string $kind): Closure
+    {
+        return function (TypeNode $type) use ($filePosition, $kind): TypeNode {
+            if ($type instanceof IdentifierTypeNode && $this->typeAnalyzer->isClassType((string) $type)) {
+                return new IdentifierTypeNode($this->delegate->resolve((string) $type, $filePosition, $kind));
+            }
 
-            return $resolvedValueType . '[]';
-        }
-
-        return $this->delegate->resolve($name, $filePosition, $kind);
+            return $type;
+        };
     }
 }

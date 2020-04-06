@@ -54,6 +54,8 @@ services:
         arguments:
             - '@structureAwareNameResolverFactory.specialNameIgnoringPositionalNameResolverBackend'
             - '@typeAnalyzer'
+            - '@docblockTypeParser'
+            - '@docblockTypeTransformer'
 
     structureAwareNameResolverFactory:
         alias: structureAwareNameResolverFactory.docblockPositionalNameResolverBackend

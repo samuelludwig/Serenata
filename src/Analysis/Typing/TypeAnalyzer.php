@@ -70,24 +70,6 @@ final class TypeAnalyzer implements TypeNormalizerInterface
     }
 
     /**
-     * @param string $type
-     *
-     * @return string
-     *
-     * @deprecated Cannot handle parantheses or extended docblock types. Use the docblock type parser service instead.
-     */
-    public function getValueTypeFromArraySyntaxTypeHint(string $type): string
-    {
-        $matches = [];
-
-        if (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type, $matches) === 1) {
-            return $matches[1];
-        }
-
-        throw new UnexpectedValueException('"' . $type . '" is not an array type hint');
-    }
-
-    /**
      * Takes an actual (single) docblock type that contains self and replaces it with the designated type.
      *
      * @param string $docblockType
@@ -157,5 +139,23 @@ final class TypeAnalyzer implements TypeNormalizerInterface
         }
 
         return $docblockType;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     *
+     * @deprecated Cannot handle parantheses or extended docblock types. Use the docblock type parser service instead.
+     */
+    private function getValueTypeFromArraySyntaxTypeHint(string $type): string
+    {
+        $matches = [];
+
+        if (preg_match(self::ARRAY_TYPE_HINT_REGEX, $type, $matches) === 1) {
+            return $matches[1];
+        }
+
+        throw new UnexpectedValueException('"' . $type . '" is not an array type hint');
     }
 }

@@ -10,13 +10,8 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 interface DocblockTypeTransformerInterface
 {
     /**
-     * @param S             $docblockType
-     * @param callable(S):T $transformer  Closure that should return a new instance of a {@see TypeNode}.
-     *
-     * @return T
-     *
-     * @template S of TypeNode
-     * @template T of TypeNode
+     * @param TypeNode                    $docblockType
+     * @param callable(TypeNode):TypeNode $transformer  Closure that should return a new instance of a {@see TypeNode}.
      */
     public function transform(TypeNode $docblockType, callable $transformer): TypeNode;
 }
