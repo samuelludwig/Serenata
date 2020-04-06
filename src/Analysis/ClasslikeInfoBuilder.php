@@ -5,8 +5,16 @@ namespace Serenata\Analysis;
 use ArrayObject;
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+
 use Serenata\Indexing\Structures;
 use Serenata\Indexing\StorageInterface;
+
+use Serenata\Parsing\DocblockTypeParserInterface;
+use Serenata\Parsing\DocblockTypeTransformerInterface;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 /**
  * Builds a complete structure of data for a classlike, including children and members.
@@ -61,6 +69,16 @@ use Serenata\Indexing\StorageInterface;
     private $typeAnalyzer;
 
     /**
+     * @var DocblockTypeParserInterface
+     */
+    private $docblockTypeParser;
+
+    /**
+     * @var DocblockTypeTransformerInterface
+     */
+    private $docblockTypeTransformer;
+
+    /**
      * @var string[]
      */
     private $resolutionStack = [];
@@ -75,6 +93,8 @@ use Serenata\Indexing\StorageInterface;
      * @param Relations\TraitUsageResolver              $traitUsageResolver
      * @param StorageInterface                          $storage
      * @param Typing\TypeAnalyzer                       $typeAnalyzer
+     * @param DocblockTypeParserInterface               $docblockTypeParser
+     * @param DocblockTypeTransformerInterface          $docblockTypeTransformer
      */
     public function __construct(
         Conversion\ClasslikeConstantConverter $classlikeConstantConverter,
@@ -85,7 +105,9 @@ use Serenata\Indexing\StorageInterface;
         Relations\InterfaceImplementationResolver $interfaceImplementationResolver,
         Relations\TraitUsageResolver $traitUsageResolver,
         StorageInterface $storage,
-        Typing\TypeAnalyzer $typeAnalyzer
+        Typing\TypeAnalyzer $typeAnalyzer,
+        DocblockTypeParserInterface $docblockTypeParser,
+        DocblockTypeTransformerInterface $docblockTypeTransformer
     ) {
         $this->classlikeConstantConverter = $classlikeConstantConverter;
         $this->propertyConverter = $propertyConverter;
@@ -98,6 +120,8 @@ use Serenata\Indexing\StorageInterface;
 
         $this->storage = $storage;
         $this->typeAnalyzer = $typeAnalyzer;
+        $this->docblockTypeParser = $docblockTypeParser;
+        $this->docblockTypeTransformer = $docblockTypeTransformer;
     }
 
     /// @inherited
@@ -371,13 +395,20 @@ use Serenata\Indexing\StorageInterface;
      */
     private function resolveSelfTypesTo(ArrayObject $result, $elementFqcn): void
     {
-        $typeAnalyzer = $this->typeAnalyzer;
-
-        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer): void {
+        $this->walkTypes($result, function (array &$type) use ($elementFqcn): void {
             if ($type['resolvedType'] !== null) {
-                $type['resolvedType'] = $typeAnalyzer->interchangeSelfWithActualType(
-                    $type['resolvedType'],
-                    $elementFqcn
+                // Not terribly efficient going back and forth. At some point should refactor the converters to leave
+                // AST intact and not cast to string, so this can be skipped.
+                $type['resolvedType'] = (string) $this->docblockTypeTransformer->transform(
+                    $this->docblockTypeParser->parse($type['resolvedType']),
+                    function (TypeNode $node) use ($elementFqcn): TypeNode {
+                        if ($node instanceof IdentifierTypeNode &&
+                            $node->name === SpecialDocblockTypeIdentifierLiteral::SELF_) {
+                            return new IdentifierTypeNode($elementFqcn);
+                        }
+
+                        return $node;
+                    }
                 );
             }
         });
@@ -389,11 +420,22 @@ use Serenata\Indexing\StorageInterface;
      */
     private function resolveStaticTypesTo(ArrayObject $result, $elementFqcn): void
     {
-        $typeAnalyzer = $this->typeAnalyzer;
+        $this->walkTypes($result, function (array &$type) use ($elementFqcn): void {
+            // Not terribly efficient going back and forth. At some point should refactor the converters to leave
+            // AST intact and not cast to string, so this can be skipped.
+            $replacedThingy = (string) $this->docblockTypeTransformer->transform(
+                $this->docblockTypeParser->parse($type['type']),
+                function (TypeNode $node) use ($elementFqcn): TypeNode {
+                    if ($node instanceof IdentifierTypeNode &&
+                        $node->name === SpecialDocblockTypeIdentifierLiteral::STATIC_) {
+                        return new IdentifierTypeNode($elementFqcn);
+                    } elseif ($node instanceof ThisTypeNode) {
+                        return new IdentifierTypeNode($elementFqcn);
+                    }
 
-        $this->walkTypes($result, function (array &$type) use ($elementFqcn, $typeAnalyzer): void {
-            $replacedThingy = $typeAnalyzer->interchangeStaticWithActualType($type['type'], $elementFqcn);
-            $replacedThingy = $typeAnalyzer->interchangeThisWithActualType($replacedThingy, $elementFqcn);
+                    return $node;
+                }
+            );
 
             if ($type['type'] !== $replacedThingy) {
                 $type['resolvedType'] = $replacedThingy;

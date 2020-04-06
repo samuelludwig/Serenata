@@ -67,6 +67,8 @@ services:
 
     typeAnalyzer:
         class: Serenata\Analysis\Typing\TypeAnalyzer
+        arguments:
+            - '@docblockTypeParser'
 
     docblockAnalyzer:
         class: Serenata\Analysis\DocblockAnalyzer
@@ -256,6 +258,8 @@ services:
             - '@traitUsageResolver'
             - '@storage'
             - '@typeAnalyzer'
+            - '@docblockTypeParser'
+            - '@docblockTypeTransformer'
 
     nodeAtOffsetLocator.raw:
         class: Serenata\Analysis\NodeAtOffsetLocator
