@@ -120,7 +120,7 @@ class SpecialDocblockTypeIdentifierLiteral
     /**
      * @return string[]
      */
-    public function getValues(): array
+    public static function getValues(): array
     {
         return [
             self::STRING_,
