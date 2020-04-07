@@ -256,12 +256,7 @@ parameters:
 			path: src/Analysis/Typing/Deduction/ExpressionTypeDeducer.php
 
 		-
-			message: "#^Foreach overwrites \\$type with its value variable\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
-
-		-
-			message: "#^Instanceof between PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode and PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode will always evaluate to true\\.$#"
+			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
 
