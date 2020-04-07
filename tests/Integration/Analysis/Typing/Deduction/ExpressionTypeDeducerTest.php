@@ -525,9 +525,9 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testForeachWithGenericSequentialArraySyntax(): void
+    public function testForeachValueWithGenericSequentialArraySyntax(): void
     {
-        $output = $this->deduceTypesFromExpression('ForeachWithGenericSequentialArraySyntax.phpt', '$a');
+        $output = $this->deduceTypesFromExpression('ForeachValueWithGenericSequentialArraySyntax.phpt', '$a');
 
         static::assertSame('\DateTime', (string) $output);
     }
@@ -535,9 +535,9 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testForeachWithGenericAssociativeArraySyntax(): void
+    public function testForeachValueWithGenericAssociativeArraySyntax(): void
     {
-        $output = $this->deduceTypesFromExpression('ForeachWithGenericAssociativeArraySyntax.phpt', '$a');
+        $output = $this->deduceTypesFromExpression('ForeachValueWithGenericAssociativeArraySyntax.phpt', '$a');
 
         static::assertSame('\DateTime', (string) $output);
     }
@@ -545,9 +545,9 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testForeachWithStaticMethodCallReturningArrayWithSelfObjects(): void
+    public function testForeachValueWithStaticMethodCallReturningArrayWithSelfObjects(): void
     {
-        $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithSelfObjects.phpt', '$b');
+        $output = $this->deduceTypesFromExpression('ForeachValueWithStaticMethodCallReturningArrayWithSelfObjects.phpt', '$b');
 
         static::assertSame('\A\B', (string) $output);
     }
@@ -555,9 +555,9 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testForeachWithStaticMethodCallReturningArrayWithStaticObjects(): void
+    public function testForeachValueWithStaticMethodCallReturningArrayWithStaticObjects(): void
     {
-        $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithStaticObjects.phpt', '$b');
+        $output = $this->deduceTypesFromExpression('ForeachValueWithStaticMethodCallReturningArrayWithStaticObjects.phpt', '$b');
 
         static::assertSame('\A\B', (string) $output);
     }
