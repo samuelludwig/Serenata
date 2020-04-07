@@ -18,7 +18,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTypeOverrideAnnotations(): void
+    public function testTypeOverrideAnnotations(): void
     {
         $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$a');
 
@@ -71,7 +71,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesFunctionTypeHints(): void
+    public function testFunctionTypeHints(): void
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHint.phpt', '$b');
 
@@ -81,7 +81,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNullableFunctionTypeHintsViaDefaultValue(): void
+    public function testNullableFunctionTypeHintsViaDefaultValue(): void
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintDefaultValue.phpt', '$b');
 
@@ -90,7 +90,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNullableFunctionTypeHintsViaNullableSyntax(): void
+    public function testNullableFunctionTypeHintsViaNullableSyntax(): void
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintNullableSyntax.phpt', '$b');
 
@@ -100,7 +100,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesFunctionDocblocks(): void
+    public function testFunctionDocblocks(): void
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterDocblock.phpt', '$b');
 
@@ -110,7 +110,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesMethodTypeHints(): void
+    public function testMethodTypeHints(): void
     {
         $output = $this->deduceTypesFromExpression('MethodParameterTypeHint.phpt', '$b');
 
@@ -120,7 +120,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesMethodDocblocks(): void
+    public function testMethodDocblocks(): void
     {
         $output = $this->deduceTypesFromExpression('MethodParameterDocblock.phpt', '$b');
 
@@ -130,7 +130,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesClosureTypeHints(): void
+    public function testClosureTypeHints(): void
     {
         $output = $this->deduceTypesFromExpression('ClosureParameterTypeHint.phpt', '$b');
 
@@ -180,7 +180,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesCatchBlockTypeHints(): void
+    public function testCatchBlockTypeHints(): void
     {
         $output = $this->deduceTypesFromExpression('CatchBlockTypeHint.phpt', '$e');
 
@@ -190,7 +190,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithInstanceof(): void
+    public function testIfStatementWithInstanceof(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofIf.phpt', '$b');
 
@@ -200,7 +200,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndProperty(): void
+    public function testIfStatementWithInstanceofAndProperty(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithProperty.phpt', '$this->foo');
 
@@ -210,7 +210,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndPropertyWithParentKeyword(): void
+    public function testIfStatementWithInstanceofAndPropertyWithParentKeyword(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithPropertyWithParentKeyword.phpt', 'parent::$foo');
 
@@ -220,7 +220,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndStaticPropertyWithClassName(): void
+    public function testIfStatementWithInstanceofAndStaticPropertyWithClassName(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithClassName.phpt', 'Test::$foo');
 
@@ -230,7 +230,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndStaticPropertyWithSelfKeyword(): void
+    public function testIfStatementWithInstanceofAndStaticPropertyWithSelfKeyword(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithSelfKeyword.phpt', 'self::$foo');
 
@@ -240,7 +240,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithInstanceofAndStaticPropertyWithStaticKeyword(): void
+    public function testIfStatementWithInstanceofAndStaticPropertyWithStaticKeyword(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithStaticKeyword.phpt', 'static::$foo');
 
@@ -250,7 +250,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndVariableInsideCondition(): void
+    public function testComplexIfStatementWithInstanceofAndVariableInsideCondition(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfVariableInsideCondition.phpt', '$b');
 
@@ -260,7 +260,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndAnd(): void
+    public function testComplexIfStatementWithInstanceofAndAnd(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfAnd.phpt', '$b');
 
@@ -270,7 +270,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithInstanceofAndOr(): void
+    public function testComplexIfStatementWithInstanceofAndOr(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfOr.phpt', '$b');
 
@@ -300,7 +300,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNestedIfStatementWithInstanceofAndNegation(): void
+    public function testNestedIfStatementWithInstanceofAndNegation(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIfWithNegation.phpt', '$b');
 
@@ -310,7 +310,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNestedIfStatementWithInstanceofAndReassignment(): void
+    public function testNestedIfStatementWithInstanceofAndReassignment(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIfReassignment.phpt', '$b');
 
@@ -320,7 +320,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithNotInstanceof(): void
+    public function testIfStatementWithNotInstanceof(): void
     {
         $output = $this->deduceTypesFromExpression('IfNotInstanceof.phpt', '$b');
 
@@ -330,7 +330,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithNotStrictlyEqualsNull(): void
+    public function testComplexIfStatementWithNotStrictlyEqualsNull(): void
     {
         $output = $this->deduceTypesFromExpression('IfNotStrictlyEqualsNull.phpt', '$b');
 
@@ -340,7 +340,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithNotLooselyEqualsNull(): void
+    public function testComplexIfStatementWithNotLooselyEqualsNull(): void
     {
         $output = $this->deduceTypesFromExpression('IfNotLooselyEqualsNull.phpt', '$b');
 
@@ -350,7 +350,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithStrictlyEqualsNull(): void
+    public function testComplexIfStatementWithStrictlyEqualsNull(): void
     {
         $output = $this->deduceTypesFromExpression('IfStrictlyEqualsNull.phpt', '$b');
 
@@ -360,7 +360,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithLooselyEqualsNull(): void
+    public function testComplexIfStatementWithLooselyEqualsNull(): void
     {
         $output = $this->deduceTypesFromExpression('IfLooselyEqualsNull.phpt', '$b');
 
@@ -370,7 +370,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithTruthy(): void
+    public function testIfStatementWithTruthy(): void
     {
         $output = $this->deduceTypesFromExpression('IfTruthy.phpt', '$b');
 
@@ -380,7 +380,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesIfStatementWithFalsy(): void
+    public function testIfStatementWithFalsy(): void
     {
         $output = $this->deduceTypesFromExpression('IfFalsy.phpt', '$b');
 
@@ -400,7 +400,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesComplexIfStatementWithVariableHandlingFunction(): void
+    public function testComplexIfStatementWithVariableHandlingFunction(): void
     {
         $output = $this->deduceTypesFromExpression('IfVariableHandlingFunction.phpt', '$b');
 
@@ -423,7 +423,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesElseIfStatementWithInstanceof(): void
+    public function testElseIfStatementWithInstanceof(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofElseIf.phpt', '$b');
 
@@ -463,7 +463,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTernaryExpressionWithInstanceof(): void
+    public function testTernaryExpressionWithInstanceof(): void
     {
         $output = $this->deduceTypesFromExpression('InstanceofTernary.phpt', '$b');
 
@@ -493,7 +493,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTernaryExpression(): void
+    public function testTernaryExpression(): void
     {
         $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$a');
 
@@ -515,7 +515,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesForeach(): void
+    public function testForeach(): void
     {
         $output = $this->deduceTypesFromExpression('Foreach.phpt', '$a');
 
@@ -525,7 +525,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesForeachWithGenericSequentialArraySyntax(): void
+    public function testForeachWithGenericSequentialArraySyntax(): void
     {
         $output = $this->deduceTypesFromExpression('ForeachWithGenericSequentialArraySyntax.phpt', '$a');
 
@@ -535,7 +535,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesForeachWithGenericAssociativeArraySyntax(): void
+    public function testForeachWithGenericAssociativeArraySyntax(): void
     {
         $output = $this->deduceTypesFromExpression('ForeachWithGenericAssociativeArraySyntax.phpt', '$a');
 
@@ -545,7 +545,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesForeachWithStaticMethodCallReturningArrayWithSelfObjects(): void
+    public function testForeachWithStaticMethodCallReturningArrayWithSelfObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithSelfObjects.phpt', '$b');
 
@@ -555,7 +555,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesForeachWithStaticMethodCallReturningArrayWithStaticObjects(): void
+    public function testForeachWithStaticMethodCallReturningArrayWithStaticObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ForeachWithStaticMethodCallReturningArrayWithStaticObjects.phpt', '$b');
 
@@ -565,7 +565,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesAssignments(): void
+    public function testAssignments(): void
     {
         $output = $this->deduceTypesFromExpression('Assignment.phpt', '$a');
 
@@ -623,7 +623,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesStaticPropertyAccess(): void
+    public function testStaticPropertyAccess(): void
     {
         $result = $this->deduceTypesFromExpression(
             'StaticPropertyAccess.phpt',
@@ -636,7 +636,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesSelf(): void
+    public function testSelf(): void
     {
         $result = $this->deduceTypesFromExpression(
             'Self.phpt',
@@ -649,7 +649,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesStatic(): void
+    public function testStatic(): void
     {
         $result = $this->deduceTypesFromExpression(
             'Static.phpt',
@@ -662,7 +662,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesParent(): void
+    public function testParent(): void
     {
         $result = $this->deduceTypesFromExpression(
             'Parent.phpt',
@@ -675,7 +675,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesThis(): void
+    public function testThis(): void
     {
         $result = $this->deduceTypesFromExpression(
             'This.phpt',
@@ -688,7 +688,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesVariables(): void
+    public function testVariables(): void
     {
         $result = $this->deduceTypesFromExpression(
             'Variable.phpt',
@@ -701,7 +701,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesGlobalFunctions(): void
+    public function testGlobalFunctions(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalFunction.phpt',
@@ -714,7 +714,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesUnqualifiedGlobalFunctions(): void
+    public function testUnqualifiedGlobalFunctions(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalFunction.phpt',
@@ -727,7 +727,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesGlobalFunctionsInNamespace(): void
+    public function testGlobalFunctionsInNamespace(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalFunctionInNamespace.phpt',
@@ -740,7 +740,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesUnqualifiedGlobalFunctionsInNamespace(): void
+    public function testUnqualifiedGlobalFunctionsInNamespace(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalFunctionInNamespace.phpt',
@@ -753,7 +753,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesGlobalConstants(): void
+    public function testGlobalConstants(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalConstant.phpt',
@@ -766,7 +766,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesUnqualifiedGlobalConstants(): void
+    public function testUnqualifiedGlobalConstants(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalConstant.phpt',
@@ -779,7 +779,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesGlobalConstantsInNamespace(): void
+    public function testGlobalConstantsInNamespace(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalConstantInNamespace.phpt',
@@ -792,7 +792,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesUnqualifiedGlobalConstantsInNamespace(): void
+    public function testUnqualifiedGlobalConstantsInNamespace(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalConstantInNamespace.phpt',
@@ -805,7 +805,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesGlobalConstantsAssignedToOtherGlobalConstants(): void
+    public function testGlobalConstantsAssignedToOtherGlobalConstants(): void
     {
         $result = $this->deduceTypesFromExpression(
             'GlobalConstant.phpt',
@@ -818,7 +818,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesClosures(): void
+    public function testClosures(): void
     {
         $result = $this->deduceTypesFromExpression(
             'Closure.phpt',
@@ -831,7 +831,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesArrowFunctionClosures(): void
+    public function testArrowFunctionClosures(): void
     {
         $result = $this->deduceTypesFromExpression(
             'ArrowFunctionClosure.phpt',
@@ -844,7 +844,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithObjects(): void
+    public function testTypeOfElementsOfArrayWithObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjects.phpt', '$b');
 
@@ -854,7 +854,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesArrayElementOfGenericAssociativeArrayWithObjects(): void
+    public function testArrayElementOfGenericAssociativeArrayWithObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfGenericAssociativeArrayWithObjects.phpt', '$b');
 
@@ -864,7 +864,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesArrayElementOfGenericSequentialArrayWithObjects(): void
+    public function testArrayElementOfGenericSequentialArrayWithObjects(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfGenericSequentialArrayWithObjects.phpt', '$b');
 
@@ -874,7 +874,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTypeOfElementsOfString(): void
+    public function testTypeOfElementsOfString(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfString.phpt', '$b');
 
@@ -884,7 +884,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTypeOfElementsOfTypeNotAccessibleAsArray(): void
+    public function testTypeOfElementsOfTypeNotAccessibleAsArray(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfTypeNotAccessibleAsArray.phpt', '$b');
 
@@ -894,7 +894,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithObjectsOfMultipleTypes(): void
+    public function testTypeOfElementsOfArrayWithObjectsOfMultipleTypes(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjectsOfMultipleTypes.phpt', '$b');
 
@@ -904,7 +904,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesTypeOfElementsOfArrayWithSelfElementsReturnedByStaticMethodCall(): void
+    public function testTypeOfElementsOfArrayWithSelfElementsReturnedByStaticMethodCall(): void
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithSelfElementsFromStaticMethodCall.phpt', '$b');
 
@@ -914,7 +914,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNewWithStatic(): void
+    public function testNewWithStatic(): void
     {
         $result = $this->deduceTypesFromExpression(
             'NewWithKeyword.phpt',
@@ -927,7 +927,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNewWithSelf(): void
+    public function testNewWithSelf(): void
     {
         $result = $this->deduceTypesFromExpression(
             'NewWithKeyword.phpt',
@@ -940,7 +940,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesNewWithParent(): void
+    public function testNewWithParent(): void
     {
         $result = $this->deduceTypesFromExpression(
             'NewWithKeyword.phpt',
@@ -953,7 +953,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesClone(): void
+    public function testClone(): void
     {
         $result = $this->deduceTypesFromExpression(
             'Clone.phpt',
@@ -966,7 +966,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesLongerChains(): void
+    public function testLongerChains(): void
     {
         $result = $this->deduceTypesFromExpression(
             'LongerChain.phpt',
@@ -979,7 +979,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesScalarTypes(): void
+    public function testScalarTypes(): void
     {
         $file = 'ScalarType.phpt';
 
@@ -1033,7 +1033,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesQualifiedFunctionCallRelativeToImport(): void
+    public function testQualifiedFunctionCallRelativeToImport(): void
     {
         $output = $this->deduceTypesFromExpression('QualifiedFunctionCallRelativeToImport.phpt', '$test');
 
@@ -1043,7 +1043,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testCorrectlyAnalyzesQualifiedConstantFetchRelativeToImport(): void
+    public function testQualifiedConstantFetchRelativeToImport(): void
     {
         $output = $this->deduceTypesFromExpression('QualifiedConstantFetchRelativeToImport.phpt', '$test');
 
