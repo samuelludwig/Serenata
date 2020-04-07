@@ -32,12 +32,33 @@ $b = $a[1];
 $b-> // Autocompletion for B.
 ```
 
-* Deducing types from arrays using generic syntax when looping over elements of arrays now works:
+* Deducing types from arrays using generic syntax when looping over values now works:
 
 ```php
 <?php
 
 /** @var array<int,B> $a */
+foreach ($a as $b) {
+    $b-> // Autocompletion for B.
+}
+
+/** @var array<B> $a */
+foreach ($a as $b) {
+    $b-> // Autocompletion for B.
+}
+```
+
+* Deducing types from iterables using generic syntax when looping over values now works:
+
+```php
+<?php
+
+/** @var iterable<int,B> $a */
+foreach ($a as $b) {
+    $b-> // Autocompletion for B.
+}
+
+/** @var iterable<B> $a */
 foreach ($a as $b) {
     $b-> // Autocompletion for B.
 }

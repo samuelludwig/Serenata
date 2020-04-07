@@ -49,17 +49,19 @@ final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        $iteratedExpressionType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $context->getNode()->expr,
             $context->getTextDocumentItem()
         ));
 
-        foreach ($this->toplevelTypeExtractor->extract($type) as $type) {
+        foreach ($this->toplevelTypeExtractor->extract($iteratedExpressionType) as $type) {
             if ($type instanceof ArrayTypeNode) {
                 return $type->type;
             } elseif ($type instanceof GenericTypeNode &&
-                $type->type instanceof IdentifierTypeNode &&
-                $type->type->name === SpecialDocblockTypeIdentifierLiteral::ARRAY_
+                in_array($type->type->name, [
+                    SpecialDocblockTypeIdentifierLiteral::ARRAY_,
+                    SpecialDocblockTypeIdentifierLiteral::ITERABLE_,
+                ])
             ) {
                 if (isset($type->genericTypes[1])) {
                     return $type->genericTypes[1];

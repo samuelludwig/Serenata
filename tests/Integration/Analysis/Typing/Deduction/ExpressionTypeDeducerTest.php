@@ -565,6 +565,26 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testForeachValueWithGenericIterableWithSyntaxOneArgument(): void
+    {
+        $output = $this->deduceTypesFromExpression('ForeachValueWithGenericIterableSyntaxWithOneArgument.phpt', '$b');
+
+        static::assertSame('\A\B', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testForeachValueWithGenericIterableWithSyntaxTwoArguments(): void
+    {
+        $output = $this->deduceTypesFromExpression('ForeachValueWithGenericIterableSyntaxWithTwoArguments.phpt', '$b');
+
+        static::assertSame('\A\B', (string) $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testAssignments(): void
     {
         $output = $this->deduceTypesFromExpression('Assignment.phpt', '$a');
