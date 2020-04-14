@@ -6,6 +6,8 @@ use Generator;
 use LogicException;
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use Serenata\Analysis\CircularDependencyException;
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
@@ -74,7 +76,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             true
         );
 
-        $classlikeInfoElements = array_map(function (string $type): ?array {
+        $classlikeInfoElements = array_map(function (TypeNode $type): ?array {
             try {
                 return $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException|CircularDependencyException $e) {

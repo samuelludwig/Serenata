@@ -79,6 +79,38 @@ final class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocomp
     /**
      * @return void
      */
+    public function testIgnoresGenericTypesForNowAndUsesClasslikeBeforeGenericSyntaxInstead(): void
+    {
+        $fileName = 'IgnoresGenericTypesForNowAndUsesClasslikeBeforeGenericSyntaxInstead.phpt';
+
+        $output = $this->provide($fileName);
+
+        $suggestions = [
+            new CompletionItem(
+                'foo',
+                CompletionItemKind::PROPERTY,
+                'foo',
+                new TextEdit(
+                    new Range(
+                        new Position(9, 4),
+                        new Position(9, 4)
+                    ),
+                    'foo'
+                ),
+                'foo',
+                null,
+                [],
+                false,
+                'string — public — A'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testDoesNotReturnStaticProperty(): void
     {
         $fileName = 'StaticProperty.phpt';

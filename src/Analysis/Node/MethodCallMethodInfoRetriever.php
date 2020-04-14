@@ -4,6 +4,8 @@ namespace Serenata\Analysis\Node;
 
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
@@ -90,6 +92,12 @@ final class MethodCallMethodInfoRetriever
 
         foreach ($this->toplevelTypeExtractor->extract($typeOfVar) as $type) {
             $info = null;
+
+            if ($type instanceof GenericTypeNode) {
+                // Not entirely correct, but we can't resolve templates yet, so ignore them for now so we can keep
+                // resolving without breaking on generic syntax.
+                $type = $type->type;
+            }
 
             try {
                 $info = $this->classlikeInfoBuilder->build($type);

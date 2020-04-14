@@ -1073,6 +1073,26 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testReturnsInfoUsingClasslikeBeforeGenericSyntaxStartsWhenDeducingMethodCall(): void
+    {
+        $result = $this->deduceTypesFromExpression('MethodCallOnClassWithGenericSyntax.phpt', '$b');
+
+        static::assertSame('string', (string) $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReturnsInfoUsingClasslikeBeforeGenericSyntaxStartsWhenDeducingPropertyFetch(): void
+    {
+        $result = $this->deduceTypesFromExpression('PropertyFetchOnClassWithGenericSyntax.phpt', '$b');
+
+        static::assertSame('string', (string) $result);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyProcessesStaticMethodCallAssignedToVariableWithFqcnWithLeadingSlash(): void
     {
         $result = $this->deduceTypesFromExpression(

@@ -6,6 +6,9 @@ use Generator;
 use LogicException;
 use UnexpectedValueException;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+
 use Serenata\Analysis\CircularDependencyException;
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 
@@ -74,7 +77,13 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
             true
         );
 
-        $classlikeInfoElements = array_map(function (string $type): ?array {
+        $classlikeInfoElements = array_map(function (TypeNode $type): ?array {
+            if ($type instanceof GenericTypeNode) {
+                // Not entirely correct, but we can't resolve templates yet, so ignore them for now so we can keep
+                // resolving without breaking on generic syntax.
+                $type = $type->type;
+            }
+
             try {
                 return $this->classlikeInfoBuilder->build($type);
             } catch (UnexpectedValueException|CircularDependencyException $e) {

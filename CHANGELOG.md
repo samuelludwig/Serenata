@@ -64,6 +64,15 @@ foreach ($a as $b) {
 }
 ```
 
+* Deducing types and autocompletion on classes using generic syntax no longer breaks (note that resolving generics is not supported yet):
+
+```php
+<?php
+
+/** @var Foo<int,string> $a */
+$a-> // Autocompletion for Foo, as stopgap until Foo is properly resolved using int and string.
+```
+
 ## 5.2.0
 * Test PHP 7.4 in CI
 * Fix large amounts of notices being generated whilst running on PHP 7.4

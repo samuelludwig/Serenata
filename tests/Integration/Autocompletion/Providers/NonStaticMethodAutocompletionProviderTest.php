@@ -207,6 +207,38 @@ final class NonStaticMethodAutocompletionProviderTest extends AbstractAutocomple
     /**
      * @return void
      */
+    public function testIgnoresGenericTypesForNowAndUsesClasslikeBeforeGenericSyntaxInstead(): void
+    {
+        $fileName = 'IgnoresGenericTypesForNowAndUsesClasslikeBeforeGenericSyntaxInstead.phpt';
+
+        $output = $this->provide($fileName);
+
+        $suggestions = [
+            new CompletionItem(
+                'foo',
+                CompletionItemKind::METHOD,
+                'foo()$0',
+                new TextEdit(
+                    new Range(
+                        new Position(15, 4),
+                        new Position(15, 4)
+                    ),
+                    'foo()$0'
+                ),
+                'foo()',
+                null,
+                [],
+                false,
+                'int|string — public — A'
+            ),
+        ];
+
+        static::assertEquals($suggestions, $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testDoesNotReturnStaticMethod(): void
     {
         $fileName = 'StaticMethod.phpt';
