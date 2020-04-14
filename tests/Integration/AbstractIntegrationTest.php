@@ -184,7 +184,11 @@ abstract class AbstractIntegrationTest extends TestCase
         $success = $indexer->index($uri, true, $this->mockJsonRpcMessageSenderInterface());
 
         if (!$mayFail) {
-            static::assertTrue($success);
+            static::assertTrue(
+                $success,
+                'Indexing "' . $uri . '" should have worked, but it failed for an unknown reason instead. Does it ' .
+                'perhaps contain syntax errors that cause parsing to fail?'
+            );
         }
 
         $this->processOpenQueueItems();
