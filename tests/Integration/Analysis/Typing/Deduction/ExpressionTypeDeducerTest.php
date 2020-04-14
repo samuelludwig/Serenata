@@ -1099,7 +1099,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
-    public function testAnonymousClassDed(): void
+    public function testAnonymousClassDeduction(): void
     {
         $fileName = 'AnonymousClass.phpt';
 
