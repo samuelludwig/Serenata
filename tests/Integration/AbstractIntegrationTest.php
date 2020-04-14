@@ -172,7 +172,7 @@ abstract class AbstractIntegrationTest extends TestCase
         ?string $source = null,
         bool $mayFail = false
     ): void {
-        // @TODO Fix all callers - string $uri should already be a valid uri before being passed here.
+        // TODO: Fix all callers - string $uri should already be a valid uri before being passed here.
         $normalized = $this->normalizePath($uri);
 
         if ($source !== null) {
