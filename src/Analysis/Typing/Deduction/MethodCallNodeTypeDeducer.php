@@ -71,6 +71,10 @@ final class MethodCallNodeTypeDeducer extends AbstractNodeTypeDeducer
             $types = array_merge($types, $this->fetchResolvedTypesFromTypeArrays($info['returnTypes']));
         }
 
+        if ($types === []) {
+            return new InvalidTypeNode();
+        }
+
         $types = array_map(function (string $type): TypeNode {
             return $this->docblockTypeParser->parse($type);
         }, $types);
