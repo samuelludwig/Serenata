@@ -246,12 +246,17 @@ abstract class AbstractIntegrationTest extends TestCase
      * @param ContainerBuilder $container
      * @param string           $path
      * @param string           $source
+     * @param bool             $mayFail
      */
-    protected function indexTestFileWithSource(ContainerBuilder $container, string $path, string $source): void
-    {
+    protected function indexTestFileWithSource(
+        ContainerBuilder $container,
+        string $path,
+        string $source,
+        bool $mayFail = false
+    ): void {
         $indexer = $container->get('diagnosticsSchedulingIndexer');
 
-        $this->indexUriViaIndexer($indexer, $path, $source);
+        $this->indexUriViaIndexer($indexer, $path, $source, $mayFail);
     }
 
     /**
