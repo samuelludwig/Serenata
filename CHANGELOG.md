@@ -11,6 +11,7 @@
 * Type parsing and deduction has been rewritten to use [PHPStan's docblock parser](https://github.com/phpstan/phpdoc-parser) to allow future parsing of extended docblock types such as generic types, array shapes and callables.
 * Fixed the type deducer getting confused and thinking `Foo ...$foo = null` meant `$foo` is an `array<Foo|null>` instead of an `array<Foo>|null`, since the `null` by assignment refers to the parameter here, not the other type as it does for non-variadic parameters.
 * Fixed the docblock parsing incorrectly stripping generic syntax from types, causing them to never show up in tooltips and other places.
+* [Fix overrides using non-fully qualified names and using array syntax not always resolving correctly, causing use as loop variables to fail](https://gitlab.com/Serenata/Serenata/-/issues/283).
 * Using intersection types will now no longer break autocompletion:
 
 ```php
