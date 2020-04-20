@@ -18,7 +18,9 @@ final class JsonRpcQueueTest extends TestCase
      */
     private $requestPriorityDeterminer;
 
-    /// @inherited
+    /**
+     * @inheritDoc
+     */
     public function setUp()
     {
         $this->requestPriorityDeterminer = $this->getMockBuilder(JsonRpcRequestPriorityDeterminerInterface::class)

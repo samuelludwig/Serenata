@@ -66,7 +66,9 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
      */
     private $jsonRpcQueueItemProcessor;
 
-    /// @inherited
+    /**
+     * @inheritDoc
+     */
     public function setUp()
     {
         $this->jsonRpcQueueItemHandlerFactoryMock = $this
