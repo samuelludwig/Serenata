@@ -971,7 +971,7 @@ parameters:
 			path: src/Parsing/DocblockTypeTransformer.php
 
 		-
-			message: "#^Parameter \\#1 \\$keyName of class PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\ArrayShapeItemNode constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprIntegerNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode\\|null, PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprIntegerNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\\|null given\\.$#"
+			message: "#^Parameter \\#1 \\$keyName of class PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\ArrayShapeItemNode constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprIntegerNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprStringNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode\\|null, PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprIntegerNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprStringNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\\|null given\\.$#"
 			count: 1
 			path: src/Parsing/DocblockTypeTransformer.php
 
