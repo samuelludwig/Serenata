@@ -6,6 +6,8 @@ use Closure;
 
 use Serenata\Tests\Integration\AbstractIntegrationTest;
 
+use Serenata\Workspace\ActiveWorkspaceManager;
+
 /**
  * @group Performance
  */
@@ -16,7 +18,7 @@ abstract class AbstractPerformanceTest extends AbstractIntegrationTest
      */
     protected function getOutputDirectory(): string
     {
-        return 'file:///' . __DIR__ . '/Output';
+        return 'file://' . $this->normalizePath(__DIR__ . '/Output');
     }
 
     /**
@@ -41,5 +43,18 @@ abstract class AbstractPerformanceTest extends AbstractIntegrationTest
     protected function finish(float $time): void
     {
         $this->markTestSkipped("Took {$time} milliseconds (" . ($time / 1000) . " seconds)");
+    }
+
+
+    /**
+     * @return ActiveWorkspaceManager
+     */
+    protected function getActiveWorkspaceManager(): ActiveWorkspaceManager
+    {
+        $manager = $this->container->get(ActiveWorkspaceManager::class);
+
+        assert($manager instanceof ActiveWorkspaceManager);
+
+        return $manager;
     }
 }

@@ -2,6 +2,15 @@
 
 namespace Serenata\Tests\Performance;
 
+use Serenata\Autocompletion\Providers\AutocompletionProviderContext;
+
+use Serenata\Common\Position;
+
+use Serenata\Sockets\JsonRpcRequest;
+
+use Serenata\Utility\InitializeParams;
+use Serenata\Utility\TextDocumentItem;
+
 /**
  * @group Performance
  */
@@ -12,23 +21,42 @@ final class AutocompletionPerformanceTest extends AbstractPerformanceTest
      */
     public function testProvideAllFromStubs(): void
     {
-        $pathToIndex = __DIR__ . '/../../vendor/jetbrains/phpstorm-stubs';
-        $dummyDatabaseUri = 'file://' . $this->getOutputDirectory() . '/test-stubs.sqlite';
+        $uriToIndex = 'file://' . $this->normalizePath(__DIR__ . '/../../vendor/jetbrains/phpstorm-stubs');
+        $dummyDatabaseUri = $this->getOutputDirectory() . '/test-stubs.sqlite';
 
         @unlink($dummyDatabaseUri);
 
+        $this->getActiveWorkspaceManager()->setActiveWorkspace(null);
         $this->container->get('managerRegistry')->setDatabaseUri($dummyDatabaseUri);
         $this->container->get('initializeJsonRpcQueueItemHandler')->initialize(
+            new InitializeParams(
+                123,
+                null,
+                $uriToIndex,
+                [
+                    'configuration' => [
+                        'uris'                    => [$uriToIndex],
+                        'indexDatabaseUri'        => $dummyDatabaseUri,
+                        'phpVersion'              => 7.1,
+                        'excludedPathExpressions' => [],
+                        'fileExtensions'          => ['php'],
+                    ],
+                ],
+                [],
+                null,
+                []
+            ),
             $this->mockJsonRpcMessageSenderInterface(),
+            new JsonRpcRequest('TESTID', 'NOT USED'),
             false
         );
 
-        $this->indexPath($this->container, $pathToIndex);
+        $this->indexPath($this->container, $uriToIndex);
 
-        $testFilePath = $pathToIndex . '/Core/Core_d.php';
+        $testFilePath = $uriToIndex . '/Core/Core_d.php';
         $code = $this->container->get('sourceCodeStreamReader')->getSourceCodeFromFile($testFilePath);
 
-        $positionThatWillGenerateNonEmptyPrefix = mb_strpos($code, "define ('E_ERROR', 1);");
+        $positionThatWillGenerateNonEmptyPrefix = strpos($code, "define ('E_ERROR', 1);");
 
         // Empty prefixes are a specially optimized case that we don't want to trigger to have more realistic results.
         static::assertTrue(
@@ -36,14 +64,17 @@ final class AutocompletionPerformanceTest extends AbstractPerformanceTest
             'No location found that would generate a non-empty prefix'
         );
 
-        $positionThatWillGenerateNonEmptyPrefix += mb_strlen('d');
+        $positionThatWillGenerateNonEmptyPrefix += strlen('d');
+        $position = Position::createFromByteOffset($positionThatWillGenerateNonEmptyPrefix, $code, 'UTF-8');
 
-        $time = $this->time(function () use ($testFilePath, $code, $positionThatWillGenerateNonEmptyPrefix) {
+        $time = $this->time(function () use ($testFilePath, $code, $position) {
             $suggestions = $this->container->get('autocompletionProvider')->provide(
-                $this->container->get('storage')->getFileByUri($testFilePath),
-                $code,
-                $positionThatWillGenerateNonEmptyPrefix
+                new AutocompletionProviderContext(new TextDocumentItem($testFilePath, $code), $position, 'd')
             );
+
+            $suggestionItems = iterator_to_array($suggestions);
+
+            self::assertNotEmpty($suggestionItems);
         });
 
         unlink($dummyDatabaseUri);
