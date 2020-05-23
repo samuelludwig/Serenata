@@ -2276,11 +2276,6 @@ parameters:
 			path: tests/Performance/AutocompletionPerformanceTest.php
 
 		-
-			message: "#^Cannot call method getFileByUri\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: tests/Performance/AutocompletionPerformanceTest.php
-
-		-
 			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
 			count: 2
 			path: tests/Performance/FunctionListProvidingPerformanceTest.php
