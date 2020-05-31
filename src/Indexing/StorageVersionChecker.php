@@ -2,7 +2,7 @@
 
 namespace Serenata\Indexing;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 use Doctrine\DBAL\Exception\TableNotFoundException;
 

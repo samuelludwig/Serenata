@@ -8,7 +8,7 @@ use Doctrine\ORM;
 
 use Doctrine\Common\Cache\Cache;
 
-use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use Doctrine\Persistence\AbstractManagerRegistry;
 
 use Doctrine\DBAL\Connection;
 
