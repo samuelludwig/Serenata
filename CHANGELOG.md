@@ -1,4 +1,7 @@
-## 5.3.0 (Unreleased)
+## 5.4.0 (Unreleased)
+* To be determined.
+
+## 5.3.0
 * Avoid unnecessary file and folder scanning when reindexing single files.
 * Try harder to remain functional instead of errorring out if duplicate imports exist.
 * [Fix notice `Undefined index: endLine in phar:///.../src/Analysis/Relations/TraitUsageResolver.php on line 209`](https://gitlab.com/Serenata/Serenata/issues/306).
