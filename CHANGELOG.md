@@ -1,5 +1,5 @@
 ## 5.4.0 (Unreleased)
-* To be determined.
+* [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
 
 ## 5.3.0
 * Avoid unnecessary file and folder scanning when reindexing single files.
