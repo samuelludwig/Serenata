@@ -4,8 +4,11 @@ stages:
     - finalization
 
 include:
-    - template: Dependency-Scanning.gitlab-ci.yml
     - template: Code-Quality.gitlab-ci.yml
+    # Unfortunately for ultimate only. We may be able to apply for ultimate as open source project, but until then,
+    # leave this commented.
+    # - template: Dependency-Scanning.gitlab-ci.yml
+    # - template: SAST.gitlab-ci.yml
 
 # ----- Build stage
 .build-setup-composer: &build-setup-composer
