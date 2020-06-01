@@ -50,8 +50,8 @@ test:run-composer-require-checker:
     stage: test
     script:
         - curl -sSL https://github.com/maglnet/ComposerRequireChecker/releases/download/2.1.0/composer-require-checker.phar --output composer-require-checker.phar
-        - echo "387584a995cf3c6c8c41fde79bd12620 composer-require-checker.phar" > checksums
-        - md5sum -c checksums
+        - echo "f5b57c8f4305eb3d5ec605943b5250b10aacb939778be005360f815860474495  composer-require-checker.phar" > checksums
+        - sha256sum -c checksums
         - php ./composer-require-checker.phar check ./composer.json
 
 test:run-phpcs:
