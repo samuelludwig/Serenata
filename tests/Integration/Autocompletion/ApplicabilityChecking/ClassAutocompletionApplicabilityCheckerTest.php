@@ -18,6 +18,7 @@ final class ClassAutocompletionApplicabilityCheckerTest extends AbstractAutocomp
     public function getFileNamesWhereShouldApply(): array
     {
         return [
+            'PropertyType.phpt',
             'TopLevelNamespace.phpt',
             'FunctionLike.phpt',
             'ParameterType.phpt',

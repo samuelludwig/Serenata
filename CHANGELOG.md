@@ -1,4 +1,5 @@
 ## 5.4.0 (Unreleased)
+* [Add autocompletion when typing property types added in PHP 7.4](https://gitlab.com/Serenata/Serenata/-/issues/331).
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
 
 ## 5.3.0

@@ -109,6 +109,8 @@ final class InterfaceAutocompletionApplicabilityChecker implements Autocompletio
                 return true;
             } elseif ($parent instanceof Node\Expr\ClassConstFetch) {
                 return true;
+            } elseif ($parent instanceof Node\Stmt\Property) {
+                return true;
             }
 
             return $this->doesApplyToNode($parent);

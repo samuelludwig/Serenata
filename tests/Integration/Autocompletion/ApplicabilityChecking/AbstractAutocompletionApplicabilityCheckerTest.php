@@ -109,6 +109,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
             'ParameterName.phpt',
             'ParameterType.phpt',
             'ParameterDefaultValue.phpt',
+            'PropertyType.phpt',
             'Clone.phpt',
             'New.phpt',
             'ClassExtends.phpt',

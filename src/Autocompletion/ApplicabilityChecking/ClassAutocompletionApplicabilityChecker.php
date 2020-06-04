@@ -107,6 +107,8 @@ final class ClassAutocompletionApplicabilityChecker implements AutocompletionApp
                 return true;
             } elseif ($parent instanceof Node\Expr\StaticPropertyFetch) {
                 return true;
+            } elseif ($parent instanceof Node\Stmt\Property) {
+                return true;
             }
 
             return $this->doesApplyToNode($parent);
