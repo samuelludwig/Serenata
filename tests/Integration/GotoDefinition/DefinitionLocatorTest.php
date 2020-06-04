@@ -342,6 +342,24 @@ final class DefinitionLocatorTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testClasslikeInPropertyType(): void
+    {
+        $fileName = 'PropertyType.phpt';
+
+        static::assertGotoDefinitionResponseEquals(
+            $fileName,
+            67,
+            73,
+            new GotoDefinitionResponse(new Location(
+                $this->getPathFor($fileName),
+                new Range(new Position(4, 0), new Position(4, 16))
+            ))
+        );
+    }
+
+    /**
      * @param string $file
      * @param int    $position
      *
