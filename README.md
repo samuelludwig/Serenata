@@ -17,51 +17,55 @@
 </a>
 </div>
 
-Serenata (previously "PHP Integrator") is a gratis, libre and open source server that indexes PHP code and performs static analysis. It stores its information in a database and retrieves information about your code to clients by communicating over sockets. Clients can use this information to provide code assistance, such as autocompletion, linting, code navigation and tooltips.
+Serenata is a gratis, libre and open source server that performs static analysis on PHP codebases to provide code assistance, such as autocompletion, linting, code navigation and tooltips. It achieves its goal by speaking the [language server protocol](https://microsoft.github.io/language-server-protocol/) over sockets with [its clients](https://serenata.gitlab.io/#what-do-i-need).
 
-More information for users, both developers looking to implement clients for other editors as well as programmers using the server via editors and IDE's, can be found [on the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://serenata.gitlab.io/).
+Serenata was previously known as "PHP Integrator".
 
-## What Features Are Supported?
-Serenata is, since version 5.0 and on the current `master` branch, a language server that follows the [language server protocol](https://microsoft.github.io/language-server-protocol/specification). See also the [support table](https://gitlab.com/Serenata/Serenata/wikis/Language-Server-Protocol-Support-Table) for more information.
-
-## Where Is It Used?
-The [php-ide-serenata](https://github.com/Gert-dev/php-ide-serenata/) package integrates Serenata into the Atom editor via Atom-IDE.
+Please see [the wiki](https://gitlab.com/Serenata/Serenata/wikis/home) as well as [the website](https://serenata.gitlab.io/), which contain more information for users, both developers looking to implement clients as well as programmers using the server via editors and IDEs.
 
 ## Installation
-If you want to use the server as language server inside an editor or IDE, you can either install the PHAR, which is the recommended and easiest way to install the server, or install the server via Composer.
-
-### PHAR (recommended)
+### Stable
+#### PHAR (recommended)
 Download the latest stable PHAR for your PHP version [from the releases page](https://gitlab.com/Serenata/Serenata/-/tags).
 
-You can also find the latest _unstable_ builds as PHAR by downloading the artifacts [of the latest pipelines](https://gitlab.com/Serenata/Serenata/pipelines).
-
-### Composer
+#### Composer
 ```sh
 composer create-project "serenata/serenata" serenata --prefer-dist --no-dev
 ```
 
-## Running
-If you downloaded the PHAR:
+### Unstable
+You can find the latest _unstable_ builds as PHAR by downloading the artifacts [of the latest pipelines](https://gitlab.com/Serenata/Serenata/pipelines) or simply install latest master through Composer or by pulling from Git.
 
+## Running
+Most users will simply want to run Serenata through their favorite editor or IDE. See [the website](https://serenata.gitlab.io/#what-do-i-need) for a list of available clients and how to install them.
+
+If you are writing a new client, please read the following sections.
+
+### PHAR
 ```sh
 php -d memory_limit=1024M distribution-7.x.phar --uri=tcp://127.0.0.1:11111
 ```
 
-Or if you installed via Composer:
+Where `x` is the PHP version you downloaded the PHAR for.
 
+### Composer
 ```sh
 php -d memory_limit=1024M <Serenata folder>/bin/console --uri=tcp://127.0.0.1:11111
 ```
 
-Using `0.0.0.0` as host allows the server to be reachable when located on a different machine, such as across the network or inside a (e.g. Docker) container.
-
+### Command Line Arguments
+#### Port
 You can select any port you desire, as long as it is not in use on your system.
 
-The memory limit can also be freely set. Serenata keeps a lot of things in memory as cache and the memory needed thus depends on the size of the project, the PHP version as well as the operating system. To give you some idea, at the time of writing, when running the server on itself, it sits at around 250 MB on a 64-bit Linux system with PHP 7.3.
+#### Host
+`127.0.0.1` will run on `localhost`, which means the server will only be reachable from your local machine. This is usually what you want.
 
-The server can additionally be optimized by installing certain extensions. [See the wiki](https://gitlab.com/Serenata/Serenata/wikis/Advanced%20Configuration) for more information.
+You can use other IP addresses such as `0.0.0.0` to make the server reachable across the network or inside a (e.g. Docker) container. (_The usual security lecture applies here, as anyone in the network can then connect to the server and request information about your codebase._)
 
-## Development
+### Performance
+See [this section of the wiki](https://gitlab.com/Serenata/Serenata/wikis/Advanced%20Configuration).
+
+## Use In Other Projects
 If you want to make the server part of your (existing) project and use the classes contained inside it for your own purposes:
 
 ```sh
