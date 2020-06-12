@@ -3,18 +3,6 @@
 
 <h1>Serenata</h1>
 <h4>Gratis, libre and open source server providing code assistance for PHP</h4>
-
-<a href="https://gitlab.com/Serenata/Serenata/commits/master">
-    <img src="https://gitlab.com/Serenata/Serenata/badges/master/pipeline.svg">
-</a>
-
-<a href="https://gitlab.com/Serenata/Serenata/commits/master">
-    <img src="https://gitlab.com/Serenata/Serenata/badges/master/coverage.svg">
-</a>
-
-<a href="https://serenata.gitlab.io/#support">
-    <img src="https://img.shields.io/badge/€-Support-blue.svg?&amp;style=flat">
-</a>
 </div>
 
 Serenata is a gratis, libre and open source server that performs static analysis on PHP codebases to provide code assistance, such as autocompletion, linting, code navigation and tooltips. It achieves its goal by speaking the [language server protocol](https://microsoft.github.io/language-server-protocol/) over sockets with [its clients](https://serenata.gitlab.io/#what-do-i-need).
