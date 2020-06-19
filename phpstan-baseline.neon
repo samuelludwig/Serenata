@@ -316,6 +316,11 @@ parameters:
 			path: src/Analysis/VariableScanner.php
 
 		-
+			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\ParentAttachingVisitor\\:\\:\\$stack type has no value type specified in iterable type SplStack\\.$#"
+			count: 1
+			path: src/Analysis/Visiting/ParentAttachingVisitor.php
+
+		-
 			message: "#^Parameter \\#2 \\$properties of method Serenata\\\\Analysis\\\\Visiting\\\\ScopeLimitingVisitor\\:\\:memorizeNodeProperties\\(\\) expects array\\<string, mixed\\>, array\\<int, string\\> given\\.$#"
 			count: 5
 			path: src/Analysis/Visiting/ScopeLimitingVisitor.php
@@ -323,6 +328,11 @@ parameters:
 		-
 			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
 			count: 3
+			path: src/Analysis/Visiting/TypeQueryingVisitor.php
+
+		-
+			message: "#^Cannot access property \\$name on PhpParser\\\\Node\\\\Expr\\\\Variable\\|null\\.$#"
+			count: 1
 			path: src/Analysis/Visiting/TypeQueryingVisitor.php
 
 		-
@@ -1041,6 +1051,11 @@ parameters:
 			path: src/SignatureHelp/SignatureHelpRetriever.php
 
 		-
+			message: "#^Binary operation \"\\+\" between int\\|string\\|false and 0\\|1 results in an error\\.$#"
+			count: 1
+			path: src/SignatureHelp/SignatureHelpRetriever.php
+
+		-
 			message: "#^Serenata\\\\Sockets\\\\RequestParsingException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Sockets/JsonRpcConnectionHandler.php
@@ -1414,6 +1429,11 @@ parameters:
 			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
+
+		-
+			message: "#^Property Serenata\\\\Utility\\\\ImmutableSet\\<T\\>\\:\\:\\$elements \\(array\\<T\\>\\) does not accept array\\<int, array\\<T\\>\\>\\.$#"
+			count: 1
+			path: src/Utility/ImmutableSet.php
 
 		-
 			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
