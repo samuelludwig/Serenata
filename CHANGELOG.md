@@ -1,6 +1,7 @@
 ## 5.4.0 (Unreleased)
 * [Add autocompletion when typing property types added in PHP 7.4](https://gitlab.com/Serenata/Serenata/-/issues/331).
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
+* [Fix error when trying to parse expressions containing colons, such as `map(fn (): array => 5)->`.](https://gitlab.com/Serenata/Serenata/issues/332)
 
 ## 5.3.0
 * Avoid unnecessary file and folder scanning when reindexing single files.

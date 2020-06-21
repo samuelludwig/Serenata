@@ -366,7 +366,8 @@ final class LastExpressionParser implements Parser
                 $code[$nextNonWhitespace] !== '[' &&
                 $code[$nextNonWhitespace] !== ']' &&
                 $code[$nextNonWhitespace] !== '(' &&
-                $code[$nextNonWhitespace] !== ')'
+                $code[$nextNonWhitespace] !== ')' &&
+                $code[$nextNonWhitespace] !== ':'
             ) {
                 return true;
             }

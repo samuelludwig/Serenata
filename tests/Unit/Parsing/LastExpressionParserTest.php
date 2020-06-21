@@ -1230,4 +1230,23 @@ SOURCE;
         static::assertSame('this', $result->expr->var->name);
         static::assertSame('one', $result->expr->name->name);
     }
+
+    /**
+     * @return void
+     */
+    public function testTODO_FIND_NAME(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            map(fn (): array => 5)->
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        static::assertInstanceOf(Node\Name::class, $result->expr->var->name);
+        static::assertSame('map', $result->expr->var->name->toString());
+    }
 }
