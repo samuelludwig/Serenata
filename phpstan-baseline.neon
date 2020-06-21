@@ -991,21 +991,6 @@ parameters:
 			path: src/Parsing/LastExpressionParser.php
 
 		-
-			message: "#^Variable \\$token might not be defined\\.$#"
-			count: 6
-			path: src/Parsing/LastExpressionParser.php
-
-		-
-			message: "#^Offset 'type' does not exist on array\\<string, mixed\\>\\|null\\.$#"
-			count: 7
-			path: src/Parsing/LastExpressionParser.php
-
-		-
-			message: "#^Variable \\$i might not be defined\\.$#"
-			count: 1
-			path: src/Parsing/LastExpressionParser.php
-
-		-
 			message: "#^Variable \\$tokenString might not be defined\\.$#"
 			count: 1
 			path: src/Parsing/LastExpressionParser.php

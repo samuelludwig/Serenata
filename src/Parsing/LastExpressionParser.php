@@ -134,6 +134,10 @@ final class LastExpressionParser implements Parser
      */
     private function tryGetStartOfHeredocExpression(string $code, array $tokens): ?int
     {
+        if ($code === '') {
+            return null;
+        }
+
         $i = 0;
         $hereDocsOpened = 0;
         $hereDocsClosed = 0;
@@ -142,6 +146,9 @@ final class LastExpressionParser implements Parser
         $busyWithTermination = false;
         $isWalkingHeredocStart = false;
         $isWalkingHeredocEnd = false;
+
+        /** @var array<string,mixed> $token token will always be set below, but PHPStan doesn't see that. */
+        $token = [];
 
         // Heredocs don't always have a termination token, catch those early as heredocs can contain interpolated
         // expressions, which must then be ignored.
@@ -198,6 +205,11 @@ final class LastExpressionParser implements Parser
      */
     private function getStartOfOtherExpression(string $code, array $tokens): int
     {
+        if ($code === '') {
+            return 0;
+        }
+
+        $i = 0;
         $parenthesesOpened = 0;
         $parenthesesClosed = 0;
         $squareBracketsOpened = 0;
@@ -208,8 +220,6 @@ final class LastExpressionParser implements Parser
         $isInDoubleQuotedString = false;
         $startedStaticClassName = false;
 
-        $token = null;
-
         $skippableTokens = $this->parserTokenHelper->getSkippableTokens();
         $castBoundaryTokens = $this->parserTokenHelper->getCastBoundaryTokens();
         $expressionBoundaryTokens = $this->parserTokenHelper->getExpressionBoundaryTokens();
@@ -218,6 +228,9 @@ final class LastExpressionParser implements Parser
         $tokenStartOffset = strlen($code);
         $currentTokenIndex = count($tokens);
         $tokenInfoMap = $this->generateTokenInfoMap($code, $tokens);
+
+        /** @var array<string,mixed> $token token will always be set below, but PHPStan doesn't see that. */
+        $token = [];
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
@@ -394,10 +407,17 @@ final class LastExpressionParser implements Parser
      */
     private function generateTokenInfoMap(string $code, array $tokens): array
     {
+        if ($code === '') {
+            return [];
+        }
+
         $tokenStartOffset = strlen($code);
         $currentTokenIndex = count($tokens);
 
         $tokenInfoMap = [];
+
+        /** @var array<string,mixed> $token token will always be set below, but PHPStan doesn't see that. */
+        $token = [];
 
         for ($i = strlen($code) - 1; $i >= 0; --$i) {
             if ($i < $tokenStartOffset) {
