@@ -1239,7 +1239,7 @@ SOURCE;
         $source = <<<'SOURCE'
             <?php
 
-            map(fn (): array => 5)->
+            map(function (): array {})->
 SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
