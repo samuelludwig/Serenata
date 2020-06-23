@@ -1234,7 +1234,7 @@ SOURCE;
     /**
      * @return void
      */
-    public function testTODO_FIND_NAME(): void
+    public function testIncludesColonForClosureReturnTypeInsideExpression(): void
     {
         $source = <<<'SOURCE'
             <?php
