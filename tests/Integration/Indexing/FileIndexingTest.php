@@ -82,6 +82,28 @@ final class FileIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testIndexesRecursively(): void
+    {
+        $path = $this->getPathFor('Folder');
+
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            [],
+            ':memory:',
+            7.1,
+            [],
+            ['php', 'phpt']
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(2, $files, 'Folders must be indexed recursively');
+    }
+
+    /**
+     * @return void
+     */
     public function testIndexingIgnoresFilesInFoldersMatchingExclusionPatterns(): void
     {
         $path = $this->getPathFor('Folder');

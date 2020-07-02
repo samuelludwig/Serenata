@@ -1942,12 +1942,12 @@ parameters:
 
 		-
 			message: "#^Cannot call method getFiles\\(\\) on object\\|null\\.$#"
-			count: 10
+			count: 11
 			path: tests/Integration/Indexing/FileIndexingTest.php
 
 		-
 			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
-			count: 5
+			count: 6
 			path: tests/Integration/Indexing/FileIndexingTest.php
 
 		-
