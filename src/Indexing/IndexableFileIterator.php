@@ -8,6 +8,8 @@ use SplFileInfo;
 use IteratorIterator;
 use IteratorAggregate;
 
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -78,7 +80,12 @@ final class IndexableFileIterator implements IteratorAggregate
     private function iterateOverDirectoryUri(string $uri): Generator
     {
         $finder = $this->prepareFinder();
-        $finder->in($uri);
+
+        try {
+            $finder->in($uri);
+        } catch (DirectoryNotFoundException $e) {
+            return; // Directory may have been removed in the meantime.
+        }
 
         $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
 
@@ -103,7 +110,12 @@ final class IndexableFileIterator implements IteratorAggregate
         // We're only checking a file to see if it matches exclusion patterns and such. We use the parent directory
         // above in order to profit from Symfony finder, but we don't want to be recursing folders inside that
         // directory to avoid a performance hit.
-        $finder->in(dirname($uri));
+        try {
+            $finder->in(dirname($uri));
+        } catch (DirectoryNotFoundException $e) {
+            return; // File or directory may have been removed in the meantime.
+        }
+
         $finder->depth('< 1');
 
         $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);

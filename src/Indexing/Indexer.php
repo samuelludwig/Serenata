@@ -93,17 +93,8 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
 
         $uri = $this->pathNormalizer->normalize($uri);
 
-        $result = true;
-
-        if (is_dir($uri)) {
-            $this->indexDirectory(
-                $uri,
-                $workspace->getConfiguration()->getFileExtensions(),
-                $workspace->getConfiguration()->getExcludedPathExpressions(),
-                $jsonRpcMessageSender
-            );
-        } elseif (is_file($uri)) {
-            $result = $this->indexFile(
+        if (is_file($uri)) {
+            return $this->indexFile(
                 $uri,
                 $workspace->getConfiguration()->getFileExtensions(),
                 $workspace->getConfiguration()->getExcludedPathExpressions(),
@@ -111,7 +102,14 @@ final class Indexer implements IndexerInterface, EventEmitterInterface
             );
         }
 
-        return $result;
+        $this->indexDirectory(
+            $uri,
+            $workspace->getConfiguration()->getFileExtensions(),
+            $workspace->getConfiguration()->getExcludedPathExpressions(),
+            $jsonRpcMessageSender
+        );
+
+        return true;
     }
 
     /**

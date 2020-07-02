@@ -4,6 +4,7 @@
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
 * [Improve scanning performance during indexing a bit by avoiding multiple scans of folders.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * [Fix error when trying to parse expressions containing colons, such as `map(fn (): array => 5)->`.](https://gitlab.com/Serenata/Serenata/issues/332)
+* [Fix server crashing if folders are removed during scanning for reindexing, such as when clearing the cache in Symfony projects.](https://gitlab.com/Serenata/Serenata/issues/316)
 
 ## 5.3.0
 * Avoid unnecessary file and folder scanning when reindexing single files.

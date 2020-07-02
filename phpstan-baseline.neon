@@ -1066,7 +1066,17 @@ parameters:
 			path: src/Sockets/JsonRpcConnectionHandler.php
 
 		-
+			message: "#^Call to an undefined method Ds\\\\PriorityQueue\\<Serenata\\\\Sockets\\\\JsonRpcQueueItem\\>\\:\\:push\\(\\)\\.$#"
+			count: 1
+			path: src/Sockets/JsonRpcQueue.php
+
+		-
 			message: "#^Unused @throws UnderflowException annotation$#"
+			count: 1
+			path: src/Sockets/JsonRpcQueue.php
+
+		-
+			message: "#^Call to an undefined method Ds\\\\PriorityQueue\\<Serenata\\\\Sockets\\\\JsonRpcQueueItem\\>\\:\\:pop\\(\\)\\.$#"
 			count: 1
 			path: src/Sockets/JsonRpcQueue.php
 
@@ -1942,12 +1952,12 @@ parameters:
 
 		-
 			message: "#^Cannot call method getFiles\\(\\) on object\\|null\\.$#"
-			count: 11
+			count: 12
 			path: tests/Integration/Indexing/FileIndexingTest.php
 
 		-
 			message: "#^Cannot call method setActiveWorkspace\\(\\) on object\\|null\\.$#"
-			count: 6
+			count: 7
 			path: tests/Integration/Indexing/FileIndexingTest.php
 
 		-

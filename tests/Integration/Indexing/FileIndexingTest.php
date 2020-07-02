@@ -217,6 +217,28 @@ final class FileIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testIndexingIsSkippedIfDirectoryDoesNotExist(): void
+    {
+        $path = $this->getPathFor('FolderThatDoesNotExist');
+
+        $this->container->get(ActiveWorkspaceManager::class)->setActiveWorkspace(new Workspace(new WorkspaceConfiguration(
+            [],
+            ':memory:',
+            7.1,
+            [],
+            ['blah']
+        )));
+
+        $this->indexTestFile($this->container, $path, true);
+
+        $files = $this->container->get('storage')->getFiles();
+
+        static::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
+    }
+
+    /**
+     * @return void
+     */
     public function testSourceHashIsUpdatedOnIndex(): void
     {
         $path = $this->getPathFor('TestFile.phpt');
