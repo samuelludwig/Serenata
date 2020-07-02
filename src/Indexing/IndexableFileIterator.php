@@ -104,6 +104,7 @@ final class IndexableFileIterator implements IteratorAggregate
         // above in order to profit from Symfony finder, but we don't want to be recursing folders inside that
         // directory to avoid a performance hit.
         $finder->in(dirname($uri));
+        $finder->depth('< 1');
 
         $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
 
