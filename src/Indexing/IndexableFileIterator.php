@@ -63,8 +63,92 @@ final class IndexableFileIterator implements IteratorAggregate
             return;
         }
 
-        $isFile = is_file($uri);
+        if (is_file($uri)) {
+            yield from $this->iterateOverFileUri($uri);
+        } else {
+            yield from $this->iterateOverDirectoryUri($uri);
+        }
+    }
 
+    /**
+     * @param string $uri
+     *
+     * @return Generator<SplFileInfo>
+     */
+    private function iterateOverDirectoryUri(string $uri): Generator
+    {
+        $finder = $this->prepareFinder();
+        $finder->in($uri);
+
+        $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
+
+        // $iterator = $this->fixUpUriEncoding($iterator);
+
+        foreach ($iterator as $item) {
+            if ($item->isFile()) {
+                yield $item;
+            }
+        }
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return Generator<SplFileInfo>
+     */
+    private function iterateOverFileUri(string $uri): Generator
+    {
+        $finder = $this->prepareFinder();
+
+        // We're only checking a file to see if it matches exclusion patterns and such. We use the parent directory
+        // above in order to profit from Symfony finder, but we don't want to be recursing folders inside that
+        // directory to avoid a performance hit.
+        $finder->in(dirname($uri));
+
+        $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
+
+        // $iterator = $this->fixUpUriEncoding($iterator);
+
+        foreach ($iterator as $item) {
+            if ($item->isFile() && $item->getFilename() === basename($uri)) {
+                // We scan the parent folder for files, see above. Breaking avoids scanning other files and,
+                // possibly, folders recursively.
+                yield $item;
+
+                return;
+            }
+        }
+    }
+
+    // /**
+    //  * Fixes up percentage encoding in URIs.
+    //  *
+    //  * @see https://gitlab.com/Serenata/Serenata/issues/278.
+    //  *
+    //  * @param Iterator $iterator
+    //  *
+    //  * @return Generator
+    //  */
+    // private function fixUpUriEncoding(Iterator $iterator): Generator
+    // {
+    //     // NOTE: This fixes encoding with URI, but then PHP's stream wrappers for file:// don't pick up these (valid)
+    //     // paths anymore and all file functions start failing.
+    //     $pathParts = explode(DIRECTORY_SEPARATOR, $item->getPathname());
+
+    //     $protocol = array_shift($pathParts);
+
+    //     $pathParts = array_map('rawurlencode', $pathParts);
+
+    //     array_unshift($pathParts, $protocol);
+
+    //     yield new SplFileInfo(implode(DIRECTORY_SEPARATOR, $pathParts));
+    // }
+
+    /**
+     * @return Finder
+     */
+    private function prepareFinder(): Finder
+    {
         /** @var string[] $globsToAdhereTo */
         $globsToAdhereTo = array_map(function (string $extension): string {
             return '/\.' . $extension . '$/';
@@ -72,40 +156,12 @@ final class IndexableFileIterator implements IteratorAggregate
 
         $finder = new Finder();
         $finder
-            // For single URIs, move up to parent folder so we can follow the same flow and pattern matching.
-            ->in($isFile ? dirname($uri) : $uri)
             ->ignoreUnreadableDirs(true)
             ->ignoreDotFiles(false)
             ->ignoreVCS(true)
             ->followLinks()
             ->name($globsToAdhereTo);
 
-        $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
-
-        foreach ($iterator as $item) {
-            if ($item->isFile()) {
-                // NOTE: See https://gitlab.com/Serenata/Serenata/issues/278 . This fixes encoding with URI, but then
-                // PHP's stream wrappers for file:// don't pick up these (valid) paths anymore and all file functions
-                // start failing.
-                // $pathParts = explode(DIRECTORY_SEPARATOR, $item->getPathname());
-                //
-                // $protocol = array_shift($pathParts);
-                //
-                // $pathParts = array_map('rawurlencode', $pathParts);
-                //
-                // array_unshift($pathParts, $protocol);
-                //
-                // yield new SplFileInfo(implode(DIRECTORY_SEPARATOR, $pathParts));
-                if (!$isFile) {
-                    yield $item;
-                } elseif ($item->getFilename() === basename($uri)) {
-                    // We scan the parent folder for files, see above. Breaking avoids scanning other files and,
-                    // possibly, folders recursively.
-                    yield $item;
-
-                    break;
-                }
-            }
-        }
+        return $finder;
     }
 }
