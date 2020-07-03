@@ -109,7 +109,6 @@ final class DirectoryIndexRequestDemuxer
         SplFileInfo $fileInfo,
         JsonRpcMessageSenderInterface $jsonRpcMessageSender
     ): void {
-
         $request = new JsonRpcRequest(null, 'serenata/internal/index', [
             'textDocument' => [
                 'uri'  => $this->pathNormalizer->normalize($fileInfo->getPathname()),
