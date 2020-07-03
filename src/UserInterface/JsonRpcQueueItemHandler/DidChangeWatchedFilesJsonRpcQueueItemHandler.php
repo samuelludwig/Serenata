@@ -5,10 +5,11 @@ namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
-use Serenata\Indexing\IndexerInterface;
 use Serenata\Indexing\StorageInterface;
 use Serenata\Indexing\FileNotFoundStorageException;
 
+use Serenata\Sockets\JsonRpcQueue;
+use Serenata\Sockets\JsonRpcRequest;
 use Serenata\Sockets\JsonRpcQueueItem;
 use Serenata\Sockets\JsonRpcMessageSenderInterface;
 
@@ -27,18 +28,18 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
     private $storage;
 
     /**
-     * @var IndexerInterface
+     * @var JsonRpcQueue
      */
-    private $indexer;
+    private $queue;
 
     /**
      * @param StorageInterface $storage
-     * @param IndexerInterface $indexer
+     * @param JsonRpcQueue     $queue
      */
-    public function __construct(StorageInterface $storage, IndexerInterface $indexer)
+    public function __construct(StorageInterface $storage, JsonRpcQueue $queue)
     {
         $this->storage = $storage;
-        $this->indexer = $indexer;
+        $this->queue = $queue;
     }
 
     /**
@@ -110,6 +111,12 @@ final class DidChangeWatchedFilesJsonRpcQueueItemHandler extends AbstractJsonRpc
             return;
         }
 
-        $this->indexer->index($event->getUri(), false, $sender);
+        $request = new JsonRpcRequest(null, 'serenata/internal/index', [
+            'textDocument' => [
+                'uri'  => $event->getUri(),
+            ],
+        ]);
+
+        $this->queue->push(new JsonRpcQueueItem($request, $sender));
     }
 }
