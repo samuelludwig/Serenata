@@ -40,7 +40,7 @@ final class DocblockTypeTransformer implements DocblockTypeTransformerInterface
         } elseif ($transformedType instanceof ArrayShapeNode) {
             return new ArrayShapeNode(array_map(function (TypeNode $type) use ($transformer): TypeNode {
                 return $this->transform($type, $transformer);
-            }, $transformedType->types));
+            }, $transformedType->items));
         } elseif ($transformedType instanceof ArrayTypeNode) {
             return new ArrayTypeNode($this->transform($transformedType->type, $transformer));
         } elseif ($transformedType instanceof NullableTypeNode) {

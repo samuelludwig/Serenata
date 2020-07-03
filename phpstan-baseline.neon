@@ -961,11 +961,6 @@ parameters:
 			path: src/Parsing/DocblockTypeTransformer.php
 
 		-
-			message: "#^Access to an undefined property PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\ArrayShapeNode\\:\\:\\$types\\.$#"
-			count: 1
-			path: src/Parsing/DocblockTypeTransformer.php
-
-		-
 			message: "#^Parameter \\#1 \\$identifier of class PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\CallableTypeNode constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode, PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode given\\.$#"
 			count: 1
 			path: src/Parsing/DocblockTypeTransformer.php
