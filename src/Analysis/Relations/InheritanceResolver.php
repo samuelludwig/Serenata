@@ -81,11 +81,16 @@ final class InheritanceResolver extends AbstractResolver
         if (isset($class['properties'][$parentPropertyData['name']])) {
             $childProperty = $class['properties'][$parentPropertyData['name']];
 
-            $overrideData = [
-                'declaringClass'     => $parentPropertyData['declaringClass'],
-                'declaringStructure' => $parentPropertyData['declaringStructure'],
-                'range'              => $parentPropertyData['range'],
-            ];
+            if ($parentPropertyData['isPrivate'] === true) {
+                // Private parent properties coexist with child properties with the same name and are not an override.
+                $overrideData = null;
+            } else {
+                $overrideData = [
+                    'declaringClass'     => $parentPropertyData['declaringClass'],
+                    'declaringStructure' => $parentPropertyData['declaringStructure'],
+                    'range'              => $parentPropertyData['range'],
+                ];
+            }
 
             if ($parentPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
                 $inheritedData = $this->extractInheritedPropertyInfo($parentPropertyData);
@@ -144,7 +149,7 @@ final class InheritanceResolver extends AbstractResolver
                         'range'              => $parentMethodData['range'],
                     ],
                 ]);
-            } else {
+            } elseif ($parentMethodData['isPrivate'] !== true) {
                 $overrideData = [
                     'declaringClass'     => $parentMethodData['declaringClass'],
                     'declaringStructure' => $parentMethodData['declaringStructure'],

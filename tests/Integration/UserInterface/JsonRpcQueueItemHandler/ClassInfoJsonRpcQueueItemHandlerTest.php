@@ -2576,6 +2576,42 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     }
 
     /**
+     * @return void
+     */
+    public function testPrivatePropertyCannotBeOverriddenByChildProperty(): void
+    {
+        $fileName = 'PrivatePropertyCannotBeOverriddenByChildProperty.phpt';
+
+        $info = $this->getClassInfo($fileName, 'A\C');
+
+        static::assertNull($info['properties']['prop']['override']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPrivateTraitPropertyIsOverriddenByClassProperty(): void
+    {
+        $fileName = 'PrivateTraitPropertyIsOverriddenByClassProperty.phpt';
+
+        $info = $this->getClassInfo($fileName, 'A\C');
+
+        static::assertNotNull($info['properties']['prop']['override']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPrivateMethodCannotBeOverriddenByChildMethod(): void
+    {
+        $fileName = 'PrivateMethodCannotBeOverriddenByChildMethod.phpt';
+
+        $info = $this->getClassInfo($fileName, 'A\C');
+
+        static::assertNull($info['methods']['foo']['override']);
+    }
+
+    /**
      * @param string $file
      * @param string $fqcn
      *
