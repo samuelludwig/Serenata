@@ -6,6 +6,7 @@ use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\TypeAnalyzer;
 
@@ -65,6 +66,8 @@ final class ClassInfoJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemHan
 
     /**
      * @param string $fqcn
+     *
+     * @throws ClasslikeBuildingFailedException
      *
      * @return array<string,mixed>
      */

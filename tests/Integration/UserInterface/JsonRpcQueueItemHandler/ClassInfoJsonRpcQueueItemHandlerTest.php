@@ -2,6 +2,8 @@
 
 namespace Serenata\Tests\Integration\UserInterface\JsonRpcQueueItemHandler;
 
+use Serenata\Analysis\ClasslikeBuildingFailedException;
+
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 
@@ -2526,12 +2528,12 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     *
      * @return void
      */
     public function testFailsOnUnknownClass(): void
     {
+        static::expectException(ClasslikeBuildingFailedException::class);
+
         $output = $this->getClassInfo('SimpleClass.phpt', 'DoesNotExist');
     }
 
@@ -2615,7 +2617,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
      * @param string $file
      * @param string $fqcn
      *
-     * @return array
+     * @return array<string,mixed>
      */
     private function getClassInfo(string $file, string $fqcn): array
     {

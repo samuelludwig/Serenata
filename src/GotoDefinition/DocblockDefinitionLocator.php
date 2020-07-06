@@ -5,6 +5,7 @@ namespace Serenata\GotoDefinition;
 use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 use Serenata\Analysis\DocblockPositionalNameResolverFactory;
 
 use Serenata\Common\FilePosition;
@@ -49,7 +50,16 @@ final class DocblockDefinitionLocator
     public function locate(TextDocumentItem $textDocumentItem, Position $position): GotoDefinitionResponse
     {
         $fqcn = $this->getFqcnFromComment($textDocumentItem, $position);
-        $info = $this->classlikeInfoBuilder->build($fqcn);
+
+        try {
+            $info = $this->classlikeInfoBuilder->build($fqcn);
+        } catch (ClasslikeBuildingFailedException $e) {
+            throw new UnexpectedValueException(
+                'Could not retrieve info for classlike with FQCN "' . $fqcn . '"',
+                0,
+                $e
+            );
+        }
 
         return new GotoDefinitionResponse(new Location($info['uri'], $info['range']));
     }

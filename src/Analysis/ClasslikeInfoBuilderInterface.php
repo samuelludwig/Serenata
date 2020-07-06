@@ -2,8 +2,6 @@
 
 namespace Serenata\Analysis;
 
-use UnexpectedValueException;
-
 /**
  * Interface for classes that build a complete structure of data for a classlike, including children and members.
  */
@@ -14,8 +12,7 @@ interface ClasslikeInfoBuilderInterface
      *
      * @param string $fqcn
      *
-     * @throws UnexpectedValueException
-     * @throws CircularDependencyException
+     * @throws ClasslikeBuildingFailedException
      *
      * @return array<string,mixed>
      */

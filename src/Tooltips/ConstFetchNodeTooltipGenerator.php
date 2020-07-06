@@ -2,8 +2,6 @@
 
 namespace Serenata\Tooltips;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\ConstantListProviderInterface;
 
 use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
@@ -55,7 +53,7 @@ final class ConstFetchNodeTooltipGenerator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException when the constant was not found.
+     * @throws TooltipGenerationFailedException when the constant was not found.
      *
      * @return string
      */
@@ -78,7 +76,7 @@ final class ConstFetchNodeTooltipGenerator
     /**
      * @param string $fullyQualifiedName
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return array<string,mixed>
      */
@@ -87,7 +85,7 @@ final class ConstFetchNodeTooltipGenerator
         $functions = $this->constantListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
+            throw new TooltipGenerationFailedException('No data found for function with name ' . $fullyQualifiedName);
         }
 
         return $functions[$fullyQualifiedName];

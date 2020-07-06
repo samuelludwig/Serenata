@@ -2,16 +2,16 @@
 
 namespace Serenata\GotoDefinition;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Node\NameNodeFqsenDeterminer;
 
 use Serenata\Common\Position;
 
-
 use PhpParser\Node;
+
+use Serenata\Tooltips\TooltipGenerationFailedException;
 
 use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
@@ -48,7 +48,7 @@ final class NameNodeDefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException when the constant was not found.
+     * @throws TooltipGenerationFailedException when the constant was not found.
      *
      * @return GotoDefinitionResponse
      */
@@ -67,12 +67,20 @@ final class NameNodeDefinitionLocator
     /**
      * @param string $fullyQualifiedName
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return array<string,mixed>
      */
     private function getClassLikeInfo(string $fullyQualifiedName): array
     {
-        return $this->classLikeInfoBuilder->build($fullyQualifiedName);
+        try {
+            return $this->classLikeInfoBuilder->build($fullyQualifiedName);
+        } catch (ClasslikeBuildingFailedException $e) {
+            throw new TooltipGenerationFailedException(
+                'Could not generate tooltip because classlike info could not be fetched',
+                0,
+                $e
+            );
+        }
     }
 }

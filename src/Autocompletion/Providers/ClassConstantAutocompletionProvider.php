@@ -4,10 +4,9 @@ namespace Serenata\Autocompletion\Providers;
 
 use Generator;
 use LogicException;
-use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
-use Serenata\Analysis\CircularDependencyException;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
@@ -77,7 +76,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
         $classlikeInfoElements = array_map(function (string $type): ?array {
             try {
                 return $this->classlikeInfoBuilder->build($type);
-            } catch (UnexpectedValueException|CircularDependencyException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 return null;
             }
         }, $this->toplevelTypeExtractor->extract($type));

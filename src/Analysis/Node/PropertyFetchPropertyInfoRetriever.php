@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -92,7 +93,7 @@ final class PropertyFetchPropertyInfoRetriever
 
             try {
                 $info = $this->classlikeInfoBuilder->build((string) $type);
-            } catch (UnexpectedValueException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 continue;
             }
 

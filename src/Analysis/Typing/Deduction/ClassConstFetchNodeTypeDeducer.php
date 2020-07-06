@@ -2,14 +2,13 @@
 
 namespace Serenata\Analysis\Typing\Deduction;
 
-use UnexpectedValueException;
-
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Parsing\InvalidTypeNode;
 use Serenata\Parsing\TypeNodeUnwrapper;
@@ -71,7 +70,7 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
             try {
                 $info = $this->classlikeInfoBuilder->build($type);
-            } catch (UnexpectedValueException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 continue;
             }
 

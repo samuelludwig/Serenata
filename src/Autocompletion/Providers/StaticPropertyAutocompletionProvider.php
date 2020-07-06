@@ -4,12 +4,11 @@ namespace Serenata\Autocompletion\Providers;
 
 use Generator;
 use LogicException;
-use UnexpectedValueException;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
-use Serenata\Analysis\CircularDependencyException;
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
@@ -79,7 +78,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
         $classlikeInfoElements = array_map(function (TypeNode $type): ?array {
             try {
                 return $this->classlikeInfoBuilder->build($type);
-            } catch (UnexpectedValueException|CircularDependencyException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 return null;
             }
         }, $this->toplevelTypeExtractor->extract($type));

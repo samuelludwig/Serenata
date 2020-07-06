@@ -3,7 +3,6 @@
 namespace Serenata\Analysis;
 
 use ArrayObject;
-use UnexpectedValueException;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
@@ -139,6 +138,7 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
      * @param string $originFqcn
      *
      * @throws CircularDependencyException
+     * @throws ClasslikeNotFoundException
      *
      * @return ArrayObject<string,mixed>
      */
@@ -160,7 +160,7 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
     /**
      * @param string $fqcn
      *
-     * @throws UnexpectedValueException
+     * @throws ClasslikeNotFoundException
      *
      * @return ArrayObject<string,mixed>
      */
@@ -169,7 +169,7 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
         $classlike = $this->storage->findStructureByFqcn($fqcn);
 
         if ($classlike === null) {
-            throw new UnexpectedValueException('The structural element "' . $fqcn . '" was not found!');
+            throw new ClasslikeNotFoundException('The structural element "' . $fqcn . '" was not found!');
         }
 
         return $this->fetchFlatClasslikeInfo($classlike);
@@ -324,7 +324,7 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
             try {
                 $traitInfo = $this->getCheckedClasslikeInfo($traitFqcn, $classlikeInfo['fqcn']);
-            } catch (UnexpectedValueException|CircularDependencyException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 continue;
             }
 
@@ -359,7 +359,7 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
             try {
                 $parentInfo = $this->getCheckedClasslikeInfo($parentFqcn, $classlikeInfo['fqcn']);
-            } catch (UnexpectedValueException|CircularDependencyException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 continue;
             }
 
@@ -383,7 +383,7 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
             try {
                 $interfaceInfo = $this->getCheckedClasslikeInfo($interfaceFqcn, $classlikeInfo['fqcn']);
-            } catch (UnexpectedValueException|CircularDependencyException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 continue;
             }
 

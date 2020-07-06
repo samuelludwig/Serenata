@@ -2,8 +2,6 @@
 
 namespace Serenata\Tooltips;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\FunctionListProviderInterface;
 
 use Serenata\Analysis\Node\FunctionCallNodeFqsenDeterminer;
@@ -54,15 +52,14 @@ final class FuncCallNodeTooltipGenerator
       * @param TextDocumentItem   $textDocumentItem
       * @param Position           $position
       *
-      * @throws UnexpectedValueException when the function was not found.
-      * @throws UnexpectedValueException when a dynamic function call is passed.
+      * @throws TooltipGenerationFailedException when the function was not found or a dynamic function call is passed.
       *
       * @return string
       */
     public function generate(Node\Expr\FuncCall $node, TextDocumentItem $textDocumentItem, Position $position): string
     {
         if (!$node->name instanceof Node\Name) {
-            throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
+            throw new TooltipGenerationFailedException('Fetching FQSEN of dynamic function calls is not supported');
         }
 
         $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $textDocumentItem->getUri(), $position);
@@ -75,7 +72,7 @@ final class FuncCallNodeTooltipGenerator
     /**
      * @param string $fullyQualifiedName
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return array<string,mixed>
      */
@@ -84,7 +81,7 @@ final class FuncCallNodeTooltipGenerator
         $functions = $this->functionListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
+            throw new TooltipGenerationFailedException('No data found for function with name ' . $fullyQualifiedName);
         }
 
         return $functions[$fullyQualifiedName];

@@ -3,7 +3,6 @@
 namespace Serenata\Tooltips;
 
 use LogicException;
-use UnexpectedValueException;
 
 use PhpParser\Node;
 
@@ -126,7 +125,7 @@ final class TooltipProvider
             $contents = $this->getTooltipForNode($node, $textDocumentItem, $position);
 
             return new TooltipResult($contents);
-        } catch (UnexpectedValueException $e) {
+        } catch (TooltipGenerationFailedException $e) {
             return null;
         }
     }
@@ -135,7 +134,7 @@ final class TooltipProvider
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return Node
      */
@@ -147,7 +146,7 @@ final class TooltipProvider
         $nearestInterestingNode = $result->getNearestInterestingNode();
 
         if ($node === null) {
-            throw new UnexpectedValueException(
+            throw new TooltipGenerationFailedException(
                 'No node found at location ' . $position->getLine() . ':' . $position->getCharacter()
             );
         }
@@ -159,6 +158,8 @@ final class TooltipProvider
             return $nearestInterestingNode;
         }
 
+        assert($nearestInterestingNode !== null);
+
         return ($node instanceof Node\Name || $node instanceof Node\Identifier) ? $node : $nearestInterestingNode;
     }
 
@@ -167,7 +168,7 @@ final class TooltipProvider
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -205,7 +206,7 @@ final class TooltipProvider
             }
         }
 
-        throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
+        throw new TooltipGenerationFailedException('Don\'t know how to handle node of type ' . get_class($node));
     }
 
     /**
@@ -213,7 +214,7 @@ final class TooltipProvider
      * @param TextDocumentItem   $textDocumentItem
      * @param Position           $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -230,7 +231,7 @@ final class TooltipProvider
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -247,7 +248,7 @@ final class TooltipProvider
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -264,7 +265,7 @@ final class TooltipProvider
      * @param TextDocumentItem        $textDocumentItem
      * @param Position                $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -281,7 +282,7 @@ final class TooltipProvider
      * @param TextDocumentItem              $textDocumentItem
      * @param Position                      $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -298,7 +299,7 @@ final class TooltipProvider
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -315,7 +316,7 @@ final class TooltipProvider
      * @param TextDocumentItem          $textDocumentItem
      * @param Position                  $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -332,7 +333,7 @@ final class TooltipProvider
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -351,7 +352,11 @@ final class TooltipProvider
         $nameNode = new Node\Name\FullyQualified($node->name->toString());
 
         if ($parentNode instanceof Node\Stmt\GroupUse) {
-            $nameNode = new Node\Name\FullyQualified(Node\Name::concat($parentNode->prefix, $nameNode));
+            $name = Node\Name::concat($parentNode->prefix, $nameNode);
+
+            assert($name !== null);
+
+            $nameNode = new Node\Name\FullyQualified($name);
         }
 
         return $this->nameNodeTooltipGenerator->generate($nameNode, $textDocumentItem, $position);
@@ -361,8 +366,6 @@ final class TooltipProvider
      * @param Node\Stmt\Function_ $node
      * @param TextDocumentItem    $textDocumentItem
      * @param Position            $position
-     *
-     * @throws UnexpectedValueException
      *
      * @return string
      */
@@ -379,7 +382,7 @@ final class TooltipProvider
      * @param TextDocumentItem      $textDocumentItem
      * @param Position              $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -396,7 +399,7 @@ final class TooltipProvider
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */

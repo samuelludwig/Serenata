@@ -2,8 +2,6 @@
 
 namespace Serenata\Tooltips;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\Node\FunctionFunctionInfoRetriever;
 
 use PhpParser\Node;
@@ -44,8 +42,6 @@ final class FunctionNodeTooltipGenerator
      * @param Node\Stmt\Function_ $node
      * @param TextDocumentItem    $textDocumentItem
      * @param Position            $position
-     *
-     * @throws UnexpectedValueException when the function was not found.
      *
      * @return string
      */

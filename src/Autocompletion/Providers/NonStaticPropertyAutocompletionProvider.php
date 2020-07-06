@@ -4,13 +4,12 @@ namespace Serenata\Autocompletion\Providers;
 
 use Generator;
 use LogicException;
-use UnexpectedValueException;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 
-use Serenata\Analysis\CircularDependencyException;
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
@@ -86,7 +85,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
 
             try {
                 return $this->classlikeInfoBuilder->build($type);
-            } catch (UnexpectedValueException|CircularDependencyException $e) {
+            } catch (ClasslikeBuildingFailedException $e) {
                 return null;
             }
         }, $this->toplevelTypeExtractor->extract($type));

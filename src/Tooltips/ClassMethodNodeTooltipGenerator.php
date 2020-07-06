@@ -3,13 +3,12 @@
 namespace Serenata\Tooltips;
 
 use LogicException;
-use UnexpectedValueException;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\FilePositionClasslikeDeterminer;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Common\Position;
-
 
 use PhpParser\Node;
 
@@ -54,8 +53,7 @@ final class ClassMethodNodeTooltipGenerator
      * @param Node\Stmt\ClassMethod $node
      * @param TextDocumentItem      $textDocumentItem
      *
-     * @throws UnexpectedValueException when the method was not found.
-     * @throws UnexpectedValueException when no class was found at the location of the node.
+     * @throws TooltipGenerationFailedException when no method or class was found at the location of the node.
      *
      * @return string
      */
@@ -75,7 +73,7 @@ final class ClassMethodNodeTooltipGenerator
         $fqcn = $this->filePositionClasslikeDeterminer->determine($textDocumentItem, $position);
 
         if ($fqcn === null) {
-            throw new UnexpectedValueException('No class found at location of method call node');
+            throw new TooltipGenerationFailedException('No class found at location of method call node');
         }
 
         $methodInfo = $this->getMethodInfo($fqcn, $node->name);
@@ -87,7 +85,7 @@ final class ClassMethodNodeTooltipGenerator
      * @param string $fqcn
      * @param string $method
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return array<string,mixed>
      */
@@ -97,8 +95,8 @@ final class ClassMethodNodeTooltipGenerator
 
         try {
             $classlikeInfo = $this->classlikeInfoBuilder->build($fqcn);
-        } catch (UnexpectedValueException $e) {
-            throw new UnexpectedValueException(
+        } catch (ClasslikeBuildingFailedException $e) {
+            throw new TooltipGenerationFailedException(
                 'Could not find class with name ' . $fqcn . ' for method call node',
                 0,
                 $e
@@ -106,7 +104,7 @@ final class ClassMethodNodeTooltipGenerator
         }
 
         if (!isset($classlikeInfo['methods'][$method])) {
-            throw new UnexpectedValueException('No method ' . $method . ' exists for class ' . $fqcn);
+            throw new TooltipGenerationFailedException('No method ' . $method . ' exists for class ' . $fqcn);
         }
 
         return $classlikeInfo['methods'][$method];

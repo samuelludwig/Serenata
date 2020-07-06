@@ -2,12 +2,9 @@
 
 namespace Serenata\Tooltips;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
 
 use Serenata\Common\Position;
-
 
 use PhpParser\Node;
 
@@ -45,7 +42,7 @@ final class StaticMethodCallNodeTooltipGenerator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -54,7 +51,7 @@ final class StaticMethodCallNodeTooltipGenerator
         $infoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         if (count($infoElements) === 0) {
-            throw new UnexpectedValueException('No method call information was found for node');
+            throw new TooltipGenerationFailedException('No method call information was found for node');
         }
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.

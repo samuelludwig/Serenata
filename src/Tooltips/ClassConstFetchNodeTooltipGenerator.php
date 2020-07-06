@@ -2,15 +2,15 @@
 
 namespace Serenata\Tooltips;
 
-use UnexpectedValueException;
-
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionException;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
@@ -67,9 +67,7 @@ final class ClassConstFetchNodeTooltipGenerator
      * @param TextDocumentItem          $textDocumentItem
      * @param Position                  $position
      *
-     * @throws UnexpectedValueException when the constant name is not a string (i.e. an error node).
-     * @throws UnexpectedValueException when the type of the class could not be determined.
-     * @throws UnexpectedValueException when no tooltips could be determined.
+     * @throws TooltipGenerationFailedException
      *
      * @return string
      */
@@ -79,7 +77,7 @@ final class ClassConstFetchNodeTooltipGenerator
         Position $position
     ): string {
         if (!$node->name instanceof Node\Identifier) {
-            throw new UnexpectedValueException("Can't deduce the type of a non-string node");
+            throw new TooltipGenerationFailedException("Can't deduce the type of a non-string node");
         }
 
         $classType = $this->getClassTypes($node, $textDocumentItem, $position);
@@ -97,7 +95,7 @@ final class ClassConstFetchNodeTooltipGenerator
         }
 
         if (count($tooltips) === 0) {
-            throw new UnexpectedValueException('Could not determine any tooltips for the class constant');
+            throw new TooltipGenerationFailedException('Could not determine any tooltips for the class constant');
         }
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
@@ -109,7 +107,7 @@ final class ClassConstFetchNodeTooltipGenerator
      * @param TextDocumentItem          $textDocumentItem
      * @param Position                  $position
      *
-     * @throws UnexpectedValueException
+     * @throws TooltipGenerationFailedException
      *
      * @return TypeNode
      */
@@ -125,8 +123,8 @@ final class ClassConstFetchNodeTooltipGenerator
                 $node->class,
                 $textDocumentItem
             ));
-        } catch (UnexpectedValueException $e) {
-            throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
+        } catch (TypeDeductionException $e) {
+            throw new TooltipGenerationFailedException('Could not deduce the type of class', 0, $e);
         }
 
         return $classType;
@@ -144,7 +142,7 @@ final class ClassConstFetchNodeTooltipGenerator
 
         try {
             $classInfo = $this->classlikeInfoBuilder->build($classType);
-        } catch (UnexpectedValueException $e) {
+        } catch (ClasslikeBuildingFailedException $e) {
             return null;
         }
 

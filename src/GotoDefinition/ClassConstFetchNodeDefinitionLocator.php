@@ -9,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PhpParser\Node;
 
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
+use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
@@ -138,7 +139,7 @@ final class ClassConstFetchNodeDefinitionLocator
 
         try {
             $classInfo = $this->classlikeInfoBuilder->build($classType);
-        } catch (UnexpectedValueException $e) {
+        } catch (ClasslikeBuildingFailedException $e) {
             return null;
         }
 

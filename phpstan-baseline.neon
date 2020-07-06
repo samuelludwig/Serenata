@@ -11,21 +11,6 @@ parameters:
 			path: src/Analysis/ClassFilteringClasslikeListProvider.php
 
 		-
-			message: "#^Unused @throws Serenata\\\\Analysis\\\\CircularDependencyException annotation$#"
-			count: 2
-			path: src/Analysis/ClasslikeInfoBuilder.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Analysis/ClasslikeInfoBuilder.php
-
-		-
-			message: "#^UnexpectedValueException is never thrown in the corresponding try block$#"
-			count: 3
-			path: src/Analysis/ClasslikeInfoBuilder.php
-
-		-
 			message: "#^Unused @throws RuntimeException annotation$#"
 			count: 1
 			path: src/Analysis/ClasslikeListRegistry.php
@@ -284,6 +269,11 @@ parameters:
 			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/MethodCallNodeMetaTypeDeducer.php
+
+		-
+			message: "#^Missing @throws Serenata\\\\Analysis\\\\ClasslikeBuildingFailedException annotation$#"
+			count: 1
+			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
@@ -651,6 +641,11 @@ parameters:
 			path: src/Autocompletion/Providers/SuperglobalAutocompletionProvider.php
 
 		-
+			message: "#^Missing @throws Serenata\\\\Analysis\\\\ClasslikeBuildingFailedException annotation$#"
+			count: 1
+			path: src/CodeLenses/CodeLensesRetriever.php
+
+		-
 			message: "#^Unused @throws Serenata\\\\Commands\\\\BadCommandArgumentsException annotation$#"
 			count: 7
 			path: src/Commands/CommandFactory.php
@@ -701,6 +696,11 @@ parameters:
 			path: src/GotoDefinition/DefinitionLocator.php
 
 		-
+			message: "#^Missing @throws Serenata\\\\Tooltips\\\\TooltipGenerationFailedException annotation$#"
+			count: 2
+			path: src/GotoDefinition/DefinitionLocator.php
+
+		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/GotoDefinition/DocblockDefinitionLocator.php
@@ -719,11 +719,6 @@ parameters:
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
 			count: 1
 			path: src/GotoDefinition/MethodCallNodeDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/GotoDefinition/NameNodeDefinitionLocator.php
 
 		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
@@ -1111,74 +1106,9 @@ parameters:
 			path: src/Symbols/DocumentSymbolRetriever.php
 
 		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
-			count: 1
-			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^UnexpectedValueException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Tooltips/ClassConstFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Tooltips/ClassMethodNodeTooltipGenerator.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/ClassMethodNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Tooltips/ConstFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Tooltips/FuncCallNodeTooltipGenerator.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/FuncCallNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/FunctionNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/MethodCallNodeTooltipGenerator.php
-
-		-
 			message: "#^Parameter \\#1 \\$functionInfo of method Serenata\\\\Tooltips\\\\FunctionTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
 			count: 1
 			path: src/Tooltips/MethodCallNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/Tooltips/NameNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/PropertyFetchNodeTooltipGenerator.php
 
 		-
 			message: "#^Parameter \\#1 \\$info of method Serenata\\\\Tooltips\\\\PropertyTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\<string, mixed\\>\\|null given\\.$#"
@@ -1186,34 +1116,9 @@ parameters:
 			path: src/Tooltips/PropertyFetchNodeTooltipGenerator.php
 
 		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/StaticMethodCallNodeTooltipGenerator.php
-
-		-
 			message: "#^Parameter \\#1 \\$functionInfo of method Serenata\\\\Tooltips\\\\FunctionTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
 			count: 1
 			path: src/Tooltips/StaticMethodCallNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Tooltips/StaticPropertyFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 13
-			path: src/Tooltips/TooltipProvider.php
-
-		-
-			message: "#^Method Serenata\\\\Tooltips\\\\TooltipProvider\\:\\:getNodeAt\\(\\) should return PhpParser\\\\Node but returns PhpParser\\\\Node\\|null\\.$#"
-			count: 1
-			path: src/Tooltips/TooltipProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class PhpParser\\\\Node\\\\Name\\\\FullyQualified constructor expects array\\<string\\>\\|PhpParser\\\\Node\\\\Name\\|string, PhpParser\\\\Node\\\\Name\\|null given\\.$#"
-			count: 1
-			path: src/Tooltips/TooltipProvider.php
 
 		-
 			message: "#^Missing @throws Exception annotation$#"
@@ -2186,13 +2091,8 @@ parameters:
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
 
 		-
-			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertNotNull\\(\\) with array will always evaluate to true\\.$#"
+			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertNotNull\\(\\) with array\\<string, mixed\\> will always evaluate to true\\.$#"
 			count: 4
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\ClassInfoJsonRpcQueueItemHandlerTest\\:\\:getClassInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
 
 		-
