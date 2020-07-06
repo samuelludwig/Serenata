@@ -67,6 +67,10 @@
     "bin": [
         "src/Main.php"
     ],
+    "scripts": {
+        "phpstan": "phpstan analyse",
+        "phpstan-generate-baseline": "@phpstan --no-interaction --no-progress --generate-baseline"
+    },
     "funding": [
         {
             "type": "liberapay",
