@@ -101,7 +101,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array                         $constant
+     * @param array<string,mixed>           $constant
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -123,7 +123,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array $classlike
+     * @param array<string,mixed> $classlike
      *
      * @return string
      */
@@ -146,7 +146,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $constant
+     * @param array<string,mixed>           $constant
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
@@ -160,7 +160,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array                         $constant
+     * @param array<string,mixed>           $constant
      * @param AutocompletionProviderContext $context
      *
      * @return string
@@ -193,7 +193,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array                         $constant
+     * @param array<string,mixed>           $constant
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit[]

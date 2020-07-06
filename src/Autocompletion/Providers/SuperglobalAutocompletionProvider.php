@@ -5,8 +5,6 @@ namespace Serenata\Autocompletion\Providers;
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 
-
-
 use Serenata\Utility\TextEdit;
 
 /**
@@ -28,7 +26,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
     }
 
     /**
-     * @param array                         $superGlobal
+     * @param array<string,mixed>           $superGlobal
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -58,7 +56,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $superGlobal
+     * @param array<string,mixed>           $superGlobal
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
@@ -69,7 +67,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
     }
 
     /**
-     * @return array
+     * @return array<array<string,mixed>>
      */
     private function getSuperGlobals(): array
     {

@@ -28,7 +28,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
     }
 
     /**
-     * @param array                         $keyword
+     * @param array<string,mixed>           $keyword
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -55,7 +55,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $keyword
+     * @param array<string,mixed>           $keyword
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
@@ -66,7 +66,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
     }
 
     /**
-     * @return array
+     * @return array<array<string,mixed>>
      */
     private function getKeywords(): array
     {

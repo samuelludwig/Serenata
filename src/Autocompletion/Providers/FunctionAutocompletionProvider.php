@@ -131,7 +131,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array                         $function
+     * @param array<string,mixed>           $function
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
@@ -157,7 +157,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array $function
+     * @param array<string,mixed> $function
      *
      * @return string
      */
@@ -180,7 +180,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $function
+     * @param array<string,mixed>           $function
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
@@ -198,7 +198,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array                         $function
+     * @param array<string,mixed>           $function
      * @param AutocompletionProviderContext $context
      * @param bool                          $shouldIncludeParanthesesInInsertText
      *
@@ -243,7 +243,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
     }
 
     /**
-     * @param array                         $function
+     * @param array<string,mixed>           $function
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit[]

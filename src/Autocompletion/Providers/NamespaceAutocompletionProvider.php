@@ -68,7 +68,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
             }
         );
 
-        /** @var array $bestApproximations */
+        /** @var array<array<string,mixed>> $bestApproximations */
         $bestApproximations = $this->bestStringApproximationDeterminer->determine(
             $namespaceArrays,
             $context->getPrefix(),
@@ -82,7 +82,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
     }
 
     /**
-     * @param array                         $namespace
+     * @param array<string,mixed>           $namespace
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -118,7 +118,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $namespace
+     * @param array<string,mixed>           $namespace
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit

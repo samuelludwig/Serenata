@@ -61,12 +61,18 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
 
         $typeName = $this->determineTypeNameOfNode($node->type);
 
+        if ($typeName === null) {
+            return [];
+        }
+
         $suggestions = $this->generateSuggestionsForName($typeName, $context);
 
         $typeNameParts = array_filter(explode('\\', $typeName));
 
         if (count($typeNameParts) > 1) {
             $lastTypeNamePart = array_pop($typeNameParts);
+
+            assert($lastTypeNamePart !== null);
 
             $suggestions = array_merge($suggestions, $this->generateSuggestionsForName($lastTypeNamePart, $context));
         }
@@ -113,7 +119,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
             PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE
         );
 
-        if (!$words || count($words) === 0) {
+        if ($words === false || count($words) === 0) {
             return '';
         }
 

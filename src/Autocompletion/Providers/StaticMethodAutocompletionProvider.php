@@ -226,11 +226,11 @@ final class StaticMethodAutocompletionProvider implements AutocompletionProvider
      */
     private function extractProtectionLevelStringFromMemberData(array $data): string
     {
-        if ($data['isPublic']) {
+        if ($data['isPublic'] === true) {
             return 'public';
-        } elseif ($data['isProtected']) {
+        } elseif ($data['isProtected'] === true) {
             return 'protected';
-        } elseif ($data['isPrivate']) {
+        } elseif ($data['isPrivate'] === true) {
             return 'private';
         }
 

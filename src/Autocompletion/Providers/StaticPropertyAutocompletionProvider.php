@@ -83,6 +83,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
             }
         }, $this->toplevelTypeExtractor->extract($type));
 
+        /** @var array<array<string,mixed>> $classlikeInfoElements */
         $classlikeInfoElements = array_filter($classlikeInfoElements);
 
         foreach ($classlikeInfoElements as $classlikeInfoElement) {
@@ -91,10 +92,10 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     }
 
     /**
-     * @param array                         $classlikeInfo
+     * @param array<string,mixed>           $classlikeInfo
      * @param AutocompletionProviderContext $context
      *
-     * @return Generator
+     * @return Generator<CompletionItem>
      */
     private function createSuggestionsForClasslikeInfo(
         array $classlikeInfo,
@@ -108,7 +109,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     }
 
     /**
-     * @param array                         $property
+     * @param array<string,mixed>           $property
      * @param AutocompletionProviderContext $context
      *
      * @return CompletionItem
@@ -140,7 +141,7 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $property
+     * @param array<string,mixed>           $property
      * @param AutocompletionProviderContext $context
      *
      * @return TextEdit
@@ -151,17 +152,17 @@ final class StaticPropertyAutocompletionProvider implements AutocompletionProvid
     }
 
     /**
-     * @param array $data
+     * @param array<string,mixed> $data
      *
      * @return string
      */
     private function extractProtectionLevelStringFromMemberData(array $data): string
     {
-        if ($data['isPublic']) {
+        if ($data['isPublic'] === true) {
             return 'public';
-        } elseif ($data['isProtected']) {
+        } elseif ($data['isProtected'] === true) {
             return 'protected';
-        } elseif ($data['isPrivate']) {
+        } elseif ($data['isPrivate'] === true) {
             return 'private';
         }
 

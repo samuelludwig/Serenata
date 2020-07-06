@@ -45,7 +45,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
     }
 
     /**
-     * @param array                         $tag
+     * @param array<string,mixed>           $tag
      * @param AutocompletionProviderContext $context
      * @param string                        $prefixOverride
      *
@@ -76,7 +76,7 @@ final class DocblockTagAutocompletionProvider implements AutocompletionProviderI
      * separator (the backslash \) whilst these clients don't. Using a {@see TextEdit} rather than a simple insertText
      * ensures that the entire prefix is replaced along with the insertion.
      *
-     * @param array                         $tag
+     * @param array<string,mixed>           $tag
      * @param AutocompletionProviderContext $context
      * @param string                        $prefixOverride
      *
