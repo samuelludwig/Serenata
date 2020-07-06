@@ -124,7 +124,9 @@ use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
         $this->docblockTypeTransformer = $docblockTypeTransformer;
     }
 
-    /// @inherited
+    /**
+     * @inheritDoc
+     */
     public function build(string $fqcn): array
     {
         $this->resolutionStack = [];
