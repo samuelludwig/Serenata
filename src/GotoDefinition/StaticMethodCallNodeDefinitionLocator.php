@@ -2,8 +2,6 @@
 
 namespace Serenata\GotoDefinition;
 
-use UnexpectedValueException;
-
 use PhpParser\Node;
 
 use Serenata\Analysis\Node\MethodCallMethodInfoRetriever;
@@ -36,7 +34,7 @@ final class StaticMethodCallNodeDefinitionLocator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -48,7 +46,7 @@ final class StaticMethodCallNodeDefinitionLocator
         $infoElements = $this->methodCallMethodInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
         if (count($infoElements) === 0) {
-            throw new UnexpectedValueException('No method call information was found for node');
+            throw new DefinitionLocationFailedException('No method call information was found for node');
         }
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.

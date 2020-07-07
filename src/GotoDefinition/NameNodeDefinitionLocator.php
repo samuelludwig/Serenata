@@ -11,8 +11,6 @@ use Serenata\Common\Position;
 
 use PhpParser\Node;
 
-use Serenata\Tooltips\TooltipGenerationFailedException;
-
 use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
 
@@ -48,7 +46,7 @@ final class NameNodeDefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws TooltipGenerationFailedException when the constant was not found.
+     * @throws DefinitionLocationFailedException when the constant was not found.
      *
      * @return GotoDefinitionResponse
      */
@@ -67,7 +65,7 @@ final class NameNodeDefinitionLocator
     /**
      * @param string $fullyQualifiedName
      *
-     * @throws TooltipGenerationFailedException
+     * @throws DefinitionLocationFailedException
      *
      * @return array<string,mixed>
      */
@@ -76,8 +74,8 @@ final class NameNodeDefinitionLocator
         try {
             return $this->classLikeInfoBuilder->build($fullyQualifiedName);
         } catch (ClasslikeBuildingFailedException $e) {
-            throw new TooltipGenerationFailedException(
-                'Could not generate tooltip because classlike info could not be fetched',
+            throw new DefinitionLocationFailedException(
+                'Could not fetch definition location because classlike info could not be fetched',
                 0,
                 $e
             );

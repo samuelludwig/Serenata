@@ -2,8 +2,6 @@
 
 namespace Serenata\GotoDefinition;
 
-use UnexpectedValueException;
-
 use PhpParser\Node;
 
 use Serenata\Analysis\ConstantListProviderInterface;
@@ -11,7 +9,6 @@ use Serenata\Analysis\ConstantListProviderInterface;
 use Serenata\Analysis\Node\ConstFetchNodeFqsenDeterminer;
 
 use Serenata\Common\Position;
-
 
 use Serenata\Utility\Location;
 use Serenata\Utility\TextDocumentItem;
@@ -48,7 +45,7 @@ final class ConstFetchNodeDefinitionLocator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException when the constant was not found.
+     * @throws DefinitionLocationFailedException when the constant was not found.
      *
      * @return GotoDefinitionResponse
      */
@@ -67,7 +64,7 @@ final class ConstFetchNodeDefinitionLocator
     /**
      * @param string $fullyQualifiedName
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return array<string,mixed>
      */
@@ -76,7 +73,7 @@ final class ConstFetchNodeDefinitionLocator
         $functions = $this->constantListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
+            throw new DefinitionLocationFailedException('No data found for function with name ' . $fullyQualifiedName);
         }
 
         return $functions[$fullyQualifiedName];

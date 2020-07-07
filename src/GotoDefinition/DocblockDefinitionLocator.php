@@ -2,8 +2,6 @@
 
 namespace Serenata\GotoDefinition;
 
-use UnexpectedValueException;
-
 use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\ClasslikeBuildingFailedException;
 use Serenata\Analysis\DocblockPositionalNameResolverFactory;
@@ -45,6 +43,8 @@ final class DocblockDefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
+     * @throws DefinitionLocationFailedException
+     *
      * @return GotoDefinitionResponse
      */
     public function locate(TextDocumentItem $textDocumentItem, Position $position): GotoDefinitionResponse
@@ -54,7 +54,7 @@ final class DocblockDefinitionLocator
         try {
             $info = $this->classlikeInfoBuilder->build($fqcn);
         } catch (ClasslikeBuildingFailedException $e) {
-            throw new UnexpectedValueException(
+            throw new DefinitionLocationFailedException(
                 'Could not retrieve info for classlike with FQCN "' . $fqcn . '"',
                 0,
                 $e
@@ -68,6 +68,8 @@ final class DocblockDefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
+     * @throws DefinitionLocationFailedException
+     *
      * @return string
      */
     private function getFqcnFromComment(TextDocumentItem $textDocumentItem, Position $position): string
@@ -75,13 +77,15 @@ final class DocblockDefinitionLocator
         $line = $this->getLineInText($textDocumentItem->getText(), $position->getLine());
 
         if (!$this->isCommentLine($line)) {
-            throw new UnexpectedValueException('Not a docblock line');
+            throw new DefinitionLocationFailedException('Not a docblock line');
         }
 
         $word = $this->getWordAtOffset($line, $position->getCharacter());
 
         if ($word === null || $word === '') {
-            throw new UnexpectedValueException(sprintf('No word at %s in line "%s"', $position->getCharacter(), $line));
+            throw new DefinitionLocationFailedException(
+                sprintf('No word at %s in line "%s"', $position->getCharacter(), $line)
+            );
         }
 
         $filePosition = new FilePosition($textDocumentItem->getUri(), $position);

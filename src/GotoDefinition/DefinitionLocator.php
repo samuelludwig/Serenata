@@ -3,7 +3,6 @@
 namespace Serenata\GotoDefinition;
 
 use LogicException;
-use UnexpectedValueException;
 
 use PhpParser\Node;
 
@@ -117,10 +116,10 @@ final class DefinitionLocator
 
             try {
                 return $this->locateDefinitionOfStructuralElementRepresentedByNode($node, $textDocumentItem, $position);
-            } catch (UnexpectedValueException $e) {
+            } catch (DefinitionLocationFailedException $e) {
                 return $this->docblockDefinitionLocator->locate($textDocumentItem, $position);
             }
-        } catch (UnexpectedValueException $e) {
+        } catch (DefinitionLocationFailedException $e) {
             return new GotoDefinitionResponse(null);
         }
     }
@@ -129,7 +128,7 @@ final class DefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return Node
      */
@@ -141,7 +140,7 @@ final class DefinitionLocator
         $nearestInterestingNode = $result->getNearestInterestingNode();
 
         if ($node === null) {
-            throw new UnexpectedValueException(
+            throw new DefinitionLocationFailedException(
                 'No node found at location ' . $position->getLine() . ':' . $position->getCharacter()
             );
         }
@@ -161,7 +160,7 @@ final class DefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -198,7 +197,7 @@ final class DefinitionLocator
             }
         }
 
-        throw new UnexpectedValueException('Don\'t know how to handle node of type ' . get_class($node));
+        throw new DefinitionLocationFailedException('Don\'t know how to handle node of type ' . get_class($node));
     }
 
     /**
@@ -206,7 +205,7 @@ final class DefinitionLocator
      * @param TextDocumentItem   $textDocumentItem
      * @param Position           $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -223,7 +222,7 @@ final class DefinitionLocator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -240,7 +239,7 @@ final class DefinitionLocator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -257,7 +256,7 @@ final class DefinitionLocator
      * @param TextDocumentItem        $textDocumentItem
      * @param Position                $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -274,7 +273,7 @@ final class DefinitionLocator
      * @param TextDocumentItem              $textDocumentItem
      * @param Position                      $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -291,7 +290,7 @@ final class DefinitionLocator
      * @param TextDocumentItem     $textDocumentItem
      * @param Position             $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -308,7 +307,7 @@ final class DefinitionLocator
      * @param TextDocumentItem          $textDocumentItem
      * @param Position                  $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -325,7 +324,7 @@ final class DefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -344,7 +343,11 @@ final class DefinitionLocator
         $nameNode = new Node\Name\FullyQualified($node->name->toString());
 
         if ($parentNode instanceof Node\Stmt\GroupUse) {
-            $nameNode = new Node\Name\FullyQualified(Node\Name::concat($parentNode->prefix, $nameNode));
+            $name = Node\Name::concat($parentNode->prefix, $nameNode);
+
+            assert($name !== null);
+
+            $nameNode = new Node\Name\FullyQualified($name);
         }
 
         return $this->nameNodeDefinitionLocator->locate($nameNode, $textDocumentItem, $position);
@@ -355,7 +358,7 @@ final class DefinitionLocator
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */

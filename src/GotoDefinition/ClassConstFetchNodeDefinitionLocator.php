@@ -2,8 +2,6 @@
 
 namespace Serenata\GotoDefinition;
 
-use UnexpectedValueException;
-
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 
 use PhpParser\Node;
@@ -12,6 +10,7 @@ use Serenata\Analysis\ClasslikeInfoBuilderInterface;
 use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionException;
 use Serenata\Analysis\Typing\Deduction\NodeTypeDeducerInterface;
 
 use Serenata\Common\Position;
@@ -61,9 +60,7 @@ final class ClassConstFetchNodeDefinitionLocator
      * @param TextDocumentItem          $textDocumentItem
      * @param Position                  $position
      *
-     * @throws UnexpectedValueException when the constant name is not a string (i.e. an error node).
-     * @throws UnexpectedValueException when the type of the class could not be determined.
-     * @throws UnexpectedValueException when no tooltips could be determined.
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -73,7 +70,7 @@ final class ClassConstFetchNodeDefinitionLocator
         Position $position
     ): GotoDefinitionResponse {
         if (!$node->name instanceof Node\Identifier) {
-            throw new UnexpectedValueException("Can't deduce the type of a non-string node");
+            throw new DefinitionLocationFailedException("Can't deduce the type of a non-string node");
         }
 
         $classType = $this->getClassTypes($node, $textDocumentItem, $position);
@@ -91,7 +88,7 @@ final class ClassConstFetchNodeDefinitionLocator
         }
 
         if (count($definitions) === 0) {
-            throw new UnexpectedValueException('Could not determine any definition for the class constant');
+            throw new DefinitionLocationFailedException('Could not determine any definition for the class constant');
         }
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
@@ -103,7 +100,7 @@ final class ClassConstFetchNodeDefinitionLocator
      * @param TextDocumentItem          $textDocumentItem
      * @param Position                  $position
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return TypeNode
      */
@@ -120,8 +117,8 @@ final class ClassConstFetchNodeDefinitionLocator
                 $textDocumentItem,
                 $position
             ));
-        } catch (UnexpectedValueException $e) {
-            throw new UnexpectedValueException('Could not deduce the type of class', 0, $e);
+        } catch (TypeDeductionException $e) {
+            throw new DefinitionLocationFailedException('Could not deduce the type of class', 0, $e);
         }
 
         return $classType;

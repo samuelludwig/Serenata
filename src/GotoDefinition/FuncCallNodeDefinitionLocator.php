@@ -2,8 +2,6 @@
 
 namespace Serenata\GotoDefinition;
 
-use UnexpectedValueException;
-
 use PhpParser\Node;
 
 use Serenata\Analysis\FunctionListProviderInterface;
@@ -47,8 +45,7 @@ final class FuncCallNodeDefinitionLocator
      * @param TextDocumentItem   $textDocumentItem
      * @param Position           $position
      *
-     * @throws UnexpectedValueException when the function was not found.
-     * @throws UnexpectedValueException when a dynamic function call is passed.
+     * @throws DefinitionLocationFailedException
      *
      * @return GotoDefinitionResponse
      */
@@ -58,7 +55,7 @@ final class FuncCallNodeDefinitionLocator
         Position $position
     ): GotoDefinitionResponse {
         if (!$node->name instanceof Node\Name) {
-            throw new UnexpectedValueException('Fetching FQSEN of dynamic function calls is not supported');
+            throw new DefinitionLocationFailedException('Fetching FQSEN of dynamic function calls is not supported');
         }
 
         $fqsen = $this->functionCallNodeFqsenDeterminer->determine($node, $textDocumentItem->getUri(), $position);
@@ -71,7 +68,7 @@ final class FuncCallNodeDefinitionLocator
     /**
      * @param string $fullyQualifiedName
      *
-     * @throws UnexpectedValueException
+     * @throws DefinitionLocationFailedException
      *
      * @return array<string,mixed>
      */
@@ -80,7 +77,7 @@ final class FuncCallNodeDefinitionLocator
         $functions = $this->functionListProvider->getAll();
 
         if (!isset($functions[$fullyQualifiedName])) {
-            throw new UnexpectedValueException('No data found for function with name ' . $fullyQualifiedName);
+            throw new DefinitionLocationFailedException('No data found for function with name ' . $fullyQualifiedName);
         }
 
         return $functions[$fullyQualifiedName];

@@ -416,39 +416,9 @@ parameters:
 			path: src/Commands/CommandFactory.php
 
 		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
-
-		-
 			message: "#^Foreach overwrites \\$classType with its value variable\\.$#"
 			count: 1
 			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
-			count: 1
-			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
-
-		-
-			message: "#^UnexpectedValueException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/GotoDefinition/ConstFetchNodeDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 11
-			path: src/GotoDefinition/DefinitionLocator.php
 
 		-
 			message: "#^Method Serenata\\\\GotoDefinition\\\\DefinitionLocator\\:\\:getNodeAt\\(\\) should return PhpParser\\\\Node but returns PhpParser\\\\Node\\|null\\.$#"
@@ -456,49 +426,9 @@ parameters:
 			path: src/GotoDefinition/DefinitionLocator.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of class PhpParser\\\\Node\\\\Name\\\\FullyQualified constructor expects array\\<string\\>\\|PhpParser\\\\Node\\\\Name\\|string, PhpParser\\\\Node\\\\Name\\|null given\\.$#"
-			count: 1
-			path: src/GotoDefinition/DefinitionLocator.php
-
-		-
-			message: "#^Missing @throws Serenata\\\\Tooltips\\\\TooltipGenerationFailedException annotation$#"
-			count: 2
-			path: src/GotoDefinition/DefinitionLocator.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/GotoDefinition/DocblockDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 2
-			path: src/GotoDefinition/FuncCallNodeDefinitionLocator.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/GotoDefinition/FuncCallNodeDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/GotoDefinition/MethodCallNodeDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/GotoDefinition/PropertyFetchDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/GotoDefinition/StaticMethodCallNodeDefinitionLocator.php
-
-		-
-			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/GotoDefinition/StaticPropertyFetchNodeDefinitionLocator.php
 
 		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
