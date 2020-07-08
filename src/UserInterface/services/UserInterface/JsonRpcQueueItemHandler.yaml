@@ -139,6 +139,9 @@ services:
             - '@documentSymbolRetriever'
             - '@messageLogger'
 
+    referencesJsonRpcQueueItemHandler:
+        class: Serenata\UserInterface\JsonRpcQueueItemHandler\ReferencesJsonRpcQueueItemHandler
+
     executeCommandJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\ExecuteCommandJsonRpcQueueItemHandler
         arguments:

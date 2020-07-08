@@ -986,6 +986,11 @@ parameters:
 			path: src/UserInterface/JsonRpcQueueItemHandler/LogTraceJsonRpcQueueItemHandler.php
 
 		-
+			message: "#^Unused @throws Throwable annotation$#"
+			count: 1
+			path: src/UserInterface/JsonRpcQueueItemHandler/ReferencesJsonRpcQueueItemHandler.php
+
+		-
 			message: "#^Unused @throws Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\InvalidArgumentsException annotation$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/ResolveTypeJsonRpcQueueItemHandler.php
