@@ -12,6 +12,8 @@ use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 use Symfony\Component\Finder\Finder;
 
+use Symfony\Component\Finder\Iterator\FilenameFilterIterator;
+
 /**
  * Iterator that iterates all indexable files for a path.
  *
@@ -120,17 +122,12 @@ final class IndexableFileIterator implements IteratorAggregate
 
         $iterator = new Iterating\AbsolutePathFilterIterator($finder->getIterator(), [], $this->globsToExclude);
 
+        // We scan the parent folder for files, ensure we don't scan anything else but the requested file.
+        $iterator = new FilenameFilterIterator($iterator, [basename($uri)], []);
+
         // $iterator = $this->fixUpUriEncoding($iterator);
 
-        foreach ($iterator as $item) {
-            if ($item->isFile() && $item->getFilename() === basename($uri)) {
-                // We scan the parent folder for files, see above. Breaking avoids scanning other files and,
-                // possibly, folders recursively.
-                yield $item;
-
-                return;
-            }
-        }
+        yield from $iterator;
     }
 
     // /**
