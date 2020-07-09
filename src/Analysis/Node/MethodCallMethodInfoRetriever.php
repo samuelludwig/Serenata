@@ -68,20 +68,25 @@ final class MethodCallMethodInfoRetriever
      */
     public function retrieve(Node\Expr $node, TextDocumentItem $textDocumentItem, Position $position): array
     {
+        $methodName = null;
+
         if ($node instanceof Node\Expr\New_) {
+            $methodName = '__construct';
+
             if ($node->class instanceof Node\Expr) {
                 // Can't currently deduce type of an expression such as "$this->{$foo}()";
                 throw new UnexpectedValueException('Can\'t determine information of dynamic method call');
             } elseif ($node->class instanceof Node\Stmt\Class_) {
                 throw new UnexpectedValueException('Can\'t determine information of anonymous class constructor call');
             }
-        } elseif ($node->name instanceof Node\Expr) {
+        } elseif (!$node->name instanceof Node\Expr) {
+            $methodName = $node->name->name;
+        } else {
             // Can't currently deduce type of an expression such as "$this->{$foo}()";
             throw new UnexpectedValueException('Can\'t determine information of dynamic method call');
         }
 
         $objectNode = ($node instanceof Node\Expr\MethodCall) ? $node->var : $node->class;
-        $methodName = ($node instanceof Node\Expr\New_) ? '__construct' : $node->name->name;
 
         $typeOfVar = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $objectNode,

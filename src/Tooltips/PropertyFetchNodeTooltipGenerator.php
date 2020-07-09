@@ -60,6 +60,8 @@ final class PropertyFetchNodeTooltipGenerator
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         $info = array_shift($infoElements);
 
+        assert($info !== null);
+
         return $this->propertyTooltipGenerator->generate($info);
     }
 }

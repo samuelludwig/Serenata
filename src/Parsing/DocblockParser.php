@@ -159,7 +159,7 @@ final class DocblockParser
         if ($docblock !== null && $docblock !== '') {
             $docblock = $this->normalizeDocblock($docblock);
 
-            if ($docblock !== null) {
+            if ($docblock !== '') {
                 preg_match_all('/^@[a-zA-Z0-9-\\\\]+/m', $docblock, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
                 $segments = [];

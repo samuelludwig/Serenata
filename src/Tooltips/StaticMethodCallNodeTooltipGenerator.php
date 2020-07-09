@@ -57,6 +57,8 @@ final class StaticMethodCallNodeTooltipGenerator
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         $info = array_shift($infoElements);
 
+        assert($info !== null);
+
         return $this->functionTooltipGenerator->generate($info);
     }
 }

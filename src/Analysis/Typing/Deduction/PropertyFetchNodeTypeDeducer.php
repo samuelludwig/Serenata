@@ -92,7 +92,7 @@ final class PropertyFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             }
         }
 
-        // We use an associative array so we automatically avoid duplicate types.
+        /** @var string[] $types We use an associative array so we automatically avoid duplicate types. */
         $types = array_keys($types);
 
         $expressionString = $this->prettyPrinter->prettyPrintExpr($context->getNode());

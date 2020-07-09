@@ -2,12 +2,16 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Common\Position;
+
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
 
 use Serenata\Sockets\JsonRpcResponse;
 use Serenata\Sockets\JsonRpcQueueItem;
@@ -33,15 +37,23 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
     private $expressionTypeDeducer;
 
     /**
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
      * @param SourceCodeStreamReader $sourceCodeStreamReader
      * @param ExpressionTypeDeducer  $expressionTypeDeducer
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         SourceCodeStreamReader $sourceCodeStreamReader,
-        ExpressionTypeDeducer $expressionTypeDeducer
+        ExpressionTypeDeducer $expressionTypeDeducer,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->sourceCodeStreamReader = $sourceCodeStreamReader;
         $this->expressionTypeDeducer = $expressionTypeDeducer;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -94,7 +106,7 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
      * @param Position $position
      * @param bool     $ignoreLastElement
      *
-     * @return array<string,mixed>
+     * @return string[]
      */
     public function deduceTypes(
         string $uri,
@@ -103,11 +115,11 @@ final class DeduceTypesJsonRpcQueueItemHandler extends AbstractJsonRpcQueueItemH
         Position $position,
         bool $ignoreLastElement
     ): array {
-        return $this->expressionTypeDeducer->deduce(
+        return $this->toplevelTypeExtractor->extract($this->expressionTypeDeducer->deduce(
             new TextDocumentItem($uri, $code),
             $position,
             $codeWithExpression,
             $ignoreLastElement
-        );
+        ));
     }
 }

@@ -115,7 +115,12 @@ final class ManagerRegistry extends AbstractManagerRegistry implements EventEmit
 
             $config = ORM\Tools\Setup::createXMLMetadataConfiguration([__DIR__ . "/Structures/Mapping"], true);
             $config->setSecondLevelCacheEnabled();
-            $config->getSecondLevelCacheConfiguration()->setCacheFactory($cacheFactory);
+
+            $secondLevelCacheConfiguration = $config->getSecondLevelCacheConfiguration();
+
+            assert($secondLevelCacheConfiguration !== null);
+
+            $secondLevelCacheConfiguration->setCacheFactory($cacheFactory);
 
             $this->entityManager = EntityManager::create($this->getConnectionInstance(), $config);
         }

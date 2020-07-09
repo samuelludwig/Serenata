@@ -25,7 +25,7 @@ final class AnnotationFilteringClasslikeListProvider implements ClasslikeListPro
      */
     public function getAll(): array
     {
-        return array_filter($this->delegate->getAll(), function (array $classlike) {
+        return array_filter($this->delegate->getAll(), function (array $classlike): bool {
             return $classlike['isAnnotation'] ?? false;
         });
     }

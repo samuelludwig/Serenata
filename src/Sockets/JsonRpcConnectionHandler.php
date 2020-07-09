@@ -222,9 +222,13 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
             $serializedData = $this->getCorrectedUtf8Data($serializedData);
 
             $data = json_encode($serializedData);
+
+            if ($data === false) {
+                trigger_error('Recovery failed, JSON reports "' . json_last_error_msg() . '"', E_USER_WARNING);
+            }
         }
 
-        return $data;
+        return $data !== false ? $data : '';
     }
 
     /**
@@ -256,7 +260,7 @@ final class JsonRpcConnectionHandler implements JsonRpcMessageSenderInterface
     {
         $end = strpos($data, self::HEADER_DELIMITER);
 
-        if ($end === -1) {
+        if ($end === false) {
             throw new RequestParsingException('Header delimiter not found');
         }
 

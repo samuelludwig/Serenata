@@ -156,8 +156,8 @@ final class ScopeLimitingVisitor extends NodeVisitorAbstract
     }
 
     /**
-     * @param Node                $node
-     * @param array<string,mixed> $properties
+     * @param Node     $node
+     * @param string[] $properties
      */
     private function memorizeNodeProperties(Node $node, array $properties): void
     {

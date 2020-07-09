@@ -20,7 +20,7 @@ abstract class AbstractConverter
     {
         $typeExtractor = new ToplevelTypeExtractor();
 
-        return array_map(function (TypeNode $nestedType) {
+        return array_map(function (TypeNode $nestedType): array {
             return [
                 'type'         => (string) $nestedType,
                 'resolvedType' => (string) $nestedType,

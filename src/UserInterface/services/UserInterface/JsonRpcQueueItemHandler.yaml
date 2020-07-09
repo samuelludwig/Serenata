@@ -95,6 +95,7 @@ services:
         arguments:
             - '@sourceCodeStreamReader'
             - '@expressionTypeDeducer'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     signatureHelpJsonRpcQueueItemHandler:
         class: Serenata\UserInterface\JsonRpcQueueItemHandler\SignatureHelpJsonRpcQueueItemHandler

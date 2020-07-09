@@ -27,9 +27,9 @@ final class DocumentSymbolRetriever
     /**
      * @param File $file
      *
-     * @return SymbolInformation[]|null
+     * @return SymbolInformation[]
      */
-    public function retrieve(File $file): ?array
+    public function retrieve(File $file): array
     {
         return $this->sortSymbolListByLocation(array_merge(
             $this->getConstantSymbolsForFile($file),
@@ -41,7 +41,7 @@ final class DocumentSymbolRetriever
     /**
      * @param File $file
      *
-     * @return array<string,mixed>
+     * @return SymbolInformation[]
      */
     private function getConstantSymbolsForFile(File $file): array
     {
@@ -53,7 +53,7 @@ final class DocumentSymbolRetriever
     /**
      * @param File $file
      *
-     * @return array<string,mixed>
+     * @return SymbolInformation[]
      */
     private function getFunctionSymbolsForFile(File $file): array
     {
@@ -65,7 +65,7 @@ final class DocumentSymbolRetriever
     /**
      * @param File $file
      *
-     * @return array<string,mixed>
+     * @return SymbolInformation[]
      */
     private function getClasslikeSymbolsForFile(File $file): array
     {
@@ -82,7 +82,7 @@ final class DocumentSymbolRetriever
      * @param Classlike $classlike
      * @param File      $file
      *
-     * @return array<string,mixed>
+     * @return SymbolInformation[]
      */
     private function getMemberSymbolsForClasslike(Classlike $classlike, File $file): array
     {
@@ -215,9 +215,9 @@ final class DocumentSymbolRetriever
     }
 
     /**
-     * @param array<string,mixed> $symbolList
+     * @param SymbolInformation[] $symbolList
      *
-     * @return array<string,mixed>
+     * @return SymbolInformation[]
      */
     private function sortSymbolListByLocation(array $symbolList): array
     {

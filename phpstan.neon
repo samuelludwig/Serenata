@@ -38,3 +38,15 @@ parameters:
         -
             message: '#Variable property access on#'
             path: 'src/Analysis/Visiting/ScopeLimitingVisitor.php'
+
+        # I think these two are bugs in PHPStan's stubs.
+        -
+            message: "#^Call to an undefined method Ds\\\\PriorityQueue\\<Serenata\\\\Sockets\\\\JsonRpcQueueItem\\>\\:\\:push\\(\\)\\.$#"
+            count: 1
+            path: src/Sockets/JsonRpcQueue.php
+
+        -
+            message: "#^Call to an undefined method Ds\\\\PriorityQueue\\<Serenata\\\\Sockets\\\\JsonRpcQueueItem\\>\\:\\:pop\\(\\)\\.$#"
+            count: 1
+            path: src/Sockets/JsonRpcQueue.php
+

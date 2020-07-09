@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeParameterNode;
 
@@ -33,10 +34,6 @@ final class DocblockTypeTransformer implements DocblockTypeTransformerInterface
             return new IntersectionTypeNode(array_map(function (TypeNode $type) use ($transformer): TypeNode {
                 return $this->transform($type, $transformer);
             }, $transformedType->types));
-        } elseif ($transformedType instanceof IntersectionTypeNode) {
-            return new IntersectionTypeNode(array_map(function (TypeNode $type) use ($transformer): TypeNode {
-                return $this->transform($type, $transformer);
-            }, $transformedType->types));
         } elseif ($transformedType instanceof ArrayShapeNode) {
             return new ArrayShapeNode(array_map(function (TypeNode $type) use ($transformer): TypeNode {
                 return $this->transform($type, $transformer);
@@ -46,15 +43,23 @@ final class DocblockTypeTransformer implements DocblockTypeTransformerInterface
         } elseif ($transformedType instanceof NullableTypeNode) {
             return new NullableTypeNode($this->transform($transformedType->type, $transformer));
         } elseif ($transformedType instanceof CallableTypeNode) {
+            $identifierNode = $this->transform($transformedType->identifier, $transformer);
+
+            assert($identifierNode instanceof IdentifierTypeNode);
+
             return new CallableTypeNode(
-                $this->transform($transformedType->identifier, $transformer),
+                $identifierNode,
                 // TODO: These parameters are not actual type nodes, but just nodes.
                 $transformedType->parameters,
                 $this->transform($transformedType->returnType, $transformer)
             );
         } elseif ($transformedType instanceof GenericTypeNode) {
+            $identifierNode = $this->transform($transformedType->type, $transformer);
+
+            assert($identifierNode instanceof IdentifierTypeNode);
+
             return new GenericTypeNode(
-                $this->transform($transformedType->type, $transformer),
+                $identifierNode,
                 array_map(function (TypeNode $type) use ($transformer): TypeNode {
                     return $this->transform($type, $transformer);
                 }, $transformedType->genericTypes)

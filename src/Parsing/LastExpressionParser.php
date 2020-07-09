@@ -412,6 +412,7 @@ final class LastExpressionParser implements Parser
             return [];
         }
 
+        $tokenString = null;
         $tokenStartOffset = strlen($code);
         $currentTokenIndex = count($tokens);
 

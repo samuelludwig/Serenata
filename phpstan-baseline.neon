@@ -21,11 +21,6 @@ parameters:
 			path: src/Analysis/ConstantListRegistry.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"array\"\\.$#"
-			count: 1
-			path: src/Analysis/Conversion/AbstractConverter.php
-
-		-
 			message: "#^Unused @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/DocblockPositionalNameResolver.php
@@ -121,11 +116,6 @@ parameters:
 			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
 
 		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 1
 			path: src/Analysis/Node/MethodCallMethodInfoRetriever.php
@@ -156,36 +146,6 @@ parameters:
 			path: src/Analysis/NodeAtOffsetLocator.php
 
 		-
-			message: "#^Only booleans are allowed in a negated boolean, mixed given\\.$#"
-			count: 1
-			path: src/Analysis/Relations/AbstractResolver.php
-
-		-
-			message: "#^Only booleans are allowed in &&, mixed given on the left side\\.$#"
-			count: 1
-			path: src/Analysis/Relations/AbstractResolver.php
-
-		-
-			message: "#^Only booleans are allowed in \\|\\|, mixed given on the left side\\.$#"
-			count: 1
-			path: src/Analysis/Relations/InheritanceResolver.php
-
-		-
-			message: "#^Only booleans are allowed in \\|\\|, mixed given on the right side\\.$#"
-			count: 1
-			path: src/Analysis/Relations/InheritanceResolver.php
-
-		-
-			message: "#^Only booleans are allowed in &&, mixed given on the left side\\.$#"
-			count: 2
-			path: src/Analysis/Relations/InheritanceResolver.php
-
-		-
-			message: "#^Only booleans are allowed in &&, mixed given on the left side\\.$#"
-			count: 1
-			path: src/Analysis/Relations/InterfaceImplementationResolver.php
-
-		-
 			message: "#^Unused @throws Serenata\\\\Analysis\\\\SourceCodeReading\\\\FileSourceCodeReaderException annotation$#"
 			count: 1
 			path: src/Analysis/SourceCodeReading/FileSourceCodeStreamReader.php
@@ -204,16 +164,6 @@ parameters:
 			message: "#^Unused @throws RuntimeException annotation$#"
 			count: 1
 			path: src/Analysis/TraitFilteringClasslikeListProvider.php
-
-		-
-			message: "#^Foreach overwrites \\$type with its value variable\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ArrayDimFetchNodeTypeDeducer.php
-
-		-
-			message: "#^Instanceof between PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode and PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode will always evaluate to true\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ArrayDimFetchNodeTypeDeducer.php
 
 		-
 			message: "#^Argument of an invalid type PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode supplied for foreach, only iterables are supported\\.$#"
@@ -241,11 +191,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/ExpressionTypeDeducer.php
 
 		-
-			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ForeachNodeLoopValueTypeDeducer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 5
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
@@ -266,11 +211,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
 
 		-
-			message: "#^Call to function in_array\\(\\) requires parameter \\#3 to be set\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/MethodCallNodeMetaTypeDeducer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\ClasslikeBuildingFailedException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
@@ -286,11 +226,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/NodeTypeDeducer.php
 
 		-
-			message: "#^Parameter \\#4 \\$defaultTypes of method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:getLocalExpressionTypes\\(\\) expects array\\<string\\>, array\\<int, int\\|string\\> given\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/PropertyFetchNodeTypeDeducer.php
-
-		-
 			message: "#^Unused @throws RuntimeException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/FileClasslikeListProviderCachingDecorator.php
@@ -304,16 +239,6 @@ parameters:
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
 			count: 1
 			path: src/Analysis/VariableScanner.php
-
-		-
-			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\ParentAttachingVisitor\\:\\:\\$stack type has no value type specified in iterable type SplStack\\.$#"
-			count: 1
-			path: src/Analysis/Visiting/ParentAttachingVisitor.php
-
-		-
-			message: "#^Parameter \\#2 \\$properties of method Serenata\\\\Analysis\\\\Visiting\\\\ScopeLimitingVisitor\\:\\:memorizeNodeProperties\\(\\) expects array\\<string, mixed\\>, array\\<int, string\\> given\\.$#"
-			count: 5
-			path: src/Analysis/Visiting/ScopeLimitingVisitor.php
 
 		-
 			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
@@ -447,27 +372,12 @@ parameters:
 
 		-
 			message: "#^Throwable is never thrown in the corresponding try block$#"
-			count: 10
+			count: 8
 			path: src/Indexing/DoctrineStorage.php
 
 		-
 			message: "#^Missing @throws Throwable annotation$#"
 			count: 10
-			path: src/Indexing/DoctrineStorage.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:beginTransaction\\(\\)\\.$#"
-			count: 1
-			path: src/Indexing/DoctrineStorage.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:commit\\(\\)\\.$#"
-			count: 1
-			path: src/Indexing/DoctrineStorage.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:rollback\\(\\)\\.$#"
-			count: 1
 			path: src/Indexing/DoctrineStorage.php
 
 		-
@@ -484,11 +394,6 @@ parameters:
 			message: "#^UnexpectedValueException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Indexing/Indexer.php
-
-		-
-			message: "#^Cannot call method setCacheFactory\\(\\) on Doctrine\\\\ORM\\\\Cache\\\\CacheConfiguration\\|null\\.$#"
-			count: 1
-			path: src/Indexing/ManagerRegistry.php
 
 		-
 			message: "#^Missing @throws Doctrine\\\\ORM\\\\ORMException annotation$#"
@@ -641,26 +546,6 @@ parameters:
 			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
 
 		-
-			message: "#^Strict comparison using \\!\\=\\= between string and null will always evaluate to true\\.$#"
-			count: 1
-			path: src/Parsing/DocblockParser.php
-
-		-
-			message: "#^Instanceof between PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode and PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IntersectionTypeNode will always evaluate to false\\.$#"
-			count: 1
-			path: src/Parsing/DocblockTypeTransformer.php
-
-		-
-			message: "#^Parameter \\#1 \\$identifier of class PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\CallableTypeNode constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode, PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode given\\.$#"
-			count: 1
-			path: src/Parsing/DocblockTypeTransformer.php
-
-		-
-			message: "#^Parameter \\#1 \\$type of class PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\GenericTypeNode constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode, PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode given\\.$#"
-			count: 1
-			path: src/Parsing/DocblockTypeTransformer.php
-
-		-
 			message: "#^Method Serenata\\\\Parsing\\\\DocblockTypeTransformer\\:\\:transform\\(\\) should return PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode but returns PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\CallableTypeParameterNode\\.$#"
 			count: 1
 			path: src/Parsing/DocblockTypeTransformer.php
@@ -674,16 +559,6 @@ parameters:
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
 			count: 1
 			path: src/Parsing/LastExpressionParser.php
-
-		-
-			message: "#^Variable \\$tokenString might not be defined\\.$#"
-			count: 1
-			path: src/Parsing/LastExpressionParser.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Parsing/PartialParser.php
 
 		-
 			message: "#^PhpParser\\\\Error is never thrown in the corresponding try block$#"
@@ -721,11 +596,6 @@ parameters:
 			path: src/SignatureHelp/SignatureHelpRetriever.php
 
 		-
-			message: "#^Binary operation \"\\+\" between int\\|string\\|false and 0\\|1 results in an error\\.$#"
-			count: 1
-			path: src/SignatureHelp/SignatureHelpRetriever.php
-
-		-
 			message: "#^Serenata\\\\Sockets\\\\RequestParsingException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Sockets/JsonRpcConnectionHandler.php
@@ -736,32 +606,12 @@ parameters:
 			path: src/Sockets/JsonRpcConnectionHandler.php
 
 		-
-			message: "#^Method Serenata\\\\Sockets\\\\JsonRpcConnectionHandler\\:\\:getEncodedResponse\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: src/Sockets/JsonRpcConnectionHandler.php
-
-		-
 			message: "#^Unused @throws Serenata\\\\Sockets\\\\RequestParsingException annotation$#"
 			count: 2
 			path: src/Sockets/JsonRpcConnectionHandler.php
 
 		-
-			message: "#^Parameter \\#3 \\$length of function substr expects int, int\\|false given\\.$#"
-			count: 1
-			path: src/Sockets/JsonRpcConnectionHandler.php
-
-		-
-			message: "#^Call to an undefined method Ds\\\\PriorityQueue\\<Serenata\\\\Sockets\\\\JsonRpcQueueItem\\>\\:\\:push\\(\\)\\.$#"
-			count: 1
-			path: src/Sockets/JsonRpcQueue.php
-
-		-
 			message: "#^Unused @throws UnderflowException annotation$#"
-			count: 1
-			path: src/Sockets/JsonRpcQueue.php
-
-		-
-			message: "#^Call to an undefined method Ds\\\\PriorityQueue\\<Serenata\\\\Sockets\\\\JsonRpcQueueItem\\>\\:\\:pop\\(\\)\\.$#"
 			count: 1
 			path: src/Sockets/JsonRpcQueue.php
 
@@ -794,26 +644,6 @@ parameters:
 			message: "#^Unused @throws RuntimeException annotation$#"
 			count: 1
 			path: src/Sockets/SocketServer.php
-
-		-
-			message: "#^Method Serenata\\\\Symbols\\\\DocumentSymbolRetriever\\:\\:getMemberSymbolsForClasslike\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, Serenata\\\\Symbols\\\\SymbolInformation\\>\\.$#"
-			count: 1
-			path: src/Symbols/DocumentSymbolRetriever.php
-
-		-
-			message: "#^Parameter \\#1 \\$functionInfo of method Serenata\\\\Tooltips\\\\FunctionTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
-			count: 1
-			path: src/Tooltips/MethodCallNodeTooltipGenerator.php
-
-		-
-			message: "#^Parameter \\#1 \\$info of method Serenata\\\\Tooltips\\\\PropertyTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\<string, mixed\\>\\|null given\\.$#"
-			count: 1
-			path: src/Tooltips/PropertyFetchNodeTooltipGenerator.php
-
-		-
-			message: "#^Parameter \\#1 \\$functionInfo of method Serenata\\\\Tooltips\\\\FunctionTooltipGenerator\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\|null given\\.$#"
-			count: 1
-			path: src/Tooltips/StaticMethodCallNodeTooltipGenerator.php
 
 		-
 			message: "#^Missing @throws Exception annotation$#"
@@ -864,11 +694,6 @@ parameters:
 			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/CompletionJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Method Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\DeduceTypesJsonRpcQueueItemHandler\\:\\:deduceTypes\\(\\) should return array\\<string, mixed\\> but returns PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\\.$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DeduceTypesJsonRpcQueueItemHandler.php
 
 		-
 			message: "#^Unused @throws Throwable annotation$#"
@@ -1024,11 +849,6 @@ parameters:
 			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Property Serenata\\\\Utility\\\\ImmutableSet\\<T\\>\\:\\:\\$elements \\(array\\<T\\>\\) does not accept array\\<int, array\\<T\\>\\>\\.$#"
-			count: 1
-			path: src/Utility/ImmutableSet.php
 
 		-
 			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"

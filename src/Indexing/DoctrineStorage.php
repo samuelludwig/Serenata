@@ -5,6 +5,8 @@ namespace Serenata\Indexing;
 use Throwable;
 use LogicException;
 
+use Doctrine\DBAL\Connection;
+
 use Doctrine\Persistence\ManagerRegistry;
 
 use Doctrine\DBAL\Exception\DriverException;
@@ -135,7 +137,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     public function beginTransaction(): void
     {
         try {
-            $this->managerRegistry->getConnection()->beginTransaction();
+            $this->getConnection()->beginTransaction();
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
@@ -149,7 +151,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
         try {
             $this->managerRegistry->getManager()->flush();
 
-            $this->managerRegistry->getConnection()->commit();
+            $this->getConnection()->commit();
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
@@ -161,7 +163,7 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
     public function rollbackTransaction(): void
     {
         try {
-            $this->managerRegistry->getConnection()->rollback();
+            $this->getConnection()->rollBack();
         } catch (Throwable $t) {
             $this->handleThrowable($t);
         }
@@ -182,6 +184,18 @@ final class DoctrineStorage implements StorageInterface, MetadataProviderInterfa
 
             return []; // Only to make PHPStan happy as it does not detect that the above call never terminates.
         }
+    }
+
+    /**
+     * @return Connection
+     */
+    private function getConnection(): Connection
+    {
+        $connection = $this->managerRegistry->getConnection();
+
+        assert($connection instanceof Connection);
+
+        return $connection;
     }
 
     /**

@@ -275,7 +275,7 @@ final class PartialParser implements Parser
 
         if ($node instanceof Node\Stmt\Expression) {
             if ($node->expr instanceof Node\Expr\ClassConstFetch || $node->expr instanceof Node\Expr\PropertyFetch) {
-                if ($node->expr->name->name === $dummyName) {
+                if (isset($node->expr->name->name) && $node->expr->name->name === $dummyName) {
                     $node->expr->name->name = '';
                 }
             }

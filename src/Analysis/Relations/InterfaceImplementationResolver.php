@@ -72,7 +72,9 @@ final class InterfaceImplementationResolver extends AbstractResolver
                 ];
             }
 
-            if ($interfaceMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
+            if ($interfaceMethodData['hasDocumentation'] === true &&
+                $this->isInheritingFullDocumentation($childMethod)
+            ) {
                 $inheritedData = $this->extractInheritedMethodInfo($interfaceMethodData, $childMethod);
             } elseif ($childMethod['longDescription'] !== null && $interfaceMethodData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(

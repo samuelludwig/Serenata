@@ -60,7 +60,7 @@ final class ForeachNodeLoopValueTypeDeducer extends AbstractNodeTypeDeducer
                 in_array($type->type->name, [
                     SpecialDocblockTypeIdentifierLiteral::ARRAY_,
                     SpecialDocblockTypeIdentifierLiteral::ITERABLE_,
-                ])
+                ], true)
             ) {
                 if (isset($type->genericTypes[1])) {
                     return $type->genericTypes[1];

@@ -25,7 +25,7 @@ final class InheritanceResolver extends AbstractResolver
             $class['longDescription'] = $this->resolveInheritDoc($class['longDescription'], $parent['longDescription']);
         }
 
-        $class['hasDocumentation'] = $class['hasDocumentation'] || $parent['hasDocumentation'];
+        $class['hasDocumentation'] = $class['hasDocumentation'] === true || $parent['hasDocumentation'] === true;
 
         $class['traits']     = array_merge($class['traits'], $parent['traits']);
         $class['interfaces'] = array_merge($class['interfaces'], $parent['interfaces']);
@@ -92,7 +92,9 @@ final class InheritanceResolver extends AbstractResolver
                 ];
             }
 
-            if ($parentPropertyData['hasDocumentation'] && $this->isInheritingFullDocumentation($childProperty)) {
+            if ($parentPropertyData['hasDocumentation'] === true &&
+                $this->isInheritingFullDocumentation($childProperty)
+            ) {
                 $inheritedData = $this->extractInheritedPropertyInfo($parentPropertyData);
             } elseif ($childProperty['longDescription'] !== null && $parentPropertyData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(
@@ -158,7 +160,7 @@ final class InheritanceResolver extends AbstractResolver
                 ];
             }
 
-            if ($parentMethodData['hasDocumentation'] && $this->isInheritingFullDocumentation($childMethod)) {
+            if ($parentMethodData['hasDocumentation'] === true && $this->isInheritingFullDocumentation($childMethod)) {
                 $inheritedData = $this->extractInheritedMethodInfo($parentMethodData, $childMethod);
             } elseif ($childMethod['longDescription'] !== null && $parentMethodData['longDescription'] !== null) {
                 $inheritedData['longDescription'] = $this->resolveInheritDoc(

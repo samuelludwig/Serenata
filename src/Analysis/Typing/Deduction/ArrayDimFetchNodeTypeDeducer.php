@@ -50,20 +50,19 @@ final class ArrayDimFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
             throw new TypeDeductionException("Can't handle node of type " . get_class($context->getNode()));
         }
 
-        $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+        $deducedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
             $context->getNode()->var,
             $context->getTextDocumentItem()
         ));
 
         $elementTypes = [];
 
-        foreach ($this->toplevelTypeExtractor->extract($type) as $type) {
+        foreach ($this->toplevelTypeExtractor->extract($deducedType) as $type) {
             if ($type instanceof IdentifierTypeNode && $type->name === SpecialDocblockTypeIdentifierLiteral::STRING_) {
                 $elementTypes[] = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_);
             } elseif ($type instanceof ArrayTypeNode) {
                 $elementTypes[] = $type->type;
             } elseif ($type instanceof GenericTypeNode &&
-                $type->type instanceof IdentifierTypeNode &&
                 $type->type->name === SpecialDocblockTypeIdentifierLiteral::ARRAY_
             ) {
                 if (isset($type->genericTypes[1])) {

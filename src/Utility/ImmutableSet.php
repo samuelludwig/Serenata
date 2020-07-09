@@ -24,7 +24,7 @@ class ImmutableSet implements IteratorAggregate
     private $elements;
 
     /**
-     * @param T[] ...$elements
+     * @param T ...$elements
      */
     public function __construct(...$elements)
     {

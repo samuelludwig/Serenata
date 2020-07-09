@@ -89,7 +89,7 @@ final class MethodCallNodeMetaTypeDeducer extends AbstractNodeTypeDeducer
 
         foreach ($this->toplevelTypeExtractor->extract($typesOfVar) as $type) {
             if ($type instanceof IdentifierTypeNode &&
-                !in_array((string) $type, SpecialDocblockTypeIdentifierLiteral::getValues())
+                !in_array((string) $type, SpecialDocblockTypeIdentifierLiteral::getValues(), true)
             ) {
                 $staticTypes = array_merge(
                     $staticTypes,

@@ -2,8 +2,9 @@
 
 namespace Serenata\Sockets;
 
-use Ds;
 use UnderflowException;
+
+use Ds\PriorityQueue;
 
 /**
  * JSON RPC queue.
@@ -16,7 +17,7 @@ final class JsonRpcQueue
     private $jsonRpcRequestPriorityDeterminer;
 
     /**
-     * @var Ds\PriorityQueue<JsonRpcQueueItem>
+     * @var PriorityQueue<JsonRpcQueueItem>
      */
     private $queue;
 
@@ -32,7 +33,7 @@ final class JsonRpcQueue
     {
         $this->jsonRpcRequestPriorityDeterminer = $jsonRpcRequestPriorityDeterminer;
 
-        $this->queue = new Ds\PriorityQueue();
+        $this->queue = new PriorityQueue();
     }
 
     /**

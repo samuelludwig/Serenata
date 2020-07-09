@@ -13,7 +13,7 @@ use PhpParser\NodeVisitorAbstract;
 final class ParentAttachingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var SplStack
+     * @var SplStack<Node>
      */
     private $stack;
 

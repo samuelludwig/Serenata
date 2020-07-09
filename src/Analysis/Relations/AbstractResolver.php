@@ -34,11 +34,11 @@ abstract class AbstractResolver
      */
     protected function isInheritingFullDocumentation(array $processedData): bool
     {
-        return
-            !$processedData['hasDocblock'] ||
-            ($processedData['shortDescription'] && $this->docblockAnalyzer->isFullInheritDocSyntax(
-                $processedData['shortDescription']
-            ));
+        return $processedData['hasDocblock'] === false || (
+            $processedData['shortDescription'] !== null &&
+            $processedData['shortDescription'] !== '' &&
+            $this->docblockAnalyzer->isFullInheritDocSyntax($processedData['shortDescription'])
+        );
     }
 
     /**
