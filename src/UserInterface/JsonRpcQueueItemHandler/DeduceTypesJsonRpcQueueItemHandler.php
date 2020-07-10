@@ -2,8 +2,6 @@
 
 namespace Serenata\UserInterface\JsonRpcQueueItemHandler;
 
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 
