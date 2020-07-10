@@ -2,6 +2,9 @@
 
 namespace Serenata\Parsing;
 
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprStringNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
+
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -65,18 +68,24 @@ final class DocblockTypeTransformer implements DocblockTypeTransformerInterface
                 }, $transformedType->genericTypes)
             );
         } elseif ($transformedType instanceof CallableTypeParameterNode) {
-            return new CallableTypeParameterNode(
+            /*return new CallableTypeParameterNode(
                 $this->transform($transformedType->type, $transformer),
                 $transformedType->isReference,
                 $transformedType->isVariadic,
                 $transformedType->parameterName,
                 $transformedType->isOptional
-            );
+            );*/
         } elseif ($transformedType instanceof ArrayShapeItemNode) {
             $keyName = $transformedType->keyName;
 
             if ($keyName instanceof TypeNode) {
                 $keyName = $this->transform($keyName, $transformer);
+
+                assert(
+                    $keyName instanceof ConstExprIntegerNode ||
+                    $keyName instanceof ConstExprStringNode ||
+                    $keyName instanceof IdentifierTypeNode
+                );
             }
 
             return new ArrayShapeItemNode(

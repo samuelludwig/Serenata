@@ -73,11 +73,11 @@ final class ClassConstFetchNodeDefinitionLocator
             throw new DefinitionLocationFailedException("Can't deduce the type of a non-string node");
         }
 
-        $classType = $this->getClassTypes($node, $textDocumentItem, $position);
+        $classTypeNode = $this->getClassTypes($node, $textDocumentItem, $position);
 
         $definitions = [];
 
-        foreach ($this->toplevelTypeExtractor->extract($classType) as $classType) {
+        foreach ($this->toplevelTypeExtractor->extract($classTypeNode) as $classType) {
             $constantInfo = $this->fetchClassConstantInfo($classType, $node->name);
 
             if ($constantInfo === null) {

@@ -109,17 +109,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
      * We could also flush the changes constantly, but this hurts performance and not fetching information we already
      * have benefits performance in large files with many interdependencies.
      *
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Structures\Classlike>
      */
     private $classlikesFound;
 
     /**
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Structures\Classlike>
      */
     private $relationsStorage;
 
     /**
-     * @var SplObjectStorage
+     * @var SplObjectStorage<Structures\Trait_>
      */
     private $traitUseStorage;
 
@@ -203,9 +203,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
     public function beforeTraverse(array $nodes)
     {
         $this->classlikeStack = new Stack();
-        $this->classlikesFound = new SplObjectStorage();
-        $this->relationsStorage = new SplObjectStorage();
-        $this->traitUseStorage = new SplObjectStorage();
+
+        /** @var SplObjectStorage<Structures\Classlike> $classlikesFound */
+        $classlikesFound = new SplObjectStorage();
+        $this->classlikesFound = $classlikesFound;
+
+        /** @var SplObjectStorage<Structures\Classlike> $relationsStorage */
+        $relationsStorage = new SplObjectStorage();
+        $this->relationsStorage = $relationsStorage;
+
+        /** @var SplObjectStorage<Structures\Trait_> $traitUseStorage */
+        $traitUseStorage = new SplObjectStorage();
+        $this->traitUseStorage = $traitUseStorage;
 
         foreach ($this->file->getClasslikes() as $classlike) {
             $this->file->removeClasslike($classlike);
@@ -313,6 +322,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $classlikeName = mb_substr($fqcn, 1);
             } else {
                 $fqcn = '\\' . $node->namespacedName->toString();
+
+                assert($node->name !== null, 'Class name cannot be null for classes that are not anonymous');
+
                 $classlikeName = $node->name->name;
             }
 
@@ -332,6 +344,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 null
             );
         } elseif ($node instanceof Node\Stmt\Interface_) {
+            assert($node->name !== null, 'Interface name cannot be empty as interfaces cannot be anonymous');
+
             $classlike = new Structures\Interface_(
                 $node->name->name,
                 '\\' . $node->namespacedName->toString(),
@@ -343,6 +357,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $docComment !== '' && $docComment !== null
             );
         } elseif ($node instanceof Node\Stmt\Trait_) {
+            assert($node->name !== null, 'Trait name cannot be empty as traits cannot be anonymous');
+
             $classlike = new Structures\Trait_(
                 $node->name->name,
                 '\\' . $node->namespacedName->toString(),
@@ -580,6 +596,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
                 $this->storage->persist($traitAlias);
             } elseif ($adaptation instanceof Node\Stmt\TraitUseAdaptation\Precedence) {
+                assert($adaptation->trait !== null, 'The trait in a trait use adaptation cannot be empty');
+
                 $traitFqcn = NodeHelpers::fetchClassName($adaptation->trait->getAttribute('resolvedName'));
                 $traitFqcn = $this->typeAnalyzer->getNormalizedFqcn($traitFqcn);
 
@@ -706,6 +724,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $accessModifier = AccessModifierNameValue::PROTECTED_;
             } elseif ($node->isPrivate()) {
                 $accessModifier = AccessModifierNameValue::PRIVATE_;
+            } else {
+                throw new DomainException('Properties should always be either public, private or protected');
             }
 
             $property = new Structures\Property(
@@ -839,6 +859,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = AccessModifierNameValue::PROTECTED_;
         } elseif ($node->isPrivate()) {
             $accessModifier = AccessModifierNameValue::PRIVATE_;
+        } else {
+            throw new DomainException('Methods should always be either public, private or protected');
         }
 
         $method = new Structures\Method(
@@ -851,7 +873,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $documentation['return']['description'] ?? null,
             $returnTypeHint,
             $this->classlikeStack->peek(),
-            $accessModifier !== null? $accessModifierMap[$accessModifier] : null,
+            $accessModifierMap[$accessModifier],
             false,
             $node->isStatic(),
             $node->isAbstract(),
@@ -892,7 +914,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 null;
 
             $parameterName = ($param->var instanceof Node\Expr\Variable ? $param->var->name : '');
-            $parameterKey = '$' . $parameterName;
+            $parameterKey = '$' . (is_string($parameterName) ? $parameterName : 'unsupported');
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
@@ -947,7 +969,9 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
 
             $parameter = new Structures\MethodParameter(
                 $method,
-                $param->var instanceof Node\Expr\Variable ? $param->var->name : '',
+                $param->var instanceof Node\Expr\Variable ?
+                    (is_string($param->var->name) ? $param->var->name : 'unsupported') :
+                    '',
                 $typeHint,
                 $type,
                 $parameterDoc ? $parameterDoc['description'] : null,
@@ -1051,6 +1075,8 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $accessModifier = AccessModifierNameValue::PROTECTED_;
         } elseif ($classConst->isPrivate()) {
             $accessModifier = AccessModifierNameValue::PRIVATE_;
+        } else {
+            throw new DomainException('Class constants should always be either public, private or protected');
         }
 
         $constant = new Structures\ClassConstant(
@@ -1065,7 +1091,7 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
             $varDocumentation ? $varDocumentation['description'] : null,
             $type,
             $this->classlikeStack->peek(),
-            $accessModifier !== null? $accessModifierMap[$accessModifier] : null
+            $accessModifierMap[$accessModifier]
         );
 
         $this->storage->persist($constant);

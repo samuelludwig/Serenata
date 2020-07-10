@@ -12,6 +12,8 @@ interface DocblockTypeTransformerInterface
     /**
      * @param TypeNode                    $docblockType
      * @param callable(TypeNode):TypeNode $transformer  Closure that should return a new instance of a {@see TypeNode}.
+     *
+     * @return TypeNode
      */
     public function transform(TypeNode $docblockType, callable $transformer): TypeNode;
 }

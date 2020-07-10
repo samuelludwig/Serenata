@@ -18,7 +18,7 @@ use Serenata\Utility\PositionEncoding;
 final class UseStatementFetchingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var array
+     * @var array<int,array<string,mixed>>
      */
     private $namespaces = [];
 

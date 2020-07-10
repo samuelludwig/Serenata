@@ -269,7 +269,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
                 null;
 
             $parameterName = ($param->var instanceof Node\Expr\Variable ? $param->var->name : '');
-            $parameterKey = '$' . $parameterName;
+            $parameterKey = '$' . (is_string($parameterName) ? $parameterName : 'unsupported');
             $parameterDoc = isset($documentation['params'][$parameterKey]) ?
                 $documentation['params'][$parameterKey] : null;
 
@@ -324,7 +324,7 @@ final class FunctionIndexingVisitor extends NodeVisitorAbstract
 
             $parameter = new Structures\FunctionParameter(
                 $function,
-                $parameterName,
+                is_string($parameterName) ? $parameterName : 'unsupported',
                 $typeHint,
                 $type,
                 $parameterDoc ? $parameterDoc['description'] : null,

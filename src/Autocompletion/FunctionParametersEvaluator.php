@@ -8,7 +8,7 @@ namespace Serenata\Autocompletion;
 final class FunctionParametersEvaluator
 {
     /**
-     * @param array $function
+     * @param array<string,mixed> $function
      *
      * @return bool
      */

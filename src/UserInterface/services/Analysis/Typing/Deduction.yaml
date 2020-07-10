@@ -126,6 +126,7 @@ services:
             - '@nodeTypeDeducer'
             - '@classlikeInfoBuilder'
             - '@docblockTypeParser'
+            - '@Serenata\Parsing\ToplevelTypeExtractorInterface'
 
     assignNodeTypeDeducer:
         class: Serenata\Analysis\Typing\Deduction\AssignNodeTypeDeducer

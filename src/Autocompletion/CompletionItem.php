@@ -12,6 +12,8 @@ use Serenata\Utility\TextEdit;
  * Represents a single autocompletion suggestion.
  *
  * This is a value object and immutable.
+ *
+ * @implements ArrayAccess<string,mixed>
  */
 final class CompletionItem implements JsonSerializable, ArrayAccess
 {

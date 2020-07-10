@@ -152,7 +152,15 @@ final class DefinitionLocator
             return $nearestInterestingNode;
         }
 
-        return ($node instanceof Node\Name || $node instanceof Node\Identifier) ? $node : $nearestInterestingNode;
+        $desiredNode = ($node instanceof Node\Name || $node instanceof Node\Identifier) ?
+            $node :
+            $nearestInterestingNode;
+
+        if ($desiredNode === null) {
+            throw new DefinitionLocationFailedException('No node found at provided location');
+        }
+
+        return $desiredNode;
     }
 
     /**

@@ -147,7 +147,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminer implement
     /**
      * @param array<array<T>> $bestMatchScorePairs
      *
-     * @return array<array<T>>
+     * @return array<T>
      *
      * @template T
      */

@@ -13,6 +13,7 @@ use Serenata\Analysis\ClasslikeBuildingFailedException;
 use Serenata\Parsing\InvalidTypeNode;
 use Serenata\Parsing\TypeNodeUnwrapper;
 use Serenata\Parsing\DocblockTypeParserInterface;
+use Serenata\Parsing\ToplevelTypeExtractorInterface;
 
 /**
  * Type deducer that can deduce the type of a {@see Node\Expr\ClassConstFetch} node.
@@ -35,18 +36,26 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
     private $docblockTypeParser;
 
     /**
+     * @var ToplevelTypeExtractorInterface
+     */
+    private $toplevelTypeExtractor;
+
+    /**
      * @param NodeTypeDeducerInterface      $nodeTypeDeducer
      * @param ClasslikeInfoBuilderInterface $classlikeInfoBuilder
      * @param DocblockTypeParserInterface   $docblockTypeParser
+     * @param ToplevelTypeExtractorInterface $toplevelTypeExtractor
      */
     public function __construct(
         NodeTypeDeducerInterface $nodeTypeDeducer,
         ClasslikeInfoBuilderInterface $classlikeInfoBuilder,
-        DocblockTypeParserInterface $docblockTypeParser
+        DocblockTypeParserInterface $docblockTypeParser,
+        ToplevelTypeExtractorInterface $toplevelTypeExtractor
     ) {
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->classlikeInfoBuilder = $classlikeInfoBuilder;
         $this->docblockTypeParser = $docblockTypeParser;
+        $this->toplevelTypeExtractor = $toplevelTypeExtractor;
     }
 
     /**
@@ -65,13 +74,17 @@ final class ClassConstFetchNodeTypeDeducer extends AbstractNodeTypeDeducer
 
         $types = [];
 
-        foreach ($typesOfVar as $type) {
+        foreach ($this->toplevelTypeExtractor->extract($typesOfVar) as $type) {
             $info = null;
 
             try {
                 $info = $this->classlikeInfoBuilder->build($type);
             } catch (ClasslikeBuildingFailedException $e) {
                 continue;
+            }
+
+            if ($context->getNode()->name instanceof Node\Expr\Error) {
+                return new InvalidTypeNode();
             }
 
             if (isset($info['constants'][$context->getNode()->name->name])) {

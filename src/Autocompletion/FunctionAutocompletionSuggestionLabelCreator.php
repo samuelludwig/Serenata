@@ -8,7 +8,7 @@ namespace Serenata\Autocompletion;
 final class FunctionAutocompletionSuggestionLabelCreator
 {
     /**
-     * @param array $function
+     * @param array<string,mixed> $function
      *
      * @return string
      */
