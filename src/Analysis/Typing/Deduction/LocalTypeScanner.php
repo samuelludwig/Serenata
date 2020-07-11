@@ -290,6 +290,8 @@ final class LocalTypeScanner
         array $defaultTypes = []
     ): array {
         if ($expressionTypeInfo->hasBestTypeOverrideMatch()) {
+            assert($expressionTypeInfo->getBestTypeOverrideMatch() !== null);
+
             $type = $this->docblockTypeParser->parse($expressionTypeInfo->getBestTypeOverrideMatch());
 
             return array_map(function (TypeNode $nestedType): string {
@@ -300,6 +302,8 @@ final class LocalTypeScanner
         $types = $defaultTypes;
 
         if ($expressionTypeInfo->hasBestMatch()) {
+            assert($expressionTypeInfo->getBestMatch() !== null);
+
             $type = $this->getTypesForBestMatchNode(
                 $expression,
                 $expressionTypeInfo->getBestMatch(),
@@ -361,7 +365,7 @@ final class LocalTypeScanner
         Position $position
     ): TypeNode {
         foreach ($node->getParams() as $param) {
-            if ($param->var->name === mb_substr($parameterName, 1)) {
+            if ($param->var instanceof Node\Expr\Variable && $param->var->name === mb_substr($parameterName, 1)) {
                 $this->functionLikeParameterTypeDeducer->setFunctionDocblock($node->getDocComment());
 
                 return $this->functionLikeParameterTypeDeducer->deduce(new TypeDeductionContext(

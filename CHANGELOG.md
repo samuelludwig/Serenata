@@ -1,4 +1,5 @@
 ## 5.4.0 (Unreleased)
+* Union types from PHP 8.0 are now supported.
 * [Add autocompletion when typing property types added in PHP 7.4](https://gitlab.com/Serenata/Serenata/-/issues/331).
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
 * Stub `textDocument/references` to avoid errors in Visual Studio Code and derivatives.

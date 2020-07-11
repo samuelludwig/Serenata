@@ -145,6 +145,16 @@ final class FunctionIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testFunctionUnionReturnType(): void
+    {
+        $function = $this->indexFunction('FunctionUnionReturnType.phpt');
+
+        self::assertSame('(\N\A | \N\B)', (string) $function->getReturnType());
+    }
+
+    /**
+     * @return void
+     */
     public function testFunctionReturnTypeInReturnTypeHintIsResolved(): void
     {
         $function = $this->indexFunction('FunctionReturnTypeInReturnTypeHintIsResolved.phpt');
@@ -225,6 +235,20 @@ final class FunctionIndexingTest extends AbstractIntegrationTest
 
         self::assertSame('\N\A', (string) $function->getParameters()[0]->getType());
         self::assertSame('\N\A', $function->getParameters()[0]->getTypeHint());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFunctionUnionParameterTypeHint(): void
+    {
+        $function = $this->indexFunction('FunctionUnionParameterTypeHint.phpt');
+
+        self::assertSame('(\N\A | \N\B)', (string) $function->getParameters()[0]->getType());
+
+        // TODO: Not correct, might use the pretty printer to ensure we always get the best output or just serialize
+        // the nodes and pretty print when we need them.
+        self::assertSame(null, $function->getParameters()[0]->getTypeHint());
     }
 
     /**

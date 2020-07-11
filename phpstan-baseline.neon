@@ -186,21 +186,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
 
 		-
-			message: "#^Parameter \\#1 \\$specification of method Serenata\\\\Parsing\\\\DocblockTypeParserInterface\\:\\:parse\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
-			message: "#^Parameter \\#2 \\$node of method Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\LocalTypeScanner\\:\\:getTypesForBestMatchNode\\(\\) expects PhpParser\\\\Node, PhpParser\\\\Node\\|null given\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Expr\\\\Variable\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/LocalTypeScanner.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\ClasslikeBuildingFailedException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/NameNodeTypeDeducer.php
@@ -231,27 +216,7 @@ parameters:
 			path: src/Analysis/VariableScanner.php
 
 		-
-			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
-			count: 3
-			path: src/Analysis/Visiting/TypeQueryingVisitor.php
-
-		-
-			message: "#^Cannot access property \\$name on PhpParser\\\\Node\\\\Expr\\\\Variable\\|null\\.$#"
-			count: 1
-			path: src/Analysis/Visiting/TypeQueryingVisitor.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Expr\\\\Variable\\:\\:\\$name\\.$#"
-			count: 1
-			path: src/Analysis/Visiting/TypeQueryingVisitor.php
-
-		-
 			message: "#^Unused @throws DomainException annotation$#"
-			count: 1
-			path: src/Analysis/Visiting/TypeQueryingVisitor.php
-
-		-
-			message: "#^Cannot cast PhpParser\\\\Node\\\\Expr\\|string to string\\.$#"
 			count: 1
 			path: src/Analysis/Visiting/TypeQueryingVisitor.php
 
@@ -386,11 +351,6 @@ parameters:
 			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
 
 		-
-			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Identifier\\|PhpParser\\\\Node\\\\Name\\|PhpParser\\\\Node\\\\UnionType\\:\\:toString\\(\\)\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 1
 			path: src/Indexing/Visiting/ConstantIndexingVisitor.php
@@ -399,11 +359,6 @@ parameters:
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 1
 			path: src/Indexing/Visiting/DefineIndexingVisitor.php
-
-		-
-			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Identifier\\|PhpParser\\\\Node\\\\Name\\|PhpParser\\\\Node\\\\UnionType\\:\\:toString\\(\\)\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"

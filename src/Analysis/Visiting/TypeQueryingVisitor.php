@@ -112,7 +112,9 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
      */
     private function parseCatch(Node\Stmt\Catch_ $node): void
     {
-        $this->expressionTypeInfoMap->setBestMatch('$' . $node->var->name, $node);
+        if ($node->var !== null && is_string($node->var->name)) {
+            $this->expressionTypeInfoMap->setBestMatch('$' . $node->var->name, $node);
+        }
     }
 
     /**
@@ -214,7 +216,9 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
                 // capture all variables of their parent scope.
                 if ($node instanceof Node\Expr\Closure) {
                     foreach ($node->uses as $closureUse) {
-                        $variablesOutsideCurrentScope[] = '$' . $closureUse->var->name;
+                        if (is_string($closureUse->var->name)) {
+                            $variablesOutsideCurrentScope[] = '$' . $closureUse->var->name;
+                        }
                     }
                 }
 
@@ -222,7 +226,9 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
             }
 
             foreach ($node->getParams() as $param) {
-                $this->expressionTypeInfoMap->setBestMatch('$' . $param->var->name, $node);
+                if ($param->var instanceof Node\Expr\Variable && is_string($param->var->name)) {
+                    $this->expressionTypeInfoMap->setBestMatch('$' . $param->var->name, $node);
+                }
             }
         }
     }
@@ -548,7 +554,11 @@ final class TypeQueryingVisitor extends NodeVisitorAbstract
     private function getExpressionString(Node\Expr $expression): string
     {
         if ($expression instanceof Node\Expr\Variable) {
-            return '$' . ((string) $expression->name);
+            if (is_string($expression->name)) {
+                return '$' . $expression->name;
+            }
+
+            return $this->getExpressionString($expression->name);
         } elseif ($expression instanceof Node\Expr\PropertyFetch ||
                   $expression instanceof Node\Expr\StaticPropertyFetch
         ) {

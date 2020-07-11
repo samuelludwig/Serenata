@@ -213,6 +213,16 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
         self::assertSame('\N\A', (string) $property->getType());
     }
 
+    // /**
+    //  * @return void
+    //  */
+    // public function testPropertyUnionTypeInDocblockIsResolved(): void
+    // {
+    //     $property = $this->indexProperty('PropertyUnionTypeInDocblock.phpt');
+
+    //     self::assertSame('(\N\A | \N\B)', (string) $property->getType());
+    // }
+
     /**
      * @return void
      */

@@ -691,6 +691,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $unresolvedType = new IdentifierTypeNode(NodeHelpers::fetchClassName($typeNode));
                 } elseif ($typeNode instanceof Node\Identifier) {
                     $unresolvedType = new IdentifierTypeNode($typeNode->name);
+                } else /*if ($typeNode instanceof Node\UnionType)*/ {
+                    $adaptedTypes = [];
+
+                    foreach ($typeNode->types as $nestedTypeNode) {
+                        if ($nestedTypeNode instanceof Node\Name) {
+                            $adaptedTypes[] = new IdentifierTypeNode(NodeHelpers::fetchClassName($nestedTypeNode));
+                        } else /*if ($nestedTypeNode instanceof Node\Identifier)*/ {
+                            $adaptedTypes[] = new IdentifierTypeNode($nestedTypeNode->name);
+                        }
+                    }
+
+                    $unresolvedType = new UnionTypeNode($adaptedTypes);
                 }
 
                 if ($node->type instanceof Node\NullableType) {
@@ -812,7 +824,17 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                 $typeStringSpecification = $nodeType->name;
             }
 
-            $typeStringSpecification = $nodeType->toString();
+            $nodeTypes = [];
+
+            if ($nodeType instanceof Node\UnionType) {
+                $nodeTypes = array_map(function ($nodeType): string {
+                    return (string) $nodeType;
+                }, $nodeType->types);
+            } else {
+                $nodeTypes = [$nodeType->toString()];
+            }
+
+            $typeStringSpecification = implode('|', $nodeTypes);
 
             if ($node->getReturnType() instanceof Node\NullableType) {
                 $typeStringSpecification .= '|null';
@@ -933,6 +955,18 @@ final class ClasslikeIndexingVisitor extends NodeVisitorAbstract
                     $unresolvedType = new IdentifierTypeNode(NodeHelpers::fetchClassName($typeNode));
                 } elseif ($typeNode instanceof Node\Identifier) {
                     $unresolvedType = new IdentifierTypeNode($typeNode->name);
+                } else /*if ($typeNode instanceof Node\UnionType)*/ {
+                    $adaptedTypes = [];
+
+                    foreach ($typeNode->types as $nestedTypeNode) {
+                        if ($nestedTypeNode instanceof Node\Name) {
+                            $adaptedTypes[] = new IdentifierTypeNode(NodeHelpers::fetchClassName($nestedTypeNode));
+                        } else /*if ($nestedTypeNode instanceof Node\Identifier)*/ {
+                            $adaptedTypes[] = new IdentifierTypeNode($nestedTypeNode->name);
+                        }
+                    }
+
+                    $unresolvedType = new UnionTypeNode($adaptedTypes);
                 }
 
                 if ($param->type instanceof Node\NullableType) {

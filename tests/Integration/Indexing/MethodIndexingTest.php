@@ -141,6 +141,16 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testMethodUnionReturnTypeHint(): void
+    {
+        $method = $this->indexMethod('MethodUnionReturnTypeHint.phpt');
+
+        self::assertSame('(\N\A | \N\B)', (string) $method->getReturnType());
+    }
+
+    /**
+     * @return void
+     */
     public function testMethodReturnTypeInReturnTypeHintIsResolved(): void
     {
         $method = $this->indexMethod('MethodReturnTypeInReturnTypeHintIsResolved.phpt');
@@ -218,6 +228,16 @@ final class MethodIndexingTest extends AbstractIntegrationTest
         $method = $this->indexMethod('MethodParameterTypeHintIsResolved.phpt');
 
         self::assertSame('\N\A', (string) $method->getParameters()[0]->getType());
+    }
+
+    /**
+     * @return void
+     */
+    public function testMethodParameterUnionTypeHint(): void
+    {
+        $method = $this->indexMethod('MethodParameterUnionTypeHint.phpt');
+
+        self::assertSame('(\N\A | \N\B)', (string) $method->getParameters()[0]->getType());
     }
 
     /**
