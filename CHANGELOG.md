@@ -1,7 +1,7 @@
 ## 5.4.0 (Unreleased)
 * Union types from PHP 8.0 are now supported.
-* [Add autocompletion when typing property types added in PHP 7.4](https://gitlab.com/Serenata/Serenata/-/issues/331).
-* [Improve overall robustness by fixing large swads of PHPStan errors.](https://gitlab.com/Serenata/Serenata/-/issues/277).
+* [Add autocompletion when typing property types added in PHP 7.4.](https://gitlab.com/Serenata/Serenata/-/issues/331)
+* [Improve overall robustness by fixing large swads of PHPStan errors.](https://gitlab.com/Serenata/Serenata/-/issues/277)
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
 * Stub `textDocument/references` to avoid errors in Visual Studio Code and derivatives.
 * [Improve scanning performance during indexing a bit by avoiding multiple scans of folders.](https://gitlab.com/Serenata/Serenata/-/issues/325)
@@ -10,7 +10,7 @@
 * [Fix server crashing if folders are removed during scanning for reindexing, such as when clearing the cache in Symfony projects.](https://gitlab.com/Serenata/Serenata/issues/316)
 * [Improve responsiveness when `workspace/didChangeWatchedFiles` notifications with large batches of files are sent by prioritizing user-initiated requests over indexing.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * [Fix warning `The PHP server has errors to report: PHP Notice:  Undefined property: PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::$types in phar:///.../DocblockTypeTransformer.php on line 43
-`.](https://gitlab.com/Serenata/Serenata/-/issues/335).
+`.](https://gitlab.com/Serenata/Serenata/-/issues/335)
 
 ## 5.3.0
 * Avoid unnecessary file and folder scanning when reindexing single files.
