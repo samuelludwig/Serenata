@@ -17,18 +17,18 @@ final class NamespaceListProviderTest extends AbstractIntegrationTest
 
         $output = $this->container->get('namespaceListProvider')->getAll();
 
-        static::assertCount(4, $output);
+        self::assertCount(4, $output);
 
         $namespaceAItem = array_filter($output, function (array $item) {
             return $item['name'] === 'NamespaceA';
         });
 
-        static::assertNotEmpty($namespaceAItem);
+        self::assertNotEmpty($namespaceAItem);
 
         $namespaceBItem = array_filter($output, function (array $item) {
             return $item['name'] === 'NamespaceB';
         });
 
-        static::assertNotEmpty($namespaceBItem);
+        self::assertNotEmpty($namespaceBItem);
     }
 }

@@ -22,13 +22,13 @@ final class ConstantListRegistryWorkspaceInteractionTest extends AbstractIntegra
     {
         $registry = $this->container->get('constantListProvider.registry');
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
 
         $registry->add([
             'fqcn' => '\Test',
         ]);
 
-        static::assertCount(1, $registry->getAll());
+        self::assertCount(1, $registry->getAll());
 
         $this->container->get('managerRegistry')->setDatabaseUri(':memory:');
         $this->container->get('schemaInitializer')->initialize();
@@ -42,6 +42,6 @@ final class ConstantListRegistryWorkspaceInteractionTest extends AbstractIntegra
             ['php']
         )));
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
     }
 }

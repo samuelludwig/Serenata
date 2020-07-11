@@ -34,7 +34,7 @@ final class DocblockTagAutocompletionProviderTest extends AbstractAutocompletion
                 false
             );
 
-        static::assertEquals($firstSuggestion, $output[0]);
+        self::assertEquals($firstSuggestion, $output[0]);
     }
 
     /**

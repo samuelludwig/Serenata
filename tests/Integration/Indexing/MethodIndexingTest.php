@@ -22,29 +22,29 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('SimpleMethod.phpt');
 
-        static::assertSame('foo', $method->getName());
-        static::assertSame($this->normalizePath($this->getPathFor('SimpleMethod.phpt')), $method->getFile()->getUri());
-        static::assertEquals(
+        self::assertSame('foo', $method->getName());
+        self::assertSame($this->normalizePath($this->getPathFor('SimpleMethod.phpt')), $method->getFile()->getUri());
+        self::assertEquals(
             new Range(
                 new Position(4, 4),
                 new Position(7, 5)
             ),
             $method->getRange()
         );
-        static::assertFalse($method->getIsDeprecated());
-        static::assertNull($method->getShortDescription());
-        static::assertNull($method->getLongDescription());
-        static::assertNull($method->getReturnDescription());
-        static::assertNull($method->getReturnTypeHint());
-        static::assertFalse($method->getHasDocblock());
-        static::assertEmpty($method->getThrows());
-        static::assertEmpty($method->getParameters());
-        static::assertSame('mixed', (string) $method->getReturnType());
-        static::assertFalse($method->getIsMagic());
-        static::assertFalse($method->getIsStatic());
-        static::assertFalse($method->getIsAbstract());
-        static::assertFalse($method->getIsFinal());
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $method->getAccessModifier()->getName());
+        self::assertFalse($method->getIsDeprecated());
+        self::assertNull($method->getShortDescription());
+        self::assertNull($method->getLongDescription());
+        self::assertNull($method->getReturnDescription());
+        self::assertNull($method->getReturnTypeHint());
+        self::assertFalse($method->getHasDocblock());
+        self::assertEmpty($method->getThrows());
+        self::assertEmpty($method->getParameters());
+        self::assertSame('mixed', (string) $method->getReturnType());
+        self::assertFalse($method->getIsMagic());
+        self::assertFalse($method->getIsStatic());
+        self::assertFalse($method->getIsAbstract());
+        self::assertFalse($method->getIsFinal());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $method->getAccessModifier()->getName());
     }
 
     /**
@@ -54,7 +54,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('DeprecatedMethod.phpt');
 
-        static::assertTrue($method->getIsDeprecated());
+        self::assertTrue($method->getIsDeprecated());
     }
 
     /**
@@ -64,7 +64,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodShortDescription.phpt');
 
-        static::assertSame('This is a summary.', $method->getShortDescription());
+        self::assertSame('This is a summary.', $method->getShortDescription());
     }
 
     /**
@@ -74,7 +74,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodLongDescription.phpt');
 
-        static::assertSame('This is a long description.', $method->getLongDescription());
+        self::assertSame('This is a long description.', $method->getLongDescription());
     }
 
     /**
@@ -84,7 +84,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReturnDescription.phpt');
 
-        static::assertSame('This is a return description.', $method->getReturnDescription());
+        self::assertSame('This is a return description.', $method->getReturnDescription());
     }
 
     /**
@@ -94,7 +94,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReturnTypeFromDocblock.phpt');
 
-        static::assertSame('int', (string) $method->getReturnType());
+        self::assertSame('int', (string) $method->getReturnType());
     }
 
     /**
@@ -104,7 +104,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReturnTypeFromTypeHint.phpt');
 
-        static::assertSame('string', (string) $method->getReturnType());
+        self::assertSame('string', (string) $method->getReturnType());
     }
 
     /**
@@ -114,7 +114,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReturnTypeHint.phpt');
 
-        static::assertSame('string', $method->getReturnTypeHint());
+        self::assertSame('string', $method->getReturnTypeHint());
     }
 
     /**
@@ -124,8 +124,8 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodExplicitlyNullableReturnTypeHint.phpt');
 
-        static::assertSame('?string', $method->getReturnTypeHint());
-        static::assertSame('(string | null)', (string) $method->getReturnType());
+        self::assertSame('?string', $method->getReturnTypeHint());
+        self::assertSame('(string | null)', (string) $method->getReturnType());
     }
 
     /**
@@ -135,7 +135,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReturnTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $method->getReturnType());
+        self::assertSame('\N\A', (string) $method->getReturnType());
     }
 
     /**
@@ -145,7 +145,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReturnTypeInReturnTypeHintIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $method->getReturnType());
+        self::assertSame('\N\A', (string) $method->getReturnType());
     }
 
     /**
@@ -155,15 +155,15 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodThrows.phpt');
 
-        static::assertCount(2, $method->getThrows());
+        self::assertCount(2, $method->getThrows());
 
-        static::assertSame('A', $method->getThrows()[0]->getType());
-        static::assertSame('\N\A', $method->getThrows()[0]->getFqcn());
-        static::assertNull($method->getThrows()[0]->getDescription());
+        self::assertSame('A', $method->getThrows()[0]->getType());
+        self::assertSame('\N\A', $method->getThrows()[0]->getFqcn());
+        self::assertNull($method->getThrows()[0]->getDescription());
 
-        static::assertSame('\Exception', $method->getThrows()[1]->getType());
-        static::assertSame('\Exception', $method->getThrows()[1]->getFqcn());
-        static::assertSame('when something goes wrong.', $method->getThrows()[1]->getDescription());
+        self::assertSame('\Exception', $method->getThrows()[1]->getType());
+        self::assertSame('\Exception', $method->getThrows()[1]->getFqcn());
+        self::assertSame('when something goes wrong.', $method->getThrows()[1]->getDescription());
     }
 
     /**
@@ -173,31 +173,31 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodSimpleParameters.phpt');
 
-        static::assertCount(2, $method->getParameters());
+        self::assertCount(2, $method->getParameters());
 
         $parameter = $method->getParameters()[0];
 
-        static::assertSame($method, $parameter->getMethod());
-        static::assertSame('a', $parameter->getName());
-        static::assertNull($parameter->getTypeHint());
-        static::assertSame('mixed', (string) $parameter->getType());
-        static::assertNull($parameter->getDescription());
-        static::assertNull($parameter->getDefaultValue());
-        static::assertFalse($parameter->getIsReference());
-        static::assertFalse($parameter->getIsOptional());
-        static::assertFalse($parameter->getIsVariadic());
+        self::assertSame($method, $parameter->getMethod());
+        self::assertSame('a', $parameter->getName());
+        self::assertNull($parameter->getTypeHint());
+        self::assertSame('mixed', (string) $parameter->getType());
+        self::assertNull($parameter->getDescription());
+        self::assertNull($parameter->getDefaultValue());
+        self::assertFalse($parameter->getIsReference());
+        self::assertFalse($parameter->getIsOptional());
+        self::assertFalse($parameter->getIsVariadic());
 
         $parameter = $method->getParameters()[1];
 
-        static::assertSame($method, $parameter->getMethod());
-        static::assertSame('b', $parameter->getName());
-        static::assertNull($parameter->getTypeHint());
-        static::assertSame('mixed', (string) $parameter->getType());
-        static::assertNull($parameter->getDescription());
-        static::assertNull($parameter->getDefaultValue());
-        static::assertFalse($parameter->getIsReference());
-        static::assertFalse($parameter->getIsOptional());
-        static::assertFalse($parameter->getIsVariadic());
+        self::assertSame($method, $parameter->getMethod());
+        self::assertSame('b', $parameter->getName());
+        self::assertNull($parameter->getTypeHint());
+        self::assertSame('mixed', (string) $parameter->getType());
+        self::assertNull($parameter->getDescription());
+        self::assertNull($parameter->getDefaultValue());
+        self::assertFalse($parameter->getIsReference());
+        self::assertFalse($parameter->getIsOptional());
+        self::assertFalse($parameter->getIsVariadic());
     }
 
     /**
@@ -207,7 +207,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterTypeHint.phpt');
 
-        static::assertSame('int', (string) $method->getParameters()[0]->getType());
+        self::assertSame('int', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -217,7 +217,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterTypeHintIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $method->getParameters()[0]->getType());
+        self::assertSame('\N\A', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -227,7 +227,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterDocblockType.phpt');
 
-        static::assertSame('int', (string) $method->getParameters()[0]->getType());
+        self::assertSame('int', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -237,7 +237,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterDocblockTypeIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $method->getParameters()[0]->getType());
+        self::assertSame('\N\A', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -247,7 +247,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterDocblockTypePrecedenceOverTypeHint.phpt');
 
-        static::assertSame('int', (string) $method->getParameters()[0]->getType());
+        self::assertSame('int', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -257,7 +257,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterDefaultValue.phpt');
 
-        static::assertSame('5', $method->getParameters()[0]->getDefaultValue());
+        self::assertSame('5', $method->getParameters()[0]->getDefaultValue());
     }
 
     /**
@@ -267,7 +267,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterDefaultValueTypeDeduction.phpt');
 
-        static::assertSame('int', (string) $method->getParameters()[0]->getType());
+        self::assertSame('int', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -277,7 +277,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterTypeHintGetsPrecedenceOverDefaultValueTypeDeduction.phpt');
 
-        static::assertSame('int', (string) $method->getParameters()[0]->getType());
+        self::assertSame('int', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -287,8 +287,8 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterExplicitNullability.phpt');
 
-        static::assertSame('?int', $method->getParameters()[0]->getTypeHint());
-        static::assertSame('(int | null)', (string) $method->getParameters()[0]->getType());
+        self::assertSame('?int', $method->getParameters()[0]->getTypeHint());
+        self::assertSame('(int | null)', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -298,8 +298,8 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodParameterImplicitNullability.phpt');
 
-        static::assertSame('int', $method->getParameters()[0]->getTypeHint());
-        static::assertSame('(int | null)', (string) $method->getParameters()[0]->getType());
+        self::assertSame('int', $method->getParameters()[0]->getTypeHint());
+        self::assertSame('(int | null)', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -309,7 +309,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodReferenceParameter.phpt');
 
-        static::assertTrue($method->getParameters()[0]->getIsReference());
+        self::assertTrue($method->getParameters()[0]->getIsReference());
     }
 
     /**
@@ -319,8 +319,8 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MethodVariadicParameter.phpt');
 
-        static::assertTrue($method->getParameters()[0]->getIsVariadic());
-        static::assertSame('int[]', (string) $method->getParameters()[0]->getType());
+        self::assertTrue($method->getParameters()[0]->getIsVariadic());
+        self::assertSame('int[]', (string) $method->getParameters()[0]->getType());
     }
 
     /**
@@ -330,7 +330,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('FinalMethod.phpt');
 
-        static::assertTrue($method->getIsFinal());
+        self::assertTrue($method->getIsFinal());
     }
 
     /**
@@ -340,7 +340,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('AbstractMethod.phpt');
 
-        static::assertTrue($method->getIsAbstract());
+        self::assertTrue($method->getIsAbstract());
     }
 
     /**
@@ -350,8 +350,8 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethod.phpt');
 
-        static::assertTrue($method->getIsMagic());
-        static::assertFalse($method->getIsStatic());
+        self::assertTrue($method->getIsMagic());
+        self::assertFalse($method->getIsStatic());
     }
 
     /**
@@ -361,7 +361,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodWithReturnType.phpt');
 
-        static::assertSame('int', (string) $method->getReturnType());
+        self::assertSame('int', (string) $method->getReturnType());
     }
 
     /**
@@ -371,7 +371,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodReturnTypeIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $method->getReturnType());
+        self::assertSame('\N\A', (string) $method->getReturnType());
     }
 
     /**
@@ -381,7 +381,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodWithDescription.phpt');
 
-        static::assertSame('A summary.', $method->getShortDescription());
+        self::assertSame('A summary.', $method->getShortDescription());
     }
 
     /**
@@ -391,7 +391,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodOmittingReturnType.phpt');
 
-        static::assertSame('void', (string) $method->getReturnType());
+        self::assertSame('void', (string) $method->getReturnType());
     }
 
     /**
@@ -401,9 +401,9 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodWithDescriptionWithoutReturnType.phpt');
 
-        static::assertSame('A summary.', $method->getShortDescription());
+        self::assertSame('A summary.', $method->getShortDescription());
 
-        static::assertSame('void', (string) $method->getReturnType());
+        self::assertSame('void', (string) $method->getReturnType());
     }
 
     /**
@@ -413,7 +413,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('StaticMagicMethodWithReturnType.phpt');
 
-        static::assertTrue($method->getIsStatic());
+        self::assertTrue($method->getIsStatic());
     }
 
     /**
@@ -423,7 +423,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('StaticMagicMethodWithoutReturnType.phpt');
 
-        static::assertTrue($method->getIsStatic());
+        self::assertTrue($method->getIsStatic());
     }
 
     /**
@@ -433,19 +433,19 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodWithRequiredParameter.phpt');
 
-        static::assertCount(1, $method->getParameters());
+        self::assertCount(1, $method->getParameters());
 
         $parameter = $method->getParameters()[0];
 
-        static::assertSame($method, $parameter->getMethod());
-        static::assertSame('a', $parameter->getName());
-        static::assertNull($parameter->getTypeHint());
-        static::assertSame('mixed', (string) $parameter->getType());
-        static::assertNull($parameter->getDescription());
-        static::assertNull($parameter->getDefaultValue());
-        static::assertFalse($parameter->getIsReference());
-        static::assertFalse($parameter->getIsOptional());
-        static::assertFalse($parameter->getIsVariadic());
+        self::assertSame($method, $parameter->getMethod());
+        self::assertSame('a', $parameter->getName());
+        self::assertNull($parameter->getTypeHint());
+        self::assertSame('mixed', (string) $parameter->getType());
+        self::assertNull($parameter->getDescription());
+        self::assertNull($parameter->getDefaultValue());
+        self::assertFalse($parameter->getIsReference());
+        self::assertFalse($parameter->getIsOptional());
+        self::assertFalse($parameter->getIsVariadic());
     }
 
     /**
@@ -455,19 +455,19 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodWithOptionalParameter.phpt');
 
-        static::assertCount(1, $method->getParameters());
+        self::assertCount(1, $method->getParameters());
 
         $parameter = $method->getParameters()[0];
 
-        static::assertSame($method, $parameter->getMethod());
-        static::assertSame('a', $parameter->getName());
-        static::assertNull($parameter->getTypeHint());
-        static::assertSame('mixed', (string) $parameter->getType());
-        static::assertNull($parameter->getDescription());
-        static::assertNull($parameter->getDefaultValue());
-        static::assertFalse($parameter->getIsReference());
-        static::assertTrue($parameter->getIsOptional());
-        static::assertFalse($parameter->getIsVariadic());
+        self::assertSame($method, $parameter->getMethod());
+        self::assertSame('a', $parameter->getName());
+        self::assertNull($parameter->getTypeHint());
+        self::assertSame('mixed', (string) $parameter->getType());
+        self::assertNull($parameter->getDescription());
+        self::assertNull($parameter->getDefaultValue());
+        self::assertFalse($parameter->getIsReference());
+        self::assertTrue($parameter->getIsOptional());
+        self::assertFalse($parameter->getIsVariadic());
     }
 
     /**
@@ -477,11 +477,11 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('MagicMethodParameterTypeIsResolved.phpt');
 
-        static::assertCount(1, $method->getParameters());
+        self::assertCount(1, $method->getParameters());
 
         $parameter = $method->getParameters()[0];
 
-        static::assertSame('\N\A', (string) $parameter->getType());
+        self::assertSame('\N\A', (string) $parameter->getType());
     }
 
     /**
@@ -491,7 +491,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('StaticMethod.phpt');
 
-        static::assertTrue($method->getIsStatic());
+        self::assertTrue($method->getIsStatic());
     }
 
     /**
@@ -501,7 +501,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('ImplicitlyPublicMethod.phpt');
 
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $method->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $method->getAccessModifier()->getName());
     }
 
     /**
@@ -511,7 +511,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('ExplicitlyPublicMethod.phpt');
 
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $method->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $method->getAccessModifier()->getName());
     }
 
     /**
@@ -521,7 +521,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('ProtectedMethod.phpt');
 
-        static::assertSame(AccessModifierNameValue::PROTECTED_, $method->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PROTECTED_, $method->getAccessModifier()->getName());
     }
 
     /**
@@ -531,7 +531,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
     {
         $method = $this->indexMethod('PrivateMethod.phpt');
 
-        static::assertSame(AccessModifierNameValue::PRIVATE_, $method->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PRIVATE_, $method->getAccessModifier()->getName());
     }
 
     /**
@@ -542,12 +542,12 @@ final class MethodIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            static::assertCount(1, $classes);
-            static::assertCount(1, $classes[0]->getMethods());
+            self::assertCount(1, $classes);
+            self::assertCount(1, $classes[0]->getMethods());
 
             $method = $classes[0]->getMethods()[0];
 
-            static::assertSame('foo', $method->getName());
+            self::assertSame('foo', $method->getName());
 
             return str_replace('foo', 'foo2 ', $source);
         };
@@ -555,17 +555,17 @@ final class MethodIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            static::assertCount(1, $classes);
-            static::assertCount(1, $classes[0]->getMethods());
+            self::assertCount(1, $classes);
+            self::assertCount(1, $classes[0]->getMethods());
 
             $method = $classes[0]->getMethods()[0];
 
-            static::assertSame('foo2', $method->getName());
+            self::assertSame('foo2', $method->getName());
         };
 
         $path = $this->getPathFor('MethodChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -581,12 +581,12 @@ final class MethodIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(1, $classes[0]->getMethods());
+        self::assertCount(1, $classes);
+        self::assertCount(1, $classes[0]->getMethods());
 
         $method = $classes[0]->getMethods()[0];
 
-        static::assertSame($classes[0], $method->getClasslike());
+        self::assertSame($classes[0], $method->getClasslike());
 
         return $method;
     }

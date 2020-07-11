@@ -383,7 +383,7 @@ final class DocumentHighlightsRetrieverTest extends AbstractIntegrationTest
         $item = new TextDocumentItem($uri, $this->container->get('textDocumentContentRegistry')->get($uri));
 
         while ($i <= $endCharacter) {
-            static::assertEquals(
+            self::assertEquals(
                 $highlights,
                 $documentHighlightsRetriever->retrieve($item, new Position($line, $i)),
                 'Range must include [' . $line . ',' . $i . ']'
@@ -395,14 +395,14 @@ final class DocumentHighlightsRetrieverTest extends AbstractIntegrationTest
         // Assert that the range doesn't extend longer than it should.
         $resultBeforeRange = $documentHighlightsRetriever->retrieve($item, new Position($line, $startCharacter - 1));
 
-        static::assertTrue(
+        self::assertTrue(
             $resultBeforeRange === null || $resultBeforeRange !== $highlights,
             "Range does not start exactly at position [{$line},{$startCharacter}], but seems to continue before it"
         );
 
         $resultAfterRange = $documentHighlightsRetriever->retrieve($item, new Position($line, $endCharacter + 1));
 
-        static::assertTrue(
+        self::assertTrue(
             $resultAfterRange === null || $resultAfterRange !== $highlights,
             "Range does not end exactly at position [{$line},{$endCharacter}], but seems to continue after it"
         );

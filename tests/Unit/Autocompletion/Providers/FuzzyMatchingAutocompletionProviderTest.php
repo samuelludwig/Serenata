@@ -59,7 +59,7 @@ final class FuzzyMatchingAutocompletionProviderTest extends TestCase
             $code
         ));
 
-        static::assertEquals([
+        self::assertEquals([
             $suggestions[1],
             $suggestions[0],
         ], $result);

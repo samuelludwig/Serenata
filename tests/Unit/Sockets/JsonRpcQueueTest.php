@@ -42,7 +42,7 @@ final class JsonRpcQueueTest extends TestCase
 
         $queue->push($queueItem);
 
-        static::assertSame($queueItem, $queue->pop());
+        self::assertSame($queueItem, $queue->pop());
     }
 
     /**
@@ -65,8 +65,8 @@ final class JsonRpcQueueTest extends TestCase
         $queue->push($queueItem2, 1);
         $queue->push($queueItem1, 1);
 
-        static::assertSame($queueItem2, $queue->pop());
-        static::assertSame($queueItem1, $queue->pop());
+        self::assertSame($queueItem2, $queue->pop());
+        self::assertSame($queueItem1, $queue->pop());
     }
 
     /**
@@ -89,8 +89,8 @@ final class JsonRpcQueueTest extends TestCase
         $queue->push($queueItemLowPriority, 1);
         $queue->push($queueItemHighPriority, 2);
 
-        static::assertSame($queueItemHighPriority, $queue->pop());
-        static::assertSame($queueItemLowPriority, $queue->pop());
+        self::assertSame($queueItemHighPriority, $queue->pop());
+        self::assertSame($queueItemLowPriority, $queue->pop());
     }
 
     /**
@@ -109,7 +109,7 @@ final class JsonRpcQueueTest extends TestCase
 
         $queue->push($queueItem);
 
-        static::assertSame($queueItem, $queue->pop());
+        self::assertSame($queueItem, $queue->pop());
     }
 
     /**
@@ -128,7 +128,7 @@ final class JsonRpcQueueTest extends TestCase
 
         $queue->push($queueItem, 1);
 
-        static::assertSame($queueItem, $queue->pop());
+        self::assertSame($queueItem, $queue->pop());
     }
 
     /**
@@ -143,11 +143,11 @@ final class JsonRpcQueueTest extends TestCase
             $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
-        static::assertTrue($queue->isEmpty());
+        self::assertTrue($queue->isEmpty());
 
         $queue->push($queueItem, 1);
 
-        static::assertFalse($queue->isEmpty());
+        self::assertFalse($queue->isEmpty());
     }
 
     /**
@@ -165,6 +165,6 @@ final class JsonRpcQueueTest extends TestCase
         $queue->push($queueItem);
         $queue->cancel('theRequestId');
 
-        static::assertTrue($queue->pop()->getIsCancelled());
+        self::assertTrue($queue->pop()->getIsCancelled());
     }
 }

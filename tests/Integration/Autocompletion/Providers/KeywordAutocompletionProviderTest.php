@@ -37,7 +37,7 @@ final class KeywordAutocompletionProviderTest extends AbstractAutocompletionProv
                 false
             );
 
-        static::assertEquals($firstSuggestion, $output[0]);
+        self::assertEquals($firstSuggestion, $output[0]);
     }
 
     /**

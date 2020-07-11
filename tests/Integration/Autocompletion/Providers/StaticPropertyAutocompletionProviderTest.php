@@ -41,7 +41,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -73,7 +73,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -85,7 +85,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
 
         $output = $this->provide($fileName);
 
-        static::assertEquals([], $output);
+        self::assertEquals([], $output);
     }
 
     /**

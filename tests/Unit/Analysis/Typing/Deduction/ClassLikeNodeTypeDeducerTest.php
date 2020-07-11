@@ -38,7 +38,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
     {
         $node = new Node\Stmt\Class_('A');
 
-        static::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
+        self::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
             new TypeDeductionContext($node, new TextDocumentItem('', ''))
         ));
     }
@@ -52,7 +52,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        static::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
+        self::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
             new TypeDeductionContext($node, new TextDocumentItem('', ''))
         ));
     }
@@ -66,7 +66,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
 
         $file = new Structures\File('', new DateTime(), []);
 
-        static::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
+        self::assertEquals(new IdentifierTypeNode('A'), $this->classLikeNodeTypeDeducer->deduce(
             new TypeDeductionContext($node, new TextDocumentItem('', ''))
         ));
     }
@@ -82,7 +82,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
 
         $file = new Structures\File('file:////test/path', new DateTime(), []);
 
-        static::assertEquals(
+        self::assertEquals(
             new IdentifierTypeNode('\anonymous_d41d8cd98f00b204e9800998ecf8427e_9'),
             $this->classLikeNodeTypeDeducer->deduce(new TypeDeductionContext($node, new TextDocumentItem('', '')))
         );

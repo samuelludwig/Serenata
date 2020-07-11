@@ -59,7 +59,7 @@ final class AutocompletionPerformanceTest extends AbstractPerformanceTest
         $positionThatWillGenerateNonEmptyPrefix = strpos($code, "define ('E_ERROR', 1);");
 
         // Empty prefixes are a specially optimized case that we don't want to trigger to have more realistic results.
-        static::assertTrue(
+        self::assertTrue(
             $positionThatWillGenerateNonEmptyPrefix !== false,
             'No location found that would generate a non-empty prefix'
         );

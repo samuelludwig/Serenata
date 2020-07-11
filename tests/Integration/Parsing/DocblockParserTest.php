@@ -26,7 +26,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        static::assertEquals([
+        self::assertEquals([
             '$foo' => [
                 'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                 'description' => 'Test description.',
@@ -48,7 +48,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        static::assertEquals([
+        self::assertEquals([
             '$foo' => [
                 'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                 'description' => 'Test description with @ sign.',
@@ -68,7 +68,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
      * @param string|null $someString Имя файла пат
      */', [DocblockParser::PARAM_TYPE], '');
 
-        static::assertEquals([
+        self::assertEquals([
             '$someString' => [
                 'type' => new UnionTypeNode([
                     new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
@@ -96,7 +96,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::VAR_TYPE], 'someProperty');
 
-        static::assertEquals([
+        self::assertEquals([
             '$someProperty' => [
                 'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::INT_),
                 'description' => '',
@@ -114,7 +114,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
             /** @var int Some description */
         ', [DocblockParser::VAR_TYPE], 'someProperty');
 
-        static::assertEquals([
+        self::assertEquals([
             '$someProperty' => [
                 'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::INT_),
                 'description' => 'Some description',
@@ -134,7 +134,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertSame([], $result['throws']);
+        self::assertSame([], $result['throws']);
     }
 
     /**
@@ -149,9 +149,9 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertCount(1, $result['throws']);
-        static::assertEquals(new IdentifierTypeNode('\UnexpectedValueException'), $result['throws'][0]['type']);
-        static::assertSame('Some description', $result['throws'][0]['description']);
+        self::assertCount(1, $result['throws']);
+        self::assertEquals(new IdentifierTypeNode('\UnexpectedValueException'), $result['throws'][0]['type']);
+        self::assertSame('Some description', $result['throws'][0]['description']);
     }
 
     /**
@@ -166,9 +166,9 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::THROWS], '');
 
-        static::assertCount(1, $result['throws']);
-        static::assertEquals(new IdentifierTypeNode('\UnexpectedValueException'), $result['throws'][0]['type']);
-        static::assertSame(null, $result['throws'][0]['description']);
+        self::assertCount(1, $result['throws']);
+        self::assertEquals(new IdentifierTypeNode('\UnexpectedValueException'), $result['throws'][0]['type']);
+        self::assertSame(null, $result['throws'][0]['description']);
     }
 
     /**
@@ -183,7 +183,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::VAR_TYPE], '');
 
-        static::assertSame([], $result['var']);
+        self::assertSame([], $result['var']);
     }
 
     /**
@@ -198,7 +198,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::VAR_TYPE], '');
 
-        static::assertEquals([
+        self::assertEquals([
             '$' => [
                 'type'        => '\DateTime',
                 'description' => '',
@@ -218,7 +218,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        static::assertSame([], $result['params']);
+        self::assertSame([], $result['params']);
     }
 
     /**
@@ -233,7 +233,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        static::assertSame([], $result['params']);
+        self::assertSame([], $result['params']);
     }
 
     /**
@@ -248,7 +248,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::PARAM_TYPE], '');
 
-        static::assertEquals([
+        self::assertEquals([
             '$test' => [
                 'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
                 'description' => 'A description.',
@@ -270,7 +270,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::RETURN_VALUE], '');
 
-        static::assertNull($result['return']);
+        self::assertNull($result['return']);
     }
 
     /**
@@ -289,8 +289,8 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::DESCRIPTION], '');
 
-        static::assertSame('This *is* _some_ markdown.', $result['descriptions']['short']);
-        static::assertSame("```\nCode sample.\n```", $result['descriptions']['long']);
+        self::assertSame('This *is* _some_ markdown.', $result['descriptions']['short']);
+        self::assertSame("```\nCode sample.\n```", $result['descriptions']['long']);
     }
 
     /**
@@ -309,8 +309,8 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::DESCRIPTION], '');
 
-        static::assertSame('This **is** _some_ HTML.', $result['descriptions']['short']);
-        static::assertSame("Code sample.", $result['descriptions']['long']);
+        self::assertSame('This **is** _some_ HTML.', $result['descriptions']['short']);
+        self::assertSame("Code sample.", $result['descriptions']['long']);
     }
 
     /**
@@ -329,7 +329,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::DESCRIPTION], '');
 
-        static::assertSame("```php\n    // Some indentation.\n```", $result['descriptions']['long']);
+        self::assertSame("```php\n    // Some indentation.\n```", $result['descriptions']['long']);
     }
 
     /**
@@ -344,7 +344,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
              */
         ', [DocblockParser::DESCRIPTION], '');
 
-        static::assertSame('This alert("test")', $result['descriptions']['short']);
+        self::assertSame('This alert("test")', $result['descriptions']['short']);
     }
 
     // /**
@@ -358,7 +358,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
     //         ''
     //     );
     //
-    //     static::assertSame('Multiple spaces with tabs.', $result['descriptions']['short']);
+    //     self::assertSame('Multiple spaces with tabs.', $result['descriptions']['short']);
     // }
 
     /**
@@ -372,7 +372,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
             ''
         );
 
-        static::assertSame("Description\n\nTest", $result['descriptions']['long']);
+        self::assertSame("Description\n\nTest", $result['descriptions']['long']);
     }
 
     /**
@@ -386,7 +386,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
             ''
         );
 
-        static::assertSame("Description\n\nTest", $result['descriptions']['long']);
+        self::assertSame("Description\n\nTest", $result['descriptions']['long']);
     }
 
     /**
@@ -406,10 +406,10 @@ final class DocblockParserTest extends AbstractIntegrationTest
             ''
         );
 
-        static::assertSame('Summary.', $result['descriptions']['short']);
-        static::assertSame('Description.', $result['descriptions']['long']);
+        self::assertSame('Summary.', $result['descriptions']['short']);
+        self::assertSame('Description.', $result['descriptions']['long']);
 
-        static::assertEquals(
+        self::assertEquals(
             [
                 '$test' => [
                     'type'        => new Type\IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::STRING_),
@@ -421,7 +421,7 @@ final class DocblockParserTest extends AbstractIntegrationTest
             $result['params']
         );
 
-        static::assertEquals([
+        self::assertEquals([
             'type'        => new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::BOOL_),
             'description' => null,
         ], $result['return']);

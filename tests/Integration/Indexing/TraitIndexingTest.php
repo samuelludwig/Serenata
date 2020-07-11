@@ -20,27 +20,27 @@ final class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('SimpleTrait.phpt');
 
-        static::assertSame('Test', $structure->getName());
-        static::assertSame('\Test', $structure->getFqcn());
-        static::assertSame($this->normalizePath($this->getPathFor('SimpleTrait.phpt')), $structure->getFile()->getUri());
-        static::assertEquals(
+        self::assertSame('Test', $structure->getName());
+        self::assertSame('\Test', $structure->getFqcn());
+        self::assertSame($this->normalizePath($this->getPathFor('SimpleTrait.phpt')), $structure->getFile()->getUri());
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(5, 1)
             ),
             $structure->getRange()
         );
-        static::assertNull($structure->getShortDescription());
-        static::assertNull($structure->getLongDescription());
-        static::assertFalse($structure->getIsDeprecated());
-        static::assertFalse($structure->getHasDocblock());
-        static::assertCount(1, $structure->getConstants());
-        static::assertEmpty($structure->getProperties());
-        static::assertEmpty($structure->getMethods());
-        static::assertEmpty($structure->getTraitFqcns());
-        static::assertEmpty($structure->getTraitUserFqcns());
-        static::assertEmpty($structure->getTraitAliases());
-        static::assertEmpty($structure->getTraitPrecedences());
+        self::assertNull($structure->getShortDescription());
+        self::assertNull($structure->getLongDescription());
+        self::assertFalse($structure->getIsDeprecated());
+        self::assertFalse($structure->getHasDocblock());
+        self::assertCount(1, $structure->getConstants());
+        self::assertEmpty($structure->getProperties());
+        self::assertEmpty($structure->getMethods());
+        self::assertEmpty($structure->getTraitFqcns());
+        self::assertEmpty($structure->getTraitUserFqcns());
+        self::assertEmpty($structure->getTraitAliases());
+        self::assertEmpty($structure->getTraitPrecedences());
     }
 
     /**
@@ -50,7 +50,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitNamespace.phpt');
 
-        static::assertSame('\N\Test', $structure->getFqcn());
+        self::assertSame('\N\Test', $structure->getFqcn());
     }
 
     /**
@@ -60,7 +60,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitShortDescription.phpt');
 
-        static::assertSame('A summary.', $structure->getShortDescription());
+        self::assertSame('A summary.', $structure->getShortDescription());
     }
 
     /**
@@ -70,7 +70,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitLongDescription.phpt');
 
-        static::assertSame('A long description.', $structure->getLongDescription());
+        self::assertSame('A long description.', $structure->getLongDescription());
     }
 
     /**
@@ -80,7 +80,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('DeprecatedTrait.phpt');
 
-        static::assertTrue($structure->getIsDeprecated());
+        self::assertTrue($structure->getIsDeprecated());
     }
 
     /**
@@ -90,7 +90,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexTrait('TraitWithDocblock.phpt');
 
-        static::assertTrue($structure->getHasDocblock());
+        self::assertTrue($structure->getHasDocblock());
     }
 
 
@@ -108,13 +108,13 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-        static::assertCount(3, $entities);
+        self::assertCount(3, $entities);
 
         $structure = $entities[2];
 
-        static::assertCount(2, $structure->getTraitFqcns());
-        static::assertSame('\A', $structure->getTraitFqcns()[0]);
-        static::assertSame('\B', $structure->getTraitFqcns()[1]);
+        self::assertCount(2, $structure->getTraitFqcns());
+        self::assertSame('\A', $structure->getTraitFqcns()[0]);
+        self::assertSame('\B', $structure->getTraitFqcns()[1]);
     }
 
     /**
@@ -128,16 +128,16 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-        static::assertCount(2, $entities);
+        self::assertCount(2, $entities);
 
         $structure = $entities[1];
 
-        static::assertCount(1, $structure->getTraitAliases());
-        static::assertSame($structure, $structure->getTraitAliases()[0]->getTrait());
-        static::assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
-        static::assertNull($structure->getTraitAliases()[0]->getAccessModifier());
-        static::assertSame('foo', $structure->getTraitAliases()[0]->getName());
-        static::assertSame('bar', $structure->getTraitAliases()[0]->getAlias());
+        self::assertCount(1, $structure->getTraitAliases());
+        self::assertSame($structure, $structure->getTraitAliases()[0]->getTrait());
+        self::assertNull($structure->getTraitAliases()[0]->getTraitFqcn());
+        self::assertNull($structure->getTraitAliases()[0]->getAccessModifier());
+        self::assertSame('foo', $structure->getTraitAliases()[0]->getName());
+        self::assertSame('bar', $structure->getTraitAliases()[0]->getAlias());
     }
 
     /**
@@ -151,12 +151,12 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-        static::assertCount(2, $entities);
+        self::assertCount(2, $entities);
 
         $structure = $entities[1];
 
-        static::assertCount(1, $structure->getTraitAliases());
-        static::assertSame('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
+        self::assertCount(1, $structure->getTraitAliases());
+        self::assertSame('\A', $structure->getTraitAliases()[0]->getTraitFqcn());
     }
 
     /**
@@ -170,13 +170,13 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-        static::assertCount(2, $entities);
+        self::assertCount(2, $entities);
 
         $structure = $entities[1];
 
-        static::assertCount(1, $structure->getTraitAliases());
-        static::assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
-        static::assertSame('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
+        self::assertCount(1, $structure->getTraitAliases());
+        self::assertNotNull($structure->getTraitAliases()[0]->getAccessModifier());
+        self::assertSame('protected', $structure->getTraitAliases()[0]->getAccessModifier()->getName());
     }
 
     /**
@@ -190,14 +190,14 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-        static::assertCount(3, $entities);
+        self::assertCount(3, $entities);
 
         $structure = $entities[2];
 
-        static::assertCount(1, $structure->getTraitPrecedences());
-        static::assertSame($structure, $structure->getTraitPrecedences()[0]->getTrait());
-        static::assertSame('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
-        static::assertSame('foo', $structure->getTraitPrecedences()[0]->getName());
+        self::assertCount(1, $structure->getTraitPrecedences());
+        self::assertSame($structure, $structure->getTraitPrecedences()[0]->getTrait());
+        self::assertSame('\A', $structure->getTraitPrecedences()[0]->getTraitFqcn());
+        self::assertSame('foo', $structure->getTraitPrecedences()[0]->getName());
     }
 
     /**
@@ -208,11 +208,11 @@ final class TraitIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-            static::assertCount(1, $structures);
+            self::assertCount(1, $structures);
 
             $structure = $structures[0];
 
-            static::assertSame('Test', $structure->getName());
+            self::assertSame('Test', $structure->getName());
 
             return str_replace('Test', 'Test2 ', $source);
         };
@@ -220,16 +220,16 @@ final class TraitIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-            static::assertCount(1, $structures);
+            self::assertCount(1, $structures);
 
             $structure = $structures[0];
 
-            static::assertSame('Test2', $structure->getName());
+            self::assertSame('Test2', $structure->getName());
         };
 
         $path = $this->getPathFor('TraitChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -245,7 +245,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
-        static::assertCount(1, $entities);
+        self::assertCount(1, $entities);
 
         return $entities[0];
     }

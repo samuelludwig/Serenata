@@ -16,7 +16,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
         $unknownFileNames = array_diff($this->getFileNamesWhereShouldApply(), $this->getFileNamesToEvaluate());
 
         if ($unknownFileNames !== []) {
-            static::fail(
+            self::fail(
                 'Only specify files that are in the list of file names to evaluate. If adding a new file, add it to ' .
                 'the base list so it is automatically evaluated for other providers as well. File names to add: ' .
                 implode(', ', $unknownFileNames)
@@ -30,7 +30,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
     public function testAppliesAtProvidedLocations(): void
     {
         foreach ($this->getFileNamesWhereShouldApply() as $fileName) {
-            static::assertNotEmpty(
+            self::assertNotEmpty(
                 $this->provide($fileName, $this->getFileNameOfFileContainingSuggestionSources()),
                 'Autocompletion should apply in "' . $fileName . '", but it doesn\'t'
             );
@@ -48,7 +48,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
         );
 
         foreach ($fileNamesWhereShouldNotApply as $fileName) {
-            static::assertEmpty(
+            self::assertEmpty(
                 $this->provide($fileName, $this->getFileNameOfFileContainingSuggestionSources()),
                 'Autocompletion shouldn\'t apply in "' . $fileName . '", but it does'
             );

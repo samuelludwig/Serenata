@@ -38,11 +38,11 @@ final class JsonRpcApplicationTest extends TestCase
 
         $this->waitForServerStart($process);
 
-        static::assertTrue($process->isRunning());
+        self::assertTrue($process->isRunning());
 
         $process->stop();
 
-        static::assertFalse($process->isRunning());
+        self::assertFalse($process->isRunning());
     }
 
     /**
@@ -72,7 +72,7 @@ final class JsonRpcApplicationTest extends TestCase
                     $eventLoop->stop();
                 },
                 function (): void {
-                    static::fail('Failed connecting to TCP server instance using client for an unknown reason');
+                    self::fail('Failed connecting to TCP server instance using client for an unknown reason');
                 }
             );
 
@@ -84,7 +84,7 @@ final class JsonRpcApplicationTest extends TestCase
 
         $process->stop();
 
-        static::assertTrue($didConnect, 'Timed out trying to connect to TCP server instance using client');
+        self::assertTrue($didConnect, 'Timed out trying to connect to TCP server instance using client');
     }
 
     /**
@@ -101,7 +101,7 @@ final class JsonRpcApplicationTest extends TestCase
         };
 
         $incomingMessageHandler = function (JsonRpcMessageInterface $message): void {
-            static::assertEquals(
+            self::assertEquals(
                 new JsonRpcResponse(
                     null,
                     null,
@@ -166,7 +166,7 @@ final class JsonRpcApplicationTest extends TestCase
                     $connectionHandler($clientConnectionHandler);
                 },
                 function (): void {
-                    static::fail('Failed connecting to TCP server instance using client for an unknown reason');
+                    self::fail('Failed connecting to TCP server instance using client for an unknown reason');
                 }
             );
 
@@ -176,7 +176,7 @@ final class JsonRpcApplicationTest extends TestCase
             $amountOfMessagesToWaitFor,
             $incomingMessageHandler
         ): void {
-            static::assertCount(
+            self::assertCount(
                 $amountOfMessagesToWaitFor,
                 $jsonRpcMessageHandlerStub->messages,
                 'Too few messages were sent back from the server to the client (fewer than expected)'
@@ -222,7 +222,7 @@ final class JsonRpcApplicationTest extends TestCase
                     $output === "Starting server bound to socket on URI " . self::TCP_TEST_URI . "...\n";
             });
         } catch (ProcessTimedOutException $e) {
-            static::fail(
+            self::fail(
                 'Timed out waiting for server start message. Either the server is not starting correctly or it is no ' .
                 'longer displaying an informational message that it started'
             );
@@ -239,7 +239,7 @@ final class JsonRpcApplicationTest extends TestCase
         $phpExecutableFinder = new PhpExecutableFinder();
         $phpExecutablePath = $phpExecutableFinder->find(false);
 
-        static::assertNotFalse($phpExecutablePath, 'Cannot find path to PHP path to spawn testserver with');
+        self::assertNotFalse($phpExecutablePath, 'Cannot find path to PHP path to spawn testserver with');
 
         return new Process(array_merge(
             [$phpExecutablePath],

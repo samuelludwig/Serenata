@@ -41,7 +41,7 @@ final class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocomp
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -73,7 +73,7 @@ final class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocomp
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -105,7 +105,7 @@ final class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocomp
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -117,7 +117,7 @@ final class NonStaticPropertyAutocompletionProviderTest extends AbstractAutocomp
 
         $output = $this->provide($fileName);
 
-        static::assertEquals([], $output);
+        self::assertEquals([], $output);
     }
 
     /**

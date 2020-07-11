@@ -21,7 +21,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
     {
         $filePath = $this->getTestFilePath('Constant.phpt');
 
-        static::assertEquals([
+        self::assertEquals([
             new SymbolInformation(
                 'CONSTANT',
                 SymbolKind::CONSTANT,
@@ -45,7 +45,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
     {
         $filePath = $this->getTestFilePath('Function.phpt');
 
-        static::assertEquals([
+        self::assertEquals([
             new SymbolInformation(
                 'foo',
                 SymbolKind::FUNCTION_,
@@ -69,7 +69,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
     {
         $filePath = $this->getTestFilePath('Class.phpt');
 
-        static::assertEquals([
+        self::assertEquals([
             new SymbolInformation(
                 'A',
                 SymbolKind::CLASS_,
@@ -93,7 +93,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
     {
         $filePath = $this->getTestFilePath('Interface.phpt');
 
-        static::assertEquals([
+        self::assertEquals([
             new SymbolInformation(
                 'I',
                 SymbolKind::INTERFACE_,
@@ -117,7 +117,7 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
     {
         $filePath = $this->getTestFilePath('Trait.phpt');
 
-        static::assertEquals([
+        self::assertEquals([
             new SymbolInformation(
                 'T',
                 SymbolKind::CLASS_,
@@ -143,8 +143,8 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 
         $symbols = $this->getSymbolsForFile($filePath);
 
-        static::assertCount(2, $symbols);
-        static::assertEquals(
+        self::assertCount(2, $symbols);
+        self::assertEquals(
             new SymbolInformation(
                 'CONSTANT',
                 SymbolKind::CONSTANT,
@@ -171,8 +171,8 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 
         $symbols = $this->getSymbolsForFile($filePath);
 
-        static::assertCount(2, $symbols);
-        static::assertEquals(
+        self::assertCount(2, $symbols);
+        self::assertEquals(
             new SymbolInformation(
                 'foo',
                 SymbolKind::METHOD,
@@ -199,8 +199,8 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 
         $symbols = $this->getSymbolsForFile($filePath);
 
-        static::assertCount(2, $symbols);
-        static::assertEquals(
+        self::assertCount(2, $symbols);
+        self::assertEquals(
             new SymbolInformation(
                 '__construct',
                 SymbolKind::CONSTRUCTOR,
@@ -227,8 +227,8 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
 
         $symbols = $this->getSymbolsForFile($filePath);
 
-        static::assertCount(2, $symbols);
-        static::assertEquals(
+        self::assertCount(2, $symbols);
+        self::assertEquals(
             new SymbolInformation(
                 'bar',
                 SymbolKind::PROPERTY,
@@ -256,16 +256,16 @@ final class DocumentSymbolRetrieverTest extends AbstractIntegrationTest
         /** @var SymbolInformation[] $symbols */
         $symbols = $this->getSymbolsForFile($filePath);
 
-        static::assertCount(8, $symbols);
+        self::assertCount(8, $symbols);
 
-        static::assertSame('Class1', $symbols[0]->getName());
-        static::assertSame('property1', $symbols[1]->getName());
-        static::assertSame('method1', $symbols[2]->getName());
-        static::assertSame('CONSTANT1', $symbols[3]->getName());
-        static::assertSame('Class2', $symbols[4]->getName());
-        static::assertSame('CONSTANT2', $symbols[5]->getName());
-        static::assertSame('method2', $symbols[6]->getName());
-        static::assertSame('property2', $symbols[7]->getName());
+        self::assertSame('Class1', $symbols[0]->getName());
+        self::assertSame('property1', $symbols[1]->getName());
+        self::assertSame('method1', $symbols[2]->getName());
+        self::assertSame('CONSTANT1', $symbols[3]->getName());
+        self::assertSame('Class2', $symbols[4]->getName());
+        self::assertSame('CONSTANT2', $symbols[5]->getName());
+        self::assertSame('method2', $symbols[6]->getName());
+        self::assertSame('property2', $symbols[7]->getName());
     }
 
     /**

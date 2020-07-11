@@ -20,12 +20,12 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
 
         $registry = $this->container->get('constantListProvider.registry');
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
 
         $this->indexTestFile($this->container, $path);
 
-        static::assertCount(1, $registry->getAll());
-        static::assertArrayHasKey('\TEST', $registry->getAll());
+        self::assertCount(1, $registry->getAll());
+        self::assertArrayHasKey('\TEST', $registry->getAll());
     }
 
     /**
@@ -36,8 +36,8 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('constantListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\TEST', $registry->getAll());
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\TEST', $registry->getAll());
 
             return str_replace('const TEST', '// const TEST ', $source);
         };
@@ -45,12 +45,12 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('constantListProvider.registry');
 
-            static::assertEmpty($registry->getAll());
+            self::assertEmpty($registry->getAll());
         };
 
         $path = $this->getPathFor('OldConstantIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -61,9 +61,9 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('constantListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\TEST', $registry->getAll());
-            static::assertSame('1', $registry->getAll()['\TEST']['defaultValue']);
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\TEST', $registry->getAll());
+            self::assertSame('1', $registry->getAll()['\TEST']['defaultValue']);
 
             return str_replace('const TEST = 1', 'const TEST = 2', $source);
         };
@@ -71,14 +71,14 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('constantListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\TEST', $registry->getAll());
-            static::assertSame('2', $registry->getAll()['\TEST']['defaultValue']);
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\TEST', $registry->getAll());
+            self::assertSame('2', $registry->getAll()['\TEST']['defaultValue']);
         };
 
         $path = $this->getPathFor('OldConstantIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

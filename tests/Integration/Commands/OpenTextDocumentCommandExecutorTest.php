@@ -24,7 +24,7 @@ final class OpenTextDocumentCommandExecutorTest extends AbstractIntegrationTest
     {
         $uri = $this->getPathFor('Class.phpt');
 
-        static::assertEquals(
+        self::assertEquals(
             new JsonRpcRequest(null, ClientCommandName::OPEN_TEXT_DOCUMENT, [
                 'uri' => $uri,
                 'position' => new Position(6, 20),

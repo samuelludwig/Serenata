@@ -91,7 +91,7 @@ final class CodeLensesRetrieverTest extends AbstractIntegrationTest
 
         $item = new TextDocumentItem($uri, $registry->get($uri));
 
-        static::assertEquals($codeLenses, $codeLensesRetriever->retrieve($item));
+        self::assertEquals($codeLenses, $codeLensesRetriever->retrieve($item));
     }
 
     /**

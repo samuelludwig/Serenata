@@ -23,14 +23,14 @@ final class NamespaceListRegistryWorkspaceInteractionTest extends AbstractIntegr
     {
         $registry = $this->container->get('namespaceListProvider.registry');
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
 
         $registry->add([
             'id'   => 'foo',
             'fqcn' => '\Test',
         ]);
 
-        static::assertCount(1, $registry->getAll());
+        self::assertCount(1, $registry->getAll());
 
         $this->container->get('managerRegistry')->setDatabaseUri(':memory:');
         $this->container->get('schemaInitializer')->initialize();
@@ -44,6 +44,6 @@ final class NamespaceListRegistryWorkspaceInteractionTest extends AbstractIntegr
             ['php']
         )));
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
     }
 }

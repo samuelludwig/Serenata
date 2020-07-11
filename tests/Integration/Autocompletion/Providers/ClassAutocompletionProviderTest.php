@@ -38,7 +38,7 @@ final class ClassAutocompletionProviderTest extends AbstractAutocompletionProvid
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -65,7 +65,7 @@ final class ClassAutocompletionProviderTest extends AbstractAutocompletionProvid
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -92,7 +92,7 @@ final class ClassAutocompletionProviderTest extends AbstractAutocompletionProvid
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -124,7 +124,7 @@ final class ClassAutocompletionProviderTest extends AbstractAutocompletionProvid
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -151,7 +151,7 @@ final class ClassAutocompletionProviderTest extends AbstractAutocompletionProvid
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**

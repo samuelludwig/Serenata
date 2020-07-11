@@ -41,7 +41,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -73,7 +73,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -105,7 +105,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -137,7 +137,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -169,7 +169,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -201,7 +201,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -213,7 +213,7 @@ final class StaticMethodAutocompletionProviderTest extends AbstractAutocompletio
 
         $output = $this->provide($fileName);
 
-        static::assertEquals([], $output);
+        self::assertEquals([], $output);
     }
 
     /**

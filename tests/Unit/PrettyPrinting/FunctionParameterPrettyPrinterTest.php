@@ -39,7 +39,7 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             'types'        => [],
         ]);
 
-        static::assertSame('$test', $result);
+        self::assertSame('$test', $result);
     }
 
     /**
@@ -55,7 +55,7 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             'types'        => [],
         ]);
 
-        static::assertSame('&$test', $result);
+        self::assertSame('&$test', $result);
     }
 
     /**
@@ -71,7 +71,7 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             'types'        => [],
         ]);
 
-        static::assertSame('...$test', $result);
+        self::assertSame('...$test', $result);
     }
 
     /**
@@ -92,7 +92,7 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             ],
         ]);
 
-        static::assertSame('int $test', $result);
+        self::assertSame('int $test', $result);
     }
 
     /**
@@ -117,7 +117,7 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             ],
         ]);
 
-        static::assertSame('int|bool $test', $result);
+        self::assertSame('int|bool $test', $result);
     }
 
     /**
@@ -133,7 +133,7 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             'types'        => [],
         ]);
 
-        static::assertSame('$test = null', $result);
+        self::assertSame('$test = null', $result);
     }
 
     /**
@@ -149,6 +149,6 @@ final class FunctionParameterPrettyPrinterTest extends TestCase
             'types'        => [],
         ]);
 
-        static::assertSame('$test = 0', $result);
+        self::assertSame('$test = 0', $result);
     }
 }

@@ -29,7 +29,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(2, 0);
         $file = 'NoNamespaceAndNoUseStatements.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -44,7 +44,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(4, 0);
         $file = 'NamespaceWithNoUseStatements.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -59,7 +59,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(2, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -74,7 +74,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -89,7 +89,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -104,7 +104,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(2, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -119,7 +119,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -134,7 +134,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(2, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -149,7 +149,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(4, 0);
         $file = 'QualifiedImportWithUnqualifiedImport.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -164,7 +164,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -179,7 +179,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -194,7 +194,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(8, 0);
         $file = 'ExistingUseStatementWithSurroundingDifferentlySegmentedOnes.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -209,7 +209,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(9, 0);
         $file = 'ExistingUseStatementWithSurroundingDifferentlySegmentedOnes.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -224,7 +224,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -239,7 +239,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -254,7 +254,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatement.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -269,7 +269,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingUseStatementsWithSamePrefix.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -284,7 +284,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(4, 0);
         $file = 'NoUseStatementsAndClass.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -299,7 +299,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(8, 0);
         $file = 'MultipleNamespaces.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -314,7 +314,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'AnonymousNamespace.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, false)
         );
@@ -329,7 +329,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(2, 0);
         $file = 'NoNamespaceAndNoUseStatements.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use function {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_FUNCTION, false)
         );
@@ -344,7 +344,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(2, 0);
         $file = 'NoNamespaceAndNoUseStatements.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use const {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CONSTANT, false)
         );
@@ -359,7 +359,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ClasslikeUseStatementAlreadyExists.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse function {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_FUNCTION, true)
         );
@@ -374,7 +374,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ClasslikeUseStatementAlreadyExists.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse const {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CONSTANT, true)
         );
@@ -389,7 +389,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'MultipleFunctionUseStatementsInNamespace.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -404,7 +404,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'FunctionUseStatementAlreadyExists.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse const {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CONSTANT, true)
         );
@@ -419,7 +419,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(3, 0);
         $file = 'ExistingMixedUseStatements.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "use function {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_FUNCTION, true)
         );
@@ -434,7 +434,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $insertionPoint = new Position(1, 0);
         $file = 'ExistingMixedUseStatements.phpt';
 
-        static::assertEquals(
+        self::assertEquals(
             new TextEdit(new Range($insertionPoint, $insertionPoint), "\nuse {$name};\n"),
             $this->create($file, $name, UseStatementKind::TYPE_CLASSLIKE, true)
         );
@@ -567,7 +567,7 @@ final class UseStatementInsertionCreatorTest extends AbstractIntegrationTest
         $markerOffset = mb_strpos($code, $marker);
 
         if ($markerOffset === false) {
-            static::fail('No marker "' . $marker . '" found in test code');
+            self::fail('No marker "' . $marker . '" found in test code');
         }
 
         return $markerOffset;

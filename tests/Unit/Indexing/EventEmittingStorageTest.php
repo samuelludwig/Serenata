@@ -32,7 +32,7 @@ final class EventEmittingStorageTest extends AbstractIntegrationTest
 
         $storage->commitTransaction();
 
-        static::assertEquals(1, $timesHit);
+        self::assertEquals(1, $timesHit);
     }
 
     /**
@@ -55,6 +55,6 @@ final class EventEmittingStorageTest extends AbstractIntegrationTest
 
         $storage->rollbackTransaction();
 
-        static::assertEquals(0, $timesHit);
+        self::assertEquals(0, $timesHit);
     }
 }

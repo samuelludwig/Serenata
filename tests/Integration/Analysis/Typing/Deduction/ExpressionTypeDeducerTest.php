@@ -22,19 +22,19 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$a');
 
-        static::assertSame('\Traversable', (string) $output);
+        self::assertSame('\Traversable', (string) $output);
 
         $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$b');
 
-        static::assertSame('\Traversable', (string) $output);
+        self::assertSame('\Traversable', (string) $output);
 
         $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$c');
 
-        static::assertSame('(\A\C | null)', (string) $output);
+        self::assertSame('(\A\C | null)', (string) $output);
 
         $output = $this->deduceTypesFromExpression('TypeOverrideAnnotations.phpt', '$d');
 
-        static::assertSame('\A\D', (string) $output);
+        self::assertSame('\A\D', (string) $output);
     }
 
     /**
@@ -45,7 +45,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
         $output = $this->deduceTypesFromExpression('IntersectionTypes.phpt', '$a');
 
         // TODO: Not quite correct, but good enough for type analysis for now as they are handled the same.
-        static::assertSame('(\A | \B)', (string) $output);
+        self::assertSame('(\A | \B)', (string) $output);
     }
 
     /**
@@ -55,7 +55,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ThisInClass.phpt', '$this');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -65,7 +65,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ThisOutsideClass.phpt', '$this');
 
-        static::assertSame('', (string) $output);
+        self::assertSame('', (string) $output);
     }
 
     /**
@@ -75,7 +75,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHint.phpt', '$b');
 
-        static::assertSame('\B', (string) $output);
+        self::assertSame('\B', (string) $output);
     }
 
     /**
@@ -85,7 +85,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintDefaultValue.phpt', '$b');
 
-        static::assertSame('(\A\B | null)', (string) $output);
+        self::assertSame('(\A\B | null)', (string) $output);
     }
     /**
      * @return void
@@ -94,7 +94,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintNullableSyntax.phpt', '$b');
 
-        static::assertSame('(\A\B | null)', (string) $output);
+        self::assertSame('(\A\B | null)', (string) $output);
     }
 
     /**
@@ -104,7 +104,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterDocblock.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -114,7 +114,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('MethodParameterTypeHint.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -124,7 +124,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('MethodParameterDocblock.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -134,7 +134,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ClosureParameterTypeHint.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -144,19 +144,19 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
 
         $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$c');
 
-        static::assertSame('\A\C', (string) $output);
+        self::assertSame('\A\C', (string) $output);
 
         $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$d');
 
-        static::assertSame('\A\D', (string) $output);
+        self::assertSame('\A\D', (string) $output);
 
         $output = $this->deduceTypesFromExpression('ClosureVariableUseStatement.phpt', '$e');
 
-        static::assertSame('', (string) $output);
+        self::assertSame('', (string) $output);
     }
 
     /**
@@ -166,15 +166,15 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ClosureVariableArrowFunction.phpt', '$e');
 
-        static::assertSame('\A\E', (string) $output);
+        self::assertSame('\A\E', (string) $output);
 
         $output = $this->deduceTypesFromExpression('ClosureVariableArrowFunction.phpt', '$d');
 
-        static::assertSame('\A\D', (string) $output);
+        self::assertSame('\A\D', (string) $output);
 
         $output = $this->deduceTypesFromExpression('ClosureVariableArrowFunction.phpt', '$a');
 
-        static::assertSame('\A\A', (string) $output);
+        self::assertSame('\A\A', (string) $output);
     }
 
     /**
@@ -184,7 +184,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('CatchBlockTypeHint.phpt', '$e');
 
-        static::assertSame('\UnexpectedValueException', (string) $output);
+        self::assertSame('\UnexpectedValueException', (string) $output);
     }
 
     /**
@@ -194,7 +194,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIf.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -204,7 +204,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithProperty.phpt', '$this->foo');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -214,7 +214,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithPropertyWithParentKeyword.phpt', 'parent::$foo');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -224,7 +224,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithClassName.phpt', 'Test::$foo');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -234,7 +234,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithSelfKeyword.phpt', 'self::$foo');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -244,7 +244,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfWithStaticPropertyWithStaticKeyword.phpt', 'static::$foo');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -254,7 +254,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfVariableInsideCondition.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -264,7 +264,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfAnd.phpt', '$b');
 
-        static::assertSame('(\A\B | \A\C | \A\D)', (string) $output);
+        self::assertSame('(\A\B | \A\C | \A\D)', (string) $output);
     }
 
     /**
@@ -274,7 +274,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofComplexIfOr.phpt', '$b');
 
-        static::assertSame('(\A\B | \A\C | \A\D | \A\E)', (string) $output);
+        self::assertSame('(\A\B | \A\C | \A\D | \A\E)', (string) $output);
     }
 
     /**
@@ -284,7 +284,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfOrWithTypeHint.phpt', '$b');
 
-        static::assertSame('(\A\B | \A\C)', (string) $output);
+        self::assertSame('(\A\B | \A\C)', (string) $output);
     }
 
     /**
@@ -294,7 +294,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIf.phpt', '$b');
 
-        static::assertSame('\A\A', (string) $output);
+        self::assertSame('\A\A', (string) $output);
     }
 
     /**
@@ -304,7 +304,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIfWithNegation.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -314,7 +314,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofNestedIfReassignment.phpt', '$b');
 
-        static::assertSame('\A\A', (string) $output);
+        self::assertSame('\A\A', (string) $output);
     }
 
     /**
@@ -324,7 +324,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfNotInstanceof.phpt', '$b');
 
-        static::assertSame('\A\A', (string) $output);
+        self::assertSame('\A\A', (string) $output);
     }
 
     /**
@@ -334,7 +334,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfNotStrictlyEqualsNull.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -344,7 +344,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfNotLooselyEqualsNull.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -354,7 +354,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfStrictlyEqualsNull.phpt', '$b');
 
-        static::assertSame('null', (string) $output);
+        self::assertSame('null', (string) $output);
     }
 
     /**
@@ -364,7 +364,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfLooselyEqualsNull.phpt', '$b');
 
-        static::assertSame('null', (string) $output);
+        self::assertSame('null', (string) $output);
     }
 
     /**
@@ -374,7 +374,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfTruthy.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -384,7 +384,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfFalsy.phpt', '$b');
 
-        static::assertSame('null', (string) $output);
+        self::assertSame('null', (string) $output);
     }
 
     /**
@@ -394,7 +394,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfWithTypeOverride.phpt', '$b');
 
-        static::assertSame('string', (string) $output);
+        self::assertSame('string', (string) $output);
     }
 
     /**
@@ -404,7 +404,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfVariableHandlingFunction.phpt', '$b');
 
-        static::assertSame(
+        self::assertSame(
             '(array | bool | callable | float | int | null | string | object | resource)',
             (string) $output
         );
@@ -417,7 +417,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofIfSeparateScope.phpt', '$b');
 
-        static::assertSame('', (string) $output);
+        self::assertSame('', (string) $output);
     }
 
     /**
@@ -427,7 +427,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofElseIf.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -437,7 +437,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfStatementNarrowsTypeOfStringVariable.phpt', '$b');
 
-        static::assertSame('string', (string) $output);
+        self::assertSame('string', (string) $output);
     }
 
     /**
@@ -447,7 +447,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfStatementDoesNotExpandTypeListOfVariable.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -457,7 +457,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofElseIfSeparateScope.phpt', '$b');
 
-        static::assertSame('', (string) $output);
+        self::assertSame('', (string) $output);
     }
 
     /**
@@ -467,7 +467,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofTernary.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -477,7 +477,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('IfWithProperty.phpt', '$b->foo');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -487,7 +487,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('InstanceofTernarySeparateScope.phpt', '$b');
 
-        static::assertSame('', (string) $output);
+        self::assertSame('', (string) $output);
     }
 
     /**
@@ -497,19 +497,19 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$a');
 
-        static::assertSame('\A', (string) $output);
+        self::assertSame('\A', (string) $output);
 
         $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$b');
 
-        static::assertSame('\B', (string) $output);
+        self::assertSame('\B', (string) $output);
 
         $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$c');
 
-        static::assertSame('(\C | null)', (string) $output);
+        self::assertSame('(\C | null)', (string) $output);
 
         $output = $this->deduceTypesFromExpression('TernaryExpression.phpt', '$d');
 
-        static::assertSame('(\A | \C | null)', (string) $output);
+        self::assertSame('(\A | \C | null)', (string) $output);
     }
 
     /**
@@ -519,7 +519,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('Foreach.phpt', '$a');
 
-        static::assertSame('\DateTime', (string) $output);
+        self::assertSame('\DateTime', (string) $output);
     }
 
     /**
@@ -529,7 +529,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ForeachValueWithGenericSequentialArraySyntax.phpt', '$a');
 
-        static::assertSame('\DateTime', (string) $output);
+        self::assertSame('\DateTime', (string) $output);
     }
 
     /**
@@ -539,7 +539,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ForeachValueWithGenericAssociativeArraySyntax.phpt', '$a');
 
-        static::assertSame('\DateTime', (string) $output);
+        self::assertSame('\DateTime', (string) $output);
     }
 
     /**
@@ -549,7 +549,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ForeachValueWithStaticMethodCallReturningArrayWithSelfObjects.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -559,7 +559,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ForeachValueWithStaticMethodCallReturningArrayWithStaticObjects.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -569,7 +569,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ForeachValueWithGenericIterableSyntaxWithOneArgument.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -579,7 +579,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ForeachValueWithGenericIterableSyntaxWithTwoArguments.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -589,7 +589,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('Assignment.phpt', '$a');
 
-        static::assertSame('\DateTime', (string) $output);
+        self::assertSame('\DateTime', (string) $output);
     }
 
     /**
@@ -599,7 +599,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('AssignmentOutOfScope.phpt', '$a');
 
-        static::assertSame('\DateTime', (string) $output);
+        self::assertSame('\DateTime', (string) $output);
     }
 
     /**
@@ -609,7 +609,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('DocblockPrecedence.phpt', '$b');
 
-        static::assertSame('\B', (string) $output);
+        self::assertSame('\B', (string) $output);
     }
 
     /**
@@ -619,7 +619,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionVariadicParameter.phpt', '$b');
 
-        static::assertSame('\A\B[]', (string) $output);
+        self::assertSame('\A\B[]', (string) $output);
     }
 
     /**
@@ -629,15 +629,15 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintSpecial.phpt', '$a');
 
-        static::assertSame('\A\C', (string) $output);
+        self::assertSame('\A\C', (string) $output);
 
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintSpecial.phpt', '$b');
 
-        static::assertSame('\A\C', (string) $output);
+        self::assertSame('\A\C', (string) $output);
 
         $output = $this->deduceTypesFromExpression('FunctionParameterTypeHintSpecial.phpt', '$c');
 
-        static::assertSame('\A\C', (string) $output);
+        self::assertSame('\A\C', (string) $output);
     }
 
     /**
@@ -650,7 +650,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'Bar::$testProperty'
         );
 
-        static::assertSame('\DateTime', (string) $result);
+        self::assertSame('\DateTime', (string) $result);
     }
 
     /**
@@ -663,7 +663,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'self::$testProperty'
         );
 
-        static::assertSame('\B', (string) $result);
+        self::assertSame('\B', (string) $result);
     }
 
     /**
@@ -673,10 +673,10 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $result = $this->deduceTypesFromExpression(
             'Static.phpt',
-            'static::$testProperty'
+            'self::$testProperty'
         );
 
-        static::assertSame('\B', (string) $result);
+        self::assertSame('\B', (string) $result);
     }
 
     /**
@@ -689,7 +689,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'parent::$testProperty'
         );
 
-        static::assertSame('\B', (string) $result);
+        self::assertSame('\B', (string) $result);
     }
 
     /**
@@ -702,7 +702,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$this->testProperty'
         );
 
-        static::assertSame('\B', (string) $result);
+        self::assertSame('\B', (string) $result);
     }
 
     /**
@@ -715,7 +715,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$var->testProperty'
         );
 
-        static::assertSame('\B', (string) $result);
+        self::assertSame('\B', (string) $result);
     }
 
     /**
@@ -728,7 +728,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '\global_function()'
         );
 
-        static::assertSame('(\B | null)', (string) $result);
+        self::assertSame('(\B | null)', (string) $result);
     }
 
     /**
@@ -741,7 +741,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'global_function()'
         );
 
-        static::assertSame('(\B | null)', (string) $result);
+        self::assertSame('(\B | null)', (string) $result);
     }
 
     /**
@@ -754,7 +754,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '\N\global_function()'
         );
 
-        static::assertSame('(\N\B | null)', (string) $result);
+        self::assertSame('(\N\B | null)', (string) $result);
     }
 
     /**
@@ -767,7 +767,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'global_function()'
         );
 
-        static::assertSame('(\N\B | null)', (string) $result);
+        self::assertSame('(\N\B | null)', (string) $result);
     }
 
     /**
@@ -780,7 +780,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '\GLOBAL_CONSTANT'
         );
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -793,7 +793,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'GLOBAL_CONSTANT'
         );
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -806,7 +806,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '\N\GLOBAL_CONSTANT'
         );
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -819,7 +819,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'GLOBAL_CONSTANT'
         );
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -832,7 +832,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '\ANOTHER_GLOBAL_CONSTANT'
         );
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -845,7 +845,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$var'
         );
 
-        static::assertSame('\Closure', (string) $result);
+        self::assertSame('\Closure', (string) $result);
     }
 
     /**
@@ -858,7 +858,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$var'
         );
 
-        static::assertSame('\Closure', (string) $result);
+        self::assertSame('\Closure', (string) $result);
     }
 
     /**
@@ -868,7 +868,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjects.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -878,7 +878,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfGenericAssociativeArrayWithObjects.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -888,7 +888,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfGenericSequentialArrayWithObjects.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -898,7 +898,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfString.phpt', '$b');
 
-        static::assertSame('string', (string) $output);
+        self::assertSame('string', (string) $output);
     }
 
     /**
@@ -908,7 +908,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfTypeNotAccessibleAsArray.phpt', '$b');
 
-        static::assertSame('mixed', (string) $output);
+        self::assertSame('mixed', (string) $output);
     }
 
     /**
@@ -918,7 +918,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithObjectsOfMultipleTypes.phpt', '$b');
 
-        static::assertSame('(\A\B | \A\C)', (string) $output);
+        self::assertSame('(\A\B | \A\C)', (string) $output);
     }
 
     /**
@@ -928,7 +928,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('ArrayElementOfArrayWithSelfElementsFromStaticMethodCall.phpt', '$b');
 
-        static::assertSame('\A\B', (string) $output);
+        self::assertSame('\A\B', (string) $output);
     }
 
     /**
@@ -941,7 +941,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'new static'
         );
 
-        static::assertSame('\Bar', (string) $result);
+        self::assertSame('\Bar', (string) $result);
     }
 
     /**
@@ -954,7 +954,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'new self'
         );
 
-        static::assertSame('\Bar', (string) $result);
+        self::assertSame('\Bar', (string) $result);
     }
 
     /**
@@ -967,7 +967,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'new parent'
         );
 
-        static::assertSame('\Foo', (string) $result);
+        self::assertSame('\Foo', (string) $result);
     }
 
     /**
@@ -980,7 +980,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             'clone $var'
         );
 
-        static::assertSame('\Bar', (string) $result);
+        self::assertSame('\Bar', (string) $result);
     }
 
     /**
@@ -993,7 +993,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$this->testProperty->aMethod()->anotherProperty'
         );
 
-        static::assertSame('\DateTime', (string) $result);
+        self::assertSame('\DateTime', (string) $result);
     }
 
     /**
@@ -1003,22 +1003,22 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $file = 'ScalarType.phpt';
 
-        static::assertSame('int', (string) $this->deduceTypesFromExpression($file, '5'));
-        static::assertSame('int', (string) $this->deduceTypesFromExpression($file, '05'));
-        static::assertSame('int', (string) $this->deduceTypesFromExpression($file, '0x5'));
-        static::assertSame('float', (string) $this->deduceTypesFromExpression($file, '5.5'));
-        static::assertSame('bool', (string) $this->deduceTypesFromExpression($file, 'true'));
-        static::assertSame('bool', (string) $this->deduceTypesFromExpression($file, 'false'));
-        static::assertSame('string', (string) $this->deduceTypesFromExpression($file, '"test"'));
-        static::assertSame('string', (string) $this->deduceTypesFromExpression($file, '\'test\''));
-        static::assertSame('array', (string) $this->deduceTypesFromExpression($file, '[$test1, function() {}]'));
-        static::assertSame('array', (string) $this->deduceTypesFromExpression($file, 'array($test1, function() {})'));
+        self::assertSame('int', (string) $this->deduceTypesFromExpression($file, '5'));
+        self::assertSame('int', (string) $this->deduceTypesFromExpression($file, '05'));
+        self::assertSame('int', (string) $this->deduceTypesFromExpression($file, '0x5'));
+        self::assertSame('float', (string) $this->deduceTypesFromExpression($file, '5.5'));
+        self::assertSame('bool', (string) $this->deduceTypesFromExpression($file, 'true'));
+        self::assertSame('bool', (string) $this->deduceTypesFromExpression($file, 'false'));
+        self::assertSame('string', (string) $this->deduceTypesFromExpression($file, '"test"'));
+        self::assertSame('string', (string) $this->deduceTypesFromExpression($file, '\'test\''));
+        self::assertSame('array', (string) $this->deduceTypesFromExpression($file, '[$test1, function() {}]'));
+        self::assertSame('array', (string) $this->deduceTypesFromExpression($file, 'array($test1, function() {})'));
 
-        static::assertSame('string', (string) $this->deduceTypesFromExpression($file, '"
+        self::assertSame('string', (string) $this->deduceTypesFromExpression($file, '"
             test
         "'));
 
-        static::assertSame('string', (string) $this->deduceTypesFromExpression($file, '\'
+        self::assertSame('string', (string) $this->deduceTypesFromExpression($file, '\'
             test
         \''));
     }
@@ -1033,21 +1033,21 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$foo1'
         );
 
-        static::assertSame('\A\Foo', (string) $result);
+        self::assertSame('\A\Foo', (string) $result);
 
         $result = $this->deduceTypesFromExpression(
             'SelfAssign.phpt',
             '$foo2'
         );
 
-        static::assertSame('\A\Foo', (string) $result);
+        self::assertSame('\A\Foo', (string) $result);
 
         $result = $this->deduceTypesFromExpression(
             'SelfAssign.phpt',
             '$foo3'
         );
 
-        static::assertSame('\A\Foo', (string) $result);
+        self::assertSame('\A\Foo', (string) $result);
     }
 
     /**
@@ -1057,7 +1057,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('QualifiedFunctionCallRelativeToImport.phpt', '$test');
 
-        static::assertSame('string', (string) $output);
+        self::assertSame('string', (string) $output);
     }
 
     /**
@@ -1067,7 +1067,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $output = $this->deduceTypesFromExpression('QualifiedConstantFetchRelativeToImport.phpt', '$test');
 
-        static::assertSame('string', (string) $output);
+        self::assertSame('string', (string) $output);
     }
 
     /**
@@ -1077,7 +1077,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $result = $this->deduceTypesFromExpression('MethodCallOnClassWithGenericSyntax.phpt', '$b');
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -1087,7 +1087,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
     {
         $result = $this->deduceTypesFromExpression('PropertyFetchOnClassWithGenericSyntax.phpt', '$b');
 
-        static::assertSame('string', (string) $result);
+        self::assertSame('string', (string) $result);
     }
 
     /**
@@ -1100,7 +1100,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$data'
         );
 
-        static::assertSame('\A\B', (string) $result);
+        self::assertSame('\A\B', (string) $result);
     }
 
     /**
@@ -1113,7 +1113,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$this->testProperty'
         );
 
-        static::assertSame('(string | int | \Foo | \Bar)', (string) $result);
+        self::assertSame('(string | int | \Foo | \Bar)', (string) $result);
     }
 
     /**
@@ -1127,7 +1127,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
 
         $filePath = $this->getFilePath($fileName);
 
-        static::assertSame('\\anonymous_' . md5($this->normalizePath($filePath)) . '_19', (string) $result);
+        self::assertSame('\\anonymous_' . md5($this->normalizePath($filePath)) . '_19', (string) $result);
     }
 
     /**
@@ -1140,7 +1140,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$e'
         );
 
-        static::assertSame('(\Throwable | \Exception)', (string) $result);
+        self::assertSame('(\Throwable | \Exception)', (string) $result);
     }
 
     /**
@@ -1154,7 +1154,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             true
         );
 
-        static::assertSame('\DateTime', (string) $result);
+        self::assertSame('\DateTime', (string) $result);
     }
 
     /**
@@ -1168,7 +1168,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$var'
         );
 
-        static::assertSame('\B\Bar', (string) $result);
+        self::assertSame('\B\Bar', (string) $result);
     }
 
     /**
@@ -1181,7 +1181,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             '$var'
         );
 
-        static::assertSame('', (string) $result);
+        self::assertSame('', (string) $result);
     }
 
     /**

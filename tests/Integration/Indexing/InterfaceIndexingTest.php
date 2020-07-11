@@ -20,26 +20,26 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('SimpleInterface.phpt');
 
-        static::assertSame('Test', $structure->getName());
-        static::assertSame('\Test', $structure->getFqcn());
-        static::assertSame($this->normalizePath($this->getPathFor('SimpleInterface.phpt')), $structure->getFile()->getUri());
-        static::assertEquals(
+        self::assertSame('Test', $structure->getName());
+        self::assertSame('\Test', $structure->getFqcn());
+        self::assertSame($this->normalizePath($this->getPathFor('SimpleInterface.phpt')), $structure->getFile()->getUri());
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(5, 1)
             ),
             $structure->getRange()
         );
-        static::assertNull($structure->getShortDescription());
-        static::assertNull($structure->getLongDescription());
-        static::assertFalse($structure->getIsDeprecated());
-        static::assertFalse($structure->getHasDocblock());
-        static::assertCount(1, $structure->getConstants());
-        static::assertEmpty($structure->getProperties());
-        static::assertEmpty($structure->getMethods());
-        static::assertEmpty($structure->getParentFqcns());
-        static::assertEmpty($structure->getChildFqcns());
-        static::assertEmpty($structure->getImplementorFqcns());
+        self::assertNull($structure->getShortDescription());
+        self::assertNull($structure->getLongDescription());
+        self::assertFalse($structure->getIsDeprecated());
+        self::assertFalse($structure->getHasDocblock());
+        self::assertCount(1, $structure->getConstants());
+        self::assertEmpty($structure->getProperties());
+        self::assertEmpty($structure->getMethods());
+        self::assertEmpty($structure->getParentFqcns());
+        self::assertEmpty($structure->getChildFqcns());
+        self::assertEmpty($structure->getImplementorFqcns());
     }
 
     /**
@@ -49,7 +49,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceNamespace.phpt');
 
-        static::assertSame('\N\Test', $structure->getFqcn());
+        self::assertSame('\N\Test', $structure->getFqcn());
     }
 
     /**
@@ -59,7 +59,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceShortDescription.phpt');
 
-        static::assertSame('A summary.', $structure->getShortDescription());
+        self::assertSame('A summary.', $structure->getShortDescription());
     }
 
     /**
@@ -69,7 +69,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceLongDescription.phpt');
 
-        static::assertSame('A long description.', $structure->getLongDescription());
+        self::assertSame('A long description.', $structure->getLongDescription());
     }
 
     /**
@@ -79,7 +79,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('DeprecatedInterface.phpt');
 
-        static::assertTrue($structure->getIsDeprecated());
+        self::assertTrue($structure->getIsDeprecated());
     }
 
     /**
@@ -89,7 +89,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceWithDocblock.phpt');
 
-        static::assertTrue($structure->getHasDocblock());
+        self::assertTrue($structure->getHasDocblock());
     }
 
     /**
@@ -103,22 +103,22 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Interface_::class)->findAll();
 
-        static::assertCount(3, $entities);
+        self::assertCount(3, $entities);
 
-        static::assertEmpty($entities[0]->getParentFqcns());
-        static::assertCount(2, $entities[0]->getChildFqcns());
-        static::assertSame($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
-        static::assertSame($entities[2]->getFqcn(), $entities[0]->getChildFqcns()[1]);
+        self::assertEmpty($entities[0]->getParentFqcns());
+        self::assertCount(2, $entities[0]->getChildFqcns());
+        self::assertSame($entities[1]->getFqcn(), $entities[0]->getChildFqcns()[0]);
+        self::assertSame($entities[2]->getFqcn(), $entities[0]->getChildFqcns()[1]);
 
-        static::assertCount(1, $entities[1]->getParentFqcns());
-        static::assertSame($entities[0]->getFqcn(), $entities[1]->getParentFqcns()[0]);
-        static::assertCount(1, $entities[1]->getChildFqcns());
-        static::assertSame($entities[2]->getFqcn(), $entities[1]->getChildFqcns()[0]);
+        self::assertCount(1, $entities[1]->getParentFqcns());
+        self::assertSame($entities[0]->getFqcn(), $entities[1]->getParentFqcns()[0]);
+        self::assertCount(1, $entities[1]->getChildFqcns());
+        self::assertSame($entities[2]->getFqcn(), $entities[1]->getChildFqcns()[0]);
 
-        static::assertCount(2, $entities[2]->getParentFqcns());
-        static::assertSame($entities[0]->getFqcn(), $entities[2]->getParentFqcns()[0]);
-        static::assertSame($entities[1]->getFqcn(), $entities[2]->getParentFqcns()[1]);
-        static::assertEmpty($entities[2]->getChildFqcns());
+        self::assertCount(2, $entities[2]->getParentFqcns());
+        self::assertSame($entities[0]->getFqcn(), $entities[2]->getParentFqcns()[0]);
+        self::assertSame($entities[1]->getFqcn(), $entities[2]->getParentFqcns()[1]);
+        self::assertEmpty($entities[2]->getChildFqcns());
     }
 
     /**
@@ -128,8 +128,8 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
     {
         $structure = $this->indexInterface('InterfaceImplementor.phpt');
 
-        static::assertCount(1, $structure->getImplementorFqcns());
-        static::assertSame('\C', $structure->getImplementorFqcns()[0]);
+        self::assertCount(1, $structure->getImplementorFqcns());
+        self::assertSame('\C', $structure->getImplementorFqcns()[0]);
     }
 
     /**
@@ -140,11 +140,11 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Interface_::class)->findAll();
 
-            static::assertCount(1, $structures);
+            self::assertCount(1, $structures);
 
             $structure = $structures[0];
 
-            static::assertSame('Test', $structure->getName());
+            self::assertSame('Test', $structure->getName());
 
             return str_replace('Test', 'Test2 ', $source);
         };
@@ -152,16 +152,16 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Interface_::class)->findAll();
 
-            static::assertCount(1, $structures);
+            self::assertCount(1, $structures);
 
             $structure = $structures[0];
 
-            static::assertSame('Test2', $structure->getName());
+            self::assertSame('Test2', $structure->getName());
         };
 
         $path = $this->getPathFor('InterfaceChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -177,7 +177,7 @@ final class InterfaceIndexingTest extends AbstractIntegrationTest
 
         $entities = $this->container->get('managerRegistry')->getRepository(Structures\Interface_::class)->findAll();
 
-        static::assertCount(1, $entities);
+        self::assertCount(1, $entities);
 
         return $entities[0];
     }

@@ -127,7 +127,7 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
 
         $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
             function (JsonRpcResponse $jsonRpcResponse) use ($response): void {
-                static::assertSame($response, $jsonRpcResponse);
+                self::assertSame($response, $jsonRpcResponse);
             }
         );
 
@@ -150,17 +150,17 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
 
         $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
             function (JsonRpcResponse $jsonRpcResponse): void {
-                static::assertSame('theRequestId', $jsonRpcResponse->getId());
-                static::assertNotNull($jsonRpcResponse->getError());
-                static::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
-                static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
+                self::assertSame('theRequestId', $jsonRpcResponse->getId());
+                self::assertNotNull($jsonRpcResponse->getError());
+                self::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
+                self::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
 
                 $data =  $jsonRpcResponse->getError()->getData();
 
-                static::assertNotNull($data);
-                static::assertNotNull($data['line']);
-                static::assertNotNull($data['file']);
-                static::assertNotNull($data['backtrace']);
+                self::assertNotNull($data);
+                self::assertNotNull($data['line']);
+                self::assertNotNull($data['file']);
+                self::assertNotNull($data['backtrace']);
             }
         );
 
@@ -183,11 +183,11 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
 
         $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
             function (JsonRpcResponse $jsonRpcResponse): void {
-                static::assertSame('theRequestId', $jsonRpcResponse->getId());
-                static::assertNotNull($jsonRpcResponse->getError());
-                static::assertSame(JsonRpcErrorCode::FATAL_SERVER_ERROR, $jsonRpcResponse->getError()->getCode());
-                static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
-                static::assertNotNull($jsonRpcResponse->getError()->getData());
+                self::assertSame('theRequestId', $jsonRpcResponse->getId());
+                self::assertNotNull($jsonRpcResponse->getError());
+                self::assertSame(JsonRpcErrorCode::FATAL_SERVER_ERROR, $jsonRpcResponse->getError()->getCode());
+                self::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
+                self::assertNotNull($jsonRpcResponse->getError()->getData());
             }
         );
 
@@ -209,11 +209,11 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
 
         $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
             function (JsonRpcResponse $jsonRpcResponse): void {
-                static::assertSame('theRequestId', $jsonRpcResponse->getId());
-                static::assertNotNull($jsonRpcResponse->getError());
-                static::assertSame(JsonRpcErrorCode::REQUEST_CANCELLED, $jsonRpcResponse->getError()->getCode());
-                static::assertSame('Request was cancelled', $jsonRpcResponse->getError()->getMessage());
-                static::assertSame(null, $jsonRpcResponse->getError()->getData());
+                self::assertSame('theRequestId', $jsonRpcResponse->getId());
+                self::assertNotNull($jsonRpcResponse->getError());
+                self::assertSame(JsonRpcErrorCode::REQUEST_CANCELLED, $jsonRpcResponse->getError()->getCode());
+                self::assertSame('Request was cancelled', $jsonRpcResponse->getError()->getMessage());
+                self::assertSame(null, $jsonRpcResponse->getError()->getData());
             }
         );
 
@@ -239,11 +239,11 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
 
         $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
             function (JsonRpcResponse $jsonRpcResponse): void {
-                static::assertSame('theRequestId', $jsonRpcResponse->getId());
-                static::assertNotNull($jsonRpcResponse->getError());
-                static::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
-                static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
-                static::assertSame(null, $jsonRpcResponse->getError()->getData());
+                self::assertSame('theRequestId', $jsonRpcResponse->getId());
+                self::assertNotNull($jsonRpcResponse->getError());
+                self::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
+                self::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
+                self::assertSame(null, $jsonRpcResponse->getError()->getData());
             }
         );
 

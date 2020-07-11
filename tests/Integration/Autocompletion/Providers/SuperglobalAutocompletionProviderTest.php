@@ -37,7 +37,7 @@ final class SuperglobalAutocompletionProviderTest extends AbstractAutocompletion
             'int'
         );
 
-        static::assertEquals($firstSuggestion, $output[0]);
+        self::assertEquals($firstSuggestion, $output[0]);
     }
 
     /**

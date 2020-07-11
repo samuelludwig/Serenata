@@ -23,10 +23,10 @@ final class FileClasslikeListProviderTest extends AbstractIntegrationTest
 
         $output = $provider->getAllForFile($file);
 
-        static::assertSame(2, count($output));
-        static::assertArrayHasKey('\A\FirstClass', $output);
-        static::assertArrayHasKey('\A\SecondClass', $output);
-        static::assertArrayNotHasKey('\A\Foo', $output);
-        static::assertArrayNotHasKey('\A\Bar', $output);
+        self::assertSame(2, count($output));
+        self::assertArrayHasKey('\A\FirstClass', $output);
+        self::assertArrayHasKey('\A\SecondClass', $output);
+        self::assertArrayNotHasKey('\A\Foo', $output);
+        self::assertArrayNotHasKey('\A\Bar', $output);
     }
 }

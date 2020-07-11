@@ -26,12 +26,12 @@ final class ImportIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(1, $namespaces);
-        static::assertCount(1, $namespaces[0]->getImports());
+        self::assertCount(1, $namespaces);
+        self::assertCount(1, $namespaces[0]->getImports());
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(2, 8)
@@ -39,10 +39,10 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             $import->getRange()
         );
 
-        static::assertSame('A', $import->getAlias());
-        static::assertSame('N\A', $import->getName());
-        static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
-        static::assertSame($namespaces[0], $import->getNamespace());
+        self::assertSame('A', $import->getAlias());
+        self::assertSame('N\A', $import->getName());
+        self::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
+        self::assertSame($namespaces[0], $import->getNamespace());
     }
 
     /**
@@ -58,12 +58,12 @@ final class ImportIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(1, $namespaces);
-        static::assertCount(1, $namespaces[0]->getImports());
+        self::assertCount(1, $namespaces);
+        self::assertCount(1, $namespaces[0]->getImports());
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(2, 13)
@@ -71,10 +71,10 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             $import->getRange()
         );
 
-        static::assertSame('B', $import->getAlias());
-        static::assertSame('N\A', $import->getName());
-        static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
-        static::assertSame($namespaces[0], $import->getNamespace());
+        self::assertSame('B', $import->getAlias());
+        self::assertSame('N\A', $import->getName());
+        self::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
+        self::assertSame($namespaces[0], $import->getNamespace());
     }
 
     /**
@@ -90,12 +90,12 @@ final class ImportIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(1, $namespaces);
-        static::assertCount(1, $namespaces[0]->getImports());
+        self::assertCount(1, $namespaces);
+        self::assertCount(1, $namespaces[0]->getImports());
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(2, 17)
@@ -103,10 +103,10 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             $import->getRange()
         );
 
-        static::assertSame('A', $import->getAlias());
-        static::assertSame('N\A', $import->getName());
-        static::assertSame(UseStatementKind::TYPE_FUNCTION, $import->getKind());
-        static::assertSame($namespaces[0], $import->getNamespace());
+        self::assertSame('A', $import->getAlias());
+        self::assertSame('N\A', $import->getName());
+        self::assertSame(UseStatementKind::TYPE_FUNCTION, $import->getKind());
+        self::assertSame($namespaces[0], $import->getNamespace());
     }
 
     /**
@@ -122,12 +122,12 @@ final class ImportIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(1, $namespaces);
-        static::assertCount(1, $namespaces[0]->getImports());
+        self::assertCount(1, $namespaces);
+        self::assertCount(1, $namespaces[0]->getImports());
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(2, 14)
@@ -135,10 +135,10 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             $import->getRange()
         );
 
-        static::assertSame('A', $import->getAlias());
-        static::assertSame('N\A', $import->getName());
-        static::assertSame(UseStatementKind::TYPE_CONSTANT, $import->getKind());
-        static::assertSame($namespaces[0], $import->getNamespace());
+        self::assertSame('A', $import->getAlias());
+        self::assertSame('N\A', $import->getName());
+        self::assertSame(UseStatementKind::TYPE_CONSTANT, $import->getKind());
+        self::assertSame($namespaces[0], $import->getNamespace());
     }
 
     /**
@@ -154,12 +154,12 @@ final class ImportIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(1, $namespaces);
-        static::assertCount(2, $namespaces[0]->getImports());
+        self::assertCount(1, $namespaces);
+        self::assertCount(2, $namespaces[0]->getImports());
 
         $import = $namespaces[0]->getImports()[0];
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(5, 1)
@@ -167,14 +167,14 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             $import->getRange()
         );
 
-        static::assertSame('A', $import->getAlias());
-        static::assertSame('N\A', $import->getName());
-        static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
-        static::assertSame($namespaces[0], $import->getNamespace());
+        self::assertSame('A', $import->getAlias());
+        self::assertSame('N\A', $import->getName());
+        self::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
+        self::assertSame($namespaces[0], $import->getNamespace());
 
         $import = $namespaces[0]->getImports()[1];
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(5, 1)
@@ -182,10 +182,10 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             $import->getRange()
         );
 
-        static::assertSame('C', $import->getAlias());
-        static::assertSame('N\B', $import->getName());
-        static::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
-        static::assertSame($namespaces[0], $import->getNamespace());
+        self::assertSame('C', $import->getAlias());
+        self::assertSame('N\B', $import->getName());
+        self::assertSame(UseStatementKind::TYPE_CLASSLIKE, $import->getKind());
+        self::assertSame($namespaces[0], $import->getNamespace());
     }
 
     /**
@@ -196,9 +196,9 @@ final class ImportIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->getFileByUri($path);
 
-            static::assertCount(1, $file->getNamespaces());
-            static::assertCount(1, $file->getNamespaces()[0]->getImports());
-            static::assertSame('N\A', $file->getNamespaces()[0]->getImports()[0]->getName());
+            self::assertCount(1, $file->getNamespaces());
+            self::assertCount(1, $file->getNamespaces()[0]->getImports());
+            self::assertSame('N\A', $file->getNamespaces()[0]->getImports()[0]->getName());
 
             return str_replace('N\A', 'N\B', $source);
         };
@@ -206,14 +206,14 @@ final class ImportIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->getFileByUri($path);
 
-            static::assertCount(1, $file->getNamespaces());
-            static::assertCount(1, $file->getNamespaces()[0]->getImports());
-            static::assertSame('N\B', $file->getNamespaces()[0]->getImports()[0]->getName());
+            self::assertCount(1, $file->getNamespaces());
+            self::assertCount(1, $file->getNamespaces()[0]->getImports());
+            self::assertSame('N\B', $file->getNamespaces()[0]->getImports()[0]->getName());
         };
 
         $path = $this->getPathFor('ImportChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

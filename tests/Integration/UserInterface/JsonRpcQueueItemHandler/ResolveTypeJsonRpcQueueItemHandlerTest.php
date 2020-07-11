@@ -23,7 +23,7 @@ final class ResolveTypeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTe
 
         $command = $this->container->get('resolveTypeJsonRpcQueueItemHandler');
 
-        static::assertSame(
+        self::assertSame(
             '\C',
             $command->resolveType('C', $path, new Position(0, 1), UseStatementKind::TYPE_CLASSLIKE)
         );

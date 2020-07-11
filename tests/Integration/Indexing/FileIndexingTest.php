@@ -27,7 +27,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(1, $files);
+        self::assertCount(1, $files);
 
         $timestamp = $files[0]->getIndexedOn();
 
@@ -37,8 +37,8 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(1, $files);
-        static::assertTrue($files[0]->getIndexedOn() > $timestamp);
+        self::assertCount(1, $files);
+        self::assertTrue($files[0]->getIndexedOn() > $timestamp);
     }
 
     // TODO: See https://gitlab.com/Serenata/Serenata/issues/278 .
@@ -53,8 +53,8 @@ final class FileIndexingTest extends AbstractIntegrationTest
     //
     //     $files = $this->container->get('storage')->getFiles();
     //
-    //     static::assertCount(1, $files);
-    //     static::assertSame($this->getPathFor('Folder') . '/' . urlencode('Test Spaces.phpt'), $files[0]->getUri());
+    //     self::assertCount(1, $files);
+    //     self::assertSame($this->getPathFor('Folder') . '/' . urlencode('Test Spaces.phpt'), $files[0]->getUri());
     // }
 
     /**
@@ -76,7 +76,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(0, $files, 'Files matched by exclusion patterns should not be indexed');
+        self::assertCount(0, $files, 'Files matched by exclusion patterns should not be indexed');
     }
 
     /**
@@ -98,7 +98,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(2, $files, 'Folders must be indexed recursively');
+        self::assertCount(2, $files, 'Folders must be indexed recursively');
     }
 
     /**
@@ -120,7 +120,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(0, $files, 'Folders matched by exclusion patterns should not be indexed');
+        self::assertCount(0, $files, 'Folders matched by exclusion patterns should not be indexed');
     }
 
     /**
@@ -142,7 +142,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
+        self::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
     }
 
     /**
@@ -164,7 +164,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
+        self::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
     }
 
     /**
@@ -186,7 +186,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(1, $files, 'Files that start with a dot such as PhpStorm meta files should be indexed');
+        self::assertCount(1, $files, 'Files that start with a dot such as PhpStorm meta files should be indexed');
     }
 
     /**
@@ -202,7 +202,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(1, $files);
+        self::assertCount(1, $files);
 
         $timestamp = $files[0]->getIndexedOn();
 
@@ -210,8 +210,8 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(1, $files);
-        static::assertTrue($files[0]->getIndexedOn() > $timestamp);
+        self::assertCount(1, $files);
+        self::assertTrue($files[0]->getIndexedOn() > $timestamp);
     }
 
     /**
@@ -233,7 +233,7 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
+        self::assertCount(0, $files, 'Files matched not matching specified extensions should not be indexed');
     }
 
     /**
@@ -249,8 +249,8 @@ final class FileIndexingTest extends AbstractIntegrationTest
 
         $files = $this->container->get('storage')->getFiles();
 
-        static::assertCount(1, $files);
-        static::assertNotNull($files[0]->getLastIndexedSourceHash());
+        self::assertCount(1, $files);
+        self::assertNotNull($files[0]->getLastIndexedSourceHash());
     }
 
     /**

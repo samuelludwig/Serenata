@@ -30,10 +30,10 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'FunctionCall.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 179, 186, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 179, 180, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 181, 183, 1);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 184, 186, 2);
+        self::assertSignatureHelpSignaturesEquals($fileName, 179, 186, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 179, 180, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 181, 183, 1);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 184, 186, 2);
     }
 
     /**
@@ -49,8 +49,8 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'FunctionCallWhitespaceBeforeFirstAndOnlyArgument.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 108, 110, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 108, 110, 0);
+        self::assertSignatureHelpSignaturesEquals($fileName, 108, 110, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 108, 110, 0);
     }
 
     /**
@@ -67,9 +67,9 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'FunctionCallWhitespaceBetweenArguments.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 142, 147, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 142, 144, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 145, 147, 1);
+        self::assertSignatureHelpSignaturesEquals($fileName, 142, 147, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 142, 144, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 145, 147, 1);
     }
 
     /**
@@ -86,9 +86,9 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'FunctionCallWithMissingLastArgumentAfterComma.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 142, 144, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 142, 143, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 144, 144, 1);
+        self::assertSignatureHelpSignaturesEquals($fileName, 142, 144, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 142, 143, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 144, 144, 1);
     }
 
     /**
@@ -104,18 +104,18 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'FunctionCallClosureArgumentBody.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 80, 104, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 80, 104, $expectedSignaturesResult);
 
         for ($i = 105; $i <= 118; ++$i) {
             $hadException = false;
 
-            static::assertNull(
+            self::assertNull(
                 $this->getSignatureHelp($fileName, $i),
                 'Signature help should not trigger inside the body of closure arguments'
             );
         }
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 119, 119, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 119, 119, $expectedSignaturesResult);
     }
 
     /**
@@ -131,18 +131,18 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'FunctionCallArrowFunctionClosureArgumentBody.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 80, 88, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 80, 88, $expectedSignaturesResult);
 
         for ($i = 89; $i <= 90; ++$i) {
             $hadException = false;
 
-            static::assertNull(
+            self::assertNull(
                 $this->getSignatureHelp($fileName, $i),
                 'Signature help should not trigger inside the body of arrow function arguments'
             );
         }
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 91, 91, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 91, 91, $expectedSignaturesResult);
     }
 
     /**
@@ -162,12 +162,12 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'NestedFunctionCall.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 127, 131, $expectedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 132, 134, $expectedNestedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 135, 136, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 127, 131, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 132, 134, null);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 135, 136, 0);
+        self::assertSignatureHelpSignaturesEquals($fileName, 127, 131, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 132, 134, $expectedNestedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 135, 136, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 127, 131, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 132, 134, null);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 135, 136, 0);
     }
 
     /**
@@ -185,10 +185,10 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'MethodCall.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 245, 252, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 245, 246, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 247, 249, 1);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 250, 252, 2);
+        self::assertSignatureHelpSignaturesEquals($fileName, 245, 252, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 245, 246, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 247, 249, 1);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 250, 252, 2);
     }
 
     /**
@@ -208,12 +208,12 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'NestedMethodCall.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 221, 232, $expectedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 233, 235, $expectedNestedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 236, 237, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 221, 232, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 233, 235, null);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 236, 237, 0);
+        self::assertSignatureHelpSignaturesEquals($fileName, 221, 232, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 233, 235, $expectedNestedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 236, 237, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 221, 232, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 233, 235, null);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 236, 237, 0);
     }
 
     /**
@@ -231,10 +231,10 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'StaticMethodCall.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 253, 260, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 253, 254, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 255, 257, 1);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 258, 260, 2);
+        self::assertSignatureHelpSignaturesEquals($fileName, 253, 260, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 253, 254, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 255, 257, 1);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 258, 260, 2);
     }
 
     /**
@@ -252,10 +252,10 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'Constructor.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 256, 309, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 256, 270, 0);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 271, 285, 1);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 286, 309, 2);
+        self::assertSignatureHelpSignaturesEquals($fileName, 256, 309, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 256, 270, 0);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 271, 285, 1);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 286, 309, 2);
     }
 
     /**
@@ -277,10 +277,10 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
 
         $fileName = 'NestedConstructor.phpt';
 
-        static::assertSignatureHelpSignaturesEquals($fileName, 219, 227, $expectedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 228, 231, $expectedNestedSignaturesResult);
-        static::assertSignatureHelpSignaturesEquals($fileName, 232, 233, $expectedSignaturesResult);
-        static::assertSignatureHelpActiveParameterEquals($fileName, 219, 233, 0);
+        self::assertSignatureHelpSignaturesEquals($fileName, 219, 227, $expectedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 228, 231, $expectedNestedSignaturesResult);
+        self::assertSignatureHelpSignaturesEquals($fileName, 232, 233, $expectedSignaturesResult);
+        self::assertSignatureHelpActiveParameterEquals($fileName, 219, 233, 0);
     }
 
     /**
@@ -290,9 +290,9 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $result = $this->getSignatureHelp('FunctionCallFunctionWithoutArguments.phpt', 48);
 
-        static::assertCount(1, $result->getSignatures());
-        static::assertEmpty($result->getSignatures()[0]->getParameters());
-        static::assertNull($result->getActiveParameter());
+        self::assertCount(1, $result->getSignatures());
+        self::assertEmpty($result->getSignatures()[0]->getParameters());
+        self::assertNull($result->getActiveParameter());
     }
 
     /**
@@ -302,15 +302,15 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
     {
         $result = $this->getSignatureHelp('VariadicParameter.phpt', 217);
 
-        static::assertCount(1, $result->getSignatures());
-        static::assertCount(2, $result->getSignatures()[0]->getParameters());
-        static::assertSame(1, $result->getActiveParameter());
+        self::assertCount(1, $result->getSignatures());
+        self::assertCount(2, $result->getSignatures()[0]->getParameters());
+        self::assertSame(1, $result->getActiveParameter());
 
         $result = $this->getSignatureHelp('VariadicParameter.phpt', 220);
 
-        static::assertCount(1, $result->getSignatures());
-        static::assertCount(2, $result->getSignatures()[0]->getParameters());
-        static::assertSame(1, $result->getActiveParameter());
+        self::assertCount(1, $result->getSignatures());
+        self::assertCount(2, $result->getSignatures()[0]->getParameters());
+        self::assertSame(1, $result->getActiveParameter());
     }
 
     /**
@@ -318,7 +318,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testFunctionCallFunctionNameDoesNotWorkWhenFunctionDoesNotHaveArguments(): void
     {
-        static::assertNull($this->getSignatureHelp('FunctionCallFunctionNameWithoutArguments.phpt', 47));
+        self::assertNull($this->getSignatureHelp('FunctionCallFunctionNameWithoutArguments.phpt', 47));
     }
 
     /**
@@ -326,7 +326,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testFunctionCallFunctionNameDoesNotWorkWhenFunctionHasArguments(): void
     {
-        static::assertNull($this->getSignatureHelp('FunctionCallFunctionNameWithArguments.phpt', 53));
+        self::assertNull($this->getSignatureHelp('FunctionCallFunctionNameWithArguments.phpt', 53));
     }
 
     /**
@@ -334,7 +334,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testFunctionCallFailsWhenArgumentIsOutOfBounds(): void
     {
-        static::assertNull($this->getSignatureHelp('FunctionCallTooManyArguments.phpt', 98));
+        self::assertNull($this->getSignatureHelp('FunctionCallTooManyArguments.phpt', 98));
     }
 
     /**
@@ -342,7 +342,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testFunctionCallFailsWhenTrailingCommaIsPresentThatWouldBeFollowedByOutOfBoundsArgument(): void
     {
-        static::assertNull(
+        self::assertNull(
             $this->getSignatureHelp('TrailingCommaIsPresentThatWouldBeFollowedByOutOfBoundsArgument.phpt', 97)
         );
     }
@@ -352,7 +352,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testDynamicFunctionNameFails(): void
     {
-        static::assertNull($this->getSignatureHelp('FunctionCallDynamic.phpt', 49));
+        self::assertNull($this->getSignatureHelp('FunctionCallDynamic.phpt', 49));
     }
 
     /**
@@ -360,7 +360,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testDynamicMethodNameFails(): void
     {
-        static::assertNull($this->getSignatureHelp('MethodCallDynamic.phpt', 85));
+        self::assertNull($this->getSignatureHelp('MethodCallDynamic.phpt', 85));
     }
 
     /**
@@ -368,7 +368,7 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
      */
     public function testNoInvocationWithMissingMemberNameFails(): void
     {
-        static::assertNull($this->getSignatureHelp('NoInvocationMissingMember.phpt', 17));
+        self::assertNull($this->getSignatureHelp('NoInvocationMissingMember.phpt', 17));
     }
 
     /**
@@ -418,9 +418,9 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->getSignatureHelp($fileName, $i);
 
-            static::assertNotNull($result, 'Expected signature help at offset ' . $i);
-            static::assertSame(0, $result->getActiveSignature());
-            static::assertEquals($signatures, $result->getSignatures());
+            self::assertNotNull($result, 'Expected signature help at offset ' . $i);
+            self::assertSame(0, $result->getActiveSignature());
+            self::assertEquals($signatures, $result->getSignatures());
 
             ++$i;
         }
@@ -428,14 +428,14 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         // Assert that the range doesn't extend longer than it should.
         $resultBeforeRange = $this->getSignatureHelp($fileName, $start - 1);
 
-        static::assertTrue(
+        self::assertTrue(
             !$resultBeforeRange || $resultBeforeRange->getSignatures() !== $signatures,
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
 
         $resultAfterRange = $this->getSignatureHelp($fileName, $end + 1);
 
-        static::assertTrue(
+        self::assertTrue(
             !$resultAfterRange || $resultAfterRange->getSignatures() !== $signatures,
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );
@@ -458,8 +458,8 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         while ($i <= $end) {
             $result = $this->getSignatureHelp($fileName, $i);
 
-            static::assertNotNull($result);
-            static::assertSame($activeParameter, $result->getActiveParameter());
+            self::assertNotNull($result);
+            self::assertSame($activeParameter, $result->getActiveParameter());
 
             ++$i;
         }
@@ -467,14 +467,14 @@ final class SignatureHelpRetrieverTest extends AbstractIntegrationTest
         // Assert that the range doesn't extend longer than it should.
         $resultBeforeRange = $this->getSignatureHelp($fileName, $start - 1);
 
-        static::assertTrue(
+        self::assertTrue(
             !$resultBeforeRange || $resultBeforeRange->getActiveParameter() !== $activeParameter,
             "Range does not start exactly at position {$start}, but seems to continue before it"
         );
 
         $resultAfterRange = $this->getSignatureHelp($fileName, $end + 1);
 
-        static::assertTrue(
+        self::assertTrue(
             !$resultAfterRange || $resultAfterRange->getActiveParameter() !== $activeParameter,
             "Range does not end exactly at position {$end}, but seems to continue after it"
         );

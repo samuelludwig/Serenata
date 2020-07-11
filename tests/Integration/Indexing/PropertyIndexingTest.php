@@ -22,25 +22,25 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('SimpleProperty.phpt');
 
-        static::assertSame('foo', $property->getName());
-        static::assertSame($this->normalizePath($this->getPathFor('SimpleProperty.phpt')), $property->getFile()->getUri());
-        static::assertEquals(
+        self::assertSame('foo', $property->getName());
+        self::assertSame($this->normalizePath($this->getPathFor('SimpleProperty.phpt')), $property->getFile()->getUri());
+        self::assertEquals(
             new Range(
                 new Position(4, 4),
                 new Position(4, 24)
             ),
             $property->getRange()
         );
-        static::assertSame("'test'", $property->getDefaultValue());
-        static::assertFalse($property->getIsDeprecated());
-        static::assertFalse($property->getIsMagic());
-        static::assertFalse($property->getIsStatic());
-        static::assertFalse($property->getHasDocblock());
-        static::assertNull($property->getShortDescription());
-        static::assertNull($property->getLongDescription());
-        static::assertNull($property->getTypeDescription());
-        static::assertSame('string', (string) $property->getType());
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
+        self::assertSame("'test'", $property->getDefaultValue());
+        self::assertFalse($property->getIsDeprecated());
+        self::assertFalse($property->getIsMagic());
+        self::assertFalse($property->getIsStatic());
+        self::assertFalse($property->getHasDocblock());
+        self::assertNull($property->getShortDescription());
+        self::assertNull($property->getLongDescription());
+        self::assertNull($property->getTypeDescription());
+        self::assertSame('string', (string) $property->getType());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
     }
 
     /**
@@ -50,7 +50,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('DeprecatedProperty.phpt');
 
-        static::assertTrue($property->getIsDeprecated());
+        self::assertTrue($property->getIsDeprecated());
     }
 
     /**
@@ -60,7 +60,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('StaticProperty.phpt');
 
-        static::assertTrue($property->getIsStatic());
+        self::assertTrue($property->getIsStatic());
     }
 
     /**
@@ -70,7 +70,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicProperty.phpt');
 
-        static::assertTrue($property->getIsMagic());
+        self::assertTrue($property->getIsMagic());
     }
 
     /**
@@ -80,7 +80,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicStaticProperty.phpt');
 
-        static::assertTrue($property->getIsStatic());
+        self::assertTrue($property->getIsStatic());
     }
 
     /**
@@ -90,7 +90,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicPropertyWithDescription.phpt');
 
-        static::assertSame('A description.', $property->getShortDescription());
+        self::assertSame('A description.', $property->getShortDescription());
     }
 
     /**
@@ -100,7 +100,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicPropertyTypeResolution.phpt');
 
-        static::assertSame('\N\A', (string) $property->getType());
+        self::assertSame('\N\A', (string) $property->getType());
     }
 
     /**
@@ -110,7 +110,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicReadProperty.phpt');
 
-        static::assertTrue($property->getIsMagic());
+        self::assertTrue($property->getIsMagic());
     }
 
     /**
@@ -120,7 +120,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('MagicWriteProperty.phpt');
 
-        static::assertTrue($property->getIsMagic());
+        self::assertTrue($property->getIsMagic());
     }
 
     /**
@@ -130,7 +130,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyShortDescription.phpt');
 
-        static::assertSame('This is a summary.', $property->getShortDescription());
+        self::assertSame('This is a summary.', $property->getShortDescription());
     }
 
     /**
@@ -140,7 +140,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyLongDescription.phpt');
 
-        static::assertSame('This is a long description.', $property->getLongDescription());
+        self::assertSame('This is a long description.', $property->getLongDescription());
     }
 
     /**
@@ -150,7 +150,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeDescription.phpt');
 
-        static::assertSame('This is a type description.', $property->getTypeDescription());
+        self::assertSame('This is a type description.', $property->getTypeDescription());
     }
 
     /**
@@ -160,7 +160,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeDescriptionAsSummary.phpt');
 
-        static::assertSame('This is a type description.', $property->getShortDescription());
+        self::assertSame('This is a type description.', $property->getShortDescription());
     }
 
     /**
@@ -170,7 +170,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeDescriptionTakesPrecedenceOverSummary.phpt');
 
-        static::assertSame('This is a type description.', $property->getShortDescription());
+        self::assertSame('This is a type description.', $property->getShortDescription());
     }
 
     /**
@@ -180,7 +180,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeFromDocblock.phpt');
 
-        static::assertSame('int', (string) $property->getType());
+        self::assertSame('int', (string) $property->getType());
     }
 
     /**
@@ -190,7 +190,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('TypedProperty.phpt');
 
-        static::assertSame('(string | null)', (string) $property->getType());
+        self::assertSame('(string | null)', (string) $property->getType());
     }
 
     /**
@@ -200,7 +200,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('TypedPropertyWithDocblockOverride.phpt');
 
-        static::assertSame('\DateTime', (string) $property->getType());
+        self::assertSame('\DateTime', (string) $property->getType());
     }
 
     /**
@@ -210,7 +210,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PropertyTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $property->getType());
+        self::assertSame('\N\A', (string) $property->getType());
     }
 
     /**
@@ -220,7 +220,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PublicProperty.phpt');
 
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
     }
 
     /**
@@ -230,7 +230,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('ProtectedProperty.phpt');
 
-        static::assertSame(AccessModifierNameValue::PROTECTED_, $property->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PROTECTED_, $property->getAccessModifier()->getName());
     }
 
     /**
@@ -240,7 +240,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('PrivateProperty.phpt');
 
-        static::assertSame(AccessModifierNameValue::PRIVATE_, $property->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PRIVATE_, $property->getAccessModifier()->getName());
     }
 
     /**
@@ -250,7 +250,7 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexProperty('ImplicitlyPublicProperty.phpt');
 
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $property->getAccessModifier()->getName());
     }
 
     /**
@@ -264,11 +264,11 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(2, $classes[0]->getProperties());
+        self::assertCount(1, $classes);
+        self::assertCount(2, $classes[0]->getProperties());
 
-        static::assertSame('foo', $classes[0]->getProperties()[0]->getName());
-        static::assertSame('bar', $classes[0]->getProperties()[1]->getName());
+        self::assertSame('foo', $classes[0]->getProperties()[0]->getName());
+        self::assertSame('bar', $classes[0]->getProperties()[1]->getName());
     }
 
     /**
@@ -282,11 +282,11 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(2, $classes[0]->getProperties());
+        self::assertCount(1, $classes);
+        self::assertCount(2, $classes[0]->getProperties());
 
-        static::assertSame(AccessModifierNameValue::PROTECTED_, $classes[0]->getProperties()[0]->getAccessModifier()->getName());
-        static::assertSame(AccessModifierNameValue::PROTECTED_, $classes[0]->getProperties()[1]->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PROTECTED_, $classes[0]->getProperties()[0]->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PROTECTED_, $classes[0]->getProperties()[1]->getAccessModifier()->getName());
     }
 
     /**
@@ -300,13 +300,13 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(2, $classes[0]->getProperties());
+        self::assertCount(1, $classes);
+        self::assertCount(2, $classes[0]->getProperties());
 
-        static::assertSame('A summary.', $classes[0]->getProperties()[0]->getShortDescription());
-        static::assertSame('A long description.', $classes[0]->getProperties()[0]->getLongDescription());
-        static::assertSame('A summary.', $classes[0]->getProperties()[1]->getShortDescription());
-        static::assertSame('A long description.', $classes[0]->getProperties()[1]->getLongDescription());
+        self::assertSame('A summary.', $classes[0]->getProperties()[0]->getShortDescription());
+        self::assertSame('A long description.', $classes[0]->getProperties()[0]->getLongDescription());
+        self::assertSame('A summary.', $classes[0]->getProperties()[1]->getShortDescription());
+        self::assertSame('A long description.', $classes[0]->getProperties()[1]->getLongDescription());
     }
 
     /**
@@ -320,16 +320,16 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(2, $classes[0]->getProperties());
+        self::assertCount(1, $classes);
+        self::assertCount(2, $classes[0]->getProperties());
 
-        static::assertSame('string', (string) $classes[0]->getProperties()[0]->getType());
-        static::assertSame('First description.', $classes[0]->getProperties()[0]->getTypeDescription());
-        static::assertSame('First description.', $classes[0]->getProperties()[0]->getShortDescription());
+        self::assertSame('string', (string) $classes[0]->getProperties()[0]->getType());
+        self::assertSame('First description.', $classes[0]->getProperties()[0]->getTypeDescription());
+        self::assertSame('First description.', $classes[0]->getProperties()[0]->getShortDescription());
 
-        static::assertSame('int', (string) $classes[0]->getProperties()[1]->getType());
-        static::assertSame('Second description.', $classes[0]->getProperties()[1]->getTypeDescription());
-        static::assertSame('Second description.', $classes[0]->getProperties()[1]->getShortDescription());
+        self::assertSame('int', (string) $classes[0]->getProperties()[1]->getType());
+        self::assertSame('Second description.', $classes[0]->getProperties()[1]->getTypeDescription());
+        self::assertSame('Second description.', $classes[0]->getProperties()[1]->getShortDescription());
     }
 
     /**
@@ -340,12 +340,12 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            static::assertCount(1, $classes);
-            static::assertCount(1, $classes[0]->getProperties());
+            self::assertCount(1, $classes);
+            self::assertCount(1, $classes[0]->getProperties());
 
             $property = $classes[0]->getProperties()[0];
 
-            static::assertSame('foo', $property->getName());
+            self::assertSame('foo', $property->getName());
 
             return str_replace('foo', 'foo2 ', $source);
         };
@@ -353,17 +353,17 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            static::assertCount(1, $classes);
-            static::assertCount(1, $classes[0]->getProperties());
+            self::assertCount(1, $classes);
+            self::assertCount(1, $classes[0]->getProperties());
 
             $property = $classes[0]->getProperties()[0];
 
-            static::assertSame('foo2', $property->getName());
+            self::assertSame('foo2', $property->getName());
         };
 
         $path = $this->getPathFor('PropertyChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -379,12 +379,12 @@ final class PropertyIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(1, $classes[0]->getProperties());
+        self::assertCount(1, $classes);
+        self::assertCount(1, $classes[0]->getProperties());
 
         $property = $classes[0]->getProperties()[0];
 
-        static::assertSame($classes[0], $property->getClasslike());
+        self::assertSame($classes[0], $property->getClasslike());
 
         return $property;
     }

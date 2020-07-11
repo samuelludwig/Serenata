@@ -91,7 +91,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
         );
 
         $response->done(function (JsonRpcResponse $response): void {
-            static::assertEquals(new JsonRpcResponse('TESTID', new InitializeResult(new ServerCapabilities(
+            self::assertEquals(new JsonRpcResponse('TESTID', new InitializeResult(new ServerCapabilities(
                 new TextDocumentSyncOptions(
                     false,
                     1,
@@ -160,9 +160,9 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
 
         $workspace = $this->getActiveWorkspaceManager()->getActiveWorkspace();
 
-        static::assertNotNull($workspace);
+        self::assertNotNull($workspace);
 
-        static::assertEquals(new Workspace(
+        self::assertEquals(new Workspace(
             new WorkspaceConfiguration(
                 [$uri],
                 $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri)),
@@ -199,9 +199,9 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
 
         $workspace = $this->getActiveWorkspaceManager()->getActiveWorkspace();
 
-        static::assertNotNull($workspace);
+        self::assertNotNull($workspace);
 
-        static::assertEquals(new Workspace(
+        self::assertEquals(new Workspace(
             new WorkspaceConfiguration(
                 [$uri],
                 $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri)),
@@ -248,9 +248,9 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
 
         $workspace = $this->getActiveWorkspaceManager()->getActiveWorkspace();
 
-        static::assertNotNull($workspace);
+        self::assertNotNull($workspace);
 
-        static::assertEquals(new Workspace(
+        self::assertEquals(new Workspace(
             new WorkspaceConfiguration(
                 [$uri1, $uri2],
                 $this->normalizePath('file://' . sys_get_temp_dir() . '/' . md5($uri1 . '-' . $uri2)),
@@ -295,9 +295,9 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
 
         $workspace = $this->getActiveWorkspaceManager()->getActiveWorkspace();
 
-        static::assertNotNull($workspace);
+        self::assertNotNull($workspace);
 
-        static::assertEquals(new Workspace(
+        self::assertEquals(new Workspace(
             new WorkspaceConfiguration(
                 [$uri],
                 ':memory:',
@@ -340,7 +340,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
             true
         );
 
-        static::assertEquals(new JsonRpcRequest(null, 'serenata/internal/index', [
+        self::assertEquals(new JsonRpcRequest(null, 'serenata/internal/index', [
             'textDocument' => [
                 'uri' => $uri . '/Folder1/File1.phpt',
             ],
@@ -348,7 +348,7 @@ final class InitializeJsonRpcQueueItemHandlerTest extends AbstractIntegrationTes
 
         $this->getRequestQueue()->pop(); // echoMessage, ignore.
 
-        static::assertEquals(new JsonRpcRequest(null, 'serenata/internal/index', [
+        self::assertEquals(new JsonRpcRequest(null, 'serenata/internal/index', [
             'textDocument' => [
                 'uri' => $uri . '/Folder2/File2.phpt',
             ],

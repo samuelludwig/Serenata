@@ -20,12 +20,12 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
 
         $registry = $this->container->get('classlikeListProvider.registry');
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
 
         $this->indexTestFile($this->container, $path);
 
-        static::assertCount(1, $registry->getAll());
-        static::assertArrayHasKey('\Test', $registry->getAll());
+        self::assertCount(1, $registry->getAll());
+        self::assertArrayHasKey('\Test', $registry->getAll());
     }
 
     /**
@@ -36,8 +36,8 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('classlikeListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\Test', $registry->getAll());
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\Test', $registry->getAll());
 
             return str_replace('class Test', '// class Test ', $source);
         };
@@ -45,12 +45,12 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('classlikeListProvider.registry');
 
-            static::assertEmpty($registry->getAll());
+            self::assertEmpty($registry->getAll());
         };
 
         $path = $this->getPathFor('OldStructureIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -61,9 +61,9 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('classlikeListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\Test', $registry->getAll());
-            static::assertFalse($registry->getAll()['\Test']['isFinal']);
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\Test', $registry->getAll());
+            self::assertFalse($registry->getAll()['\Test']['isFinal']);
 
             return str_replace('class Test {}', 'final class Test {}', $source);
         };
@@ -71,14 +71,14 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('classlikeListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\Test', $registry->getAll());
-            static::assertTrue($registry->getAll()['\Test']['isFinal']);
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\Test', $registry->getAll());
+            self::assertTrue($registry->getAll()['\Test']['isFinal']);
         };
 
         $path = $this->getPathFor('OldStructureIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

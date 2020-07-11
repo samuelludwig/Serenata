@@ -20,18 +20,18 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
 
         $registry = $this->container->get('namespaceListProvider.registry');
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
 
         $this->indexTestFile($this->container, $path);
 
         $results = $registry->getAll();
 
-        static::assertCount(2, $results);
+        self::assertCount(2, $results);
 
         array_shift($results);
         $secondElement = array_shift($results);
 
-        static::assertSame('Test', $secondElement['name']);
+        self::assertSame('Test', $secondElement['name']);
     }
 
     /**
@@ -44,12 +44,12 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
 
             $results = $registry->getAll();
 
-            static::assertCount(2, $results);
+            self::assertCount(2, $results);
 
             array_shift($results);
             $secondElement = array_shift($results);
 
-            static::assertSame('Test', $secondElement['name']);
+            self::assertSame('Test', $secondElement['name']);
 
             return str_replace('namespace Test', '// namespace Test ', $source);
         };
@@ -57,12 +57,12 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('namespaceListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
+            self::assertCount(1, $registry->getAll());
         };
 
         $path = $this->getPathFor('OldNamespaceIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -75,13 +75,13 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
 
             $results = $registry->getAll();
 
-            static::assertCount(2, $results);
+            self::assertCount(2, $results);
 
             array_shift($results);
             $secondElement = array_shift($results);
 
-            static::assertSame('Test', $secondElement['name']);
-            static::assertSame(4, $secondElement['range']->getEnd()->getLine());
+            self::assertSame('Test', $secondElement['name']);
+            self::assertSame(4, $secondElement['range']->getEnd()->getLine());
 
             return str_replace('namespace Test;', "namespace Test;\n\n", $source);
         };
@@ -91,18 +91,18 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
 
             $results = $registry->getAll();
 
-            static::assertCount(2, $results);
+            self::assertCount(2, $results);
 
             array_shift($results);
             $secondElement = array_shift($results);
 
-            static::assertSame('Test', $secondElement['name']);
-            static::assertSame(6, $secondElement['range']->getEnd()->getLine());
+            self::assertSame('Test', $secondElement['name']);
+            self::assertSame(6, $secondElement['range']->getEnd()->getLine());
         };
 
         $path = $this->getPathFor('OldNamespaceIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

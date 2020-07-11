@@ -13,23 +13,23 @@ final class GlobalConstantsJsonRpcQueueItemHandlerTest extends AbstractIntegrati
     {
         $output = $this->getGlobalConstants('GlobalConstants.phpt');
 
-        static::assertThat($output, $this->arrayHasKey('\DEFINE_CONSTANT'));
-        static::assertSame($output['\DEFINE_CONSTANT']['name'], 'DEFINE_CONSTANT');
-        static::assertSame($output['\DEFINE_CONSTANT']['fqcn'], '\DEFINE_CONSTANT');
+        self::assertThat($output, $this->arrayHasKey('\DEFINE_CONSTANT'));
+        self::assertSame($output['\DEFINE_CONSTANT']['name'], 'DEFINE_CONSTANT');
+        self::assertSame($output['\DEFINE_CONSTANT']['fqcn'], '\DEFINE_CONSTANT');
 
-        static::assertThat($output, $this->arrayHasKey('\A\DEFINE_CONSTANT_NAMESPACED'));
-        static::assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['name'], 'DEFINE_CONSTANT_NAMESPACED');
-        static::assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['fqcn'], '\A\DEFINE_CONSTANT_NAMESPACED');
+        self::assertThat($output, $this->arrayHasKey('\A\DEFINE_CONSTANT_NAMESPACED'));
+        self::assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['name'], 'DEFINE_CONSTANT_NAMESPACED');
+        self::assertSame($output['\A\DEFINE_CONSTANT_NAMESPACED']['fqcn'], '\A\DEFINE_CONSTANT_NAMESPACED');
 
-        static::assertThat($output, $this->arrayHasKey('\A\FIRST_CONSTANT'));
-        static::assertSame($output['\A\FIRST_CONSTANT']['name'], 'FIRST_CONSTANT');
-        static::assertSame($output['\A\FIRST_CONSTANT']['fqcn'], '\A\FIRST_CONSTANT');
+        self::assertThat($output, $this->arrayHasKey('\A\FIRST_CONSTANT'));
+        self::assertSame($output['\A\FIRST_CONSTANT']['name'], 'FIRST_CONSTANT');
+        self::assertSame($output['\A\FIRST_CONSTANT']['fqcn'], '\A\FIRST_CONSTANT');
 
-        static::assertThat($output, $this->arrayHasKey('\A\SECOND_CONSTANT'));
-        static::assertSame($output['\A\SECOND_CONSTANT']['name'], 'SECOND_CONSTANT');
-        static::assertSame($output['\A\SECOND_CONSTANT']['fqcn'], '\A\SECOND_CONSTANT');
+        self::assertThat($output, $this->arrayHasKey('\A\SECOND_CONSTANT'));
+        self::assertSame($output['\A\SECOND_CONSTANT']['name'], 'SECOND_CONSTANT');
+        self::assertSame($output['\A\SECOND_CONSTANT']['fqcn'], '\A\SECOND_CONSTANT');
 
-        static::assertThat($output, $this->logicalNot($this->arrayHasKey('SHOULD_NOT_SHOW_UP')));
+        self::assertThat($output, $this->logicalNot($this->arrayHasKey('SHOULD_NOT_SHOW_UP')));
     }
 
     /**
@@ -39,7 +39,7 @@ final class GlobalConstantsJsonRpcQueueItemHandlerTest extends AbstractIntegrati
     {
         $output = $this->getGlobalConstants('DefineWithExpression.phpt');
 
-        static::assertSame('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
+        self::assertSame('(($version{0} * 10000) + ($version{2} * 100) + $version{4})', $output['\TEST_CONSTANT']['defaultValue']);
     }
 
     /**
@@ -49,7 +49,7 @@ final class GlobalConstantsJsonRpcQueueItemHandlerTest extends AbstractIntegrati
     {
         $output = $this->getGlobalConstants('DefineWithIncompleteConstFetch.phpt');
 
-        static::assertSame('\Test::', $output['\TEST_CONSTANT']['defaultValue']);
+        self::assertSame('\Test::', $output['\TEST_CONSTANT']['defaultValue']);
     }
 
     /**

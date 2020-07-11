@@ -18,7 +18,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('VariableStartingAtOffset.phpt');
 
-        static::assertSame([], $output);
+        self::assertSame([], $output);
     }
 
     /**
@@ -28,7 +28,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('VariableEndingAtOffset.phpt');
 
-        static::assertSame([], $output);
+        self::assertSame([], $output);
     }
 
     /**
@@ -38,7 +38,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('VariablePartOfAssignmentStartingAtOffset.phpt');
 
-        static::assertSame([], $output);
+        self::assertSame([], $output);
     }
 
     /**
@@ -48,7 +48,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('VariablePartOfAssignmentEndingAtOffset.phpt');
 
-        static::assertSame([], $output);
+        self::assertSame([], $output);
     }
 
     /**
@@ -58,7 +58,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('VariableOperatingAsLeftOperandOfAssignmentAtOffset.phpt');
 
-        static::assertSame([], $output);
+        self::assertSame([], $output);
     }
 
     /**
@@ -68,7 +68,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('GlobalScope.phpt');
 
-        static::assertSame([
+        self::assertSame([
             '$var3' => ['name' => '$var3', 'type' => null],
             '$var2' => ['name' => '$var2', 'type' => null],
             '$var1' => ['name' => '$var1', 'type' => null],
@@ -82,7 +82,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('FunctionScope.phpt');
 
-        static::assertSame([
+        self::assertSame([
             '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
             '$param1'  => ['name' => '$param1',  'type' => null],
@@ -96,7 +96,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('ClassMethodScope.phpt');
 
-        static::assertSame([
+        self::assertSame([
             '$this'    => ['name' => '$this',    'type' => null],
             '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
@@ -111,7 +111,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
     {
         $output = $this->getAvailableVariables('ClosureScope.phpt');
 
-        static::assertSame([
+        self::assertSame([
             '$this'         => ['name' => '$this',         'type' => null],
             '$test'         => ['name' => '$test',         'type' => null],
             '$something'    => ['name' => '$something',    'type' => null],
@@ -154,7 +154,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
                 $list[$variableName] = ['name' => $variableName, 'type' => null];
             }
 
-            static::assertSame(
+            self::assertSame(
                 $list,
                 $scanner->getAvailableVariables(
                     new TextDocumentItem($fullPath, file_get_contents($fullPath)),
@@ -200,7 +200,7 @@ final class VariableScannerTest extends AbstractIntegrationTest
      */
     public function testIgnoresErrorsInParameterNames(): void
     {
-        static::assertSame([], $this->getAvailableVariables('ErrorInParameterName.phpt'));
+        self::assertSame([], $this->getAvailableVariables('ErrorInParameterName.phpt'));
     }
 
     /**

@@ -41,8 +41,8 @@ final class ClassConstantAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertCount(2, $output);
-        static::assertEquals($suggestions[0], $output[1]);
+        self::assertCount(2, $output);
+        self::assertEquals($suggestions[0], $output[1]);
     }
 
     /**
@@ -74,8 +74,8 @@ final class ClassConstantAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertCount(2, $output);
-        static::assertEquals($suggestions[0], $output[1]);
+        self::assertCount(2, $output);
+        self::assertEquals($suggestions[0], $output[1]);
     }
 
     /**

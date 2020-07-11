@@ -21,10 +21,10 @@ final class ClasslikeListProviderTest extends AbstractIntegrationTest
 
         $output = $provider->getAll();
 
-        static::assertSame(4, count($output));
-        static::assertArrayHasKey('\A\FirstClass', $output);
-        static::assertArrayHasKey('\A\SecondClass', $output);
-        static::assertArrayHasKey('\A\Foo', $output);
-        static::assertArrayHasKey('\A\Bar', $output);
+        self::assertSame(4, count($output));
+        self::assertArrayHasKey('\A\FirstClass', $output);
+        self::assertArrayHasKey('\A\SecondClass', $output);
+        self::assertArrayHasKey('\A\Foo', $output);
+        self::assertArrayHasKey('\A\Bar', $output);
     }
 }

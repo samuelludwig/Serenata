@@ -39,10 +39,10 @@ final class AutocompletionPrefixDeterminerTest extends TestCase
 
         $determiner = new AutocompletionPrefixDeterminer($this->boundaryTokenRetrieverMock);
 
-        static::assertSame('', $determiner->determine('hello', new Position(0, 0)));
-        static::assertSame('hell', $determiner->determine('hello', new Position(0, 4)));
-        static::assertSame('hello', $determiner->determine('hello', new Position(0, 5)));
-        static::assertSame('lo', $determiner->determine('hel+lo', new Position(0, 6)));
+        self::assertSame('', $determiner->determine('hello', new Position(0, 0)));
+        self::assertSame('hell', $determiner->determine('hello', new Position(0, 4)));
+        self::assertSame('hello', $determiner->determine('hello', new Position(0, 5)));
+        self::assertSame('lo', $determiner->determine('hel+lo', new Position(0, 6)));
     }
 
     /**
@@ -54,6 +54,6 @@ final class AutocompletionPrefixDeterminerTest extends TestCase
 
         $determiner = new AutocompletionPrefixDeterminer($this->boundaryTokenRetrieverMock);
 
-        static::assertSame('hel\lo', $determiner->determine('hel\lo', new Position(0, 6)));
+        self::assertSame('hel\lo', $determiner->determine('hel\lo', new Position(0, 6)));
     }
 }

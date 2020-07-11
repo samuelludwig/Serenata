@@ -22,23 +22,23 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('SimpleConstant.phpt');
 
-        static::assertSame('CONSTANT', $constant->getName());
-        static::assertSame($this->normalizePath($this->getPathFor('SimpleConstant.phpt')), $constant->getFile()->getUri());
-        static::assertEquals(
+        self::assertSame('CONSTANT', $constant->getName());
+        self::assertSame($this->normalizePath($this->getPathFor('SimpleConstant.phpt')), $constant->getFile()->getUri());
+        self::assertEquals(
             new Range(
                 new Position(4, 10),
                 new Position(4, 27)
             ),
             $constant->getRange()
         );
-        static::assertSame("'test'", $constant->getDefaultValue());
-        static::assertFalse($constant->getIsDeprecated());
-        static::assertFalse($constant->getHasDocblock());
-        static::assertNull($constant->getShortDescription());
-        static::assertNull($constant->getLongDescription());
-        static::assertNull($constant->getTypeDescription());
-        static::assertSame('string', (string) $constant->getType());
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
+        self::assertSame("'test'", $constant->getDefaultValue());
+        self::assertFalse($constant->getIsDeprecated());
+        self::assertFalse($constant->getHasDocblock());
+        self::assertNull($constant->getShortDescription());
+        self::assertNull($constant->getLongDescription());
+        self::assertNull($constant->getTypeDescription());
+        self::assertSame('string', (string) $constant->getType());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -52,30 +52,30 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(1, $classes[0]->getConstants());
+        self::assertCount(1, $classes);
+        self::assertCount(1, $classes[0]->getConstants());
 
         $constant = $classes[0]->getConstants()[0];
 
-        static::assertSame($classes[0], $constant->getClasslike());
+        self::assertSame($classes[0], $constant->getClasslike());
 
-        static::assertSame('class', $constant->getName());
-        static::assertSame($this->normalizePath($this->getPathFor('ClassKeywordConstant.phpt')), $constant->getFile()->getUri());
-        static::assertEquals(
+        self::assertSame('class', $constant->getName());
+        self::assertSame($this->normalizePath($this->getPathFor('ClassKeywordConstant.phpt')), $constant->getFile()->getUri());
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(2, 0)
             ),
             $constant->getRange()
         );
-        static::assertSame("'Test'", $constant->getDefaultValue());
-        static::assertFalse($constant->getIsDeprecated());
-        static::assertFalse($constant->getHasDocblock());
-        static::assertSame('PHP built-in class constant that evaluates to the FQCN.', $constant->getShortDescription());
-        static::assertNull($constant->getLongDescription());
-        static::assertNull($constant->getTypeDescription());
-        static::assertSame('string', (string) $constant->getType());
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
+        self::assertSame("'Test'", $constant->getDefaultValue());
+        self::assertFalse($constant->getIsDeprecated());
+        self::assertFalse($constant->getHasDocblock());
+        self::assertSame('PHP built-in class constant that evaluates to the FQCN.', $constant->getShortDescription());
+        self::assertNull($constant->getLongDescription());
+        self::assertNull($constant->getTypeDescription());
+        self::assertSame('string', (string) $constant->getType());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -85,7 +85,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('DeprecatedConstant.phpt');
 
-        static::assertTrue($constant->getIsDeprecated());
+        self::assertTrue($constant->getIsDeprecated());
     }
 
     /**
@@ -95,7 +95,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantShortDescription.phpt');
 
-        static::assertSame('This is a summary.', $constant->getShortDescription());
+        self::assertSame('This is a summary.', $constant->getShortDescription());
     }
 
     /**
@@ -105,7 +105,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantLongDescription.phpt');
 
-        static::assertSame('This is a long description.', $constant->getLongDescription());
+        self::assertSame('This is a long description.', $constant->getLongDescription());
     }
 
     /**
@@ -115,7 +115,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeDescription.phpt');
 
-        static::assertSame('This is a type description.', $constant->getTypeDescription());
+        self::assertSame('This is a type description.', $constant->getTypeDescription());
     }
 
     /**
@@ -125,7 +125,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeDescriptionAsSummary.phpt');
 
-        static::assertSame('This is a type description.', $constant->getShortDescription());
+        self::assertSame('This is a type description.', $constant->getShortDescription());
     }
 
     /**
@@ -135,7 +135,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $property = $this->indexConstant('ConstantTypeDescriptionTakesPrecedenceOverSummary.phpt');
 
-        static::assertSame('This is a type description.', $property->getShortDescription());
+        self::assertSame('This is a type description.', $property->getShortDescription());
     }
 
     /**
@@ -145,7 +145,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeFromDocblock.phpt');
 
-        static::assertSame('int', (string) $constant->getType());
+        self::assertSame('int', (string) $constant->getType());
     }
 
     /**
@@ -155,7 +155,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantTypeInDocblockIsResolved.phpt');
 
-        static::assertSame('\N\A', (string) $constant->getType());
+        self::assertSame('\N\A', (string) $constant->getType());
     }
 
     /**
@@ -165,7 +165,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ImplicitlyPublicConstant.phpt');
 
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -175,7 +175,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ExplicitlyPublicConstant.phpt');
 
-        static::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PUBLIC_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -185,7 +185,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ProtectedConstant.phpt');
 
-        static::assertSame(AccessModifierNameValue::PROTECTED_, $constant->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PROTECTED_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -195,7 +195,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('PrivateConstant.phpt');
 
-        static::assertSame(AccessModifierNameValue::PRIVATE_, $constant->getAccessModifier()->getName());
+        self::assertSame(AccessModifierNameValue::PRIVATE_, $constant->getAccessModifier()->getName());
     }
 
     /**
@@ -205,7 +205,7 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
     {
         $constant = $this->indexConstant('ConstantNoTypeSpecification.phpt');
 
-        static::assertSame('mixed', (string) $constant->getType());
+        self::assertSame('mixed', (string) $constant->getType());
     }
 
     /**
@@ -216,12 +216,12 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            static::assertCount(1, $classes);
-            static::assertCount(2, $classes[0]->getConstants());
+            self::assertCount(1, $classes);
+            self::assertCount(2, $classes[0]->getConstants());
 
             $constant = $classes[0]->getConstants()[1];
 
-            static::assertSame('CONSTANT', $constant->getName());
+            self::assertSame('CONSTANT', $constant->getName());
 
             return str_replace('CONSTANT', 'CONSTANT2 ', $source);
         };
@@ -229,17 +229,17 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-            static::assertCount(1, $classes);
-            static::assertCount(2, $classes[0]->getConstants());
+            self::assertCount(1, $classes);
+            self::assertCount(2, $classes[0]->getConstants());
 
             $constant = $classes[0]->getConstants()[1];
 
-            static::assertSame('CONSTANT2', $constant->getName());
+            self::assertSame('CONSTANT2', $constant->getName());
         };
 
         $path = $this->getPathFor('ConstantChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -255,12 +255,12 @@ final class ClassConstantIndexingTest extends AbstractIntegrationTest
 
         $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
-        static::assertCount(1, $classes);
-        static::assertCount(2, $classes[0]->getConstants());
+        self::assertCount(1, $classes);
+        self::assertCount(2, $classes[0]->getConstants());
 
         $constant = $classes[0]->getConstants()[1];
 
-        static::assertSame($classes[0], $constant->getClasslike());
+        self::assertSame($classes[0], $constant->getClasslike());
 
         return $constant;
     }

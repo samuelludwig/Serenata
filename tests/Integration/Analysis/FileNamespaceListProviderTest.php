@@ -23,14 +23,14 @@ final class FileNamespaceListProviderTest extends AbstractIntegrationTest
 
         $output = $this->container->get('fileNamespaceListProvider')->getAllForFile($file);
 
-        static::assertCount(2, $output);
+        self::assertCount(2, $output);
 
         $firstItem = array_shift($output);
 
-        static::assertSame(null, $firstItem['name']);
-        static::assertSame($normalized, $firstItem['uri']);
+        self::assertSame(null, $firstItem['name']);
+        self::assertSame($normalized, $firstItem['uri']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(0, 0),
                 new Position(2, 0)
@@ -40,10 +40,10 @@ final class FileNamespaceListProviderTest extends AbstractIntegrationTest
 
         $secondItem = array_shift($output);
 
-        static::assertSame('NamespaceA', $secondItem['name']);
-        static::assertSame($normalized, $secondItem['uri']);
+        self::assertSame('NamespaceA', $secondItem['name']);
+        self::assertSame($normalized, $secondItem['uri']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(9, 0)

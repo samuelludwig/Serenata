@@ -22,8 +22,8 @@ final class FileIndexerFileNamespaceProviderCombinationTest extends AbstractInte
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $results = $container->get('fileNamespaceProvider')->provide($path);
 
-            static::assertCount(3, $results);
-            static::assertEmpty($results[2]->getImports());
+            self::assertCount(3, $results);
+            self::assertEmpty($results[2]->getImports());
 
             return str_replace('// ', '', $source);
         };
@@ -31,13 +31,13 @@ final class FileIndexerFileNamespaceProviderCombinationTest extends AbstractInte
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $results = $container->get('fileNamespaceProvider')->provide($path);
 
-            static::assertCount(3, $results);
-            static::assertCount(1, $results[2]->getImports(), 'Failed asserting that file namespace provider picks up new imports after reindex');
+            self::assertCount(3, $results);
+            self::assertCount(1, $results[2]->getImports(), 'Failed asserting that file namespace provider picks up new imports after reindex');
         };
 
         $path = $this->getPathFor('NewImportClearsCache.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

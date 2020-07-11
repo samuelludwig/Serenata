@@ -39,7 +39,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -69,7 +69,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -101,7 +101,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -133,7 +133,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -160,7 +160,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -187,7 +187,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -214,7 +214,7 @@ final class ConstantAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**

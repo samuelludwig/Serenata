@@ -19,7 +19,7 @@ final class ClassListJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $command = $this->container->get('classListJsonRpcQueueItemHandler');
 
-        static::assertArrayHasKey('\N\SimpleClass', $command->getAll());
+        self::assertArrayHasKey('\N\SimpleClass', $command->getAll());
     }
 
     /**
@@ -33,7 +33,7 @@ final class ClassListJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     //
     //     $command = $this->container->get('classListJsonRpcQueueItemHandler');
     //
-    //     static::assertEmpty($command->getAll());
+    //     self::assertEmpty($command->getAll());
     // }
 
     /**

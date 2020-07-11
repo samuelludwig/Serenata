@@ -39,7 +39,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -69,7 +69,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -99,7 +99,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -129,7 +129,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -159,7 +159,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -189,7 +189,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -221,7 +221,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -253,7 +253,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -280,7 +280,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -307,7 +307,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -334,7 +334,7 @@ final class FunctionAutocompletionProviderTest extends AbstractAutocompletionPro
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**

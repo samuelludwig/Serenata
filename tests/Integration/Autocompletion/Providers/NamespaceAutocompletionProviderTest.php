@@ -39,7 +39,7 @@ final class NamespaceAutocompletionProviderTest extends AbstractAutocompletionPr
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -49,7 +49,7 @@ final class NamespaceAutocompletionProviderTest extends AbstractAutocompletionPr
     {
         $output = $this->provide('AnonymousNamespace.phpt');
 
-        static::assertEquals([], $output);
+        self::assertEquals([], $output);
     }
 
     /**
@@ -79,7 +79,7 @@ final class NamespaceAutocompletionProviderTest extends AbstractAutocompletionPr
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**

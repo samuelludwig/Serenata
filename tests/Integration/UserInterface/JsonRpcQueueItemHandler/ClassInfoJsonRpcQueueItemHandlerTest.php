@@ -18,7 +18,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     {
         $fileName = 'SimpleClass.phpt';
 
-        static::assertSame(
+        self::assertSame(
             $this->getClassInfo($fileName, 'A\SimpleClass'),
             $this->getClassInfo($fileName, '\A\SimpleClass')
         );
@@ -33,7 +33,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\SimpleClass');
 
-        static::assertSame([
+        self::assertSame([
             'name'               => 'SimpleClass',
             'fqcn'               => '\A\SimpleClass',
             'range'              => $output['range'],
@@ -102,7 +102,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'methods'            => [],
         ], $output);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(9, 0)
@@ -110,7 +110,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['class']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -118,7 +118,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['class']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -126,7 +126,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['class']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(9, 0)
@@ -134,7 +134,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['class']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(new Range(new Position(9, 0), new Position(12, 1)), $output['range']);
+        self::assertEquals(new Range(new Position(9, 0), new Position(12, 1)), $output['range']);
     }
 
     /**
@@ -146,7 +146,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame([
+        self::assertSame([
             'name'               => 'testProperty',
             'range'              => $output['properties']['testProperty']['range'],
             'uri'                => $this->getPathFor($fileName),
@@ -193,7 +193,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['properties']['testProperty']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(13, 4),
                 new Position(13, 36)
@@ -201,7 +201,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['testProperty']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(14, 1)
@@ -209,7 +209,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['testProperty']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(14, 1)
@@ -217,7 +217,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['testProperty']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(13, 4),
                 new Position(13, 36)
@@ -235,7 +235,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame([
+        self::assertSame([
             'name'               => 'testMethod',
             'range'              => $output['methods']['testMethod']['range'],
             'uri'                => $this->getPathFor($fileName),
@@ -356,7 +356,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['testMethod']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(18, 4),
                 new Position(21, 5)
@@ -364,7 +364,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['testMethod']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(22, 1)
@@ -372,7 +372,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['testMethod']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(22, 1)
@@ -380,7 +380,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['testMethod']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(18, 4),
                 new Position(21, 5)
@@ -398,7 +398,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame([
+        self::assertSame([
             'name'               => 'TEST_CONSTANT',
             'range'              => $output['constants']['TEST_CONSTANT']['range'],
             'defaultValue'       => '5',
@@ -443,7 +443,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['constants']['TEST_CONSTANT']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(13, 10),
                 new Position(13, 27)
@@ -451,7 +451,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['TEST_CONSTANT']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(14, 1)
@@ -459,7 +459,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['TEST_CONSTANT']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(14, 1)
@@ -467,7 +467,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['constants']['TEST_CONSTANT']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(13, 10),
                 new Position(13, 27)
@@ -487,10 +487,10 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         $parentClassOutput = $this->getClassInfo($fileName, 'A\ParentClass');
         $anotherChildClassOutput = $this->getClassInfo($fileName, 'A\AnotherChildClass');
 
-        static::assertSame('This is the summary.', $childClassOutput['shortDescription']);
-        static::assertSame('This is a long description.', $childClassOutput['longDescription']);
+        self::assertSame('This is the summary.', $childClassOutput['shortDescription']);
+        self::assertSame('This is a long description.', $childClassOutput['longDescription']);
 
-        static::assertSame(
+        self::assertSame(
             'Pre. ' . $parentClassOutput['longDescription'] . ' Post.',
             $anotherChildClassOutput['longDescription']
         );
@@ -519,33 +519,33 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         ];
 
         foreach ($keysToTestForEquality as $key) {
-            static::assertSame(
+            self::assertSame(
                 $childClassOutput['methods']['basicDocblockInheritanceTraitTest'][$key],
                 $traitOutput['methods']['basicDocblockInheritanceTraitTest'][$key]
             );
 
-            static::assertSame(
+            self::assertSame(
                 $childClassOutput['methods']['basicDocblockInheritanceInterfaceTest'][$key],
                 $interfaceOutput['methods']['basicDocblockInheritanceInterfaceTest'][$key]
             );
 
-            static::assertSame(
+            self::assertSame(
                 $childClassOutput['methods']['basicDocblockInheritanceBaseClassTest'][$key],
                 $parentClassOutput['methods']['basicDocblockInheritanceBaseClassTest'][$key]
             );
         }
 
-        static::assertSame(
+        self::assertSame(
             'Pre. ' . $parentClassOutput['methods']['inheritDocBaseClassTest']['longDescription'] . ' Post.',
             $childClassOutput['methods']['inheritDocBaseClassTest']['longDescription']
         );
 
-        static::assertSame(
+        self::assertSame(
             'Pre. ' . $interfaceOutput['methods']['inheritDocInterfaceTest']['longDescription'] . ' Post.',
             $childClassOutput['methods']['inheritDocInterfaceTest']['longDescription']
         );
 
-        static::assertSame(
+        self::assertSame(
             'Pre. ' . $traitOutput['methods']['inheritDocTraitTest']['longDescription'] . ' Post.',
             $childClassOutput['methods']['inheritDocTraitTest']['longDescription']
         );
@@ -572,23 +572,23 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         ];
 
         foreach ($keysToTestForEquality as $key) {
-            static::assertSame(
+            self::assertSame(
                 $childClassOutput['properties']['basicDocblockInheritanceTraitTest'][$key],
                 $traitOutput['properties']['basicDocblockInheritanceTraitTest'][$key]
             );
 
-            static::assertSame(
+            self::assertSame(
                 $childClassOutput['properties']['basicDocblockInheritanceBaseClassTest'][$key],
                 $parentClassOutput['properties']['basicDocblockInheritanceBaseClassTest'][$key]
             );
         }
 
-        static::assertSame(
+        self::assertSame(
             $childClassOutput['properties']['inheritDocBaseClassTest']['longDescription'],
             'Pre. ' . $parentClassOutput['properties']['inheritDocBaseClassTest']['longDescription'] . ' Post.'
         );
 
-        static::assertSame(
+        self::assertSame(
             $childClassOutput['properties']['inheritDocTraitTest']['longDescription'],
             'Pre. ' . $traitOutput['properties']['inheritDocTraitTest']['longDescription'] . ' Post.'
         );
@@ -603,7 +603,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -622,7 +622,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['__construct']['parameters']);
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -642,7 +642,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['__construct']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(24, 4),
                 new Position(27, 5)
@@ -650,7 +650,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['__construct']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -658,7 +658,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['__construct']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -666,7 +666,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['__construct']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(24, 4),
                 new Position(27, 5)
@@ -674,7 +674,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['__construct']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(54, 4),
                 new Position(57, 5)
@@ -682,7 +682,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['__construct']['range']
         );
 
-        static::assertSame([
+        self::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -706,7 +706,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['parentTraitMethod']['parameters']);
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -726,7 +726,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['parentTraitMethod']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 4),
                 new Position(17, 5)
@@ -734,7 +734,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentTraitMethod']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -742,7 +742,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentTraitMethod']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(12, 0),
                 new Position(18, 1)
@@ -750,7 +750,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentTraitMethod']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 4),
                 new Position(17, 5)
@@ -758,7 +758,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentTraitMethod']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(64, 4),
                 new Position(67, 5)
@@ -766,7 +766,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentTraitMethod']['range']
         );
 
-        static::assertSame([
+        self::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -791,7 +791,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['parentMethod']['parameters']);
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -811,7 +811,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['parentMethod']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(29, 4),
                 new Position(32, 5)
@@ -819,7 +819,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentMethod']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -827,7 +827,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentMethod']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -835,7 +835,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentMethod']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(29, 4),
                 new Position(32, 5)
@@ -843,7 +843,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentMethod']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(69, 4),
                 new Position(72, 5)
@@ -851,7 +851,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentMethod']['range']
         );
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -871,7 +871,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['ancestorMethod']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(34, 4),
                 new Position(37, 5)
@@ -879,7 +879,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['ancestorMethod']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -887,7 +887,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['ancestorMethod']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(20, 0),
                 new Position(38, 1)
@@ -895,7 +895,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['ancestorMethod']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(34, 4),
                 new Position(37, 5)
@@ -903,7 +903,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['ancestorMethod']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(59, 4),
                 new Position(62, 5)
@@ -911,7 +911,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['ancestorMethod']['range']
         );
 
-        static::assertSame([
+        self::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -936,7 +936,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['traitMethod']['parameters']);
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\TestTrait',
                 'uri'       =>  $this->getPathFor($fileName),
@@ -956,7 +956,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['traitMethod']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(42, 4),
                 new Position(45, 5)
@@ -964,7 +964,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['traitMethod']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(40, 0),
                 new Position(48, 1)
@@ -972,7 +972,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['traitMethod']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(40, 0),
                 new Position(48, 1)
@@ -980,7 +980,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['traitMethod']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(42, 4),
                 new Position(45, 5)
@@ -988,7 +988,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['traitMethod']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(74, 4),
                 new Position(77, 5)
@@ -996,7 +996,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['traitMethod']['range']
         );
 
-        static::assertSame([
+        self::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -1021,7 +1021,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['abstractMethod']['parameters']);
 
-        static::assertSame($output['methods']['abstractMethod']['override']['wasAbstract'], true);
+        self::assertSame($output['methods']['abstractMethod']['override']['wasAbstract'], true);
     }
 
     /**
@@ -1033,7 +1033,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       =>  $this->getPathFor($fileName),
@@ -1053,7 +1053,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['interfaceMethod']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(14, 5)
@@ -1061,7 +1061,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(15, 1)
@@ -1069,7 +1069,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(15, 1)
@@ -1077,7 +1077,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(14, 5)
@@ -1085,9 +1085,9 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEmpty($output['methods']['interfaceMethod']['implementations']);
+        self::assertEmpty($output['methods']['interfaceMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(19, 4),
                 new Position(22, 5)
@@ -1105,7 +1105,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
@@ -1126,7 +1126,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['interfaceMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 38)
@@ -1134,7 +1134,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1142,7 +1142,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1150,7 +1150,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 38)
@@ -1158,7 +1158,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       =>  $this->getPathFor($fileName),
@@ -1178,7 +1178,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'wasAbstract' => false,
         ], $output['methods']['interfaceMethod']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(14, 5)
@@ -1186,7 +1186,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(15, 1)
@@ -1194,7 +1194,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(15, 1)
@@ -1202,7 +1202,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(14, 5)
@@ -1210,7 +1210,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(19, 4),
                 new Position(22, 5)
@@ -1228,7 +1228,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -1247,7 +1247,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'range' => $output['properties']['parentTraitProperty']['override']['range'],
         ], $output['properties']['parentTraitProperty']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 34)
@@ -1255,7 +1255,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentTraitProperty']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 0),
                 new Position(20, 1)
@@ -1263,7 +1263,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentTraitProperty']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -1271,7 +1271,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentTraitProperty']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 34)
@@ -1279,7 +1279,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentTraitProperty']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -1298,7 +1298,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'range' => $output['properties']['parentProperty']['override']['range'],
         ], $output['properties']['parentProperty']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(18, 4),
                 new Position(18, 29)
@@ -1306,7 +1306,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentProperty']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 0),
                 new Position(20, 1)
@@ -1314,7 +1314,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentProperty']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 0),
                 new Position(20, 1)
@@ -1322,7 +1322,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentProperty']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(18, 4),
                 new Position(18, 29)
@@ -1330,7 +1330,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['parentProperty']['override']['declaringStructure']['memberRange']
         );
 
-        static::assertSame([
+        self::assertSame([
             'declaringClass' => [
                 'fqcn'      => '\A\ParentClass',
                 'uri'       => $this->getPathFor($fileName),
@@ -1349,7 +1349,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             'range' => $output['properties']['ancestorProperty']['override']['range'],
         ], $output['properties']['ancestorProperty']['override']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(19, 4),
                 new Position(19, 31)
@@ -1357,7 +1357,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['ancestorProperty']['override']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 0),
                 new Position(20, 1)
@@ -1365,7 +1365,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['ancestorProperty']['override']['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(14, 0),
                 new Position(20, 1)
@@ -1373,7 +1373,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['properties']['ancestorProperty']['override']['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(19, 4),
                 new Position(19, 31)
@@ -1391,7 +1391,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'name'         => 'foo',
                 'typeHint'     => '\A\Foo',
@@ -1415,7 +1415,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['parentInterfaceMethod']['parameters']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentClass',
@@ -1436,7 +1436,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['parentInterfaceMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 44)
@@ -1444,7 +1444,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentInterfaceMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -1452,7 +1452,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1460,7 +1460,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 44)
@@ -1468,8 +1468,8 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['parentInterfaceMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\ChildClass', $output['methods']['parentInterfaceMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1481,7 +1481,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\ParentInterface',
@@ -1502,7 +1502,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['interfaceParentMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 44)
@@ -1510,7 +1510,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceParentMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1518,7 +1518,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceParentMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1526,7 +1526,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 44)
@@ -1534,10 +1534,10 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceParentMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertNull($output['methods']['interfaceParentMethod']['override']);
+        self::assertNull($output['methods']['interfaceParentMethod']['override']);
 
-        static::assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\ChildClass', $output['methods']['interfaceParentMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1549,7 +1549,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface',
@@ -1570,7 +1570,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['interfaceMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 38)
@@ -1578,7 +1578,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1586,7 +1586,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -1594,7 +1594,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 38)
@@ -1602,8 +1602,8 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['interfaceMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\ChildClass', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1616,7 +1616,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         $output = $this->getClassInfo($fileName, 'A\TestClass');
         $parameters = $output['methods']['testMethod']['parameters'];
 
-        static::assertSame('\stdClass[]', $parameters[0]['types'][0]['type']);
+        self::assertSame('\stdClass[]', $parameters[0]['types'][0]['type']);
     }
 
     /**
@@ -1628,31 +1628,31 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ChildClass');
 
-        static::assertSame($output['parents'], ['\A\BaseClass', '\A\AncestorClass']);
-        static::assertSame($output['directParents'], ['\A\BaseClass']);
+        self::assertSame($output['parents'], ['\A\BaseClass', '\A\AncestorClass']);
+        self::assertSame($output['directParents'], ['\A\BaseClass']);
 
-        static::assertThat($output['constants'], $this->arrayHasKey('INHERITED_CONSTANT'));
-        static::assertThat($output['constants'], $this->arrayHasKey('CHILD_CONSTANT'));
+        self::assertThat($output['constants'], $this->arrayHasKey('INHERITED_CONSTANT'));
+        self::assertThat($output['constants'], $this->arrayHasKey('CHILD_CONSTANT'));
 
-        static::assertThat($output['properties'], $this->arrayHasKey('inheritedProperty'));
-        static::assertThat($output['properties'], $this->arrayHasKey('childProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('inheritedProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('childProperty'));
 
-        static::assertThat($output['methods'], $this->arrayHasKey('inheritedMethod'));
-        static::assertThat($output['methods'], $this->arrayHasKey('childMethod'));
+        self::assertThat($output['methods'], $this->arrayHasKey('inheritedMethod'));
+        self::assertThat($output['methods'], $this->arrayHasKey('childMethod'));
 
         // Do a couple of sanity checks.
-        static::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['fqcn']);
-        static::assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringClass']['fqcn']);
-        static::assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringClass']['fqcn']);
 
-        static::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringStructure']['fqcn']);
-        static::assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringStructure']['fqcn']);
-        static::assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['properties']['inheritedProperty']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['methods']['inheritedMethod']['declaringStructure']['fqcn']);
 
         $output = $this->getClassInfo($fileName, 'A\BaseClass');
 
-        static::assertSame($output['directChildren'], ['\A\ChildClass']);
-        static::assertSame($output['parents'], ['\A\AncestorClass']);
+        self::assertSame($output['directChildren'], ['\A\ChildClass']);
+        self::assertSame($output['parents'], ['\A\AncestorClass']);
     }
 
     /**
@@ -1664,25 +1664,25 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame(['\A\BaseInterface', '\A\FirstInterface', '\A\SecondInterface'], $output['interfaces']);
-        static::assertSame(['\A\FirstInterface', '\A\SecondInterface'], $output['directInterfaces']);
+        self::assertSame(['\A\BaseInterface', '\A\FirstInterface', '\A\SecondInterface'], $output['interfaces']);
+        self::assertSame(['\A\FirstInterface', '\A\SecondInterface'], $output['directInterfaces']);
 
-        static::assertThat($output['constants'], $this->arrayHasKey('FIRST_INTERFACE_CONSTANT'));
-        static::assertThat($output['constants'], $this->arrayHasKey('SECOND_INTERFACE_CONSTANT'));
+        self::assertThat($output['constants'], $this->arrayHasKey('FIRST_INTERFACE_CONSTANT'));
+        self::assertThat($output['constants'], $this->arrayHasKey('SECOND_INTERFACE_CONSTANT'));
 
-        static::assertThat($output['methods'], $this->arrayHasKey('methodFromFirstInterface'));
-        static::assertThat($output['methods'], $this->arrayHasKey('methodFromSecondInterface'));
+        self::assertThat($output['methods'], $this->arrayHasKey('methodFromFirstInterface'));
+        self::assertThat($output['methods'], $this->arrayHasKey('methodFromSecondInterface'));
 
         // Do a couple of sanity checks.
-        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
+        self::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
+        self::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['methodFromFirstInterface']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstInterface', $output['methods']['methodFromFirstInterface']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1694,47 +1694,47 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame(['\A\FirstTrait', '\A\SecondTrait', '\A\BaseTrait'], $output['traits']);
-        static::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
+        self::assertSame(['\A\FirstTrait', '\A\SecondTrait', '\A\BaseTrait'], $output['traits']);
+        self::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
 
-        static::assertThat($output['properties'], $this->arrayHasKey('baseTraitProperty'));
-        static::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
-        static::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('baseTraitProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
 
-        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
-        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
-        static::assertThat($output['methods'], $this->arrayHasKey('baseTraitMethod'));
+        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
+        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
+        self::assertThat($output['methods'], $this->arrayHasKey('baseTraitMethod'));
 
         // Do a couple of sanity checks.
-        static::assertSame('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['fqcn']);
-        static::assertSame('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseTrait', $output['properties']['baseTraitProperty']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['methods']['baseTraitMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseTrait', $output['methods']['baseTraitMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestClass', $output['methods']['test1']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['test1']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['overriddenInBaseAndChild']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
-        static::assertThat($output['methods'], $this->arrayHasKey('test1'));
-        static::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+        self::assertThat($output['methods'], $this->arrayHasKey('test1'));
+        self::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
 
-        static::assertTrue($output['methods']['test1']['isPrivate']);
+        self::assertTrue($output['methods']['test1']['isPrivate']);
 
-        static::assertSame('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
-        static::assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
+        self::assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1746,9 +1746,9 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertFalse($output['methods']['test1']['isPublic']);
-        static::assertTrue($output['methods']['test1']['isProtected']);
-        static::assertFalse($output['methods']['test1']['isPrivate']);
+        self::assertFalse($output['methods']['test1']['isPublic']);
+        self::assertTrue($output['methods']['test1']['isProtected']);
+        self::assertFalse($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1760,9 +1760,9 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertFalse($output['methods']['test1']['isPublic']);
-        static::assertFalse($output['methods']['test1']['isProtected']);
-        static::assertTrue($output['methods']['test1']['isPrivate']);
+        self::assertFalse($output['methods']['test1']['isPublic']);
+        self::assertFalse($output['methods']['test1']['isProtected']);
+        self::assertTrue($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1774,13 +1774,13 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
-        static::assertEmpty($output['methods']['someMethod']['implementations']);
+        self::assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1792,13 +1792,13 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
-        static::assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseClass', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
-        static::assertEmpty($output['methods']['someMethod']['implementations']);
+        self::assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1810,33 +1810,33 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        static::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['traits']);
-        static::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
+        self::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['traits']);
+        self::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
 
-        static::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
-        static::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
+        self::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
 
-        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
-        static::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
+        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
+        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
 
         // Do a couple of sanity checks.
-        static::assertSame('\A\TestTrait', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['properties']['firstTraitProperty']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestTrait', $output['methods']['test1']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['test1']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
-        static::assertThat($output['methods'], $this->arrayHasKey('test1'));
-        static::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+        self::assertThat($output['methods'], $this->arrayHasKey('test1'));
+        self::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
 
-        static::assertTrue($output['methods']['test1']['isPrivate']);
+        self::assertTrue($output['methods']['test1']['isPrivate']);
 
-        static::assertSame('\A\TestTrait', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
-        static::assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['testAmbiguous']['declaringClass']['fqcn']);
+        self::assertSame('\A\SecondTrait', $output['methods']['testAmbiguous']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestTrait', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['testAmbiguousAsWell']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['methods']['testAmbiguousAsWell']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1848,9 +1848,9 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        static::assertFalse($output['methods']['test1']['isPublic']);
-        static::assertTrue($output['methods']['test1']['isProtected']);
-        static::assertFalse($output['methods']['test1']['isPrivate']);
+        self::assertFalse($output['methods']['test1']['isPublic']);
+        self::assertTrue($output['methods']['test1']['isProtected']);
+        self::assertFalse($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1862,9 +1862,9 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        static::assertFalse($output['methods']['test1']['isPublic']);
-        static::assertFalse($output['methods']['test1']['isProtected']);
-        static::assertTrue($output['methods']['test1']['isPrivate']);
+        self::assertFalse($output['methods']['test1']['isPublic']);
+        self::assertFalse($output['methods']['test1']['isProtected']);
+        self::assertTrue($output['methods']['test1']['isPrivate']);
     }
 
     /**
@@ -1876,13 +1876,13 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestTrait');
 
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
-        static::assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringClass']['fqcn']);
+        self::assertSame('\A\FirstTrait', $output['methods']['someMethod']['override']['declaringStructure']['fqcn']);
 
-        static::assertEmpty($output['methods']['someMethod']['implementations']);
+        self::assertEmpty($output['methods']['someMethod']['implementations']);
     }
 
     /**
@@ -1894,13 +1894,13 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestInterface');
 
-        static::assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestInterface', $output['methods']['interfaceMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['fqcn']);
-        static::assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['fqcn']);
+        self::assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringClass']['fqcn']);
+        self::assertSame('\A\BaseInterface', $output['methods']['interfaceMethod']['override']['declaringStructure']['fqcn']);
 
-        static::assertEmpty($output['methods']['interfaceMethod']['implementations']);
+        self::assertEmpty($output['methods']['interfaceMethod']['implementations']);
     }
 
     /**
@@ -1912,13 +1912,13 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['fqcn']);
-        static::assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringClass']['fqcn']);
+        self::assertSame('\A\TestInterface', $output['methods']['someMethod']['implementations'][0]['declaringStructure']['fqcn']);
 
-        static::assertNull($output['methods']['someMethod']['override']);
+        self::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1930,12 +1930,12 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestInterface1', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertEmpty($output['methods']['someMethod']['implementations']);
+        self::assertEmpty($output['methods']['someMethod']['implementations']);
 
-        static::assertNull($output['methods']['someMethod']['override']);
+        self::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -1947,8 +1947,8 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
     }
 
     /**
@@ -1960,10 +1960,10 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
@@ -2003,7 +2003,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['someMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 33)
@@ -2011,7 +2011,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -2019,7 +2019,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -2027,7 +2027,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 33)
@@ -2035,7 +2035,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 33)
@@ -2043,7 +2043,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -2051,7 +2051,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -2059,7 +2059,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 33)
@@ -2067,7 +2067,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange']
         );
 
-        static::assertNull($output['methods']['someMethod']['override']);
+        self::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -2079,10 +2079,10 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestTrait', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
@@ -2122,7 +2122,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['someMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 33)
@@ -2130,7 +2130,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -2138,7 +2138,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -2146,7 +2146,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 33)
@@ -2154,7 +2154,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 33)
@@ -2162,7 +2162,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -2170,7 +2170,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -2178,7 +2178,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 33)
@@ -2186,7 +2186,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange']
         );
 
-        static::assertNull($output['methods']['someMethod']['override']);
+        self::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -2198,10 +2198,10 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\TestClass');
 
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
-        static::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringClass']['fqcn']);
+        self::assertSame('\A\TestClass', $output['methods']['someMethod']['declaringStructure']['fqcn']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'declaringClass' => [
                     'fqcn'      => '\A\TestInterface1',
@@ -2241,7 +2241,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             ],
         ], $output['methods']['someMethod']['implementations']);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 33)
@@ -2249,7 +2249,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -2257,7 +2257,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(4, 0),
                 new Position(7, 1)
@@ -2265,7 +2265,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(6, 4),
                 new Position(6, 33)
@@ -2273,7 +2273,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][0]['declaringStructure']['memberRange']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 33)
@@ -2281,7 +2281,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -2289,7 +2289,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringClass']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(9, 0),
                 new Position(12, 1)
@@ -2297,7 +2297,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringStructure']['range']
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(11, 4),
                 new Position(11, 33)
@@ -2305,7 +2305,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
             $output['methods']['someMethod']['implementations'][1]['declaringStructure']['memberRange']
         );
 
-        static::assertNull($output['methods']['someMethod']['override']);
+        self::assertNull($output['methods']['someMethod']['override']);
     }
 
     /**
@@ -2317,112 +2317,112 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\childClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropSelf']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['basePropStatic']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['basePropThis']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['propSelf']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['propStatic']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['properties']['propThis']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodSelf']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodStatic']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodThis']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodSelf']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodStatic']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodThis']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '\A\childClass',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['methodOwnClassName']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][0]['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\childClass',
             ],
         ], $output['methods']['baseMethodWithParameters']['parameters'][1]['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\childClass',
@@ -2431,42 +2431,42 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, 'A\ParentClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropSelf']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropStatic']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['properties']['basePropThis']['types']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'self',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodSelf']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => 'static',
                 'resolvedType' => '\A\ParentClass',
             ],
         ], $output['methods']['baseMethodStatic']['returnTypes']);
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '$this',
                 'resolvedType' => '\A\ParentClass',
@@ -2483,7 +2483,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestClass');
 
-        static::assertSame(['\A\I'], $output['interfaces']);
+        self::assertSame(['\A\I'], $output['interfaces']);
     }
 
     /**
@@ -2495,7 +2495,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestClass');
 
-        static::assertSame(['\A\T', '\A\T2'], $output['traits']);
+        self::assertSame(['\A\T', '\A\T2'], $output['traits']);
     }
 
     /**
@@ -2507,7 +2507,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestInterface');
 
-        static::assertSame(['\A\I'], $output['parents']);
+        self::assertSame(['\A\I'], $output['parents']);
     }
 
     /**
@@ -2519,7 +2519,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $output = $this->getClassInfo($fileName, '\A\TestClass');
 
-        static::assertSame([
+        self::assertSame([
             [
                 'type'         => '\DateTime',
                 'resolvedType' => '\DateTime',
@@ -2532,7 +2532,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
      */
     public function testFailsOnUnknownClass(): void
     {
-        static::expectException(ClasslikeBuildingFailedException::class);
+        self::expectException(ClasslikeBuildingFailedException::class);
 
         $output = $this->getClassInfo('SimpleClass.phpt', 'DoesNotExist');
     }
@@ -2544,7 +2544,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     {
         $fileName = 'CircularDependencyExtends.phpt';
 
-        static::assertNotNull($this->getClassInfo($fileName, 'A\C'));
+        self::assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
@@ -2554,7 +2554,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     {
         $fileName = 'CircularDependencyImplements.phpt';
 
-        static::assertNotNull($this->getClassInfo($fileName, 'A\C'));
+        self::assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
@@ -2564,7 +2564,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     {
         $fileName = 'CircularDependencyUses.phpt';
 
-        static::assertNotNull($this->getClassInfo($fileName, 'A\C'));
+        self::assertNotNull($this->getClassInfo($fileName, 'A\C'));
     }
 
     /**
@@ -2574,7 +2574,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
     {
         $fileName = 'InterfaceIncorrectlyUsesTrait.phpt';
 
-        static::assertNotNull($this->getClassInfo($fileName, 'A\I'));
+        self::assertNotNull($this->getClassInfo($fileName, 'A\I'));
     }
 
     /**
@@ -2586,7 +2586,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $info = $this->getClassInfo($fileName, 'A\C');
 
-        static::assertNull($info['properties']['prop']['override']);
+        self::assertNull($info['properties']['prop']['override']);
     }
 
     /**
@@ -2598,7 +2598,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $info = $this->getClassInfo($fileName, 'A\C');
 
-        static::assertNotNull($info['properties']['prop']['override']);
+        self::assertNotNull($info['properties']['prop']['override']);
     }
 
     /**
@@ -2610,7 +2610,7 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
 
         $info = $this->getClassInfo($fileName, 'A\C');
 
-        static::assertNull($info['methods']['foo']['override']);
+        self::assertNull($info['methods']['foo']['override']);
     }
 
     /**

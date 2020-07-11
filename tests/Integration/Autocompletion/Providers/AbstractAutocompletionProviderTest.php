@@ -47,7 +47,7 @@ abstract class AbstractAutocompletionProviderTest extends AbstractIntegrationTes
 
             $code = str_replace('// <INJECTION>', $additionalCode, $code, $count);
 
-            static::assertGreaterThan(0, $count, 'Injection point for additional code not found in file ' . $file);
+            self::assertGreaterThan(0, $count, 'Injection point for additional code not found in file ' . $file);
         }
 
         $markerString = '// <MARKER>';

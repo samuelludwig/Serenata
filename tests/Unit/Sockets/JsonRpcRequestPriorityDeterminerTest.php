@@ -19,7 +19,7 @@ final class JsonRpcRequestPriorityDeterminerTest extends TestCase
 
         $request = new JsonRpcRequest(null, 'someGenericJsonRpcQueueItemHandler');
 
-        static::assertSame(JsonRpcQueueItemPriority::NORMAL, $determiner->determine($request));
+        self::assertSame(JsonRpcQueueItemPriority::NORMAL, $determiner->determine($request));
     }
 
     /**
@@ -31,7 +31,7 @@ final class JsonRpcRequestPriorityDeterminerTest extends TestCase
 
         $request = new JsonRpcRequest(null, '$/cancelRequest');
 
-        static::assertSame(JsonRpcQueueItemPriority::CRITICAL, $determiner->determine($request));
+        self::assertSame(JsonRpcQueueItemPriority::CRITICAL, $determiner->determine($request));
     }
 
     /**
@@ -43,7 +43,7 @@ final class JsonRpcRequestPriorityDeterminerTest extends TestCase
 
         $request = new JsonRpcRequest(null, 'serenata/internal/index');
 
-        static::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
+        self::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
     }
 
     /**
@@ -55,6 +55,6 @@ final class JsonRpcRequestPriorityDeterminerTest extends TestCase
 
         $request = new JsonRpcRequest(null, 'serenata/internal/echoMessage');
 
-        static::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
+        self::assertSame(JsonRpcQueueItemPriority::LOW, $determiner->determine($request));
     }
 }

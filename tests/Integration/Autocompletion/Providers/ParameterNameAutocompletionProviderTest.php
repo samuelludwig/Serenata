@@ -19,7 +19,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
     {
         $output = $this->provide('UntypedParameter.phpt');
 
-        static::assertEquals([], $output);
+        self::assertEquals([], $output);
     }
 
     /**
@@ -44,7 +44,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -82,7 +82,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -133,7 +133,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -184,7 +184,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**
@@ -248,7 +248,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             ),
         ];
 
-        static::assertEquals($suggestions, $output);
+        self::assertEquals($suggestions, $output);
     }
 
     /**

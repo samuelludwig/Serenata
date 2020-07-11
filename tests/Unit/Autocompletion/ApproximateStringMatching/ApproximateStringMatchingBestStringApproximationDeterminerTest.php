@@ -29,7 +29,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ['key' => 'bestMatch'],
         ];
 
-        static::assertSame(
+        self::assertSame(
             [$items[1], $items[0]],
             $determiner->determine($items, 'referenceText', 'key', null)
         );
@@ -53,7 +53,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ['key' => 'bestMatch'],
         ];
 
-        static::assertSame(
+        self::assertSame(
             [$items[1]],
             $determiner->determine($items, 'referenceText', 'key', null)
         );
@@ -77,7 +77,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ['key' => 'second'],
         ];
 
-        static::assertSame(
+        self::assertSame(
             [$items[0], $items[1]],
             $determiner->determine($items, 'referenceText', 'key', null)
         );
@@ -101,7 +101,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ['key' => 'bestMatch'],
         ];
 
-        static::assertSame(
+        self::assertSame(
             [$items[1]],
             $determiner->determine($items, 'referenceText', 'key', 1)
         );
@@ -124,7 +124,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             new ArrayObject(['key' => 'test']),
         ];
 
-        static::assertSame(
+        self::assertSame(
             [$items[0]],
             $determiner->determine($items, 'referenceText', 'key', null)
         );
@@ -145,7 +145,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
 
         $items = [];
 
-        static::assertSame(
+        self::assertSame(
             [],
             $determiner->determine($items, 'referenceText', 'key', null)
         );

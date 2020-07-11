@@ -62,9 +62,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\ConstFetch::class, $result->expr);
-        static::assertSame('array_walk', $result->expr->name->toString());
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\ConstFetch::class, $result->expr);
+        self::assertSame('array_walk', $result->expr->name->toString());
     }
 
     /**
@@ -84,11 +84,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
-        static::assertSame('Bar', $result->expr->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('TEST_CONSTANT', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertSame('Bar', $result->expr->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('TEST_CONSTANT', $result->expr->name->name);
     }
 
     /**
@@ -104,11 +104,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
-        static::assertSame('Bar', $result->expr->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('DO', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertSame('Bar', $result->expr->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('DO', $result->expr->name->name);
     }
 
     /**
@@ -124,11 +124,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
-        static::assertSame('self', $result->expr->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('NEW', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertSame('self', $result->expr->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('NEW', $result->expr->name->name);
     }
 
     /**
@@ -148,11 +148,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\StaticCall::class, $result->expr);
-        static::assertSame('NamespaceTest\Bar', $result->expr->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('staticmethod', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\StaticCall::class, $result->expr);
+        self::assertSame('NamespaceTest\Bar', $result->expr->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('staticmethod', $result->expr->name->name);
     }
 
     /**
@@ -172,11 +172,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('someProperty', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('someProperty', $result->expr->name->name);
     }
 
     /**
@@ -192,11 +192,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('someProperty', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('someProperty', $result->expr->name->name);
     }
 
     /**
@@ -212,11 +212,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('someProperty', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('someProperty', $result->expr->name->name);
     }
 
     /**
@@ -236,11 +236,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('someProperty', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('someProperty', $result->expr->name->name);
     }
 
     /**
@@ -260,15 +260,15 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('self', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
-        static::assertSame('someProperty', $result->expr->var->name->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('test', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('self', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        self::assertSame('someProperty', $result->expr->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -288,15 +288,15 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('parent', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
-        static::assertSame('someProperty', $result->expr->var->name->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('test', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('parent', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        self::assertSame('someProperty', $result->expr->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -316,15 +316,15 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('static', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
-        static::assertSame('someProperty', $result->expr->var->name->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('test', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\StaticPropertyFetch::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('static', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
+        self::assertSame('someProperty', $result->expr->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -340,11 +340,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertSame('c', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('foo', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertSame('c', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('foo', $result->expr->name->name);
     }
 
     /**
@@ -360,11 +360,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertSame('d', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('bar', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertSame('d', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('bar', $result->expr->name->name);
     }
 
     /**
@@ -380,11 +380,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertSame('c', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('bar', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertSame('c', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('bar', $result->expr->name->name);
     }
 
     /**
@@ -400,9 +400,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        static::assertSame('.:', $result->expr->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
+        self::assertSame('.:', $result->expr->value);
     }
 
     /**
@@ -422,15 +422,15 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var);
-        static::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->var);
-        static::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->name);
-        static::assertSame('this', $result->expr->var->var->name);
-        static::assertSame('foo', $result->expr->var->name->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('test', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->var);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var->name);
+        self::assertSame('this', $result->expr->var->var->name);
+        self::assertSame('foo', $result->expr->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -446,11 +446,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('test', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('test', $result->expr->name->name);
     }
 
     /**
@@ -469,11 +469,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('', $result->expr->name->name);
     }
 
     /**
@@ -489,11 +489,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('', $result->expr->name->name);
     }
 
     /**
@@ -513,13 +513,13 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('Foo\Bar', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('doFoo', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('Foo\Bar', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -536,13 +536,13 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('Foo\Bar', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('doFoo', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('Foo\Bar', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -559,13 +559,13 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('Foo\Bar', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('doFoo', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('Foo\Bar', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -581,13 +581,13 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->class);
-        static::assertSame('Foo\Bar', $result->expr->var->class->toString());
-        static::assertInstanceOf(Node\Identifier::class, $result->expr->name);
-        static::assertSame('doFoo', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\New_::class, $result->expr->var);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->class);
+        self::assertSame('Foo\Bar', $result->expr->var->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
+        self::assertSame('doFoo', $result->expr->name->name);
     }
 
     /**
@@ -634,17 +634,17 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var->var);
-        static::assertSame('testChaining', $result->expr->var->name->name);
-        static::assertSame('testChaining', $result->expr->var->var->name->name);
-        static::assertSame('testChaining', $result->expr->var->var->var->name->name);
-        static::assertSame('testChaining', $result->expr->var->var->var->var->name->name);
-        static::assertSame('testChai', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var->var);
+        self::assertSame('testChaining', $result->expr->var->name->name);
+        self::assertSame('testChaining', $result->expr->var->var->name->name);
+        self::assertSame('testChaining', $result->expr->var->var->var->name->name);
+        self::assertSame('testChaining', $result->expr->var->var->var->var->name->name);
+        self::assertSame('testChai', $result->expr->name->name);
     }
 
     /**
@@ -660,10 +660,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -679,22 +679,22 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
-        static::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[0]);
-        static::assertSame('((', $result->expr->parts[0]->value);
-        static::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[1]);
-        static::assertSame('version', $result->expr->parts[1]->name);
-        static::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
-        static::assertSame('{0} * 10000) + (', $result->expr->parts[2]->value);
-        static::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[3]);
-        static::assertSame('version', $result->expr->parts[3]->name);
-        static::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[4]);
-        static::assertSame('{2} * 100) + ', $result->expr->parts[4]->value);
-        static::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[5]);
-        static::assertSame('version', $result->expr->parts[5]->name);
-        static::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[6]);
-        static::assertSame('{4}', $result->expr->parts[6]->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
+        self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[0]);
+        self::assertSame('((', $result->expr->parts[0]->value);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[1]);
+        self::assertSame('version', $result->expr->parts[1]->name);
+        self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
+        self::assertSame('{0} * 10000) + (', $result->expr->parts[2]->value);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[3]);
+        self::assertSame('version', $result->expr->parts[3]->name);
+        self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[4]);
+        self::assertSame('{2} * 100) + ', $result->expr->parts[4]->value);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[5]);
+        self::assertSame('version', $result->expr->parts[5]->name);
+        self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[6]);
+        self::assertSame('{4}', $result->expr->parts[6]->value);
     }
 
     /**
@@ -710,11 +710,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
-        static::assertSame('test', $result->expr->parts[0]->var->name);
-        static::assertSame('foo', $result->expr->parts[0]->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
+        self::assertSame('test', $result->expr->parts[0]->var->name);
+        self::assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
     /**
@@ -730,11 +730,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
-        static::assertSame('test', $result->expr->parts[0]->var->name);
-        static::assertSame('foo', $result->expr->parts[0]->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
+        self::assertSame('test', $result->expr->parts[0]->var->name);
+        self::assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
     /**
@@ -750,11 +750,11 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr->parts[0]);
-        static::assertSame('test', $result->expr->parts[0]->var->name);
-        static::assertSame('foo', $result->expr->parts[0]->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr->parts[0]);
+        self::assertSame('test', $result->expr->parts[0]->var->name);
+        self::assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
     /**
@@ -770,9 +770,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        static::assertSame('{$a->asd()[0]}', $result->expr->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
+        self::assertSame('{$a->asd()[0]}', $result->expr->value);
     }
 
     /**
@@ -790,9 +790,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        static::assertSame('TEST', $result->expr->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
+        self::assertSame('TEST', $result->expr->value);
     }
 
     /**
@@ -810,9 +810,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
-        static::assertSame('TEST', $result->expr->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\String_::class, $result->expr);
+        self::assertSame('TEST', $result->expr->value);
     }
 
     /**
@@ -833,17 +833,17 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
-        static::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[0]);
-        static::assertSame('EOF: ', $result->expr->parts[0]->value);
-        static::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[1]);
-        static::assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->expr->parts[1]->var);
-        static::assertSame('foo', $result->expr->parts[1]->var->var->name);
-        static::assertSame(2, $result->expr->parts[1]->var->dim->value);
-        static::assertSame('bar', $result->expr->parts[1]->name->name);
-        static::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
-        static::assertSame(" some_text\n\nThis is / some text.\n", $result->expr->parts[2]->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
+        self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[0]);
+        self::assertSame('EOF: ', $result->expr->parts[0]->value);
+        self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[1]);
+        self::assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->expr->parts[1]->var);
+        self::assertSame('foo', $result->expr->parts[1]->var->var->name);
+        self::assertSame(2, $result->expr->parts[1]->var->dim->value);
+        self::assertSame('bar', $result->expr->parts[1]->name->name);
+        self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
+        self::assertSame(" some_text\n\nThis is / some text.\n", $result->expr->parts[2]->value);
     }
 
     /**
@@ -863,10 +863,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -882,10 +882,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
-        static::assertSame('Test', $result->expr->class->toString());
-        static::assertSame('class', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertSame('Test', $result->expr->class->toString());
+        self::assertSame('class', $result->expr->name->name);
     }
 
     /**
@@ -901,10 +901,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -920,10 +920,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -939,10 +939,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -958,10 +958,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -977,10 +977,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -996,10 +996,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1015,10 +1015,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1034,10 +1034,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1053,10 +1053,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1072,10 +1072,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1091,10 +1091,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1110,10 +1110,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1129,10 +1129,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1148,9 +1148,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Scalar\LNumber::class, $result->expr);
-        static::assertSame(0, $result->expr->value);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Scalar\LNumber::class, $result->expr);
+        self::assertSame(0, $result->expr->value);
     }
 
     /**
@@ -1166,10 +1166,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1185,10 +1185,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1205,10 +1205,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1225,10 +1225,10 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertSame('this', $result->expr->var->name);
-        static::assertSame('one', $result->expr->name->name);
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertSame('this', $result->expr->var->name);
+        self::assertSame('one', $result->expr->name->name);
     }
 
     /**
@@ -1244,9 +1244,9 @@ SOURCE;
 
         $result = $this->createLastExpressionParser()->getLastNodeAt($source);
 
-        static::assertInstanceOf(Node\Stmt\Expression::class, $result);
-        static::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
-        static::assertInstanceOf(Node\Name::class, $result->expr->var->name);
-        static::assertSame('map', $result->expr->var->name->toString());
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Name::class, $result->expr->var->name);
+        self::assertSame('map', $result->expr->var->name->toString());
     }
 }

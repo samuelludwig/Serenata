@@ -19,7 +19,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -33,7 +33,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -47,7 +47,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -61,7 +61,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -75,7 +75,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -89,7 +89,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -103,7 +103,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -117,7 +117,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
+        self::assertTrue($matcher->score($test1, $referenceText) < $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -131,7 +131,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertSame($matcher->score($test1, $referenceText), $matcher->score($test2, $referenceText));
+        self::assertSame($matcher->score($test1, $referenceText), $matcher->score($test2, $referenceText));
     }
 
     /**
@@ -141,8 +141,8 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
     {
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertNull($matcher->score('foo', 'test'));
-        static::assertNull($matcher->score('Application\Test\FooBar\QuxProviderInterface', 'ActiveUserProviderInterface'));
+        self::assertNull($matcher->score('foo', 'test'));
+        self::assertNull($matcher->score('Application\Test\FooBar\QuxProviderInterface', 'ActiveUserProviderInterface'));
     }
 
     /**
@@ -155,7 +155,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertNotNull($matcher->score($test, $referenceText));
+        self::assertNotNull($matcher->score($test, $referenceText));
     }
 
     /**
@@ -168,7 +168,7 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertNull($matcher->score($test, $referenceText));
+        self::assertNull($matcher->score($test, $referenceText));
     }
 
     /**
@@ -181,6 +181,6 @@ final class LevenshteinApproximateStringMatcherTest extends TestCase
 
         $matcher = new LevenshteinApproximateStringMatcher();
 
-        static::assertNull($matcher->score($test, $referenceText));
+        self::assertNull($matcher->score($test, $referenceText));
     }
 }

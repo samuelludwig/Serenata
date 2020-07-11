@@ -24,9 +24,9 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(1, $namespaces);
+        self::assertCount(1, $namespaces);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(0, 0),
                 new Position(2, 0)
@@ -34,9 +34,9 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
             $namespaces[0]->getRange()
         );
 
-        static::assertSame(null, $namespaces[0]->getName());
-        static::assertSame($this->normalizePath($path), $namespaces[0]->getFile()->getUri());
-        static::assertEmpty($namespaces[0]->getImports());
+        self::assertSame(null, $namespaces[0]->getName());
+        self::assertSame($this->normalizePath($path), $namespaces[0]->getFile()->getUri());
+        self::assertEmpty($namespaces[0]->getImports());
     }
 
     /**
@@ -52,9 +52,9 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(2, $namespaces);
+        self::assertCount(2, $namespaces);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(6, 0)
@@ -62,9 +62,9 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
             $namespaces[1]->getRange()
         );
 
-        static::assertSame('N', $namespaces[1]->getName());
-        static::assertSame($this->normalizePath($path), $namespaces[1]->getFile()->getUri());
-        static::assertEmpty($namespaces[1]->getImports());
+        self::assertSame('N', $namespaces[1]->getName());
+        self::assertSame($this->normalizePath($path), $namespaces[1]->getFile()->getUri());
+        self::assertEmpty($namespaces[1]->getImports());
     }
 
     /**
@@ -80,9 +80,9 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
 
         $namespaces = $file->getNamespaces();
 
-        static::assertCount(2, $namespaces);
+        self::assertCount(2, $namespaces);
 
-        static::assertEquals(
+        self::assertEquals(
             new Range(
                 new Position(2, 0),
                 new Position(6, 0)
@@ -90,9 +90,9 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
             $namespaces[1]->getRange()
         );
 
-        static::assertSame(null, $namespaces[1]->getName());
-        static::assertSame($this->normalizePath($path), $namespaces[1]->getFile()->getUri());
-        static::assertCount(1, $namespaces[1]->getImports());
+        self::assertSame(null, $namespaces[1]->getName());
+        self::assertSame($this->normalizePath($path), $namespaces[1]->getFile()->getUri());
+        self::assertCount(1, $namespaces[1]->getImports());
     }
 
     /**
@@ -103,8 +103,8 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->getFileByUri($path);
 
-            static::assertCount(3, $file->getNamespaces());
-            static::assertSame('N', $file->getNamespaces()[1]->getName());
+            self::assertCount(3, $file->getNamespaces());
+            self::assertSame('N', $file->getNamespaces()[1]->getName());
 
             return str_replace('namespace N', 'namespace ', $source);
         };
@@ -112,13 +112,13 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $file = $container->get('storage')->getFileByUri($path);
 
-            static::assertCount(3, $file->getNamespaces());
-            static::assertSame(null, $file->getNamespaces()[1]->getName());
+            self::assertCount(3, $file->getNamespaces());
+            self::assertSame(null, $file->getNamespaces()[1]->getName());
         };
 
         $path = $this->getPathFor('NamespaceChanges.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

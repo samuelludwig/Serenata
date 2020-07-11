@@ -72,7 +72,7 @@ final class FilePositionClasslikeDeterminerTest extends TestCase
 
         $position = new Position(3, 0);
 
-        static::assertSame(
+        self::assertSame(
             '\\AnonymousClass',
             $this->filePositionClasslikeDeterminer->determine(
                 new TextDocumentItem('', $code),

@@ -20,12 +20,12 @@ final class FunctionListRegistryIndexSynchronizationTest extends AbstractIntegra
 
         $registry = $this->container->get('functionListProvider.registry');
 
-        static::assertEmpty($registry->getAll());
+        self::assertEmpty($registry->getAll());
 
         $this->indexTestFile($this->container, $path);
 
-        static::assertCount(1, $registry->getAll());
-        static::assertArrayHasKey('\test', $registry->getAll());
+        self::assertCount(1, $registry->getAll());
+        self::assertArrayHasKey('\test', $registry->getAll());
     }
 
     /**
@@ -36,8 +36,8 @@ final class FunctionListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('functionListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\test', $registry->getAll());
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\test', $registry->getAll());
 
             return str_replace('function test', '// function test ', $source);
         };
@@ -45,12 +45,12 @@ final class FunctionListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('functionListProvider.registry');
 
-            static::assertEmpty($registry->getAll());
+            self::assertEmpty($registry->getAll());
         };
 
         $path = $this->getPathFor('OldFunctionIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**
@@ -61,9 +61,9 @@ final class FunctionListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('functionListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\test', $registry->getAll());
-            static::assertEmpty($registry->getAll()['\test']['parameters']);
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\test', $registry->getAll());
+            self::assertEmpty($registry->getAll()['\test']['parameters']);
 
             return str_replace('function test()', 'function test(int $a) ', $source);
         };
@@ -71,14 +71,14 @@ final class FunctionListRegistryIndexSynchronizationTest extends AbstractIntegra
         $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
             $registry = $this->container->get('functionListProvider.registry');
 
-            static::assertCount(1, $registry->getAll());
-            static::assertArrayHasKey('\test', $registry->getAll());
-            static::assertCount(1, $registry->getAll()['\test']['parameters']);
+            self::assertCount(1, $registry->getAll());
+            self::assertArrayHasKey('\test', $registry->getAll());
+            self::assertCount(1, $registry->getAll()['\test']['parameters']);
         };
 
         $path = $this->getPathFor('OldFunctionIsRemoved.phpt');
 
-        static::assertReindexingChanges($path, $afterIndex, $afterReindex);
+        self::assertReindexingChanges($path, $afterIndex, $afterReindex);
     }
 
     /**

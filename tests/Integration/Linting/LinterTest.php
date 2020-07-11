@@ -19,7 +19,7 @@ final class LinterTest extends AbstractIntegrationTest
     {
         $output = $this->lintFile('SyntaxError.phpt', true);
 
-        static::assertEquals([
+        self::assertEquals([
             new Diagnostic(
                 new Range(
                     new Position(5, 15),
