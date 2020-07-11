@@ -100,7 +100,7 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
      */
     public function testChangesArePickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $file = $container->get('storage')->getFileByUri($path);
 
             self::assertCount(3, $file->getNamespaces());
@@ -109,7 +109,7 @@ final class NamespaceIndexingTest extends AbstractIntegrationTest
             return str_replace('namespace N', 'namespace ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $file = $container->get('storage')->getFileByUri($path);
 
             self::assertCount(3, $file->getNamespaces());

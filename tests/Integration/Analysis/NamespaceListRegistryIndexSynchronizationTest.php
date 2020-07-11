@@ -39,7 +39,7 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
      */
     public function testOldNamespaceIsRemoved(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $registry = $this->container->get('namespaceListProvider.registry');
 
             $results = $registry->getAll();
@@ -54,7 +54,7 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
             return str_replace('namespace Test', '// namespace Test ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $registry = $this->container->get('namespaceListProvider.registry');
 
             self::assertCount(1, $registry->getAll());
@@ -70,7 +70,7 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
      */
     public function testExistingNamespaceIsUpdated(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $registry = $this->container->get('namespaceListProvider.registry');
 
             $results = $registry->getAll();
@@ -86,7 +86,7 @@ final class NamespaceListRegistryIndexSynchronizationTest extends AbstractIntegr
             return str_replace('namespace Test;', "namespace Test;\n\n", $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $registry = $this->container->get('namespaceListProvider.registry');
 
             $results = $registry->getAll();

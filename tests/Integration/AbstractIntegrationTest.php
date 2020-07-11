@@ -141,7 +141,7 @@ abstract class AbstractIntegrationTest extends TestCase
             $this->instantiateRequiredServices(self::$application, self::$testContainer);
         }
 
-        $this->prepareContainer(self::$testContainer, false);
+        $this->prepareContainer(self::$testContainer);
 
         return self::$testContainer;
     }

@@ -16,7 +16,7 @@ final class PathNormalizerTest extends TestCase
         $path = 'C:\Path\To\file.ext';
         $normalized = (new PathNormalizer())->normalize($path);
 
-        $this->assertEquals('C:/Path/To/file.ext', $normalized);
+        self::assertEquals('C:/Path/To/file.ext', $normalized);
     }
 
     /**
@@ -27,7 +27,7 @@ final class PathNormalizerTest extends TestCase
         $path = 'C:\Path/To\Other/file.ext';
         $normalized = (new PathNormalizer())->normalize($path);
 
-        $this->assertEquals('C:/Path/To/Other/file.ext', $normalized);
+        self::assertEquals('C:/Path/To/Other/file.ext', $normalized);
     }
 
     /**
@@ -38,7 +38,7 @@ final class PathNormalizerTest extends TestCase
         $path = 'file://C:\Path\To\file.ext';
         $normalized = (new PathNormalizer())->normalize($path);
 
-        $this->assertEquals('file://C:/Path/To/file.ext', $normalized);
+        self::assertEquals('file://C:/Path/To/file.ext', $normalized);
     }
 
     /**
@@ -49,7 +49,7 @@ final class PathNormalizerTest extends TestCase
         $path = '/path/to/file.ext';
         $normalized = (new PathNormalizer())->normalize($path);
 
-        $this->assertEquals($path, $normalized);
+        self::assertEquals($path, $normalized);
     }
 
     /**
@@ -60,7 +60,7 @@ final class PathNormalizerTest extends TestCase
         $path = 'relative/path/to/file.ext';
         $normalized = (new PathNormalizer())->normalize($path);
 
-        $this->assertEquals($path, $normalized);
+        self::assertEquals($path, $normalized);
     }
 
     /**
@@ -71,6 +71,6 @@ final class PathNormalizerTest extends TestCase
         $path = 'file:///relative/path/to/file.ext';
         $normalized = (new PathNormalizer())->normalize($path);
 
-        $this->assertEquals($path, $normalized);
+        self::assertEquals($path, $normalized);
     }
 }

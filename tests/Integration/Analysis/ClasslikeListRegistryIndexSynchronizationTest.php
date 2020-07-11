@@ -33,7 +33,7 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
      */
     public function testOldStructureIsRemoved(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $registry = $this->container->get('classlikeListProvider.registry');
 
             self::assertCount(1, $registry->getAll());
@@ -42,7 +42,7 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
             return str_replace('class Test', '// class Test ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $registry = $this->container->get('classlikeListProvider.registry');
 
             self::assertEmpty($registry->getAll());
@@ -58,7 +58,7 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
      */
     public function testExistingStructureIsUpdated(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $registry = $this->container->get('classlikeListProvider.registry');
 
             self::assertCount(1, $registry->getAll());
@@ -68,7 +68,7 @@ final class ClasslikeListRegistryIndexSynchronizationTest extends AbstractIntegr
             return str_replace('class Test {}', 'final class Test {}', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $registry = $this->container->get('classlikeListProvider.registry');
 
             self::assertCount(1, $registry->getAll());

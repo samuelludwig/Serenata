@@ -25,7 +25,7 @@ final class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
 
         $this->indexPath($this->container, $pathToIndex);
 
-        $time = $this->time(function () {
+        $time = $this->time(function (): void {
             $this->container->get('functionListProvider')->getAll();
         });
 
@@ -53,7 +53,7 @@ final class FunctionListProvidingPerformanceTest extends AbstractPerformanceTest
         $this->indexPath($this->container, $pathToIndex);
         $this->container->get('functionListProvider')->getAll();
 
-        $time = $this->time(function () {
+        $time = $this->time(function (): void {
             $this->container->get('functionListProvider')->getAll();
         });
 

@@ -23,7 +23,7 @@ final class EventEmittingStorageTest extends AbstractIntegrationTest
 
         $timesHit = 0;
 
-        $storage->on(IndexingEventName::CLASSLIKE_UPDATED, function () use (&$timesHit) {
+        $storage->on(IndexingEventName::CLASSLIKE_UPDATED, function () use (&$timesHit): void {
             ++$timesHit;
         });
 
@@ -47,7 +47,7 @@ final class EventEmittingStorageTest extends AbstractIntegrationTest
 
         $timesHit = 0;
 
-        $storage->on(IndexingEventName::CLASSLIKE_UPDATED, function () use (&$timesHit) {
+        $storage->on(IndexingEventName::CLASSLIKE_UPDATED, function () use (&$timesHit): void {
             ++$timesHit;
         });
 

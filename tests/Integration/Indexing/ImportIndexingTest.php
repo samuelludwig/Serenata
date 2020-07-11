@@ -193,7 +193,7 @@ final class ImportIndexingTest extends AbstractIntegrationTest
      */
     public function testChangesArePickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $file = $container->get('storage')->getFileByUri($path);
 
             self::assertCount(1, $file->getNamespaces());
@@ -203,7 +203,7 @@ final class ImportIndexingTest extends AbstractIntegrationTest
             return str_replace('N\A', 'N\B', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $file = $container->get('storage')->getFileByUri($path);
 
             self::assertCount(1, $file->getNamespaces());

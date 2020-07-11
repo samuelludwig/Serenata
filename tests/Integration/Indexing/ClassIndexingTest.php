@@ -273,7 +273,7 @@ final class ClassIndexingTest extends AbstractIntegrationTest
      */
     public function testRenameChangeIsPickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
             self::assertCount(1, $structures);
@@ -285,7 +285,7 @@ final class ClassIndexingTest extends AbstractIntegrationTest
             return str_replace('Test', 'Test2 ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
             self::assertCount(1, $structures);
@@ -305,7 +305,7 @@ final class ClassIndexingTest extends AbstractIntegrationTest
      */
     public function testParentChangeIsPickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
             self::assertCount(3, $structures);
@@ -317,7 +317,7 @@ final class ClassIndexingTest extends AbstractIntegrationTest
             return str_replace('Parent1', 'Parent2 ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
             self::assertCount(3, $structures);

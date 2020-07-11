@@ -41,7 +41,7 @@ final class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
      */
     public function testChangesArePickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
 
             self::assertCount(1, $types);
@@ -54,7 +54,7 @@ final class MetaStaticMethodTypesIndexingTest extends AbstractIntegrationTest
             return str_replace('\A\\', '\B\\', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $types = $this->container->get('metadataProvider')->getMetaStaticMethodTypesFor('\A\Foo', 'get');
             self::assertCount(0, $types);
 

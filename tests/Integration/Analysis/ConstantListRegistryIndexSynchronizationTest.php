@@ -33,7 +33,7 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
      */
     public function testOldConstantIsRemoved(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $registry = $this->container->get('constantListProvider.registry');
 
             self::assertCount(1, $registry->getAll());
@@ -42,7 +42,7 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
             return str_replace('const TEST', '// const TEST ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $registry = $this->container->get('constantListProvider.registry');
 
             self::assertEmpty($registry->getAll());
@@ -58,7 +58,7 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
      */
     public function testExistingConstantIsUpdated(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $registry = $this->container->get('constantListProvider.registry');
 
             self::assertCount(1, $registry->getAll());
@@ -68,7 +68,7 @@ final class ConstantListRegistryIndexSynchronizationTest extends AbstractIntegra
             return str_replace('const TEST = 1', 'const TEST = 2', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $registry = $this->container->get('constantListProvider.registry');
 
             self::assertCount(1, $registry->getAll());

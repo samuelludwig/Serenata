@@ -418,6 +418,7 @@ final class DefinitionLocatorTest extends AbstractIntegrationTest
 
         // Assert that the range doesn't extend longer than it should.
         $gotException = false;
+        $resultBeforeRange = null;
 
         try {
             $resultBeforeRange = $this->locateDefinition($fileName, $start - 1);
@@ -443,6 +444,7 @@ final class DefinitionLocatorTest extends AbstractIntegrationTest
         );
 
         $gotException = false;
+        $resultAfterRange = null;
 
         try {
             $resultAfterRange = $this->locateDefinition($fileName, $end + 1);

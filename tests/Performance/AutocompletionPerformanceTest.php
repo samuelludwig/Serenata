@@ -67,7 +67,7 @@ final class AutocompletionPerformanceTest extends AbstractPerformanceTest
         $positionThatWillGenerateNonEmptyPrefix += strlen('d');
         $position = Position::createFromByteOffset($positionThatWillGenerateNonEmptyPrefix, $code, 'UTF-8');
 
-        $time = $this->time(function () use ($testFilePath, $code, $position) {
+        $time = $this->time(function () use ($testFilePath, $code, $position): void {
             $suggestions = $this->container->get('autocompletionProvider')->provide(
                 new AutocompletionProviderContext(new TextDocumentItem($testFilePath, $code), $position, 'd')
             );

@@ -701,11 +701,6 @@ parameters:
 			path: tests/Integration/AbstractIntegrationTest.php
 
 		-
-			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:prepareContainer\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: tests/Integration/AbstractIntegrationTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$indexer of method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:indexUriViaIndexer\\(\\) expects Serenata\\\\Indexing\\\\IndexerInterface, object\\|null given\\.$#"
 			count: 4
 			path: tests/Integration/AbstractIntegrationTest.php
@@ -746,16 +741,6 @@ parameters:
 			path: tests/Integration/Analysis/ClasslikeListRegistryIndexSynchronizationTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/ClasslikeListRegistryIndexSynchronizationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/ClasslikeListRegistryIndexSynchronizationTest.php
-
-		-
 			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
 			count: 3
 			path: tests/Integration/Analysis/ClasslikeListRegistryWorkspaceInteractionTest.php
@@ -788,16 +773,6 @@ parameters:
 		-
 			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
 			count: 12
-			path: tests/Integration/Analysis/ConstantListRegistryIndexSynchronizationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/ConstantListRegistryIndexSynchronizationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
 			path: tests/Integration/Analysis/ConstantListRegistryIndexSynchronizationTest.php
 
 		-
@@ -846,16 +821,6 @@ parameters:
 			path: tests/Integration/Analysis/FunctionListRegistryIndexSynchronizationTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/FunctionListRegistryIndexSynchronizationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/FunctionListRegistryIndexSynchronizationTest.php
-
-		-
 			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
 			count: 3
 			path: tests/Integration/Analysis/FunctionListRegistryWorkspaceInteractionTest.php
@@ -891,23 +856,8 @@ parameters:
 			path: tests/Integration/Analysis/NamespaceListProviderTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"bool\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/NamespaceListProviderTest.php
-
-		-
 			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
 			count: 6
-			path: tests/Integration/Analysis/NamespaceListRegistryIndexSynchronizationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 2
-			path: tests/Integration/Analysis/NamespaceListRegistryIndexSynchronizationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
 			path: tests/Integration/Analysis/NamespaceListRegistryIndexSynchronizationTest.php
 
 		-
@@ -986,11 +936,6 @@ parameters:
 			path: tests/Integration/Analysis/VariableScannerTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Analysis/VariableScannerTest.php
-
-		-
 			message: "#^Cannot call method getAvailableVariables\\(\\) on object\\|null\\.$#"
 			count: 2
 			path: tests/Integration/Analysis/VariableScannerTest.php
@@ -1051,11 +996,6 @@ parameters:
 			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
 
 		-
-			message: "#^Variable \\$resultBeforeRange might not be defined\\.$#"
-			count: 6
-			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
-
-		-
 			message: "#^Strict comparison using \\=\\=\\= between false and false will always evaluate to true\\.$#"
 			count: 2
 			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
@@ -1073,11 +1013,6 @@ parameters:
 		-
 			message: "#^Cannot access offset 0 on array\\<Serenata\\\\Utility\\\\Location\\>\\|Serenata\\\\Utility\\\\Location\\|null\\.$#"
 			count: 8
-			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
-
-		-
-			message: "#^Variable \\$resultAfterRange might not be defined\\.$#"
-			count: 7
 			path: tests/Integration/GotoDefinition/DefinitionLocatorTest.php
 
 		-
@@ -1101,73 +1036,23 @@ parameters:
 			path: tests/Integration/Indexing/ClassConstantIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/ClassConstantIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/ClassConstantIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 7
 			path: tests/Integration/Indexing/ClassIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 2
-			path: tests/Integration/Indexing/ClassIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
-			path: tests/Integration/Indexing/ClassIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/ConstantIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 3
 			path: tests/Integration/Indexing/ConstantIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/ConstantIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/DefineIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 3
 			path: tests/Integration/Indexing/DefineIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/DefineIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/FileIndexerFileNamespaceProviderCombinationTest.php
 
 		-
 			message: "#^Cannot call method provide\\(\\) on object\\|null\\.$#"
 			count: 2
-			path: tests/Integration/Indexing/FileIndexerFileNamespaceProviderCombinationTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
 			path: tests/Integration/Indexing/FileIndexerFileNamespaceProviderCombinationTest.php
 
 		-
@@ -1191,18 +1076,8 @@ parameters:
 			path: tests/Integration/Indexing/FunctionIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/FunctionIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 3
-			path: tests/Integration/Indexing/FunctionIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
 			path: tests/Integration/Indexing/FunctionIndexingTest.php
 
 		-
@@ -1211,43 +1086,13 @@ parameters:
 			path: tests/Integration/Indexing/ImportIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/ImportIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/ImportIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 4
 			path: tests/Integration/Indexing/InterfaceIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/InterfaceIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/InterfaceIndexingTest.php
-
-		-
 			message: "#^Cannot call method getMetaStaticMethodTypesFor\\(\\) on object\\|null\\.$#"
 			count: 4
-			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
 			path: tests/Integration/Indexing/MetaStaticMethodTypesIndexingTest.php
 
 		-
@@ -1261,18 +1106,8 @@ parameters:
 			path: tests/Integration/Indexing/MethodIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/MethodIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 3
-			path: tests/Integration/Indexing/MethodIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
 			path: tests/Integration/Indexing/MethodIndexingTest.php
 
 		-
@@ -1281,43 +1116,13 @@ parameters:
 			path: tests/Integration/Indexing/NamespaceIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/NamespaceIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/NamespaceIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 7
 			path: tests/Integration/Indexing/PropertyIndexingTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/PropertyIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/PropertyIndexingTest.php
-
-		-
 			message: "#^Cannot call method getRepository\\(\\) on object\\|null\\.$#"
 			count: 8
-			path: tests/Integration/Indexing/TraitIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"string\"\\.$#"
-			count: 1
-			path: tests/Integration/Indexing/TraitIndexingTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 1
 			path: tests/Integration/Indexing/TraitIndexingTest.php
 
 		-
@@ -1406,16 +1211,6 @@ parameters:
 			path: tests/Integration/Tooltips/TooltipProviderTest.php
 
 		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:arrayHasKey\\(\\)\\.$#"
-			count: 24
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:logicalNot\\(\\)\\.$#"
-			count: 2
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
-
-		-
 			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertNotNull\\(\\) with array\\<string, mixed\\> will always evaluate to true\\.$#"
 			count: 4
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassInfoJsonRpcQueueItemHandlerTest.php
@@ -1436,16 +1231,6 @@ parameters:
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ClassListJsonRpcQueueItemHandlerTest.php
 
 		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:arrayHasKey\\(\\)\\.$#"
-			count: 5
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:logicalNot\\(\\)\\.$#"
-			count: 1
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
-
-		-
 			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\GlobalConstantsJsonRpcQueueItemHandlerTest\\:\\:getGlobalConstants\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalConstantsJsonRpcQueueItemHandlerTest.php
@@ -1461,16 +1246,6 @@ parameters:
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalFunctionsJsonRpcQueueItemHandlerTest.php
 
 		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:arrayHasKey\\(\\)\\.$#"
-			count: 3
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalFunctionsJsonRpcQueueItemHandlerTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:logicalNot\\(\\)\\.$#"
-			count: 1
-			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/GlobalFunctionsJsonRpcQueueItemHandlerTest.php
-
-		-
 			message: "#^Cannot call method localizeType\\(\\) on object\\|null\\.$#"
 			count: 17
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/LocalizeTypeJsonRpcQueueItemHandlerTest.php
@@ -1479,11 +1254,6 @@ parameters:
 			message: "#^Cannot call method resolveType\\(\\) on object\\|null\\.$#"
 			count: 2
 			path: tests/Integration/UserInterface/JsonRpcQueueItemHandler/ResolveTypeJsonRpcQueueItemHandlerTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:markTestSkipped\\(\\)\\.$#"
-			count: 1
-			path: tests/Performance/AbstractPerformanceTest.php
 
 		-
 			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
@@ -1497,11 +1267,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: tests/Performance/AutocompletionPerformanceTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
 			count: 1
 			path: tests/Performance/AutocompletionPerformanceTest.php
 
@@ -1521,11 +1286,6 @@ parameters:
 			path: tests/Performance/FunctionListProvidingPerformanceTest.php
 
 		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
-			path: tests/Performance/FunctionListProvidingPerformanceTest.php
-
-		-
 			message: "#^Cannot call method getAll\\(\\) on object\\|null\\.$#"
 			count: 3
 			path: tests/Performance/FunctionListProvidingPerformanceTest.php
@@ -1537,11 +1297,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method initialize\\(\\) on object\\|null\\.$#"
-			count: 2
-			path: tests/Performance/IndexingPerformanceTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
 			count: 2
 			path: tests/Performance/IndexingPerformanceTest.php
 
@@ -1559,16 +1314,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$autocompletionPrefixBoundaryTokenRetriever of class Serenata\\\\Autocompletion\\\\AutocompletionPrefixDeterminer constructor expects Serenata\\\\Autocompletion\\\\AutocompletionPrefixBoundaryTokenRetrieverInterface, PHPUnit_Framework_MockObject_MockObject given\\.$#"
 			count: 2
 			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 2
-			path: tests/Unit/Indexing/EventEmittingStorageTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertEquals\\(\\)\\.$#"
-			count: 6
-			path: tests/Unit/Indexing/PathNormalizerTest.php
 
 		-
 			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"

@@ -23,7 +23,7 @@ final class IndexingPerformanceTest extends AbstractPerformanceTest
             false
         );
 
-        $time = $this->time(function () use ($pathToIndex) {
+        $time = $this->time(function () use ($pathToIndex): void {
             $this->indexPath($this->container, $pathToIndex);
         });
 
@@ -49,7 +49,7 @@ final class IndexingPerformanceTest extends AbstractPerformanceTest
             false
         );
 
-        $time = $this->time(function () use ($pathToIndex) {
+        $time = $this->time(function () use ($pathToIndex): void {
             $this->indexPath($this->container, $pathToIndex);
         });
 

@@ -147,7 +147,12 @@ final class VariableScannerTest extends AbstractIntegrationTest
             $markerOffsets[$i++] = $markerOffset;
         }
 
-        $doMarkerTest = function ($markerNumber, array $variableNames) use ($scanner, $fullPath, $markerOffsets, $code) {
+        $doMarkerTest = function ($markerNumber, array $variableNames) use (
+            $scanner,
+            $fullPath,
+            $markerOffsets,
+            $code
+        ): void {
             $list = [];
 
             foreach ($variableNames as $variableName) {

@@ -1631,14 +1631,14 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         self::assertSame($output['parents'], ['\A\BaseClass', '\A\AncestorClass']);
         self::assertSame($output['directParents'], ['\A\BaseClass']);
 
-        self::assertThat($output['constants'], $this->arrayHasKey('INHERITED_CONSTANT'));
-        self::assertThat($output['constants'], $this->arrayHasKey('CHILD_CONSTANT'));
+        self::assertThat($output['constants'], self::arrayHasKey('INHERITED_CONSTANT'));
+        self::assertThat($output['constants'], self::arrayHasKey('CHILD_CONSTANT'));
 
-        self::assertThat($output['properties'], $this->arrayHasKey('inheritedProperty'));
-        self::assertThat($output['properties'], $this->arrayHasKey('childProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('inheritedProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('childProperty'));
 
-        self::assertThat($output['methods'], $this->arrayHasKey('inheritedMethod'));
-        self::assertThat($output['methods'], $this->arrayHasKey('childMethod'));
+        self::assertThat($output['methods'], self::arrayHasKey('inheritedMethod'));
+        self::assertThat($output['methods'], self::arrayHasKey('childMethod'));
 
         // Do a couple of sanity checks.
         self::assertSame('\A\BaseClass', $output['constants']['INHERITED_CONSTANT']['declaringClass']['fqcn']);
@@ -1667,11 +1667,11 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         self::assertSame(['\A\BaseInterface', '\A\FirstInterface', '\A\SecondInterface'], $output['interfaces']);
         self::assertSame(['\A\FirstInterface', '\A\SecondInterface'], $output['directInterfaces']);
 
-        self::assertThat($output['constants'], $this->arrayHasKey('FIRST_INTERFACE_CONSTANT'));
-        self::assertThat($output['constants'], $this->arrayHasKey('SECOND_INTERFACE_CONSTANT'));
+        self::assertThat($output['constants'], self::arrayHasKey('FIRST_INTERFACE_CONSTANT'));
+        self::assertThat($output['constants'], self::arrayHasKey('SECOND_INTERFACE_CONSTANT'));
 
-        self::assertThat($output['methods'], $this->arrayHasKey('methodFromFirstInterface'));
-        self::assertThat($output['methods'], $this->arrayHasKey('methodFromSecondInterface'));
+        self::assertThat($output['methods'], self::arrayHasKey('methodFromFirstInterface'));
+        self::assertThat($output['methods'], self::arrayHasKey('methodFromSecondInterface'));
 
         // Do a couple of sanity checks.
         self::assertSame('\A\FirstInterface', $output['constants']['FIRST_INTERFACE_CONSTANT']['declaringClass']['fqcn']);
@@ -1697,13 +1697,13 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         self::assertSame(['\A\FirstTrait', '\A\SecondTrait', '\A\BaseTrait'], $output['traits']);
         self::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
 
-        self::assertThat($output['properties'], $this->arrayHasKey('baseTraitProperty'));
-        self::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
-        self::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('baseTraitProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('firstTraitProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('secondTraitProperty'));
 
-        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
-        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
-        self::assertThat($output['methods'], $this->arrayHasKey('baseTraitMethod'));
+        self::assertThat($output['methods'], self::arrayHasKey('testAmbiguous'));
+        self::assertThat($output['methods'], self::arrayHasKey('testAmbiguousAsWell'));
+        self::assertThat($output['methods'], self::arrayHasKey('baseTraitMethod'));
 
         // Do a couple of sanity checks.
         self::assertSame('\A\BaseClass', $output['properties']['baseTraitProperty']['declaringClass']['fqcn']);
@@ -1725,8 +1725,8 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         self::assertSame('\A\TestClass', $output['methods']['overriddenInChild']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
-        self::assertThat($output['methods'], $this->arrayHasKey('test1'));
-        self::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+        self::assertThat($output['methods'], self::arrayHasKey('test1'));
+        self::assertThat($output['methods'], self::logicalNot(self::arrayHasKey('test')));
 
         self::assertTrue($output['methods']['test1']['isPrivate']);
 
@@ -1813,11 +1813,11 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         self::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['traits']);
         self::assertSame(['\A\FirstTrait', '\A\SecondTrait'], $output['directTraits']);
 
-        self::assertThat($output['properties'], $this->arrayHasKey('firstTraitProperty'));
-        self::assertThat($output['properties'], $this->arrayHasKey('secondTraitProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('firstTraitProperty'));
+        self::assertThat($output['properties'], self::arrayHasKey('secondTraitProperty'));
 
-        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguous'));
-        self::assertThat($output['methods'], $this->arrayHasKey('testAmbiguousAsWell'));
+        self::assertThat($output['methods'], self::arrayHasKey('testAmbiguous'));
+        self::assertThat($output['methods'], self::arrayHasKey('testAmbiguousAsWell'));
 
         // Do a couple of sanity checks.
         self::assertSame('\A\TestTrait', $output['properties']['firstTraitProperty']['declaringClass']['fqcn']);
@@ -1827,8 +1827,8 @@ final class ClassInfoJsonRpcQueueItemHandlerTest extends AbstractIntegrationTest
         self::assertSame('\A\FirstTrait', $output['methods']['test1']['declaringStructure']['fqcn']);
 
         // Test the 'as' keyword for renaming trait method.
-        self::assertThat($output['methods'], $this->arrayHasKey('test1'));
-        self::assertThat($output['methods'], $this->logicalNot($this->arrayHasKey('test')));
+        self::assertThat($output['methods'], self::arrayHasKey('test1'));
+        self::assertThat($output['methods'], self::logicalNot(self::arrayHasKey('test')));
 
         self::assertTrue($output['methods']['test1']['isPrivate']);
 

@@ -205,7 +205,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
      */
     public function testChangesArePickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
             self::assertCount(1, $structures);
@@ -217,7 +217,7 @@ final class TraitIndexingTest extends AbstractIntegrationTest
             return str_replace('Test', 'Test2 ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $structures = $this->container->get('managerRegistry')->getRepository(Structures\Trait_::class)->findAll();
 
             self::assertCount(1, $structures);

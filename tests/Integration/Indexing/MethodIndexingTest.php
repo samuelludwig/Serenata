@@ -559,7 +559,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
      */
     public function testChangesArePickedUpOnReindex(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
             self::assertCount(1, $classes);
@@ -572,7 +572,7 @@ final class MethodIndexingTest extends AbstractIntegrationTest
             return str_replace('foo', 'foo2 ', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $classes = $this->container->get('managerRegistry')->getRepository(Structures\Class_::class)->findAll();
 
             self::assertCount(1, $classes);

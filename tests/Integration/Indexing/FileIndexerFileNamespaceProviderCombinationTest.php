@@ -19,7 +19,7 @@ final class FileIndexerFileNamespaceProviderCombinationTest extends AbstractInte
      */
     public function testNewImportsArePickedUpIn(): void
     {
-        $afterIndex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterIndex = function (ContainerBuilder $container, string $path, string $source): string {
             $results = $container->get('fileNamespaceProvider')->provide($path);
 
             self::assertCount(3, $results);
@@ -28,7 +28,7 @@ final class FileIndexerFileNamespaceProviderCombinationTest extends AbstractInte
             return str_replace('// ', '', $source);
         };
 
-        $afterReindex = function (ContainerBuilder $container, string $path, string $source) {
+        $afterReindex = function (ContainerBuilder $container, string $path, string $source): void {
             $results = $container->get('fileNamespaceProvider')->provide($path);
 
             self::assertCount(3, $results);

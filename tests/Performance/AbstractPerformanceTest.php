@@ -42,7 +42,7 @@ abstract class AbstractPerformanceTest extends AbstractIntegrationTest
      */
     protected function finish(float $time): void
     {
-        $this->markTestSkipped("Took {$time} milliseconds (" . ($time / 1000) . " seconds)");
+        self::markTestSkipped("Took {$time} milliseconds (" . ($time / 1000) . " seconds)");
     }
 
 

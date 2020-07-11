@@ -19,12 +19,12 @@ final class GlobalFunctionsJsonRpcQueueItemHandlerTest extends AbstractIntegrati
 
         $output = $command->getGlobalFunctions();
 
-        self::assertThat($output, $this->arrayHasKey('\A\firstFunction'));
+        self::assertThat($output, self::arrayHasKey('\A\firstFunction'));
         self::assertSame($output['\A\firstFunction']['name'], 'firstFunction');
         self::assertSame($output['\A\firstFunction']['fqcn'], '\A\firstFunction');
-        self::assertThat($output, $this->arrayHasKey('\A\secondFunction'));
+        self::assertThat($output, self::arrayHasKey('\A\secondFunction'));
         self::assertSame($output['\A\secondFunction']['name'], 'secondFunction');
         self::assertSame($output['\A\secondFunction']['fqcn'], '\A\secondFunction');
-        self::assertThat($output, $this->logicalNot($this->arrayHasKey('shouldNotShowUp')));
+        self::assertThat($output, self::logicalNot(self::arrayHasKey('shouldNotShowUp')));
     }
 }
