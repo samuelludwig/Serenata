@@ -14,14 +14,14 @@ use PHPUnit\Framework\TestCase;
 final class JsonRpcQueueTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var MockObject&JsonRpcRequestPriorityDeterminerInterface
      */
     private $requestPriorityDeterminer;
 
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->requestPriorityDeterminer = $this->getMockBuilder(JsonRpcRequestPriorityDeterminerInterface::class)
             ->setMethods(['determine'])
@@ -105,7 +105,7 @@ final class JsonRpcQueueTest extends TestCase
             $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
-        $this->requestPriorityDeterminer->expects($this->once())->method('determine')->with($queueItem->getRequest());
+        $this->requestPriorityDeterminer->expects(self::once())->method('determine')->with($queueItem->getRequest());
 
         $queue->push($queueItem);
 
@@ -124,7 +124,7 @@ final class JsonRpcQueueTest extends TestCase
             $this->getMockBuilder(JsonRpcMessageSenderInterface::class)->getMock()
         );
 
-        $this->requestPriorityDeterminer->expects($this->never())->method('determine');
+        $this->requestPriorityDeterminer->expects(self::never())->method('determine');
 
         $queue->push($queueItem, 1);
 

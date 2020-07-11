@@ -38,8 +38,8 @@ final class FuzzyMatchingAutocompletionProviderTest extends TestCase
             new CompletionItem('test12', CompletionItemKind::FUNCTION, 'test', null, 'test', null),
         ];
 
-        $delegate->expects($this->once())->method('provide')->willReturn($suggestions);
-        $bestStringApproximationDeterminer->expects($this->once())->method('determine')->willReturn([
+        $delegate->expects(self::once())->method('provide')->willReturn($suggestions);
+        $bestStringApproximationDeterminer->expects(self::once())->method('determine')->willReturn([
             $suggestions[1],
             $suggestions[0],
         ]);

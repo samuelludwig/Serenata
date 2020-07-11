@@ -9,7 +9,7 @@ use Serenata\Tests\Integration\Autocompletion\Providers\AbstractAutocompletionPr
  */
 abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAutocompletionProviderTest
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

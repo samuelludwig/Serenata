@@ -26,7 +26,7 @@ final class ClassLikeNodeTypeDeducerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->classLikeNodeTypeDeducer = new ClassLikeNodeTypeDeducer();
     }

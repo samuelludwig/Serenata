@@ -166,16 +166,6 @@ parameters:
 			path: src/Analysis/TraitFilteringClasslikeListProvider.php
 
 		-
-			message: "#^Argument of an invalid type PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
-			count: 2
-			path: src/Analysis/Typing/Deduction/ClassConstFetchNodeTypeDeducer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/ConstFetchNodeTypeDeducer.php
@@ -266,61 +256,6 @@ parameters:
 			path: src/Analysis/Visiting/TypeQueryingVisitor.php
 
 		-
-			message: "#^Property Serenata\\\\Analysis\\\\Visiting\\\\UseStatementFetchingVisitor\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Analysis/Visiting/UseStatementFetchingVisitor.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:determine\\(\\) should return array\\<T\\> but returns array\\<array\\>\\.$#"
-			count: 1
-			path: src/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminer.php
-
-		-
-			message: "#^Class Serenata\\\\Autocompletion\\\\CompletionItem implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetSet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetSet\\(\\) has parameter \\$value with no typehint specified\\.$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetExists\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetUnset\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetGet\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\CompletionItem\\:\\:offsetGet\\(\\) has parameter \\$offset with no typehint specified\\.$#"
-			count: 1
-			path: src/Autocompletion/CompletionItem.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\FunctionAutocompletionSuggestionLabelCreator\\:\\:create\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Autocompletion/FunctionAutocompletionSuggestionLabelCreator.php
-
-		-
-			message: "#^Method Serenata\\\\Autocompletion\\\\FunctionParametersEvaluator\\:\\:hasRequiredParameters\\(\\) has parameter \\$function with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Autocompletion/FunctionParametersEvaluator.php
-
-		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
 			count: 1
 			path: src/Autocompletion/Providers/LocalVariableAutocompletionProvider.php
@@ -339,16 +274,6 @@ parameters:
 			message: "#^Unused @throws Serenata\\\\Commands\\\\BadCommandArgumentsException annotation$#"
 			count: 7
 			path: src/Commands/CommandFactory.php
-
-		-
-			message: "#^Foreach overwrites \\$classType with its value variable\\.$#"
-			count: 1
-			path: src/GotoDefinition/ClassConstFetchNodeDefinitionLocator.php
-
-		-
-			message: "#^Method Serenata\\\\GotoDefinition\\\\DefinitionLocator\\:\\:getNodeAt\\(\\) should return PhpParser\\\\Node but returns PhpParser\\\\Node\\|null\\.$#"
-			count: 1
-			path: src/GotoDefinition/DefinitionLocator.php
 
 		-
 			message: "#^Missing @throws Serenata\\\\NameQualificationUtilities\\\\Exception\\\\MalformedNameEncounteredException annotation$#"
@@ -456,57 +381,12 @@ parameters:
 			path: src/Indexing/UpdateEnforcingIndexer.php
 
 		-
-			message: "#^Parameter \\#2 \\$classlike of method Serenata\\\\Indexing\\\\Visiting\\\\ClasslikeIndexingVisitor\\:\\:processClassLikeRelations\\(\\) expects Serenata\\\\Indexing\\\\Structures\\\\Classlike, object given\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Parameter \\#2 \\$classlike of method Serenata\\\\Indexing\\\\Visiting\\\\ClasslikeIndexingVisitor\\:\\:processTraitUseNode\\(\\) expects Serenata\\\\Indexing\\\\Structures\\\\Classlike, object given\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Cannot access property \\$name on PhpParser\\\\Node\\\\Identifier\\|null\\.$#"
-			count: 3
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Cannot call method getAttribute\\(\\) on PhpParser\\\\Node\\\\Name\\|null\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 3
 			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
 
 		-
 			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Identifier\\|PhpParser\\\\Node\\\\Name\\|PhpParser\\\\Node\\\\UnionType\\:\\:toString\\(\\)\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Parameter \\#10 \\$accessModifier of class Serenata\\\\Indexing\\\\Structures\\\\Method constructor expects Serenata\\\\Indexing\\\\Structures\\\\AccessModifier, Serenata\\\\Indexing\\\\Structures\\\\AccessModifier\\|null given\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Parameter \\#2 \\$name of class Serenata\\\\Indexing\\\\Structures\\\\MethodParameter constructor expects string, PhpParser\\\\Node\\\\Expr\\|string given\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Parameter \\#12 \\$accessModifier of class Serenata\\\\Indexing\\\\Structures\\\\ClassConstant constructor expects Serenata\\\\Indexing\\\\Structures\\\\AccessModifier, Serenata\\\\Indexing\\\\Structures\\\\AccessModifier\\|null given\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
-
-		-
-			message: "#^Method Serenata\\\\Indexing\\\\Visiting\\\\ClasslikeIndexingVisitor\\:\\:findStructureByFqcn\\(\\) should return Serenata\\\\Indexing\\\\Structures\\\\Classlike\\|null but returns object\\.$#"
 			count: 1
 			path: src/Indexing/Visiting/ClasslikeIndexingVisitor.php
 
@@ -526,17 +406,7 @@ parameters:
 			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
 
 		-
-			message: "#^Binary operation \"\\.\" between '\\$' and PhpParser\\\\Node\\\\Expr\\|string results in an error\\.$#"
-			count: 1
-			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
-			count: 1
-			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
-
-		-
-			message: "#^Parameter \\#2 \\$name of class Serenata\\\\Indexing\\\\Structures\\\\FunctionParameter constructor expects string, PhpParser\\\\Node\\\\Expr\\|string given\\.$#"
 			count: 1
 			path: src/Indexing/Visiting/FunctionIndexingVisitor.php
 
@@ -544,16 +414,6 @@ parameters:
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
 			count: 3
 			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
-
-		-
-			message: "#^Method Serenata\\\\Parsing\\\\DocblockTypeTransformer\\:\\:transform\\(\\) should return PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode but returns PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\CallableTypeParameterNode\\.$#"
-			count: 1
-			path: src/Parsing/DocblockTypeTransformer.php
-
-		-
-			message: "#^Parameter \\#1 \\$keyName of class PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\ArrayShapeItemNode constructor expects PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprIntegerNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprStringNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\IdentifierTypeNode\\|null, PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprIntegerNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\ConstExprStringNode\\|PHPStan\\\\PhpDocParser\\\\Ast\\\\Type\\\\TypeNode\\|null given\\.$#"
-			count: 1
-			path: src/Parsing/DocblockTypeTransformer.php
 
 		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
@@ -849,11 +709,6 @@ parameters:
 			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Integration/AbstractIntegrationTest.php
 
 		-
 			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:tearDown\\(\\) has no return typehint specified\\.$#"
@@ -1199,11 +1054,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$offset of static method Serenata\\\\Common\\\\Position\\:\\:createFromByteOffset\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: tests/Integration/Analysis/VariableScannerTest.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\Autocompletion\\\\ApplicabilityChecking\\\\AbstractAutocompletionApplicabilityCheckerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Integration/Autocompletion/ApplicabilityChecking/AbstractAutocompletionApplicabilityCheckerTest.php
 
 		-
 			message: "#^Cannot call method getSourceCodeFromFile\\(\\) on object\\|null\\.$#"
@@ -1741,16 +1591,6 @@ parameters:
 			path: tests/Performance/IndexingPerformanceTest.php
 
 		-
-			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Analysis\\\\FilePositionClasslikeDeterminerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Analysis/FilePositionClasslikeDeterminerTest.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Analysis\\\\Typing\\\\Deduction\\\\ClassLikeNodeTypeDeducerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Analysis/Typing/Deduction/ClassLikeNodeTypeDeducerTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$nodes of method PhpParser\\\\NodeTraverser\\:\\:traverse\\(\\) expects array\\<PhpParser\\\\Node\\>, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
 			count: 1
 			path: tests/Unit/Analysis/Visiting/ScopeLimitingVisitorTest.php
@@ -1761,34 +1601,14 @@ parameters:
 			path: tests/Unit/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminerTest.php
 
 		-
-			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Autocompletion\\\\AutocompletionPrefixDeterminerTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$autocompletionPrefixBoundaryTokenRetriever of class Serenata\\\\Autocompletion\\\\AutocompletionPrefixDeterminer constructor expects Serenata\\\\Autocompletion\\\\AutocompletionPrefixBoundaryTokenRetrieverInterface, PHPUnit_Framework_MockObject_MockObject given\\.$#"
 			count: 2
 			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
 
 		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
-			count: 2
-			path: tests/Unit/Autocompletion/Providers/FuzzyMatchingAutocompletionProviderTest.php
-
-		-
 			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
 			count: 2
 			path: tests/Unit/Indexing/EventEmittingStorageTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
-			count: 5
-			path: tests/Unit/Indexing/FilePruningTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
-			count: 1
-			path: tests/Unit/Indexing/FilePruningTest.php
 
 		-
 			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertEquals\\(\\)\\.$#"
@@ -1874,64 +1694,4 @@ parameters:
 			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'PhpParser\\\\\\\\Node\\\\\\\\Arg' and PhpParser\\\\Node\\\\Arg will always evaluate to true\\.$#"
 			count: 12
 			path: tests/Unit/Parsing/PartialParserTest.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Sockets\\\\JsonRpcQueueItemProcessorTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
-			count: 9
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Anonymous function should have native return typehint \"void\"\\.$#"
-			count: 5
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Cannot call method getCode\\(\\) on Serenata\\\\Sockets\\\\JsonRpcError\\|null\\.$#"
-			count: 4
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Cannot call method getMessage\\(\\) on Serenata\\\\Sockets\\\\JsonRpcError\\|null\\.$#"
-			count: 4
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Cannot call method getData\\(\\) on Serenata\\\\Sockets\\\\JsonRpcError\\|null\\.$#"
-			count: 4
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:throwException\\(\\)\\.$#"
-			count: 1
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
-			count: 1
-			path: tests/Unit/Sockets/JsonRpcQueueItemProcessorTest.php
-
-		-
-			message: "#^Method Serenata\\\\Tests\\\\Unit\\\\Sockets\\\\JsonRpcQueueTest\\:\\:setUp\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Unit/Sockets/JsonRpcQueueTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$jsonRpcRequestPriorityDeterminer of class Serenata\\\\Sockets\\\\JsonRpcQueue constructor expects Serenata\\\\Sockets\\\\JsonRpcRequestPriorityDeterminerInterface, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 7
-			path: tests/Unit/Sockets/JsonRpcQueueTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:once\\(\\)\\.$#"
-			count: 1
-			path: tests/Unit/Sockets/JsonRpcQueueTest.php
-
-		-
-			message: "#^Dynamic call to static method PHPUnit\\\\Framework\\\\TestCase\\:\\:never\\(\\)\\.$#"
-			count: 1
-			path: tests/Unit/Sockets/JsonRpcQueueTest.php
 

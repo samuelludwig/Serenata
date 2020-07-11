@@ -52,12 +52,12 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
     private $testMethod;
 
     /**
-     * @var MockObject
+     * @var MockObject&JsonRpcQueueItemHandlerInterface
      */
     private $commandMock;
 
     /**
-     * @var MockObject
+     * @var MockObject&ActiveWorkspaceManager
      */
     private $activeWorkspaceManagerMock;
 
@@ -69,7 +69,7 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->jsonRpcQueueItemHandlerFactoryMock = $this
             ->getMockBuilder(JsonRpcQueueItemHandlerFactoryInterface::class)
@@ -121,12 +121,12 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
         $responseDeferred = new Deferred();
         $responseDeferred->resolve($response);
 
-        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->willReturn(
+        $this->commandMock->expects(self::once())->method('execute')->with($queueItem)->willReturn(
             $responseDeferred->promise()
         );
 
-        $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
-            function (JsonRpcResponse $jsonRpcResponse) use ($response) {
+        $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
+            function (JsonRpcResponse $jsonRpcResponse) use ($response): void {
                 static::assertSame($response, $jsonRpcResponse);
             }
         );
@@ -144,13 +144,14 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
             $this->jsonRpcResponseSenderMock
         );
 
-        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->willThrowException(
+        $this->commandMock->expects(self::once())->method('execute')->with($queueItem)->willThrowException(
             new UnexpectedValueException('Exception message')
         );
 
-        $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
-            function (JsonRpcResponse $jsonRpcResponse) {
+        $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
+            function (JsonRpcResponse $jsonRpcResponse): void {
                 static::assertSame('theRequestId', $jsonRpcResponse->getId());
+                static::assertNotNull($jsonRpcResponse->getError());
                 static::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
                 static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
 
@@ -176,13 +177,14 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
             $this->jsonRpcResponseSenderMock
         );
 
-        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->will($this->throwException(
+        $this->commandMock->expects(self::once())->method('execute')->with($queueItem)->will(self::throwException(
             new LogicException('Exception message')
         ));
 
-        $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
-            function (JsonRpcResponse $jsonRpcResponse) {
+        $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
+            function (JsonRpcResponse $jsonRpcResponse): void {
                 static::assertSame('theRequestId', $jsonRpcResponse->getId());
+                static::assertNotNull($jsonRpcResponse->getError());
                 static::assertSame(JsonRpcErrorCode::FATAL_SERVER_ERROR, $jsonRpcResponse->getError()->getCode());
                 static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
                 static::assertNotNull($jsonRpcResponse->getError()->getData());
@@ -203,11 +205,12 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
             true
         );
 
-        $this->commandMock->expects($this->never())->method('execute');
+        $this->commandMock->expects(self::never())->method('execute');
 
-        $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
-            function (JsonRpcResponse $jsonRpcResponse) {
+        $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
+            function (JsonRpcResponse $jsonRpcResponse): void {
                 static::assertSame('theRequestId', $jsonRpcResponse->getId());
+                static::assertNotNull($jsonRpcResponse->getError());
                 static::assertSame(JsonRpcErrorCode::REQUEST_CANCELLED, $jsonRpcResponse->getError()->getCode());
                 static::assertSame('Request was cancelled', $jsonRpcResponse->getError()->getMessage());
                 static::assertSame(null, $jsonRpcResponse->getError()->getData());
@@ -230,13 +233,14 @@ final class JsonRpcQueueItemProcessorTest extends TestCase
         $responseDeferred = new Deferred();
         $responseDeferred->reject(new UnexpectedValueException('Exception message'));
 
-        $this->commandMock->expects($this->once())->method('execute')->with($queueItem)->willReturn(
+        $this->commandMock->expects(self::once())->method('execute')->with($queueItem)->willReturn(
             $responseDeferred->promise()
         );
 
-        $this->jsonRpcResponseSenderMock->expects($this->once())->method('send')->willReturnCallback(
-            function (JsonRpcResponse $jsonRpcResponse) {
+        $this->jsonRpcResponseSenderMock->expects(self::once())->method('send')->willReturnCallback(
+            function (JsonRpcResponse $jsonRpcResponse): void {
                 static::assertSame('theRequestId', $jsonRpcResponse->getId());
+                static::assertNotNull($jsonRpcResponse->getError());
                 static::assertSame(JsonRpcErrorCode::GENERIC_RUNTIME_ERROR, $jsonRpcResponse->getError()->getCode());
                 static::assertSame('Exception message', $jsonRpcResponse->getError()->getMessage());
                 static::assertSame(null, $jsonRpcResponse->getError()->getData());

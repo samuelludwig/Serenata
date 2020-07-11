@@ -21,7 +21,7 @@ final class AutocompletionPrefixDeterminerTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->boundaryTokenRetrieverMock = $this->getMockBuilder(
             AutocompletionPrefixBoundaryTokenRetrieverInterface::class

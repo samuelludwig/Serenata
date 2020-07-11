@@ -25,19 +25,19 @@ final class FilePositionClasslikeDeterminerTest extends TestCase
     private $filePositionClasslikeDeterminer;
 
     /**
-     * @var MockObject
+     * @var MockObject&FileClasslikeListProviderInterface
      */
     private $fileClasslikeListProviderMock;
 
     /**
-     * @var MockObject
+     * @var MockObject&StorageInterface
      */
     private $storageMock;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileClasslikeListProviderMock = $this->getMockBuilder(
             FileClasslikeListProviderInterface::class
