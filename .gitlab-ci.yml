@@ -171,3 +171,15 @@ finalization:code-coverage:
             - coverage/
     dependencies:
         - build:php-7.4
+
+# See also https://docs.gitlab.com/ee/user/project/code_intelligence.html
+finalization:code-navigation:
+    image: golang:1.14.0
+    stage: finalization
+    allow_failure: true
+    script:
+        - go get github.com/sourcegraph/lsif-go/cmd/lsif-go
+        - lsif-go
+    artifacts:
+        reports:
+            lsif: dump.lsif
