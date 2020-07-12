@@ -11,6 +11,7 @@
 * [Fix server crashing if folders are removed during scanning for reindexing, such as when clearing the cache in Symfony projects.](https://gitlab.com/Serenata/Serenata/issues/316)
 * [Fix legacy `insertText` in snippet format in completion items not having reserved characters such as `$`, `}`, and `\\` escaped in all cases](https://gitlab.com/Serenata/Serenata/-/issues/310)
 * [Improve responsiveness when `workspace/didChangeWatchedFiles` notifications with large batches of files are sent by prioritizing user-initiated requests over indexing.](https://gitlab.com/Serenata/Serenata/-/issues/325)
+* Completion items will now also send the new `tags` property from LSP 3.15.0 and fill it with the "deprecated" tag if the item is deprecated. The old `deprecated` property will also remain in place.
 * [Fix warning `The PHP server has errors to report: PHP Notice:  Undefined property: PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::$types in phar:///.../DocblockTypeTransformer.php on line 43
 `.](https://gitlab.com/Serenata/Serenata/-/issues/335)
 
