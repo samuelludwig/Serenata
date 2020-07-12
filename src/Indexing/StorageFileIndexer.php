@@ -249,6 +249,7 @@ final class StorageFileIndexer implements FileIndexerInterface
 
             new Visiting\DefineIndexingVisitor(
                 $this->storage,
+                $this->docblockParser,
                 $this->nodeTypeDeducer,
                 $this->typeResolvingDocblockTypeTransformer,
                 $file,

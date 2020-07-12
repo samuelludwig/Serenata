@@ -42,6 +42,96 @@ final class DefineIndexingTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testDeprecatedDefine(): void
+    {
+        $constant = $this->indexDefine('DeprecatedDefine.phpt');
+
+        self::assertTrue($constant->getIsDeprecated());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineShortDescription(): void
+    {
+        $constant = $this->indexDefine('DefineShortDescription.phpt');
+
+        self::assertSame('This is a summary.', $constant->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineLongDescription(): void
+    {
+        $constant = $this->indexDefine('DefineLongDescription.phpt');
+
+        self::assertSame('This is a long description.', $constant->getLongDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineTypeDescription(): void
+    {
+        $constant = $this->indexDefine('DefineTypeDescription.phpt');
+
+        self::assertSame('This is a type description.', $constant->getTypeDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineTypeDescriptionIsUsedAsSummaryIfSummaryIsMissing(): void
+    {
+        $constant = $this->indexDefine('DefineTypeDescriptionAsSummary.phpt');
+
+        self::assertSame('This is a type description.', $constant->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineTypeDescriptionTakesPrecedenceOverSummary(): void
+    {
+        $property = $this->indexDefine('DefineTypeDescriptionTakesPrecedenceOverSummary.phpt');
+
+        self::assertSame('This is a type description.', $property->getShortDescription());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineTypeIsFetchedFromDocblockAndGetsPrecedenceOverDefaultValueType(): void
+    {
+        $constant = $this->indexDefine('DefineTypeFromDocblock.phpt');
+
+        self::assertSame('int', (string) $constant->getType());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineTypeInDocblockIsResolved(): void
+    {
+        $constant = $this->indexDefine('DefineTypeInDocblockIsResolved.phpt');
+
+        self::assertSame('\N\A', (string) $constant->getType());
+    }
+
+    /**
+     * @return void
+     */
+    public function testDefineWithoutTypeSpecificationGetsMixedType(): void
+    {
+        $constant = $this->indexDefine('DefineNoTypeSpecification.phpt');
+
+        self::assertSame('mixed', (string) $constant->getType());
+    }
+
+    /**
+     * @return void
+     */
     public function testDefineFqcnWithNamespace(): void
     {
         $constant = $this->indexDefine('DefineFqcnWithNamespace.phpt');

@@ -7,6 +7,7 @@
 * Stub `textDocument/references` to avoid errors in Visual Studio Code and derivatives.
 * [Improve scanning performance during indexing a bit by avoiding multiple scans of folders.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * [Fix error when trying to parse expressions containing colons, such as `map(fn (): array => 5)->`.](https://gitlab.com/Serenata/Serenata/issues/332)
+* [Fix no documentation or deprecated information being processed for constants originating from `define` statements.](https://gitlab.com/Serenata/Serenata/-/issues/230)
 * [Fix property or method with the same name as a private parent property or method being incorrectly treated as override.](https://gitlab.com/Serenata/Serenata/-/issues/336)
 * [Fix server crashing if folders are removed during scanning for reindexing, such as when clearing the cache in Symfony projects.](https://gitlab.com/Serenata/Serenata/issues/316)
 * [Fix legacy `insertText` in snippet format in completion items not having reserved characters such as `$`, `}`, and `\\` escaped in all cases.](https://gitlab.com/Serenata/Serenata/-/issues/310)

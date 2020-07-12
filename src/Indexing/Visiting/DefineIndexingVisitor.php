@@ -5,12 +5,16 @@ namespace Serenata\Indexing\Visiting;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 
 use Serenata\Analysis\Typing\Deduction\TypeDeductionContext;
+use Serenata\Analysis\Typing\Deduction\TypeDeductionException;
 
 use Serenata\Analysis\Typing\TypeResolvingDocblockTypeTransformer;
 
 use Serenata\Common\Range;
 use Serenata\Common\Position;
 use Serenata\Common\FilePosition;
+
+use Serenata\Parsing\DocblockParser;
+use Serenata\Parsing\SpecialDocblockTypeIdentifierLiteral;
 
 use Serenata\Utility\PositionEncoding;
 
@@ -37,6 +41,11 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
     private $storage;
 
     /**
+     * @var DocblockParser
+     */
+    private $docblockParser;
+
+    /**
      * @var NodeTypeDeducerInterface
      */
     private $nodeTypeDeducer;
@@ -58,6 +67,7 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
 
     /**
      * @param StorageInterface                     $storage
+     * @param DocblockParser                       $docblockParser
      * @param NodeTypeDeducerInterface             $nodeTypeDeducer
      * @param TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer
      * @param Structures\File                      $file
@@ -65,12 +75,14 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
      */
     public function __construct(
         StorageInterface $storage,
+        DocblockParser $docblockParser,
         NodeTypeDeducerInterface $nodeTypeDeducer,
         TypeResolvingDocblockTypeTransformer $typeResolvingDocblockTypeTransformer,
         Structures\File $file,
         TextDocumentItem $textDocumentItem
     ) {
         $this->storage = $storage;
+        $this->docblockParser = $docblockParser;
         $this->nodeTypeDeducer = $nodeTypeDeducer;
         $this->typeResolvingDocblockTypeTransformer = $typeResolvingDocblockTypeTransformer;
         $this->file = $file;
@@ -109,11 +121,19 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
             return;
         }
 
-        // Defines can be namespaced if their name contains slashes, see also
-        // https://php.net/manual/en/function.define.php#90282
-        $name = new Node\Name($nameValue->value);
+        $docComment = $node->getDocComment() !== null ? $node->getDocComment()->getText() : null;
 
-        $type = new IdentifierTypeNode('mixed');
+        $documentation = $this->docblockParser->parse($docComment, [
+            DocblockParser::VAR_TYPE,
+            DocblockParser::DEPRECATED,
+            DocblockParser::DESCRIPTION,
+        ], $nameValue->value);
+
+        $varDocumentation = isset($documentation['var']['$' . $nameValue->value]) ?
+            $documentation['var']['$' . $nameValue->value] :
+            null;
+
+        $shortDescription = $documentation['descriptions']['short'];
 
         $defaultValue = substr(
             $this->textDocumentItem->getText(),
@@ -134,16 +154,38 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
             )
         );
 
-        if (isset($node->args[1])) {
-            $type = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
-                $node->args[1]->value,
-                $this->textDocumentItem
-            ));
+        $unresolvedType = null;
 
-            $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
+        if ($varDocumentation) {
+            // You can place documentation after the @var tag as well as at the start of the docblock. Fall back
+            // from the latter to the former.
+            if ($varDocumentation['description'] !== '' && $varDocumentation['description'] !== null) {
+                $shortDescription = $varDocumentation['description'];
+            }
 
-            $type = $this->typeResolvingDocblockTypeTransformer->resolve($type, $filePosition);
+            $unresolvedType = $varDocumentation['type'];
+        } elseif (isset($node->args[1])) {
+            try {
+                $unresolvedType = $this->nodeTypeDeducer->deduce(new TypeDeductionContext(
+                    $node->args[1]->value,
+                    $this->textDocumentItem
+                ));
+            } catch (TypeDeductionException $th) {
+                $unresolvedType = new IdentifierTypeNode(SpecialDocblockTypeIdentifierLiteral::MIXED_);
+            }
         }
+
+        $filePosition = new FilePosition($this->textDocumentItem->getUri(), $range->getStart());
+
+        if ($unresolvedType !== null) {
+            $type = $this->typeResolvingDocblockTypeTransformer->resolve($unresolvedType, $filePosition);
+        } else {
+            $type = new IdentifierTypeNode('mixed');
+        }
+
+        // Defines can be namespaced if their name contains slashes, see also
+        // https://php.net/manual/en/function.define.php#90282
+        $name = new Node\Name($nameValue->value);
 
         $constant = new Structures\Constant(
             $name->getLast(),
@@ -151,11 +193,11 @@ final class DefineIndexingVisitor extends NodeVisitorAbstract
             $this->file,
             $range,
             $defaultValue,
-            false,
-            false,
-            null,
-            null,
-            null,
+            $documentation['deprecated'],
+            $docComment !== '' && $docComment !== null,
+            $shortDescription ? $shortDescription : null,
+            $documentation['descriptions']['long'] ? $documentation['descriptions']['long'] : null,
+            $varDocumentation ? $varDocumentation['description'] : null,
             $type
         );
 

@@ -1,0 +1,3 @@
+<?php
+
+define('DEFINE', CONSTANT_THAT_DOES_NOT_EXIST);
