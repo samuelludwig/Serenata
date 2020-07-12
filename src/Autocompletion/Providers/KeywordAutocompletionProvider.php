@@ -82,6 +82,8 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             ['name' => 'false'],
             ['name' => 'null'],
             ['name' => 'void'],
+            ['name' => 'object'],
+            ['name' => 'mixed'],
             ['name' => 'iterable'],
             ['name' => '__halt_compiler'],
             ['name' => 'abstract'],
@@ -150,6 +152,8 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
             ['name' => 'while'],
             ['name' => 'xor'],
             ['name' => 'yield'],
+            ['name' => 'yield from'],
+            ['name' => 'match'],
         ];
     }
 }

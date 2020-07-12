@@ -3,6 +3,7 @@
 * [Add autocompletion when typing property types added in PHP 7.4.](https://gitlab.com/Serenata/Serenata/-/issues/331)
 * [Improve overall robustness by fixing large swads of PHPStan errors.](https://gitlab.com/Serenata/Serenata/-/issues/277)
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
+* Add `yield from`, `object`, `mixed` and `match` to keyword autocompletions.
 * Stub `textDocument/references` to avoid errors in Visual Studio Code and derivatives.
 * [Improve scanning performance during indexing a bit by avoiding multiple scans of folders.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * [Fix error when trying to parse expressions containing colons, such as `map(fn (): array => 5)->`.](https://gitlab.com/Serenata/Serenata/issues/332)
