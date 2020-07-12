@@ -14,6 +14,7 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
@@ -231,6 +232,8 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             $insertText = implode('\\', array_slice($parts, -$partsToSlice - 1));
         }
 
+        $insertText = SnippetInsertionTextEscaper::escape($insertText);
+
         if ($shouldIncludeParanthesesInInsertText && $paranthesesAreAllowed) {
             if ($this->functionParametersEvaluator->hasRequiredParameters($function)) {
                 $insertText .= '($0)';
@@ -239,7 +242,7 @@ final class FunctionAutocompletionProvider implements AutocompletionProviderInte
             }
         }
 
-        return str_replace('\\', '\\\\', $insertText);
+        return $insertText;
     }
 
     /**

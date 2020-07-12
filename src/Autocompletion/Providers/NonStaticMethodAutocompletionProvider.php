@@ -16,6 +16,7 @@ use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\FunctionParametersEvaluator;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionLabelCreator;
 use Serenata\Autocompletion\FunctionAutocompletionSuggestionParanthesesNecessityEvaluator;
@@ -213,7 +214,7 @@ final class NonStaticMethodAutocompletionProvider implements AutocompletionProvi
      */
     private function getInsertTextForSuggestion(array $method, bool $shouldIncludeParanthesesInInsertText): string
     {
-        $insertText = $method['name'];
+        $insertText = SnippetInsertionTextEscaper::escape($method['name']);
 
         if ($shouldIncludeParanthesesInInsertText) {
             if ($this->functionParametersEvaluator->hasRequiredParameters($method)) {

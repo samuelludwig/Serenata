@@ -4,6 +4,7 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 
 use Serenata\Utility\TextEdit;
 
@@ -38,7 +39,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
         return new CompletionItem(
             $keyword['name'],
             CompletionItemKind::KEYWORD,
-            $keyword['name'],
+            SnippetInsertionTextEscaper::escape($keyword['name']),
             $this->getTextEditForSuggestion($keyword, $context),
             $keyword['name'],
             'PHP keyword',
@@ -62,7 +63,7 @@ final class KeywordAutocompletionProvider implements AutocompletionProviderInter
      */
     private function getTextEditForSuggestion(array $keyword, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $keyword['name']);
+        return new TextEdit($context->getPrefixRange(), SnippetInsertionTextEscaper::escape($keyword['name']));
     }
 
     /**

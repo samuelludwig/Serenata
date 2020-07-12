@@ -11,6 +11,7 @@ use Serenata\Analysis\Visiting\UseStatementKind;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDeterminerInterface;
@@ -189,7 +190,7 @@ final class ConstantAutocompletionProvider implements AutocompletionProviderInte
             $insertText = implode('\\', array_slice($parts, -$partsToSlice - 1));
         }
 
-        return str_replace('\\', '\\\\', $insertText);
+        return SnippetInsertionTextEscaper::escape($insertText);
     }
 
     /**

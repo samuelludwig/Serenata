@@ -8,6 +8,7 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 
 use Serenata\Utility\TextEdit;
 
@@ -100,7 +101,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
         return new CompletionItem(
             $fqcnWithoutLeadingSlash,
             CompletionItemKind::MODULE,
-            str_replace('\\', '\\\\', $namespace['name']),
+            SnippetInsertionTextEscaper::escape($namespace['name']),
             $this->getTextEditForSuggestion($namespace, $context),
             $fqcnWithoutLeadingSlash,
             null,
@@ -127,7 +128,7 @@ final class NamespaceAutocompletionProvider implements AutocompletionProviderInt
     {
         return new TextEdit(
             $context->getPrefixRange(),
-            str_replace('\\', '\\\\', $namespace['name'])
+            SnippetInsertionTextEscaper::escape($namespace['name'])
         );
     }
 }

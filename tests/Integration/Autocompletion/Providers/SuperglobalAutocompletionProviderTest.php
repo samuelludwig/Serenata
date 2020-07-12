@@ -22,7 +22,7 @@ final class SuperglobalAutocompletionProviderTest extends AbstractAutocompletion
         $firstSuggestion = new CompletionItem(
             '$argc',
             CompletionItemKind::VARIABLE,
-            '$argc',
+            '\$argc',
             new TextEdit(
                 new Range(
                     new Position(2, 0),

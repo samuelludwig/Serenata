@@ -23,7 +23,7 @@ final class LocalVariableAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$foo',
                 CompletionItemKind::VARIABLE,
-                '$foo',
+                '\$foo',
                 new TextEdit(
                     new Range(new Position(4, 0), new Position(4, 0)),
                     '\$foo'

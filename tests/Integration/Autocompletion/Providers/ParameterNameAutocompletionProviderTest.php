@@ -33,7 +33,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$int',
                 CompletionItemKind::VARIABLE,
-                '$int',
+                '\$int',
                 new TextEdit(
                     new Range(new Position(4, 28), new Position(4, 30)),
                     '\$int'
@@ -58,7 +58,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
-                '$someClasslike',
+                '\$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 38), new Position(4, 40)),
                     '\$someClasslike'
@@ -71,7 +71,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$some',
                 CompletionItemKind::VARIABLE,
-                '$some',
+                '\$some',
                 new TextEdit(
                     new Range(new Position(4, 38), new Position(4, 40)),
                     '\$some'
@@ -96,7 +96,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
-                '$someClasslike',
+                '\$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
                     '\$someClasslike'
@@ -109,7 +109,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$some',
                 CompletionItemKind::VARIABLE,
-                '$some',
+                '\$some',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
                     '\$some'
@@ -122,7 +122,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$classlike',
                 CompletionItemKind::VARIABLE,
-                '$classlike',
+                '\$classlike',
                 new TextEdit(
                     new Range(new Position(4, 39), new Position(4, 41)),
                     '\$classlike'
@@ -147,7 +147,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
-                '$someClasslike',
+                '\$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
                     '\$someClasslike'
@@ -160,7 +160,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$some',
                 CompletionItemKind::VARIABLE,
-                '$some',
+                '\$some',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
                     '\$some'
@@ -173,7 +173,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$classlike',
                 CompletionItemKind::VARIABLE,
-                '$classlike',
+                '\$classlike',
                 new TextEdit(
                     new Range(new Position(4, 40), new Position(4, 42)),
                     '\$classlike'
@@ -198,7 +198,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$someClasslikeType',
                 CompletionItemKind::VARIABLE,
-                '$someClasslikeType',
+                '\$someClasslikeType',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
                     '\$someClasslikeType'
@@ -211,7 +211,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$someClasslike',
                 CompletionItemKind::VARIABLE,
-                '$someClasslike',
+                '\$someClasslike',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
                     '\$someClasslike'
@@ -224,7 +224,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$classlikeType',
                 CompletionItemKind::VARIABLE,
-                '$classlikeType',
+                '\$classlikeType',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
                     '\$classlikeType'
@@ -237,7 +237,7 @@ final class ParameterNameAutocompletionProviderTest extends AbstractAutocompleti
             new CompletionItem(
                 '$classlike',
                 CompletionItemKind::VARIABLE,
-                '$classlike',
+                '\$classlike',
                 new TextEdit(
                     new Range(new Position(4, 43), new Position(4, 45)),
                     '\$classlike'

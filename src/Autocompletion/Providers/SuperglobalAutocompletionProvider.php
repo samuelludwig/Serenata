@@ -4,6 +4,7 @@ namespace Serenata\Autocompletion\Providers;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 
 use Serenata\Utility\TextEdit;
 
@@ -38,7 +39,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
         return new CompletionItem(
             $superGlobal['name'],
             CompletionItemKind::VARIABLE,
-            $superGlobal['name'],
+            SnippetInsertionTextEscaper::escape($superGlobal['name']),
             $this->getTextEditForSuggestion($superGlobal, $context),
             mb_substr($superGlobal['name'], 1),
             'PHP superglobal',
@@ -63,7 +64,7 @@ final class SuperglobalAutocompletionProvider implements AutocompletionProviderI
      */
     private function getTextEditForSuggestion(array $superGlobal, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), str_replace('$', '\$', $superGlobal['name']));
+        return new TextEdit($context->getPrefixRange(), SnippetInsertionTextEscaper::escape($superGlobal['name']));
     }
 
     /**

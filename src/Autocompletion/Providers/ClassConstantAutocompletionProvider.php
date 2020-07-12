@@ -10,6 +10,7 @@ use Serenata\Analysis\ClasslikeBuildingFailedException;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
@@ -115,7 +116,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
         return new CompletionItem(
             $constant['name'],
             CompletionItemKind::CONSTANT,
-            $constant['name'],
+            SnippetInsertionTextEscaper::escape($constant['name']),
             $this->getTextEditForSuggestion($constant, $context),
             $constant['name'],
             $constant['shortDescription'],
@@ -144,7 +145,7 @@ final class ClassConstantAutocompletionProvider implements AutocompletionProvide
      */
     private function getTextEditForSuggestion(array $constant, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $constant['name']);
+        return new TextEdit($context->getPrefixRange(), SnippetInsertionTextEscaper::escape($constant['name']));
     }
 
     /**

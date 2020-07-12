@@ -13,6 +13,7 @@ use Serenata\Autocompletion\ApproximateStringMatching\BestStringApproximationDet
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 
 use Serenata\Common\Position;
 
@@ -178,7 +179,7 @@ final class ClasslikeAutocompletionProvider implements AutocompletionProviderInt
 
         // Don't try to add use statements for class names that the user wants to make absolute by adding a leading
         // slash.
-        return str_replace('\\', '\\\\', $insertText);
+        return SnippetInsertionTextEscaper::escape($insertText);
     }
 
     /**

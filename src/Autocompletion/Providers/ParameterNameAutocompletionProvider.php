@@ -8,6 +8,7 @@ use Serenata\Analysis\NodeAtOffsetLocatorInterface;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 
 
 
@@ -157,7 +158,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
         return new CompletionItem(
             $name,
             CompletionItemKind::VARIABLE,
-            $name,
+            SnippetInsertionTextEscaper::escape($name),
             $this->getTextEditForSuggestion($name, $context),
             mb_substr($name, 1),
             null,
@@ -181,7 +182,7 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
      */
     private function getTextEditForSuggestion(string $name, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), str_replace('$', '\$', $name));
+        return new TextEdit($context->getPrefixRange(), SnippetInsertionTextEscaper::escape($name));
     }
 
     /**

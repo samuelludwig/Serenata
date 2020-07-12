@@ -25,7 +25,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
             new CompletionItem(
                 '$foo',
                 CompletionItemKind::PROPERTY,
-                '$foo',
+                '\$foo',
                 new TextEdit(
                     new Range(
                         new Position(10, 3),
@@ -57,7 +57,7 @@ final class StaticPropertyAutocompletionProviderTest extends AbstractAutocomplet
             new CompletionItem(
                 '$foo',
                 CompletionItemKind::PROPERTY,
-                '$foo',
+                '\$foo',
                 new TextEdit(
                     new Range(
                         new Position(10, 3),

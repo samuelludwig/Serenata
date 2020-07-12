@@ -13,6 +13,7 @@ use Serenata\Analysis\VariableScanner;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 use Serenata\Utility\TextEdit;
@@ -92,7 +93,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
         return new CompletionItem(
             $variable['name'],
             CompletionItemKind::VARIABLE,
-            $variable['name'],
+            SnippetInsertionTextEscaper::escape($variable['name']),
             $this->getTextEditForSuggestion($variable, $context),
             mb_substr($variable['name'], 1),
             null,
@@ -117,7 +118,7 @@ final class LocalVariableAutocompletionProvider implements AutocompletionProvide
      */
     private function getTextEditForSuggestion(array $variable, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), str_replace('$', '\$', $variable['name']));
+        return new TextEdit($context->getPrefixRange(), SnippetInsertionTextEscaper::escape($variable['name']));
     }
 
     /**

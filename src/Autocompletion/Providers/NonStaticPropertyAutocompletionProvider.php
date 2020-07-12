@@ -15,6 +15,7 @@ use Serenata\Analysis\Typing\Deduction\ExpressionTypeDeducer;
 
 use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
+use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 use Serenata\Autocompletion\CompletionItemDetailFormatter;
 
 use Serenata\Parsing\ToplevelTypeExtractorInterface;
@@ -126,7 +127,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
         return new CompletionItem(
             $property['name'],
             CompletionItemKind::PROPERTY,
-            $property['name'],
+            SnippetInsertionTextEscaper::escape($property['name']),
             $this->getTextEditForSuggestion($property, $context),
             $property['name'],
             $property['shortDescription'],
@@ -155,7 +156,7 @@ final class NonStaticPropertyAutocompletionProvider implements AutocompletionPro
      */
     private function getTextEditForSuggestion(array $property, AutocompletionProviderContext $context): TextEdit
     {
-        return new TextEdit($context->getPrefixRange(), $property['name']);
+        return new TextEdit($context->getPrefixRange(), SnippetInsertionTextEscaper::escape($property['name']));
     }
 
     /**
