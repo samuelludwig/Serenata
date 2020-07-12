@@ -1171,6 +1171,22 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
         self::assertSame('\B\Bar', (string) $result);
     }
 
+    // TODO: Enable and fix, see #234.
+    // /**
+    //  * @return void
+    //  */
+    // public function testMetaStaticMethodTypesWhenExpressionIsIncomplete(): void
+    // {
+    //     $result = $this->deduceTypesFromExpressionWithMeta(
+    //         'MetaStaticMethodTypesMatchingFqcn.phpt',
+    //         'MetaStaticMethodTypesMetaFile.phpt',
+    //         '$foo->get("bar")->f',
+    //         true
+    //     );
+
+    //     self::assertSame('\B\Bar', (string) $result);
+    // }
+
     /**
      * @return void
      */
@@ -1228,11 +1244,16 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
      * @param string $file
      * @param string $metaFile
      * @param string $expression
+     * @param bool   $ignoreLastExpression
      *
      * @return TypeNode
      */
-    private function deduceTypesFromExpressionWithMeta(string $file, string $metaFile, string $expression): TypeNode
-    {
+    private function deduceTypesFromExpressionWithMeta(
+        string $file,
+        string $metaFile,
+        string $expression,
+        bool $ignoreLastExpression = false
+    ): TypeNode {
         $path = $this->getFilePath($file);
         $metaFilePath = __DIR__ . '/ExpressionTypeDeducerTest/' . $metaFile;
 
@@ -1249,7 +1270,7 @@ final class ExpressionTypeDeducerTest extends AbstractIntegrationTest
             new TextDocumentItem($path, $code),
             Position::createFromByteOffset($markerOffset, $code, PositionEncoding::VALUE),
             $expression,
-            false
+            $ignoreLastExpression
         );
     }
 
