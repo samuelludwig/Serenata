@@ -71,6 +71,7 @@ abstract class AbstractAutocompletionApplicabilityCheckerTest extends AbstractAu
     protected function getFileNamesToEvaluate(): array
     {
         return [
+            'AnonymousFunctionBind.phpt',
             'TopLevelNamespace.phpt',
             'FunctionLike.phpt',
             'VariableName.phpt',

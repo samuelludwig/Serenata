@@ -18,6 +18,7 @@ final class LocalVariableAutocompletionApplicabilityCheckerTest extends Abstract
     public function getFileNamesWhereShouldApply(): array
     {
         return [
+            'AnonymousFunctionBind.phpt',
             'TopLevelNamespace.phpt',
             'FunctionLike.phpt',
             'VariableName.phpt',
