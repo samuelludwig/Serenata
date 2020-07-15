@@ -127,8 +127,9 @@ final class VariableScannerTest extends AbstractIntegrationTest
         $output = $this->getAvailableVariables('ClosureBindingScope.phpt');
 
         self::assertSame([
-            // TODO: This should also be available as you can bind the variable that the closure is assigned to inside
-            // said closure.
+            // NOTE: $closure also show up, and it does in the
+            // testReturnsOnlyVariablesRelevantToTheOutsideScopeInClosureBindingWithPrefix, but it won't here since the
+            // code that is present is not valid PHP code, thus the entire assignment is stripped by PHP-Parser.
             // '$closure' => ['name' => '$closure', 'type' => null],
             '$param2'  => ['name' => '$param2',  'type' => null],
             '$param1'  => ['name' => '$param1',  'type' => null],
@@ -143,7 +144,8 @@ final class VariableScannerTest extends AbstractIntegrationTest
         $output = $this->getAvailableVariables('ClosureBindingScopeWithPrefix.phpt');
 
         self::assertSame([
-            '$var1'  => ['name' => '$var1', 'type' => null],
+            '$closure' => ['name' => '$closure', 'type' => null],
+            '$var1'    => ['name' => '$var1', 'type' => null],
         ], $output);
     }
 

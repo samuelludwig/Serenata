@@ -65,7 +65,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
                 $isPositionInsideClosureUses = false;
 
                 if ($node instanceof Node\Expr\Closure) {
-                    $isPositionInsideClosureUses = $this->isCurrentOffsetInsideClosureParams($node);
+                    $isPositionInsideClosureUses = $this->isCurrentOffsetInsideClosureUses($node);
 
                     if (!$isPositionInsideClosureUses) {
                         // Closures can have a custom object bound to the $this variable. There is no way for us to detect
@@ -81,24 +81,37 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
         }
 
         if ($node instanceof Node\Expr\Variable) {
+            /** @var Node\Expr\Assign|null $parentAssignmentExpression */
             $parentAssignmentExpression = NodeHelpers::findAncestorOfAnyType($node, Node\Expr\Assign::class);
 
             if (($node->getAttribute('endFilePos') + 1) < $this->byteOffset && (
                 $parentAssignmentExpression === null ||
-                ($parentAssignmentExpression->getAttribute('endFilePos') + 1) < $this->byteOffset
+                ($parentAssignmentExpression->getAttribute('endFilePos') + 1) < $this->byteOffset ||
+                (
+                    $parentAssignmentExpression->expr instanceof Node\Expr\Closure &&
+                    $this->isCurrentOffsetInsideClosureUses($parentAssignmentExpression->expr)
+                )
             )) {
                 $this->parseVariable($node);
             }
+
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         } elseif ($node instanceof Node\Expr\ClosureUse) {
-            if (!$this->isCurrentOffsetInsideClosureParams($node->getAttribute('parent'))) {
+            if (!$this->isCurrentOffsetInsideClosureUses($node->getAttribute('parent'))) {
                 $this->parseClosureUse($node);
             }
+
+            // Otherwise the above variable instance check will pick this up again.
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         } elseif ($node instanceof Node\Param) {
             if (!$node->getAttribute('parent') instanceof Node\Expr\Closure ||
-                !$this->isCurrentOffsetInsideClosureParams($node->getAttribute('parent'))
+                !$this->isCurrentOffsetInsideClosureUses($node->getAttribute('parent'))
             ) {
                 $this->parseParam($node);
             }
+
+            // Otherwise the above variable instance check will pick this up again.
+            return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
         return null;
@@ -109,7 +122,7 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
      *
      * @return bool
      */
-    private function isCurrentOffsetInsideClosureParams(Node\Expr\Closure $node): bool
+    private function isCurrentOffsetInsideClosureUses(Node\Expr\Closure $node): bool
     {
         foreach ($node->uses as $use) {
             if ($use->getAttribute('startFilePos') <= $this->byteOffset &&

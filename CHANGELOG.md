@@ -13,6 +13,7 @@
 * [Fix legacy `insertText` in snippet format in completion items not having reserved characters such as `$`, `}`, and `\\` escaped in all cases.](https://gitlab.com/Serenata/Serenata/-/issues/310)
 * [Improve responsiveness when `workspace/didChangeWatchedFiles` notifications with large batches of files are sent by prioritizing user-initiated requests over indexing.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * Completion items will now also send the new `tags` property from LSP 3.15.0 and fill it with the "deprecated" tag if the item is deprecated. The old `deprecated` property will also remain in place.
+* Fix variable that closure is being assigned to not being suggested in closure binding (`use`), which is valid as a closure can bind the variable it's assigned to in order to create recursive closures.
 * [Fix no documentation or deprecated information being processed for constants originating from `define` statements. This also caused no documentation to be displayed for built-in constants such as `CURLOPT_SSH_AUTH_TYPES`.](https://gitlab.com/Serenata/Serenata/-/issues/230)
 * [Fix warning `The PHP server has errors to report: PHP Notice:  Undefined property: PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::$types in phar:///.../DocblockTypeTransformer.php on line 43
 `.](https://gitlab.com/Serenata/Serenata/-/issues/335)
