@@ -62,13 +62,21 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
                 // here.
                 $this->variables = [];
             } elseif ($node instanceof Node\FunctionLike) {
+                $isPositionInsideClosureUses = false;
+
                 if ($node instanceof Node\Expr\Closure) {
-                    // Closures can have a custom object bound to the $this variable. There is no way for us to detect
-                    // whether this actually happened (as that is only known at runtime), so just include the variable.
-                    $this->hasThisContext = true;
+                    $isPositionInsideClosureUses = $this->isCurrentOffsetInsideClosureParams($node);
+
+                    if (!$isPositionInsideClosureUses) {
+                        // Closures can have a custom object bound to the $this variable. There is no way for us to detect
+                        // whether this actually happened (as that is only known at runtime), so just include the variable.
+                        $this->hasThisContext = true;
+                    }
                 }
 
-                $this->variables = [];
+                if (!$isPositionInsideClosureUses) {
+                    $this->variables = [];
+                }
             }
         }
 
@@ -82,12 +90,36 @@ final class VariableScanningVisitor extends NodeVisitorAbstract
                 $this->parseVariable($node);
             }
         } elseif ($node instanceof Node\Expr\ClosureUse) {
-            $this->parseClosureUse($node);
+            if (!$this->isCurrentOffsetInsideClosureParams($node->getAttribute('parent'))) {
+                $this->parseClosureUse($node);
+            }
         } elseif ($node instanceof Node\Param) {
-            $this->parseParam($node);
+            if (!$node->getAttribute('parent') instanceof Node\Expr\Closure ||
+                !$this->isCurrentOffsetInsideClosureParams($node->getAttribute('parent'))
+            ) {
+                $this->parseParam($node);
+            }
         }
 
         return null;
+    }
+
+    /**
+     * @param Node\Expr\Closure $node
+     *
+     * @return bool
+     */
+    private function isCurrentOffsetInsideClosureParams(Node\Expr\Closure $node): bool
+    {
+        foreach ($node->uses as $use) {
+            if ($use->getAttribute('startFilePos') <= $this->byteOffset &&
+                ($use->getAttribute('endFilePos') + 1) >= $this->byteOffset
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

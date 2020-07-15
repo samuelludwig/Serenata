@@ -122,6 +122,34 @@ final class VariableScannerTest extends AbstractIntegrationTest
     /**
      * @return void
      */
+    public function testReturnsOnlyVariablesRelevantToTheOutsideScopeInClosureBinding(): void
+    {
+        $output = $this->getAvailableVariables('ClosureBindingScope.phpt');
+
+        self::assertSame([
+            // TODO: This should also be available as you can bind the variable that the closure is assigned to inside
+            // said closure.
+            // '$closure' => ['name' => '$closure', 'type' => null],
+            '$param2'  => ['name' => '$param2',  'type' => null],
+            '$param1'  => ['name' => '$param1',  'type' => null],
+        ], $output);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReturnsOnlyVariablesRelevantToTheOutsideScopeInClosureBindingWithPrefix(): void
+    {
+        $output = $this->getAvailableVariables('ClosureBindingScopeWithPrefix.phpt');
+
+        self::assertSame([
+            '$var1'  => ['name' => '$var1', 'type' => null],
+        ], $output);
+    }
+
+    /**
+     * @return void
+     */
     public function testCorrectlyIgnoresVariousStatements(): void
     {
         $file = 'VariousStatements.phpt';
