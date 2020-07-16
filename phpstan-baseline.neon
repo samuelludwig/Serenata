@@ -1336,16 +1336,6 @@ parameters:
 			path: tests/Unit/Parsing/LastExpressionParserTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
-			count: 33
-			path: tests/Unit/Parsing/PartialParserTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift expects array, array\\<PhpParser\\\\Node\\\\Stmt\\>\\|null given\\.$#"
-			count: 32
-			path: tests/Unit/Parsing/PartialParserTest.php
-
-		-
 			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"
 			count: 7
 			path: tests/Unit/Parsing/PartialParserTest.php

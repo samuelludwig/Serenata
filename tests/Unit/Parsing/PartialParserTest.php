@@ -42,6 +42,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -64,6 +65,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -87,6 +89,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -110,6 +113,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -133,6 +137,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -156,6 +161,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -178,6 +184,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -205,6 +212,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -228,6 +236,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -281,6 +290,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -311,6 +321,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -334,6 +345,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -369,6 +381,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -393,6 +406,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -417,6 +431,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -441,6 +456,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -465,6 +481,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -523,6 +540,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -546,6 +564,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -569,6 +588,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -593,6 +613,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -617,6 +638,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -643,6 +665,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -671,6 +694,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -700,6 +724,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -726,6 +751,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -757,6 +783,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -785,6 +812,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -816,6 +844,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -844,6 +873,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -874,6 +904,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -901,6 +932,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         $result = array_shift($result);
@@ -929,6 +961,7 @@ SOURCE;
 
         $result = $this->createPartialParser()->parse($source);
 
+        self::assertNotNull($result);
         self::assertSame(1, count($result));
 
         // Mostly just to test that this works as an extension of testParsesDoubleObjectArrows, no need to specify
