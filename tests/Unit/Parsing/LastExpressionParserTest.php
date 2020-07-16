@@ -1249,4 +1249,24 @@ SOURCE;
         self::assertInstanceOf(Node\Name::class, $result->expr->var->name);
         self::assertSame('map', $result->expr->var->name->toString());
     }
+
+    /**
+     * @return void
+     */
+    public function testParsesExpressionIfPreviousExpressionIsNotTerminatedBySemicolon(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            $a->foo
+            $b->
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        self::assertInstanceOf(Node\Stmt\Expression::class, $result);
+        self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
+        self::assertSame('b', $result->expr->var->name);
+    }
 }

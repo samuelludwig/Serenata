@@ -320,6 +320,14 @@ final class LastExpressionParser implements Parser
                         // stop. These always appear the start of the call stack, so we know we can stop if we find
                         // them.
                         $startedStaticClassName = true;
+                    } elseif ($this->isWordFollowedByImpossibleCharacter($code, $i, $tokenInfoMap)) {
+                        ++$i;
+
+                        while (in_array($tokenInfoMap[$i]['type'], $skippableTokens, true)) {
+                            ++$i;
+                        }
+
+                        return $i;
                     }
                 }
             }
@@ -369,6 +377,36 @@ final class LastExpressionParser implements Parser
                 $code[$nextNonWhitespace] !== ')' &&
                 $code[$nextNonWhitespace] !== ':'
             ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string                         $code
+     * @param int                            $i
+     * @param array<int,array<string,mixed>> $tokenInfoMap
+     *
+     * @return bool
+     */
+    private function isWordFollowedByImpossibleCharacter(string $code, int $i, array $tokenInfoMap): bool
+    {
+        $skippableTokens = $this->parserTokenHelper->getSkippableTokens();
+
+        $nextNonWhitespace = null;
+
+        for ($j = $i + 1; $j < count($tokenInfoMap); ++$j) {
+            if (!in_array($tokenInfoMap[$j]['type'], $skippableTokens, true)) {
+                $nextNonWhitespace = $j;
+
+                break;
+            }
+        }
+
+        if ($nextNonWhitespace !== null) {
+            if ($code[$nextNonWhitespace] === '$') {
                 return true;
             }
         }

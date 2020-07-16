@@ -9,6 +9,7 @@
 * [Fix error when trying to parse expressions containing colons, such as `map(fn (): array => 5)->`.](https://gitlab.com/Serenata/Serenata/issues/332)
 * [Fix property or method with the same name as a private parent property or method being incorrectly treated as override.](https://gitlab.com/Serenata/Serenata/-/issues/336)
 * [Fix variable autocompletion throwing its hands in the air during closure binding (`use`) after the first character was typed.](https://gitlab.com/Serenata/Serenata/-/issues/235)
+* Improve error recovery when an expression such as `$this->foo` is preceded by an unterminated expression such as `$this->bar`.
 * [Fix server crashing if folders are removed during scanning for reindexing, such as when clearing the cache in Symfony projects.](https://gitlab.com/Serenata/Serenata/issues/316)
 * [Fix legacy `insertText` in snippet format in completion items not having reserved characters such as `$`, `}`, and `\\` escaped in all cases.](https://gitlab.com/Serenata/Serenata/-/issues/310)
 * [Improve responsiveness when `workspace/didChangeWatchedFiles` notifications with large batches of files are sent by prioritizing user-initiated requests over indexing.](https://gitlab.com/Serenata/Serenata/-/issues/325)
