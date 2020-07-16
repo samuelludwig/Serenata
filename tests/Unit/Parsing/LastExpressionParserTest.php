@@ -86,6 +86,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Name::class, $result->expr->class);
         self::assertSame('Bar', $result->expr->class->toString());
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('TEST_CONSTANT', $result->expr->name->name);
@@ -106,6 +107,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Name::class, $result->expr->class);
         self::assertSame('Bar', $result->expr->class->toString());
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('DO', $result->expr->name->name);
@@ -126,6 +128,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Name::class, $result->expr->class);
         self::assertSame('self', $result->expr->class->toString());
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('NEW', $result->expr->name->name);
@@ -150,6 +153,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\StaticCall::class, $result->expr);
+        self::assertInstanceOf(Node\Name::class, $result->expr->class);
         self::assertSame('NamespaceTest\Bar', $result->expr->class->toString());
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('staticmethod', $result->expr->name->name);
@@ -174,6 +178,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('someProperty', $result->expr->name->name);
@@ -194,6 +199,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('someProperty', $result->expr->name->name);
@@ -214,6 +220,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('someProperty', $result->expr->name->name);
@@ -238,6 +245,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('someProperty', $result->expr->name->name);
@@ -342,6 +350,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('c', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('foo', $result->expr->name->name);
@@ -362,6 +371,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('d', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('bar', $result->expr->name->name);
@@ -382,6 +392,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('c', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('bar', $result->expr->name->name);
@@ -448,6 +459,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('test', $result->expr->name->name);
@@ -471,6 +483,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('', $result->expr->name->name);
@@ -491,6 +504,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
         self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('', $result->expr->name->name);
@@ -640,10 +654,15 @@ SOURCE;
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->var->var->var->var);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->name);
         self::assertSame('testChaining', $result->expr->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->var->name);
         self::assertSame('testChaining', $result->expr->var->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->var->var->name);
         self::assertSame('testChaining', $result->expr->var->var->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->var->var->var->var->name);
         self::assertSame('testChaining', $result->expr->var->var->var->var->name->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('testChai', $result->expr->name->name);
     }
 
@@ -662,7 +681,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -713,7 +734,9 @@ SOURCE;
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[0]->var);
         self::assertSame('test', $result->expr->parts[0]->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->parts[0]->name);
         self::assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
@@ -733,7 +756,9 @@ SOURCE;
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[0]);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[0]->var);
         self::assertSame('test', $result->expr->parts[0]->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->parts[0]->name);
         self::assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
@@ -753,7 +778,9 @@ SOURCE;
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Scalar\Encapsed::class, $result->expr);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr->parts[0]);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[0]->var);
         self::assertSame('test', $result->expr->parts[0]->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->parts[0]->name);
         self::assertSame('foo', $result->expr->parts[0]->name->name);
     }
 
@@ -839,8 +866,12 @@ SOURCE;
         self::assertSame('EOF: ', $result->expr->parts[0]->value);
         self::assertInstanceOf(Node\Expr\MethodCall::class, $result->expr->parts[1]);
         self::assertInstanceOf(Node\Expr\ArrayDimFetch::class, $result->expr->parts[1]->var);
+
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->parts[1]->var->var);
         self::assertSame('foo', $result->expr->parts[1]->var->var->name);
+        self::assertInstanceOf(Node\Scalar\LNumber::class, $result->expr->parts[1]->var->dim);
         self::assertSame(2, $result->expr->parts[1]->var->dim->value);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->parts[1]->name);
         self::assertSame('bar', $result->expr->parts[1]->name->name);
         self::assertInstanceOf(Node\Scalar\EncapsedStringPart::class, $result->expr->parts[2]);
         self::assertSame(" some_text\n\nThis is / some text.\n", $result->expr->parts[2]->value);
@@ -865,7 +896,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -884,7 +917,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\ClassConstFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Name::class, $result->expr->class);
         self::assertSame('Test', $result->expr->class->toString());
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('class', $result->expr->name->name);
     }
 
@@ -903,7 +938,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -922,7 +959,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -941,7 +980,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -960,7 +1001,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -979,7 +1022,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -998,7 +1043,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1017,7 +1064,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1036,7 +1085,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1055,7 +1106,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1074,7 +1127,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1093,7 +1148,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1112,7 +1169,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1131,7 +1190,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1168,7 +1229,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1187,7 +1250,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1207,7 +1272,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1227,7 +1294,9 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('this', $result->expr->var->name);
+        self::assertInstanceOf(Node\Identifier::class, $result->expr->name);
         self::assertSame('one', $result->expr->name->name);
     }
 
@@ -1246,6 +1315,7 @@ SOURCE;
 
         self::assertInstanceOf(Node\Stmt\Expression::class, $result);
         self::assertInstanceOf(Node\Expr\PropertyFetch::class, $result->expr);
+        self::assertInstanceOf(Node\Expr\FuncCall::class, $result->expr->var);
         self::assertInstanceOf(Node\Name::class, $result->expr->var->name);
         self::assertSame('map', $result->expr->var->name->toString());
     }

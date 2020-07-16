@@ -1312,31 +1312,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"
-			count: 5
-			path: tests/Unit/Parsing/LastExpressionParserTest.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\:\\:\\$name\\.$#"
-			count: 34
-			path: tests/Unit/Parsing/LastExpressionParserTest.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
-			count: 28
-			path: tests/Unit/Parsing/LastExpressionParserTest.php
-
-		-
-			message: "#^Cannot access property \\$value on PhpParser\\\\Node\\\\Expr\\|null\\.$#"
-			count: 1
-			path: tests/Unit/Parsing/LastExpressionParserTest.php
-
-		-
-			message: "#^Access to an undefined property PhpParser\\\\Node\\\\Expr\\\\Error\\|PhpParser\\\\Node\\\\Identifier\\:\\:\\$name\\.$#"
-			count: 1
-			path: tests/Unit/Parsing/LastExpressionParserTest.php
-
-		-
-			message: "#^Call to an undefined method PhpParser\\\\Node\\\\Expr\\|PhpParser\\\\Node\\\\Name\\:\\:toString\\(\\)\\.$#"
 			count: 7
 			path: tests/Unit/Parsing/PartialParserTest.php
 
