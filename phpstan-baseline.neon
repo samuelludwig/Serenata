@@ -366,6 +366,16 @@ parameters:
 			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
 
 		-
+			message: "#^Parameter \\#1 \\$node of method Serenata\\\\Indexing\\\\Visiting\\\\MetaStaticMethodTypeIndexingVisitor\\:\\:enterStaticMethodTypesElementNode\\(\\) expects PhpParser\\\\Node\\\\Expr\\\\ArrayItem, PhpParser\\\\Node\\\\Expr\\\\ArrayItem\\|null given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
+
+		-
+			message: "#^Parameter \\#1 \\$item of method Serenata\\\\Indexing\\\\Visiting\\\\MetaStaticMethodTypeIndexingVisitor\\:\\:enterStaticMethodTypesValueNode\\(\\) expects PhpParser\\\\Node\\\\Expr\\\\ArrayItem, PhpParser\\\\Node\\\\Expr\\\\ArrayItem\\|null given\\.$#"
+			count: 1
+			path: src/Indexing/Visiting/MetaStaticMethodTypeIndexingVisitor.php
+
+		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
 			count: 1
 			path: src/Parsing/LastExpressionParser.php
