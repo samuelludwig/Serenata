@@ -42,12 +42,6 @@ final class LastExpressionParser implements Parser
      */
     public function parse(string $code, ?ErrorHandler $errorHandler = null)
     {
-        if ($errorHandler !== null) {
-            throw new LogicException(
-                'Error handling is not supported as error recovery will be attempted automatically'
-            );
-        }
-
         $code = $this->getNormalizedCode($code);
         $boundary = $this->getStartOfExpression($code);
 
@@ -60,13 +54,15 @@ final class LastExpressionParser implements Parser
             $nodes = [new Nop()];
         }
 
-        if ($nodes === null || count($nodes) === 0) {
-            throw new Error(
+        if ($errorHandler !== null && ($nodes === null || count($nodes) === 0)) {
+            $errorHandler->handleError(new Error(
                 'Could not parse the code, even after attempting corrections. The following snippet failed: ' .
                 '❰' . $code . '❱, the expression was ❰' . $expression . '❱'
-            );
-        } elseif (count($nodes) > 1) {
-            throw new Error(
+            ));
+        }
+
+        if ($nodes !== null && count($nodes) > 1) {
+            throw new LogicException(
                 'Parsing succeeded, but more than one node was returned for a single expression for the following ' .
                 'snippet ❰' . $code . '❱, the expression was ❰' . $expression . '❱'
             );

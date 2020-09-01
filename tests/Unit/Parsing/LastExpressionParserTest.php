@@ -1339,4 +1339,20 @@ SOURCE;
         self::assertInstanceOf(Node\Expr\Variable::class, $result->expr->var);
         self::assertSame('b', $result->expr->var->name);
     }
+
+    /**
+     * @return void
+     */
+    public function testReturnsNullOnCompletelyBrokenExpressions(): void
+    {
+        $source = <<<'SOURCE'
+            <?php
+
+            $this->foo(->
+SOURCE;
+
+        $result = $this->createLastExpressionParser()->getLastNodeAt($source);
+
+        self::assertNull($result);
+    }
 }
