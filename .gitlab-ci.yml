@@ -30,6 +30,7 @@ include:
         expire_in: 1 hrs
         paths:
             - vendor/
+    needs: []
 
 build:php-7.1:
     image: php:7.1-cli-alpine
@@ -68,8 +69,9 @@ test:run-phpcs:
             - phpcs-test-report.xml
         reports:
             junit: phpcs-test-report.xml
-    dependencies:
-        - build:php-7.4
+    needs:
+        - job: build:php-7.4
+          artifacts: true
 
 test:run-phpstan:
     image: php:7.4-cli-alpine
@@ -87,8 +89,9 @@ test:run-phpstan:
             - phpstan-report.xml
         reports:
             junit: phpstan-report.xml
-    dependencies:
-        - build:php-7.4
+    needs:
+        - job: build:php-7.4
+          artifacts: true
 
 .test-run-phpunit: &test-run-phpunit
     script:
@@ -101,26 +104,30 @@ test:run-phpstan:
 test:php-7.1:
     image: php:7.1-cli-alpine
     <<: *test-job-shared
-    dependencies:
-        - build:php-7.1
+    needs:
+        - job: build:php-7.1
+          artifacts: true
 
 test:php-7.2:
     image: php:7.2-cli-alpine
     <<: *test-job-shared
-    dependencies:
-        - build:php-7.2
+    needs:
+        - job: build:php-7.2
+          artifacts: true
 
 test:php-7.3:
     image: php:7.3-cli-alpine
     <<: *test-job-shared
-    dependencies:
-        - build:php-7.3
+    needs:
+        - job: build:php-7.3
+          artifacts: true
 
 test:php-7.4:
     image: php:7.4-cli-alpine
     <<: *test-job-shared
-    dependencies:
-        - build:php-7.4
+    needs:
+        - job: build:php-7.4
+          artifacts: true
 
 # ----- Finalization stage, which contains finishing steps such as metrics and packaging.
 .finalization-package-job-shared: &finalization-package-job-shared
@@ -140,6 +147,7 @@ test:php-7.4:
     artifacts:
         paths:
             - bin/distribution.phar
+    needs: []
 
 finalization:package-php-7.1:
     image: php:7.1-cli-alpine
@@ -169,8 +177,9 @@ finalization:code-coverage:
         expire_in: 1 weeks
         paths:
             - coverage/
-    dependencies:
-        - build:php-7.4
+    needs:
+        - job: build:php-7.4
+          artifacts: true
 
 # See also https://docs.gitlab.com/ee/user/project/code_intelligence.html. Does not support PHP at the moment (yet).
 # finalization:code-navigation:
