@@ -17,7 +17,7 @@ include:
         - echo "0d3a60be9515c87d6c061899ddaa23aa1476b34f7c0f75e562a928f58019f973  composer.phar" > checksums
         - sha256sum -c checksums
 
-        - php composer.phar install --prefer-dist --optimize-autoloader --no-interaction --no-progress
+        - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress
 
 .build-job-shared: &build-job-shared
     stage: build
@@ -131,7 +131,7 @@ test:php-7.4:
         - sha256sum -c checksums
 
         # Do a clean install so we can avoid including dev dependencies.
-        - php composer.phar install --prefer-dist --optimize-autoloader --no-interaction --no-progress --no-dev
+        - php composer.phar update --prefer-dist --optimize-autoloader --no-interaction --no-progress --no-dev
         - php -d phar.readonly=0 bin/create-phar
     cache:
         key: "$CI_JOB_NAME-composer-no-dev"
