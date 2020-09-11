@@ -13,8 +13,8 @@ include:
 # ----- Build stage
 .build-setup-composer: &build-setup-composer
     script:
-        - curl -sSL https://getcomposer.org/download/2.0.0-alpha3/composer.phar --output composer.phar
-        - echo "56acbd0b4c3314dac87a04fe44fe55bdfc117da38dfee8fd29528093d1e704bf  composer.phar" > checksums
+        - curl -sSL https://getcomposer.org/download/2.0.0-RC1/composer.phar --output composer.phar
+        - echo "0d3a60be9515c87d6c061899ddaa23aa1476b34f7c0f75e562a928f58019f973  composer.phar" > checksums
         - sha256sum -c checksums
 
         - php composer.phar install --prefer-dist --optimize-autoloader --no-interaction --no-progress
@@ -126,8 +126,8 @@ test:php-7.4:
 .finalization-package-job-shared: &finalization-package-job-shared
     stage: finalization
     script:
-        - curl -sSL https://getcomposer.org/download/2.0.0-alpha3/composer.phar --output composer.phar
-        - echo "56acbd0b4c3314dac87a04fe44fe55bdfc117da38dfee8fd29528093d1e704bf  composer.phar" > checksums
+        - curl -sSL https://getcomposer.org/download/2.0.0-RC1/composer.phar --output composer.phar
+        - echo "0d3a60be9515c87d6c061899ddaa23aa1476b34f7c0f75e562a928f58019f973  composer.phar" > checksums
         - sha256sum -c checksums
 
         # Do a clean install so we can avoid including dev dependencies.
