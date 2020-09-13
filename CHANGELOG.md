@@ -1,21 +1,21 @@
 ## 5.4.0 (Unreleased)
 * Union types from PHP 8.0 are now supported.
-* Fix error when trying to parse broken expressions such as `$this->foo(->`.
 * [Add autocompletion when typing property types added in PHP 7.4.](https://gitlab.com/Serenata/Serenata/-/issues/331)
 * [Improve overall robustness by fixing large swads of PHPStan errors.](https://gitlab.com/Serenata/Serenata/-/issues/277)
 * [Fix some dependencies not being explicitly listed in `composer.json`.](https://gitlab.com/Serenata/Serenata/issues/306)
+* Fix error when trying to parse broken expressions such as `$this->foo(->`.
 * Add `yield from`, `object`, `mixed` and `match` to keyword autocompletions.
 * Stub `textDocument/references` to avoid errors in Visual Studio Code and derivatives.
 * [Improve scanning performance during indexing a bit by avoiding multiple scans of folders.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * [Fix error when trying to parse expressions containing colons, such as `map(fn (): array => 5)->`.](https://gitlab.com/Serenata/Serenata/issues/332)
 * [Fix property or method with the same name as a private parent property or method being incorrectly treated as override.](https://gitlab.com/Serenata/Serenata/-/issues/336)
 * [Fix variable autocompletion throwing its hands in the air during closure binding (`use`) after the first character was typed.](https://gitlab.com/Serenata/Serenata/-/issues/235)
-* Improve error recovery when an expression such as `$this->foo` is preceded by an unterminated expression such as `$this->bar`.
 * [Fix server crashing if folders are removed during scanning for reindexing, such as when clearing the cache in Symfony projects.](https://gitlab.com/Serenata/Serenata/issues/316)
+* Improve error recovery when an expression such as `$this->foo` is preceded by an unterminated expression such as `$this->bar`.
 * [Fix legacy `insertText` in snippet format in completion items not having reserved characters such as `$`, `}`, and `\\` escaped in all cases.](https://gitlab.com/Serenata/Serenata/-/issues/310)
+* Don't send error responses for parsing-related errors anymore, clients such as VSCode throw this in the face of the user and the code is linted as erroneous anyway.
 * [Improve responsiveness when `workspace/didChangeWatchedFiles` notifications with large batches of files are sent by prioritizing user-initiated requests over indexing.](https://gitlab.com/Serenata/Serenata/-/issues/325)
 * Completion items will now also send the new `tags` property from LSP 3.15.0 and fill it with the "deprecated" tag if the item is deprecated. The old `deprecated` property will also remain in place.
-* Don't send error responses for parsing-related errors anymore, clients such as VSCode throw this in the face of the user and the code is linted as erroneous anyway.
 * Fix variable that closure is being assigned to not being suggested in closure binding (`use`), which is valid as a closure can bind the variable it's assigned to in order to create recursive closures.
 * [Fix no documentation or deprecated information being processed for constants originating from `define` statements. This also caused no documentation to be displayed for built-in constants such as `CURLOPT_SSH_AUTH_TYPES`.](https://gitlab.com/Serenata/Serenata/-/issues/230)
 * [Fix warning `The PHP server has errors to report: PHP Notice:  Undefined property: PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::$types in phar:///.../DocblockTypeTransformer.php on line 43
