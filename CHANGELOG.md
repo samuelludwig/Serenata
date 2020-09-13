@@ -1,4 +1,7 @@
-## 5.4.0 (Unreleased)
+## 5.5.0 (Unreleased)
+* To be determined.
+
+## 5.4.0
 * Union types from PHP 8.0 are now supported.
 * [Add autocompletion when typing property types added in PHP 7.4.](https://gitlab.com/Serenata/Serenata/-/issues/331)
 * [Improve overall robustness by fixing large swads of PHPStan errors.](https://gitlab.com/Serenata/Serenata/-/issues/277)
