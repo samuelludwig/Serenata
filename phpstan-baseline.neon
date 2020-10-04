@@ -296,7 +296,7 @@ parameters:
 			path: src/Indexing/SchemaInitializer.php
 
 		-
-			message: "#^Missing @throws Doctrine\\\\DBAL\\\\DBALException annotation$#"
+			message: "#^Missing @throws Doctrine\\\\DBAL\\\\Exception annotation$#"
 			count: 5
 			path: src/Indexing/SqliteConnectionFactory.php
 
