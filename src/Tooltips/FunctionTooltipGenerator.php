@@ -2,8 +2,6 @@
 
 namespace Serenata\Tooltips;
 
-use LogicException;
-
 use Serenata\PrettyPrinting\ParameterNamePrettyPrinter;
 
 /**
@@ -204,12 +202,6 @@ final class FunctionTooltipGenerator
     {
         $parts = explode('\\', $fqcn);
 
-        $part = array_pop($parts);
-
-        if ($part === null) {
-            throw new LogicException('FQCN "' . $fqcn . '" does not contain at least one part');
-        }
-
-        return $part;
+        return array_pop($parts);
     }
 }

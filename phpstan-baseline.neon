@@ -171,11 +171,6 @@ parameters:
 			path: src/Analysis/Typing/Deduction/ConstFetchNodeTypeDeducer.php
 
 		-
-			message: "#^PhpParser\\\\Error is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Analysis/Typing/Deduction/ExpressionLocalTypeAnalyzer.php
-
-		-
 			message: "#^Missing @throws Serenata\\\\Analysis\\\\Typing\\\\Deduction\\\\TypeDeductionException annotation$#"
 			count: 1
 			path: src/Analysis/Typing/Deduction/ExpressionTypeDeducer.php
@@ -222,11 +217,6 @@ parameters:
 
 		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 1
-			path: src/Autocompletion/Providers/LocalVariableAutocompletionProvider.php
-
-		-
-			message: "#^PhpParser\\\\Error is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Autocompletion/Providers/LocalVariableAutocompletionProvider.php
 
@@ -281,11 +271,6 @@ parameters:
 			path: src/Indexing/Indexer.php
 
 		-
-			message: "#^UnexpectedValueException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Indexing/Indexer.php
-
-		-
 			message: "#^Missing @throws Doctrine\\\\ORM\\\\ORMException annotation$#"
 			count: 1
 			path: src/Indexing/ManagerRegistry.php
@@ -313,6 +298,11 @@ parameters:
 		-
 			message: "#^Unused @throws PhpParser\\\\Error annotation$#"
 			count: 1
+			path: src/Indexing/StorageFileIndexer.php
+
+		-
+			message: "#^Exception is never thrown in the corresponding try block$#"
+			count: 2
 			path: src/Indexing/StorageFileIndexer.php
 
 		-
@@ -381,11 +371,6 @@ parameters:
 			path: src/Parsing/LastExpressionParser.php
 
 		-
-			message: "#^PhpParser\\\\Error is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Parsing/PartialParser.php
-
-		-
 			message: "#^PHPStan\\\\PhpDocParser\\\\Parser\\\\ParserException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Parsing/PhpstanDocblockTypeParser.php
@@ -407,23 +392,8 @@ parameters:
 
 		-
 			message: "#^Unused @throws UnexpectedValueException annotation$#"
-			count: 6
-			path: src/SignatureHelp/SignatureHelpRetriever.php
-
-		-
-			message: "#^Useless @throws UnexpectedValueException annotation$#"
 			count: 1
 			path: src/SignatureHelp/SignatureHelpRetriever.php
-
-		-
-			message: "#^Serenata\\\\Sockets\\\\RequestParsingException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Sockets/JsonRpcConnectionHandler.php
-
-		-
-			message: "#^UnexpectedValueException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/Sockets/JsonRpcConnectionHandler.php
 
 		-
 			message: "#^Unused @throws Serenata\\\\Sockets\\\\RequestParsingException annotation$#"
@@ -447,11 +417,6 @@ parameters:
 
 		-
 			message: "#^Useless @throws Serenata\\\\UserInterface\\\\JsonRpcQueueItemHandler\\\\InvalidArgumentsException annotation$#"
-			count: 1
-			path: src/Sockets/JsonRpcQueueItemProcessor.php
-
-		-
-			message: "#^DomainException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/Sockets/JsonRpcQueueItemProcessor.php
 
@@ -491,42 +456,12 @@ parameters:
 			path: src/UserInterface/JsonRpcQueueItemHandler/CodeLensJsonRpcQueueItemHandler.php
 
 		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/CodeLensJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/CodeLensJsonRpcQueueItemHandler.php
-
-		-
 			message: "#^Unused @throws Throwable annotation$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/CompletionJsonRpcQueueItemHandler.php
 
 		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/CompletionJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/CompletionJsonRpcQueueItemHandler.php
-
-		-
 			message: "#^Unused @throws Throwable annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DefinitionJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DefinitionJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/DefinitionJsonRpcQueueItemHandler.php
 
@@ -551,27 +486,7 @@ parameters:
 			path: src/UserInterface/JsonRpcQueueItemHandler/DocumentHighlightJsonRpcQueueItemHandler.php
 
 		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DocumentHighlightJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DocumentHighlightJsonRpcQueueItemHandler.php
-
-		-
 			message: "#^Unused @throws Throwable annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DocumentSymbolJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/DocumentSymbolJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/DocumentSymbolJsonRpcQueueItemHandler.php
 
@@ -592,16 +507,6 @@ parameters:
 
 		-
 			message: "#^Unused @throws Throwable annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/HoverJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/HoverJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/HoverJsonRpcQueueItemHandler.php
 
@@ -657,16 +562,6 @@ parameters:
 
 		-
 			message: "#^Unused @throws Throwable annotation$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\Indexing\\\\FileNotFoundStorageException is never thrown in the corresponding try block$#"
-			count: 1
-			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
-
-		-
-			message: "#^Serenata\\\\NameQualificationUtilities\\\\PositionOutOfBoundsPositionalNamespaceDeterminerException is never thrown in the corresponding try block$#"
 			count: 1
 			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
 

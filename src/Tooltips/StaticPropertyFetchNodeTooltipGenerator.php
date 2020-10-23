@@ -58,13 +58,6 @@ final class StaticPropertyFetchNodeTooltipGenerator
         }
 
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
-        $info = array_shift($infoElements);
-
-        assert(
-            $info !== null,
-            'Null should never be returned on shifting as the error was already guaranteed to be not empty'
-        );
-
-        return $this->propertyTooltipGenerator->generate($info);
+        return $this->propertyTooltipGenerator->generate(array_shift($infoElements));
     }
 }

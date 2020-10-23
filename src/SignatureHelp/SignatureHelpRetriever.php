@@ -67,9 +67,6 @@ final class SignatureHelpRetriever
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
      *
-     * @throws UnexpectedValueException when there is no signature help to be retrieved for the location.
-     * @throws UnexpectedValueException when a node type is encountered that this method doesn't know how to handle.
-     *
      * @return SignatureHelp|null
      */
     public function get(TextDocumentItem $textDocumentItem, Position $position): ?SignatureHelp
@@ -88,8 +85,6 @@ final class SignatureHelpRetriever
     /**
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
-     *
-     * @throws UnexpectedValueException
      *
      * @return Node
      */
@@ -112,8 +107,6 @@ final class SignatureHelpRetriever
      * @param Node             $node
      * @param TextDocumentItem $textDocumentItem
      * @param Position         $position
-     *
-     * @throws UnexpectedValueException
      *
      * @return SignatureHelp
      */
@@ -318,11 +311,7 @@ final class SignatureHelpRetriever
             }
 
             // FIXME: There could be multiple matches, return multiple signatures in that case.
-            $methodInfo = array_shift($methodInfoElements);
-
-            assert($methodInfo !== null);
-
-            return $this->generateResponseFromFunctionInfo($methodInfo, $argumentIndex);
+            return $this->generateResponseFromFunctionInfo(array_shift($methodInfoElements), $argumentIndex);
         } elseif ($node instanceof Node\Expr\FuncCall) {
             $functionInfo = $this->functionFunctionInfoRetriever->retrieve($node, $textDocumentItem, $position);
 
@@ -337,8 +326,6 @@ final class SignatureHelpRetriever
     /**
      * @param array<string,mixed> $functionInfo
      * @param int                 $argumentIndex
-     *
-     * @throws UnexpectedValueException
      *
      * @return SignatureHelp
      */
@@ -375,8 +362,6 @@ final class SignatureHelpRetriever
     /**
      * @param array<string,mixed> $functionInfo
      * @param int                 $argumentIndex
-     *
-     * @throws UnexpectedValueException
      *
      * @return int|null
      */

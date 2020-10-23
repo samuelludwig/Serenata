@@ -16,7 +16,7 @@ parameters:
         - stubs/Deferred.stub
 
     exceptionRules:
-        reportUnusedCatchesOfUncheckedExceptions: true
+        reportUnusedCatchesOfUncheckedExceptions: false
         reportUnusedCheckedThrowsInSubtypes: true
         reportCheckedThrowsInGlobalScope: true
         ignoreDescriptiveUncheckedExceptions: false

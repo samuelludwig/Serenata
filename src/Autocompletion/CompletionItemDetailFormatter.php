@@ -70,12 +70,6 @@ final class CompletionItemDetailFormatter
     {
         $parts = explode('\\', $fqcn);
 
-        $name = array_pop($parts);
-
-        if ($name === null) {
-            throw new LogicException('Missing at least one segment after explode, which should never happen');
-        }
-
-        return $name;
+        return array_pop($parts);
     }
 }

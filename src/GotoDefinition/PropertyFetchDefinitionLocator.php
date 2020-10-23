@@ -52,11 +52,6 @@ final class PropertyFetchDefinitionLocator
         // Fetch the first tooltip. In theory, multiple tooltips are possible, but we don't support these at the moment.
         $info = array_shift($infoElements);
 
-        assert(
-            $info !== null,
-            'Null should never be returned on shifting as the error was already guaranteed to be not empty'
-        );
-
         return new GotoDefinitionResponse(new Location($info['uri'], $info['range']));
     }
 }

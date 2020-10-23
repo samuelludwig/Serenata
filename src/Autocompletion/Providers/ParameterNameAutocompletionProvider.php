@@ -10,8 +10,6 @@ use Serenata\Autocompletion\CompletionItemKind;
 use Serenata\Autocompletion\CompletionItem;
 use Serenata\Autocompletion\SnippetInsertionTextEscaper;
 
-
-
 use Serenata\Common\Position;
 
 use Serenata\Utility\TextEdit;
@@ -72,8 +70,6 @@ final class ParameterNameAutocompletionProvider implements AutocompletionProvide
 
         if (count($typeNameParts) > 1) {
             $lastTypeNamePart = array_pop($typeNameParts);
-
-            assert($lastTypeNamePart !== null);
 
             $suggestions = array_merge($suggestions, $this->generateSuggestionsForName($lastTypeNamePart, $context));
         }
