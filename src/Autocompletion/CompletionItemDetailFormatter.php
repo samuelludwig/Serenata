@@ -2,8 +2,6 @@
 
 namespace Serenata\Autocompletion;
 
-use LogicException;
-
 /**
  * Aids in formatting types for autocompletion suggestions.
  */
