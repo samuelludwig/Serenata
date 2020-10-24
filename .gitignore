@@ -3,5 +3,5 @@
 /composer.lock
 /vendor
 /phpunit.xml
-/src/.phpunit.result.cache
 /bin/distribution.phar
+.phpunit.result.cache
