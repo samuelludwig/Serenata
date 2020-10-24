@@ -566,11 +566,6 @@ parameters:
 			path: src/UserInterface/JsonRpcQueueItemHandler/SignatureHelpJsonRpcQueueItemHandler.php
 
 		-
-			message: "#^Method Serenata\\\\Tests\\\\Integration\\\\AbstractIntegrationTest\\:\\:tearDown\\(\\) has no return typehint specified\\.$#"
-			count: 1
-			path: tests/Integration/AbstractIntegrationTest.php
-
-		-
 			message: "#^Cannot call method setDatabaseUri\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: tests/Integration/AbstractIntegrationTest.php
@@ -1209,6 +1204,21 @@ parameters:
 			message: "#^Unable to resolve the template type T in call to method Serenata\\\\Autocompletion\\\\ApproximateStringMatching\\\\ApproximateStringMatchingBestStringApproximationDeterminer\\:\\:determine\\(\\)$#"
 			count: 1
 			path: tests/Unit/Autocompletion/ApproximateStringMatching/ApproximateStringMatchingBestStringApproximationDeterminerTest.php
+
+		-
+			message: "#^Property Serenata\\\\Tests\\\\Unit\\\\Autocompletion\\\\AutocompletionPrefixDeterminerTest\\:\\:\\$boundaryTokenRetrieverMock has unknown class PHPUnit_Framework_MockObject_MockObject as its type\\.$#"
+			count: 1
+			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
+
+		-
+			message: "#^Property Serenata\\\\Tests\\\\Unit\\\\Autocompletion\\\\AutocompletionPrefixDeterminerTest\\:\\:\\$boundaryTokenRetrieverMock \\(PHPUnit_Framework_MockObject_MockObject\\) does not accept PHPUnit\\\\Framework\\\\MockObject\\\\MockObject&Serenata\\\\Autocompletion\\\\AutocompletionPrefixBoundaryTokenRetrieverInterface\\.$#"
+			count: 1
+			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
+
+		-
+			message: "#^Call to method method\\(\\) on an unknown class PHPUnit_Framework_MockObject_MockObject\\.$#"
+			count: 2
+			path: tests/Unit/Autocompletion/AutocompletionPrefixDeterminerTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$autocompletionPrefixBoundaryTokenRetriever of class Serenata\\\\Autocompletion\\\\AutocompletionPrefixDeterminer constructor expects Serenata\\\\Autocompletion\\\\AutocompletionPrefixBoundaryTokenRetrieverInterface, PHPUnit_Framework_MockObject_MockObject given\\.$#"
