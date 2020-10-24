@@ -5,7 +5,7 @@
     "homepage": "https://serenata.github.io",
     "license": "AGPL-3.0-or-later",
     "require": {
-        "php": "^7.3",
+        "php": "^7.3||^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pdo_sqlite": "*",
