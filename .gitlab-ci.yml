@@ -86,7 +86,7 @@ test:run-phpstan:
         reports:
             junit: phpstan-report.xml
     needs:
-        - job: build:php-7.4
+        - job: build:php-8.0
           artifacts: true
 
 .test-run-phpunit: &test-run-phpunit
