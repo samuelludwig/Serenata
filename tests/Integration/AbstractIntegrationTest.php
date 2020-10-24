@@ -57,7 +57,7 @@ abstract class AbstractIntegrationTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         // Still try to collect cyclic references every so often. See also Bootstrap.php for the reasoning.
         gc_collect_cycles();
