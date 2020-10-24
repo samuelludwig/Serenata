@@ -20,7 +20,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ->setMethods(['score'])
             ->getMock();
 
-        $approximateStringMatcher->method('score')->willReturn(2, 1);
+        $approximateStringMatcher->method('score')->willReturn(2.0, 1.0);
 
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
@@ -44,7 +44,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ->setMethods(['score'])
             ->getMock();
 
-        $approximateStringMatcher->method('score')->willReturn(null, 1);
+        $approximateStringMatcher->method('score')->willReturn(null, 1.0);
 
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
@@ -68,7 +68,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ->setMethods(['score'])
             ->getMock();
 
-        $approximateStringMatcher->method('score')->willReturn(1, 1);
+        $approximateStringMatcher->method('score')->willReturn(1.0, 1.0);
 
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
@@ -92,7 +92,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ->setMethods(['score'])
             ->getMock();
 
-        $approximateStringMatcher->method('score')->willReturn(2, 1);
+        $approximateStringMatcher->method('score')->willReturn(2.0, 1.0);
 
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
@@ -116,7 +116,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ->setMethods(['score'])
             ->getMock();
 
-        $approximateStringMatcher->method('score')->willReturn(1, 1);
+        $approximateStringMatcher->method('score')->willReturn(1.0, 1.0);
 
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
@@ -139,7 +139,7 @@ final class ApproximateStringMatchingBestStringApproximationDeterminerTest exten
             ->setMethods(['score'])
             ->getMock();
 
-        $approximateStringMatcher->method('score')->willReturn(1, 1);
+        $approximateStringMatcher->method('score')->willReturn(1.0, 1.0);
 
         $determiner = new ApproximateStringMatchingBestStringApproximationDeterminer($approximateStringMatcher);
 
