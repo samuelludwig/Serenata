@@ -1,5 +1,5 @@
-## 5.5.0 (Unreleased)
-* To be determined.
+## 6.0.0 (Unreleased)
+* Support for PHP 7.1 and 7.2 has been removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).
 
 ## 5.4.0
 * Union types from PHP 8.0 are now supported.

@@ -32,14 +32,6 @@ include:
             - vendor/
     needs: []
 
-build:php-7.1:
-    image: php:7.1-cli-alpine
-    <<: *build-job-shared
-
-build:php-7.2:
-    image: php:7.2-cli-alpine
-    <<: *build-job-shared
-
 build:php-7.3:
     image: php:7.3-cli-alpine
     <<: *build-job-shared
@@ -101,20 +93,6 @@ test:run-phpstan:
     stage: test
     <<: *test-run-phpunit
 
-test:php-7.1:
-    image: php:7.1-cli-alpine
-    <<: *test-job-shared
-    needs:
-        - job: build:php-7.1
-          artifacts: true
-
-test:php-7.2:
-    image: php:7.2-cli-alpine
-    <<: *test-job-shared
-    needs:
-        - job: build:php-7.2
-          artifacts: true
-
 test:php-7.3:
     image: php:7.3-cli-alpine
     <<: *test-job-shared
@@ -148,14 +126,6 @@ test:php-7.4:
         paths:
             - bin/distribution.phar
     needs: []
-
-finalization:package-php-7.1:
-    image: php:7.1-cli-alpine
-    <<: *finalization-package-job-shared
-
-finalization:package-php-7.2:
-    image: php:7.2-cli-alpine
-    <<: *finalization-package-job-shared
 
 finalization:package-php-7.3:
     image: php:7.3-cli-alpine
