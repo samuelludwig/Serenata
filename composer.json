@@ -45,8 +45,8 @@
         "phpstan/phpstan-strict-rules": "^0.12",
         "phpunit/phpunit": "^9.0",
         "slevomat/coding-standard": "^6.3",
-        "symfony/process": "^5.0",
-        "symfony/var-dumper": "^5.0"
+        "symfony/process": "^5.1",
+        "symfony/var-dumper": "^5.1"
     },
     "autoload": {
         "psr-4": {
