@@ -1,4 +1,5 @@
 ## 6.0.0 (Unreleased)
+* Nightly (CI) PHAR builds for PHP 8 are now provided.
 * Update dependencies to latest versions (Symfony 5, PHPUnit 9, Paratest 5, ...).
 * Fix parsing qualified names used in static class member access not working properly on PHP 8.
 * Support for PHP 7.1 and 7.2 has been removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).

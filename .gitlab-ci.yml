@@ -40,6 +40,10 @@ build:php-7.4:
     image: php:7.4-cli-alpine
     <<: *build-job-shared
 
+build:php-8.0:
+    image: php:8.0.0RC2-cli-alpine
+    <<: *build-job-shared
+
 # ----- Test stage
 test:run-composer-require-checker:
     image: php:7.4-cli-alpine
@@ -51,7 +55,7 @@ test:run-composer-require-checker:
         - php ./composer-require-checker.phar check ./composer.json
 
 test:run-phpcs:
-    image: php:7.4-cli-alpine
+    image: php:8.0.0RC2-cli-alpine
     stage: test
     script:
         - php vendor/bin/phpcs src tests --warning-severity=8 --report-junit=./phpcs-test-report.xml
@@ -66,7 +70,7 @@ test:run-phpcs:
           artifacts: true
 
 test:run-phpstan:
-    image: php:7.4-cli-alpine
+    image: php:8.0.0RC2-cli-alpine
     stage: test
     script:
         - php -d memory_limit=2048M vendor/bin/phpstan analyse -c phpstan-ci.neon --no-interaction --no-progress --error-format junit > ./phpstan-report.xml
@@ -107,6 +111,13 @@ test:php-7.4:
         - job: build:php-7.4
           artifacts: true
 
+test:php-8.0:
+    image: php:8.0.0RC2-cli-alpine
+    <<: *test-job-shared
+    needs:
+        - job: build:php-8.0
+          artifacts: true
+
 # ----- Finalization stage, which contains finishing steps such as metrics and packaging.
 .finalization-package-job-shared: &finalization-package-job-shared
     stage: finalization
@@ -135,8 +146,12 @@ finalization:package-php-7.4:
     image: php:7.4-cli-alpine
     <<: *finalization-package-job-shared
 
+finalization:package-php-8.0:
+    image: php:8.0.0RC2-cli-alpine
+    <<: *finalization-package-job-shared
+
 finalization:code-coverage:
-    image: php:7.4-cli-alpine
+    image: php:8.0.0RC2-cli-alpine
     stage: finalization
     coverage: '/^\s*Lines:\s*\d+.\d+\%/'
     script:
@@ -148,7 +163,7 @@ finalization:code-coverage:
         paths:
             - coverage/
     needs:
-        - job: build:php-7.4
+        - job: build:php-8.0
           artifacts: true
 
 # See also https://docs.gitlab.com/ee/user/project/code_intelligence.html. Does not support PHP at the moment (yet).
