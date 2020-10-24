@@ -329,7 +329,7 @@ final class LastExpressionParser implements Parser
             }
 
             if ($startedStaticClassName &&
-                !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC], true)
+                !in_array($token['type'], [T_DOUBLE_COLON, T_STRING, T_NS_SEPARATOR, T_STATIC, T_NAME_QUALIFIED], true)
             ) {
                 return ++$i;
             }

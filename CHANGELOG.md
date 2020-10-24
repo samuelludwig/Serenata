@@ -1,5 +1,6 @@
 ## 6.0.0 (Unreleased)
 * Update dependencies to latest versions (Symfony 5, PHPUnit 9, Paratest 5, ...).
+* Fix parsing qualified names used in static class member access not working properly on PHP 8.
 * Support for PHP 7.1 and 7.2 has been removed as they were previously deprecated and are [end of life](https://www.php.net/supported-versions.php).
 * _Running_ Serenata _on_ PHP 7.3 is now deprecated
     * PHP 7.3 [no longer receives active support when PHP 8 is released](https://www.php.net/supported-versions.php).
